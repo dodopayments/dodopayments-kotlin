@@ -39,6 +39,7 @@ class SubscriptionTest {
                 .subscriptionPeriodInterval(Subscription.SubscriptionPeriodInterval.DAY)
                 .taxInclusive(true)
                 .trialPeriodDays(0L)
+                .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .discountId("discount_id")
                 .build()
         assertThat(subscription).isNotNull
@@ -74,6 +75,8 @@ class SubscriptionTest {
             .isEqualTo(Subscription.SubscriptionPeriodInterval.DAY)
         assertThat(subscription.taxInclusive()).isEqualTo(true)
         assertThat(subscription.trialPeriodDays()).isEqualTo(0L)
+        assertThat(subscription.cancelledAt())
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(subscription.discountId()).isEqualTo("discount_id")
     }
 }

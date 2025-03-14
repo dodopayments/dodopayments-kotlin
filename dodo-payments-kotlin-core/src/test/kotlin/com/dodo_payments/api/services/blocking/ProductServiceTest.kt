@@ -40,6 +40,7 @@ class ProductServiceTest {
                             .build()
                     )
                     .taxCategory(ProductCreateParams.TaxCategory.DIGITAL_PRODUCTS)
+                    .addAddon("string")
                     .description("description")
                     .licenseKeyActivationMessage("license_key_activation_message")
                     .licenseKeyActivationsLimit(0L)
@@ -83,6 +84,7 @@ class ProductServiceTest {
         productService.update(
             ProductUpdateParams.builder()
                 .id("id")
+                .addAddon("string")
                 .description("description")
                 .imageId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .licenseKeyActivationMessage("license_key_activation_message")

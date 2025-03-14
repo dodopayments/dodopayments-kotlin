@@ -10,6 +10,7 @@ import com.dodo_payments.api.core.JsonField
 import com.dodo_payments.api.core.JsonMissing
 import com.dodo_payments.api.core.JsonValue
 import com.dodo_payments.api.core.NoAutoDetect
+import com.dodo_payments.api.core.checkKnown
 import com.dodo_payments.api.core.checkRequired
 import com.dodo_payments.api.core.getOrThrow
 import com.dodo_payments.api.core.immutableEmptyMap
@@ -55,6 +56,9 @@ private constructor(
     @JsonProperty("updated_at")
     @ExcludeMissing
     private val updatedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("addons")
+    @ExcludeMissing
+    private val addons: JsonField<List<String>> = JsonMissing.of(),
     @JsonProperty("description")
     @ExcludeMissing
     private val description: JsonField<String> = JsonMissing.of(),
@@ -96,6 +100,9 @@ private constructor(
 
     /** Timestamp when the product was last updated. */
     fun updatedAt(): OffsetDateTime = updatedAt.getRequired("updated_at")
+
+    /** Available Addons for subscription products */
+    fun addons(): List<String>? = addons.getNullable("addons")
 
     /** Description of the product, optional. */
     fun description(): String? = description.getNullable("description")
@@ -152,6 +159,9 @@ private constructor(
     @ExcludeMissing
     fun _updatedAt(): JsonField<OffsetDateTime> = updatedAt
 
+    /** Available Addons for subscription products */
+    @JsonProperty("addons") @ExcludeMissing fun _addons(): JsonField<List<String>> = addons
+
     /** Description of the product, optional. */
     @JsonProperty("description") @ExcludeMissing fun _description(): JsonField<String> = description
 
@@ -194,6 +204,7 @@ private constructor(
         productId()
         taxCategory()
         updatedAt()
+        addons()
         description()
         image()
         licenseKeyActivationMessage()
@@ -236,6 +247,7 @@ private constructor(
         private var productId: JsonField<String>? = null
         private var taxCategory: JsonField<TaxCategory>? = null
         private var updatedAt: JsonField<OffsetDateTime>? = null
+        private var addons: JsonField<MutableList<String>>? = null
         private var description: JsonField<String> = JsonMissing.of()
         private var image: JsonField<String> = JsonMissing.of()
         private var licenseKeyActivationMessage: JsonField<String> = JsonMissing.of()
@@ -253,6 +265,7 @@ private constructor(
             productId = product.productId
             taxCategory = product.taxCategory
             updatedAt = product.updatedAt
+            addons = product.addons.map { it.toMutableList() }
             description = product.description
             image = product.image
             licenseKeyActivationMessage = product.licenseKeyActivationMessage
@@ -322,6 +335,22 @@ private constructor(
 
         /** Timestamp when the product was last updated. */
         fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply { this.updatedAt = updatedAt }
+
+        /** Available Addons for subscription products */
+        fun addons(addons: List<String>?) = addons(JsonField.ofNullable(addons))
+
+        /** Available Addons for subscription products */
+        fun addons(addons: JsonField<List<String>>) = apply {
+            this.addons = addons.map { it.toMutableList() }
+        }
+
+        /** Available Addons for subscription products */
+        fun addAddon(addon: String) = apply {
+            addons =
+                (addons ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("addons", it).add(addon)
+                }
+        }
 
         /** Description of the product, optional. */
         fun description(description: String?) = description(JsonField.ofNullable(description))
@@ -399,6 +428,7 @@ private constructor(
                 checkRequired("productId", productId),
                 checkRequired("taxCategory", taxCategory),
                 checkRequired("updatedAt", updatedAt),
+                (addons ?: JsonMissing.of()).map { it.toImmutable() },
                 description,
                 image,
                 licenseKeyActivationMessage,
@@ -3992,15 +4022,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Product && businessId == other.businessId && createdAt == other.createdAt && isRecurring == other.isRecurring && licenseKeyEnabled == other.licenseKeyEnabled && price == other.price && productId == other.productId && taxCategory == other.taxCategory && updatedAt == other.updatedAt && description == other.description && image == other.image && licenseKeyActivationMessage == other.licenseKeyActivationMessage && licenseKeyActivationsLimit == other.licenseKeyActivationsLimit && licenseKeyDuration == other.licenseKeyDuration && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Product && businessId == other.businessId && createdAt == other.createdAt && isRecurring == other.isRecurring && licenseKeyEnabled == other.licenseKeyEnabled && price == other.price && productId == other.productId && taxCategory == other.taxCategory && updatedAt == other.updatedAt && addons == other.addons && description == other.description && image == other.image && licenseKeyActivationMessage == other.licenseKeyActivationMessage && licenseKeyActivationsLimit == other.licenseKeyActivationsLimit && licenseKeyDuration == other.licenseKeyDuration && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(businessId, createdAt, isRecurring, licenseKeyEnabled, price, productId, taxCategory, updatedAt, description, image, licenseKeyActivationMessage, licenseKeyActivationsLimit, licenseKeyDuration, name, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(businessId, createdAt, isRecurring, licenseKeyEnabled, price, productId, taxCategory, updatedAt, addons, description, image, licenseKeyActivationMessage, licenseKeyActivationsLimit, licenseKeyDuration, name, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Product{businessId=$businessId, createdAt=$createdAt, isRecurring=$isRecurring, licenseKeyEnabled=$licenseKeyEnabled, price=$price, productId=$productId, taxCategory=$taxCategory, updatedAt=$updatedAt, description=$description, image=$image, licenseKeyActivationMessage=$licenseKeyActivationMessage, licenseKeyActivationsLimit=$licenseKeyActivationsLimit, licenseKeyDuration=$licenseKeyDuration, name=$name, additionalProperties=$additionalProperties}"
+        "Product{businessId=$businessId, createdAt=$createdAt, isRecurring=$isRecurring, licenseKeyEnabled=$licenseKeyEnabled, price=$price, productId=$productId, taxCategory=$taxCategory, updatedAt=$updatedAt, addons=$addons, description=$description, image=$image, licenseKeyActivationMessage=$licenseKeyActivationMessage, licenseKeyActivationsLimit=$licenseKeyActivationsLimit, licenseKeyDuration=$licenseKeyDuration, name=$name, additionalProperties=$additionalProperties}"
 }

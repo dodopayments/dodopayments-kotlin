@@ -12,6 +12,7 @@ class ProductUpdateParamsTest {
     fun create() {
         ProductUpdateParams.builder()
             .id("id")
+            .addAddon("string")
             .description("description")
             .imageId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .licenseKeyActivationMessage("license_key_activation_message")
@@ -45,6 +46,7 @@ class ProductUpdateParamsTest {
         val params =
             ProductUpdateParams.builder()
                 .id("id")
+                .addAddon("string")
                 .description("description")
                 .imageId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .licenseKeyActivationMessage("license_key_activation_message")
@@ -75,6 +77,7 @@ class ProductUpdateParamsTest {
         val body = params._body()
 
         assertNotNull(body)
+        assertThat(body.addons()).isEqualTo(listOf("string"))
         assertThat(body.description()).isEqualTo("description")
         assertThat(body.imageId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(body.licenseKeyActivationMessage()).isEqualTo("license_key_activation_message")

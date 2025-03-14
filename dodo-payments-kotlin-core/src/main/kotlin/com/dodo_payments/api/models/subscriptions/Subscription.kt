@@ -73,6 +73,9 @@ private constructor(
     @JsonProperty("trial_period_days")
     @ExcludeMissing
     private val trialPeriodDays: JsonField<Long> = JsonMissing.of(),
+    @JsonProperty("cancelled_at")
+    @ExcludeMissing
+    private val cancelledAt: JsonField<OffsetDateTime> = JsonMissing.of(),
     @JsonProperty("discount_id")
     @ExcludeMissing
     private val discountId: JsonField<String> = JsonMissing.of(),
@@ -126,6 +129,9 @@ private constructor(
 
     /** Number of days in the trial period (0 if no trial) */
     fun trialPeriodDays(): Long = trialPeriodDays.getRequired("trial_period_days")
+
+    /** Cancelled timestamp if the subscription is cancelled */
+    fun cancelledAt(): OffsetDateTime? = cancelledAt.getNullable("cancelled_at")
 
     /** The discount id if discount is applied */
     fun discountId(): String? = discountId.getNullable("discount_id")
@@ -195,6 +201,11 @@ private constructor(
     @ExcludeMissing
     fun _trialPeriodDays(): JsonField<Long> = trialPeriodDays
 
+    /** Cancelled timestamp if the subscription is cancelled */
+    @JsonProperty("cancelled_at")
+    @ExcludeMissing
+    fun _cancelledAt(): JsonField<OffsetDateTime> = cancelledAt
+
     /** The discount id if discount is applied */
     @JsonProperty("discount_id") @ExcludeMissing fun _discountId(): JsonField<String> = discountId
 
@@ -225,6 +236,7 @@ private constructor(
         subscriptionPeriodInterval()
         taxInclusive()
         trialPeriodDays()
+        cancelledAt()
         discountId()
         validated = true
     }
@@ -278,6 +290,7 @@ private constructor(
         private var subscriptionPeriodInterval: JsonField<SubscriptionPeriodInterval>? = null
         private var taxInclusive: JsonField<Boolean>? = null
         private var trialPeriodDays: JsonField<Long>? = null
+        private var cancelledAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var discountId: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -298,6 +311,7 @@ private constructor(
             subscriptionPeriodInterval = subscription.subscriptionPeriodInterval
             taxInclusive = subscription.taxInclusive
             trialPeriodDays = subscription.trialPeriodDays
+            cancelledAt = subscription.cancelledAt
             discountId = subscription.discountId
             additionalProperties = subscription.additionalProperties.toMutableMap()
         }
@@ -416,6 +430,15 @@ private constructor(
             this.trialPeriodDays = trialPeriodDays
         }
 
+        /** Cancelled timestamp if the subscription is cancelled */
+        fun cancelledAt(cancelledAt: OffsetDateTime?) =
+            cancelledAt(JsonField.ofNullable(cancelledAt))
+
+        /** Cancelled timestamp if the subscription is cancelled */
+        fun cancelledAt(cancelledAt: JsonField<OffsetDateTime>) = apply {
+            this.cancelledAt = cancelledAt
+        }
+
         /** The discount id if discount is applied */
         fun discountId(discountId: String?) = discountId(JsonField.ofNullable(discountId))
 
@@ -459,6 +482,7 @@ private constructor(
                 checkRequired("subscriptionPeriodInterval", subscriptionPeriodInterval),
                 checkRequired("taxInclusive", taxInclusive),
                 checkRequired("trialPeriodDays", trialPeriodDays),
+                cancelledAt,
                 discountId,
                 additionalProperties.toImmutable(),
             )
@@ -2021,15 +2045,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Subscription && createdAt == other.createdAt && currency == other.currency && customer == other.customer && metadata == other.metadata && nextBillingDate == other.nextBillingDate && paymentFrequencyCount == other.paymentFrequencyCount && paymentFrequencyInterval == other.paymentFrequencyInterval && productId == other.productId && quantity == other.quantity && recurringPreTaxAmount == other.recurringPreTaxAmount && status == other.status && subscriptionId == other.subscriptionId && subscriptionPeriodCount == other.subscriptionPeriodCount && subscriptionPeriodInterval == other.subscriptionPeriodInterval && taxInclusive == other.taxInclusive && trialPeriodDays == other.trialPeriodDays && discountId == other.discountId && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Subscription && createdAt == other.createdAt && currency == other.currency && customer == other.customer && metadata == other.metadata && nextBillingDate == other.nextBillingDate && paymentFrequencyCount == other.paymentFrequencyCount && paymentFrequencyInterval == other.paymentFrequencyInterval && productId == other.productId && quantity == other.quantity && recurringPreTaxAmount == other.recurringPreTaxAmount && status == other.status && subscriptionId == other.subscriptionId && subscriptionPeriodCount == other.subscriptionPeriodCount && subscriptionPeriodInterval == other.subscriptionPeriodInterval && taxInclusive == other.taxInclusive && trialPeriodDays == other.trialPeriodDays && cancelledAt == other.cancelledAt && discountId == other.discountId && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(createdAt, currency, customer, metadata, nextBillingDate, paymentFrequencyCount, paymentFrequencyInterval, productId, quantity, recurringPreTaxAmount, status, subscriptionId, subscriptionPeriodCount, subscriptionPeriodInterval, taxInclusive, trialPeriodDays, discountId, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(createdAt, currency, customer, metadata, nextBillingDate, paymentFrequencyCount, paymentFrequencyInterval, productId, quantity, recurringPreTaxAmount, status, subscriptionId, subscriptionPeriodCount, subscriptionPeriodInterval, taxInclusive, trialPeriodDays, cancelledAt, discountId, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Subscription{createdAt=$createdAt, currency=$currency, customer=$customer, metadata=$metadata, nextBillingDate=$nextBillingDate, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, discountId=$discountId, additionalProperties=$additionalProperties}"
+        "Subscription{createdAt=$createdAt, currency=$currency, customer=$customer, metadata=$metadata, nextBillingDate=$nextBillingDate, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancelledAt=$cancelledAt, discountId=$discountId, additionalProperties=$additionalProperties}"
 }
