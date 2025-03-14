@@ -27,9 +27,9 @@ configure<PublishingExtension> {
                 }
 
                 scm {
-                    connection.set("scm:git:git://github.com/stainless-sdks/dodo-payments-kotlin.git")
-                    developerConnection.set("scm:git:git://github.com/stainless-sdks/dodo-payments-kotlin.git")
-                    url.set("https://github.com/stainless-sdks/dodo-payments-kotlin")
+                    connection.set("scm:git:git://github.com/dodopayments/dodopayments-kotlin.git")
+                    developerConnection.set("scm:git:git://github.com/dodopayments/dodopayments-kotlin.git")
+                    url.set("https://github.com/dodopayments/dodopayments-kotlin")
                 }
 
                 versionMapping {
