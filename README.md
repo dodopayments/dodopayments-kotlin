@@ -9,6 +9,8 @@
 
 The Dodo Payments Kotlin SDK provides convenient access to the Dodo Payments REST API from applications written in Kotlin.
 
+The Dodo Payments Kotlin SDK is similar to the Dodo Payments Java SDK but with minor differences that make it more ergonomic for use in Kotlin, such as nullable values instead of `Optional`, `Sequence` instead of `Stream`, and suspend functions instead of `CompletableFuture`.
+
 It is generated with [Stainless](https://www.stainless.com/).
 
 The REST API documentation can be found on [docs.dodopayments.com](https://docs.dodopayments.com). KDocs are also available on [javadoc.io](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/0.0.1-alpha.0).
