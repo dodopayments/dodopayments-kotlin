@@ -5,6 +5,7 @@ package com.dodopayments.api.services.async
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.models.licensekeys.LicenseKey
+import com.dodopayments.api.models.licensekeys.LicenseKeyListPageAsync
 import com.dodopayments.api.models.licensekeys.LicenseKeyListParams
 import com.dodopayments.api.models.licensekeys.LicenseKeyRetrieveParams
 import com.dodopayments.api.models.licensekeys.LicenseKeyUpdateParams
@@ -30,10 +31,10 @@ interface LicenseKeyServiceAsync {
     suspend fun list(
         params: LicenseKeyListParams = LicenseKeyListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): List<ListLicenseKeysResponse>
+    ): LicenseKeyListPageAsync
 
     /** @see [list] */
-    suspend fun list(requestOptions: RequestOptions): List<ListLicenseKeysResponse> =
+    suspend fun list(requestOptions: RequestOptions): LicenseKeyListPageAsync =
         list(LicenseKeyListParams.none(), requestOptions)
 
     /**
@@ -70,13 +71,11 @@ interface LicenseKeyServiceAsync {
         suspend fun list(
             params: LicenseKeyListParams = LicenseKeyListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<List<ListLicenseKeysResponse>>
+        ): HttpResponseFor<LicenseKeyListPageAsync>
 
         /** @see [list] */
         @MustBeClosed
-        suspend fun list(
-            requestOptions: RequestOptions
-        ): HttpResponseFor<List<ListLicenseKeysResponse>> =
+        suspend fun list(requestOptions: RequestOptions): HttpResponseFor<LicenseKeyListPageAsync> =
             list(LicenseKeyListParams.none(), requestOptions)
     }
 }

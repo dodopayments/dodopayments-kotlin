@@ -16,6 +16,7 @@ import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepare
 import com.dodopayments.api.errors.DodoPaymentsError
 import com.dodopayments.api.models.licensekeys.LicenseKey
+import com.dodopayments.api.models.licensekeys.LicenseKeyListPage
 import com.dodopayments.api.models.licensekeys.LicenseKeyListParams
 import com.dodopayments.api.models.licensekeys.LicenseKeyRetrieveParams
 import com.dodopayments.api.models.licensekeys.LicenseKeyUpdateParams
@@ -46,7 +47,7 @@ class LicenseKeyServiceImpl internal constructor(private val clientOptions: Clie
     override fun list(
         params: LicenseKeyListParams,
         requestOptions: RequestOptions,
-    ): List<ListLicenseKeysResponse> =
+    ): LicenseKeyListPage =
         // get /license_keys
         withRawResponse().list(params, requestOptions).parse()
 
@@ -109,14 +110,14 @@ class LicenseKeyServiceImpl internal constructor(private val clientOptions: Clie
             }
         }
 
-        private val listHandler: Handler<List<ListLicenseKeysResponse>> =
-            jsonHandler<List<ListLicenseKeysResponse>>(clientOptions.jsonMapper)
+        private val listHandler: Handler<LicenseKeyListPage.Response> =
+            jsonHandler<LicenseKeyListPage.Response>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun list(
             params: LicenseKeyListParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<List<ListLicenseKeysResponse>> {
+        ): HttpResponseFor<LicenseKeyListPage> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -130,9 +131,10 @@ class LicenseKeyServiceImpl internal constructor(private val clientOptions: Clie
                     .use { listHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
-                            it.forEach { it.validate() }
+                            it.validate()
                         }
                     }
+                    .let { LicenseKeyListPage.of(LicenseKeyServiceImpl(clientOptions), params, it) }
             }
         }
     }

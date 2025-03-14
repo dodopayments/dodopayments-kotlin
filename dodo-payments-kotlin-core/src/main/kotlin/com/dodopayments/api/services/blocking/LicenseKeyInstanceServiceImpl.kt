@@ -16,6 +16,7 @@ import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepare
 import com.dodopayments.api.errors.DodoPaymentsError
 import com.dodopayments.api.models.licensekeyinstances.LicenseKeyInstance
+import com.dodopayments.api.models.licensekeyinstances.LicenseKeyInstanceListPage
 import com.dodopayments.api.models.licensekeyinstances.LicenseKeyInstanceListParams
 import com.dodopayments.api.models.licensekeyinstances.LicenseKeyInstanceRetrieveParams
 import com.dodopayments.api.models.licensekeyinstances.LicenseKeyInstanceUpdateParams
@@ -46,7 +47,7 @@ class LicenseKeyInstanceServiceImpl internal constructor(private val clientOptio
     override fun list(
         params: LicenseKeyInstanceListParams,
         requestOptions: RequestOptions,
-    ): List<ListLicenseKeyInstancesResponse> =
+    ): LicenseKeyInstanceListPage =
         // get /license_key_instances
         withRawResponse().list(params, requestOptions).parse()
 
@@ -109,14 +110,14 @@ class LicenseKeyInstanceServiceImpl internal constructor(private val clientOptio
             }
         }
 
-        private val listHandler: Handler<List<ListLicenseKeyInstancesResponse>> =
-            jsonHandler<List<ListLicenseKeyInstancesResponse>>(clientOptions.jsonMapper)
+        private val listHandler: Handler<LicenseKeyInstanceListPage.Response> =
+            jsonHandler<LicenseKeyInstanceListPage.Response>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun list(
             params: LicenseKeyInstanceListParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<List<ListLicenseKeyInstancesResponse>> {
+        ): HttpResponseFor<LicenseKeyInstanceListPage> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -130,8 +131,15 @@ class LicenseKeyInstanceServiceImpl internal constructor(private val clientOptio
                     .use { listHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
-                            it.forEach { it.validate() }
+                            it.validate()
                         }
+                    }
+                    .let {
+                        LicenseKeyInstanceListPage.of(
+                            LicenseKeyInstanceServiceImpl(clientOptions),
+                            params,
+                            it,
+                        )
                     }
             }
         }

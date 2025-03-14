@@ -5,6 +5,7 @@ package com.dodopayments.api.services.blocking
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.models.licensekeys.LicenseKey
+import com.dodopayments.api.models.licensekeys.LicenseKeyListPage
 import com.dodopayments.api.models.licensekeys.LicenseKeyListParams
 import com.dodopayments.api.models.licensekeys.LicenseKeyRetrieveParams
 import com.dodopayments.api.models.licensekeys.LicenseKeyUpdateParams
@@ -30,10 +31,10 @@ interface LicenseKeyService {
     fun list(
         params: LicenseKeyListParams = LicenseKeyListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): List<ListLicenseKeysResponse>
+    ): LicenseKeyListPage
 
     /** @see [list] */
-    fun list(requestOptions: RequestOptions): List<ListLicenseKeysResponse> =
+    fun list(requestOptions: RequestOptions): LicenseKeyListPage =
         list(LicenseKeyListParams.none(), requestOptions)
 
     /** A view of [LicenseKeyService] that provides access to raw HTTP responses for each method. */
@@ -67,11 +68,11 @@ interface LicenseKeyService {
         fun list(
             params: LicenseKeyListParams = LicenseKeyListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<List<ListLicenseKeysResponse>>
+        ): HttpResponseFor<LicenseKeyListPage>
 
         /** @see [list] */
         @MustBeClosed
-        fun list(requestOptions: RequestOptions): HttpResponseFor<List<ListLicenseKeysResponse>> =
+        fun list(requestOptions: RequestOptions): HttpResponseFor<LicenseKeyListPage> =
             list(LicenseKeyListParams.none(), requestOptions)
     }
 }
