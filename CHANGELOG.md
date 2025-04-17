@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.14.2 (2025-04-17)
+
+Full Changelog: [v1.14.1...v1.14.2](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.14.1...v1.14.2)
+
+### Chores
+
+* **internal:** version bump ([c634026](https://github.com/dodopayments/dodopayments-kotlin/commit/c634026cb5354dcd2e9deeb97862603963a40338))
+
 ## 1.14.1 (2025-04-17)
 
 Full Changelog: [v1.14.0...v1.14.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.14.0...v1.14.1)
