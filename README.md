@@ -2,18 +2,16 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.dodopayments.api/dodo-payments-kotlin)](https://central.sonatype.com/artifact/com.dodopayments.api/dodo-payments-kotlin/0.0.1-alpha.0)
-[![javadoc](https://javadoc.io/badge2/com.dodopayments.api/dodo-payments-kotlin/0.0.1-alpha.0/javadoc.svg)](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/0.0.1-alpha.0)
+[![Maven Central](https://img.shields.io/maven-central/v/com.dodo_payments.api/dodo-payments-kotlin)](https://central.sonatype.com/artifact/com.dodo_payments.api/dodo-payments-kotlin/0.0.1-alpha.0)
+[![javadoc](https://javadoc.io/badge2/com.dodo_payments.api/dodo-payments-kotlin/0.0.1-alpha.0/javadoc.svg)](https://javadoc.io/doc/com.dodo_payments.api/dodo-payments-kotlin/0.0.1-alpha.0)
 
 <!-- x-release-please-end -->
 
 The Dodo Payments Kotlin SDK provides convenient access to the Dodo Payments REST API from applications written in Kotlin.
 
-The Dodo Payments Kotlin SDK is similar to the Dodo Payments Java SDK but with minor differences that make it more ergonomic for use in Kotlin, such as nullable values instead of `Optional`, `Sequence` instead of `Stream`, and suspend functions instead of `CompletableFuture`.
-
 It is generated with [Stainless](https://www.stainless.com/).
 
-The REST API documentation can be found on [docs.dodopayments.com](https://docs.dodopayments.com). KDocs are also available on [javadoc.io](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/0.0.1-alpha.0).
+The REST API documentation can be found on [docs.dodopayments.com](https://docs.dodopayments.com). KDocs are also available on [javadoc.io](https://javadoc.io/doc/com.dodo_payments.api/dodo-payments-kotlin/0.0.1-alpha.0).
 
 ## Installation
 
@@ -22,14 +20,14 @@ The REST API documentation can be found on [docs.dodopayments.com](https://docs.
 ### Gradle
 
 ```kotlin
-implementation("com.dodopayments.api:dodo-payments-kotlin:0.0.1-alpha.0")
+implementation("com.dodo_payments.api:dodo-payments-kotlin:0.0.1-alpha.0")
 ```
 
 ### Maven
 
 ```xml
 <dependency>
-    <groupId>com.dodopayments.api</groupId>
+    <groupId>com.dodo_payments.api</groupId>
     <artifactId>dodo-payments-kotlin</artifactId>
     <version>0.0.1-alpha.0</version>
 </dependency>
@@ -44,14 +42,14 @@ This library requires Java 8 or later.
 ## Usage
 
 ```kotlin
-import com.dodopayments.api.client.DodoPaymentsClient
-import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
-import com.dodopayments.api.models.misc.CountryCode
-import com.dodopayments.api.models.payments.AttachExistingCustomer
-import com.dodopayments.api.models.payments.BillingAddress
-import com.dodopayments.api.models.payments.OneTimeProductCartItem
-import com.dodopayments.api.models.payments.PaymentCreateParams
-import com.dodopayments.api.models.payments.PaymentCreateResponse
+import com.dodo_payments.api.client.DodoPaymentsClient
+import com.dodo_payments.api.client.okhttp.DodoPaymentsOkHttpClient
+import com.dodo_payments.api.models.misc.CountryCode
+import com.dodo_payments.api.models.payments.AttachExistingCustomer
+import com.dodo_payments.api.models.payments.BillingAddress
+import com.dodo_payments.api.models.payments.OneTimeProductCartItem
+import com.dodo_payments.api.models.payments.PaymentCreateParams
+import com.dodo_payments.api.models.payments.PaymentCreateResponse
 
 // Configures using the `DODO_PAYMENTS_API_KEY` environment variable
 val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.fromEnv()
@@ -80,8 +78,8 @@ val payment: PaymentCreateResponse = client.payments().create(params)
 Configure the client using environment variables:
 
 ```kotlin
-import com.dodopayments.api.client.DodoPaymentsClient
-import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
+import com.dodo_payments.api.client.DodoPaymentsClient
+import com.dodo_payments.api.client.okhttp.DodoPaymentsOkHttpClient
 
 // Configures using the `DODO_PAYMENTS_API_KEY` environment variable
 val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.fromEnv()
@@ -90,8 +88,8 @@ val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.fromEnv()
 Or manually:
 
 ```kotlin
-import com.dodopayments.api.client.DodoPaymentsClient
-import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
+import com.dodo_payments.api.client.DodoPaymentsClient
+import com.dodo_payments.api.client.okhttp.DodoPaymentsOkHttpClient
 
 val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.builder()
     .bearerToken("My Bearer Token")
@@ -101,8 +99,8 @@ val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.builder()
 Or using a combination of the two approaches:
 
 ```kotlin
-import com.dodopayments.api.client.DodoPaymentsClient
-import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
+import com.dodo_payments.api.client.DodoPaymentsClient
+import com.dodo_payments.api.client.okhttp.DodoPaymentsOkHttpClient
 
 val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.builder()
     // Configures using the `DODO_PAYMENTS_API_KEY` environment variable
@@ -140,14 +138,14 @@ Because each class is immutable, builder modification will _never_ affect alread
 The default client is synchronous. To switch to asynchronous execution, call the `async()` method:
 
 ```kotlin
-import com.dodopayments.api.client.DodoPaymentsClient
-import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
-import com.dodopayments.api.models.misc.CountryCode
-import com.dodopayments.api.models.payments.AttachExistingCustomer
-import com.dodopayments.api.models.payments.BillingAddress
-import com.dodopayments.api.models.payments.OneTimeProductCartItem
-import com.dodopayments.api.models.payments.PaymentCreateParams
-import com.dodopayments.api.models.payments.PaymentCreateResponse
+import com.dodo_payments.api.client.DodoPaymentsClient
+import com.dodo_payments.api.client.okhttp.DodoPaymentsOkHttpClient
+import com.dodo_payments.api.models.misc.CountryCode
+import com.dodo_payments.api.models.payments.AttachExistingCustomer
+import com.dodo_payments.api.models.payments.BillingAddress
+import com.dodo_payments.api.models.payments.OneTimeProductCartItem
+import com.dodo_payments.api.models.payments.PaymentCreateParams
+import com.dodo_payments.api.models.payments.PaymentCreateResponse
 
 // Configures using the `DODO_PAYMENTS_API_KEY` environment variable
 val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.fromEnv()
@@ -174,14 +172,14 @@ val payment: PaymentCreateResponse = client.async().payments().create(params)
 Or create an asynchronous client from the beginning:
 
 ```kotlin
-import com.dodopayments.api.client.DodoPaymentsClientAsync
-import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClientAsync
-import com.dodopayments.api.models.misc.CountryCode
-import com.dodopayments.api.models.payments.AttachExistingCustomer
-import com.dodopayments.api.models.payments.BillingAddress
-import com.dodopayments.api.models.payments.OneTimeProductCartItem
-import com.dodopayments.api.models.payments.PaymentCreateParams
-import com.dodopayments.api.models.payments.PaymentCreateResponse
+import com.dodo_payments.api.client.DodoPaymentsClientAsync
+import com.dodo_payments.api.client.okhttp.DodoPaymentsOkHttpClientAsync
+import com.dodo_payments.api.models.misc.CountryCode
+import com.dodo_payments.api.models.payments.AttachExistingCustomer
+import com.dodo_payments.api.models.payments.BillingAddress
+import com.dodo_payments.api.models.payments.OneTimeProductCartItem
+import com.dodo_payments.api.models.payments.PaymentCreateParams
+import com.dodo_payments.api.models.payments.PaymentCreateResponse
 
 // Configures using the `DODO_PAYMENTS_API_KEY` environment variable
 val client: DodoPaymentsClientAsync = DodoPaymentsOkHttpClientAsync.fromEnv()
@@ -214,14 +212,14 @@ The SDK defines methods that deserialize responses into instances of Kotlin clas
 To access this data, prefix any HTTP method call on a client or service with `withRawResponse()`:
 
 ```kotlin
-import com.dodopayments.api.core.http.Headers
-import com.dodopayments.api.core.http.HttpResponseFor
-import com.dodopayments.api.models.misc.CountryCode
-import com.dodopayments.api.models.payments.AttachExistingCustomer
-import com.dodopayments.api.models.payments.BillingAddress
-import com.dodopayments.api.models.payments.OneTimeProductCartItem
-import com.dodopayments.api.models.payments.PaymentCreateParams
-import com.dodopayments.api.models.payments.PaymentCreateResponse
+import com.dodo_payments.api.core.http.Headers
+import com.dodo_payments.api.core.http.HttpResponseFor
+import com.dodo_payments.api.models.misc.CountryCode
+import com.dodo_payments.api.models.payments.AttachExistingCustomer
+import com.dodo_payments.api.models.payments.BillingAddress
+import com.dodo_payments.api.models.payments.OneTimeProductCartItem
+import com.dodo_payments.api.models.payments.PaymentCreateParams
+import com.dodo_payments.api.models.payments.PaymentCreateResponse
 
 val params: PaymentCreateParams = PaymentCreateParams.builder()
     .billing(BillingAddress.builder()
@@ -248,7 +246,7 @@ val headers: Headers = payment.headers()
 You can still deserialize the response into an instance of a Kotlin class if needed:
 
 ```kotlin
-import com.dodopayments.api.models.payments.PaymentCreateResponse
+import com.dodo_payments.api.models.payments.PaymentCreateResponse
 
 val parsedPayment: PaymentCreateResponse = payment.parse()
 ```
@@ -257,7 +255,7 @@ val parsedPayment: PaymentCreateResponse = payment.parse()
 
 The SDK throws custom unchecked exception types:
 
-- [`DodoPaymentsServiceException`](dodo-payments-kotlin-core/src/main/kotlin/com/dodopayments/api/errors/DodoPaymentsServiceException.kt): Base class for HTTP errors. See this table for which exception subclass is thrown for each HTTP status code:
+- [`DodoPaymentsServiceException`](dodo-payments-kotlin-core/src/main/kotlin/com/dodo_payments/api/errors/DodoPaymentsServiceException.kt): Base class for HTTP errors. See this table for which exception subclass is thrown for each HTTP status code:
 
   | Status | Exception                       |
   | ------ | ------------------------------- |
@@ -270,11 +268,11 @@ The SDK throws custom unchecked exception types:
   | 5xx    | `InternalServerException`       |
   | others | `UnexpectedStatusCodeException` |
 
-- [`DodoPaymentsIoException`](dodo-payments-kotlin-core/src/main/kotlin/com/dodopayments/api/errors/DodoPaymentsIoException.kt): I/O networking errors.
+- [`DodoPaymentsIoException`](dodo-payments-kotlin-core/src/main/kotlin/com/dodo_payments/api/errors/DodoPaymentsIoException.kt): I/O networking errors.
 
-- [`DodoPaymentsInvalidDataException`](dodo-payments-kotlin-core/src/main/kotlin/com/dodopayments/api/errors/DodoPaymentsInvalidDataException.kt): Failure to interpret successfully parsed data. For example, when accessing a property that's supposed to be required, but the API unexpectedly omitted it from the response.
+- [`DodoPaymentsInvalidDataException`](dodo-payments-kotlin-core/src/main/kotlin/com/dodo_payments/api/errors/DodoPaymentsInvalidDataException.kt): Failure to interpret successfully parsed data. For example, when accessing a property that's supposed to be required, but the API unexpectedly omitted it from the response.
 
-- [`DodoPaymentsException`](dodo-payments-kotlin-core/src/main/kotlin/com/dodopayments/api/errors/DodoPaymentsException.kt): Base class for all exceptions. Most errors will result in one of the previously mentioned ones, but completely generic errors may be thrown using the base class.
+- [`DodoPaymentsException`](dodo-payments-kotlin-core/src/main/kotlin/com/dodo_payments/api/errors/DodoPaymentsException.kt): Base class for all exceptions. Most errors will result in one of the previously mentioned ones, but completely generic errors may be thrown using the base class.
 
 ## Pagination
 
@@ -287,8 +285,8 @@ To iterate through all results across all pages, you can use `autoPager`, which 
 ### Synchronous
 
 ```kotlin
-import com.dodopayments.api.models.payments.PaymentListPage
-import com.dodopayments.api.models.payments.PaymentListResponse
+import com.dodo_payments.api.models.payments.PaymentListPage
+import com.dodo_payments.api.models.payments.PaymentListResponse
 
 // As a Sequence:
 client.payments().list(params).autoPager()
@@ -310,8 +308,8 @@ asyncClient.payments().list(params).autoPager()
 If none of the above helpers meet your needs, you can also manually request pages one-by-one. A page of results has a `data()` method to fetch the list of objects, as well as top-level `response` and other methods to fetch top-level data about the page. It also has methods `hasNextPage`, `getNextPage`, and `getNextPageParams` methods to help with pagination.
 
 ```kotlin
-import com.dodopayments.api.models.payments.PaymentListPage
-import com.dodopayments.api.models.payments.PaymentListResponse
+import com.dodo_payments.api.models.payments.PaymentListPage
+import com.dodo_payments.api.models.payments.PaymentListResponse
 
 val page = client.payments().list(params)
 while (page != null) {
@@ -358,8 +356,8 @@ The API may also explicitly instruct the SDK to retry or not retry a response.
 To set a custom number of retries, configure the client using the `maxRetries` method:
 
 ```kotlin
-import com.dodopayments.api.client.DodoPaymentsClient
-import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
+import com.dodo_payments.api.client.DodoPaymentsClient
+import com.dodo_payments.api.client.okhttp.DodoPaymentsOkHttpClient
 
 val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.builder()
     .fromEnv()
@@ -374,12 +372,12 @@ Requests time out after 1 minute by default.
 To set a custom timeout, configure the method call using the `timeout` method:
 
 ```kotlin
-import com.dodopayments.api.models.misc.CountryCode
-import com.dodopayments.api.models.payments.AttachExistingCustomer
-import com.dodopayments.api.models.payments.BillingAddress
-import com.dodopayments.api.models.payments.OneTimeProductCartItem
-import com.dodopayments.api.models.payments.PaymentCreateParams
-import com.dodopayments.api.models.payments.PaymentCreateResponse
+import com.dodo_payments.api.models.misc.CountryCode
+import com.dodo_payments.api.models.payments.AttachExistingCustomer
+import com.dodo_payments.api.models.payments.BillingAddress
+import com.dodo_payments.api.models.payments.OneTimeProductCartItem
+import com.dodo_payments.api.models.payments.PaymentCreateParams
+import com.dodo_payments.api.models.payments.PaymentCreateResponse
 
 val payment: PaymentCreateResponse = client.payments().create(
   params, RequestOptions.builder().timeout(Duration.ofSeconds(30)).build()
@@ -389,8 +387,8 @@ val payment: PaymentCreateResponse = client.payments().create(
 Or configure the default for all method calls at the client level:
 
 ```kotlin
-import com.dodopayments.api.client.DodoPaymentsClient
-import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
+import com.dodo_payments.api.client.DodoPaymentsClient
+import com.dodo_payments.api.client.okhttp.DodoPaymentsOkHttpClient
 import java.time.Duration
 
 val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.builder()
@@ -404,8 +402,8 @@ val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.builder()
 To route requests through a proxy, configure the client using the `proxy` method:
 
 ```kotlin
-import com.dodopayments.api.client.DodoPaymentsClient
-import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
+import com.dodo_payments.api.client.DodoPaymentsClient
+import com.dodo_payments.api.client.okhttp.DodoPaymentsOkHttpClient
 import java.net.InetSocketAddress
 import java.net.Proxy
 
@@ -424,8 +422,8 @@ val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.builder()
 The SDK sends requests to the live_mode by default. To send requests to a different environment, configure the client like so:
 
 ```kotlin
-import com.dodopayments.api.client.DodoPaymentsClient
-import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
+import com.dodo_payments.api.client.DodoPaymentsClient
+import com.dodo_payments.api.client.okhttp.DodoPaymentsOkHttpClient
 
 val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.builder()
     .fromEnv()
@@ -442,8 +440,8 @@ The SDK is typed for convenient usage of the documented API. However, it also su
 To set undocumented parameters, call the `putAdditionalHeader`, `putAdditionalQueryParam`, or `putAdditionalBodyProperty` methods on any `Params` class:
 
 ```kotlin
-import com.dodopayments.api.core.JsonValue
-import com.dodopayments.api.models.payments.PaymentCreateParams
+import com.dodo_payments.api.core.JsonValue
+import com.dodo_payments.api.models.payments.PaymentCreateParams
 
 val params: PaymentCreateParams = PaymentCreateParams.builder()
     .putAdditionalHeader("Secret-Header", "42")
@@ -457,9 +455,9 @@ These can be accessed on the built object later using the `_additionalHeaders()`
 To set undocumented parameters on _nested_ headers, query params, or body classes, call the `putAdditionalProperty` method on the nested class:
 
 ```kotlin
-import com.dodopayments.api.core.JsonValue
-import com.dodopayments.api.models.payments.BillingAddress
-import com.dodopayments.api.models.payments.PaymentCreateParams
+import com.dodo_payments.api.core.JsonValue
+import com.dodo_payments.api.models.payments.BillingAddress
+import com.dodo_payments.api.models.payments.PaymentCreateParams
 
 val params: PaymentCreateParams = PaymentCreateParams.builder()
     .billing(BillingAddress.builder()
@@ -470,14 +468,14 @@ val params: PaymentCreateParams = PaymentCreateParams.builder()
 
 These properties can be accessed on the nested built object later using the `_additionalProperties()` method.
 
-To set a documented parameter or property to an undocumented or not yet supported _value_, pass a [`JsonValue`](dodo-payments-kotlin-core/src/main/kotlin/com/dodopayments/api/core/Values.kt) object to its setter:
+To set a documented parameter or property to an undocumented or not yet supported _value_, pass a [`JsonValue`](dodo-payments-kotlin-core/src/main/kotlin/com/dodo_payments/api/core/Values.kt) object to its setter:
 
 ```kotlin
-import com.dodopayments.api.models.misc.CountryCode
-import com.dodopayments.api.models.payments.AttachExistingCustomer
-import com.dodopayments.api.models.payments.BillingAddress
-import com.dodopayments.api.models.payments.OneTimeProductCartItem
-import com.dodopayments.api.models.payments.PaymentCreateParams
+import com.dodo_payments.api.models.misc.CountryCode
+import com.dodo_payments.api.models.payments.AttachExistingCustomer
+import com.dodo_payments.api.models.payments.BillingAddress
+import com.dodo_payments.api.models.payments.OneTimeProductCartItem
+import com.dodo_payments.api.models.payments.PaymentCreateParams
 
 val params: PaymentCreateParams = PaymentCreateParams.builder()
     .billing(BillingAddress.builder()
@@ -497,10 +495,10 @@ val params: PaymentCreateParams = PaymentCreateParams.builder()
     .build()
 ```
 
-The most straightforward way to create a [`JsonValue`](dodo-payments-kotlin-core/src/main/kotlin/com/dodopayments/api/core/Values.kt) is using its `from(...)` method:
+The most straightforward way to create a [`JsonValue`](dodo-payments-kotlin-core/src/main/kotlin/com/dodo_payments/api/core/Values.kt) is using its `from(...)` method:
 
 ```kotlin
-import com.dodopayments.api.core.JsonValue
+import com.dodo_payments.api.core.JsonValue
 
 // Create primitive JSON values
 val nullValue: JsonValue = JsonValue.from(null)
@@ -537,10 +535,10 @@ val complexValue: JsonValue = JsonValue.from(mapOf(
 To access undocumented response properties, call the `_additionalProperties()` method:
 
 ```kotlin
-import com.dodopayments.api.core.JsonBoolean
-import com.dodopayments.api.core.JsonNull
-import com.dodopayments.api.core.JsonNumber
-import com.dodopayments.api.core.JsonValue
+import com.dodo_payments.api.core.JsonBoolean
+import com.dodo_payments.api.core.JsonNull
+import com.dodo_payments.api.core.JsonNumber
+import com.dodo_payments.api.core.JsonValue
 
 val additionalProperties: Map<String, JsonValue> = client.payments().create(params)._additionalProperties()
 val secretPropertyValue: JsonValue = additionalProperties.get("secretProperty")
@@ -557,8 +555,8 @@ val result = when (secretPropertyValue) {
 To access a property's raw JSON value, which may be undocumented, call its `_` prefixed method:
 
 ```kotlin
-import com.dodopayments.api.core.JsonField
-import com.dodopayments.api.models.payments.BillingAddress
+import com.dodo_payments.api.core.JsonField
+import com.dodo_payments.api.models.payments.BillingAddress
 
 val billing: JsonField<BillingAddress> = client.payments().create(params)._billing()
 
@@ -580,12 +578,12 @@ if (billing.isMissing()) {
 
 In rare cases, the API may return a response that doesn't match the expected type. For example, the SDK may expect a property to contain a `String`, but the API could return something else.
 
-By default, the SDK will not throw an exception in this case. It will throw [`DodoPaymentsInvalidDataException`](dodo-payments-kotlin-core/src/main/kotlin/com/dodopayments/api/errors/DodoPaymentsInvalidDataException.kt) only if you directly access the property.
+By default, the SDK will not throw an exception in this case. It will throw [`DodoPaymentsInvalidDataException`](dodo-payments-kotlin-core/src/main/kotlin/com/dodo_payments/api/errors/DodoPaymentsInvalidDataException.kt) only if you directly access the property.
 
 If you would prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
 ```kotlin
-import com.dodopayments.api.models.payments.PaymentCreateResponse
+import com.dodo_payments.api.models.payments.PaymentCreateResponse
 
 val payment: PaymentCreateResponse = client.payments().create(params).validate()
 ```
@@ -593,12 +591,12 @@ val payment: PaymentCreateResponse = client.payments().create(params).validate()
 Or configure the method call to validate the response using the `responseValidation` method:
 
 ```kotlin
-import com.dodopayments.api.models.misc.CountryCode
-import com.dodopayments.api.models.payments.AttachExistingCustomer
-import com.dodopayments.api.models.payments.BillingAddress
-import com.dodopayments.api.models.payments.OneTimeProductCartItem
-import com.dodopayments.api.models.payments.PaymentCreateParams
-import com.dodopayments.api.models.payments.PaymentCreateResponse
+import com.dodo_payments.api.models.misc.CountryCode
+import com.dodo_payments.api.models.payments.AttachExistingCustomer
+import com.dodo_payments.api.models.payments.BillingAddress
+import com.dodo_payments.api.models.payments.OneTimeProductCartItem
+import com.dodo_payments.api.models.payments.PaymentCreateParams
+import com.dodo_payments.api.models.payments.PaymentCreateResponse
 
 val payment: PaymentCreateResponse = client.payments().create(
   params, RequestOptions.builder().responseValidation(true).build()
@@ -608,8 +606,8 @@ val payment: PaymentCreateResponse = client.payments().create(
 Or configure the default for all method calls at the client level:
 
 ```kotlin
-import com.dodopayments.api.client.DodoPaymentsClient
-import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
+import com.dodo_payments.api.client.DodoPaymentsClient
+import com.dodo_payments.api.client.okhttp.DodoPaymentsOkHttpClient
 
 val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.builder()
     .fromEnv()
