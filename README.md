@@ -13,7 +13,7 @@ The Dodo Payments Kotlin SDK is similar to the Dodo Payments Java SDK but with m
 
 It is generated with [Stainless](https://www.stainless.com/).
 
-The REST API documentation can be found on [docs.dodopayments.com](https://docs.dodopayments.com). KDocs are also available on [javadoc.io](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/1.14.0).
+The REST API documentation can be found on [docs.dodopayments.com](https://docs.dodopayments.com). KDocs are also available on [javadoc.io](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/1.14.1).
 
 ## Installation
 
