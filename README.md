@@ -2,8 +2,8 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.dodopayments.api/dodo-payments-kotlin)](https://central.sonatype.com/artifact/com.dodopayments.api/dodo-payments-kotlin/0.0.1-alpha.0)
-[![javadoc](https://javadoc.io/badge2/com.dodopayments.api/dodo-payments-kotlin/0.0.1-alpha.0/javadoc.svg)](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/0.0.1-alpha.0)
+[![Maven Central](https://img.shields.io/maven-central/v/com.dodopayments.api/dodo-payments-kotlin)](https://central.sonatype.com/artifact/com.dodopayments.api/dodo-payments-kotlin/1.14.0)
+[![javadoc](https://javadoc.io/badge2/com.dodopayments.api/dodo-payments-kotlin/1.14.0/javadoc.svg)](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/1.14.0)
 
 <!-- x-release-please-end -->
 
@@ -13,7 +13,7 @@ The Dodo Payments Kotlin SDK is similar to the Dodo Payments Java SDK but with m
 
 It is generated with [Stainless](https://www.stainless.com/).
 
-The REST API documentation can be found on [docs.dodopayments.com](https://docs.dodopayments.com). KDocs are also available on [javadoc.io](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/0.0.1-alpha.0).
+The REST API documentation can be found on [docs.dodopayments.com](https://docs.dodopayments.com). KDocs are also available on [javadoc.io](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/1.14.0).
 
 ## Installation
 
@@ -22,7 +22,7 @@ The REST API documentation can be found on [docs.dodopayments.com](https://docs.
 ### Gradle
 
 ```kotlin
-implementation("com.dodopayments.api:dodo-payments-kotlin:0.0.1-alpha.0")
+implementation("com.dodopayments.api:dodo-payments-kotlin:1.14.0")
 ```
 
 ### Maven
@@ -31,7 +31,7 @@ implementation("com.dodopayments.api:dodo-payments-kotlin:0.0.1-alpha.0")
 <dependency>
     <groupId>com.dodopayments.api</groupId>
     <artifactId>dodo-payments-kotlin</artifactId>
-    <version>0.0.1-alpha.0</version>
+    <version>1.14.0</version>
 </dependency>
 ```
 
