@@ -8,5 +8,5 @@ dependencies {
 }
 
 application {
-    mainClass = "com.dodo_payments.api.example.MainKt"
+    mainClass = "com.dodopayments.api.example.MainKt"
 }
