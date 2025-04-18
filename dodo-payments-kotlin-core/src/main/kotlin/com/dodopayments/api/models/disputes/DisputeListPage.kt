@@ -2,140 +2,104 @@
 
 package com.dodopayments.api.models.disputes
 
-import com.dodopayments.api.core.ExcludeMissing
-import com.dodopayments.api.core.JsonField
-import com.dodopayments.api.core.JsonMissing
-import com.dodopayments.api.core.JsonValue
-import com.dodopayments.api.core.NoAutoDetect
-import com.dodopayments.api.core.immutableEmptyMap
-import com.dodopayments.api.core.toImmutable
+import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.blocking.DisputeService
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Objects
 
+/** @see [DisputeService.list] */
 class DisputeListPage
 private constructor(
-    private val disputesService: DisputeService,
+    private val service: DisputeService,
     private val params: DisputeListParams,
-    private val response: Response,
+    private val response: DisputeListPageResponse,
 ) {
 
-    fun response(): Response = response
+    /**
+     * Delegates to [DisputeListPageResponse], but gracefully handles missing data.
+     *
+     * @see [DisputeListPageResponse.items]
+     */
+    fun items(): List<Dispute> = response._items().getNullable("items") ?: emptyList()
 
-    fun items(): List<Dispute> = response().items()
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is DisputeListPage && disputesService == other.disputesService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(disputesService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "DisputeListPage{disputesService=$disputesService, params=$params, response=$response}"
-
-    fun hasNextPage(): Boolean {
-        return !items().isEmpty()
-    }
+    fun hasNextPage(): Boolean = items().isNotEmpty()
 
     fun getNextPageParams(): DisputeListParams? {
         if (!hasNextPage()) {
             return null
         }
 
-        return DisputeListParams.builder()
-            .from(params)
-            .pageNumber((params.pageNumber() ?: 0) + 1)
-            .build()
+        val pageNumber = params.pageNumber() ?: 1
+        return params.toBuilder().pageNumber(pageNumber + 1).build()
     }
 
-    fun getNextPage(): DisputeListPage? {
-        return getNextPageParams()?.let { disputesService.list(it) }
-    }
+    fun getNextPage(): DisputeListPage? = getNextPageParams()?.let { service.list(it) }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): DisputeListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): DisputeListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        fun of(disputesService: DisputeService, params: DisputeListParams, response: Response) =
-            DisputeListPage(disputesService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [DisputeListPage].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Response
-    @JsonCreator
-    constructor(
-        @JsonProperty("items") private val items: JsonField<List<Dispute>> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-    ) {
+    /** A builder for [DisputeListPage]. */
+    class Builder internal constructor() {
 
-        fun items(): List<Dispute> = items.getNullable("items") ?: listOf()
+        private var service: DisputeService? = null
+        private var params: DisputeListParams? = null
+        private var response: DisputeListPageResponse? = null
 
-        @JsonProperty("items") fun _items(): JsonField<List<Dispute>>? = items
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Response = apply {
-            if (validated) {
-                return@apply
-            }
-
-            items().map { it.validate() }
-            validated = true
+        internal fun from(disputeListPage: DisputeListPage) = apply {
+            service = disputeListPage.service
+            params = disputeListPage.params
+            response = disputeListPage.response
         }
 
-        fun toBuilder() = Builder().from(this)
+        fun service(service: DisputeService) = apply { this.service = service }
 
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+        /** The parameters that were used to request this page. */
+        fun params(params: DisputeListParams) = apply { this.params = params }
 
-            return /* spotless:off */ other is Response && items == other.items && additionalProperties == other.additionalProperties /* spotless:on */
-        }
+        /** The response that this page was parsed from. */
+        fun response(response: DisputeListPageResponse) = apply { this.response = response }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(items, additionalProperties) /* spotless:on */
-
-        override fun toString() =
-            "Response{items=$items, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [DisputeListPage]. */
-            fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var items: JsonField<List<Dispute>> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(page: Response) = apply {
-                this.items = page.items
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
-
-            fun items(items: List<Dispute>) = items(JsonField.of(items))
-
-            fun items(items: JsonField<List<Dispute>>) = apply { this.items = items }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            fun build() = Response(items, additionalProperties.toImmutable())
-        }
+        /**
+         * Returns an immutable instance of [DisputeListPage].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): DisputeListPage =
+            DisputeListPage(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: DisputeListPage) : Sequence<Dispute> {
@@ -152,4 +116,17 @@ private constructor(
             }
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is DisputeListPage && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() =
+        "DisputeListPage{service=$service, params=$params, response=$response}"
 }

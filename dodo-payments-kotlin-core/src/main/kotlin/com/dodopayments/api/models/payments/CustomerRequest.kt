@@ -5,6 +5,7 @@ package com.dodopayments.api.models.payments
 import com.dodopayments.api.core.BaseDeserializer
 import com.dodopayments.api.core.BaseSerializer
 import com.dodopayments.api.core.JsonValue
+import com.dodopayments.api.core.allMaxBy
 import com.dodopayments.api.core.getOrThrow
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.fasterxml.jackson.core.JsonGenerator
@@ -40,14 +41,13 @@ private constructor(
 
     fun _json(): JsonValue? = _json
 
-    fun <T> accept(visitor: Visitor<T>): T {
-        return when {
+    fun <T> accept(visitor: Visitor<T>): T =
+        when {
             attachExistingCustomer != null ->
                 visitor.visitAttachExistingCustomer(attachExistingCustomer)
             createNewCustomer != null -> visitor.visitCreateNewCustomer(createNewCustomer)
             else -> visitor.unknown(_json)
         }
-    }
 
     private var validated: Boolean = false
 
@@ -71,6 +71,33 @@ private constructor(
         )
         validated = true
     }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: DodoPaymentsInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    internal fun validity(): Int =
+        accept(
+            object : Visitor<Int> {
+                override fun visitAttachExistingCustomer(
+                    attachExistingCustomer: AttachExistingCustomer
+                ) = attachExistingCustomer.validity()
+
+                override fun visitCreateNewCustomer(createNewCustomer: CreateNewCustomer) =
+                    createNewCustomer.validity()
+
+                override fun unknown(json: JsonValue?) = 0
+            }
+        )
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -130,16 +157,27 @@ private constructor(
         override fun ObjectCodec.deserialize(node: JsonNode): CustomerRequest {
             val json = JsonValue.fromJsonNode(node)
 
-            tryDeserialize(node, jacksonTypeRef<AttachExistingCustomer>()) { it.validate() }
-                ?.let {
-                    return CustomerRequest(attachExistingCustomer = it, _json = json)
-                }
-            tryDeserialize(node, jacksonTypeRef<CreateNewCustomer>()) { it.validate() }
-                ?.let {
-                    return CustomerRequest(createNewCustomer = it, _json = json)
-                }
-
-            return CustomerRequest(_json = json)
+            val bestMatches =
+                sequenceOf(
+                        tryDeserialize(node, jacksonTypeRef<AttachExistingCustomer>())?.let {
+                            CustomerRequest(attachExistingCustomer = it, _json = json)
+                        },
+                        tryDeserialize(node, jacksonTypeRef<CreateNewCustomer>())?.let {
+                            CustomerRequest(createNewCustomer = it, _json = json)
+                        },
+                    )
+                    .filterNotNull()
+                    .allMaxBy { it.validity() }
+                    .toList()
+            return when (bestMatches.size) {
+                // This can happen if what we're deserializing is completely incompatible with all
+                // the possible variants (e.g. deserializing from boolean).
+                0 -> CustomerRequest(_json = json)
+                1 -> bestMatches.single()
+                // If there's more than one match with the highest validity, then use the first
+                // completely valid match, or simply the first match if none are completely valid.
+                else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
+            }
         }
     }
 

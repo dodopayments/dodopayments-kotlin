@@ -2,11 +2,10 @@
 
 package com.dodopayments.api.models.refunds
 
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class RefundCreateParamsTest {
+internal class RefundCreateParamsTest {
 
     @Test
     fun create() {
@@ -19,7 +18,6 @@ class RefundCreateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.paymentId()).isEqualTo("payment_id")
         assertThat(body.reason()).isEqualTo("reason")
     }
@@ -30,7 +28,6 @@ class RefundCreateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.paymentId()).isEqualTo("payment_id")
     }
 }

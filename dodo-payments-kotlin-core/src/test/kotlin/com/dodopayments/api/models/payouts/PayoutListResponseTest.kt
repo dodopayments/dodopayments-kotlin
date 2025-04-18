@@ -2,14 +2,16 @@
 
 package com.dodopayments.api.models.payouts
 
+import com.dodopayments.api.core.jsonMapper
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class PayoutListResponseTest {
+internal class PayoutListResponseTest {
 
     @Test
-    fun createPayoutListResponse() {
+    fun create() {
         val payoutListResponse =
             PayoutListResponse.builder()
                 .amount(0L)
@@ -28,7 +30,7 @@ class PayoutListResponseTest {
                 .payoutDocumentUrl("payout_document_url")
                 .remarks("remarks")
                 .build()
-        assertThat(payoutListResponse).isNotNull
+
         assertThat(payoutListResponse.amount()).isEqualTo(0L)
         assertThat(payoutListResponse.businessId()).isEqualTo("business_id")
         assertThat(payoutListResponse.chargebacks()).isEqualTo(0L)
@@ -46,5 +48,36 @@ class PayoutListResponseTest {
         assertThat(payoutListResponse.name()).isEqualTo("name")
         assertThat(payoutListResponse.payoutDocumentUrl()).isEqualTo("payout_document_url")
         assertThat(payoutListResponse.remarks()).isEqualTo("remarks")
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val payoutListResponse =
+            PayoutListResponse.builder()
+                .amount(0L)
+                .businessId("business_id")
+                .chargebacks(0L)
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .currency(PayoutListResponse.Currency.AED)
+                .fee(0L)
+                .paymentMethod("payment_method")
+                .payoutId("payout_id")
+                .refunds(0L)
+                .status(PayoutListResponse.Status.NOT_INITIATED)
+                .tax(0L)
+                .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .name("name")
+                .payoutDocumentUrl("payout_document_url")
+                .remarks("remarks")
+                .build()
+
+        val roundtrippedPayoutListResponse =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(payoutListResponse),
+                jacksonTypeRef<PayoutListResponse>(),
+            )
+
+        assertThat(roundtrippedPayoutListResponse).isEqualTo(payoutListResponse)
     }
 }

@@ -5,7 +5,7 @@ package com.dodopayments.api.models.customers
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CustomerRetrieveParamsTest {
+internal class CustomerRetrieveParamsTest {
 
     @Test
     fun create() {
@@ -13,12 +13,11 @@ class CustomerRetrieveParamsTest {
     }
 
     @Test
-    fun getPathParam() {
+    fun pathParams() {
         val params = CustomerRetrieveParams.builder().customerId("customer_id").build()
-        assertThat(params).isNotNull
-        // path param "customerId"
-        assertThat(params.getPathParam(0)).isEqualTo("customer_id")
+
+        assertThat(params._pathParam(0)).isEqualTo("customer_id")
         // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        assertThat(params._pathParam(1)).isEqualTo("")
     }
 }

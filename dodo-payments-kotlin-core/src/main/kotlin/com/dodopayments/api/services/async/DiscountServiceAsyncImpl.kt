@@ -3,6 +3,7 @@
 package com.dodopayments.api.services.async
 
 import com.dodopayments.api.core.ClientOptions
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.handlers.emptyHandler
 import com.dodopayments.api.core.handlers.errorHandler
@@ -16,11 +17,11 @@ import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepareAsync
-import com.dodopayments.api.errors.DodoPaymentsError
 import com.dodopayments.api.models.discounts.Discount
 import com.dodopayments.api.models.discounts.DiscountCreateParams
 import com.dodopayments.api.models.discounts.DiscountDeleteParams
 import com.dodopayments.api.models.discounts.DiscountListPageAsync
+import com.dodopayments.api.models.discounts.DiscountListPageResponse
 import com.dodopayments.api.models.discounts.DiscountListParams
 import com.dodopayments.api.models.discounts.DiscountRetrieveParams
 import com.dodopayments.api.models.discounts.DiscountUpdateParams
@@ -70,8 +71,7 @@ class DiscountServiceAsyncImpl internal constructor(private val clientOptions: C
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         DiscountServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<DodoPaymentsError> =
-            errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
         private val createHandler: Handler<Discount> =
             jsonHandler<Discount>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
@@ -110,7 +110,7 @@ class DiscountServiceAsyncImpl internal constructor(private val clientOptions: C
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("discounts", params.getPathParam(0))
+                    .addPathSegments("discounts", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -136,7 +136,7 @@ class DiscountServiceAsyncImpl internal constructor(private val clientOptions: C
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PATCH)
-                    .addPathSegments("discounts", params.getPathParam(0))
+                    .addPathSegments("discounts", params._pathParam(0))
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -153,8 +153,8 @@ class DiscountServiceAsyncImpl internal constructor(private val clientOptions: C
             }
         }
 
-        private val listHandler: Handler<DiscountListPageAsync.Response> =
-            jsonHandler<DiscountListPageAsync.Response>(clientOptions.jsonMapper)
+        private val listHandler: Handler<DiscountListPageResponse> =
+            jsonHandler<DiscountListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override suspend fun list(
@@ -178,11 +178,11 @@ class DiscountServiceAsyncImpl internal constructor(private val clientOptions: C
                         }
                     }
                     .let {
-                        DiscountListPageAsync.of(
-                            DiscountServiceAsyncImpl(clientOptions),
-                            params,
-                            it,
-                        )
+                        DiscountListPageAsync.builder()
+                            .service(DiscountServiceAsyncImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
                     }
             }
         }
@@ -196,7 +196,7 @@ class DiscountServiceAsyncImpl internal constructor(private val clientOptions: C
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
-                    .addPathSegments("discounts", params.getPathParam(0))
+                    .addPathSegments("discounts", params._pathParam(0))
                     .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepareAsync(clientOptions, params)

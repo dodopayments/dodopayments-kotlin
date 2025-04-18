@@ -3,6 +3,7 @@
 package com.dodopayments.api.services.async
 
 import com.dodopayments.api.core.ClientOptions
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.handlers.errorHandler
 import com.dodopayments.api.core.handlers.jsonHandler
@@ -13,8 +14,8 @@ import com.dodopayments.api.core.http.HttpResponse.Handler
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepareAsync
-import com.dodopayments.api.errors.DodoPaymentsError
 import com.dodopayments.api.models.payouts.PayoutListPageAsync
+import com.dodopayments.api.models.payouts.PayoutListPageResponse
 import com.dodopayments.api.models.payouts.PayoutListParams
 
 class PayoutServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -36,11 +37,10 @@ class PayoutServiceAsyncImpl internal constructor(private val clientOptions: Cli
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         PayoutServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<DodoPaymentsError> =
-            errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
-        private val listHandler: Handler<PayoutListPageAsync.Response> =
-            jsonHandler<PayoutListPageAsync.Response>(clientOptions.jsonMapper)
+        private val listHandler: Handler<PayoutListPageResponse> =
+            jsonHandler<PayoutListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override suspend fun list(
@@ -64,7 +64,11 @@ class PayoutServiceAsyncImpl internal constructor(private val clientOptions: Cli
                         }
                     }
                     .let {
-                        PayoutListPageAsync.of(PayoutServiceAsyncImpl(clientOptions), params, it)
+                        PayoutListPageAsync.builder()
+                            .service(PayoutServiceAsyncImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
                     }
             }
         }

@@ -2,11 +2,10 @@
 
 package com.dodopayments.api.models.customers
 
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CustomerCreateParamsTest {
+internal class CustomerCreateParamsTest {
 
     @Test
     fun create() {
@@ -28,7 +27,6 @@ class CustomerCreateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.email()).isEqualTo("email")
         assertThat(body.name()).isEqualTo("name")
         assertThat(body.phoneNumber()).isEqualTo("phone_number")
@@ -40,7 +38,6 @@ class CustomerCreateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.email()).isEqualTo("email")
         assertThat(body.name()).isEqualTo("name")
     }

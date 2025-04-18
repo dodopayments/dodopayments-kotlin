@@ -2,11 +2,10 @@
 
 package com.dodopayments.api.models.subscriptions
 
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class SubscriptionChargeParamsTest {
+internal class SubscriptionChargeParamsTest {
 
     @Test
     fun create() {
@@ -14,6 +13,19 @@ class SubscriptionChargeParamsTest {
             .subscriptionId("subscription_id")
             .productPrice(0L)
             .build()
+    }
+
+    @Test
+    fun pathParams() {
+        val params =
+            SubscriptionChargeParams.builder()
+                .subscriptionId("subscription_id")
+                .productPrice(0L)
+                .build()
+
+        assertThat(params._pathParam(0)).isEqualTo("subscription_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
     }
 
     @Test
@@ -26,35 +38,6 @@ class SubscriptionChargeParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.productPrice()).isEqualTo(0L)
-    }
-
-    @Test
-    fun bodyWithoutOptionalFields() {
-        val params =
-            SubscriptionChargeParams.builder()
-                .subscriptionId("subscription_id")
-                .productPrice(0L)
-                .build()
-
-        val body = params._body()
-
-        assertNotNull(body)
-        assertThat(body.productPrice()).isEqualTo(0L)
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            SubscriptionChargeParams.builder()
-                .subscriptionId("subscription_id")
-                .productPrice(0L)
-                .build()
-        assertThat(params).isNotNull
-        // path param "subscriptionId"
-        assertThat(params.getPathParam(0)).isEqualTo("subscription_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

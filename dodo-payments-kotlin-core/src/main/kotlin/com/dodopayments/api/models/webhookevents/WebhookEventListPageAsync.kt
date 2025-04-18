@@ -2,148 +2,107 @@
 
 package com.dodopayments.api.models.webhookevents
 
-import com.dodopayments.api.core.ExcludeMissing
-import com.dodopayments.api.core.JsonField
-import com.dodopayments.api.core.JsonMissing
-import com.dodopayments.api.core.JsonValue
-import com.dodopayments.api.core.NoAutoDetect
-import com.dodopayments.api.core.immutableEmptyMap
-import com.dodopayments.api.core.toImmutable
+import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.async.WebhookEventServiceAsync
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Objects
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 
+/** @see [WebhookEventServiceAsync.list] */
 class WebhookEventListPageAsync
 private constructor(
-    private val webhookEventsService: WebhookEventServiceAsync,
+    private val service: WebhookEventServiceAsync,
     private val params: WebhookEventListParams,
-    private val response: Response,
+    private val response: WebhookEventListPageResponse,
 ) {
 
-    fun response(): Response = response
+    /**
+     * Delegates to [WebhookEventListPageResponse], but gracefully handles missing data.
+     *
+     * @see [WebhookEventListPageResponse.items]
+     */
+    fun items(): List<WebhookEvent> = response._items().getNullable("items") ?: emptyList()
 
-    fun items(): List<WebhookEvent> = response().items()
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is WebhookEventListPageAsync && webhookEventsService == other.webhookEventsService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(webhookEventsService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "WebhookEventListPageAsync{webhookEventsService=$webhookEventsService, params=$params, response=$response}"
-
-    fun hasNextPage(): Boolean {
-        return !items().isEmpty()
-    }
+    fun hasNextPage(): Boolean = items().isNotEmpty()
 
     fun getNextPageParams(): WebhookEventListParams? {
         if (!hasNextPage()) {
             return null
         }
 
-        return WebhookEventListParams.builder()
-            .from(params)
-            .pageNumber((params.pageNumber() ?: 0) + 1)
-            .build()
+        val pageNumber = params.pageNumber() ?: 1
+        return params.toBuilder().pageNumber(pageNumber + 1).build()
     }
 
-    suspend fun getNextPage(): WebhookEventListPageAsync? {
-        return getNextPageParams()?.let { webhookEventsService.list(it) }
-    }
+    suspend fun getNextPage(): WebhookEventListPageAsync? =
+        getNextPageParams()?.let { service.list(it) }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): WebhookEventListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): WebhookEventListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        fun of(
-            webhookEventsService: WebhookEventServiceAsync,
-            params: WebhookEventListParams,
-            response: Response,
-        ) = WebhookEventListPageAsync(webhookEventsService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [WebhookEventListPageAsync].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Response
-    @JsonCreator
-    constructor(
-        @JsonProperty("items") private val items: JsonField<List<WebhookEvent>> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-    ) {
+    /** A builder for [WebhookEventListPageAsync]. */
+    class Builder internal constructor() {
 
-        fun items(): List<WebhookEvent> = items.getNullable("items") ?: listOf()
+        private var service: WebhookEventServiceAsync? = null
+        private var params: WebhookEventListParams? = null
+        private var response: WebhookEventListPageResponse? = null
 
-        @JsonProperty("items") fun _items(): JsonField<List<WebhookEvent>>? = items
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Response = apply {
-            if (validated) {
-                return@apply
-            }
-
-            items().map { it.validate() }
-            validated = true
+        internal fun from(webhookEventListPageAsync: WebhookEventListPageAsync) = apply {
+            service = webhookEventListPageAsync.service
+            params = webhookEventListPageAsync.params
+            response = webhookEventListPageAsync.response
         }
 
-        fun toBuilder() = Builder().from(this)
+        fun service(service: WebhookEventServiceAsync) = apply { this.service = service }
 
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+        /** The parameters that were used to request this page. */
+        fun params(params: WebhookEventListParams) = apply { this.params = params }
 
-            return /* spotless:off */ other is Response && items == other.items && additionalProperties == other.additionalProperties /* spotless:on */
-        }
+        /** The response that this page was parsed from. */
+        fun response(response: WebhookEventListPageResponse) = apply { this.response = response }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(items, additionalProperties) /* spotless:on */
-
-        override fun toString() =
-            "Response{items=$items, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of
-             * [WebhookEventListPageAsync].
-             */
-            fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var items: JsonField<List<WebhookEvent>> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(page: Response) = apply {
-                this.items = page.items
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
-
-            fun items(items: List<WebhookEvent>) = items(JsonField.of(items))
-
-            fun items(items: JsonField<List<WebhookEvent>>) = apply { this.items = items }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            fun build() = Response(items, additionalProperties.toImmutable())
-        }
+        /**
+         * Returns an immutable instance of [WebhookEventListPageAsync].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): WebhookEventListPageAsync =
+            WebhookEventListPageAsync(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: WebhookEventListPageAsync) : Flow<WebhookEvent> {
@@ -160,4 +119,17 @@ private constructor(
             }
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is WebhookEventListPageAsync && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() =
+        "WebhookEventListPageAsync{service=$service, params=$params, response=$response}"
 }

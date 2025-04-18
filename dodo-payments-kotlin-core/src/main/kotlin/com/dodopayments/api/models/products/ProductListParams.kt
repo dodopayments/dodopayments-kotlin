@@ -2,7 +2,6 @@
 
 package com.dodopayments.api.models.products
 
-import com.dodopayments.api.core.NoAutoDetect
 import com.dodopayments.api.core.Params
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
@@ -39,18 +38,6 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams {
-        val queryParams = QueryParams.builder()
-        this.archived?.let { queryParams.put("archived", listOf(it.toString())) }
-        this.pageNumber?.let { queryParams.put("page_number", listOf(it.toString())) }
-        this.pageSize?.let { queryParams.put("page_size", listOf(it.toString())) }
-        this.recurring?.let { queryParams.put("recurring", listOf(it.toString())) }
-        queryParams.putAll(additionalQueryParams)
-        return queryParams.build()
-    }
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -62,7 +49,6 @@ private constructor(
     }
 
     /** A builder for [ProductListParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var archived: Boolean? = null
@@ -84,19 +70,31 @@ private constructor(
         /** List archived products */
         fun archived(archived: Boolean?) = apply { this.archived = archived }
 
-        /** List archived products */
+        /**
+         * Alias for [Builder.archived].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun archived(archived: Boolean) = archived(archived as Boolean?)
 
         /** Page number default is 0 */
         fun pageNumber(pageNumber: Long?) = apply { this.pageNumber = pageNumber }
 
-        /** Page number default is 0 */
+        /**
+         * Alias for [Builder.pageNumber].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun pageNumber(pageNumber: Long) = pageNumber(pageNumber as Long?)
 
         /** Page size default is 10 max is 100 */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
-        /** Page size default is 10 max is 100 */
+        /**
+         * Alias for [Builder.pageSize].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun pageSize(pageSize: Long) = pageSize(pageSize as Long?)
 
         /**
@@ -108,10 +106,9 @@ private constructor(
         fun recurring(recurring: Boolean?) = apply { this.recurring = recurring }
 
         /**
-         * Filter products by pricing type:
-         * - `true`: Show only recurring pricing products (e.g. subscriptions)
-         * - `false`: Show only one-time price products
-         * - `null` or absent: Show both types of products
+         * Alias for [Builder.recurring].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
          */
         fun recurring(recurring: Boolean) = recurring(recurring as Boolean?)
 
@@ -213,6 +210,11 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [ProductListParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): ProductListParams =
             ProductListParams(
                 archived,
@@ -223,6 +225,19 @@ private constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                archived?.let { put("archived", it.toString()) }
+                pageNumber?.let { put("page_number", it.toString()) }
+                pageSize?.let { put("page_size", it.toString()) }
+                recurring?.let { put("recurring", it.toString()) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

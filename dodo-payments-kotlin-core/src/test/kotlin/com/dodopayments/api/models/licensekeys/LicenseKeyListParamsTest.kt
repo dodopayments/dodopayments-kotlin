@@ -6,7 +6,7 @@ import com.dodopayments.api.core.http.QueryParams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class LicenseKeyListParamsTest {
+internal class LicenseKeyListParamsTest {
 
     @Test
     fun create() {
@@ -29,19 +29,27 @@ class LicenseKeyListParamsTest {
                 .productId("product_id")
                 .status(LicenseKeyStatus.ACTIVE)
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("customer_id", "customer_id")
-        expected.put("page_number", "0")
-        expected.put("page_size", "0")
-        expected.put("product_id", "product_id")
-        expected.put("status", LicenseKeyStatus.ACTIVE.toString())
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("customer_id", "customer_id")
+                    .put("page_number", "0")
+                    .put("page_size", "0")
+                    .put("product_id", "product_id")
+                    .put("status", "active")
+                    .build()
+            )
     }
 
     @Test
     fun queryParamsWithoutOptionalFields() {
         val params = LicenseKeyListParams.builder().build()
-        val expected = QueryParams.builder()
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
     }
 }

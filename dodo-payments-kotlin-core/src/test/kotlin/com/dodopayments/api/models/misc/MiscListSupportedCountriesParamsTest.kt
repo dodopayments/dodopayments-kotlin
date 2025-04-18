@@ -4,7 +4,7 @@ package com.dodopayments.api.models.misc
 
 import org.junit.jupiter.api.Test
 
-class MiscListSupportedCountriesParamsTest {
+internal class MiscListSupportedCountriesParamsTest {
 
     @Test
     fun create() {

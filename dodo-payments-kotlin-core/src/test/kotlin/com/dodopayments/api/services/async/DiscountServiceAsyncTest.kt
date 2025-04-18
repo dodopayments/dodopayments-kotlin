@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class DiscountServiceAsyncTest {
+internal class DiscountServiceAsyncTest {
 
     @Test
     suspend fun create() {

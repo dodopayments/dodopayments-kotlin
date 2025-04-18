@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class LicenseServiceAsyncTest {
+internal class LicenseServiceAsyncTest {
 
     @Test
     suspend fun activate() {

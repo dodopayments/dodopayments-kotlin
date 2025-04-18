@@ -7,13 +7,11 @@ import com.dodopayments.api.core.ExcludeMissing
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
-import com.dodopayments.api.core.NoAutoDetect
 import com.dodopayments.api.core.Params
 import com.dodopayments.api.core.checkKnown
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
-import com.dodopayments.api.core.immutableEmptyMap
 import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.dodopayments.api.models.payments.AttachExistingCustomer
@@ -24,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 
 class SubscriptionCreateParams
@@ -33,14 +32,32 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
+    /**
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun billing(): BillingAddress = body.billing()
 
+    /**
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun customer(): CustomerRequest = body.customer()
 
-    /** Unique identifier of the product to subscribe to */
+    /**
+     * Unique identifier of the product to subscribe to
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun productId(): String = body.productId()
 
-    /** Number of units to subscribe for. Must be at least 1. */
+    /**
+     * Number of units to subscribe for. Must be at least 1.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun quantity(): Long = body.quantity()
 
     /**
@@ -49,85 +66,178 @@ private constructor(
      * Customers will **never** see payment methods that are **not** in this list. However, adding a
      * method here **does not guarantee** customers will see it. Availability still depends on other
      * factors (e.g., customer location, merchant settings).
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
      */
     fun allowedPaymentMethodTypes(): List<AllowedPaymentMethodType>? =
         body.allowedPaymentMethodTypes()
 
+    /**
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
     fun billingCurrency(): BillingCurrency? = body.billingCurrency()
 
-    /** Discount Code to apply to the subscription */
+    /**
+     * Discount Code to apply to the subscription
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
     fun discountCode(): String? = body.discountCode()
 
+    /**
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
     fun metadata(): Metadata? = body.metadata()
 
+    /**
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
     fun onDemand(): OnDemand? = body.onDemand()
 
-    /** If true, generates a payment link. Defaults to false if not specified. */
+    /**
+     * If true, generates a payment link. Defaults to false if not specified.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
     fun paymentLink(): Boolean? = body.paymentLink()
 
-    /** Optional URL to redirect after successful subscription creation */
+    /**
+     * Optional URL to redirect after successful subscription creation
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
     fun returnUrl(): String? = body.returnUrl()
 
-    /** Display saved payment methods of a returning customer False by default */
+    /**
+     * Display saved payment methods of a returning customer False by default
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
     fun showSavedPaymentMethods(): Boolean? = body.showSavedPaymentMethods()
 
     /**
      * Tax ID in case the payment is B2B. If tax id validation fails the payment creation will fail
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
      */
     fun taxId(): String? = body.taxId()
 
     /**
      * Optional trial period in days If specified, this value overrides the trial period set in the
      * product's price Must be between 0 and 10000 days
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
      */
     fun trialPeriodDays(): Long? = body.trialPeriodDays()
 
+    /**
+     * Returns the raw JSON value of [billing].
+     *
+     * Unlike [billing], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _billing(): JsonField<BillingAddress> = body._billing()
 
+    /**
+     * Returns the raw JSON value of [customer].
+     *
+     * Unlike [customer], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _customer(): JsonField<CustomerRequest> = body._customer()
 
-    /** Unique identifier of the product to subscribe to */
+    /**
+     * Returns the raw JSON value of [productId].
+     *
+     * Unlike [productId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _productId(): JsonField<String> = body._productId()
 
-    /** Number of units to subscribe for. Must be at least 1. */
+    /**
+     * Returns the raw JSON value of [quantity].
+     *
+     * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _quantity(): JsonField<Long> = body._quantity()
 
     /**
-     * List of payment methods allowed during checkout.
+     * Returns the raw JSON value of [allowedPaymentMethodTypes].
      *
-     * Customers will **never** see payment methods that are **not** in this list. However, adding a
-     * method here **does not guarantee** customers will see it. Availability still depends on other
-     * factors (e.g., customer location, merchant settings).
+     * Unlike [allowedPaymentMethodTypes], this method doesn't throw if the JSON field has an
+     * unexpected type.
      */
     fun _allowedPaymentMethodTypes(): JsonField<List<AllowedPaymentMethodType>> =
         body._allowedPaymentMethodTypes()
 
+    /**
+     * Returns the raw JSON value of [billingCurrency].
+     *
+     * Unlike [billingCurrency], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _billingCurrency(): JsonField<BillingCurrency> = body._billingCurrency()
 
-    /** Discount Code to apply to the subscription */
+    /**
+     * Returns the raw JSON value of [discountCode].
+     *
+     * Unlike [discountCode], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _discountCode(): JsonField<String> = body._discountCode()
 
+    /**
+     * Returns the raw JSON value of [metadata].
+     *
+     * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _metadata(): JsonField<Metadata> = body._metadata()
 
+    /**
+     * Returns the raw JSON value of [onDemand].
+     *
+     * Unlike [onDemand], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _onDemand(): JsonField<OnDemand> = body._onDemand()
 
-    /** If true, generates a payment link. Defaults to false if not specified. */
+    /**
+     * Returns the raw JSON value of [paymentLink].
+     *
+     * Unlike [paymentLink], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _paymentLink(): JsonField<Boolean> = body._paymentLink()
 
-    /** Optional URL to redirect after successful subscription creation */
+    /**
+     * Returns the raw JSON value of [returnUrl].
+     *
+     * Unlike [returnUrl], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _returnUrl(): JsonField<String> = body._returnUrl()
 
-    /** Display saved payment methods of a returning customer False by default */
+    /**
+     * Returns the raw JSON value of [showSavedPaymentMethods].
+     *
+     * Unlike [showSavedPaymentMethods], this method doesn't throw if the JSON field has an
+     * unexpected type.
+     */
     fun _showSavedPaymentMethods(): JsonField<Boolean> = body._showSavedPaymentMethods()
 
     /**
-     * Tax ID in case the payment is B2B. If tax id validation fails the payment creation will fail
+     * Returns the raw JSON value of [taxId].
+     *
+     * Unlike [taxId], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _taxId(): JsonField<String> = body._taxId()
 
     /**
-     * Optional trial period in days If specified, this value overrides the trial period set in the
-     * product's price Must be between 0 and 10000 days
+     * Returns the raw JSON value of [trialPeriodDays].
+     *
+     * Unlike [trialPeriodDays], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _trialPeriodDays(): JsonField<Long> = body._trialPeriodDays()
 
@@ -136,477 +246,6 @@ private constructor(
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    internal fun _body(): Body = body
-
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams = additionalQueryParams
-
-    /**
-     * Request payload for creating a new subscription
-     *
-     * This struct represents the data required to create a new subscription in the system. It
-     * includes details about the product, quantity, customer information, and billing details.
-     */
-    @NoAutoDetect
-    class Body
-    @JsonCreator
-    private constructor(
-        @JsonProperty("billing")
-        @ExcludeMissing
-        private val billing: JsonField<BillingAddress> = JsonMissing.of(),
-        @JsonProperty("customer")
-        @ExcludeMissing
-        private val customer: JsonField<CustomerRequest> = JsonMissing.of(),
-        @JsonProperty("product_id")
-        @ExcludeMissing
-        private val productId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("quantity")
-        @ExcludeMissing
-        private val quantity: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("allowed_payment_method_types")
-        @ExcludeMissing
-        private val allowedPaymentMethodTypes: JsonField<List<AllowedPaymentMethodType>> =
-            JsonMissing.of(),
-        @JsonProperty("billing_currency")
-        @ExcludeMissing
-        private val billingCurrency: JsonField<BillingCurrency> = JsonMissing.of(),
-        @JsonProperty("discount_code")
-        @ExcludeMissing
-        private val discountCode: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("metadata")
-        @ExcludeMissing
-        private val metadata: JsonField<Metadata> = JsonMissing.of(),
-        @JsonProperty("on_demand")
-        @ExcludeMissing
-        private val onDemand: JsonField<OnDemand> = JsonMissing.of(),
-        @JsonProperty("payment_link")
-        @ExcludeMissing
-        private val paymentLink: JsonField<Boolean> = JsonMissing.of(),
-        @JsonProperty("return_url")
-        @ExcludeMissing
-        private val returnUrl: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("show_saved_payment_methods")
-        @ExcludeMissing
-        private val showSavedPaymentMethods: JsonField<Boolean> = JsonMissing.of(),
-        @JsonProperty("tax_id")
-        @ExcludeMissing
-        private val taxId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("trial_period_days")
-        @ExcludeMissing
-        private val trialPeriodDays: JsonField<Long> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-    ) {
-
-        fun billing(): BillingAddress = billing.getRequired("billing")
-
-        fun customer(): CustomerRequest = customer.getRequired("customer")
-
-        /** Unique identifier of the product to subscribe to */
-        fun productId(): String = productId.getRequired("product_id")
-
-        /** Number of units to subscribe for. Must be at least 1. */
-        fun quantity(): Long = quantity.getRequired("quantity")
-
-        /**
-         * List of payment methods allowed during checkout.
-         *
-         * Customers will **never** see payment methods that are **not** in this list. However,
-         * adding a method here **does not guarantee** customers will see it. Availability still
-         * depends on other factors (e.g., customer location, merchant settings).
-         */
-        fun allowedPaymentMethodTypes(): List<AllowedPaymentMethodType>? =
-            allowedPaymentMethodTypes.getNullable("allowed_payment_method_types")
-
-        fun billingCurrency(): BillingCurrency? = billingCurrency.getNullable("billing_currency")
-
-        /** Discount Code to apply to the subscription */
-        fun discountCode(): String? = discountCode.getNullable("discount_code")
-
-        fun metadata(): Metadata? = metadata.getNullable("metadata")
-
-        fun onDemand(): OnDemand? = onDemand.getNullable("on_demand")
-
-        /** If true, generates a payment link. Defaults to false if not specified. */
-        fun paymentLink(): Boolean? = paymentLink.getNullable("payment_link")
-
-        /** Optional URL to redirect after successful subscription creation */
-        fun returnUrl(): String? = returnUrl.getNullable("return_url")
-
-        /** Display saved payment methods of a returning customer False by default */
-        fun showSavedPaymentMethods(): Boolean? =
-            showSavedPaymentMethods.getNullable("show_saved_payment_methods")
-
-        /**
-         * Tax ID in case the payment is B2B. If tax id validation fails the payment creation will
-         * fail
-         */
-        fun taxId(): String? = taxId.getNullable("tax_id")
-
-        /**
-         * Optional trial period in days If specified, this value overrides the trial period set in
-         * the product's price Must be between 0 and 10000 days
-         */
-        fun trialPeriodDays(): Long? = trialPeriodDays.getNullable("trial_period_days")
-
-        @JsonProperty("billing") @ExcludeMissing fun _billing(): JsonField<BillingAddress> = billing
-
-        @JsonProperty("customer")
-        @ExcludeMissing
-        fun _customer(): JsonField<CustomerRequest> = customer
-
-        /** Unique identifier of the product to subscribe to */
-        @JsonProperty("product_id") @ExcludeMissing fun _productId(): JsonField<String> = productId
-
-        /** Number of units to subscribe for. Must be at least 1. */
-        @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Long> = quantity
-
-        /**
-         * List of payment methods allowed during checkout.
-         *
-         * Customers will **never** see payment methods that are **not** in this list. However,
-         * adding a method here **does not guarantee** customers will see it. Availability still
-         * depends on other factors (e.g., customer location, merchant settings).
-         */
-        @JsonProperty("allowed_payment_method_types")
-        @ExcludeMissing
-        fun _allowedPaymentMethodTypes(): JsonField<List<AllowedPaymentMethodType>> =
-            allowedPaymentMethodTypes
-
-        @JsonProperty("billing_currency")
-        @ExcludeMissing
-        fun _billingCurrency(): JsonField<BillingCurrency> = billingCurrency
-
-        /** Discount Code to apply to the subscription */
-        @JsonProperty("discount_code")
-        @ExcludeMissing
-        fun _discountCode(): JsonField<String> = discountCode
-
-        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
-
-        @JsonProperty("on_demand") @ExcludeMissing fun _onDemand(): JsonField<OnDemand> = onDemand
-
-        /** If true, generates a payment link. Defaults to false if not specified. */
-        @JsonProperty("payment_link")
-        @ExcludeMissing
-        fun _paymentLink(): JsonField<Boolean> = paymentLink
-
-        /** Optional URL to redirect after successful subscription creation */
-        @JsonProperty("return_url") @ExcludeMissing fun _returnUrl(): JsonField<String> = returnUrl
-
-        /** Display saved payment methods of a returning customer False by default */
-        @JsonProperty("show_saved_payment_methods")
-        @ExcludeMissing
-        fun _showSavedPaymentMethods(): JsonField<Boolean> = showSavedPaymentMethods
-
-        /**
-         * Tax ID in case the payment is B2B. If tax id validation fails the payment creation will
-         * fail
-         */
-        @JsonProperty("tax_id") @ExcludeMissing fun _taxId(): JsonField<String> = taxId
-
-        /**
-         * Optional trial period in days If specified, this value overrides the trial period set in
-         * the product's price Must be between 0 and 10000 days
-         */
-        @JsonProperty("trial_period_days")
-        @ExcludeMissing
-        fun _trialPeriodDays(): JsonField<Long> = trialPeriodDays
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Body = apply {
-            if (validated) {
-                return@apply
-            }
-
-            billing().validate()
-            customer().validate()
-            productId()
-            quantity()
-            allowedPaymentMethodTypes()
-            billingCurrency()
-            discountCode()
-            metadata()?.validate()
-            onDemand()?.validate()
-            paymentLink()
-            returnUrl()
-            showSavedPaymentMethods()
-            taxId()
-            trialPeriodDays()
-            validated = true
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [Body].
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .billing()
-             * .customer()
-             * .productId()
-             * .quantity()
-             * ```
-             */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [Body]. */
-        class Builder internal constructor() {
-
-            private var billing: JsonField<BillingAddress>? = null
-            private var customer: JsonField<CustomerRequest>? = null
-            private var productId: JsonField<String>? = null
-            private var quantity: JsonField<Long>? = null
-            private var allowedPaymentMethodTypes:
-                JsonField<MutableList<AllowedPaymentMethodType>>? =
-                null
-            private var billingCurrency: JsonField<BillingCurrency> = JsonMissing.of()
-            private var discountCode: JsonField<String> = JsonMissing.of()
-            private var metadata: JsonField<Metadata> = JsonMissing.of()
-            private var onDemand: JsonField<OnDemand> = JsonMissing.of()
-            private var paymentLink: JsonField<Boolean> = JsonMissing.of()
-            private var returnUrl: JsonField<String> = JsonMissing.of()
-            private var showSavedPaymentMethods: JsonField<Boolean> = JsonMissing.of()
-            private var taxId: JsonField<String> = JsonMissing.of()
-            private var trialPeriodDays: JsonField<Long> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(body: Body) = apply {
-                billing = body.billing
-                customer = body.customer
-                productId = body.productId
-                quantity = body.quantity
-                allowedPaymentMethodTypes =
-                    body.allowedPaymentMethodTypes.map { it.toMutableList() }
-                billingCurrency = body.billingCurrency
-                discountCode = body.discountCode
-                metadata = body.metadata
-                onDemand = body.onDemand
-                paymentLink = body.paymentLink
-                returnUrl = body.returnUrl
-                showSavedPaymentMethods = body.showSavedPaymentMethods
-                taxId = body.taxId
-                trialPeriodDays = body.trialPeriodDays
-                additionalProperties = body.additionalProperties.toMutableMap()
-            }
-
-            fun billing(billing: BillingAddress) = billing(JsonField.of(billing))
-
-            fun billing(billing: JsonField<BillingAddress>) = apply { this.billing = billing }
-
-            fun customer(customer: CustomerRequest) = customer(JsonField.of(customer))
-
-            fun customer(customer: JsonField<CustomerRequest>) = apply { this.customer = customer }
-
-            fun customer(attachExistingCustomer: AttachExistingCustomer) =
-                customer(CustomerRequest.ofAttachExistingCustomer(attachExistingCustomer))
-
-            fun customer(createNewCustomer: CreateNewCustomer) =
-                customer(CustomerRequest.ofCreateNewCustomer(createNewCustomer))
-
-            /** Unique identifier of the product to subscribe to */
-            fun productId(productId: String) = productId(JsonField.of(productId))
-
-            /** Unique identifier of the product to subscribe to */
-            fun productId(productId: JsonField<String>) = apply { this.productId = productId }
-
-            /** Number of units to subscribe for. Must be at least 1. */
-            fun quantity(quantity: Long) = quantity(JsonField.of(quantity))
-
-            /** Number of units to subscribe for. Must be at least 1. */
-            fun quantity(quantity: JsonField<Long>) = apply { this.quantity = quantity }
-
-            /**
-             * List of payment methods allowed during checkout.
-             *
-             * Customers will **never** see payment methods that are **not** in this list. However,
-             * adding a method here **does not guarantee** customers will see it. Availability still
-             * depends on other factors (e.g., customer location, merchant settings).
-             */
-            fun allowedPaymentMethodTypes(
-                allowedPaymentMethodTypes: List<AllowedPaymentMethodType>?
-            ) = allowedPaymentMethodTypes(JsonField.ofNullable(allowedPaymentMethodTypes))
-
-            /**
-             * List of payment methods allowed during checkout.
-             *
-             * Customers will **never** see payment methods that are **not** in this list. However,
-             * adding a method here **does not guarantee** customers will see it. Availability still
-             * depends on other factors (e.g., customer location, merchant settings).
-             */
-            fun allowedPaymentMethodTypes(
-                allowedPaymentMethodTypes: JsonField<List<AllowedPaymentMethodType>>
-            ) = apply {
-                this.allowedPaymentMethodTypes =
-                    allowedPaymentMethodTypes.map { it.toMutableList() }
-            }
-
-            /**
-             * List of payment methods allowed during checkout.
-             *
-             * Customers will **never** see payment methods that are **not** in this list. However,
-             * adding a method here **does not guarantee** customers will see it. Availability still
-             * depends on other factors (e.g., customer location, merchant settings).
-             */
-            fun addAllowedPaymentMethodType(allowedPaymentMethodType: AllowedPaymentMethodType) =
-                apply {
-                    allowedPaymentMethodTypes =
-                        (allowedPaymentMethodTypes ?: JsonField.of(mutableListOf())).also {
-                            checkKnown("allowedPaymentMethodTypes", it)
-                                .add(allowedPaymentMethodType)
-                        }
-                }
-
-            fun billingCurrency(billingCurrency: BillingCurrency?) =
-                billingCurrency(JsonField.ofNullable(billingCurrency))
-
-            fun billingCurrency(billingCurrency: JsonField<BillingCurrency>) = apply {
-                this.billingCurrency = billingCurrency
-            }
-
-            /** Discount Code to apply to the subscription */
-            fun discountCode(discountCode: String?) =
-                discountCode(JsonField.ofNullable(discountCode))
-
-            /** Discount Code to apply to the subscription */
-            fun discountCode(discountCode: JsonField<String>) = apply {
-                this.discountCode = discountCode
-            }
-
-            fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
-
-            fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
-
-            fun onDemand(onDemand: OnDemand?) = onDemand(JsonField.ofNullable(onDemand))
-
-            fun onDemand(onDemand: JsonField<OnDemand>) = apply { this.onDemand = onDemand }
-
-            /** If true, generates a payment link. Defaults to false if not specified. */
-            fun paymentLink(paymentLink: Boolean?) = paymentLink(JsonField.ofNullable(paymentLink))
-
-            /** If true, generates a payment link. Defaults to false if not specified. */
-            fun paymentLink(paymentLink: Boolean) = paymentLink(paymentLink as Boolean?)
-
-            /** If true, generates a payment link. Defaults to false if not specified. */
-            fun paymentLink(paymentLink: JsonField<Boolean>) = apply {
-                this.paymentLink = paymentLink
-            }
-
-            /** Optional URL to redirect after successful subscription creation */
-            fun returnUrl(returnUrl: String?) = returnUrl(JsonField.ofNullable(returnUrl))
-
-            /** Optional URL to redirect after successful subscription creation */
-            fun returnUrl(returnUrl: JsonField<String>) = apply { this.returnUrl = returnUrl }
-
-            /** Display saved payment methods of a returning customer False by default */
-            fun showSavedPaymentMethods(showSavedPaymentMethods: Boolean) =
-                showSavedPaymentMethods(JsonField.of(showSavedPaymentMethods))
-
-            /** Display saved payment methods of a returning customer False by default */
-            fun showSavedPaymentMethods(showSavedPaymentMethods: JsonField<Boolean>) = apply {
-                this.showSavedPaymentMethods = showSavedPaymentMethods
-            }
-
-            /**
-             * Tax ID in case the payment is B2B. If tax id validation fails the payment creation
-             * will fail
-             */
-            fun taxId(taxId: String?) = taxId(JsonField.ofNullable(taxId))
-
-            /**
-             * Tax ID in case the payment is B2B. If tax id validation fails the payment creation
-             * will fail
-             */
-            fun taxId(taxId: JsonField<String>) = apply { this.taxId = taxId }
-
-            /**
-             * Optional trial period in days If specified, this value overrides the trial period set
-             * in the product's price Must be between 0 and 10000 days
-             */
-            fun trialPeriodDays(trialPeriodDays: Long?) =
-                trialPeriodDays(JsonField.ofNullable(trialPeriodDays))
-
-            /**
-             * Optional trial period in days If specified, this value overrides the trial period set
-             * in the product's price Must be between 0 and 10000 days
-             */
-            fun trialPeriodDays(trialPeriodDays: Long) = trialPeriodDays(trialPeriodDays as Long?)
-
-            /**
-             * Optional trial period in days If specified, this value overrides the trial period set
-             * in the product's price Must be between 0 and 10000 days
-             */
-            fun trialPeriodDays(trialPeriodDays: JsonField<Long>) = apply {
-                this.trialPeriodDays = trialPeriodDays
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            fun build(): Body =
-                Body(
-                    checkRequired("billing", billing),
-                    checkRequired("customer", customer),
-                    checkRequired("productId", productId),
-                    checkRequired("quantity", quantity),
-                    (allowedPaymentMethodTypes ?: JsonMissing.of()).map { it.toImmutable() },
-                    billingCurrency,
-                    discountCode,
-                    metadata,
-                    onDemand,
-                    paymentLink,
-                    returnUrl,
-                    showSavedPaymentMethods,
-                    taxId,
-                    trialPeriodDays,
-                    additionalProperties.toImmutable(),
-                )
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Body && billing == other.billing && customer == other.customer && productId == other.productId && quantity == other.quantity && allowedPaymentMethodTypes == other.allowedPaymentMethodTypes && billingCurrency == other.billingCurrency && discountCode == other.discountCode && metadata == other.metadata && onDemand == other.onDemand && paymentLink == other.paymentLink && returnUrl == other.returnUrl && showSavedPaymentMethods == other.showSavedPaymentMethods && taxId == other.taxId && trialPeriodDays == other.trialPeriodDays && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(billing, customer, productId, quantity, allowedPaymentMethodTypes, billingCurrency, discountCode, metadata, onDemand, paymentLink, returnUrl, showSavedPaymentMethods, taxId, trialPeriodDays, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Body{billing=$billing, customer=$customer, productId=$productId, quantity=$quantity, allowedPaymentMethodTypes=$allowedPaymentMethodTypes, billingCurrency=$billingCurrency, discountCode=$discountCode, metadata=$metadata, onDemand=$onDemand, paymentLink=$paymentLink, returnUrl=$returnUrl, showSavedPaymentMethods=$showSavedPaymentMethods, taxId=$taxId, trialPeriodDays=$trialPeriodDays, additionalProperties=$additionalProperties}"
-    }
 
     fun toBuilder() = Builder().from(this)
 
@@ -627,7 +266,6 @@ private constructor(
     }
 
     /** A builder for [SubscriptionCreateParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var body: Body.Builder = Body.builder()
@@ -640,18 +278,54 @@ private constructor(
             additionalQueryParams = subscriptionCreateParams.additionalQueryParams.toBuilder()
         }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [billing]
+         * - [customer]
+         * - [productId]
+         * - [quantity]
+         * - [allowedPaymentMethodTypes]
+         * - etc.
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         fun billing(billing: BillingAddress) = apply { body.billing(billing) }
 
+        /**
+         * Sets [Builder.billing] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.billing] with a well-typed [BillingAddress] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun billing(billing: JsonField<BillingAddress>) = apply { body.billing(billing) }
 
         fun customer(customer: CustomerRequest) = apply { body.customer(customer) }
 
+        /**
+         * Sets [Builder.customer] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.customer] with a well-typed [CustomerRequest] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun customer(customer: JsonField<CustomerRequest>) = apply { body.customer(customer) }
 
+        /**
+         * Alias for calling [customer] with
+         * `CustomerRequest.ofAttachExistingCustomer(attachExistingCustomer)`.
+         */
         fun customer(attachExistingCustomer: AttachExistingCustomer) = apply {
             body.customer(attachExistingCustomer)
         }
 
+        /**
+         * Alias for calling [customer] with
+         * `CustomerRequest.ofCreateNewCustomer(createNewCustomer)`.
+         */
         fun customer(createNewCustomer: CreateNewCustomer) = apply {
             body.customer(createNewCustomer)
         }
@@ -659,13 +333,24 @@ private constructor(
         /** Unique identifier of the product to subscribe to */
         fun productId(productId: String) = apply { body.productId(productId) }
 
-        /** Unique identifier of the product to subscribe to */
+        /**
+         * Sets [Builder.productId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.productId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun productId(productId: JsonField<String>) = apply { body.productId(productId) }
 
         /** Number of units to subscribe for. Must be at least 1. */
         fun quantity(quantity: Long) = apply { body.quantity(quantity) }
 
-        /** Number of units to subscribe for. Must be at least 1. */
+        /**
+         * Sets [Builder.quantity] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.quantity] with a well-typed [Long] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun quantity(quantity: JsonField<Long>) = apply { body.quantity(quantity) }
 
         /**
@@ -681,22 +366,20 @@ private constructor(
             }
 
         /**
-         * List of payment methods allowed during checkout.
+         * Sets [Builder.allowedPaymentMethodTypes] to an arbitrary JSON value.
          *
-         * Customers will **never** see payment methods that are **not** in this list. However,
-         * adding a method here **does not guarantee** customers will see it. Availability still
-         * depends on other factors (e.g., customer location, merchant settings).
+         * You should usually call [Builder.allowedPaymentMethodTypes] with a well-typed
+         * `List<AllowedPaymentMethodType>` value instead. This method is primarily for setting the
+         * field to an undocumented or not yet supported value.
          */
         fun allowedPaymentMethodTypes(
             allowedPaymentMethodTypes: JsonField<List<AllowedPaymentMethodType>>
         ) = apply { body.allowedPaymentMethodTypes(allowedPaymentMethodTypes) }
 
         /**
-         * List of payment methods allowed during checkout.
+         * Adds a single [AllowedPaymentMethodType] to [allowedPaymentMethodTypes].
          *
-         * Customers will **never** see payment methods that are **not** in this list. However,
-         * adding a method here **does not guarantee** customers will see it. Availability still
-         * depends on other factors (e.g., customer location, merchant settings).
+         * @throws IllegalStateException if the field was previously set to a non-list.
          */
         fun addAllowedPaymentMethodType(allowedPaymentMethodType: AllowedPaymentMethodType) =
             apply {
@@ -707,6 +390,13 @@ private constructor(
             body.billingCurrency(billingCurrency)
         }
 
+        /**
+         * Sets [Builder.billingCurrency] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.billingCurrency] with a well-typed [BillingCurrency]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
         fun billingCurrency(billingCurrency: JsonField<BillingCurrency>) = apply {
             body.billingCurrency(billingCurrency)
         }
@@ -714,32 +404,68 @@ private constructor(
         /** Discount Code to apply to the subscription */
         fun discountCode(discountCode: String?) = apply { body.discountCode(discountCode) }
 
-        /** Discount Code to apply to the subscription */
+        /**
+         * Sets [Builder.discountCode] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.discountCode] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun discountCode(discountCode: JsonField<String>) = apply {
             body.discountCode(discountCode)
         }
 
         fun metadata(metadata: Metadata) = apply { body.metadata(metadata) }
 
+        /**
+         * Sets [Builder.metadata] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.metadata] with a well-typed [Metadata] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun metadata(metadata: JsonField<Metadata>) = apply { body.metadata(metadata) }
 
         fun onDemand(onDemand: OnDemand?) = apply { body.onDemand(onDemand) }
 
+        /**
+         * Sets [Builder.onDemand] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.onDemand] with a well-typed [OnDemand] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun onDemand(onDemand: JsonField<OnDemand>) = apply { body.onDemand(onDemand) }
 
         /** If true, generates a payment link. Defaults to false if not specified. */
         fun paymentLink(paymentLink: Boolean?) = apply { body.paymentLink(paymentLink) }
 
-        /** If true, generates a payment link. Defaults to false if not specified. */
+        /**
+         * Alias for [Builder.paymentLink].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun paymentLink(paymentLink: Boolean) = paymentLink(paymentLink as Boolean?)
 
-        /** If true, generates a payment link. Defaults to false if not specified. */
+        /**
+         * Sets [Builder.paymentLink] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.paymentLink] with a well-typed [Boolean] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun paymentLink(paymentLink: JsonField<Boolean>) = apply { body.paymentLink(paymentLink) }
 
         /** Optional URL to redirect after successful subscription creation */
         fun returnUrl(returnUrl: String?) = apply { body.returnUrl(returnUrl) }
 
-        /** Optional URL to redirect after successful subscription creation */
+        /**
+         * Sets [Builder.returnUrl] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.returnUrl] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun returnUrl(returnUrl: JsonField<String>) = apply { body.returnUrl(returnUrl) }
 
         /** Display saved payment methods of a returning customer False by default */
@@ -747,7 +473,13 @@ private constructor(
             body.showSavedPaymentMethods(showSavedPaymentMethods)
         }
 
-        /** Display saved payment methods of a returning customer False by default */
+        /**
+         * Sets [Builder.showSavedPaymentMethods] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.showSavedPaymentMethods] with a well-typed [Boolean]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
         fun showSavedPaymentMethods(showSavedPaymentMethods: JsonField<Boolean>) = apply {
             body.showSavedPaymentMethods(showSavedPaymentMethods)
         }
@@ -759,8 +491,10 @@ private constructor(
         fun taxId(taxId: String?) = apply { body.taxId(taxId) }
 
         /**
-         * Tax ID in case the payment is B2B. If tax id validation fails the payment creation will
-         * fail
+         * Sets [Builder.taxId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.taxId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun taxId(taxId: JsonField<String>) = apply { body.taxId(taxId) }
 
@@ -773,14 +507,18 @@ private constructor(
         }
 
         /**
-         * Optional trial period in days If specified, this value overrides the trial period set in
-         * the product's price Must be between 0 and 10000 days
+         * Alias for [Builder.trialPeriodDays].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
          */
         fun trialPeriodDays(trialPeriodDays: Long) = trialPeriodDays(trialPeriodDays as Long?)
 
         /**
-         * Optional trial period in days If specified, this value overrides the trial period set in
-         * the product's price Must be between 0 and 10000 days
+         * Sets [Builder.trialPeriodDays] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.trialPeriodDays] with a well-typed [Long] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
         fun trialPeriodDays(trialPeriodDays: JsonField<Long>) = apply {
             body.trialPeriodDays(trialPeriodDays)
@@ -903,12 +641,776 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [SubscriptionCreateParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .billing()
+         * .customer()
+         * .productId()
+         * .quantity()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): SubscriptionCreateParams =
             SubscriptionCreateParams(
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
+    }
+
+    fun _body(): Body = body
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    /**
+     * Request payload for creating a new subscription
+     *
+     * This struct represents the data required to create a new subscription in the system. It
+     * includes details about the product, quantity, customer information, and billing details.
+     */
+    class Body
+    private constructor(
+        private val billing: JsonField<BillingAddress>,
+        private val customer: JsonField<CustomerRequest>,
+        private val productId: JsonField<String>,
+        private val quantity: JsonField<Long>,
+        private val allowedPaymentMethodTypes: JsonField<List<AllowedPaymentMethodType>>,
+        private val billingCurrency: JsonField<BillingCurrency>,
+        private val discountCode: JsonField<String>,
+        private val metadata: JsonField<Metadata>,
+        private val onDemand: JsonField<OnDemand>,
+        private val paymentLink: JsonField<Boolean>,
+        private val returnUrl: JsonField<String>,
+        private val showSavedPaymentMethods: JsonField<Boolean>,
+        private val taxId: JsonField<String>,
+        private val trialPeriodDays: JsonField<Long>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("billing")
+            @ExcludeMissing
+            billing: JsonField<BillingAddress> = JsonMissing.of(),
+            @JsonProperty("customer")
+            @ExcludeMissing
+            customer: JsonField<CustomerRequest> = JsonMissing.of(),
+            @JsonProperty("product_id")
+            @ExcludeMissing
+            productId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("quantity") @ExcludeMissing quantity: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("allowed_payment_method_types")
+            @ExcludeMissing
+            allowedPaymentMethodTypes: JsonField<List<AllowedPaymentMethodType>> = JsonMissing.of(),
+            @JsonProperty("billing_currency")
+            @ExcludeMissing
+            billingCurrency: JsonField<BillingCurrency> = JsonMissing.of(),
+            @JsonProperty("discount_code")
+            @ExcludeMissing
+            discountCode: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("metadata")
+            @ExcludeMissing
+            metadata: JsonField<Metadata> = JsonMissing.of(),
+            @JsonProperty("on_demand")
+            @ExcludeMissing
+            onDemand: JsonField<OnDemand> = JsonMissing.of(),
+            @JsonProperty("payment_link")
+            @ExcludeMissing
+            paymentLink: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("return_url")
+            @ExcludeMissing
+            returnUrl: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("show_saved_payment_methods")
+            @ExcludeMissing
+            showSavedPaymentMethods: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("tax_id") @ExcludeMissing taxId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("trial_period_days")
+            @ExcludeMissing
+            trialPeriodDays: JsonField<Long> = JsonMissing.of(),
+        ) : this(
+            billing,
+            customer,
+            productId,
+            quantity,
+            allowedPaymentMethodTypes,
+            billingCurrency,
+            discountCode,
+            metadata,
+            onDemand,
+            paymentLink,
+            returnUrl,
+            showSavedPaymentMethods,
+            taxId,
+            trialPeriodDays,
+            mutableMapOf(),
+        )
+
+        /**
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun billing(): BillingAddress = billing.getRequired("billing")
+
+        /**
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun customer(): CustomerRequest = customer.getRequired("customer")
+
+        /**
+         * Unique identifier of the product to subscribe to
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun productId(): String = productId.getRequired("product_id")
+
+        /**
+         * Number of units to subscribe for. Must be at least 1.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun quantity(): Long = quantity.getRequired("quantity")
+
+        /**
+         * List of payment methods allowed during checkout.
+         *
+         * Customers will **never** see payment methods that are **not** in this list. However,
+         * adding a method here **does not guarantee** customers will see it. Availability still
+         * depends on other factors (e.g., customer location, merchant settings).
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun allowedPaymentMethodTypes(): List<AllowedPaymentMethodType>? =
+            allowedPaymentMethodTypes.getNullable("allowed_payment_method_types")
+
+        /**
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun billingCurrency(): BillingCurrency? = billingCurrency.getNullable("billing_currency")
+
+        /**
+         * Discount Code to apply to the subscription
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun discountCode(): String? = discountCode.getNullable("discount_code")
+
+        /**
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun metadata(): Metadata? = metadata.getNullable("metadata")
+
+        /**
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun onDemand(): OnDemand? = onDemand.getNullable("on_demand")
+
+        /**
+         * If true, generates a payment link. Defaults to false if not specified.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun paymentLink(): Boolean? = paymentLink.getNullable("payment_link")
+
+        /**
+         * Optional URL to redirect after successful subscription creation
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun returnUrl(): String? = returnUrl.getNullable("return_url")
+
+        /**
+         * Display saved payment methods of a returning customer False by default
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun showSavedPaymentMethods(): Boolean? =
+            showSavedPaymentMethods.getNullable("show_saved_payment_methods")
+
+        /**
+         * Tax ID in case the payment is B2B. If tax id validation fails the payment creation will
+         * fail
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun taxId(): String? = taxId.getNullable("tax_id")
+
+        /**
+         * Optional trial period in days If specified, this value overrides the trial period set in
+         * the product's price Must be between 0 and 10000 days
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun trialPeriodDays(): Long? = trialPeriodDays.getNullable("trial_period_days")
+
+        /**
+         * Returns the raw JSON value of [billing].
+         *
+         * Unlike [billing], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("billing") @ExcludeMissing fun _billing(): JsonField<BillingAddress> = billing
+
+        /**
+         * Returns the raw JSON value of [customer].
+         *
+         * Unlike [customer], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("customer")
+        @ExcludeMissing
+        fun _customer(): JsonField<CustomerRequest> = customer
+
+        /**
+         * Returns the raw JSON value of [productId].
+         *
+         * Unlike [productId], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("product_id") @ExcludeMissing fun _productId(): JsonField<String> = productId
+
+        /**
+         * Returns the raw JSON value of [quantity].
+         *
+         * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Long> = quantity
+
+        /**
+         * Returns the raw JSON value of [allowedPaymentMethodTypes].
+         *
+         * Unlike [allowedPaymentMethodTypes], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("allowed_payment_method_types")
+        @ExcludeMissing
+        fun _allowedPaymentMethodTypes(): JsonField<List<AllowedPaymentMethodType>> =
+            allowedPaymentMethodTypes
+
+        /**
+         * Returns the raw JSON value of [billingCurrency].
+         *
+         * Unlike [billingCurrency], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("billing_currency")
+        @ExcludeMissing
+        fun _billingCurrency(): JsonField<BillingCurrency> = billingCurrency
+
+        /**
+         * Returns the raw JSON value of [discountCode].
+         *
+         * Unlike [discountCode], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("discount_code")
+        @ExcludeMissing
+        fun _discountCode(): JsonField<String> = discountCode
+
+        /**
+         * Returns the raw JSON value of [metadata].
+         *
+         * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
+
+        /**
+         * Returns the raw JSON value of [onDemand].
+         *
+         * Unlike [onDemand], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("on_demand") @ExcludeMissing fun _onDemand(): JsonField<OnDemand> = onDemand
+
+        /**
+         * Returns the raw JSON value of [paymentLink].
+         *
+         * Unlike [paymentLink], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("payment_link")
+        @ExcludeMissing
+        fun _paymentLink(): JsonField<Boolean> = paymentLink
+
+        /**
+         * Returns the raw JSON value of [returnUrl].
+         *
+         * Unlike [returnUrl], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("return_url") @ExcludeMissing fun _returnUrl(): JsonField<String> = returnUrl
+
+        /**
+         * Returns the raw JSON value of [showSavedPaymentMethods].
+         *
+         * Unlike [showSavedPaymentMethods], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("show_saved_payment_methods")
+        @ExcludeMissing
+        fun _showSavedPaymentMethods(): JsonField<Boolean> = showSavedPaymentMethods
+
+        /**
+         * Returns the raw JSON value of [taxId].
+         *
+         * Unlike [taxId], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("tax_id") @ExcludeMissing fun _taxId(): JsonField<String> = taxId
+
+        /**
+         * Returns the raw JSON value of [trialPeriodDays].
+         *
+         * Unlike [trialPeriodDays], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("trial_period_days")
+        @ExcludeMissing
+        fun _trialPeriodDays(): JsonField<Long> = trialPeriodDays
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .billing()
+             * .customer()
+             * .productId()
+             * .quantity()
+             * ```
+             */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [Body]. */
+        class Builder internal constructor() {
+
+            private var billing: JsonField<BillingAddress>? = null
+            private var customer: JsonField<CustomerRequest>? = null
+            private var productId: JsonField<String>? = null
+            private var quantity: JsonField<Long>? = null
+            private var allowedPaymentMethodTypes:
+                JsonField<MutableList<AllowedPaymentMethodType>>? =
+                null
+            private var billingCurrency: JsonField<BillingCurrency> = JsonMissing.of()
+            private var discountCode: JsonField<String> = JsonMissing.of()
+            private var metadata: JsonField<Metadata> = JsonMissing.of()
+            private var onDemand: JsonField<OnDemand> = JsonMissing.of()
+            private var paymentLink: JsonField<Boolean> = JsonMissing.of()
+            private var returnUrl: JsonField<String> = JsonMissing.of()
+            private var showSavedPaymentMethods: JsonField<Boolean> = JsonMissing.of()
+            private var taxId: JsonField<String> = JsonMissing.of()
+            private var trialPeriodDays: JsonField<Long> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(body: Body) = apply {
+                billing = body.billing
+                customer = body.customer
+                productId = body.productId
+                quantity = body.quantity
+                allowedPaymentMethodTypes =
+                    body.allowedPaymentMethodTypes.map { it.toMutableList() }
+                billingCurrency = body.billingCurrency
+                discountCode = body.discountCode
+                metadata = body.metadata
+                onDemand = body.onDemand
+                paymentLink = body.paymentLink
+                returnUrl = body.returnUrl
+                showSavedPaymentMethods = body.showSavedPaymentMethods
+                taxId = body.taxId
+                trialPeriodDays = body.trialPeriodDays
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
+
+            fun billing(billing: BillingAddress) = billing(JsonField.of(billing))
+
+            /**
+             * Sets [Builder.billing] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.billing] with a well-typed [BillingAddress] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun billing(billing: JsonField<BillingAddress>) = apply { this.billing = billing }
+
+            fun customer(customer: CustomerRequest) = customer(JsonField.of(customer))
+
+            /**
+             * Sets [Builder.customer] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.customer] with a well-typed [CustomerRequest] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun customer(customer: JsonField<CustomerRequest>) = apply { this.customer = customer }
+
+            /**
+             * Alias for calling [customer] with
+             * `CustomerRequest.ofAttachExistingCustomer(attachExistingCustomer)`.
+             */
+            fun customer(attachExistingCustomer: AttachExistingCustomer) =
+                customer(CustomerRequest.ofAttachExistingCustomer(attachExistingCustomer))
+
+            /**
+             * Alias for calling [customer] with
+             * `CustomerRequest.ofCreateNewCustomer(createNewCustomer)`.
+             */
+            fun customer(createNewCustomer: CreateNewCustomer) =
+                customer(CustomerRequest.ofCreateNewCustomer(createNewCustomer))
+
+            /** Unique identifier of the product to subscribe to */
+            fun productId(productId: String) = productId(JsonField.of(productId))
+
+            /**
+             * Sets [Builder.productId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.productId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun productId(productId: JsonField<String>) = apply { this.productId = productId }
+
+            /** Number of units to subscribe for. Must be at least 1. */
+            fun quantity(quantity: Long) = quantity(JsonField.of(quantity))
+
+            /**
+             * Sets [Builder.quantity] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.quantity] with a well-typed [Long] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun quantity(quantity: JsonField<Long>) = apply { this.quantity = quantity }
+
+            /**
+             * List of payment methods allowed during checkout.
+             *
+             * Customers will **never** see payment methods that are **not** in this list. However,
+             * adding a method here **does not guarantee** customers will see it. Availability still
+             * depends on other factors (e.g., customer location, merchant settings).
+             */
+            fun allowedPaymentMethodTypes(
+                allowedPaymentMethodTypes: List<AllowedPaymentMethodType>?
+            ) = allowedPaymentMethodTypes(JsonField.ofNullable(allowedPaymentMethodTypes))
+
+            /**
+             * Sets [Builder.allowedPaymentMethodTypes] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.allowedPaymentMethodTypes] with a well-typed
+             * `List<AllowedPaymentMethodType>` value instead. This method is primarily for setting
+             * the field to an undocumented or not yet supported value.
+             */
+            fun allowedPaymentMethodTypes(
+                allowedPaymentMethodTypes: JsonField<List<AllowedPaymentMethodType>>
+            ) = apply {
+                this.allowedPaymentMethodTypes =
+                    allowedPaymentMethodTypes.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [AllowedPaymentMethodType] to [allowedPaymentMethodTypes].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addAllowedPaymentMethodType(allowedPaymentMethodType: AllowedPaymentMethodType) =
+                apply {
+                    allowedPaymentMethodTypes =
+                        (allowedPaymentMethodTypes ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("allowedPaymentMethodTypes", it)
+                                .add(allowedPaymentMethodType)
+                        }
+                }
+
+            fun billingCurrency(billingCurrency: BillingCurrency?) =
+                billingCurrency(JsonField.ofNullable(billingCurrency))
+
+            /**
+             * Sets [Builder.billingCurrency] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.billingCurrency] with a well-typed [BillingCurrency]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun billingCurrency(billingCurrency: JsonField<BillingCurrency>) = apply {
+                this.billingCurrency = billingCurrency
+            }
+
+            /** Discount Code to apply to the subscription */
+            fun discountCode(discountCode: String?) =
+                discountCode(JsonField.ofNullable(discountCode))
+
+            /**
+             * Sets [Builder.discountCode] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.discountCode] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun discountCode(discountCode: JsonField<String>) = apply {
+                this.discountCode = discountCode
+            }
+
+            fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
+
+            /**
+             * Sets [Builder.metadata] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
+
+            fun onDemand(onDemand: OnDemand?) = onDemand(JsonField.ofNullable(onDemand))
+
+            /**
+             * Sets [Builder.onDemand] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.onDemand] with a well-typed [OnDemand] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun onDemand(onDemand: JsonField<OnDemand>) = apply { this.onDemand = onDemand }
+
+            /** If true, generates a payment link. Defaults to false if not specified. */
+            fun paymentLink(paymentLink: Boolean?) = paymentLink(JsonField.ofNullable(paymentLink))
+
+            /**
+             * Alias for [Builder.paymentLink].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun paymentLink(paymentLink: Boolean) = paymentLink(paymentLink as Boolean?)
+
+            /**
+             * Sets [Builder.paymentLink] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.paymentLink] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun paymentLink(paymentLink: JsonField<Boolean>) = apply {
+                this.paymentLink = paymentLink
+            }
+
+            /** Optional URL to redirect after successful subscription creation */
+            fun returnUrl(returnUrl: String?) = returnUrl(JsonField.ofNullable(returnUrl))
+
+            /**
+             * Sets [Builder.returnUrl] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.returnUrl] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun returnUrl(returnUrl: JsonField<String>) = apply { this.returnUrl = returnUrl }
+
+            /** Display saved payment methods of a returning customer False by default */
+            fun showSavedPaymentMethods(showSavedPaymentMethods: Boolean) =
+                showSavedPaymentMethods(JsonField.of(showSavedPaymentMethods))
+
+            /**
+             * Sets [Builder.showSavedPaymentMethods] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.showSavedPaymentMethods] with a well-typed [Boolean]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun showSavedPaymentMethods(showSavedPaymentMethods: JsonField<Boolean>) = apply {
+                this.showSavedPaymentMethods = showSavedPaymentMethods
+            }
+
+            /**
+             * Tax ID in case the payment is B2B. If tax id validation fails the payment creation
+             * will fail
+             */
+            fun taxId(taxId: String?) = taxId(JsonField.ofNullable(taxId))
+
+            /**
+             * Sets [Builder.taxId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.taxId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun taxId(taxId: JsonField<String>) = apply { this.taxId = taxId }
+
+            /**
+             * Optional trial period in days If specified, this value overrides the trial period set
+             * in the product's price Must be between 0 and 10000 days
+             */
+            fun trialPeriodDays(trialPeriodDays: Long?) =
+                trialPeriodDays(JsonField.ofNullable(trialPeriodDays))
+
+            /**
+             * Alias for [Builder.trialPeriodDays].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun trialPeriodDays(trialPeriodDays: Long) = trialPeriodDays(trialPeriodDays as Long?)
+
+            /**
+             * Sets [Builder.trialPeriodDays] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.trialPeriodDays] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun trialPeriodDays(trialPeriodDays: JsonField<Long>) = apply {
+                this.trialPeriodDays = trialPeriodDays
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Body].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .billing()
+             * .customer()
+             * .productId()
+             * .quantity()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): Body =
+                Body(
+                    checkRequired("billing", billing),
+                    checkRequired("customer", customer),
+                    checkRequired("productId", productId),
+                    checkRequired("quantity", quantity),
+                    (allowedPaymentMethodTypes ?: JsonMissing.of()).map { it.toImmutable() },
+                    billingCurrency,
+                    discountCode,
+                    metadata,
+                    onDemand,
+                    paymentLink,
+                    returnUrl,
+                    showSavedPaymentMethods,
+                    taxId,
+                    trialPeriodDays,
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Body = apply {
+            if (validated) {
+                return@apply
+            }
+
+            billing().validate()
+            customer().validate()
+            productId()
+            quantity()
+            allowedPaymentMethodTypes()?.forEach { it.validate() }
+            billingCurrency()?.validate()
+            discountCode()
+            metadata()?.validate()
+            onDemand()?.validate()
+            paymentLink()
+            returnUrl()
+            showSavedPaymentMethods()
+            taxId()
+            trialPeriodDays()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            (billing.asKnown()?.validity() ?: 0) +
+                (customer.asKnown()?.validity() ?: 0) +
+                (if (productId.asKnown() == null) 0 else 1) +
+                (if (quantity.asKnown() == null) 0 else 1) +
+                (allowedPaymentMethodTypes.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                (billingCurrency.asKnown()?.validity() ?: 0) +
+                (if (discountCode.asKnown() == null) 0 else 1) +
+                (metadata.asKnown()?.validity() ?: 0) +
+                (onDemand.asKnown()?.validity() ?: 0) +
+                (if (paymentLink.asKnown() == null) 0 else 1) +
+                (if (returnUrl.asKnown() == null) 0 else 1) +
+                (if (showSavedPaymentMethods.asKnown() == null) 0 else 1) +
+                (if (taxId.asKnown() == null) 0 else 1) +
+                (if (trialPeriodDays.asKnown() == null) 0 else 1)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Body && billing == other.billing && customer == other.customer && productId == other.productId && quantity == other.quantity && allowedPaymentMethodTypes == other.allowedPaymentMethodTypes && billingCurrency == other.billingCurrency && discountCode == other.discountCode && metadata == other.metadata && onDemand == other.onDemand && paymentLink == other.paymentLink && returnUrl == other.returnUrl && showSavedPaymentMethods == other.showSavedPaymentMethods && taxId == other.taxId && trialPeriodDays == other.trialPeriodDays && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(billing, customer, productId, quantity, allowedPaymentMethodTypes, billingCurrency, discountCode, metadata, onDemand, paymentLink, returnUrl, showSavedPaymentMethods, taxId, trialPeriodDays, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Body{billing=$billing, customer=$customer, productId=$productId, quantity=$quantity, allowedPaymentMethodTypes=$allowedPaymentMethodTypes, billingCurrency=$billingCurrency, discountCode=$discountCode, metadata=$metadata, onDemand=$onDemand, paymentLink=$paymentLink, returnUrl=$returnUrl, showSavedPaymentMethods=$showSavedPaymentMethods, taxId=$taxId, trialPeriodDays=$trialPeriodDays, additionalProperties=$additionalProperties}"
     }
 
     class AllowedPaymentMethodType
@@ -1095,6 +1597,33 @@ private constructor(
          */
         fun asString(): String =
             _value().asString() ?: throw DodoPaymentsInvalidDataException("Value is not a String")
+
+        private var validated: Boolean = false
+
+        fun validate(): AllowedPaymentMethodType = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -2056,6 +2585,33 @@ private constructor(
         fun asString(): String =
             _value().asString() ?: throw DodoPaymentsInvalidDataException("Value is not a String")
 
+        private var validated: Boolean = false
+
+        fun validate(): BillingCurrency = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
@@ -2069,27 +2625,16 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    @NoAutoDetect
     class Metadata
     @JsonCreator
     private constructor(
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
     ) {
 
         @JsonAnyGetter
         @ExcludeMissing
         fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Metadata = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -2127,8 +2672,40 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Metadata].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
             fun build(): Metadata = Metadata(additionalProperties.toImmutable())
         }
+
+        private var validated: Boolean = false
+
+        fun validate(): Metadata = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -2147,23 +2724,29 @@ private constructor(
         override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
     }
 
-    @NoAutoDetect
     class OnDemand
-    @JsonCreator
     private constructor(
-        @JsonProperty("mandate_only")
-        @ExcludeMissing
-        private val mandateOnly: JsonField<Boolean> = JsonMissing.of(),
-        @JsonProperty("product_price")
-        @ExcludeMissing
-        private val productPrice: JsonField<Long> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val mandateOnly: JsonField<Boolean>,
+        private val productPrice: JsonField<Long>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("mandate_only")
+            @ExcludeMissing
+            mandateOnly: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("product_price")
+            @ExcludeMissing
+            productPrice: JsonField<Long> = JsonMissing.of(),
+        ) : this(mandateOnly, productPrice, mutableMapOf())
 
         /**
          * If set as True, does not perform any charge and only authorizes payment method details
          * for future use.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun mandateOnly(): Boolean = mandateOnly.getRequired("mandate_only")
 
@@ -2171,41 +2754,40 @@ private constructor(
          * Product price for the initial charge to customer If not specified the stored price of the
          * product will be used Represented in the lowest denomination of the currency (e.g., cents
          * for USD). For example, to charge $1.00, pass `100`.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
          */
         fun productPrice(): Long? = productPrice.getNullable("product_price")
 
         /**
-         * If set as True, does not perform any charge and only authorizes payment method details
-         * for future use.
+         * Returns the raw JSON value of [mandateOnly].
+         *
+         * Unlike [mandateOnly], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("mandate_only")
         @ExcludeMissing
         fun _mandateOnly(): JsonField<Boolean> = mandateOnly
 
         /**
-         * Product price for the initial charge to customer If not specified the stored price of the
-         * product will be used Represented in the lowest denomination of the currency (e.g., cents
-         * for USD). For example, to charge $1.00, pass `100`.
+         * Returns the raw JSON value of [productPrice].
+         *
+         * Unlike [productPrice], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("product_price")
         @ExcludeMissing
         fun _productPrice(): JsonField<Long> = productPrice
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): OnDemand = apply {
-            if (validated) {
-                return@apply
-            }
-
-            mandateOnly()
-            productPrice()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -2242,8 +2824,11 @@ private constructor(
             fun mandateOnly(mandateOnly: Boolean) = mandateOnly(JsonField.of(mandateOnly))
 
             /**
-             * If set as True, does not perform any charge and only authorizes payment method
-             * details for future use.
+             * Sets [Builder.mandateOnly] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.mandateOnly] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun mandateOnly(mandateOnly: JsonField<Boolean>) = apply {
                 this.mandateOnly = mandateOnly
@@ -2257,16 +2842,18 @@ private constructor(
             fun productPrice(productPrice: Long?) = productPrice(JsonField.ofNullable(productPrice))
 
             /**
-             * Product price for the initial charge to customer If not specified the stored price of
-             * the product will be used Represented in the lowest denomination of the currency
-             * (e.g., cents for USD). For example, to charge $1.00, pass `100`.
+             * Alias for [Builder.productPrice].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
              */
             fun productPrice(productPrice: Long) = productPrice(productPrice as Long?)
 
             /**
-             * Product price for the initial charge to customer If not specified the stored price of
-             * the product will be used Represented in the lowest denomination of the currency
-             * (e.g., cents for USD). For example, to charge $1.00, pass `100`.
+             * Sets [Builder.productPrice] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.productPrice] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun productPrice(productPrice: JsonField<Long>) = apply {
                 this.productPrice = productPrice
@@ -2291,13 +2878,55 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [OnDemand].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .mandateOnly()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): OnDemand =
                 OnDemand(
                     checkRequired("mandateOnly", mandateOnly),
                     productPrice,
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
         }
+
+        private var validated: Boolean = false
+
+        fun validate(): OnDemand = apply {
+            if (validated) {
+                return@apply
+            }
+
+            mandateOnly()
+            productPrice()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            (if (mandateOnly.asKnown() == null) 0 else 1) +
+                (if (productPrice.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {

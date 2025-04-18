@@ -3,19 +3,21 @@
 package com.dodopayments.api.models.payments
 
 import com.dodopayments.api.core.JsonValue
+import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.disputes.Dispute
 import com.dodopayments.api.models.disputes.DisputeStage
 import com.dodopayments.api.models.disputes.DisputeStatus
 import com.dodopayments.api.models.refunds.Refund
 import com.dodopayments.api.models.refunds.RefundStatus
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class PaymentTest {
+internal class PaymentTest {
 
     @Test
-    fun createPayment() {
+    fun create() {
         val payment =
             Payment.builder()
                 .businessId("business_id")
@@ -72,7 +74,7 @@ class PaymentTest {
                 .tax(0L)
                 .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
-        assertThat(payment).isNotNull
+
         assertThat(payment.businessId()).isEqualTo("business_id")
         assertThat(payment.createdAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(payment.currency()).isEqualTo(Payment.Currency.AED)
@@ -131,5 +133,71 @@ class PaymentTest {
         assertThat(payment.subscriptionId()).isEqualTo("subscription_id")
         assertThat(payment.tax()).isEqualTo(0L)
         assertThat(payment.updatedAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val payment =
+            Payment.builder()
+                .businessId("business_id")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .currency(Payment.Currency.AED)
+                .customer(
+                    CustomerLimitedDetails.builder()
+                        .customerId("customer_id")
+                        .email("email")
+                        .name("name")
+                        .build()
+                )
+                .addDispute(
+                    Dispute.builder()
+                        .amount("amount")
+                        .businessId("business_id")
+                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .currency("currency")
+                        .disputeId("dispute_id")
+                        .disputeStage(DisputeStage.PRE_DISPUTE)
+                        .disputeStatus(DisputeStatus.DISPUTE_OPENED)
+                        .paymentId("payment_id")
+                        .build()
+                )
+                .metadata(
+                    Payment.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
+                .paymentId("payment_id")
+                .addRefund(
+                    Refund.builder()
+                        .businessId("business_id")
+                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentId("payment_id")
+                        .refundId("refund_id")
+                        .status(RefundStatus.SUCCEEDED)
+                        .amount(0L)
+                        .currency(Refund.Currency.AED)
+                        .reason("reason")
+                        .build()
+                )
+                .totalAmount(0L)
+                .discountId("discount_id")
+                .errorMessage("error_message")
+                .paymentLink("payment_link")
+                .paymentMethod("payment_method")
+                .paymentMethodType("payment_method_type")
+                .addProductCart(
+                    Payment.ProductCart.builder().productId("product_id").quantity(0L).build()
+                )
+                .status(IntentStatus.SUCCEEDED)
+                .subscriptionId("subscription_id")
+                .tax(0L)
+                .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .build()
+
+        val roundtrippedPayment =
+            jsonMapper.readValue(jsonMapper.writeValueAsString(payment), jacksonTypeRef<Payment>())
+
+        assertThat(roundtrippedPayment).isEqualTo(payment)
     }
 }

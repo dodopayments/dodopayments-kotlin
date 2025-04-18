@@ -7,87 +7,158 @@ import com.dodopayments.api.core.ExcludeMissing
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
-import com.dodopayments.api.core.NoAutoDetect
 import com.dodopayments.api.core.checkRequired
-import com.dodopayments.api.core.immutableEmptyMap
-import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.OffsetDateTime
+import java.util.Collections
 import java.util.Objects
 
-@NoAutoDetect
 class ProductListResponse
-@JsonCreator
 private constructor(
-    @JsonProperty("business_id")
-    @ExcludeMissing
-    private val businessId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("created_at")
-    @ExcludeMissing
-    private val createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("is_recurring")
-    @ExcludeMissing
-    private val isRecurring: JsonField<Boolean> = JsonMissing.of(),
-    @JsonProperty("product_id")
-    @ExcludeMissing
-    private val productId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("tax_category")
-    @ExcludeMissing
-    private val taxCategory: JsonField<TaxCategory> = JsonMissing.of(),
-    @JsonProperty("updated_at")
-    @ExcludeMissing
-    private val updatedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("currency")
-    @ExcludeMissing
-    private val currency: JsonField<Currency> = JsonMissing.of(),
-    @JsonProperty("description")
-    @ExcludeMissing
-    private val description: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("image") @ExcludeMissing private val image: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("price") @ExcludeMissing private val price: JsonField<Long> = JsonMissing.of(),
-    @JsonProperty("price_detail")
-    @ExcludeMissing
-    private val priceDetail: JsonField<Price> = JsonMissing.of(),
-    @JsonProperty("tax_inclusive")
-    @ExcludeMissing
-    private val taxInclusive: JsonField<Boolean> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val businessId: JsonField<String>,
+    private val createdAt: JsonField<OffsetDateTime>,
+    private val isRecurring: JsonField<Boolean>,
+    private val productId: JsonField<String>,
+    private val taxCategory: JsonField<TaxCategory>,
+    private val updatedAt: JsonField<OffsetDateTime>,
+    private val currency: JsonField<Currency>,
+    private val description: JsonField<String>,
+    private val image: JsonField<String>,
+    private val name: JsonField<String>,
+    private val price: JsonField<Long>,
+    private val priceDetail: JsonField<Price>,
+    private val taxInclusive: JsonField<Boolean>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
-    /** Unique identifier for the business to which the product belongs. */
+    @JsonCreator
+    private constructor(
+        @JsonProperty("business_id")
+        @ExcludeMissing
+        businessId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("is_recurring")
+        @ExcludeMissing
+        isRecurring: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("product_id") @ExcludeMissing productId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("tax_category")
+        @ExcludeMissing
+        taxCategory: JsonField<TaxCategory> = JsonMissing.of(),
+        @JsonProperty("updated_at")
+        @ExcludeMissing
+        updatedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("currency") @ExcludeMissing currency: JsonField<Currency> = JsonMissing.of(),
+        @JsonProperty("description")
+        @ExcludeMissing
+        description: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("image") @ExcludeMissing image: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("price") @ExcludeMissing price: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("price_detail")
+        @ExcludeMissing
+        priceDetail: JsonField<Price> = JsonMissing.of(),
+        @JsonProperty("tax_inclusive")
+        @ExcludeMissing
+        taxInclusive: JsonField<Boolean> = JsonMissing.of(),
+    ) : this(
+        businessId,
+        createdAt,
+        isRecurring,
+        productId,
+        taxCategory,
+        updatedAt,
+        currency,
+        description,
+        image,
+        name,
+        price,
+        priceDetail,
+        taxInclusive,
+        mutableMapOf(),
+    )
+
+    /**
+     * Unique identifier for the business to which the product belongs.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun businessId(): String = businessId.getRequired("business_id")
 
-    /** Timestamp when the product was created. */
+    /**
+     * Timestamp when the product was created.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
-    /** Indicates if the product is recurring (e.g., subscriptions). */
+    /**
+     * Indicates if the product is recurring (e.g., subscriptions).
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun isRecurring(): Boolean = isRecurring.getRequired("is_recurring")
 
-    /** Unique identifier for the product. */
+    /**
+     * Unique identifier for the product.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun productId(): String = productId.getRequired("product_id")
 
     /**
      * Represents the different categories of taxation applicable to various products and services.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun taxCategory(): TaxCategory = taxCategory.getRequired("tax_category")
 
-    /** Timestamp when the product was last updated. */
+    /**
+     * Timestamp when the product was last updated.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun updatedAt(): OffsetDateTime = updatedAt.getRequired("updated_at")
 
+    /**
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
     fun currency(): Currency? = currency.getNullable("currency")
 
-    /** Description of the product, optional. */
+    /**
+     * Description of the product, optional.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
     fun description(): String? = description.getNullable("description")
 
-    /** URL of the product image, optional. */
+    /**
+     * URL of the product image, optional.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
     fun image(): String? = image.getNullable("image")
 
-    /** Name of the product, optional. */
+    /**
+     * Name of the product, optional.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
     fun name(): String? = name.getNullable("name")
 
     /**
@@ -99,98 +170,136 @@ private constructor(
      * - In INR, a price of `₹1234.56` would be represented as `123456` (paise).
      *
      * This ensures precision and avoids floating-point rounding errors.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
      */
     fun price(): Long? = price.getNullable("price")
 
+    /**
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
     fun priceDetail(): Price? = priceDetail.getNullable("price_detail")
 
-    /** Indicates if the price is tax inclusive */
+    /**
+     * Indicates if the price is tax inclusive
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
     fun taxInclusive(): Boolean? = taxInclusive.getNullable("tax_inclusive")
 
-    /** Unique identifier for the business to which the product belongs. */
+    /**
+     * Returns the raw JSON value of [businessId].
+     *
+     * Unlike [businessId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("business_id") @ExcludeMissing fun _businessId(): JsonField<String> = businessId
 
-    /** Timestamp when the product was created. */
+    /**
+     * Returns the raw JSON value of [createdAt].
+     *
+     * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("created_at")
     @ExcludeMissing
     fun _createdAt(): JsonField<OffsetDateTime> = createdAt
 
-    /** Indicates if the product is recurring (e.g., subscriptions). */
+    /**
+     * Returns the raw JSON value of [isRecurring].
+     *
+     * Unlike [isRecurring], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("is_recurring")
     @ExcludeMissing
     fun _isRecurring(): JsonField<Boolean> = isRecurring
 
-    /** Unique identifier for the product. */
+    /**
+     * Returns the raw JSON value of [productId].
+     *
+     * Unlike [productId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("product_id") @ExcludeMissing fun _productId(): JsonField<String> = productId
 
     /**
-     * Represents the different categories of taxation applicable to various products and services.
+     * Returns the raw JSON value of [taxCategory].
+     *
+     * Unlike [taxCategory], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("tax_category")
     @ExcludeMissing
     fun _taxCategory(): JsonField<TaxCategory> = taxCategory
 
-    /** Timestamp when the product was last updated. */
+    /**
+     * Returns the raw JSON value of [updatedAt].
+     *
+     * Unlike [updatedAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("updated_at")
     @ExcludeMissing
     fun _updatedAt(): JsonField<OffsetDateTime> = updatedAt
 
+    /**
+     * Returns the raw JSON value of [currency].
+     *
+     * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<Currency> = currency
 
-    /** Description of the product, optional. */
+    /**
+     * Returns the raw JSON value of [description].
+     *
+     * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("description") @ExcludeMissing fun _description(): JsonField<String> = description
 
-    /** URL of the product image, optional. */
+    /**
+     * Returns the raw JSON value of [image].
+     *
+     * Unlike [image], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("image") @ExcludeMissing fun _image(): JsonField<String> = image
 
-    /** Name of the product, optional. */
+    /**
+     * Returns the raw JSON value of [name].
+     *
+     * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
     /**
-     * Price of the product, optional.
+     * Returns the raw JSON value of [price].
      *
-     * The price is represented in the lowest denomination of the currency. For example:
-     * - In USD, a price of `$12.34` would be represented as `1234` (cents).
-     * - In JPY, a price of `¥1500` would be represented as `1500` (yen).
-     * - In INR, a price of `₹1234.56` would be represented as `123456` (paise).
-     *
-     * This ensures precision and avoids floating-point rounding errors.
+     * Unlike [price], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Long> = price
 
+    /**
+     * Returns the raw JSON value of [priceDetail].
+     *
+     * Unlike [priceDetail], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("price_detail") @ExcludeMissing fun _priceDetail(): JsonField<Price> = priceDetail
 
-    /** Indicates if the price is tax inclusive */
+    /**
+     * Returns the raw JSON value of [taxInclusive].
+     *
+     * Unlike [taxInclusive], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("tax_inclusive")
     @ExcludeMissing
     fun _taxInclusive(): JsonField<Boolean> = taxInclusive
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): ProductListResponse = apply {
-        if (validated) {
-            return@apply
-        }
-
-        businessId()
-        createdAt()
-        isRecurring()
-        productId()
-        taxCategory()
-        updatedAt()
-        currency()
-        description()
-        image()
-        name()
-        price()
-        priceDetail()?.validate()
-        taxInclusive()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -250,25 +359,49 @@ private constructor(
         /** Unique identifier for the business to which the product belongs. */
         fun businessId(businessId: String) = businessId(JsonField.of(businessId))
 
-        /** Unique identifier for the business to which the product belongs. */
+        /**
+         * Sets [Builder.businessId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.businessId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun businessId(businessId: JsonField<String>) = apply { this.businessId = businessId }
 
         /** Timestamp when the product was created. */
         fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
 
-        /** Timestamp when the product was created. */
+        /**
+         * Sets [Builder.createdAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
         /** Indicates if the product is recurring (e.g., subscriptions). */
         fun isRecurring(isRecurring: Boolean) = isRecurring(JsonField.of(isRecurring))
 
-        /** Indicates if the product is recurring (e.g., subscriptions). */
+        /**
+         * Sets [Builder.isRecurring] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.isRecurring] with a well-typed [Boolean] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun isRecurring(isRecurring: JsonField<Boolean>) = apply { this.isRecurring = isRecurring }
 
         /** Unique identifier for the product. */
         fun productId(productId: String) = productId(JsonField.of(productId))
 
-        /** Unique identifier for the product. */
+        /**
+         * Sets [Builder.productId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.productId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
         /**
@@ -278,8 +411,11 @@ private constructor(
         fun taxCategory(taxCategory: TaxCategory) = taxCategory(JsonField.of(taxCategory))
 
         /**
-         * Represents the different categories of taxation applicable to various products and
-         * services.
+         * Sets [Builder.taxCategory] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.taxCategory] with a well-typed [TaxCategory] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun taxCategory(taxCategory: JsonField<TaxCategory>) = apply {
             this.taxCategory = taxCategory
@@ -288,29 +424,58 @@ private constructor(
         /** Timestamp when the product was last updated. */
         fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))
 
-        /** Timestamp when the product was last updated. */
+        /**
+         * Sets [Builder.updatedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.updatedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply { this.updatedAt = updatedAt }
 
         fun currency(currency: Currency?) = currency(JsonField.ofNullable(currency))
 
+        /**
+         * Sets [Builder.currency] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.currency] with a well-typed [Currency] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun currency(currency: JsonField<Currency>) = apply { this.currency = currency }
 
         /** Description of the product, optional. */
         fun description(description: String?) = description(JsonField.ofNullable(description))
 
-        /** Description of the product, optional. */
+        /**
+         * Sets [Builder.description] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.description] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun description(description: JsonField<String>) = apply { this.description = description }
 
         /** URL of the product image, optional. */
         fun image(image: String?) = image(JsonField.ofNullable(image))
 
-        /** URL of the product image, optional. */
+        /**
+         * Sets [Builder.image] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.image] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun image(image: JsonField<String>) = apply { this.image = image }
 
         /** Name of the product, optional. */
         fun name(name: String?) = name(JsonField.ofNullable(name))
 
-        /** Name of the product, optional. */
+        /**
+         * Sets [Builder.name] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.name] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun name(name: JsonField<String>) = apply { this.name = name }
 
         /**
@@ -326,44 +491,54 @@ private constructor(
         fun price(price: Long?) = price(JsonField.ofNullable(price))
 
         /**
-         * Price of the product, optional.
+         * Alias for [Builder.price].
          *
-         * The price is represented in the lowest denomination of the currency. For example:
-         * - In USD, a price of `$12.34` would be represented as `1234` (cents).
-         * - In JPY, a price of `¥1500` would be represented as `1500` (yen).
-         * - In INR, a price of `₹1234.56` would be represented as `123456` (paise).
-         *
-         * This ensures precision and avoids floating-point rounding errors.
+         * This unboxed primitive overload exists for backwards compatibility.
          */
         fun price(price: Long) = price(price as Long?)
 
         /**
-         * Price of the product, optional.
+         * Sets [Builder.price] to an arbitrary JSON value.
          *
-         * The price is represented in the lowest denomination of the currency. For example:
-         * - In USD, a price of `$12.34` would be represented as `1234` (cents).
-         * - In JPY, a price of `¥1500` would be represented as `1500` (yen).
-         * - In INR, a price of `₹1234.56` would be represented as `123456` (paise).
-         *
-         * This ensures precision and avoids floating-point rounding errors.
+         * You should usually call [Builder.price] with a well-typed [Long] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun price(price: JsonField<Long>) = apply { this.price = price }
 
         fun priceDetail(priceDetail: Price?) = priceDetail(JsonField.ofNullable(priceDetail))
 
+        /**
+         * Sets [Builder.priceDetail] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.priceDetail] with a well-typed [Price] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun priceDetail(priceDetail: JsonField<Price>) = apply { this.priceDetail = priceDetail }
 
+        /** Alias for calling [priceDetail] with `Price.ofOneTime(oneTime)`. */
         fun priceDetail(oneTime: Price.OneTimePrice) = priceDetail(Price.ofOneTime(oneTime))
 
+        /** Alias for calling [priceDetail] with `Price.ofRecurring(recurring)`. */
         fun priceDetail(recurring: Price.RecurringPrice) = priceDetail(Price.ofRecurring(recurring))
 
         /** Indicates if the price is tax inclusive */
         fun taxInclusive(taxInclusive: Boolean?) = taxInclusive(JsonField.ofNullable(taxInclusive))
 
-        /** Indicates if the price is tax inclusive */
+        /**
+         * Alias for [Builder.taxInclusive].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun taxInclusive(taxInclusive: Boolean) = taxInclusive(taxInclusive as Boolean?)
 
-        /** Indicates if the price is tax inclusive */
+        /**
+         * Sets [Builder.taxInclusive] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.taxInclusive] with a well-typed [Boolean] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun taxInclusive(taxInclusive: JsonField<Boolean>) = apply {
             this.taxInclusive = taxInclusive
         }
@@ -387,6 +562,23 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [ProductListResponse].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .businessId()
+         * .createdAt()
+         * .isRecurring()
+         * .productId()
+         * .taxCategory()
+         * .updatedAt()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): ProductListResponse =
             ProductListResponse(
                 checkRequired("businessId", businessId),
@@ -402,9 +594,60 @@ private constructor(
                 price,
                 priceDetail,
                 taxInclusive,
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
     }
+
+    private var validated: Boolean = false
+
+    fun validate(): ProductListResponse = apply {
+        if (validated) {
+            return@apply
+        }
+
+        businessId()
+        createdAt()
+        isRecurring()
+        productId()
+        taxCategory().validate()
+        updatedAt()
+        currency()?.validate()
+        description()
+        image()
+        name()
+        price()
+        priceDetail()?.validate()
+        taxInclusive()
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: DodoPaymentsInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    internal fun validity(): Int =
+        (if (businessId.asKnown() == null) 0 else 1) +
+            (if (createdAt.asKnown() == null) 0 else 1) +
+            (if (isRecurring.asKnown() == null) 0 else 1) +
+            (if (productId.asKnown() == null) 0 else 1) +
+            (taxCategory.asKnown()?.validity() ?: 0) +
+            (if (updatedAt.asKnown() == null) 0 else 1) +
+            (currency.asKnown()?.validity() ?: 0) +
+            (if (description.asKnown() == null) 0 else 1) +
+            (if (image.asKnown() == null) 0 else 1) +
+            (if (name.asKnown() == null) 0 else 1) +
+            (if (price.asKnown() == null) 0 else 1) +
+            (priceDetail.asKnown()?.validity() ?: 0) +
+            (if (taxInclusive.asKnown() == null) 0 else 1)
 
     /**
      * Represents the different categories of taxation applicable to various products and services.
@@ -508,6 +751,33 @@ private constructor(
          */
         fun asString(): String =
             _value().asString() ?: throw DodoPaymentsInvalidDataException("Value is not a String")
+
+        private var validated: Boolean = false
+
+        fun validate(): TaxCategory = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -1464,6 +1734,33 @@ private constructor(
          */
         fun asString(): String =
             _value().asString() ?: throw DodoPaymentsInvalidDataException("Value is not a String")
+
+        private var validated: Boolean = false
+
+        fun validate(): Currency = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {

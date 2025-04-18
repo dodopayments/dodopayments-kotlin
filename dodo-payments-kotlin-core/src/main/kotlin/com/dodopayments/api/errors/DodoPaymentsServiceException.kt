@@ -1,21 +1,17 @@
+// File generated from our OpenAPI spec by Stainless.
+
 package com.dodopayments.api.errors
 
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.http.Headers
 
-abstract class DodoPaymentsServiceException(
-    private val statusCode: Int,
-    private val headers: Headers,
-    private val body: String,
-    private val error: DodoPaymentsError,
-    message: String = "$statusCode: $error",
-    cause: Throwable? = null,
-) : DodoPaymentsException(message, cause) {
+abstract class DodoPaymentsServiceException
+protected constructor(message: String, cause: Throwable? = null) :
+    DodoPaymentsException(message, cause) {
 
-    fun statusCode(): Int = statusCode
+    abstract fun statusCode(): Int
 
-    fun headers(): Headers = headers
+    abstract fun headers(): Headers
 
-    fun body(): String = body
-
-    fun error(): DodoPaymentsError = error
+    abstract fun body(): JsonValue
 }

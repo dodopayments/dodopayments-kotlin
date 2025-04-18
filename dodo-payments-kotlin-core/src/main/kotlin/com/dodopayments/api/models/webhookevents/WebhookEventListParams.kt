@@ -2,7 +2,6 @@
 
 package com.dodopayments.api.models.webhookevents
 
-import com.dodopayments.api.core.NoAutoDetect
 import com.dodopayments.api.core.Params
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
@@ -44,30 +43,6 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams {
-        val queryParams = QueryParams.builder()
-        this.createdAtGte?.let {
-            queryParams.put(
-                "created_at_gte",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it)),
-            )
-        }
-        this.createdAtLte?.let {
-            queryParams.put(
-                "created_at_lte",
-                listOf(DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it)),
-            )
-        }
-        this.limit?.let { queryParams.put("limit", listOf(it.toString())) }
-        this.objectId?.let { queryParams.put("object_id", listOf(it.toString())) }
-        this.pageNumber?.let { queryParams.put("page_number", listOf(it.toString())) }
-        this.pageSize?.let { queryParams.put("page_size", listOf(it.toString())) }
-        queryParams.putAll(additionalQueryParams)
-        return queryParams.build()
-    }
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -79,7 +54,6 @@ private constructor(
     }
 
     /** A builder for [WebhookEventListParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var createdAtGte: OffsetDateTime? = null
@@ -111,7 +85,11 @@ private constructor(
         /** Min : 1, Max : 100, default 10 */
         fun limit(limit: Long?) = apply { this.limit = limit }
 
-        /** Min : 1, Max : 100, default 10 */
+        /**
+         * Alias for [Builder.limit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun limit(limit: Long) = limit(limit as Long?)
 
         /** Get events history of a specific object like payment/subscription/refund/dispute */
@@ -120,13 +98,21 @@ private constructor(
         /** Page number default is 0 */
         fun pageNumber(pageNumber: Long?) = apply { this.pageNumber = pageNumber }
 
-        /** Page number default is 0 */
+        /**
+         * Alias for [Builder.pageNumber].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun pageNumber(pageNumber: Long) = pageNumber(pageNumber as Long?)
 
         /** Page size default is 10 max is 100 */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
-        /** Page size default is 10 max is 100 */
+        /**
+         * Alias for [Builder.pageSize].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun pageSize(pageSize: Long) = pageSize(pageSize as Long?)
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -227,6 +213,11 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [WebhookEventListParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): WebhookEventListParams =
             WebhookEventListParams(
                 createdAtGte,
@@ -239,6 +230,25 @@ private constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                createdAtGte?.let {
+                    put("created_at_gte", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
+                createdAtLte?.let {
+                    put("created_at_lte", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
+                limit?.let { put("limit", it.toString()) }
+                objectId?.let { put("object_id", it) }
+                pageNumber?.let { put("page_number", it.toString()) }
+                pageSize?.let { put("page_size", it.toString()) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
