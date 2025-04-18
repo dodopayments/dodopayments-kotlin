@@ -3,6 +3,7 @@
 package com.dodopayments.api.services.async
 
 import com.dodopayments.api.core.ClientOptions
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.handlers.errorHandler
 import com.dodopayments.api.core.handlers.jsonHandler
@@ -14,10 +15,10 @@ import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepareAsync
-import com.dodopayments.api.errors.DodoPaymentsError
 import com.dodopayments.api.models.refunds.Refund
 import com.dodopayments.api.models.refunds.RefundCreateParams
 import com.dodopayments.api.models.refunds.RefundListPageAsync
+import com.dodopayments.api.models.refunds.RefundListPageResponse
 import com.dodopayments.api.models.refunds.RefundListParams
 import com.dodopayments.api.models.refunds.RefundRetrieveParams
 
@@ -54,8 +55,7 @@ class RefundServiceAsyncImpl internal constructor(private val clientOptions: Cli
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         RefundServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<DodoPaymentsError> =
-            errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
         private val createHandler: Handler<Refund> =
             jsonHandler<Refund>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
@@ -94,7 +94,7 @@ class RefundServiceAsyncImpl internal constructor(private val clientOptions: Cli
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("refunds", params.getPathParam(0))
+                    .addPathSegments("refunds", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -110,8 +110,8 @@ class RefundServiceAsyncImpl internal constructor(private val clientOptions: Cli
             }
         }
 
-        private val listHandler: Handler<RefundListPageAsync.Response> =
-            jsonHandler<RefundListPageAsync.Response>(clientOptions.jsonMapper)
+        private val listHandler: Handler<RefundListPageResponse> =
+            jsonHandler<RefundListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override suspend fun list(
@@ -135,7 +135,11 @@ class RefundServiceAsyncImpl internal constructor(private val clientOptions: Cli
                         }
                     }
                     .let {
-                        RefundListPageAsync.of(RefundServiceAsyncImpl(clientOptions), params, it)
+                        RefundListPageAsync.builder()
+                            .service(RefundServiceAsyncImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
                     }
             }
         }

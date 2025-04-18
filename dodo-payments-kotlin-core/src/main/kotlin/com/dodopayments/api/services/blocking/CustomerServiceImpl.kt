@@ -3,6 +3,7 @@
 package com.dodopayments.api.services.blocking
 
 import com.dodopayments.api.core.ClientOptions
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.handlers.errorHandler
 import com.dodopayments.api.core.handlers.jsonHandler
@@ -14,10 +15,10 @@ import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepare
-import com.dodopayments.api.errors.DodoPaymentsError
 import com.dodopayments.api.models.customers.Customer
 import com.dodopayments.api.models.customers.CustomerCreateParams
 import com.dodopayments.api.models.customers.CustomerListPage
+import com.dodopayments.api.models.customers.CustomerListPageResponse
 import com.dodopayments.api.models.customers.CustomerListParams
 import com.dodopayments.api.models.customers.CustomerRetrieveParams
 import com.dodopayments.api.models.customers.CustomerUpdateParams
@@ -64,8 +65,7 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         CustomerService.WithRawResponse {
 
-        private val errorHandler: Handler<DodoPaymentsError> =
-            errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
         private val customerPortal: CustomerPortalService.WithRawResponse by lazy {
             CustomerPortalServiceImpl.WithRawResponseImpl(clientOptions)
@@ -110,7 +110,7 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("customers", params.getPathParam(0))
+                    .addPathSegments("customers", params._pathParam(0))
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -136,7 +136,7 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PATCH)
-                    .addPathSegments("customers", params.getPathParam(0))
+                    .addPathSegments("customers", params._pathParam(0))
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepare(clientOptions, params)
@@ -153,8 +153,8 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
             }
         }
 
-        private val listHandler: Handler<CustomerListPage.Response> =
-            jsonHandler<CustomerListPage.Response>(clientOptions.jsonMapper)
+        private val listHandler: Handler<CustomerListPageResponse> =
+            jsonHandler<CustomerListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun list(
@@ -177,7 +177,13 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
                             it.validate()
                         }
                     }
-                    .let { CustomerListPage.of(CustomerServiceImpl(clientOptions), params, it) }
+                    .let {
+                        CustomerListPage.builder()
+                            .service(CustomerServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
             }
         }
     }

@@ -9,11 +9,8 @@ import com.dodopayments.api.core.ExcludeMissing
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
-import com.dodopayments.api.core.NoAutoDetect
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.getOrThrow
-import com.dodopayments.api.core.immutableEmptyMap
-import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.dodopayments.api.models.subscriptions.TimeInterval
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -27,6 +24,7 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import java.util.Collections
 import java.util.Objects
 
 @JsonDeserialize(using = Price.Deserializer::class)
@@ -52,13 +50,12 @@ private constructor(
 
     fun _json(): JsonValue? = _json
 
-    fun <T> accept(visitor: Visitor<T>): T {
-        return when {
+    fun <T> accept(visitor: Visitor<T>): T =
+        when {
             oneTime != null -> visitor.visitOneTime(oneTime)
             recurring != null -> visitor.visitRecurring(recurring)
             else -> visitor.unknown(_json)
         }
-    }
 
     private var validated: Boolean = false
 
@@ -80,6 +77,30 @@ private constructor(
         )
         validated = true
     }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: DodoPaymentsInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    internal fun validity(): Int =
+        accept(
+            object : Visitor<Int> {
+                override fun visitOneTime(oneTime: OneTimePrice) = oneTime.validity()
+
+                override fun visitRecurring(recurring: RecurringPrice) = recurring.validity()
+
+                override fun unknown(json: JsonValue?) = 0
+            }
+        )
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -135,16 +156,14 @@ private constructor(
 
             when (type) {
                 "one_time_price" -> {
-                    tryDeserialize(node, jacksonTypeRef<OneTimePrice>()) { it.validate() }
-                        ?.let {
-                            return Price(oneTime = it, _json = json)
-                        }
+                    return tryDeserialize(node, jacksonTypeRef<OneTimePrice>())?.let {
+                        Price(oneTime = it, _json = json)
+                    } ?: Price(_json = json)
                 }
                 "recurring_price" -> {
-                    tryDeserialize(node, jacksonTypeRef<RecurringPrice>()) { it.validate() }
-                        ?.let {
-                            return Price(recurring = it, _json = json)
-                        }
+                    return tryDeserialize(node, jacksonTypeRef<RecurringPrice>())?.let {
+                        Price(recurring = it, _json = json)
+                    } ?: Price(_json = json)
                 }
             }
 
@@ -168,39 +187,65 @@ private constructor(
         }
     }
 
-    @NoAutoDetect
     class OneTimePrice
-    @JsonCreator
     private constructor(
-        @JsonProperty("currency")
-        @ExcludeMissing
-        private val currency: JsonField<Currency> = JsonMissing.of(),
-        @JsonProperty("discount")
-        @ExcludeMissing
-        private val discount: JsonField<Double> = JsonMissing.of(),
-        @JsonProperty("price")
-        @ExcludeMissing
-        private val price: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("purchasing_power_parity")
-        @ExcludeMissing
-        private val purchasingPowerParity: JsonField<Boolean> = JsonMissing.of(),
-        @JsonProperty("type") @ExcludeMissing private val type: JsonField<Type> = JsonMissing.of(),
-        @JsonProperty("pay_what_you_want")
-        @ExcludeMissing
-        private val payWhatYouWant: JsonField<Boolean> = JsonMissing.of(),
-        @JsonProperty("suggested_price")
-        @ExcludeMissing
-        private val suggestedPrice: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("tax_inclusive")
-        @ExcludeMissing
-        private val taxInclusive: JsonField<Boolean> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val currency: JsonField<Currency>,
+        private val discount: JsonField<Double>,
+        private val price: JsonField<Long>,
+        private val purchasingPowerParity: JsonField<Boolean>,
+        private val type: JsonField<Type>,
+        private val payWhatYouWant: JsonField<Boolean>,
+        private val suggestedPrice: JsonField<Long>,
+        private val taxInclusive: JsonField<Boolean>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
+        @JsonCreator
+        private constructor(
+            @JsonProperty("currency")
+            @ExcludeMissing
+            currency: JsonField<Currency> = JsonMissing.of(),
+            @JsonProperty("discount")
+            @ExcludeMissing
+            discount: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("price") @ExcludeMissing price: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("purchasing_power_parity")
+            @ExcludeMissing
+            purchasingPowerParity: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
+            @JsonProperty("pay_what_you_want")
+            @ExcludeMissing
+            payWhatYouWant: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("suggested_price")
+            @ExcludeMissing
+            suggestedPrice: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("tax_inclusive")
+            @ExcludeMissing
+            taxInclusive: JsonField<Boolean> = JsonMissing.of(),
+        ) : this(
+            currency,
+            discount,
+            price,
+            purchasingPowerParity,
+            type,
+            payWhatYouWant,
+            suggestedPrice,
+            taxInclusive,
+            mutableMapOf(),
+        )
+
+        /**
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun currency(): Currency = currency.getRequired("currency")
 
-        /** Discount applied to the price, represented as a percentage (0 to 100). */
+        /**
+         * Discount applied to the price, represented as a percentage (0 to 100).
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun discount(): Double = discount.getRequired("discount")
 
         /**
@@ -209,99 +254,131 @@ private constructor(
          *
          * If [`pay_what_you_want`](Self::pay_what_you_want) is set to `true`, this field represents
          * the **minimum** amount the customer must pay.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun price(): Long = price.getRequired("price")
 
         /**
          * Indicates if purchasing power parity adjustments are applied to the price. Purchasing
          * power parity feature is not available as of now.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun purchasingPowerParity(): Boolean =
             purchasingPowerParity.getRequired("purchasing_power_parity")
 
+        /**
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun type(): Type = type.getRequired("type")
 
         /**
          * Indicates whether the customer can pay any amount they choose. If set to `true`, the
          * [`price`](Self::price) field is the minimum amount.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
          */
         fun payWhatYouWant(): Boolean? = payWhatYouWant.getNullable("pay_what_you_want")
 
         /**
          * A suggested price for the user to pay. This value is only considered if
          * [`pay_what_you_want`](Self::pay_what_you_want) is `true`. Otherwise, it is ignored.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
          */
         fun suggestedPrice(): Long? = suggestedPrice.getNullable("suggested_price")
 
-        /** Indicates if the price is tax inclusive. */
+        /**
+         * Indicates if the price is tax inclusive.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
         fun taxInclusive(): Boolean? = taxInclusive.getNullable("tax_inclusive")
 
+        /**
+         * Returns the raw JSON value of [currency].
+         *
+         * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<Currency> = currency
 
-        /** Discount applied to the price, represented as a percentage (0 to 100). */
+        /**
+         * Returns the raw JSON value of [discount].
+         *
+         * Unlike [discount], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("discount") @ExcludeMissing fun _discount(): JsonField<Double> = discount
 
         /**
-         * The payment amount, in the smallest denomination of the currency (e.g., cents for USD).
-         * For example, to charge $1.00, pass `100`.
+         * Returns the raw JSON value of [price].
          *
-         * If [`pay_what_you_want`](Self::pay_what_you_want) is set to `true`, this field represents
-         * the **minimum** amount the customer must pay.
+         * Unlike [price], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Long> = price
 
         /**
-         * Indicates if purchasing power parity adjustments are applied to the price. Purchasing
-         * power parity feature is not available as of now.
+         * Returns the raw JSON value of [purchasingPowerParity].
+         *
+         * Unlike [purchasingPowerParity], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
         @JsonProperty("purchasing_power_parity")
         @ExcludeMissing
         fun _purchasingPowerParity(): JsonField<Boolean> = purchasingPowerParity
 
+        /**
+         * Returns the raw JSON value of [type].
+         *
+         * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
         /**
-         * Indicates whether the customer can pay any amount they choose. If set to `true`, the
-         * [`price`](Self::price) field is the minimum amount.
+         * Returns the raw JSON value of [payWhatYouWant].
+         *
+         * Unlike [payWhatYouWant], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("pay_what_you_want")
         @ExcludeMissing
         fun _payWhatYouWant(): JsonField<Boolean> = payWhatYouWant
 
         /**
-         * A suggested price for the user to pay. This value is only considered if
-         * [`pay_what_you_want`](Self::pay_what_you_want) is `true`. Otherwise, it is ignored.
+         * Returns the raw JSON value of [suggestedPrice].
+         *
+         * Unlike [suggestedPrice], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("suggested_price")
         @ExcludeMissing
         fun _suggestedPrice(): JsonField<Long> = suggestedPrice
 
-        /** Indicates if the price is tax inclusive. */
+        /**
+         * Returns the raw JSON value of [taxInclusive].
+         *
+         * Unlike [taxInclusive], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("tax_inclusive")
         @ExcludeMissing
         fun _taxInclusive(): JsonField<Boolean> = taxInclusive
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): OneTimePrice = apply {
-            if (validated) {
-                return@apply
-            }
-
-            currency()
-            discount()
-            price()
-            purchasingPowerParity()
-            type()
-            payWhatYouWant()
-            suggestedPrice()
-            taxInclusive()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -349,12 +426,25 @@ private constructor(
 
             fun currency(currency: Currency) = currency(JsonField.of(currency))
 
+            /**
+             * Sets [Builder.currency] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.currency] with a well-typed [Currency] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun currency(currency: JsonField<Currency>) = apply { this.currency = currency }
 
             /** Discount applied to the price, represented as a percentage (0 to 100). */
             fun discount(discount: Double) = discount(JsonField.of(discount))
 
-            /** Discount applied to the price, represented as a percentage (0 to 100). */
+            /**
+             * Sets [Builder.discount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.discount] with a well-typed [Double] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun discount(discount: JsonField<Double>) = apply { this.discount = discount }
 
             /**
@@ -367,11 +457,11 @@ private constructor(
             fun price(price: Long) = price(JsonField.of(price))
 
             /**
-             * The payment amount, in the smallest denomination of the currency (e.g., cents for
-             * USD). For example, to charge $1.00, pass `100`.
+             * Sets [Builder.price] to an arbitrary JSON value.
              *
-             * If [`pay_what_you_want`](Self::pay_what_you_want) is set to `true`, this field
-             * represents the **minimum** amount the customer must pay.
+             * You should usually call [Builder.price] with a well-typed [Long] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
              */
             fun price(price: JsonField<Long>) = apply { this.price = price }
 
@@ -383,8 +473,11 @@ private constructor(
                 purchasingPowerParity(JsonField.of(purchasingPowerParity))
 
             /**
-             * Indicates if purchasing power parity adjustments are applied to the price. Purchasing
-             * power parity feature is not available as of now.
+             * Sets [Builder.purchasingPowerParity] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.purchasingPowerParity] with a well-typed [Boolean]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
             fun purchasingPowerParity(purchasingPowerParity: JsonField<Boolean>) = apply {
                 this.purchasingPowerParity = purchasingPowerParity
@@ -392,6 +485,13 @@ private constructor(
 
             fun type(type: Type) = type(JsonField.of(type))
 
+            /**
+             * Sets [Builder.type] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.type] with a well-typed [Type] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun type(type: JsonField<Type>) = apply { this.type = type }
 
             /**
@@ -402,8 +502,11 @@ private constructor(
                 payWhatYouWant(JsonField.of(payWhatYouWant))
 
             /**
-             * Indicates whether the customer can pay any amount they choose. If set to `true`, the
-             * [`price`](Self::price) field is the minimum amount.
+             * Sets [Builder.payWhatYouWant] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.payWhatYouWant] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun payWhatYouWant(payWhatYouWant: JsonField<Boolean>) = apply {
                 this.payWhatYouWant = payWhatYouWant
@@ -417,14 +520,18 @@ private constructor(
                 suggestedPrice(JsonField.ofNullable(suggestedPrice))
 
             /**
-             * A suggested price for the user to pay. This value is only considered if
-             * [`pay_what_you_want`](Self::pay_what_you_want) is `true`. Otherwise, it is ignored.
+             * Alias for [Builder.suggestedPrice].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
              */
             fun suggestedPrice(suggestedPrice: Long) = suggestedPrice(suggestedPrice as Long?)
 
             /**
-             * A suggested price for the user to pay. This value is only considered if
-             * [`pay_what_you_want`](Self::pay_what_you_want) is `true`. Otherwise, it is ignored.
+             * Sets [Builder.suggestedPrice] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.suggestedPrice] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun suggestedPrice(suggestedPrice: JsonField<Long>) = apply {
                 this.suggestedPrice = suggestedPrice
@@ -434,10 +541,20 @@ private constructor(
             fun taxInclusive(taxInclusive: Boolean?) =
                 taxInclusive(JsonField.ofNullable(taxInclusive))
 
-            /** Indicates if the price is tax inclusive. */
+            /**
+             * Alias for [Builder.taxInclusive].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
             fun taxInclusive(taxInclusive: Boolean) = taxInclusive(taxInclusive as Boolean?)
 
-            /** Indicates if the price is tax inclusive. */
+            /**
+             * Sets [Builder.taxInclusive] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.taxInclusive] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun taxInclusive(taxInclusive: JsonField<Boolean>) = apply {
                 this.taxInclusive = taxInclusive
             }
@@ -461,6 +578,22 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [OneTimePrice].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .currency()
+             * .discount()
+             * .price()
+             * .purchasingPowerParity()
+             * .type()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): OneTimePrice =
                 OneTimePrice(
                     checkRequired("currency", currency),
@@ -471,9 +604,51 @@ private constructor(
                     payWhatYouWant,
                     suggestedPrice,
                     taxInclusive,
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
         }
+
+        private var validated: Boolean = false
+
+        fun validate(): OneTimePrice = apply {
+            if (validated) {
+                return@apply
+            }
+
+            currency().validate()
+            discount()
+            price()
+            purchasingPowerParity()
+            type().validate()
+            payWhatYouWant()
+            suggestedPrice()
+            taxInclusive()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            (currency.asKnown()?.validity() ?: 0) +
+                (if (discount.asKnown() == null) 0 else 1) +
+                (if (price.asKnown() == null) 0 else 1) +
+                (if (purchasingPowerParity.asKnown() == null) 0 else 1) +
+                (type.asKnown()?.validity() ?: 0) +
+                (if (payWhatYouWant.asKnown() == null) 0 else 1) +
+                (if (suggestedPrice.asKnown() == null) 0 else 1) +
+                (if (taxInclusive.asKnown() == null) 0 else 1)
 
         class Currency @JsonCreator private constructor(private val value: JsonField<String>) :
             Enum {
@@ -1421,6 +1596,33 @@ private constructor(
             fun asString(): String =
                 _value().asString()
                     ?: throw DodoPaymentsInvalidDataException("Value is not a String")
+
+            private var validated: Boolean = false
+
+            fun validate(): Currency = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: DodoPaymentsInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -1515,6 +1717,33 @@ private constructor(
                 _value().asString()
                     ?: throw DodoPaymentsInvalidDataException("Value is not a String")
 
+            private var validated: Boolean = false
+
+            fun validate(): Type = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: DodoPaymentsInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
@@ -1546,69 +1775,114 @@ private constructor(
             "OneTimePrice{currency=$currency, discount=$discount, price=$price, purchasingPowerParity=$purchasingPowerParity, type=$type, payWhatYouWant=$payWhatYouWant, suggestedPrice=$suggestedPrice, taxInclusive=$taxInclusive, additionalProperties=$additionalProperties}"
     }
 
-    @NoAutoDetect
     class RecurringPrice
-    @JsonCreator
     private constructor(
-        @JsonProperty("currency")
-        @ExcludeMissing
-        private val currency: JsonField<Currency> = JsonMissing.of(),
-        @JsonProperty("discount")
-        @ExcludeMissing
-        private val discount: JsonField<Double> = JsonMissing.of(),
-        @JsonProperty("payment_frequency_count")
-        @ExcludeMissing
-        private val paymentFrequencyCount: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("payment_frequency_interval")
-        @ExcludeMissing
-        private val paymentFrequencyInterval: JsonField<TimeInterval> = JsonMissing.of(),
-        @JsonProperty("price")
-        @ExcludeMissing
-        private val price: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("purchasing_power_parity")
-        @ExcludeMissing
-        private val purchasingPowerParity: JsonField<Boolean> = JsonMissing.of(),
-        @JsonProperty("subscription_period_count")
-        @ExcludeMissing
-        private val subscriptionPeriodCount: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("subscription_period_interval")
-        @ExcludeMissing
-        private val subscriptionPeriodInterval: JsonField<TimeInterval> = JsonMissing.of(),
-        @JsonProperty("type") @ExcludeMissing private val type: JsonField<Type> = JsonMissing.of(),
-        @JsonProperty("tax_inclusive")
-        @ExcludeMissing
-        private val taxInclusive: JsonField<Boolean> = JsonMissing.of(),
-        @JsonProperty("trial_period_days")
-        @ExcludeMissing
-        private val trialPeriodDays: JsonField<Long> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val currency: JsonField<Currency>,
+        private val discount: JsonField<Double>,
+        private val paymentFrequencyCount: JsonField<Long>,
+        private val paymentFrequencyInterval: JsonField<TimeInterval>,
+        private val price: JsonField<Long>,
+        private val purchasingPowerParity: JsonField<Boolean>,
+        private val subscriptionPeriodCount: JsonField<Long>,
+        private val subscriptionPeriodInterval: JsonField<TimeInterval>,
+        private val type: JsonField<Type>,
+        private val taxInclusive: JsonField<Boolean>,
+        private val trialPeriodDays: JsonField<Long>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
+        @JsonCreator
+        private constructor(
+            @JsonProperty("currency")
+            @ExcludeMissing
+            currency: JsonField<Currency> = JsonMissing.of(),
+            @JsonProperty("discount")
+            @ExcludeMissing
+            discount: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("payment_frequency_count")
+            @ExcludeMissing
+            paymentFrequencyCount: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("payment_frequency_interval")
+            @ExcludeMissing
+            paymentFrequencyInterval: JsonField<TimeInterval> = JsonMissing.of(),
+            @JsonProperty("price") @ExcludeMissing price: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("purchasing_power_parity")
+            @ExcludeMissing
+            purchasingPowerParity: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("subscription_period_count")
+            @ExcludeMissing
+            subscriptionPeriodCount: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("subscription_period_interval")
+            @ExcludeMissing
+            subscriptionPeriodInterval: JsonField<TimeInterval> = JsonMissing.of(),
+            @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
+            @JsonProperty("tax_inclusive")
+            @ExcludeMissing
+            taxInclusive: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("trial_period_days")
+            @ExcludeMissing
+            trialPeriodDays: JsonField<Long> = JsonMissing.of(),
+        ) : this(
+            currency,
+            discount,
+            paymentFrequencyCount,
+            paymentFrequencyInterval,
+            price,
+            purchasingPowerParity,
+            subscriptionPeriodCount,
+            subscriptionPeriodInterval,
+            type,
+            taxInclusive,
+            trialPeriodDays,
+            mutableMapOf(),
+        )
+
+        /**
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun currency(): Currency = currency.getRequired("currency")
 
-        /** Discount applied to the price, represented as a percentage (0 to 100). */
+        /**
+         * Discount applied to the price, represented as a percentage (0 to 100).
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun discount(): Double = discount.getRequired("discount")
 
         /**
          * Number of units for the payment frequency. For example, a value of `1` with a
          * `payment_frequency_interval` of `month` represents monthly payments.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun paymentFrequencyCount(): Long =
             paymentFrequencyCount.getRequired("payment_frequency_count")
 
+        /**
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun paymentFrequencyInterval(): TimeInterval =
             paymentFrequencyInterval.getRequired("payment_frequency_interval")
 
         /**
          * The payment amount. Represented in the lowest denomination of the currency (e.g., cents
          * for USD). For example, to charge $1.00, pass `100`.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun price(): Long = price.getRequired("price")
 
         /**
          * Indicates if purchasing power parity adjustments are applied to the price. Purchasing
          * power parity feature is not available as of now
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun purchasingPowerParity(): Boolean =
             purchasingPowerParity.getRequired("purchasing_power_parity")
@@ -1616,100 +1890,149 @@ private constructor(
         /**
          * Number of units for the subscription period. For example, a value of `12` with a
          * `subscription_period_interval` of `month` represents a one-year subscription.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun subscriptionPeriodCount(): Long =
             subscriptionPeriodCount.getRequired("subscription_period_count")
 
+        /**
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun subscriptionPeriodInterval(): TimeInterval =
             subscriptionPeriodInterval.getRequired("subscription_period_interval")
 
+        /**
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun type(): Type = type.getRequired("type")
 
-        /** Indicates if the price is tax inclusive */
+        /**
+         * Indicates if the price is tax inclusive
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
         fun taxInclusive(): Boolean? = taxInclusive.getNullable("tax_inclusive")
 
-        /** Number of days for the trial period. A value of `0` indicates no trial period. */
+        /**
+         * Number of days for the trial period. A value of `0` indicates no trial period.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
         fun trialPeriodDays(): Long? = trialPeriodDays.getNullable("trial_period_days")
 
+        /**
+         * Returns the raw JSON value of [currency].
+         *
+         * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<Currency> = currency
 
-        /** Discount applied to the price, represented as a percentage (0 to 100). */
+        /**
+         * Returns the raw JSON value of [discount].
+         *
+         * Unlike [discount], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("discount") @ExcludeMissing fun _discount(): JsonField<Double> = discount
 
         /**
-         * Number of units for the payment frequency. For example, a value of `1` with a
-         * `payment_frequency_interval` of `month` represents monthly payments.
+         * Returns the raw JSON value of [paymentFrequencyCount].
+         *
+         * Unlike [paymentFrequencyCount], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
         @JsonProperty("payment_frequency_count")
         @ExcludeMissing
         fun _paymentFrequencyCount(): JsonField<Long> = paymentFrequencyCount
 
+        /**
+         * Returns the raw JSON value of [paymentFrequencyInterval].
+         *
+         * Unlike [paymentFrequencyInterval], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
         @JsonProperty("payment_frequency_interval")
         @ExcludeMissing
         fun _paymentFrequencyInterval(): JsonField<TimeInterval> = paymentFrequencyInterval
 
         /**
-         * The payment amount. Represented in the lowest denomination of the currency (e.g., cents
-         * for USD). For example, to charge $1.00, pass `100`.
+         * Returns the raw JSON value of [price].
+         *
+         * Unlike [price], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Long> = price
 
         /**
-         * Indicates if purchasing power parity adjustments are applied to the price. Purchasing
-         * power parity feature is not available as of now
+         * Returns the raw JSON value of [purchasingPowerParity].
+         *
+         * Unlike [purchasingPowerParity], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
         @JsonProperty("purchasing_power_parity")
         @ExcludeMissing
         fun _purchasingPowerParity(): JsonField<Boolean> = purchasingPowerParity
 
         /**
-         * Number of units for the subscription period. For example, a value of `12` with a
-         * `subscription_period_interval` of `month` represents a one-year subscription.
+         * Returns the raw JSON value of [subscriptionPeriodCount].
+         *
+         * Unlike [subscriptionPeriodCount], this method doesn't throw if the JSON field has an
+         * unexpected type.
          */
         @JsonProperty("subscription_period_count")
         @ExcludeMissing
         fun _subscriptionPeriodCount(): JsonField<Long> = subscriptionPeriodCount
 
+        /**
+         * Returns the raw JSON value of [subscriptionPeriodInterval].
+         *
+         * Unlike [subscriptionPeriodInterval], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
         @JsonProperty("subscription_period_interval")
         @ExcludeMissing
         fun _subscriptionPeriodInterval(): JsonField<TimeInterval> = subscriptionPeriodInterval
 
+        /**
+         * Returns the raw JSON value of [type].
+         *
+         * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
-        /** Indicates if the price is tax inclusive */
+        /**
+         * Returns the raw JSON value of [taxInclusive].
+         *
+         * Unlike [taxInclusive], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("tax_inclusive")
         @ExcludeMissing
         fun _taxInclusive(): JsonField<Boolean> = taxInclusive
 
-        /** Number of days for the trial period. A value of `0` indicates no trial period. */
+        /**
+         * Returns the raw JSON value of [trialPeriodDays].
+         *
+         * Unlike [trialPeriodDays], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("trial_period_days")
         @ExcludeMissing
         fun _trialPeriodDays(): JsonField<Long> = trialPeriodDays
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): RecurringPrice = apply {
-            if (validated) {
-                return@apply
-            }
-
-            currency()
-            discount()
-            paymentFrequencyCount()
-            paymentFrequencyInterval()
-            price()
-            purchasingPowerParity()
-            subscriptionPeriodCount()
-            subscriptionPeriodInterval()
-            type()
-            taxInclusive()
-            trialPeriodDays()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -1767,12 +2090,25 @@ private constructor(
 
             fun currency(currency: Currency) = currency(JsonField.of(currency))
 
+            /**
+             * Sets [Builder.currency] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.currency] with a well-typed [Currency] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun currency(currency: JsonField<Currency>) = apply { this.currency = currency }
 
             /** Discount applied to the price, represented as a percentage (0 to 100). */
             fun discount(discount: Double) = discount(JsonField.of(discount))
 
-            /** Discount applied to the price, represented as a percentage (0 to 100). */
+            /**
+             * Sets [Builder.discount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.discount] with a well-typed [Double] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun discount(discount: JsonField<Double>) = apply { this.discount = discount }
 
             /**
@@ -1783,8 +2119,11 @@ private constructor(
                 paymentFrequencyCount(JsonField.of(paymentFrequencyCount))
 
             /**
-             * Number of units for the payment frequency. For example, a value of `1` with a
-             * `payment_frequency_interval` of `month` represents monthly payments.
+             * Sets [Builder.paymentFrequencyCount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.paymentFrequencyCount] with a well-typed [Long]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
             fun paymentFrequencyCount(paymentFrequencyCount: JsonField<Long>) = apply {
                 this.paymentFrequencyCount = paymentFrequencyCount
@@ -1793,6 +2132,13 @@ private constructor(
             fun paymentFrequencyInterval(paymentFrequencyInterval: TimeInterval) =
                 paymentFrequencyInterval(JsonField.of(paymentFrequencyInterval))
 
+            /**
+             * Sets [Builder.paymentFrequencyInterval] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.paymentFrequencyInterval] with a well-typed
+             * [TimeInterval] value instead. This method is primarily for setting the field to an
+             * undocumented or not yet supported value.
+             */
             fun paymentFrequencyInterval(paymentFrequencyInterval: JsonField<TimeInterval>) =
                 apply {
                     this.paymentFrequencyInterval = paymentFrequencyInterval
@@ -1805,8 +2151,11 @@ private constructor(
             fun price(price: Long) = price(JsonField.of(price))
 
             /**
-             * The payment amount. Represented in the lowest denomination of the currency (e.g.,
-             * cents for USD). For example, to charge $1.00, pass `100`.
+             * Sets [Builder.price] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.price] with a well-typed [Long] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
              */
             fun price(price: JsonField<Long>) = apply { this.price = price }
 
@@ -1818,8 +2167,11 @@ private constructor(
                 purchasingPowerParity(JsonField.of(purchasingPowerParity))
 
             /**
-             * Indicates if purchasing power parity adjustments are applied to the price. Purchasing
-             * power parity feature is not available as of now
+             * Sets [Builder.purchasingPowerParity] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.purchasingPowerParity] with a well-typed [Boolean]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
             fun purchasingPowerParity(purchasingPowerParity: JsonField<Boolean>) = apply {
                 this.purchasingPowerParity = purchasingPowerParity
@@ -1833,8 +2185,11 @@ private constructor(
                 subscriptionPeriodCount(JsonField.of(subscriptionPeriodCount))
 
             /**
-             * Number of units for the subscription period. For example, a value of `12` with a
-             * `subscription_period_interval` of `month` represents a one-year subscription.
+             * Sets [Builder.subscriptionPeriodCount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.subscriptionPeriodCount] with a well-typed [Long]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
             fun subscriptionPeriodCount(subscriptionPeriodCount: JsonField<Long>) = apply {
                 this.subscriptionPeriodCount = subscriptionPeriodCount
@@ -1843,6 +2198,13 @@ private constructor(
             fun subscriptionPeriodInterval(subscriptionPeriodInterval: TimeInterval) =
                 subscriptionPeriodInterval(JsonField.of(subscriptionPeriodInterval))
 
+            /**
+             * Sets [Builder.subscriptionPeriodInterval] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.subscriptionPeriodInterval] with a well-typed
+             * [TimeInterval] value instead. This method is primarily for setting the field to an
+             * undocumented or not yet supported value.
+             */
             fun subscriptionPeriodInterval(subscriptionPeriodInterval: JsonField<TimeInterval>) =
                 apply {
                     this.subscriptionPeriodInterval = subscriptionPeriodInterval
@@ -1850,16 +2212,33 @@ private constructor(
 
             fun type(type: Type) = type(JsonField.of(type))
 
+            /**
+             * Sets [Builder.type] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.type] with a well-typed [Type] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun type(type: JsonField<Type>) = apply { this.type = type }
 
             /** Indicates if the price is tax inclusive */
             fun taxInclusive(taxInclusive: Boolean?) =
                 taxInclusive(JsonField.ofNullable(taxInclusive))
 
-            /** Indicates if the price is tax inclusive */
+            /**
+             * Alias for [Builder.taxInclusive].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
             fun taxInclusive(taxInclusive: Boolean) = taxInclusive(taxInclusive as Boolean?)
 
-            /** Indicates if the price is tax inclusive */
+            /**
+             * Sets [Builder.taxInclusive] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.taxInclusive] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun taxInclusive(taxInclusive: JsonField<Boolean>) = apply {
                 this.taxInclusive = taxInclusive
             }
@@ -1868,7 +2247,13 @@ private constructor(
             fun trialPeriodDays(trialPeriodDays: Long) =
                 trialPeriodDays(JsonField.of(trialPeriodDays))
 
-            /** Number of days for the trial period. A value of `0` indicates no trial period. */
+            /**
+             * Sets [Builder.trialPeriodDays] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.trialPeriodDays] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun trialPeriodDays(trialPeriodDays: JsonField<Long>) = apply {
                 this.trialPeriodDays = trialPeriodDays
             }
@@ -1892,6 +2277,26 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [RecurringPrice].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .currency()
+             * .discount()
+             * .paymentFrequencyCount()
+             * .paymentFrequencyInterval()
+             * .price()
+             * .purchasingPowerParity()
+             * .subscriptionPeriodCount()
+             * .subscriptionPeriodInterval()
+             * .type()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): RecurringPrice =
                 RecurringPrice(
                     checkRequired("currency", currency),
@@ -1905,9 +2310,57 @@ private constructor(
                     checkRequired("type", type),
                     taxInclusive,
                     trialPeriodDays,
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
         }
+
+        private var validated: Boolean = false
+
+        fun validate(): RecurringPrice = apply {
+            if (validated) {
+                return@apply
+            }
+
+            currency().validate()
+            discount()
+            paymentFrequencyCount()
+            paymentFrequencyInterval().validate()
+            price()
+            purchasingPowerParity()
+            subscriptionPeriodCount()
+            subscriptionPeriodInterval().validate()
+            type().validate()
+            taxInclusive()
+            trialPeriodDays()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            (currency.asKnown()?.validity() ?: 0) +
+                (if (discount.asKnown() == null) 0 else 1) +
+                (if (paymentFrequencyCount.asKnown() == null) 0 else 1) +
+                (paymentFrequencyInterval.asKnown()?.validity() ?: 0) +
+                (if (price.asKnown() == null) 0 else 1) +
+                (if (purchasingPowerParity.asKnown() == null) 0 else 1) +
+                (if (subscriptionPeriodCount.asKnown() == null) 0 else 1) +
+                (subscriptionPeriodInterval.asKnown()?.validity() ?: 0) +
+                (type.asKnown()?.validity() ?: 0) +
+                (if (taxInclusive.asKnown() == null) 0 else 1) +
+                (if (trialPeriodDays.asKnown() == null) 0 else 1)
 
         class Currency @JsonCreator private constructor(private val value: JsonField<String>) :
             Enum {
@@ -2856,6 +3309,33 @@ private constructor(
                 _value().asString()
                     ?: throw DodoPaymentsInvalidDataException("Value is not a String")
 
+            private var validated: Boolean = false
+
+            fun validate(): Currency = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: DodoPaymentsInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
@@ -2948,6 +3428,33 @@ private constructor(
             fun asString(): String =
                 _value().asString()
                     ?: throw DodoPaymentsInvalidDataException("Value is not a String")
+
+            private var validated: Boolean = false
+
+            fun validate(): Type = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: DodoPaymentsInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {

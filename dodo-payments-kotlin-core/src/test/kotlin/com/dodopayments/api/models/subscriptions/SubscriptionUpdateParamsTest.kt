@@ -5,11 +5,10 @@ package com.dodopayments.api.models.subscriptions
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.payments.BillingAddress
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class SubscriptionUpdateParamsTest {
+internal class SubscriptionUpdateParamsTest {
 
     @Test
     fun create() {
@@ -32,6 +31,15 @@ class SubscriptionUpdateParamsTest {
             .status(SubscriptionStatus.PENDING)
             .taxId("tax_id")
             .build()
+    }
+
+    @Test
+    fun pathParams() {
+        val params = SubscriptionUpdateParams.builder().subscriptionId("subscription_id").build()
+
+        assertThat(params._pathParam(0)).isEqualTo("subscription_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
     }
 
     @Test
@@ -59,7 +67,6 @@ class SubscriptionUpdateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.billing())
             .isEqualTo(
                 BillingAddress.builder()
@@ -85,17 +92,5 @@ class SubscriptionUpdateParamsTest {
         val params = SubscriptionUpdateParams.builder().subscriptionId("subscription_id").build()
 
         val body = params._body()
-
-        assertNotNull(body)
-    }
-
-    @Test
-    fun getPathParam() {
-        val params = SubscriptionUpdateParams.builder().subscriptionId("subscription_id").build()
-        assertThat(params).isNotNull
-        // path param "subscriptionId"
-        assertThat(params.getPathParam(0)).isEqualTo("subscription_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

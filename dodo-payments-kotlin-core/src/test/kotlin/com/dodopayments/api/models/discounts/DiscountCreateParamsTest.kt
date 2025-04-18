@@ -3,11 +3,10 @@
 package com.dodopayments.api.models.discounts
 
 import java.time.OffsetDateTime
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class DiscountCreateParamsTest {
+internal class DiscountCreateParamsTest {
 
     @Test
     fun create() {
@@ -37,13 +36,12 @@ class DiscountCreateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.amount()).isEqualTo(0L)
         assertThat(body.type()).isEqualTo(DiscountType.PERCENTAGE)
         assertThat(body.code()).isEqualTo("code")
         assertThat(body.expiresAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(body.name()).isEqualTo("name")
-        assertThat(body.restrictedTo()).isEqualTo(listOf("string"))
+        assertThat(body.restrictedTo()).containsExactly("string")
         assertThat(body.usageLimit()).isEqualTo(0L)
     }
 
@@ -53,7 +51,6 @@ class DiscountCreateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.amount()).isEqualTo(0L)
         assertThat(body.type()).isEqualTo(DiscountType.PERCENTAGE)
     }

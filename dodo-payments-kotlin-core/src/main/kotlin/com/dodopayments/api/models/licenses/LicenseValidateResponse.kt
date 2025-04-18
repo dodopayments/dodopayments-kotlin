@@ -6,42 +6,48 @@ import com.dodopayments.api.core.ExcludeMissing
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
-import com.dodopayments.api.core.NoAutoDetect
 import com.dodopayments.api.core.checkRequired
-import com.dodopayments.api.core.immutableEmptyMap
-import com.dodopayments.api.core.toImmutable
+import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 
-@NoAutoDetect
 class LicenseValidateResponse
-@JsonCreator
 private constructor(
-    @JsonProperty("valid") @ExcludeMissing private val valid: JsonField<Boolean> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val valid: JsonField<Boolean>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
+    @JsonCreator
+    private constructor(
+        @JsonProperty("valid") @ExcludeMissing valid: JsonField<Boolean> = JsonMissing.of()
+    ) : this(valid, mutableMapOf())
+
+    /**
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun valid(): Boolean = valid.getRequired("valid")
 
+    /**
+     * Returns the raw JSON value of [valid].
+     *
+     * Unlike [valid], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("valid") @ExcludeMissing fun _valid(): JsonField<Boolean> = valid
+
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): LicenseValidateResponse = apply {
-        if (validated) {
-            return@apply
-        }
-
-        valid()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -71,6 +77,12 @@ private constructor(
 
         fun valid(valid: Boolean) = valid(JsonField.of(valid))
 
+        /**
+         * Sets [Builder.valid] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.valid] with a well-typed [Boolean] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun valid(valid: JsonField<Boolean>) = apply { this.valid = valid }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -92,12 +104,50 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [LicenseValidateResponse].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .valid()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): LicenseValidateResponse =
             LicenseValidateResponse(
                 checkRequired("valid", valid),
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
     }
+
+    private var validated: Boolean = false
+
+    fun validate(): LicenseValidateResponse = apply {
+        if (validated) {
+            return@apply
+        }
+
+        valid()
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: DodoPaymentsInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    internal fun validity(): Int = (if (valid.asKnown() == null) 0 else 1)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

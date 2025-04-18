@@ -2,7 +2,6 @@
 
 package com.dodopayments.api.models.misc
 
-import com.dodopayments.api.core.NoAutoDetect
 import com.dodopayments.api.core.Params
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
@@ -18,10 +17,6 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams = additionalQueryParams
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -36,7 +31,6 @@ private constructor(
     }
 
     /** A builder for [MiscListSupportedCountriesParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -147,12 +141,21 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [MiscListSupportedCountriesParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): MiscListSupportedCountriesParams =
             MiscListSupportedCountriesParams(
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
     }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

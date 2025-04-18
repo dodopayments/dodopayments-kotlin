@@ -3,6 +3,7 @@
 package com.dodopayments.api.services.blocking
 
 import com.dodopayments.api.core.ClientOptions
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.handlers.emptyHandler
 import com.dodopayments.api.core.handlers.errorHandler
@@ -16,7 +17,6 @@ import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepare
-import com.dodopayments.api.errors.DodoPaymentsError
 import com.dodopayments.api.models.licensekeyinstances.LicenseKeyInstance
 import com.dodopayments.api.models.licenses.LicenseActivateParams
 import com.dodopayments.api.models.licenses.LicenseDeactivateParams
@@ -54,8 +54,7 @@ class LicenseServiceImpl internal constructor(private val clientOptions: ClientO
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         LicenseService.WithRawResponse {
 
-        private val errorHandler: Handler<DodoPaymentsError> =
-            errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
         private val activateHandler: Handler<LicenseKeyInstance> =
             jsonHandler<LicenseKeyInstance>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

@@ -3,6 +3,7 @@
 package com.dodopayments.api.services.blocking
 
 import com.dodopayments.api.core.ClientOptions
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.handlers.errorHandler
 import com.dodopayments.api.core.handlers.jsonHandler
@@ -14,13 +15,13 @@ import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepare
-import com.dodopayments.api.errors.DodoPaymentsError
 import com.dodopayments.api.models.subscriptions.Subscription
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
 import com.dodopayments.api.models.subscriptions.SubscriptionCreateResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionListPage
+import com.dodopayments.api.models.subscriptions.SubscriptionListPageResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionListParams
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveParams
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdateParams
@@ -72,8 +73,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         SubscriptionService.WithRawResponse {
 
-        private val errorHandler: Handler<DodoPaymentsError> =
-            errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
         private val createHandler: Handler<SubscriptionCreateResponse> =
             jsonHandler<SubscriptionCreateResponse>(clientOptions.jsonMapper)
@@ -113,7 +113,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("subscriptions", params.getPathParam(0))
+                    .addPathSegments("subscriptions", params._pathParam(0))
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -139,7 +139,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PATCH)
-                    .addPathSegments("subscriptions", params.getPathParam(0))
+                    .addPathSegments("subscriptions", params._pathParam(0))
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepare(clientOptions, params)
@@ -156,8 +156,8 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
             }
         }
 
-        private val listHandler: Handler<SubscriptionListPage.Response> =
-            jsonHandler<SubscriptionListPage.Response>(clientOptions.jsonMapper)
+        private val listHandler: Handler<SubscriptionListPageResponse> =
+            jsonHandler<SubscriptionListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun list(
@@ -181,7 +181,11 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                         }
                     }
                     .let {
-                        SubscriptionListPage.of(SubscriptionServiceImpl(clientOptions), params, it)
+                        SubscriptionListPage.builder()
+                            .service(SubscriptionServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
                     }
             }
         }
@@ -197,7 +201,7 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
-                    .addPathSegments("subscriptions", params.getPathParam(0), "charge")
+                    .addPathSegments("subscriptions", params._pathParam(0), "charge")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepare(clientOptions, params)

@@ -2,7 +2,6 @@
 
 package com.dodopayments.api.models.disputes
 
-import com.dodopayments.api.core.NoAutoDetect
 import com.dodopayments.api.core.Params
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.http.Headers
@@ -22,17 +21,6 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> disputeId
-            else -> ""
-        }
-    }
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -49,7 +37,6 @@ private constructor(
     }
 
     /** A builder for [DisputeRetrieveParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var disputeId: String? = null
@@ -162,6 +149,18 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [DisputeRetrieveParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .disputeId()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): DisputeRetrieveParams =
             DisputeRetrieveParams(
                 checkRequired("disputeId", disputeId),
@@ -169,6 +168,16 @@ private constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> disputeId
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

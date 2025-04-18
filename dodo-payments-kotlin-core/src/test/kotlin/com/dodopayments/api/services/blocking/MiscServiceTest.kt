@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class MiscServiceTest {
+internal class MiscServiceTest {
 
     @Test
     fun listSupportedCountries() {
@@ -19,6 +19,8 @@ class MiscServiceTest {
                 .build()
         val miscService = client.misc()
 
-        miscService.listSupportedCountries()
+        val countryCodes = miscService.listSupportedCountries()
+
+        countryCodes.forEach { it.validate() }
     }
 }

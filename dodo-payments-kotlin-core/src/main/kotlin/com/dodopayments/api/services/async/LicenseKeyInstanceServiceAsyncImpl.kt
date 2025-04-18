@@ -3,6 +3,7 @@
 package com.dodopayments.api.services.async
 
 import com.dodopayments.api.core.ClientOptions
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.handlers.errorHandler
 import com.dodopayments.api.core.handlers.jsonHandler
@@ -14,9 +15,9 @@ import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepareAsync
-import com.dodopayments.api.errors.DodoPaymentsError
 import com.dodopayments.api.models.licensekeyinstances.LicenseKeyInstance
 import com.dodopayments.api.models.licensekeyinstances.LicenseKeyInstanceListPageAsync
+import com.dodopayments.api.models.licensekeyinstances.LicenseKeyInstanceListPageResponse
 import com.dodopayments.api.models.licensekeyinstances.LicenseKeyInstanceListParams
 import com.dodopayments.api.models.licensekeyinstances.LicenseKeyInstanceRetrieveParams
 import com.dodopayments.api.models.licensekeyinstances.LicenseKeyInstanceUpdateParams
@@ -54,8 +55,7 @@ internal constructor(private val clientOptions: ClientOptions) : LicenseKeyInsta
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         LicenseKeyInstanceServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<DodoPaymentsError> =
-            errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
         private val retrieveHandler: Handler<LicenseKeyInstance> =
             jsonHandler<LicenseKeyInstance>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
@@ -67,7 +67,7 @@ internal constructor(private val clientOptions: ClientOptions) : LicenseKeyInsta
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("license_key_instances", params.getPathParam(0))
+                    .addPathSegments("license_key_instances", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -93,7 +93,7 @@ internal constructor(private val clientOptions: ClientOptions) : LicenseKeyInsta
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PATCH)
-                    .addPathSegments("license_key_instances", params.getPathParam(0))
+                    .addPathSegments("license_key_instances", params._pathParam(0))
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -110,8 +110,8 @@ internal constructor(private val clientOptions: ClientOptions) : LicenseKeyInsta
             }
         }
 
-        private val listHandler: Handler<LicenseKeyInstanceListPageAsync.Response> =
-            jsonHandler<LicenseKeyInstanceListPageAsync.Response>(clientOptions.jsonMapper)
+        private val listHandler: Handler<LicenseKeyInstanceListPageResponse> =
+            jsonHandler<LicenseKeyInstanceListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override suspend fun list(
@@ -135,11 +135,11 @@ internal constructor(private val clientOptions: ClientOptions) : LicenseKeyInsta
                         }
                     }
                     .let {
-                        LicenseKeyInstanceListPageAsync.of(
-                            LicenseKeyInstanceServiceAsyncImpl(clientOptions),
-                            params,
-                            it,
-                        )
+                        LicenseKeyInstanceListPageAsync.builder()
+                            .service(LicenseKeyInstanceServiceAsyncImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
                     }
             }
         }

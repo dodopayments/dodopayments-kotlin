@@ -3,6 +3,7 @@
 package com.dodopayments.api.services.async
 
 import com.dodopayments.api.core.ClientOptions
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.handlers.errorHandler
 import com.dodopayments.api.core.handlers.jsonHandler
@@ -14,9 +15,9 @@ import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepareAsync
-import com.dodopayments.api.errors.DodoPaymentsError
 import com.dodopayments.api.models.licensekeys.LicenseKey
 import com.dodopayments.api.models.licensekeys.LicenseKeyListPageAsync
+import com.dodopayments.api.models.licensekeys.LicenseKeyListPageResponse
 import com.dodopayments.api.models.licensekeys.LicenseKeyListParams
 import com.dodopayments.api.models.licensekeys.LicenseKeyRetrieveParams
 import com.dodopayments.api.models.licensekeys.LicenseKeyUpdateParams
@@ -54,8 +55,7 @@ class LicenseKeyServiceAsyncImpl internal constructor(private val clientOptions:
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         LicenseKeyServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<DodoPaymentsError> =
-            errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
         private val retrieveHandler: Handler<LicenseKey> =
             jsonHandler<LicenseKey>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
@@ -67,7 +67,7 @@ class LicenseKeyServiceAsyncImpl internal constructor(private val clientOptions:
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("license_keys", params.getPathParam(0))
+                    .addPathSegments("license_keys", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -93,7 +93,7 @@ class LicenseKeyServiceAsyncImpl internal constructor(private val clientOptions:
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PATCH)
-                    .addPathSegments("license_keys", params.getPathParam(0))
+                    .addPathSegments("license_keys", params._pathParam(0))
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -110,8 +110,8 @@ class LicenseKeyServiceAsyncImpl internal constructor(private val clientOptions:
             }
         }
 
-        private val listHandler: Handler<LicenseKeyListPageAsync.Response> =
-            jsonHandler<LicenseKeyListPageAsync.Response>(clientOptions.jsonMapper)
+        private val listHandler: Handler<LicenseKeyListPageResponse> =
+            jsonHandler<LicenseKeyListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override suspend fun list(
@@ -135,11 +135,11 @@ class LicenseKeyServiceAsyncImpl internal constructor(private val clientOptions:
                         }
                     }
                     .let {
-                        LicenseKeyListPageAsync.of(
-                            LicenseKeyServiceAsyncImpl(clientOptions),
-                            params,
-                            it,
-                        )
+                        LicenseKeyListPageAsync.builder()
+                            .service(LicenseKeyServiceAsyncImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
                     }
             }
         }

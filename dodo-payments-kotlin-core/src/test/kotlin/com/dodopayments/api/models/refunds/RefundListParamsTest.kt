@@ -7,7 +7,7 @@ import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class RefundListParamsTest {
+internal class RefundListParamsTest {
 
     @Test
     fun create() {
@@ -32,20 +32,28 @@ class RefundListParamsTest {
                 .pageSize(0L)
                 .status(RefundStatus.SUCCEEDED)
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("created_at_gte", "2019-12-27T18:11:19.117Z")
-        expected.put("created_at_lte", "2019-12-27T18:11:19.117Z")
-        expected.put("customer_id", "customer_id")
-        expected.put("page_number", "0")
-        expected.put("page_size", "0")
-        expected.put("status", RefundStatus.SUCCEEDED.toString())
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("created_at_gte", "2019-12-27T18:11:19.117Z")
+                    .put("created_at_lte", "2019-12-27T18:11:19.117Z")
+                    .put("customer_id", "customer_id")
+                    .put("page_number", "0")
+                    .put("page_size", "0")
+                    .put("status", "succeeded")
+                    .build()
+            )
     }
 
     @Test
     fun queryParamsWithoutOptionalFields() {
         val params = RefundListParams.builder().build()
-        val expected = QueryParams.builder()
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
     }
 }
