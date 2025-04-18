@@ -6,18 +6,17 @@ import com.dodopayments.api.core.ExcludeMissing
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
-import com.dodopayments.api.core.NoAutoDetect
 import com.dodopayments.api.core.Params
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
-import com.dodopayments.api.core.immutableEmptyMap
-import com.dodopayments.api.core.toImmutable
+import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.OffsetDateTime
+import java.util.Collections
 import java.util.Objects
 
 class LicenseKeyUpdateParams
@@ -33,36 +32,49 @@ private constructor(
     /**
      * The updated activation limit for the license key. Use `null` to remove the limit, or omit
      * this field to leave it unchanged.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
      */
     fun activationsLimit(): Long? = body.activationsLimit()
 
     /**
      * Indicates whether the license key should be disabled. A value of `true` disables the key,
      * while `false` enables it. Omit this field to leave it unchanged.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
      */
     fun disabled(): Boolean? = body.disabled()
 
     /**
      * The updated expiration timestamp for the license key in UTC. Use `null` to remove the
      * expiration date, or omit this field to leave it unchanged.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
      */
     fun expiresAt(): OffsetDateTime? = body.expiresAt()
 
     /**
-     * The updated activation limit for the license key. Use `null` to remove the limit, or omit
-     * this field to leave it unchanged.
+     * Returns the raw JSON value of [activationsLimit].
+     *
+     * Unlike [activationsLimit], this method doesn't throw if the JSON field has an unexpected
+     * type.
      */
     fun _activationsLimit(): JsonField<Long> = body._activationsLimit()
 
     /**
-     * Indicates whether the license key should be disabled. A value of `true` disables the key,
-     * while `false` enables it. Omit this field to leave it unchanged.
+     * Returns the raw JSON value of [disabled].
+     *
+     * Unlike [disabled], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _disabled(): JsonField<Boolean> = body._disabled()
 
     /**
-     * The updated expiration timestamp for the license key in UTC. Use `null` to remove the
-     * expiration date, or omit this field to leave it unchanged.
+     * Returns the raw JSON value of [expiresAt].
+     *
+     * Unlike [expiresAt], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _expiresAt(): JsonField<OffsetDateTime> = body._expiresAt()
 
@@ -71,211 +83,6 @@ private constructor(
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    internal fun _body(): Body = body
-
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> id
-            else -> ""
-        }
-    }
-
-    @NoAutoDetect
-    class Body
-    @JsonCreator
-    private constructor(
-        @JsonProperty("activations_limit")
-        @ExcludeMissing
-        private val activationsLimit: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("disabled")
-        @ExcludeMissing
-        private val disabled: JsonField<Boolean> = JsonMissing.of(),
-        @JsonProperty("expires_at")
-        @ExcludeMissing
-        private val expiresAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-    ) {
-
-        /**
-         * The updated activation limit for the license key. Use `null` to remove the limit, or omit
-         * this field to leave it unchanged.
-         */
-        fun activationsLimit(): Long? = activationsLimit.getNullable("activations_limit")
-
-        /**
-         * Indicates whether the license key should be disabled. A value of `true` disables the key,
-         * while `false` enables it. Omit this field to leave it unchanged.
-         */
-        fun disabled(): Boolean? = disabled.getNullable("disabled")
-
-        /**
-         * The updated expiration timestamp for the license key in UTC. Use `null` to remove the
-         * expiration date, or omit this field to leave it unchanged.
-         */
-        fun expiresAt(): OffsetDateTime? = expiresAt.getNullable("expires_at")
-
-        /**
-         * The updated activation limit for the license key. Use `null` to remove the limit, or omit
-         * this field to leave it unchanged.
-         */
-        @JsonProperty("activations_limit")
-        @ExcludeMissing
-        fun _activationsLimit(): JsonField<Long> = activationsLimit
-
-        /**
-         * Indicates whether the license key should be disabled. A value of `true` disables the key,
-         * while `false` enables it. Omit this field to leave it unchanged.
-         */
-        @JsonProperty("disabled") @ExcludeMissing fun _disabled(): JsonField<Boolean> = disabled
-
-        /**
-         * The updated expiration timestamp for the license key in UTC. Use `null` to remove the
-         * expiration date, or omit this field to leave it unchanged.
-         */
-        @JsonProperty("expires_at")
-        @ExcludeMissing
-        fun _expiresAt(): JsonField<OffsetDateTime> = expiresAt
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Body = apply {
-            if (validated) {
-                return@apply
-            }
-
-            activationsLimit()
-            disabled()
-            expiresAt()
-            validated = true
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [Body]. */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [Body]. */
-        class Builder internal constructor() {
-
-            private var activationsLimit: JsonField<Long> = JsonMissing.of()
-            private var disabled: JsonField<Boolean> = JsonMissing.of()
-            private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(body: Body) = apply {
-                activationsLimit = body.activationsLimit
-                disabled = body.disabled
-                expiresAt = body.expiresAt
-                additionalProperties = body.additionalProperties.toMutableMap()
-            }
-
-            /**
-             * The updated activation limit for the license key. Use `null` to remove the limit, or
-             * omit this field to leave it unchanged.
-             */
-            fun activationsLimit(activationsLimit: Long?) =
-                activationsLimit(JsonField.ofNullable(activationsLimit))
-
-            /**
-             * The updated activation limit for the license key. Use `null` to remove the limit, or
-             * omit this field to leave it unchanged.
-             */
-            fun activationsLimit(activationsLimit: Long) =
-                activationsLimit(activationsLimit as Long?)
-
-            /**
-             * The updated activation limit for the license key. Use `null` to remove the limit, or
-             * omit this field to leave it unchanged.
-             */
-            fun activationsLimit(activationsLimit: JsonField<Long>) = apply {
-                this.activationsLimit = activationsLimit
-            }
-
-            /**
-             * Indicates whether the license key should be disabled. A value of `true` disables the
-             * key, while `false` enables it. Omit this field to leave it unchanged.
-             */
-            fun disabled(disabled: Boolean?) = disabled(JsonField.ofNullable(disabled))
-
-            /**
-             * Indicates whether the license key should be disabled. A value of `true` disables the
-             * key, while `false` enables it. Omit this field to leave it unchanged.
-             */
-            fun disabled(disabled: Boolean) = disabled(disabled as Boolean?)
-
-            /**
-             * Indicates whether the license key should be disabled. A value of `true` disables the
-             * key, while `false` enables it. Omit this field to leave it unchanged.
-             */
-            fun disabled(disabled: JsonField<Boolean>) = apply { this.disabled = disabled }
-
-            /**
-             * The updated expiration timestamp for the license key in UTC. Use `null` to remove the
-             * expiration date, or omit this field to leave it unchanged.
-             */
-            fun expiresAt(expiresAt: OffsetDateTime?) = expiresAt(JsonField.ofNullable(expiresAt))
-
-            /**
-             * The updated expiration timestamp for the license key in UTC. Use `null` to remove the
-             * expiration date, or omit this field to leave it unchanged.
-             */
-            fun expiresAt(expiresAt: JsonField<OffsetDateTime>) = apply {
-                this.expiresAt = expiresAt
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            fun build(): Body =
-                Body(activationsLimit, disabled, expiresAt, additionalProperties.toImmutable())
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Body && activationsLimit == other.activationsLimit && disabled == other.disabled && expiresAt == other.expiresAt && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(activationsLimit, disabled, expiresAt, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Body{activationsLimit=$activationsLimit, disabled=$disabled, expiresAt=$expiresAt, additionalProperties=$additionalProperties}"
-    }
 
     fun toBuilder() = Builder().from(this)
 
@@ -293,7 +100,6 @@ private constructor(
     }
 
     /** A builder for [LicenseKeyUpdateParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var id: String? = null
@@ -311,6 +117,17 @@ private constructor(
         fun id(id: String) = apply { this.id = id }
 
         /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [activationsLimit]
+         * - [disabled]
+         * - [expiresAt]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        /**
          * The updated activation limit for the license key. Use `null` to remove the limit, or omit
          * this field to leave it unchanged.
          */
@@ -319,14 +136,18 @@ private constructor(
         }
 
         /**
-         * The updated activation limit for the license key. Use `null` to remove the limit, or omit
-         * this field to leave it unchanged.
+         * Alias for [Builder.activationsLimit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
          */
         fun activationsLimit(activationsLimit: Long) = activationsLimit(activationsLimit as Long?)
 
         /**
-         * The updated activation limit for the license key. Use `null` to remove the limit, or omit
-         * this field to leave it unchanged.
+         * Sets [Builder.activationsLimit] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.activationsLimit] with a well-typed [Long] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun activationsLimit(activationsLimit: JsonField<Long>) = apply {
             body.activationsLimit(activationsLimit)
@@ -339,14 +160,18 @@ private constructor(
         fun disabled(disabled: Boolean?) = apply { body.disabled(disabled) }
 
         /**
-         * Indicates whether the license key should be disabled. A value of `true` disables the key,
-         * while `false` enables it. Omit this field to leave it unchanged.
+         * Alias for [Builder.disabled].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
          */
         fun disabled(disabled: Boolean) = disabled(disabled as Boolean?)
 
         /**
-         * Indicates whether the license key should be disabled. A value of `true` disables the key,
-         * while `false` enables it. Omit this field to leave it unchanged.
+         * Sets [Builder.disabled] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.disabled] with a well-typed [Boolean] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
         fun disabled(disabled: JsonField<Boolean>) = apply { body.disabled(disabled) }
 
@@ -357,8 +182,11 @@ private constructor(
         fun expiresAt(expiresAt: OffsetDateTime?) = apply { body.expiresAt(expiresAt) }
 
         /**
-         * The updated expiration timestamp for the license key in UTC. Use `null` to remove the
-         * expiration date, or omit this field to leave it unchanged.
+         * Sets [Builder.expiresAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.expiresAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun expiresAt(expiresAt: JsonField<OffsetDateTime>) = apply { body.expiresAt(expiresAt) }
 
@@ -479,6 +307,18 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [LicenseKeyUpdateParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .id()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): LicenseKeyUpdateParams =
             LicenseKeyUpdateParams(
                 checkRequired("id", id),
@@ -486,6 +326,268 @@ private constructor(
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
+    }
+
+    fun _body(): Body = body
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> id
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    class Body
+    private constructor(
+        private val activationsLimit: JsonField<Long>,
+        private val disabled: JsonField<Boolean>,
+        private val expiresAt: JsonField<OffsetDateTime>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("activations_limit")
+            @ExcludeMissing
+            activationsLimit: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("disabled")
+            @ExcludeMissing
+            disabled: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("expires_at")
+            @ExcludeMissing
+            expiresAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        ) : this(activationsLimit, disabled, expiresAt, mutableMapOf())
+
+        /**
+         * The updated activation limit for the license key. Use `null` to remove the limit, or omit
+         * this field to leave it unchanged.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun activationsLimit(): Long? = activationsLimit.getNullable("activations_limit")
+
+        /**
+         * Indicates whether the license key should be disabled. A value of `true` disables the key,
+         * while `false` enables it. Omit this field to leave it unchanged.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun disabled(): Boolean? = disabled.getNullable("disabled")
+
+        /**
+         * The updated expiration timestamp for the license key in UTC. Use `null` to remove the
+         * expiration date, or omit this field to leave it unchanged.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun expiresAt(): OffsetDateTime? = expiresAt.getNullable("expires_at")
+
+        /**
+         * Returns the raw JSON value of [activationsLimit].
+         *
+         * Unlike [activationsLimit], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("activations_limit")
+        @ExcludeMissing
+        fun _activationsLimit(): JsonField<Long> = activationsLimit
+
+        /**
+         * Returns the raw JSON value of [disabled].
+         *
+         * Unlike [disabled], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("disabled") @ExcludeMissing fun _disabled(): JsonField<Boolean> = disabled
+
+        /**
+         * Returns the raw JSON value of [expiresAt].
+         *
+         * Unlike [expiresAt], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("expires_at")
+        @ExcludeMissing
+        fun _expiresAt(): JsonField<OffsetDateTime> = expiresAt
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Body]. */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [Body]. */
+        class Builder internal constructor() {
+
+            private var activationsLimit: JsonField<Long> = JsonMissing.of()
+            private var disabled: JsonField<Boolean> = JsonMissing.of()
+            private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(body: Body) = apply {
+                activationsLimit = body.activationsLimit
+                disabled = body.disabled
+                expiresAt = body.expiresAt
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
+
+            /**
+             * The updated activation limit for the license key. Use `null` to remove the limit, or
+             * omit this field to leave it unchanged.
+             */
+            fun activationsLimit(activationsLimit: Long?) =
+                activationsLimit(JsonField.ofNullable(activationsLimit))
+
+            /**
+             * Alias for [Builder.activationsLimit].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun activationsLimit(activationsLimit: Long) =
+                activationsLimit(activationsLimit as Long?)
+
+            /**
+             * Sets [Builder.activationsLimit] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.activationsLimit] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun activationsLimit(activationsLimit: JsonField<Long>) = apply {
+                this.activationsLimit = activationsLimit
+            }
+
+            /**
+             * Indicates whether the license key should be disabled. A value of `true` disables the
+             * key, while `false` enables it. Omit this field to leave it unchanged.
+             */
+            fun disabled(disabled: Boolean?) = disabled(JsonField.ofNullable(disabled))
+
+            /**
+             * Alias for [Builder.disabled].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun disabled(disabled: Boolean) = disabled(disabled as Boolean?)
+
+            /**
+             * Sets [Builder.disabled] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.disabled] with a well-typed [Boolean] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun disabled(disabled: JsonField<Boolean>) = apply { this.disabled = disabled }
+
+            /**
+             * The updated expiration timestamp for the license key in UTC. Use `null` to remove the
+             * expiration date, or omit this field to leave it unchanged.
+             */
+            fun expiresAt(expiresAt: OffsetDateTime?) = expiresAt(JsonField.ofNullable(expiresAt))
+
+            /**
+             * Sets [Builder.expiresAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.expiresAt] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun expiresAt(expiresAt: JsonField<OffsetDateTime>) = apply {
+                this.expiresAt = expiresAt
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Body].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Body =
+                Body(activationsLimit, disabled, expiresAt, additionalProperties.toMutableMap())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Body = apply {
+            if (validated) {
+                return@apply
+            }
+
+            activationsLimit()
+            disabled()
+            expiresAt()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            (if (activationsLimit.asKnown() == null) 0 else 1) +
+                (if (disabled.asKnown() == null) 0 else 1) +
+                (if (expiresAt.asKnown() == null) 0 else 1)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Body && activationsLimit == other.activationsLimit && disabled == other.disabled && expiresAt == other.expiresAt && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(activationsLimit, disabled, expiresAt, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Body{activationsLimit=$activationsLimit, disabled=$disabled, expiresAt=$expiresAt, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

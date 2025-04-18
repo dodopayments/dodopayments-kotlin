@@ -6,17 +6,16 @@ import com.dodopayments.api.core.ExcludeMissing
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
-import com.dodopayments.api.core.NoAutoDetect
 import com.dodopayments.api.core.Params
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
-import com.dodopayments.api.core.immutableEmptyMap
-import com.dodopayments.api.core.toImmutable
+import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 
 class SubscriptionChargeParams
@@ -32,12 +31,16 @@ private constructor(
     /**
      * The product price. Represented in the lowest denomination of the currency (e.g., cents for
      * USD). For example, to charge $1.00, pass `100`.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun productPrice(): Long = body.productPrice()
 
     /**
-     * The product price. Represented in the lowest denomination of the currency (e.g., cents for
-     * USD). For example, to charge $1.00, pass `100`.
+     * Returns the raw JSON value of [productPrice].
+     *
+     * Unlike [productPrice], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _productPrice(): JsonField<Long> = body._productPrice()
 
@@ -46,143 +49,6 @@ private constructor(
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    internal fun _body(): Body = body
-
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> subscriptionId
-            else -> ""
-        }
-    }
-
-    @NoAutoDetect
-    class Body
-    @JsonCreator
-    private constructor(
-        @JsonProperty("product_price")
-        @ExcludeMissing
-        private val productPrice: JsonField<Long> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-    ) {
-
-        /**
-         * The product price. Represented in the lowest denomination of the currency (e.g., cents
-         * for USD). For example, to charge $1.00, pass `100`.
-         */
-        fun productPrice(): Long = productPrice.getRequired("product_price")
-
-        /**
-         * The product price. Represented in the lowest denomination of the currency (e.g., cents
-         * for USD). For example, to charge $1.00, pass `100`.
-         */
-        @JsonProperty("product_price")
-        @ExcludeMissing
-        fun _productPrice(): JsonField<Long> = productPrice
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Body = apply {
-            if (validated) {
-                return@apply
-            }
-
-            productPrice()
-            validated = true
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [Body].
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .productPrice()
-             * ```
-             */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [Body]. */
-        class Builder internal constructor() {
-
-            private var productPrice: JsonField<Long>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(body: Body) = apply {
-                productPrice = body.productPrice
-                additionalProperties = body.additionalProperties.toMutableMap()
-            }
-
-            /**
-             * The product price. Represented in the lowest denomination of the currency (e.g.,
-             * cents for USD). For example, to charge $1.00, pass `100`.
-             */
-            fun productPrice(productPrice: Long) = productPrice(JsonField.of(productPrice))
-
-            /**
-             * The product price. Represented in the lowest denomination of the currency (e.g.,
-             * cents for USD). For example, to charge $1.00, pass `100`.
-             */
-            fun productPrice(productPrice: JsonField<Long>) = apply {
-                this.productPrice = productPrice
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            fun build(): Body =
-                Body(
-                    checkRequired("productPrice", productPrice),
-                    additionalProperties.toImmutable(),
-                )
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Body && productPrice == other.productPrice && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(productPrice, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Body{productPrice=$productPrice, additionalProperties=$additionalProperties}"
-    }
 
     fun toBuilder() = Builder().from(this)
 
@@ -201,7 +67,6 @@ private constructor(
     }
 
     /** A builder for [SubscriptionChargeParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var subscriptionId: String? = null
@@ -219,14 +84,26 @@ private constructor(
         fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
 
         /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [productPrice]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        /**
          * The product price. Represented in the lowest denomination of the currency (e.g., cents
          * for USD). For example, to charge $1.00, pass `100`.
          */
         fun productPrice(productPrice: Long) = apply { body.productPrice(productPrice) }
 
         /**
-         * The product price. Represented in the lowest denomination of the currency (e.g., cents
-         * for USD). For example, to charge $1.00, pass `100`.
+         * Sets [Builder.productPrice] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.productPrice] with a well-typed [Long] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
         fun productPrice(productPrice: JsonField<Long>) = apply { body.productPrice(productPrice) }
 
@@ -347,6 +224,19 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [SubscriptionChargeParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .subscriptionId()
+         * .productPrice()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): SubscriptionChargeParams =
             SubscriptionChargeParams(
                 checkRequired("subscriptionId", subscriptionId),
@@ -354,6 +244,186 @@ private constructor(
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
+    }
+
+    fun _body(): Body = body
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> subscriptionId
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    class Body
+    private constructor(
+        private val productPrice: JsonField<Long>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("product_price")
+            @ExcludeMissing
+            productPrice: JsonField<Long> = JsonMissing.of()
+        ) : this(productPrice, mutableMapOf())
+
+        /**
+         * The product price. Represented in the lowest denomination of the currency (e.g., cents
+         * for USD). For example, to charge $1.00, pass `100`.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun productPrice(): Long = productPrice.getRequired("product_price")
+
+        /**
+         * Returns the raw JSON value of [productPrice].
+         *
+         * Unlike [productPrice], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("product_price")
+        @ExcludeMissing
+        fun _productPrice(): JsonField<Long> = productPrice
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .productPrice()
+             * ```
+             */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [Body]. */
+        class Builder internal constructor() {
+
+            private var productPrice: JsonField<Long>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(body: Body) = apply {
+                productPrice = body.productPrice
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
+
+            /**
+             * The product price. Represented in the lowest denomination of the currency (e.g.,
+             * cents for USD). For example, to charge $1.00, pass `100`.
+             */
+            fun productPrice(productPrice: Long) = productPrice(JsonField.of(productPrice))
+
+            /**
+             * Sets [Builder.productPrice] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.productPrice] with a well-typed [Long] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun productPrice(productPrice: JsonField<Long>) = apply {
+                this.productPrice = productPrice
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Body].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .productPrice()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): Body =
+                Body(
+                    checkRequired("productPrice", productPrice),
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Body = apply {
+            if (validated) {
+                return@apply
+            }
+
+            productPrice()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int = (if (productPrice.asKnown() == null) 0 else 1)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Body && productPrice == other.productPrice && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(productPrice, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Body{productPrice=$productPrice, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

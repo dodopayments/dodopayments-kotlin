@@ -6,7 +6,7 @@ import com.dodopayments.api.core.http.QueryParams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ProductListParamsTest {
+internal class ProductListParamsTest {
 
     @Test
     fun create() {
@@ -27,18 +27,26 @@ class ProductListParamsTest {
                 .pageSize(0L)
                 .recurring(true)
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("archived", "true")
-        expected.put("page_number", "0")
-        expected.put("page_size", "0")
-        expected.put("recurring", "true")
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("archived", "true")
+                    .put("page_number", "0")
+                    .put("page_size", "0")
+                    .put("recurring", "true")
+                    .build()
+            )
     }
 
     @Test
     fun queryParamsWithoutOptionalFields() {
         val params = ProductListParams.builder().build()
-        val expected = QueryParams.builder()
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
     }
 }

@@ -2,141 +2,104 @@
 
 package com.dodopayments.api.models.payments
 
-import com.dodopayments.api.core.ExcludeMissing
-import com.dodopayments.api.core.JsonField
-import com.dodopayments.api.core.JsonMissing
-import com.dodopayments.api.core.JsonValue
-import com.dodopayments.api.core.NoAutoDetect
-import com.dodopayments.api.core.immutableEmptyMap
-import com.dodopayments.api.core.toImmutable
+import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.blocking.PaymentService
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Objects
 
+/** @see [PaymentService.list] */
 class PaymentListPage
 private constructor(
-    private val paymentsService: PaymentService,
+    private val service: PaymentService,
     private val params: PaymentListParams,
-    private val response: Response,
+    private val response: PaymentListPageResponse,
 ) {
 
-    fun response(): Response = response
+    /**
+     * Delegates to [PaymentListPageResponse], but gracefully handles missing data.
+     *
+     * @see [PaymentListPageResponse.items]
+     */
+    fun items(): List<PaymentListResponse> = response._items().getNullable("items") ?: emptyList()
 
-    fun items(): List<PaymentListResponse> = response().items()
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is PaymentListPage && paymentsService == other.paymentsService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(paymentsService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "PaymentListPage{paymentsService=$paymentsService, params=$params, response=$response}"
-
-    fun hasNextPage(): Boolean {
-        return !items().isEmpty()
-    }
+    fun hasNextPage(): Boolean = items().isNotEmpty()
 
     fun getNextPageParams(): PaymentListParams? {
         if (!hasNextPage()) {
             return null
         }
 
-        return PaymentListParams.builder()
-            .from(params)
-            .pageNumber((params.pageNumber() ?: 0) + 1)
-            .build()
+        val pageNumber = params.pageNumber() ?: 1
+        return params.toBuilder().pageNumber(pageNumber + 1).build()
     }
 
-    fun getNextPage(): PaymentListPage? {
-        return getNextPageParams()?.let { paymentsService.list(it) }
-    }
+    fun getNextPage(): PaymentListPage? = getNextPageParams()?.let { service.list(it) }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): PaymentListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): PaymentListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        fun of(paymentsService: PaymentService, params: PaymentListParams, response: Response) =
-            PaymentListPage(paymentsService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [PaymentListPage].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Response
-    @JsonCreator
-    constructor(
-        @JsonProperty("items")
-        private val items: JsonField<List<PaymentListResponse>> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-    ) {
+    /** A builder for [PaymentListPage]. */
+    class Builder internal constructor() {
 
-        fun items(): List<PaymentListResponse> = items.getNullable("items") ?: listOf()
+        private var service: PaymentService? = null
+        private var params: PaymentListParams? = null
+        private var response: PaymentListPageResponse? = null
 
-        @JsonProperty("items") fun _items(): JsonField<List<PaymentListResponse>>? = items
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Response = apply {
-            if (validated) {
-                return@apply
-            }
-
-            items().map { it.validate() }
-            validated = true
+        internal fun from(paymentListPage: PaymentListPage) = apply {
+            service = paymentListPage.service
+            params = paymentListPage.params
+            response = paymentListPage.response
         }
 
-        fun toBuilder() = Builder().from(this)
+        fun service(service: PaymentService) = apply { this.service = service }
 
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+        /** The parameters that were used to request this page. */
+        fun params(params: PaymentListParams) = apply { this.params = params }
 
-            return /* spotless:off */ other is Response && items == other.items && additionalProperties == other.additionalProperties /* spotless:on */
-        }
+        /** The response that this page was parsed from. */
+        fun response(response: PaymentListPageResponse) = apply { this.response = response }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(items, additionalProperties) /* spotless:on */
-
-        override fun toString() =
-            "Response{items=$items, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [PaymentListPage]. */
-            fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var items: JsonField<List<PaymentListResponse>> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(page: Response) = apply {
-                this.items = page.items
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
-
-            fun items(items: List<PaymentListResponse>) = items(JsonField.of(items))
-
-            fun items(items: JsonField<List<PaymentListResponse>>) = apply { this.items = items }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            fun build() = Response(items, additionalProperties.toImmutable())
-        }
+        /**
+         * Returns an immutable instance of [PaymentListPage].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): PaymentListPage =
+            PaymentListPage(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: PaymentListPage) : Sequence<PaymentListResponse> {
@@ -153,4 +116,17 @@ private constructor(
             }
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is PaymentListPage && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() =
+        "PaymentListPage{service=$service, params=$params, response=$response}"
 }

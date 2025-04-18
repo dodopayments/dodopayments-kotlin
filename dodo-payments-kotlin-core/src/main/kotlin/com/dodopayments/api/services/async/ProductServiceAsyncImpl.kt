@@ -3,6 +3,7 @@
 package com.dodopayments.api.services.async
 
 import com.dodopayments.api.core.ClientOptions
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.handlers.emptyHandler
 import com.dodopayments.api.core.handlers.errorHandler
@@ -16,11 +17,11 @@ import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepareAsync
-import com.dodopayments.api.errors.DodoPaymentsError
 import com.dodopayments.api.models.products.Product
 import com.dodopayments.api.models.products.ProductCreateParams
 import com.dodopayments.api.models.products.ProductDeleteParams
 import com.dodopayments.api.models.products.ProductListPageAsync
+import com.dodopayments.api.models.products.ProductListPageResponse
 import com.dodopayments.api.models.products.ProductListParams
 import com.dodopayments.api.models.products.ProductRetrieveParams
 import com.dodopayments.api.models.products.ProductUnarchiveParams
@@ -80,8 +81,7 @@ class ProductServiceAsyncImpl internal constructor(private val clientOptions: Cl
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ProductServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<DodoPaymentsError> =
-            errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
         private val images: ImageServiceAsync.WithRawResponse by lazy {
             ImageServiceAsyncImpl.WithRawResponseImpl(clientOptions)
@@ -126,7 +126,7 @@ class ProductServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("products", params.getPathParam(0))
+                    .addPathSegments("products", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -151,7 +151,7 @@ class ProductServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PATCH)
-                    .addPathSegments("products", params.getPathParam(0))
+                    .addPathSegments("products", params._pathParam(0))
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -160,8 +160,8 @@ class ProductServiceAsyncImpl internal constructor(private val clientOptions: Cl
             return response.parseable { response.use { updateHandler.handle(it) } }
         }
 
-        private val listHandler: Handler<ProductListPageAsync.Response> =
-            jsonHandler<ProductListPageAsync.Response>(clientOptions.jsonMapper)
+        private val listHandler: Handler<ProductListPageResponse> =
+            jsonHandler<ProductListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override suspend fun list(
@@ -185,7 +185,11 @@ class ProductServiceAsyncImpl internal constructor(private val clientOptions: Cl
                         }
                     }
                     .let {
-                        ProductListPageAsync.of(ProductServiceAsyncImpl(clientOptions), params, it)
+                        ProductListPageAsync.builder()
+                            .service(ProductServiceAsyncImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
                     }
             }
         }
@@ -199,7 +203,7 @@ class ProductServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
-                    .addPathSegments("products", params.getPathParam(0))
+                    .addPathSegments("products", params._pathParam(0))
                     .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -217,7 +221,7 @@ class ProductServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
-                    .addPathSegments("products", params.getPathParam(0), "unarchive")
+                    .addPathSegments("products", params._pathParam(0), "unarchive")
                     .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepareAsync(clientOptions, params)

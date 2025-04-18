@@ -3,6 +3,7 @@
 package com.dodopayments.api.services.async
 
 import com.dodopayments.api.core.ClientOptions
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.handlers.errorHandler
 import com.dodopayments.api.core.handlers.jsonHandler
@@ -13,9 +14,9 @@ import com.dodopayments.api.core.http.HttpResponse.Handler
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepareAsync
-import com.dodopayments.api.errors.DodoPaymentsError
 import com.dodopayments.api.models.webhookevents.WebhookEvent
 import com.dodopayments.api.models.webhookevents.WebhookEventListPageAsync
+import com.dodopayments.api.models.webhookevents.WebhookEventListPageResponse
 import com.dodopayments.api.models.webhookevents.WebhookEventListParams
 import com.dodopayments.api.models.webhookevents.WebhookEventRetrieveParams
 
@@ -45,8 +46,7 @@ class WebhookEventServiceAsyncImpl internal constructor(private val clientOption
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         WebhookEventServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<DodoPaymentsError> =
-            errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
         private val retrieveHandler: Handler<WebhookEvent> =
             jsonHandler<WebhookEvent>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
@@ -58,7 +58,7 @@ class WebhookEventServiceAsyncImpl internal constructor(private val clientOption
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("webhook_events", params.getPathParam(0))
+                    .addPathSegments("webhook_events", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -74,8 +74,8 @@ class WebhookEventServiceAsyncImpl internal constructor(private val clientOption
             }
         }
 
-        private val listHandler: Handler<WebhookEventListPageAsync.Response> =
-            jsonHandler<WebhookEventListPageAsync.Response>(clientOptions.jsonMapper)
+        private val listHandler: Handler<WebhookEventListPageResponse> =
+            jsonHandler<WebhookEventListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override suspend fun list(
@@ -99,11 +99,11 @@ class WebhookEventServiceAsyncImpl internal constructor(private val clientOption
                         }
                     }
                     .let {
-                        WebhookEventListPageAsync.of(
-                            WebhookEventServiceAsyncImpl(clientOptions),
-                            params,
-                            it,
-                        )
+                        WebhookEventListPageAsync.builder()
+                            .service(WebhookEventServiceAsyncImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
                     }
             }
         }

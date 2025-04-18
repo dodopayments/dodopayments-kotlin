@@ -3,11 +3,10 @@
 package com.dodopayments.api.models.products
 
 import com.dodopayments.api.models.subscriptions.TimeInterval
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ProductCreateParamsTest {
+internal class ProductCreateParamsTest {
 
     @Test
     fun create() {
@@ -67,7 +66,6 @@ class ProductCreateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.price())
             .isEqualTo(
                 Price.ofOneTime(
@@ -84,7 +82,7 @@ class ProductCreateParamsTest {
                 )
             )
         assertThat(body.taxCategory()).isEqualTo(ProductCreateParams.TaxCategory.DIGITAL_PRODUCTS)
-        assertThat(body.addons()).isEqualTo(listOf("string"))
+        assertThat(body.addons()).containsExactly("string")
         assertThat(body.description()).isEqualTo("description")
         assertThat(body.licenseKeyActivationMessage()).isEqualTo("license_key_activation_message")
         assertThat(body.licenseKeyActivationsLimit()).isEqualTo(0L)
@@ -112,7 +110,6 @@ class ProductCreateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.price())
             .isEqualTo(
                 Price.ofOneTime(

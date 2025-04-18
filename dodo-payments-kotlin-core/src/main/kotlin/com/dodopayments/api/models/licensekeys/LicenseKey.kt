@@ -6,161 +6,277 @@ import com.dodopayments.api.core.ExcludeMissing
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
-import com.dodopayments.api.core.NoAutoDetect
 import com.dodopayments.api.core.checkRequired
-import com.dodopayments.api.core.immutableEmptyMap
-import com.dodopayments.api.core.toImmutable
+import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.OffsetDateTime
+import java.util.Collections
 import java.util.Objects
 
-@NoAutoDetect
 class LicenseKey
-@JsonCreator
 private constructor(
-    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("business_id")
-    @ExcludeMissing
-    private val businessId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("created_at")
-    @ExcludeMissing
-    private val createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("customer_id")
-    @ExcludeMissing
-    private val customerId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("instances_count")
-    @ExcludeMissing
-    private val instancesCount: JsonField<Long> = JsonMissing.of(),
-    @JsonProperty("key") @ExcludeMissing private val key: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("payment_id")
-    @ExcludeMissing
-    private val paymentId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("product_id")
-    @ExcludeMissing
-    private val productId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("status")
-    @ExcludeMissing
-    private val status: JsonField<LicenseKeyStatus> = JsonMissing.of(),
-    @JsonProperty("activations_limit")
-    @ExcludeMissing
-    private val activationsLimit: JsonField<Long> = JsonMissing.of(),
-    @JsonProperty("expires_at")
-    @ExcludeMissing
-    private val expiresAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("subscription_id")
-    @ExcludeMissing
-    private val subscriptionId: JsonField<String> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val id: JsonField<String>,
+    private val businessId: JsonField<String>,
+    private val createdAt: JsonField<OffsetDateTime>,
+    private val customerId: JsonField<String>,
+    private val instancesCount: JsonField<Long>,
+    private val key: JsonField<String>,
+    private val paymentId: JsonField<String>,
+    private val productId: JsonField<String>,
+    private val status: JsonField<LicenseKeyStatus>,
+    private val activationsLimit: JsonField<Long>,
+    private val expiresAt: JsonField<OffsetDateTime>,
+    private val subscriptionId: JsonField<String>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
-    /** The unique identifier of the license key. */
+    @JsonCreator
+    private constructor(
+        @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("business_id")
+        @ExcludeMissing
+        businessId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        customerId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("instances_count")
+        @ExcludeMissing
+        instancesCount: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("key") @ExcludeMissing key: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("payment_id") @ExcludeMissing paymentId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("product_id") @ExcludeMissing productId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("status")
+        @ExcludeMissing
+        status: JsonField<LicenseKeyStatus> = JsonMissing.of(),
+        @JsonProperty("activations_limit")
+        @ExcludeMissing
+        activationsLimit: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("expires_at")
+        @ExcludeMissing
+        expiresAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("subscription_id")
+        @ExcludeMissing
+        subscriptionId: JsonField<String> = JsonMissing.of(),
+    ) : this(
+        id,
+        businessId,
+        createdAt,
+        customerId,
+        instancesCount,
+        key,
+        paymentId,
+        productId,
+        status,
+        activationsLimit,
+        expiresAt,
+        subscriptionId,
+        mutableMapOf(),
+    )
+
+    /**
+     * The unique identifier of the license key.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun id(): String = id.getRequired("id")
 
-    /** The unique identifier of the business associated with the license key. */
+    /**
+     * The unique identifier of the business associated with the license key.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun businessId(): String = businessId.getRequired("business_id")
 
-    /** The timestamp indicating when the license key was created, in UTC. */
+    /**
+     * The timestamp indicating when the license key was created, in UTC.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
-    /** The unique identifier of the customer associated with the license key. */
+    /**
+     * The unique identifier of the customer associated with the license key.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun customerId(): String = customerId.getRequired("customer_id")
 
-    /** The current number of instances activated for this license key. */
+    /**
+     * The current number of instances activated for this license key.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun instancesCount(): Long = instancesCount.getRequired("instances_count")
 
-    /** The license key string. */
+    /**
+     * The license key string.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun key(): String = key.getRequired("key")
 
-    /** The unique identifier of the payment associated with the license key. */
+    /**
+     * The unique identifier of the payment associated with the license key.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun paymentId(): String = paymentId.getRequired("payment_id")
 
-    /** The unique identifier of the product associated with the license key. */
+    /**
+     * The unique identifier of the product associated with the license key.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun productId(): String = productId.getRequired("product_id")
 
+    /**
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun status(): LicenseKeyStatus = status.getRequired("status")
 
-    /** The maximum number of activations allowed for this license key. */
+    /**
+     * The maximum number of activations allowed for this license key.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
     fun activationsLimit(): Long? = activationsLimit.getNullable("activations_limit")
 
-    /** The timestamp indicating when the license key expires, in UTC. */
+    /**
+     * The timestamp indicating when the license key expires, in UTC.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
     fun expiresAt(): OffsetDateTime? = expiresAt.getNullable("expires_at")
 
-    /** The unique identifier of the subscription associated with the license key, if any. */
+    /**
+     * The unique identifier of the subscription associated with the license key, if any.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
     fun subscriptionId(): String? = subscriptionId.getNullable("subscription_id")
 
-    /** The unique identifier of the license key. */
+    /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    /** The unique identifier of the business associated with the license key. */
+    /**
+     * Returns the raw JSON value of [businessId].
+     *
+     * Unlike [businessId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("business_id") @ExcludeMissing fun _businessId(): JsonField<String> = businessId
 
-    /** The timestamp indicating when the license key was created, in UTC. */
+    /**
+     * Returns the raw JSON value of [createdAt].
+     *
+     * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("created_at")
     @ExcludeMissing
     fun _createdAt(): JsonField<OffsetDateTime> = createdAt
 
-    /** The unique identifier of the customer associated with the license key. */
+    /**
+     * Returns the raw JSON value of [customerId].
+     *
+     * Unlike [customerId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("customer_id") @ExcludeMissing fun _customerId(): JsonField<String> = customerId
 
-    /** The current number of instances activated for this license key. */
+    /**
+     * Returns the raw JSON value of [instancesCount].
+     *
+     * Unlike [instancesCount], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("instances_count")
     @ExcludeMissing
     fun _instancesCount(): JsonField<Long> = instancesCount
 
-    /** The license key string. */
+    /**
+     * Returns the raw JSON value of [key].
+     *
+     * Unlike [key], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<String> = key
 
-    /** The unique identifier of the payment associated with the license key. */
+    /**
+     * Returns the raw JSON value of [paymentId].
+     *
+     * Unlike [paymentId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("payment_id") @ExcludeMissing fun _paymentId(): JsonField<String> = paymentId
 
-    /** The unique identifier of the product associated with the license key. */
+    /**
+     * Returns the raw JSON value of [productId].
+     *
+     * Unlike [productId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("product_id") @ExcludeMissing fun _productId(): JsonField<String> = productId
 
+    /**
+     * Returns the raw JSON value of [status].
+     *
+     * Unlike [status], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("status") @ExcludeMissing fun _status(): JsonField<LicenseKeyStatus> = status
 
-    /** The maximum number of activations allowed for this license key. */
+    /**
+     * Returns the raw JSON value of [activationsLimit].
+     *
+     * Unlike [activationsLimit], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
     @JsonProperty("activations_limit")
     @ExcludeMissing
     fun _activationsLimit(): JsonField<Long> = activationsLimit
 
-    /** The timestamp indicating when the license key expires, in UTC. */
+    /**
+     * Returns the raw JSON value of [expiresAt].
+     *
+     * Unlike [expiresAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("expires_at")
     @ExcludeMissing
     fun _expiresAt(): JsonField<OffsetDateTime> = expiresAt
 
-    /** The unique identifier of the subscription associated with the license key, if any. */
+    /**
+     * Returns the raw JSON value of [subscriptionId].
+     *
+     * Unlike [subscriptionId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("subscription_id")
     @ExcludeMissing
     fun _subscriptionId(): JsonField<String> = subscriptionId
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): LicenseKey = apply {
-        if (validated) {
-            return@apply
-        }
-
-        id()
-        businessId()
-        createdAt()
-        customerId()
-        instancesCount()
-        key()
-        paymentId()
-        productId()
-        status()
-        activationsLimit()
-        expiresAt()
-        subscriptionId()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -221,31 +337,60 @@ private constructor(
         /** The unique identifier of the license key. */
         fun id(id: String) = id(JsonField.of(id))
 
-        /** The unique identifier of the license key. */
+        /**
+         * Sets [Builder.id] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.id] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
         /** The unique identifier of the business associated with the license key. */
         fun businessId(businessId: String) = businessId(JsonField.of(businessId))
 
-        /** The unique identifier of the business associated with the license key. */
+        /**
+         * Sets [Builder.businessId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.businessId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun businessId(businessId: JsonField<String>) = apply { this.businessId = businessId }
 
         /** The timestamp indicating when the license key was created, in UTC. */
         fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
 
-        /** The timestamp indicating when the license key was created, in UTC. */
+        /**
+         * Sets [Builder.createdAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
         /** The unique identifier of the customer associated with the license key. */
         fun customerId(customerId: String) = customerId(JsonField.of(customerId))
 
-        /** The unique identifier of the customer associated with the license key. */
+        /**
+         * Sets [Builder.customerId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.customerId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
         /** The current number of instances activated for this license key. */
         fun instancesCount(instancesCount: Long) = instancesCount(JsonField.of(instancesCount))
 
-        /** The current number of instances activated for this license key. */
+        /**
+         * Sets [Builder.instancesCount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.instancesCount] with a well-typed [Long] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun instancesCount(instancesCount: JsonField<Long>) = apply {
             this.instancesCount = instancesCount
         }
@@ -253,33 +398,67 @@ private constructor(
         /** The license key string. */
         fun key(key: String) = key(JsonField.of(key))
 
-        /** The license key string. */
+        /**
+         * Sets [Builder.key] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.key] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun key(key: JsonField<String>) = apply { this.key = key }
 
         /** The unique identifier of the payment associated with the license key. */
         fun paymentId(paymentId: String) = paymentId(JsonField.of(paymentId))
 
-        /** The unique identifier of the payment associated with the license key. */
+        /**
+         * Sets [Builder.paymentId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.paymentId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun paymentId(paymentId: JsonField<String>) = apply { this.paymentId = paymentId }
 
         /** The unique identifier of the product associated with the license key. */
         fun productId(productId: String) = productId(JsonField.of(productId))
 
-        /** The unique identifier of the product associated with the license key. */
+        /**
+         * Sets [Builder.productId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.productId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
         fun status(status: LicenseKeyStatus) = status(JsonField.of(status))
 
+        /**
+         * Sets [Builder.status] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.status] with a well-typed [LicenseKeyStatus] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun status(status: JsonField<LicenseKeyStatus>) = apply { this.status = status }
 
         /** The maximum number of activations allowed for this license key. */
         fun activationsLimit(activationsLimit: Long?) =
             activationsLimit(JsonField.ofNullable(activationsLimit))
 
-        /** The maximum number of activations allowed for this license key. */
+        /**
+         * Alias for [Builder.activationsLimit].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun activationsLimit(activationsLimit: Long) = activationsLimit(activationsLimit as Long?)
 
-        /** The maximum number of activations allowed for this license key. */
+        /**
+         * Sets [Builder.activationsLimit] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.activationsLimit] with a well-typed [Long] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun activationsLimit(activationsLimit: JsonField<Long>) = apply {
             this.activationsLimit = activationsLimit
         }
@@ -287,14 +466,26 @@ private constructor(
         /** The timestamp indicating when the license key expires, in UTC. */
         fun expiresAt(expiresAt: OffsetDateTime?) = expiresAt(JsonField.ofNullable(expiresAt))
 
-        /** The timestamp indicating when the license key expires, in UTC. */
+        /**
+         * Sets [Builder.expiresAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.expiresAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun expiresAt(expiresAt: JsonField<OffsetDateTime>) = apply { this.expiresAt = expiresAt }
 
         /** The unique identifier of the subscription associated with the license key, if any. */
         fun subscriptionId(subscriptionId: String?) =
             subscriptionId(JsonField.ofNullable(subscriptionId))
 
-        /** The unique identifier of the subscription associated with the license key, if any. */
+        /**
+         * Sets [Builder.subscriptionId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.subscriptionId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun subscriptionId(subscriptionId: JsonField<String>) = apply {
             this.subscriptionId = subscriptionId
         }
@@ -318,6 +509,26 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [LicenseKey].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .id()
+         * .businessId()
+         * .createdAt()
+         * .customerId()
+         * .instancesCount()
+         * .key()
+         * .paymentId()
+         * .productId()
+         * .status()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): LicenseKey =
             LicenseKey(
                 checkRequired("id", id),
@@ -332,9 +543,58 @@ private constructor(
                 activationsLimit,
                 expiresAt,
                 subscriptionId,
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
     }
+
+    private var validated: Boolean = false
+
+    fun validate(): LicenseKey = apply {
+        if (validated) {
+            return@apply
+        }
+
+        id()
+        businessId()
+        createdAt()
+        customerId()
+        instancesCount()
+        key()
+        paymentId()
+        productId()
+        status().validate()
+        activationsLimit()
+        expiresAt()
+        subscriptionId()
+        validated = true
+    }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: DodoPaymentsInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    internal fun validity(): Int =
+        (if (id.asKnown() == null) 0 else 1) +
+            (if (businessId.asKnown() == null) 0 else 1) +
+            (if (createdAt.asKnown() == null) 0 else 1) +
+            (if (customerId.asKnown() == null) 0 else 1) +
+            (if (instancesCount.asKnown() == null) 0 else 1) +
+            (if (key.asKnown() == null) 0 else 1) +
+            (if (paymentId.asKnown() == null) 0 else 1) +
+            (if (productId.asKnown() == null) 0 else 1) +
+            (status.asKnown()?.validity() ?: 0) +
+            (if (activationsLimit.asKnown() == null) 0 else 1) +
+            (if (expiresAt.asKnown() == null) 0 else 1) +
+            (if (subscriptionId.asKnown() == null) 0 else 1)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

@@ -5,7 +5,7 @@ package com.dodopayments.api.models.webhookevents
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class WebhookEventRetrieveParamsTest {
+internal class WebhookEventRetrieveParamsTest {
 
     @Test
     fun create() {
@@ -13,12 +13,11 @@ class WebhookEventRetrieveParamsTest {
     }
 
     @Test
-    fun getPathParam() {
+    fun pathParams() {
         val params = WebhookEventRetrieveParams.builder().webhookEventId("webhook_event_id").build()
-        assertThat(params).isNotNull
-        // path param "webhookEventId"
-        assertThat(params.getPathParam(0)).isEqualTo("webhook_event_id")
+
+        assertThat(params._pathParam(0)).isEqualTo("webhook_event_id")
         // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        assertThat(params._pathParam(1)).isEqualTo("")
     }
 }

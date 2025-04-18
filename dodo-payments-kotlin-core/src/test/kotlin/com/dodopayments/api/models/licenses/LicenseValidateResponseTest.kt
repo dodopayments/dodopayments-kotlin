@@ -2,15 +2,31 @@
 
 package com.dodopayments.api.models.licenses
 
+import com.dodopayments.api.core.jsonMapper
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class LicenseValidateResponseTest {
+internal class LicenseValidateResponseTest {
 
     @Test
-    fun createLicenseValidateResponse() {
+    fun create() {
         val licenseValidateResponse = LicenseValidateResponse.builder().valid(true).build()
-        assertThat(licenseValidateResponse).isNotNull
+
         assertThat(licenseValidateResponse.valid()).isEqualTo(true)
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val licenseValidateResponse = LicenseValidateResponse.builder().valid(true).build()
+
+        val roundtrippedLicenseValidateResponse =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(licenseValidateResponse),
+                jacksonTypeRef<LicenseValidateResponse>(),
+            )
+
+        assertThat(roundtrippedLicenseValidateResponse).isEqualTo(licenseValidateResponse)
     }
 }

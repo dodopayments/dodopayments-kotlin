@@ -2,14 +2,16 @@
 
 package com.dodopayments.api.models.webhookevents
 
+import com.dodopayments.api.core.jsonMapper
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class WebhookEventTest {
+internal class WebhookEventTest {
 
     @Test
-    fun createWebhookEvent() {
+    fun create() {
         val webhookEvent =
             WebhookEvent.builder()
                 .businessId("business_id")
@@ -21,7 +23,7 @@ class WebhookEventTest {
                 .request("request")
                 .response("response")
                 .build()
-        assertThat(webhookEvent).isNotNull
+
         assertThat(webhookEvent.businessId()).isEqualTo("business_id")
         assertThat(webhookEvent.createdAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -32,5 +34,29 @@ class WebhookEventTest {
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(webhookEvent.request()).isEqualTo("request")
         assertThat(webhookEvent.response()).isEqualTo("response")
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val webhookEvent =
+            WebhookEvent.builder()
+                .businessId("business_id")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .eventId("event_id")
+                .eventType("event_type")
+                .objectId("object_id")
+                .latestAttemptedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .request("request")
+                .response("response")
+                .build()
+
+        val roundtrippedWebhookEvent =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(webhookEvent),
+                jacksonTypeRef<WebhookEvent>(),
+            )
+
+        assertThat(roundtrippedWebhookEvent).isEqualTo(webhookEvent)
     }
 }

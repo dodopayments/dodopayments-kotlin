@@ -7,7 +7,7 @@ import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class PaymentListParamsTest {
+internal class PaymentListParamsTest {
 
     @Test
     fun create() {
@@ -34,21 +34,29 @@ class PaymentListParamsTest {
                 .status(IntentStatus.SUCCEEDED)
                 .subscriptionId("subscription_id")
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("created_at_gte", "2019-12-27T18:11:19.117Z")
-        expected.put("created_at_lte", "2019-12-27T18:11:19.117Z")
-        expected.put("customer_id", "customer_id")
-        expected.put("page_number", "0")
-        expected.put("page_size", "0")
-        expected.put("status", IntentStatus.SUCCEEDED.toString())
-        expected.put("subscription_id", "subscription_id")
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("created_at_gte", "2019-12-27T18:11:19.117Z")
+                    .put("created_at_lte", "2019-12-27T18:11:19.117Z")
+                    .put("customer_id", "customer_id")
+                    .put("page_number", "0")
+                    .put("page_size", "0")
+                    .put("status", "succeeded")
+                    .put("subscription_id", "subscription_id")
+                    .build()
+            )
     }
 
     @Test
     fun queryParamsWithoutOptionalFields() {
         val params = PaymentListParams.builder().build()
-        val expected = QueryParams.builder()
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
     }
 }

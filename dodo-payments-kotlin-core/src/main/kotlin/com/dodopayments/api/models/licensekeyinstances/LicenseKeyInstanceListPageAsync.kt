@@ -2,149 +2,111 @@
 
 package com.dodopayments.api.models.licensekeyinstances
 
-import com.dodopayments.api.core.ExcludeMissing
-import com.dodopayments.api.core.JsonField
-import com.dodopayments.api.core.JsonMissing
-import com.dodopayments.api.core.JsonValue
-import com.dodopayments.api.core.NoAutoDetect
-import com.dodopayments.api.core.immutableEmptyMap
-import com.dodopayments.api.core.toImmutable
+import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.async.LicenseKeyInstanceServiceAsync
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Objects
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 
+/** @see [LicenseKeyInstanceServiceAsync.list] */
 class LicenseKeyInstanceListPageAsync
 private constructor(
-    private val licenseKeyInstancesService: LicenseKeyInstanceServiceAsync,
+    private val service: LicenseKeyInstanceServiceAsync,
     private val params: LicenseKeyInstanceListParams,
-    private val response: Response,
+    private val response: LicenseKeyInstanceListPageResponse,
 ) {
 
-    fun response(): Response = response
+    /**
+     * Delegates to [LicenseKeyInstanceListPageResponse], but gracefully handles missing data.
+     *
+     * @see [LicenseKeyInstanceListPageResponse.items]
+     */
+    fun items(): List<LicenseKeyInstance> = response._items().getNullable("items") ?: emptyList()
 
-    fun items(): List<LicenseKeyInstance> = response().items()
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is LicenseKeyInstanceListPageAsync && licenseKeyInstancesService == other.licenseKeyInstancesService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(licenseKeyInstancesService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "LicenseKeyInstanceListPageAsync{licenseKeyInstancesService=$licenseKeyInstancesService, params=$params, response=$response}"
-
-    fun hasNextPage(): Boolean {
-        return !items().isEmpty()
-    }
+    fun hasNextPage(): Boolean = items().isNotEmpty()
 
     fun getNextPageParams(): LicenseKeyInstanceListParams? {
         if (!hasNextPage()) {
             return null
         }
 
-        return LicenseKeyInstanceListParams.builder()
-            .from(params)
-            .pageNumber((params.pageNumber() ?: 0) + 1)
-            .build()
+        val pageNumber = params.pageNumber() ?: 1
+        return params.toBuilder().pageNumber(pageNumber + 1).build()
     }
 
-    suspend fun getNextPage(): LicenseKeyInstanceListPageAsync? {
-        return getNextPageParams()?.let { licenseKeyInstancesService.list(it) }
-    }
+    suspend fun getNextPage(): LicenseKeyInstanceListPageAsync? =
+        getNextPageParams()?.let { service.list(it) }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): LicenseKeyInstanceListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): LicenseKeyInstanceListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        fun of(
-            licenseKeyInstancesService: LicenseKeyInstanceServiceAsync,
-            params: LicenseKeyInstanceListParams,
-            response: Response,
-        ) = LicenseKeyInstanceListPageAsync(licenseKeyInstancesService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [LicenseKeyInstanceListPageAsync].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        fun builder() = Builder()
     }
 
-    @NoAutoDetect
-    class Response
-    @JsonCreator
-    constructor(
-        @JsonProperty("items")
-        private val items: JsonField<List<LicenseKeyInstance>> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-    ) {
+    /** A builder for [LicenseKeyInstanceListPageAsync]. */
+    class Builder internal constructor() {
 
-        fun items(): List<LicenseKeyInstance> = items.getNullable("items") ?: listOf()
+        private var service: LicenseKeyInstanceServiceAsync? = null
+        private var params: LicenseKeyInstanceListParams? = null
+        private var response: LicenseKeyInstanceListPageResponse? = null
 
-        @JsonProperty("items") fun _items(): JsonField<List<LicenseKeyInstance>>? = items
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Response = apply {
-            if (validated) {
-                return@apply
+        internal fun from(licenseKeyInstanceListPageAsync: LicenseKeyInstanceListPageAsync) =
+            apply {
+                service = licenseKeyInstanceListPageAsync.service
+                params = licenseKeyInstanceListPageAsync.params
+                response = licenseKeyInstanceListPageAsync.response
             }
 
-            items().map { it.validate() }
-            validated = true
+        fun service(service: LicenseKeyInstanceServiceAsync) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: LicenseKeyInstanceListParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: LicenseKeyInstanceListPageResponse) = apply {
+            this.response = response
         }
 
-        fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Response && items == other.items && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(items, additionalProperties) /* spotless:on */
-
-        override fun toString() =
-            "Response{items=$items, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of
-             * [LicenseKeyInstanceListPageAsync].
-             */
-            fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var items: JsonField<List<LicenseKeyInstance>> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(page: Response) = apply {
-                this.items = page.items
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
-
-            fun items(items: List<LicenseKeyInstance>) = items(JsonField.of(items))
-
-            fun items(items: JsonField<List<LicenseKeyInstance>>) = apply { this.items = items }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            fun build() = Response(items, additionalProperties.toImmutable())
-        }
+        /**
+         * Returns an immutable instance of [LicenseKeyInstanceListPageAsync].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): LicenseKeyInstanceListPageAsync =
+            LicenseKeyInstanceListPageAsync(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: LicenseKeyInstanceListPageAsync) :
@@ -162,4 +124,17 @@ private constructor(
             }
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is LicenseKeyInstanceListPageAsync && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() =
+        "LicenseKeyInstanceListPageAsync{service=$service, params=$params, response=$response}"
 }

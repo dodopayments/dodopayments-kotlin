@@ -2,11 +2,10 @@
 
 package com.dodopayments.api.models.licenses
 
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class LicenseValidateParamsTest {
+internal class LicenseValidateParamsTest {
 
     @Test
     fun create() {
@@ -26,7 +25,6 @@ class LicenseValidateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.licenseKey()).isEqualTo("2b1f8e2d-c41e-4e8f-b2d3-d9fd61c38f43")
         assertThat(body.licenseKeyInstanceId()).isEqualTo("lki_123")
     }
@@ -40,7 +38,6 @@ class LicenseValidateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.licenseKey()).isEqualTo("2b1f8e2d-c41e-4e8f-b2d3-d9fd61c38f43")
     }
 }

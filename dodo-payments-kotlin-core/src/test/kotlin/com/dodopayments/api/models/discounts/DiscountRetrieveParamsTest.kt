@@ -5,7 +5,7 @@ package com.dodopayments.api.models.discounts
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class DiscountRetrieveParamsTest {
+internal class DiscountRetrieveParamsTest {
 
     @Test
     fun create() {
@@ -13,12 +13,11 @@ class DiscountRetrieveParamsTest {
     }
 
     @Test
-    fun getPathParam() {
+    fun pathParams() {
         val params = DiscountRetrieveParams.builder().discountId("discount_id").build()
-        assertThat(params).isNotNull
-        // path param "discountId"
-        assertThat(params.getPathParam(0)).isEqualTo("discount_id")
+
+        assertThat(params._pathParam(0)).isEqualTo("discount_id")
         // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        assertThat(params._pathParam(1)).isEqualTo("")
     }
 }

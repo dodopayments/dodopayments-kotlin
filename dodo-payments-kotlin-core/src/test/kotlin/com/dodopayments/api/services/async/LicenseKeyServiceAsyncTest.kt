@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class LicenseKeyServiceAsyncTest {
+internal class LicenseKeyServiceAsyncTest {
 
     @Test
     suspend fun retrieve() {
