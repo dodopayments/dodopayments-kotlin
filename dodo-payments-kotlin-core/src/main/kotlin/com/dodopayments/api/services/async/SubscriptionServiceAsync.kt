@@ -3,8 +3,10 @@
 package com.dodopayments.api.services.async
 
 import com.dodopayments.api.core.RequestOptions
+import com.dodopayments.api.core.http.HttpResponse
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.models.subscriptions.Subscription
+import com.dodopayments.api.models.subscriptions.SubscriptionChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
@@ -45,6 +47,11 @@ interface SubscriptionServiceAsync {
     /** @see [list] */
     suspend fun list(requestOptions: RequestOptions): SubscriptionListPageAsync =
         list(SubscriptionListParams.none(), requestOptions)
+
+    suspend fun changePlan(
+        params: SubscriptionChangePlanParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    )
 
     suspend fun charge(
         params: SubscriptionChargeParams,
@@ -103,6 +110,16 @@ interface SubscriptionServiceAsync {
             requestOptions: RequestOptions
         ): HttpResponseFor<SubscriptionListPageAsync> =
             list(SubscriptionListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /subscriptions/{subscription_id}/change-plan`, but
+         * is otherwise the same as [SubscriptionServiceAsync.changePlan].
+         */
+        @MustBeClosed
+        suspend fun changePlan(
+            params: SubscriptionChangePlanParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
 
         /**
          * Returns a raw HTTP response for `post /subscriptions/{subscription_id}/charge`, but is
