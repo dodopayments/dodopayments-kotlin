@@ -31,6 +31,7 @@ private constructor(
     private val nextBillingDate: JsonField<OffsetDateTime>,
     private val paymentFrequencyCount: JsonField<Long>,
     private val paymentFrequencyInterval: JsonField<TimeInterval>,
+    private val previousBillingDate: JsonField<OffsetDateTime>,
     private val productId: JsonField<String>,
     private val quantity: JsonField<Long>,
     private val recurringPreTaxAmount: JsonField<Long>,
@@ -67,6 +68,9 @@ private constructor(
         @JsonProperty("payment_frequency_interval")
         @ExcludeMissing
         paymentFrequencyInterval: JsonField<TimeInterval> = JsonMissing.of(),
+        @JsonProperty("previous_billing_date")
+        @ExcludeMissing
+        previousBillingDate: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("product_id") @ExcludeMissing productId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("quantity") @ExcludeMissing quantity: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("recurring_pre_tax_amount")
@@ -105,6 +109,7 @@ private constructor(
         nextBillingDate,
         paymentFrequencyCount,
         paymentFrequencyInterval,
+        previousBillingDate,
         productId,
         quantity,
         recurringPreTaxAmount,
@@ -152,7 +157,7 @@ private constructor(
     fun metadata(): Metadata = metadata.getRequired("metadata")
 
     /**
-     * Timestamp of the next scheduled billing
+     * Timestamp of the next scheduled billing. Indicates the end of current billing period
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -173,6 +178,15 @@ private constructor(
      */
     fun paymentFrequencyInterval(): TimeInterval =
         paymentFrequencyInterval.getRequired("payment_frequency_interval")
+
+    /**
+     * Timestamp of the last payment. Indicates the start of current billing period
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun previousBillingDate(): OffsetDateTime =
+        previousBillingDate.getRequired("previous_billing_date")
 
     /**
      * Identifier of the product associated with this subscription
@@ -330,6 +344,16 @@ private constructor(
     fun _paymentFrequencyInterval(): JsonField<TimeInterval> = paymentFrequencyInterval
 
     /**
+     * Returns the raw JSON value of [previousBillingDate].
+     *
+     * Unlike [previousBillingDate], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("previous_billing_date")
+    @ExcludeMissing
+    fun _previousBillingDate(): JsonField<OffsetDateTime> = previousBillingDate
+
+    /**
      * Returns the raw JSON value of [productId].
      *
      * Unlike [productId], this method doesn't throw if the JSON field has an unexpected type.
@@ -450,6 +474,7 @@ private constructor(
          * .nextBillingDate()
          * .paymentFrequencyCount()
          * .paymentFrequencyInterval()
+         * .previousBillingDate()
          * .productId()
          * .quantity()
          * .recurringPreTaxAmount()
@@ -475,6 +500,7 @@ private constructor(
         private var nextBillingDate: JsonField<OffsetDateTime>? = null
         private var paymentFrequencyCount: JsonField<Long>? = null
         private var paymentFrequencyInterval: JsonField<TimeInterval>? = null
+        private var previousBillingDate: JsonField<OffsetDateTime>? = null
         private var productId: JsonField<String>? = null
         private var quantity: JsonField<Long>? = null
         private var recurringPreTaxAmount: JsonField<Long>? = null
@@ -497,6 +523,7 @@ private constructor(
             nextBillingDate = subscription.nextBillingDate
             paymentFrequencyCount = subscription.paymentFrequencyCount
             paymentFrequencyInterval = subscription.paymentFrequencyInterval
+            previousBillingDate = subscription.previousBillingDate
             productId = subscription.productId
             quantity = subscription.quantity
             recurringPreTaxAmount = subscription.recurringPreTaxAmount
@@ -569,7 +596,7 @@ private constructor(
          */
         fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
-        /** Timestamp of the next scheduled billing */
+        /** Timestamp of the next scheduled billing. Indicates the end of current billing period */
         fun nextBillingDate(nextBillingDate: OffsetDateTime) =
             nextBillingDate(JsonField.of(nextBillingDate))
 
@@ -611,6 +638,21 @@ private constructor(
          */
         fun paymentFrequencyInterval(paymentFrequencyInterval: JsonField<TimeInterval>) = apply {
             this.paymentFrequencyInterval = paymentFrequencyInterval
+        }
+
+        /** Timestamp of the last payment. Indicates the start of current billing period */
+        fun previousBillingDate(previousBillingDate: OffsetDateTime) =
+            previousBillingDate(JsonField.of(previousBillingDate))
+
+        /**
+         * Sets [Builder.previousBillingDate] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.previousBillingDate] with a well-typed [OffsetDateTime]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
+        fun previousBillingDate(previousBillingDate: JsonField<OffsetDateTime>) = apply {
+            this.previousBillingDate = previousBillingDate
         }
 
         /** Identifier of the product associated with this subscription */
@@ -798,6 +840,7 @@ private constructor(
          * .nextBillingDate()
          * .paymentFrequencyCount()
          * .paymentFrequencyInterval()
+         * .previousBillingDate()
          * .productId()
          * .quantity()
          * .recurringPreTaxAmount()
@@ -821,6 +864,7 @@ private constructor(
                 checkRequired("nextBillingDate", nextBillingDate),
                 checkRequired("paymentFrequencyCount", paymentFrequencyCount),
                 checkRequired("paymentFrequencyInterval", paymentFrequencyInterval),
+                checkRequired("previousBillingDate", previousBillingDate),
                 checkRequired("productId", productId),
                 checkRequired("quantity", quantity),
                 checkRequired("recurringPreTaxAmount", recurringPreTaxAmount),
@@ -851,6 +895,7 @@ private constructor(
         nextBillingDate()
         paymentFrequencyCount()
         paymentFrequencyInterval().validate()
+        previousBillingDate()
         productId()
         quantity()
         recurringPreTaxAmount()
@@ -887,6 +932,7 @@ private constructor(
             (if (nextBillingDate.asKnown() == null) 0 else 1) +
             (if (paymentFrequencyCount.asKnown() == null) 0 else 1) +
             (paymentFrequencyInterval.asKnown()?.validity() ?: 0) +
+            (if (previousBillingDate.asKnown() == null) 0 else 1) +
             (if (productId.asKnown() == null) 0 else 1) +
             (if (quantity.asKnown() == null) 0 else 1) +
             (if (recurringPreTaxAmount.asKnown() == null) 0 else 1) +
@@ -1986,15 +2032,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Subscription && billing == other.billing && createdAt == other.createdAt && currency == other.currency && customer == other.customer && metadata == other.metadata && nextBillingDate == other.nextBillingDate && paymentFrequencyCount == other.paymentFrequencyCount && paymentFrequencyInterval == other.paymentFrequencyInterval && productId == other.productId && quantity == other.quantity && recurringPreTaxAmount == other.recurringPreTaxAmount && status == other.status && subscriptionId == other.subscriptionId && subscriptionPeriodCount == other.subscriptionPeriodCount && subscriptionPeriodInterval == other.subscriptionPeriodInterval && taxInclusive == other.taxInclusive && trialPeriodDays == other.trialPeriodDays && cancelledAt == other.cancelledAt && discountId == other.discountId && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Subscription && billing == other.billing && createdAt == other.createdAt && currency == other.currency && customer == other.customer && metadata == other.metadata && nextBillingDate == other.nextBillingDate && paymentFrequencyCount == other.paymentFrequencyCount && paymentFrequencyInterval == other.paymentFrequencyInterval && previousBillingDate == other.previousBillingDate && productId == other.productId && quantity == other.quantity && recurringPreTaxAmount == other.recurringPreTaxAmount && status == other.status && subscriptionId == other.subscriptionId && subscriptionPeriodCount == other.subscriptionPeriodCount && subscriptionPeriodInterval == other.subscriptionPeriodInterval && taxInclusive == other.taxInclusive && trialPeriodDays == other.trialPeriodDays && cancelledAt == other.cancelledAt && discountId == other.discountId && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(billing, createdAt, currency, customer, metadata, nextBillingDate, paymentFrequencyCount, paymentFrequencyInterval, productId, quantity, recurringPreTaxAmount, status, subscriptionId, subscriptionPeriodCount, subscriptionPeriodInterval, taxInclusive, trialPeriodDays, cancelledAt, discountId, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(billing, createdAt, currency, customer, metadata, nextBillingDate, paymentFrequencyCount, paymentFrequencyInterval, previousBillingDate, productId, quantity, recurringPreTaxAmount, status, subscriptionId, subscriptionPeriodCount, subscriptionPeriodInterval, taxInclusive, trialPeriodDays, cancelledAt, discountId, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Subscription{billing=$billing, createdAt=$createdAt, currency=$currency, customer=$customer, metadata=$metadata, nextBillingDate=$nextBillingDate, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancelledAt=$cancelledAt, discountId=$discountId, additionalProperties=$additionalProperties}"
+        "Subscription{billing=$billing, createdAt=$createdAt, currency=$currency, customer=$customer, metadata=$metadata, nextBillingDate=$nextBillingDate, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancelledAt=$cancelledAt, discountId=$discountId, additionalProperties=$additionalProperties}"
 }
