@@ -5,17 +5,20 @@ package com.dodopayments.api.services.async
 import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.RequestOptions
+import com.dodopayments.api.core.handlers.emptyHandler
 import com.dodopayments.api.core.handlers.errorHandler
 import com.dodopayments.api.core.handlers.jsonHandler
 import com.dodopayments.api.core.handlers.withErrorHandler
 import com.dodopayments.api.core.http.HttpMethod
 import com.dodopayments.api.core.http.HttpRequest
+import com.dodopayments.api.core.http.HttpResponse
 import com.dodopayments.api.core.http.HttpResponse.Handler
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepareAsync
 import com.dodopayments.api.models.subscriptions.Subscription
+import com.dodopayments.api.models.subscriptions.SubscriptionChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
@@ -62,6 +65,14 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
     ): SubscriptionListPageAsync =
         // get /subscriptions
         withRawResponse().list(params, requestOptions).parse()
+
+    override suspend fun changePlan(
+        params: SubscriptionChangePlanParams,
+        requestOptions: RequestOptions,
+    ) {
+        // post /subscriptions/{subscription_id}/change-plan
+        withRawResponse().changePlan(params, requestOptions)
+    }
 
     override suspend fun charge(
         params: SubscriptionChargeParams,
@@ -188,6 +199,25 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                             .build()
                     }
             }
+        }
+
+        private val changePlanHandler: Handler<Void?> =
+            emptyHandler().withErrorHandler(errorHandler)
+
+        override suspend fun changePlan(
+            params: SubscriptionChangePlanParams,
+            requestOptions: RequestOptions,
+        ): HttpResponse {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("subscriptions", params._pathParam(0), "change-plan")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return response.parseable { response.use { changePlanHandler.handle(it) } }
         }
 
         private val chargeHandler: Handler<SubscriptionChargeResponse> =

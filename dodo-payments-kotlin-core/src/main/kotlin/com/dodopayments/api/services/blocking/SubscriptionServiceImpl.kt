@@ -5,17 +5,20 @@ package com.dodopayments.api.services.blocking
 import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.RequestOptions
+import com.dodopayments.api.core.handlers.emptyHandler
 import com.dodopayments.api.core.handlers.errorHandler
 import com.dodopayments.api.core.handlers.jsonHandler
 import com.dodopayments.api.core.handlers.withErrorHandler
 import com.dodopayments.api.core.http.HttpMethod
 import com.dodopayments.api.core.http.HttpRequest
+import com.dodopayments.api.core.http.HttpResponse
 import com.dodopayments.api.core.http.HttpResponse.Handler
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepare
 import com.dodopayments.api.models.subscriptions.Subscription
+import com.dodopayments.api.models.subscriptions.SubscriptionChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
@@ -62,6 +65,11 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
     ): SubscriptionListPage =
         // get /subscriptions
         withRawResponse().list(params, requestOptions).parse()
+
+    override fun changePlan(params: SubscriptionChangePlanParams, requestOptions: RequestOptions) {
+        // post /subscriptions/{subscription_id}/change-plan
+        withRawResponse().changePlan(params, requestOptions)
+    }
 
     override fun charge(
         params: SubscriptionChargeParams,
@@ -188,6 +196,25 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                             .build()
                     }
             }
+        }
+
+        private val changePlanHandler: Handler<Void?> =
+            emptyHandler().withErrorHandler(errorHandler)
+
+        override fun changePlan(
+            params: SubscriptionChangePlanParams,
+            requestOptions: RequestOptions,
+        ): HttpResponse {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("subscriptions", params._pathParam(0), "change-plan")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable { response.use { changePlanHandler.handle(it) } }
         }
 
         private val chargeHandler: Handler<SubscriptionChargeResponse> =
