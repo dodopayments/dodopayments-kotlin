@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.18.0 (2025-04-23)
+
+Full Changelog: [v1.17.0...v1.18.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.17.0...v1.18.0)
+
+### Features
+
+* **api:** added change plan api ([8f5e0f4](https://github.com/dodopayments/dodopayments-kotlin/commit/8f5e0f44fac12f492c69a99e0f7cf52b29b986df))
+* **api:** manual updates ([8c6a744](https://github.com/dodopayments/dodopayments-kotlin/commit/8c6a7441400a69a77539e1bb8c6fd44339e1d9c0))
+
+
+### Chores
+
+* **ci:** add timeout thresholds for CI jobs ([77fceb7](https://github.com/dodopayments/dodopayments-kotlin/commit/77fceb7b264e760587e1fdcc55e1cef7873008ba))
+
 ## 1.17.0 (2025-04-22)
 
 Full Changelog: [v1.16.1...v1.17.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.16.1...v1.17.0)
