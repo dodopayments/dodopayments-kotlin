@@ -8,6 +8,7 @@ import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
+import com.dodopayments.api.models.subscriptions.SubscriptionChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeParams
 import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveParams
@@ -134,6 +135,27 @@ internal class SubscriptionServiceAsyncTest {
         val page = subscriptionServiceAsync.list()
 
         page.response().validate()
+    }
+
+    @Test
+    suspend fun changePlan() {
+        val client =
+            DodoPaymentsOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val subscriptionServiceAsync = client.subscriptions()
+
+        subscriptionServiceAsync.changePlan(
+            SubscriptionChangePlanParams.builder()
+                .subscriptionId("subscription_id")
+                .productId("product_id")
+                .prorationBillingMode(
+                    SubscriptionChangePlanParams.ProrationBillingMode.PRORATED_IMMEDIATELY
+                )
+                .quantity(0L)
+                .build()
+        )
     }
 
     @Test
