@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.18.1 (2025-04-24)
+
+Full Changelog: [v1.18.0...v1.18.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.18.0...v1.18.1)
+
+### Chores
+
+* **ci:** only use depot for staging repos ([a5192c9](https://github.com/dodopayments/dodopayments-kotlin/commit/a5192c9caa661a525119660c6dddaca3ce5cf946))
+* **internal:** codegen related update ([7b74fdf](https://github.com/dodopayments/dodopayments-kotlin/commit/7b74fdfb46225a39df70cc806219c2f233f950b5))
+* **internal:** java 17 -&gt; 21 on ci ([a32c7ae](https://github.com/dodopayments/dodopayments-kotlin/commit/a32c7aedd1947f2cf82de67b4efe5718f779ab15))
+
 ## 1.18.0 (2025-04-23)
 
 Full Changelog: [v1.17.0...v1.18.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.17.0...v1.18.0)
