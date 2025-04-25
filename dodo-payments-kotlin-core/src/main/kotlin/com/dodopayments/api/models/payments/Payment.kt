@@ -40,6 +40,7 @@ private constructor(
     private val paymentMethod: JsonField<String>,
     private val paymentMethodType: JsonField<String>,
     private val productCart: JsonField<List<ProductCart>>,
+    private val settlementTax: JsonField<Long>,
     private val status: JsonField<IntentStatus>,
     private val subscriptionId: JsonField<String>,
     private val tax: JsonField<Long>,
@@ -94,6 +95,9 @@ private constructor(
         @JsonProperty("product_cart")
         @ExcludeMissing
         productCart: JsonField<List<ProductCart>> = JsonMissing.of(),
+        @JsonProperty("settlement_tax")
+        @ExcludeMissing
+        settlementTax: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("status") @ExcludeMissing status: JsonField<IntentStatus> = JsonMissing.of(),
         @JsonProperty("subscription_id")
         @ExcludeMissing
@@ -120,6 +124,7 @@ private constructor(
         paymentMethod,
         paymentMethodType,
         productCart,
+        settlementTax,
         status,
         subscriptionId,
         tax,
@@ -257,6 +262,16 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun productCart(): List<ProductCart>? = productCart.getNullable("product_cart")
+
+    /**
+     * This represents the portion of settlement_amount that corresponds to taxes collected.
+     * Especially relevant for adaptive pricing where the tax component must be tracked separately
+     * in your Dodo balance.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun settlementTax(): Long? = settlementTax.getNullable("settlement_tax")
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -429,6 +444,15 @@ private constructor(
     fun _productCart(): JsonField<List<ProductCart>> = productCart
 
     /**
+     * Returns the raw JSON value of [settlementTax].
+     *
+     * Unlike [settlementTax], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("settlement_tax")
+    @ExcludeMissing
+    fun _settlementTax(): JsonField<Long> = settlementTax
+
+    /**
      * Returns the raw JSON value of [status].
      *
      * Unlike [status], this method doesn't throw if the JSON field has an unexpected type.
@@ -515,6 +539,7 @@ private constructor(
         private var paymentMethod: JsonField<String> = JsonMissing.of()
         private var paymentMethodType: JsonField<String> = JsonMissing.of()
         private var productCart: JsonField<MutableList<ProductCart>>? = null
+        private var settlementTax: JsonField<Long> = JsonMissing.of()
         private var status: JsonField<IntentStatus> = JsonMissing.of()
         private var subscriptionId: JsonField<String> = JsonMissing.of()
         private var tax: JsonField<Long> = JsonMissing.of()
@@ -539,6 +564,7 @@ private constructor(
             paymentMethod = payment.paymentMethod
             paymentMethodType = payment.paymentMethodType
             productCart = payment.productCart.map { it.toMutableList() }
+            settlementTax = payment.settlementTax
             status = payment.status
             subscriptionId = payment.subscriptionId
             tax = payment.tax
@@ -812,6 +838,31 @@ private constructor(
                 }
         }
 
+        /**
+         * This represents the portion of settlement_amount that corresponds to taxes collected.
+         * Especially relevant for adaptive pricing where the tax component must be tracked
+         * separately in your Dodo balance.
+         */
+        fun settlementTax(settlementTax: Long?) = settlementTax(JsonField.ofNullable(settlementTax))
+
+        /**
+         * Alias for [Builder.settlementTax].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun settlementTax(settlementTax: Long) = settlementTax(settlementTax as Long?)
+
+        /**
+         * Sets [Builder.settlementTax] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.settlementTax] with a well-typed [Long] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun settlementTax(settlementTax: JsonField<Long>) = apply {
+            this.settlementTax = settlementTax
+        }
+
         fun status(status: IntentStatus?) = status(JsonField.ofNullable(status))
 
         /**
@@ -928,6 +979,7 @@ private constructor(
                 paymentMethod,
                 paymentMethodType,
                 (productCart ?: JsonMissing.of()).map { it.toImmutable() },
+                settlementTax,
                 status,
                 subscriptionId,
                 tax,
@@ -960,6 +1012,7 @@ private constructor(
         paymentMethod()
         paymentMethodType()
         productCart()?.forEach { it.validate() }
+        settlementTax()
         status()?.validate()
         subscriptionId()
         tax()
@@ -998,6 +1051,7 @@ private constructor(
             (if (paymentMethod.asKnown() == null) 0 else 1) +
             (if (paymentMethodType.asKnown() == null) 0 else 1) +
             (productCart.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (settlementTax.asKnown() == null) 0 else 1) +
             (status.asKnown()?.validity() ?: 0) +
             (if (subscriptionId.asKnown() == null) 0 else 1) +
             (if (tax.asKnown() == null) 0 else 1) +
@@ -3267,15 +3321,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Payment && businessId == other.businessId && createdAt == other.createdAt && currency == other.currency && customer == other.customer && disputes == other.disputes && metadata == other.metadata && paymentId == other.paymentId && refunds == other.refunds && settlementAmount == other.settlementAmount && settlementCurrency == other.settlementCurrency && totalAmount == other.totalAmount && discountId == other.discountId && errorMessage == other.errorMessage && paymentLink == other.paymentLink && paymentMethod == other.paymentMethod && paymentMethodType == other.paymentMethodType && productCart == other.productCart && status == other.status && subscriptionId == other.subscriptionId && tax == other.tax && updatedAt == other.updatedAt && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Payment && businessId == other.businessId && createdAt == other.createdAt && currency == other.currency && customer == other.customer && disputes == other.disputes && metadata == other.metadata && paymentId == other.paymentId && refunds == other.refunds && settlementAmount == other.settlementAmount && settlementCurrency == other.settlementCurrency && totalAmount == other.totalAmount && discountId == other.discountId && errorMessage == other.errorMessage && paymentLink == other.paymentLink && paymentMethod == other.paymentMethod && paymentMethodType == other.paymentMethodType && productCart == other.productCart && settlementTax == other.settlementTax && status == other.status && subscriptionId == other.subscriptionId && tax == other.tax && updatedAt == other.updatedAt && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(businessId, createdAt, currency, customer, disputes, metadata, paymentId, refunds, settlementAmount, settlementCurrency, totalAmount, discountId, errorMessage, paymentLink, paymentMethod, paymentMethodType, productCart, status, subscriptionId, tax, updatedAt, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(businessId, createdAt, currency, customer, disputes, metadata, paymentId, refunds, settlementAmount, settlementCurrency, totalAmount, discountId, errorMessage, paymentLink, paymentMethod, paymentMethodType, productCart, settlementTax, status, subscriptionId, tax, updatedAt, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Payment{businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, disputes=$disputes, metadata=$metadata, paymentId=$paymentId, refunds=$refunds, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, totalAmount=$totalAmount, discountId=$discountId, errorMessage=$errorMessage, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, productCart=$productCart, status=$status, subscriptionId=$subscriptionId, tax=$tax, updatedAt=$updatedAt, additionalProperties=$additionalProperties}"
+        "Payment{businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, disputes=$disputes, metadata=$metadata, paymentId=$paymentId, refunds=$refunds, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, totalAmount=$totalAmount, discountId=$discountId, errorMessage=$errorMessage, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, productCart=$productCart, settlementTax=$settlementTax, status=$status, subscriptionId=$subscriptionId, tax=$tax, updatedAt=$updatedAt, additionalProperties=$additionalProperties}"
 }
