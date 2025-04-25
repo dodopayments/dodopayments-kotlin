@@ -71,6 +71,7 @@ internal class PaymentTest {
                 .addProductCart(
                     Payment.ProductCart.builder().productId("product_id").quantity(0L).build()
                 )
+                .settlementTax(0L)
                 .status(IntentStatus.SUCCEEDED)
                 .subscriptionId("subscription_id")
                 .tax(0L)
@@ -133,6 +134,7 @@ internal class PaymentTest {
             .containsExactly(
                 Payment.ProductCart.builder().productId("product_id").quantity(0L).build()
             )
+        assertThat(payment.settlementTax()).isEqualTo(0L)
         assertThat(payment.status()).isEqualTo(IntentStatus.SUCCEEDED)
         assertThat(payment.subscriptionId()).isEqualTo("subscription_id")
         assertThat(payment.tax()).isEqualTo(0L)
@@ -195,6 +197,7 @@ internal class PaymentTest {
                 .addProductCart(
                     Payment.ProductCart.builder().productId("product_id").quantity(0L).build()
                 )
+                .settlementTax(0L)
                 .status(IntentStatus.SUCCEEDED)
                 .subscriptionId("subscription_id")
                 .tax(0L)
