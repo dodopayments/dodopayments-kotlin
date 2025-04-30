@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
@@ -35,6 +36,12 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun billing(): BillingAddress? = body.billing()
+
+    /**
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun disableOnDemand(): DisableOnDemand? = body.disableOnDemand()
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -60,6 +67,13 @@ private constructor(
      * Unlike [billing], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _billing(): JsonField<BillingAddress> = body._billing()
+
+    /**
+     * Returns the raw JSON value of [disableOnDemand].
+     *
+     * Unlike [disableOnDemand], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _disableOnDemand(): JsonField<DisableOnDemand> = body._disableOnDemand()
 
     /**
      * Returns the raw JSON value of [metadata].
@@ -126,9 +140,11 @@ private constructor(
          * This is generally only useful if you are already constructing the body separately.
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [billing]
+         * - [disableOnDemand]
          * - [metadata]
          * - [status]
          * - [taxId]
+         * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
@@ -142,6 +158,21 @@ private constructor(
          * supported value.
          */
         fun billing(billing: JsonField<BillingAddress>) = apply { body.billing(billing) }
+
+        fun disableOnDemand(disableOnDemand: DisableOnDemand?) = apply {
+            body.disableOnDemand(disableOnDemand)
+        }
+
+        /**
+         * Sets [Builder.disableOnDemand] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.disableOnDemand] with a well-typed [DisableOnDemand]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
+        fun disableOnDemand(disableOnDemand: JsonField<DisableOnDemand>) = apply {
+            body.disableOnDemand(disableOnDemand)
+        }
 
         fun metadata(metadata: Metadata?) = apply { body.metadata(metadata) }
 
@@ -328,6 +359,7 @@ private constructor(
     class Body
     private constructor(
         private val billing: JsonField<BillingAddress>,
+        private val disableOnDemand: JsonField<DisableOnDemand>,
         private val metadata: JsonField<Metadata>,
         private val status: JsonField<SubscriptionStatus>,
         private val taxId: JsonField<String>,
@@ -339,6 +371,9 @@ private constructor(
             @JsonProperty("billing")
             @ExcludeMissing
             billing: JsonField<BillingAddress> = JsonMissing.of(),
+            @JsonProperty("disable_on_demand")
+            @ExcludeMissing
+            disableOnDemand: JsonField<DisableOnDemand> = JsonMissing.of(),
             @JsonProperty("metadata")
             @ExcludeMissing
             metadata: JsonField<Metadata> = JsonMissing.of(),
@@ -346,13 +381,19 @@ private constructor(
             @ExcludeMissing
             status: JsonField<SubscriptionStatus> = JsonMissing.of(),
             @JsonProperty("tax_id") @ExcludeMissing taxId: JsonField<String> = JsonMissing.of(),
-        ) : this(billing, metadata, status, taxId, mutableMapOf())
+        ) : this(billing, disableOnDemand, metadata, status, taxId, mutableMapOf())
 
         /**
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
         fun billing(): BillingAddress? = billing.getNullable("billing")
+
+        /**
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun disableOnDemand(): DisableOnDemand? = disableOnDemand.getNullable("disable_on_demand")
 
         /**
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
@@ -378,6 +419,16 @@ private constructor(
          * Unlike [billing], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("billing") @ExcludeMissing fun _billing(): JsonField<BillingAddress> = billing
+
+        /**
+         * Returns the raw JSON value of [disableOnDemand].
+         *
+         * Unlike [disableOnDemand], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("disable_on_demand")
+        @ExcludeMissing
+        fun _disableOnDemand(): JsonField<DisableOnDemand> = disableOnDemand
 
         /**
          * Returns the raw JSON value of [metadata].
@@ -424,6 +475,7 @@ private constructor(
         class Builder internal constructor() {
 
             private var billing: JsonField<BillingAddress> = JsonMissing.of()
+            private var disableOnDemand: JsonField<DisableOnDemand> = JsonMissing.of()
             private var metadata: JsonField<Metadata> = JsonMissing.of()
             private var status: JsonField<SubscriptionStatus> = JsonMissing.of()
             private var taxId: JsonField<String> = JsonMissing.of()
@@ -431,6 +483,7 @@ private constructor(
 
             internal fun from(body: Body) = apply {
                 billing = body.billing
+                disableOnDemand = body.disableOnDemand
                 metadata = body.metadata
                 status = body.status
                 taxId = body.taxId
@@ -447,6 +500,20 @@ private constructor(
              * supported value.
              */
             fun billing(billing: JsonField<BillingAddress>) = apply { this.billing = billing }
+
+            fun disableOnDemand(disableOnDemand: DisableOnDemand?) =
+                disableOnDemand(JsonField.ofNullable(disableOnDemand))
+
+            /**
+             * Sets [Builder.disableOnDemand] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.disableOnDemand] with a well-typed [DisableOnDemand]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun disableOnDemand(disableOnDemand: JsonField<DisableOnDemand>) = apply {
+                this.disableOnDemand = disableOnDemand
+            }
 
             fun metadata(metadata: Metadata?) = metadata(JsonField.ofNullable(metadata))
 
@@ -506,7 +573,14 @@ private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              */
             fun build(): Body =
-                Body(billing, metadata, status, taxId, additionalProperties.toMutableMap())
+                Body(
+                    billing,
+                    disableOnDemand,
+                    metadata,
+                    status,
+                    taxId,
+                    additionalProperties.toMutableMap(),
+                )
         }
 
         private var validated: Boolean = false
@@ -517,6 +591,7 @@ private constructor(
             }
 
             billing()?.validate()
+            disableOnDemand()?.validate()
             metadata()?.validate()
             status()?.validate()
             taxId()
@@ -539,6 +614,7 @@ private constructor(
          */
         internal fun validity(): Int =
             (billing.asKnown()?.validity() ?: 0) +
+                (disableOnDemand.asKnown()?.validity() ?: 0) +
                 (metadata.asKnown()?.validity() ?: 0) +
                 (status.asKnown()?.validity() ?: 0) +
                 (if (taxId.asKnown() == null) 0 else 1)
@@ -548,17 +624,179 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && billing == other.billing && metadata == other.metadata && status == other.status && taxId == other.taxId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && billing == other.billing && disableOnDemand == other.disableOnDemand && metadata == other.metadata && status == other.status && taxId == other.taxId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(billing, metadata, status, taxId, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(billing, disableOnDemand, metadata, status, taxId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{billing=$billing, metadata=$metadata, status=$status, taxId=$taxId, additionalProperties=$additionalProperties}"
+            "Body{billing=$billing, disableOnDemand=$disableOnDemand, metadata=$metadata, status=$status, taxId=$taxId, additionalProperties=$additionalProperties}"
+    }
+
+    class DisableOnDemand
+    private constructor(
+        private val nextBillingDate: JsonField<OffsetDateTime>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("next_billing_date")
+            @ExcludeMissing
+            nextBillingDate: JsonField<OffsetDateTime> = JsonMissing.of()
+        ) : this(nextBillingDate, mutableMapOf())
+
+        /**
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun nextBillingDate(): OffsetDateTime = nextBillingDate.getRequired("next_billing_date")
+
+        /**
+         * Returns the raw JSON value of [nextBillingDate].
+         *
+         * Unlike [nextBillingDate], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("next_billing_date")
+        @ExcludeMissing
+        fun _nextBillingDate(): JsonField<OffsetDateTime> = nextBillingDate
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [DisableOnDemand].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .nextBillingDate()
+             * ```
+             */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [DisableOnDemand]. */
+        class Builder internal constructor() {
+
+            private var nextBillingDate: JsonField<OffsetDateTime>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(disableOnDemand: DisableOnDemand) = apply {
+                nextBillingDate = disableOnDemand.nextBillingDate
+                additionalProperties = disableOnDemand.additionalProperties.toMutableMap()
+            }
+
+            fun nextBillingDate(nextBillingDate: OffsetDateTime) =
+                nextBillingDate(JsonField.of(nextBillingDate))
+
+            /**
+             * Sets [Builder.nextBillingDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.nextBillingDate] with a well-typed [OffsetDateTime]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun nextBillingDate(nextBillingDate: JsonField<OffsetDateTime>) = apply {
+                this.nextBillingDate = nextBillingDate
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [DisableOnDemand].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .nextBillingDate()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): DisableOnDemand =
+                DisableOnDemand(
+                    checkRequired("nextBillingDate", nextBillingDate),
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): DisableOnDemand = apply {
+            if (validated) {
+                return@apply
+            }
+
+            nextBillingDate()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int = (if (nextBillingDate.asKnown() == null) 0 else 1)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is DisableOnDemand && nextBillingDate == other.nextBillingDate && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(nextBillingDate, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "DisableOnDemand{nextBillingDate=$nextBillingDate, additionalProperties=$additionalProperties}"
     }
 
     class Metadata

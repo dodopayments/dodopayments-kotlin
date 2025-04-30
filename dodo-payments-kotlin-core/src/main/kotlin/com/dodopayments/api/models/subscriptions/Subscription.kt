@@ -29,6 +29,7 @@ private constructor(
     private val customer: JsonField<CustomerLimitedDetails>,
     private val metadata: JsonField<Metadata>,
     private val nextBillingDate: JsonField<OffsetDateTime>,
+    private val onDemand: JsonField<Boolean>,
     private val paymentFrequencyCount: JsonField<Long>,
     private val paymentFrequencyInterval: JsonField<TimeInterval>,
     private val previousBillingDate: JsonField<OffsetDateTime>,
@@ -62,6 +63,7 @@ private constructor(
         @JsonProperty("next_billing_date")
         @ExcludeMissing
         nextBillingDate: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("on_demand") @ExcludeMissing onDemand: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("payment_frequency_count")
         @ExcludeMissing
         paymentFrequencyCount: JsonField<Long> = JsonMissing.of(),
@@ -107,6 +109,7 @@ private constructor(
         customer,
         metadata,
         nextBillingDate,
+        onDemand,
         paymentFrequencyCount,
         paymentFrequencyInterval,
         previousBillingDate,
@@ -163,6 +166,14 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun nextBillingDate(): OffsetDateTime = nextBillingDate.getRequired("next_billing_date")
+
+    /**
+     * Wether the subscription is on-demand or not
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun onDemand(): Boolean = onDemand.getRequired("on_demand")
 
     /**
      * Number of payment frequency intervals
@@ -324,6 +335,13 @@ private constructor(
     fun _nextBillingDate(): JsonField<OffsetDateTime> = nextBillingDate
 
     /**
+     * Returns the raw JSON value of [onDemand].
+     *
+     * Unlike [onDemand], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("on_demand") @ExcludeMissing fun _onDemand(): JsonField<Boolean> = onDemand
+
+    /**
      * Returns the raw JSON value of [paymentFrequencyCount].
      *
      * Unlike [paymentFrequencyCount], this method doesn't throw if the JSON field has an unexpected
@@ -472,6 +490,7 @@ private constructor(
          * .customer()
          * .metadata()
          * .nextBillingDate()
+         * .onDemand()
          * .paymentFrequencyCount()
          * .paymentFrequencyInterval()
          * .previousBillingDate()
@@ -498,6 +517,7 @@ private constructor(
         private var customer: JsonField<CustomerLimitedDetails>? = null
         private var metadata: JsonField<Metadata>? = null
         private var nextBillingDate: JsonField<OffsetDateTime>? = null
+        private var onDemand: JsonField<Boolean>? = null
         private var paymentFrequencyCount: JsonField<Long>? = null
         private var paymentFrequencyInterval: JsonField<TimeInterval>? = null
         private var previousBillingDate: JsonField<OffsetDateTime>? = null
@@ -521,6 +541,7 @@ private constructor(
             customer = subscription.customer
             metadata = subscription.metadata
             nextBillingDate = subscription.nextBillingDate
+            onDemand = subscription.onDemand
             paymentFrequencyCount = subscription.paymentFrequencyCount
             paymentFrequencyInterval = subscription.paymentFrequencyInterval
             previousBillingDate = subscription.previousBillingDate
@@ -610,6 +631,18 @@ private constructor(
         fun nextBillingDate(nextBillingDate: JsonField<OffsetDateTime>) = apply {
             this.nextBillingDate = nextBillingDate
         }
+
+        /** Wether the subscription is on-demand or not */
+        fun onDemand(onDemand: Boolean) = onDemand(JsonField.of(onDemand))
+
+        /**
+         * Sets [Builder.onDemand] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.onDemand] with a well-typed [Boolean] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun onDemand(onDemand: JsonField<Boolean>) = apply { this.onDemand = onDemand }
 
         /** Number of payment frequency intervals */
         fun paymentFrequencyCount(paymentFrequencyCount: Long) =
@@ -838,6 +871,7 @@ private constructor(
          * .customer()
          * .metadata()
          * .nextBillingDate()
+         * .onDemand()
          * .paymentFrequencyCount()
          * .paymentFrequencyInterval()
          * .previousBillingDate()
@@ -862,6 +896,7 @@ private constructor(
                 checkRequired("customer", customer),
                 checkRequired("metadata", metadata),
                 checkRequired("nextBillingDate", nextBillingDate),
+                checkRequired("onDemand", onDemand),
                 checkRequired("paymentFrequencyCount", paymentFrequencyCount),
                 checkRequired("paymentFrequencyInterval", paymentFrequencyInterval),
                 checkRequired("previousBillingDate", previousBillingDate),
@@ -893,6 +928,7 @@ private constructor(
         customer().validate()
         metadata().validate()
         nextBillingDate()
+        onDemand()
         paymentFrequencyCount()
         paymentFrequencyInterval().validate()
         previousBillingDate()
@@ -930,6 +966,7 @@ private constructor(
             (customer.asKnown()?.validity() ?: 0) +
             (metadata.asKnown()?.validity() ?: 0) +
             (if (nextBillingDate.asKnown() == null) 0 else 1) +
+            (if (onDemand.asKnown() == null) 0 else 1) +
             (if (paymentFrequencyCount.asKnown() == null) 0 else 1) +
             (paymentFrequencyInterval.asKnown()?.validity() ?: 0) +
             (if (previousBillingDate.asKnown() == null) 0 else 1) +
@@ -2032,15 +2069,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Subscription && billing == other.billing && createdAt == other.createdAt && currency == other.currency && customer == other.customer && metadata == other.metadata && nextBillingDate == other.nextBillingDate && paymentFrequencyCount == other.paymentFrequencyCount && paymentFrequencyInterval == other.paymentFrequencyInterval && previousBillingDate == other.previousBillingDate && productId == other.productId && quantity == other.quantity && recurringPreTaxAmount == other.recurringPreTaxAmount && status == other.status && subscriptionId == other.subscriptionId && subscriptionPeriodCount == other.subscriptionPeriodCount && subscriptionPeriodInterval == other.subscriptionPeriodInterval && taxInclusive == other.taxInclusive && trialPeriodDays == other.trialPeriodDays && cancelledAt == other.cancelledAt && discountId == other.discountId && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Subscription && billing == other.billing && createdAt == other.createdAt && currency == other.currency && customer == other.customer && metadata == other.metadata && nextBillingDate == other.nextBillingDate && onDemand == other.onDemand && paymentFrequencyCount == other.paymentFrequencyCount && paymentFrequencyInterval == other.paymentFrequencyInterval && previousBillingDate == other.previousBillingDate && productId == other.productId && quantity == other.quantity && recurringPreTaxAmount == other.recurringPreTaxAmount && status == other.status && subscriptionId == other.subscriptionId && subscriptionPeriodCount == other.subscriptionPeriodCount && subscriptionPeriodInterval == other.subscriptionPeriodInterval && taxInclusive == other.taxInclusive && trialPeriodDays == other.trialPeriodDays && cancelledAt == other.cancelledAt && discountId == other.discountId && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(billing, createdAt, currency, customer, metadata, nextBillingDate, paymentFrequencyCount, paymentFrequencyInterval, previousBillingDate, productId, quantity, recurringPreTaxAmount, status, subscriptionId, subscriptionPeriodCount, subscriptionPeriodInterval, taxInclusive, trialPeriodDays, cancelledAt, discountId, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(billing, createdAt, currency, customer, metadata, nextBillingDate, onDemand, paymentFrequencyCount, paymentFrequencyInterval, previousBillingDate, productId, quantity, recurringPreTaxAmount, status, subscriptionId, subscriptionPeriodCount, subscriptionPeriodInterval, taxInclusive, trialPeriodDays, cancelledAt, discountId, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Subscription{billing=$billing, createdAt=$createdAt, currency=$currency, customer=$customer, metadata=$metadata, nextBillingDate=$nextBillingDate, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancelledAt=$cancelledAt, discountId=$discountId, additionalProperties=$additionalProperties}"
+        "Subscription{billing=$billing, createdAt=$createdAt, currency=$currency, customer=$customer, metadata=$metadata, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancelledAt=$cancelledAt, discountId=$discountId, additionalProperties=$additionalProperties}"
 }
