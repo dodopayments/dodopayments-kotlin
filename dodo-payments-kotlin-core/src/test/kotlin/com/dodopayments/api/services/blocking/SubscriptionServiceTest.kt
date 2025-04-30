@@ -14,6 +14,7 @@ import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveParams
 import com.dodopayments.api.models.subscriptions.SubscriptionStatus
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdateParams
+import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -108,6 +109,11 @@ internal class SubscriptionServiceTest {
                             .state("state")
                             .street("street")
                             .zipcode("zipcode")
+                            .build()
+                    )
+                    .disableOnDemand(
+                        SubscriptionUpdateParams.DisableOnDemand.builder()
+                            .nextBillingDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .build()
                     )
                     .metadata(

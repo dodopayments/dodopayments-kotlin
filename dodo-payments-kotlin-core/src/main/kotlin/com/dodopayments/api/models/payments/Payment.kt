@@ -23,6 +23,7 @@ import java.util.Objects
 
 class Payment
 private constructor(
+    private val billing: JsonField<BillingAddress>,
     private val businessId: JsonField<String>,
     private val createdAt: JsonField<OffsetDateTime>,
     private val currency: JsonField<Currency>,
@@ -50,6 +51,9 @@ private constructor(
 
     @JsonCreator
     private constructor(
+        @JsonProperty("billing")
+        @ExcludeMissing
+        billing: JsonField<BillingAddress> = JsonMissing.of(),
         @JsonProperty("business_id")
         @ExcludeMissing
         businessId: JsonField<String> = JsonMissing.of(),
@@ -107,6 +111,7 @@ private constructor(
         @ExcludeMissing
         updatedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
     ) : this(
+        billing,
         businessId,
         createdAt,
         currency,
@@ -131,6 +136,12 @@ private constructor(
         updatedAt,
         mutableMapOf(),
     )
+
+    /**
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun billing(): BillingAddress = billing.getRequired("billing")
 
     /**
      * Identifier of the business associated with the payment
@@ -302,6 +313,13 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun updatedAt(): OffsetDateTime? = updatedAt.getNullable("updated_at")
+
+    /**
+     * Returns the raw JSON value of [billing].
+     *
+     * Unlike [billing], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("billing") @ExcludeMissing fun _billing(): JsonField<BillingAddress> = billing
 
     /**
      * Returns the raw JSON value of [businessId].
@@ -503,6 +521,7 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
+         * .billing()
          * .businessId()
          * .createdAt()
          * .currency()
@@ -522,6 +541,7 @@ private constructor(
     /** A builder for [Payment]. */
     class Builder internal constructor() {
 
+        private var billing: JsonField<BillingAddress>? = null
         private var businessId: JsonField<String>? = null
         private var createdAt: JsonField<OffsetDateTime>? = null
         private var currency: JsonField<Currency>? = null
@@ -547,6 +567,7 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(payment: Payment) = apply {
+            billing = payment.billing
             businessId = payment.businessId
             createdAt = payment.createdAt
             currency = payment.currency
@@ -571,6 +592,17 @@ private constructor(
             updatedAt = payment.updatedAt
             additionalProperties = payment.additionalProperties.toMutableMap()
         }
+
+        fun billing(billing: BillingAddress) = billing(JsonField.of(billing))
+
+        /**
+         * Sets [Builder.billing] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.billing] with a well-typed [BillingAddress] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun billing(billing: JsonField<BillingAddress>) = apply { this.billing = billing }
 
         /** Identifier of the business associated with the payment */
         fun businessId(businessId: String) = businessId(JsonField.of(businessId))
@@ -945,6 +977,7 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
+         * .billing()
          * .businessId()
          * .createdAt()
          * .currency()
@@ -962,6 +995,7 @@ private constructor(
          */
         fun build(): Payment =
             Payment(
+                checkRequired("billing", billing),
                 checkRequired("businessId", businessId),
                 checkRequired("createdAt", createdAt),
                 checkRequired("currency", currency),
@@ -995,6 +1029,7 @@ private constructor(
             return@apply
         }
 
+        billing().validate()
         businessId()
         createdAt()
         currency().validate()
@@ -1034,7 +1069,8 @@ private constructor(
      * Used for best match union deserialization.
      */
     internal fun validity(): Int =
-        (if (businessId.asKnown() == null) 0 else 1) +
+        (billing.asKnown()?.validity() ?: 0) +
+            (if (businessId.asKnown() == null) 0 else 1) +
             (if (createdAt.asKnown() == null) 0 else 1) +
             (currency.asKnown()?.validity() ?: 0) +
             (customer.asKnown()?.validity() ?: 0) +
@@ -3321,15 +3357,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Payment && businessId == other.businessId && createdAt == other.createdAt && currency == other.currency && customer == other.customer && disputes == other.disputes && metadata == other.metadata && paymentId == other.paymentId && refunds == other.refunds && settlementAmount == other.settlementAmount && settlementCurrency == other.settlementCurrency && totalAmount == other.totalAmount && discountId == other.discountId && errorMessage == other.errorMessage && paymentLink == other.paymentLink && paymentMethod == other.paymentMethod && paymentMethodType == other.paymentMethodType && productCart == other.productCart && settlementTax == other.settlementTax && status == other.status && subscriptionId == other.subscriptionId && tax == other.tax && updatedAt == other.updatedAt && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Payment && billing == other.billing && businessId == other.businessId && createdAt == other.createdAt && currency == other.currency && customer == other.customer && disputes == other.disputes && metadata == other.metadata && paymentId == other.paymentId && refunds == other.refunds && settlementAmount == other.settlementAmount && settlementCurrency == other.settlementCurrency && totalAmount == other.totalAmount && discountId == other.discountId && errorMessage == other.errorMessage && paymentLink == other.paymentLink && paymentMethod == other.paymentMethod && paymentMethodType == other.paymentMethodType && productCart == other.productCart && settlementTax == other.settlementTax && status == other.status && subscriptionId == other.subscriptionId && tax == other.tax && updatedAt == other.updatedAt && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(businessId, createdAt, currency, customer, disputes, metadata, paymentId, refunds, settlementAmount, settlementCurrency, totalAmount, discountId, errorMessage, paymentLink, paymentMethod, paymentMethodType, productCart, settlementTax, status, subscriptionId, tax, updatedAt, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(billing, businessId, createdAt, currency, customer, disputes, metadata, paymentId, refunds, settlementAmount, settlementCurrency, totalAmount, discountId, errorMessage, paymentLink, paymentMethod, paymentMethodType, productCart, settlementTax, status, subscriptionId, tax, updatedAt, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Payment{businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, disputes=$disputes, metadata=$metadata, paymentId=$paymentId, refunds=$refunds, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, totalAmount=$totalAmount, discountId=$discountId, errorMessage=$errorMessage, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, productCart=$productCart, settlementTax=$settlementTax, status=$status, subscriptionId=$subscriptionId, tax=$tax, updatedAt=$updatedAt, additionalProperties=$additionalProperties}"
+        "Payment{billing=$billing, businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, disputes=$disputes, metadata=$metadata, paymentId=$paymentId, refunds=$refunds, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, totalAmount=$totalAmount, discountId=$discountId, errorMessage=$errorMessage, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, productCart=$productCart, settlementTax=$settlementTax, status=$status, subscriptionId=$subscriptionId, tax=$tax, updatedAt=$updatedAt, additionalProperties=$additionalProperties}"
 }
