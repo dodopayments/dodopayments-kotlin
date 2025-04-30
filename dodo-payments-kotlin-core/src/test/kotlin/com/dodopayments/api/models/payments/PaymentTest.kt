@@ -7,6 +7,7 @@ import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.disputes.Dispute
 import com.dodopayments.api.models.disputes.DisputeStage
 import com.dodopayments.api.models.disputes.DisputeStatus
+import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.refunds.Refund
 import com.dodopayments.api.models.refunds.RefundStatus
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
@@ -20,6 +21,15 @@ internal class PaymentTest {
     fun create() {
         val payment =
             Payment.builder()
+                .billing(
+                    BillingAddress.builder()
+                        .city("city")
+                        .country(CountryCode.AF)
+                        .state("state")
+                        .street("street")
+                        .zipcode("zipcode")
+                        .build()
+                )
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .currency(Payment.Currency.AED)
@@ -78,6 +88,16 @@ internal class PaymentTest {
                 .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
 
+        assertThat(payment.billing())
+            .isEqualTo(
+                BillingAddress.builder()
+                    .city("city")
+                    .country(CountryCode.AF)
+                    .state("state")
+                    .street("street")
+                    .zipcode("zipcode")
+                    .build()
+            )
         assertThat(payment.businessId()).isEqualTo("business_id")
         assertThat(payment.createdAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(payment.currency()).isEqualTo(Payment.Currency.AED)
@@ -146,6 +166,15 @@ internal class PaymentTest {
         val jsonMapper = jsonMapper()
         val payment =
             Payment.builder()
+                .billing(
+                    BillingAddress.builder()
+                        .city("city")
+                        .country(CountryCode.AF)
+                        .state("state")
+                        .street("street")
+                        .zipcode("zipcode")
+                        .build()
+                )
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .currency(Payment.Currency.AED)

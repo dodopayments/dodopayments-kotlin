@@ -5,6 +5,7 @@ package com.dodopayments.api.models.subscriptions
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.payments.BillingAddress
+import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -21,6 +22,11 @@ internal class SubscriptionUpdateParamsTest {
                     .state("state")
                     .street("street")
                     .zipcode("zipcode")
+                    .build()
+            )
+            .disableOnDemand(
+                SubscriptionUpdateParams.DisableOnDemand.builder()
+                    .nextBillingDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .build()
             )
             .metadata(
@@ -56,6 +62,11 @@ internal class SubscriptionUpdateParamsTest {
                         .zipcode("zipcode")
                         .build()
                 )
+                .disableOnDemand(
+                    SubscriptionUpdateParams.DisableOnDemand.builder()
+                        .nextBillingDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .build()
+                )
                 .metadata(
                     SubscriptionUpdateParams.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -75,6 +86,12 @@ internal class SubscriptionUpdateParamsTest {
                     .state("state")
                     .street("street")
                     .zipcode("zipcode")
+                    .build()
+            )
+        assertThat(body.disableOnDemand())
+            .isEqualTo(
+                SubscriptionUpdateParams.DisableOnDemand.builder()
+                    .nextBillingDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .build()
             )
         assertThat(body.metadata())
