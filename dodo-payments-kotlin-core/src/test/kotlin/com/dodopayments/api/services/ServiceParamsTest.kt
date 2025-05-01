@@ -11,7 +11,6 @@ import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.OneTimeProductCartItem
 import com.dodopayments.api.models.payments.PaymentCreateParams
-import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import com.github.tomakehurst.wiremock.client.WireMock.matchingJsonPath
@@ -77,66 +76,6 @@ internal class ServiceParamsTest {
                 .returnUrl("return_url")
                 .showSavedPaymentMethods(true)
                 .taxId("tax_id")
-                .putAdditionalHeader("Secret-Header", "42")
-                .putAdditionalQueryParam("secret_query_param", "42")
-                .putAdditionalBodyProperty("secretProperty", JsonValue.from("42"))
-                .build()
-        )
-
-        verify(
-            postRequestedFor(anyUrl())
-                .withHeader("Secret-Header", equalTo("42"))
-                .withQueryParam("secret_query_param", equalTo("42"))
-                .withRequestBody(matchingJsonPath("$.secretProperty", equalTo("42")))
-        )
-    }
-
-    @Test
-    fun create() {
-        val subscriptionService = client.subscriptions()
-        stubFor(post(anyUrl()).willReturn(ok("{}")))
-
-        subscriptionService.create(
-            SubscriptionCreateParams.builder()
-                .billing(
-                    BillingAddress.builder()
-                        .city("city")
-                        .country(CountryCode.AF)
-                        .state("state")
-                        .street("street")
-                        .zipcode("zipcode")
-                        .build()
-                )
-                .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
-                .productId("product_id")
-                .quantity(0L)
-                .addAddon(
-                    SubscriptionCreateParams.Addon.builder()
-                        .addonId("addon_id")
-                        .quantity(0L)
-                        .build()
-                )
-                .addAllowedPaymentMethodType(
-                    SubscriptionCreateParams.AllowedPaymentMethodType.CREDIT
-                )
-                .billingCurrency(Currency.AED)
-                .discountCode("discount_code")
-                .metadata(
-                    SubscriptionCreateParams.Metadata.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("string"))
-                        .build()
-                )
-                .onDemand(
-                    SubscriptionCreateParams.OnDemand.builder()
-                        .mandateOnly(true)
-                        .productPrice(0L)
-                        .build()
-                )
-                .paymentLink(true)
-                .returnUrl("return_url")
-                .showSavedPaymentMethods(true)
-                .taxId("tax_id")
-                .trialPeriodDays(0L)
                 .putAdditionalHeader("Secret-Header", "42")
                 .putAdditionalQueryParam("secret_query_param", "42")
                 .putAdditionalBodyProperty("secretProperty", JsonValue.from("42"))
