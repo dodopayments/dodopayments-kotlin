@@ -19,7 +19,7 @@ import java.util.Objects
 
 class SubscriptionListPageResponse
 private constructor(
-    private val items: JsonField<List<Subscription>>,
+    private val items: JsonField<List<SubscriptionListResponse>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -27,21 +27,23 @@ private constructor(
     private constructor(
         @JsonProperty("items")
         @ExcludeMissing
-        items: JsonField<List<Subscription>> = JsonMissing.of()
+        items: JsonField<List<SubscriptionListResponse>> = JsonMissing.of()
     ) : this(items, mutableMapOf())
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun items(): List<Subscription> = items.getRequired("items")
+    fun items(): List<SubscriptionListResponse> = items.getRequired("items")
 
     /**
      * Returns the raw JSON value of [items].
      *
      * Unlike [items], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("items") @ExcludeMissing fun _items(): JsonField<List<Subscription>> = items
+    @JsonProperty("items")
+    @ExcludeMissing
+    fun _items(): JsonField<List<SubscriptionListResponse>> = items
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -71,7 +73,7 @@ private constructor(
     /** A builder for [SubscriptionListPageResponse]. */
     class Builder internal constructor() {
 
-        private var items: JsonField<MutableList<Subscription>>? = null
+        private var items: JsonField<MutableList<SubscriptionListResponse>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(subscriptionListPageResponse: SubscriptionListPageResponse) = apply {
@@ -79,25 +81,25 @@ private constructor(
             additionalProperties = subscriptionListPageResponse.additionalProperties.toMutableMap()
         }
 
-        fun items(items: List<Subscription>) = items(JsonField.of(items))
+        fun items(items: List<SubscriptionListResponse>) = items(JsonField.of(items))
 
         /**
          * Sets [Builder.items] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.items] with a well-typed `List<Subscription>` value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.items] with a well-typed
+         * `List<SubscriptionListResponse>` value instead. This method is primarily for setting the
+         * field to an undocumented or not yet supported value.
          */
-        fun items(items: JsonField<List<Subscription>>) = apply {
+        fun items(items: JsonField<List<SubscriptionListResponse>>) = apply {
             this.items = items.map { it.toMutableList() }
         }
 
         /**
-         * Adds a single [Subscription] to [items].
+         * Adds a single [SubscriptionListResponse] to [items].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addItem(item: Subscription) = apply {
+        fun addItem(item: SubscriptionListResponse) = apply {
             items =
                 (items ?: JsonField.of(mutableListOf())).also { checkKnown("items", it).add(item) }
         }

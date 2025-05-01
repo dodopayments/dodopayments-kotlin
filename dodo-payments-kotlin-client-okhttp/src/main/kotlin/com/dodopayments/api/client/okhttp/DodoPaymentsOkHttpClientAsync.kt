@@ -154,7 +154,7 @@ class DodoPaymentsOkHttpClientAsync private constructor() {
             clientOptions.responseValidation(responseValidation)
         }
 
-        fun bearerToken(bearerToken: String) = apply { clientOptions.bearerToken(bearerToken) }
+        fun apiKey(apiKey: String) = apply { clientOptions.apiKey(apiKey) }
 
         fun fromEnv() = apply { clientOptions.fromEnv() }
 

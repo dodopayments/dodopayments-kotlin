@@ -5,6 +5,7 @@ package com.dodopayments.api.models.subscriptions
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.misc.CountryCode
+import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.CustomerLimitedDetails
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
@@ -19,7 +20,7 @@ internal class SubscriptionListPageResponseTest {
         val subscriptionListPageResponse =
             SubscriptionListPageResponse.builder()
                 .addItem(
-                    Subscription.builder()
+                    SubscriptionListResponse.builder()
                         .billing(
                             BillingAddress.builder()
                                 .city("city")
@@ -30,7 +31,7 @@ internal class SubscriptionListPageResponseTest {
                                 .build()
                         )
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .currency(Subscription.Currency.AED)
+                        .currency(Currency.AED)
                         .customer(
                             CustomerLimitedDetails.builder()
                                 .customerId("customer_id")
@@ -39,7 +40,7 @@ internal class SubscriptionListPageResponseTest {
                                 .build()
                         )
                         .metadata(
-                            Subscription.Metadata.builder()
+                            SubscriptionListResponse.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -65,7 +66,7 @@ internal class SubscriptionListPageResponseTest {
 
         assertThat(subscriptionListPageResponse.items())
             .containsExactly(
-                Subscription.builder()
+                SubscriptionListResponse.builder()
                     .billing(
                         BillingAddress.builder()
                             .city("city")
@@ -76,7 +77,7 @@ internal class SubscriptionListPageResponseTest {
                             .build()
                     )
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .currency(Subscription.Currency.AED)
+                    .currency(Currency.AED)
                     .customer(
                         CustomerLimitedDetails.builder()
                             .customerId("customer_id")
@@ -85,7 +86,7 @@ internal class SubscriptionListPageResponseTest {
                             .build()
                     )
                     .metadata(
-                        Subscription.Metadata.builder()
+                        SubscriptionListResponse.Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -115,7 +116,7 @@ internal class SubscriptionListPageResponseTest {
         val subscriptionListPageResponse =
             SubscriptionListPageResponse.builder()
                 .addItem(
-                    Subscription.builder()
+                    SubscriptionListResponse.builder()
                         .billing(
                             BillingAddress.builder()
                                 .city("city")
@@ -126,7 +127,7 @@ internal class SubscriptionListPageResponseTest {
                                 .build()
                         )
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .currency(Subscription.Currency.AED)
+                        .currency(Currency.AED)
                         .customer(
                             CustomerLimitedDetails.builder()
                                 .customerId("customer_id")
@@ -135,7 +136,7 @@ internal class SubscriptionListPageResponseTest {
                                 .build()
                         )
                         .metadata(
-                            Subscription.Metadata.builder()
+                            SubscriptionListResponse.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )

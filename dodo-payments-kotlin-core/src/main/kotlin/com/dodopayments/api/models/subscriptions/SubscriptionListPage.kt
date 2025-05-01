@@ -19,7 +19,8 @@ private constructor(
      *
      * @see [SubscriptionListPageResponse.items]
      */
-    fun items(): List<Subscription> = response._items().getNullable("items") ?: emptyList()
+    fun items(): List<SubscriptionListResponse> =
+        response._items().getNullable("items") ?: emptyList()
 
     fun hasNextPage(): Boolean = items().isNotEmpty()
 
@@ -102,9 +103,10 @@ private constructor(
             )
     }
 
-    class AutoPager(private val firstPage: SubscriptionListPage) : Sequence<Subscription> {
+    class AutoPager(private val firstPage: SubscriptionListPage) :
+        Sequence<SubscriptionListResponse> {
 
-        override fun iterator(): Iterator<Subscription> = iterator {
+        override fun iterator(): Iterator<SubscriptionListResponse> = iterator {
             var page = firstPage
             var index = 0
             while (true) {

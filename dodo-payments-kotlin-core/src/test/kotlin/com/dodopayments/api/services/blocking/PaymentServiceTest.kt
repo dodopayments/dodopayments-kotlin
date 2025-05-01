@@ -6,6 +6,7 @@ import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.misc.CountryCode
+import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.OneTimeProductCartItem
@@ -22,7 +23,7 @@ internal class PaymentServiceTest {
         val client =
             DodoPaymentsOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val paymentService = client.payments()
 
@@ -49,7 +50,7 @@ internal class PaymentServiceTest {
                     .addAllowedPaymentMethodType(
                         PaymentCreateParams.AllowedPaymentMethodType.CREDIT
                     )
-                    .billingCurrency(PaymentCreateParams.BillingCurrency.AED)
+                    .billingCurrency(Currency.AED)
                     .discountCode("discount_code")
                     .metadata(
                         PaymentCreateParams.Metadata.builder()
@@ -71,7 +72,7 @@ internal class PaymentServiceTest {
         val client =
             DodoPaymentsOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val paymentService = client.payments()
 
@@ -86,7 +87,7 @@ internal class PaymentServiceTest {
         val client =
             DodoPaymentsOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val paymentService = client.payments()
 

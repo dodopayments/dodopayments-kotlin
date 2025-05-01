@@ -2,6 +2,7 @@
 
 package com.dodopayments.api.client
 
+import com.dodopayments.api.services.blocking.AddonService
 import com.dodopayments.api.services.blocking.CustomerService
 import com.dodopayments.api.services.blocking.DiscountService
 import com.dodopayments.api.services.blocking.DisputeService
@@ -74,6 +75,8 @@ interface DodoPaymentsClient {
 
     fun discounts(): DiscountService
 
+    fun addons(): AddonService
+
     /**
      * Closes this client, relinquishing any underlying resources.
      *
@@ -119,5 +122,7 @@ interface DodoPaymentsClient {
         fun misc(): MiscService.WithRawResponse
 
         fun discounts(): DiscountService.WithRawResponse
+
+        fun addons(): AddonService.WithRawResponse
     }
 }

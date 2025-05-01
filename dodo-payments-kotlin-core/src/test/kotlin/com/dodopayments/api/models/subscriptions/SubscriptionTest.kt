@@ -5,6 +5,7 @@ package com.dodopayments.api.models.subscriptions
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.misc.CountryCode
+import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.CustomerLimitedDetails
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
@@ -18,6 +19,7 @@ internal class SubscriptionTest {
     fun create() {
         val subscription =
             Subscription.builder()
+                .addAddon(AddonCartResponseItem.builder().addonId("addon_id").quantity(0L).build())
                 .billing(
                     BillingAddress.builder()
                         .city("city")
@@ -28,7 +30,7 @@ internal class SubscriptionTest {
                         .build()
                 )
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .currency(Subscription.Currency.AED)
+                .currency(Currency.AED)
                 .customer(
                     CustomerLimitedDetails.builder()
                         .customerId("customer_id")
@@ -59,6 +61,10 @@ internal class SubscriptionTest {
                 .discountId("discount_id")
                 .build()
 
+        assertThat(subscription.addons())
+            .containsExactly(
+                AddonCartResponseItem.builder().addonId("addon_id").quantity(0L).build()
+            )
         assertThat(subscription.billing())
             .isEqualTo(
                 BillingAddress.builder()
@@ -71,7 +77,7 @@ internal class SubscriptionTest {
             )
         assertThat(subscription.createdAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(subscription.currency()).isEqualTo(Subscription.Currency.AED)
+        assertThat(subscription.currency()).isEqualTo(Currency.AED)
         assertThat(subscription.customer())
             .isEqualTo(
                 CustomerLimitedDetails.builder()
@@ -112,6 +118,7 @@ internal class SubscriptionTest {
         val jsonMapper = jsonMapper()
         val subscription =
             Subscription.builder()
+                .addAddon(AddonCartResponseItem.builder().addonId("addon_id").quantity(0L).build())
                 .billing(
                     BillingAddress.builder()
                         .city("city")
@@ -122,7 +129,7 @@ internal class SubscriptionTest {
                         .build()
                 )
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .currency(Subscription.Currency.AED)
+                .currency(Currency.AED)
                 .customer(
                     CustomerLimitedDetails.builder()
                         .customerId("customer_id")

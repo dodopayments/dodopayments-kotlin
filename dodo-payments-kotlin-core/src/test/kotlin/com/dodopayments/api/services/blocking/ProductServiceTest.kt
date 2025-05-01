@@ -4,6 +4,8 @@ package com.dodopayments.api.services.blocking
 
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
+import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.misc.TaxCategory
 import com.dodopayments.api.models.products.LicenseKeyDuration
 import com.dodopayments.api.models.products.Price
 import com.dodopayments.api.models.products.ProductCreateParams
@@ -23,7 +25,7 @@ internal class ProductServiceTest {
         val client =
             DodoPaymentsOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val productService = client.products()
 
@@ -32,7 +34,7 @@ internal class ProductServiceTest {
                 ProductCreateParams.builder()
                     .price(
                         Price.OneTimePrice.builder()
-                            .currency(Price.OneTimePrice.Currency.AED)
+                            .currency(Currency.AED)
                             .discount(0.0)
                             .price(0L)
                             .purchasingPowerParity(true)
@@ -42,7 +44,7 @@ internal class ProductServiceTest {
                             .taxInclusive(true)
                             .build()
                     )
-                    .taxCategory(ProductCreateParams.TaxCategory.DIGITAL_PRODUCTS)
+                    .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
                     .addAddon("string")
                     .description("description")
                     .licenseKeyActivationMessage("license_key_activation_message")
@@ -63,7 +65,7 @@ internal class ProductServiceTest {
         val client =
             DodoPaymentsOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val productService = client.products()
 
@@ -77,7 +79,7 @@ internal class ProductServiceTest {
         val client =
             DodoPaymentsOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val productService = client.products()
 
@@ -96,7 +98,7 @@ internal class ProductServiceTest {
                 .name("name")
                 .price(
                     Price.OneTimePrice.builder()
-                        .currency(Price.OneTimePrice.Currency.AED)
+                        .currency(Currency.AED)
                         .discount(0.0)
                         .price(0L)
                         .purchasingPowerParity(true)
@@ -106,7 +108,7 @@ internal class ProductServiceTest {
                         .taxInclusive(true)
                         .build()
                 )
-                .taxCategory(ProductUpdateParams.TaxCategory.DIGITAL_PRODUCTS)
+                .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
                 .build()
         )
     }
@@ -116,7 +118,7 @@ internal class ProductServiceTest {
         val client =
             DodoPaymentsOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val productService = client.products()
 
@@ -130,7 +132,7 @@ internal class ProductServiceTest {
         val client =
             DodoPaymentsOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val productService = client.products()
 
@@ -142,7 +144,7 @@ internal class ProductServiceTest {
         val client =
             DodoPaymentsOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val productService = client.products()
 

@@ -4,6 +4,7 @@ package com.dodopayments.api.models.payments
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.misc.Currency
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -18,7 +19,7 @@ internal class PaymentListPageResponseTest {
                 .addItem(
                     PaymentListResponse.builder()
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .currency(PaymentListResponse.Currency.AED)
+                        .currency(Currency.AED)
                         .customer(
                             CustomerLimitedDetails.builder()
                                 .customerId("customer_id")
@@ -45,7 +46,7 @@ internal class PaymentListPageResponseTest {
             .containsExactly(
                 PaymentListResponse.builder()
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .currency(PaymentListResponse.Currency.AED)
+                    .currency(Currency.AED)
                     .customer(
                         CustomerLimitedDetails.builder()
                             .customerId("customer_id")
@@ -76,7 +77,7 @@ internal class PaymentListPageResponseTest {
                 .addItem(
                     PaymentListResponse.builder()
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .currency(PaymentListResponse.Currency.AED)
+                        .currency(Currency.AED)
                         .customer(
                             CustomerLimitedDetails.builder()
                                 .customerId("customer_id")

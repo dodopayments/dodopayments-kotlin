@@ -8,6 +8,7 @@ import com.dodopayments.api.models.disputes.Dispute
 import com.dodopayments.api.models.disputes.DisputeStage
 import com.dodopayments.api.models.disputes.DisputeStatus
 import com.dodopayments.api.models.misc.CountryCode
+import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.refunds.Refund
 import com.dodopayments.api.models.refunds.RefundStatus
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
@@ -32,7 +33,7 @@ internal class PaymentTest {
                 )
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .currency(Payment.Currency.AED)
+                .currency(Currency.AED)
                 .customer(
                     CustomerLimitedDetails.builder()
                         .customerId("customer_id")
@@ -66,12 +67,12 @@ internal class PaymentTest {
                         .refundId("refund_id")
                         .status(RefundStatus.SUCCEEDED)
                         .amount(0L)
-                        .currency(Refund.Currency.AED)
+                        .currency(Currency.AED)
                         .reason("reason")
                         .build()
                 )
                 .settlementAmount(0L)
-                .settlementCurrency(Payment.SettlementCurrency.AED)
+                .settlementCurrency(Currency.AED)
                 .totalAmount(0L)
                 .discountId("discount_id")
                 .errorMessage("error_message")
@@ -100,7 +101,7 @@ internal class PaymentTest {
             )
         assertThat(payment.businessId()).isEqualTo("business_id")
         assertThat(payment.createdAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(payment.currency()).isEqualTo(Payment.Currency.AED)
+        assertThat(payment.currency()).isEqualTo(Currency.AED)
         assertThat(payment.customer())
             .isEqualTo(
                 CustomerLimitedDetails.builder()
@@ -138,12 +139,12 @@ internal class PaymentTest {
                     .refundId("refund_id")
                     .status(RefundStatus.SUCCEEDED)
                     .amount(0L)
-                    .currency(Refund.Currency.AED)
+                    .currency(Currency.AED)
                     .reason("reason")
                     .build()
             )
         assertThat(payment.settlementAmount()).isEqualTo(0L)
-        assertThat(payment.settlementCurrency()).isEqualTo(Payment.SettlementCurrency.AED)
+        assertThat(payment.settlementCurrency()).isEqualTo(Currency.AED)
         assertThat(payment.totalAmount()).isEqualTo(0L)
         assertThat(payment.discountId()).isEqualTo("discount_id")
         assertThat(payment.errorMessage()).isEqualTo("error_message")
@@ -177,7 +178,7 @@ internal class PaymentTest {
                 )
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .currency(Payment.Currency.AED)
+                .currency(Currency.AED)
                 .customer(
                     CustomerLimitedDetails.builder()
                         .customerId("customer_id")
@@ -211,12 +212,12 @@ internal class PaymentTest {
                         .refundId("refund_id")
                         .status(RefundStatus.SUCCEEDED)
                         .amount(0L)
-                        .currency(Refund.Currency.AED)
+                        .currency(Currency.AED)
                         .reason("reason")
                         .build()
                 )
                 .settlementAmount(0L)
-                .settlementCurrency(Payment.SettlementCurrency.AED)
+                .settlementCurrency(Currency.AED)
                 .totalAmount(0L)
                 .discountId("discount_id")
                 .errorMessage("error_message")

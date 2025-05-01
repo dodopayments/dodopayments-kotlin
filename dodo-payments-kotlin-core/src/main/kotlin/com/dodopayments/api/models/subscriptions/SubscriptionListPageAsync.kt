@@ -21,7 +21,8 @@ private constructor(
      *
      * @see [SubscriptionListPageResponse.items]
      */
-    fun items(): List<Subscription> = response._items().getNullable("items") ?: emptyList()
+    fun items(): List<SubscriptionListResponse> =
+        response._items().getNullable("items") ?: emptyList()
 
     fun hasNextPage(): Boolean = items().isNotEmpty()
 
@@ -105,9 +106,10 @@ private constructor(
             )
     }
 
-    class AutoPager(private val firstPage: SubscriptionListPageAsync) : Flow<Subscription> {
+    class AutoPager(private val firstPage: SubscriptionListPageAsync) :
+        Flow<SubscriptionListResponse> {
 
-        override suspend fun collect(collector: FlowCollector<Subscription>) {
+        override suspend fun collect(collector: FlowCollector<SubscriptionListResponse>) {
             var page = firstPage
             var index = 0
             while (true) {

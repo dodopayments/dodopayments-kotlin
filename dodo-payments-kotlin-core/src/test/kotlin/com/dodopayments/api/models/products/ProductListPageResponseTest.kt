@@ -3,6 +3,8 @@
 package com.dodopayments.api.models.products
 
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.misc.TaxCategory
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -20,16 +22,16 @@ internal class ProductListPageResponseTest {
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .isRecurring(true)
                         .productId("product_id")
-                        .taxCategory(ProductListResponse.TaxCategory.DIGITAL_PRODUCTS)
+                        .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .currency(ProductListResponse.Currency.AED)
+                        .currency(Currency.AED)
                         .description("description")
                         .image("image")
                         .name("name")
                         .price(0L)
                         .priceDetail(
                             Price.OneTimePrice.builder()
-                                .currency(Price.OneTimePrice.Currency.AED)
+                                .currency(Currency.AED)
                                 .discount(0.0)
                                 .price(0L)
                                 .purchasingPowerParity(true)
@@ -51,16 +53,16 @@ internal class ProductListPageResponseTest {
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .isRecurring(true)
                     .productId("product_id")
-                    .taxCategory(ProductListResponse.TaxCategory.DIGITAL_PRODUCTS)
+                    .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
                     .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .currency(ProductListResponse.Currency.AED)
+                    .currency(Currency.AED)
                     .description("description")
                     .image("image")
                     .name("name")
                     .price(0L)
                     .priceDetail(
                         Price.OneTimePrice.builder()
-                            .currency(Price.OneTimePrice.Currency.AED)
+                            .currency(Currency.AED)
                             .discount(0.0)
                             .price(0L)
                             .purchasingPowerParity(true)
@@ -86,16 +88,16 @@ internal class ProductListPageResponseTest {
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .isRecurring(true)
                         .productId("product_id")
-                        .taxCategory(ProductListResponse.TaxCategory.DIGITAL_PRODUCTS)
+                        .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .currency(ProductListResponse.Currency.AED)
+                        .currency(Currency.AED)
                         .description("description")
                         .image("image")
                         .name("name")
                         .price(0L)
                         .priceDetail(
                             Price.OneTimePrice.builder()
-                                .currency(Price.OneTimePrice.Currency.AED)
+                                .currency(Currency.AED)
                                 .discount(0.0)
                                 .price(0L)
                                 .purchasingPowerParity(true)

@@ -5,6 +5,7 @@ package com.dodopayments.api.models.products
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
+import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.subscriptions.TimeInterval
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
@@ -19,7 +20,7 @@ internal class PriceTest {
     fun ofOneTime() {
         val oneTime =
             Price.OneTimePrice.builder()
-                .currency(Price.OneTimePrice.Currency.AED)
+                .currency(Currency.AED)
                 .discount(0.0)
                 .price(0L)
                 .purchasingPowerParity(true)
@@ -41,7 +42,7 @@ internal class PriceTest {
         val price =
             Price.ofOneTime(
                 Price.OneTimePrice.builder()
-                    .currency(Price.OneTimePrice.Currency.AED)
+                    .currency(Currency.AED)
                     .discount(0.0)
                     .price(0L)
                     .purchasingPowerParity(true)
@@ -62,7 +63,7 @@ internal class PriceTest {
     fun ofRecurring() {
         val recurring =
             Price.RecurringPrice.builder()
-                .currency(Price.RecurringPrice.Currency.AED)
+                .currency(Currency.AED)
                 .discount(0.0)
                 .paymentFrequencyCount(0L)
                 .paymentFrequencyInterval(TimeInterval.DAY)
@@ -87,7 +88,7 @@ internal class PriceTest {
         val price =
             Price.ofRecurring(
                 Price.RecurringPrice.builder()
-                    .currency(Price.RecurringPrice.Currency.AED)
+                    .currency(Currency.AED)
                     .discount(0.0)
                     .paymentFrequencyCount(0L)
                     .paymentFrequencyInterval(TimeInterval.DAY)
