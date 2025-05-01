@@ -53,13 +53,14 @@ import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
-import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
-import com.dodopayments.api.models.subscriptions.SubscriptionCreateResponse
+import com.dodopayments.api.models.payments.OneTimeProductCartItem
+import com.dodopayments.api.models.payments.PaymentCreateParams
+import com.dodopayments.api.models.payments.PaymentCreateResponse
 
 // Configures using the `DODO_PAYMENTS_API_KEY` and `DODO_PAYMENTS_BASE_URL` environment variables
 val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.fromEnv()
 
-val params: SubscriptionCreateParams = SubscriptionCreateParams.builder()
+val params: PaymentCreateParams = PaymentCreateParams.builder()
     .billing(BillingAddress.builder()
         .city("city")
         .country(CountryCode.AF)
@@ -70,10 +71,12 @@ val params: SubscriptionCreateParams = SubscriptionCreateParams.builder()
     .customer(AttachExistingCustomer.builder()
         .customerId("customer_id")
         .build())
-    .productId("product_id")
-    .quantity(0L)
+    .addProductCart(OneTimeProductCartItem.builder()
+        .productId("product_id")
+        .quantity(0L)
+        .build())
     .build()
-val subscription: SubscriptionCreateResponse = client.subscriptions().create(params)
+val payment: PaymentCreateResponse = client.payments().create(params)
 ```
 
 ## Client configuration
@@ -127,7 +130,7 @@ See this table for the available options:
 
 To send a request to the Dodo Payments API, build an instance of some `Params` class and pass it to the corresponding client method. When the response is received, it will be deserialized into an instance of a Kotlin class.
 
-For example, `client.subscriptions().create(...)` should be called with an instance of `SubscriptionCreateParams`, and it will return an instance of `SubscriptionCreateResponse`.
+For example, `client.payments().create(...)` should be called with an instance of `PaymentCreateParams`, and it will return an instance of `PaymentCreateResponse`.
 
 ## Immutability
 
@@ -147,13 +150,14 @@ import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
-import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
-import com.dodopayments.api.models.subscriptions.SubscriptionCreateResponse
+import com.dodopayments.api.models.payments.OneTimeProductCartItem
+import com.dodopayments.api.models.payments.PaymentCreateParams
+import com.dodopayments.api.models.payments.PaymentCreateResponse
 
 // Configures using the `DODO_PAYMENTS_API_KEY` and `DODO_PAYMENTS_BASE_URL` environment variables
 val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.fromEnv()
 
-val params: SubscriptionCreateParams = SubscriptionCreateParams.builder()
+val params: PaymentCreateParams = PaymentCreateParams.builder()
     .billing(BillingAddress.builder()
         .city("city")
         .country(CountryCode.AF)
@@ -164,10 +168,12 @@ val params: SubscriptionCreateParams = SubscriptionCreateParams.builder()
     .customer(AttachExistingCustomer.builder()
         .customerId("customer_id")
         .build())
-    .productId("product_id")
-    .quantity(0L)
+    .addProductCart(OneTimeProductCartItem.builder()
+        .productId("product_id")
+        .quantity(0L)
+        .build())
     .build()
-val subscription: SubscriptionCreateResponse = client.async().subscriptions().create(params)
+val payment: PaymentCreateResponse = client.async().payments().create(params)
 ```
 
 Or create an asynchronous client from the beginning:
@@ -178,13 +184,14 @@ import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClientAsync
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
-import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
-import com.dodopayments.api.models.subscriptions.SubscriptionCreateResponse
+import com.dodopayments.api.models.payments.OneTimeProductCartItem
+import com.dodopayments.api.models.payments.PaymentCreateParams
+import com.dodopayments.api.models.payments.PaymentCreateResponse
 
 // Configures using the `DODO_PAYMENTS_API_KEY` and `DODO_PAYMENTS_BASE_URL` environment variables
 val client: DodoPaymentsClientAsync = DodoPaymentsOkHttpClientAsync.fromEnv()
 
-val params: SubscriptionCreateParams = SubscriptionCreateParams.builder()
+val params: PaymentCreateParams = PaymentCreateParams.builder()
     .billing(BillingAddress.builder()
         .city("city")
         .country(CountryCode.AF)
@@ -195,10 +202,12 @@ val params: SubscriptionCreateParams = SubscriptionCreateParams.builder()
     .customer(AttachExistingCustomer.builder()
         .customerId("customer_id")
         .build())
-    .productId("product_id")
-    .quantity(0L)
+    .addProductCart(OneTimeProductCartItem.builder()
+        .productId("product_id")
+        .quantity(0L)
+        .build())
     .build()
-val subscription: SubscriptionCreateResponse = client.subscriptions().create(params)
+val payment: PaymentCreateResponse = client.payments().create(params)
 ```
 
 The asynchronous client supports the same options as the synchronous one, except most methods are [suspending](https://kotlinlang.org/docs/coroutines-guide.html).
@@ -384,10 +393,11 @@ To set a custom timeout, configure the method call using the `timeout` method:
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
-import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
-import com.dodopayments.api.models.subscriptions.SubscriptionCreateResponse
+import com.dodopayments.api.models.payments.OneTimeProductCartItem
+import com.dodopayments.api.models.payments.PaymentCreateParams
+import com.dodopayments.api.models.payments.PaymentCreateResponse
 
-val subscription: SubscriptionCreateResponse = client.subscriptions().create(
+val payment: PaymentCreateResponse = client.payments().create(
   params, RequestOptions.builder().timeout(Duration.ofSeconds(30)).build()
 )
 ```
@@ -485,9 +495,9 @@ To set undocumented parameters, call the `putAdditionalHeader`, `putAdditionalQu
 
 ```kotlin
 import com.dodopayments.api.core.JsonValue
-import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
+import com.dodopayments.api.models.payments.PaymentCreateParams
 
-val params: SubscriptionCreateParams = SubscriptionCreateParams.builder()
+val params: PaymentCreateParams = PaymentCreateParams.builder()
     .putAdditionalHeader("Secret-Header", "42")
     .putAdditionalQueryParam("secret_query_param", "42")
     .putAdditionalBodyProperty("secretProperty", JsonValue.from("42"))
@@ -501,9 +511,9 @@ To set undocumented parameters on _nested_ headers, query params, or body classe
 ```kotlin
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.payments.BillingAddress
-import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
+import com.dodopayments.api.models.payments.PaymentCreateParams
 
-val params: SubscriptionCreateParams = SubscriptionCreateParams.builder()
+val params: PaymentCreateParams = PaymentCreateParams.builder()
     .billing(BillingAddress.builder()
         .putAdditionalProperty("secretProperty", JsonValue.from("42"))
         .build())
@@ -518,9 +528,10 @@ To set a documented parameter or property to an undocumented or not yet supporte
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
-import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
+import com.dodopayments.api.models.payments.OneTimeProductCartItem
+import com.dodopayments.api.models.payments.PaymentCreateParams
 
-val params: SubscriptionCreateParams = SubscriptionCreateParams.builder()
+val params: PaymentCreateParams = PaymentCreateParams.builder()
     .billing(BillingAddress.builder()
         .city("city")
         .country(CountryCode.AF)
@@ -531,8 +542,10 @@ val params: SubscriptionCreateParams = SubscriptionCreateParams.builder()
     .customer(AttachExistingCustomer.builder()
         .customerId("customer_id")
         .build())
-    .productId("product_id")
-    .quantity(0L)
+    .addProductCart(OneTimeProductCartItem.builder()
+        .productId("product_id")
+        .quantity(0L)
+        .build())
     .build()
 ```
 
@@ -578,14 +591,17 @@ To forcibly omit a required parameter or property, pass [`JsonMissing`](dodo-pay
 ```kotlin
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.models.payments.AttachExistingCustomer
-import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
+import com.dodopayments.api.models.payments.OneTimeProductCartItem
+import com.dodopayments.api.models.payments.PaymentCreateParams
 
-val params: SubscriptionCreateParams = SubscriptionCreateParams.builder()
+val params: PaymentCreateParams = PaymentCreateParams.builder()
     .customer(AttachExistingCustomer.builder()
         .customerId("customer_id")
         .build())
-    .productId("product_id")
-    .quantity(0L)
+    .addProductCart(OneTimeProductCartItem.builder()
+        .productId("product_id")
+        .quantity(0L)
+        .build())
     .billing(JsonMissing.of())
     .build()
 ```
@@ -600,7 +616,7 @@ import com.dodopayments.api.core.JsonNull
 import com.dodopayments.api.core.JsonNumber
 import com.dodopayments.api.core.JsonValue
 
-val additionalProperties: Map<String, JsonValue> = client.subscriptions().create(params)._additionalProperties()
+val additionalProperties: Map<String, JsonValue> = client.payments().create(params)._additionalProperties()
 val secretPropertyValue: JsonValue = additionalProperties.get("secretProperty")
 
 val result = when (secretPropertyValue) {
@@ -618,7 +634,7 @@ To access a property's raw JSON value, which may be undocumented, call its `_` p
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.models.payments.BillingAddress
 
-val billing: JsonField<BillingAddress> = client.subscriptions().create(params)._billing()
+val billing: JsonField<BillingAddress> = client.payments().create(params)._billing()
 
 if (billing.isMissing()) {
   // The property is absent from the JSON response
@@ -643,9 +659,9 @@ By default, the SDK will not throw an exception in this case. It will throw [`Do
 If you would prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
 ```kotlin
-import com.dodopayments.api.models.subscriptions.SubscriptionCreateResponse
+import com.dodopayments.api.models.payments.PaymentCreateResponse
 
-val subscription: SubscriptionCreateResponse = client.subscriptions().create(params).validate()
+val payment: PaymentCreateResponse = client.payments().create(params).validate()
 ```
 
 Or configure the method call to validate the response using the `responseValidation` method:
@@ -654,10 +670,11 @@ Or configure the method call to validate the response using the `responseValidat
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
-import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
-import com.dodopayments.api.models.subscriptions.SubscriptionCreateResponse
+import com.dodopayments.api.models.payments.OneTimeProductCartItem
+import com.dodopayments.api.models.payments.PaymentCreateParams
+import com.dodopayments.api.models.payments.PaymentCreateResponse
 
-val subscription: SubscriptionCreateResponse = client.subscriptions().create(
+val payment: PaymentCreateResponse = client.payments().create(
   params, RequestOptions.builder().responseValidation(true).build()
 )
 ```
