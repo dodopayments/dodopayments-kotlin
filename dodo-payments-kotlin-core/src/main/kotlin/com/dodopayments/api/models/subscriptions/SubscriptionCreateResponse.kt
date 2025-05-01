@@ -6,6 +6,7 @@ import com.dodopayments.api.core.ExcludeMissing
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
+import com.dodopayments.api.core.checkKnown
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
@@ -19,6 +20,7 @@ import java.util.Objects
 
 class SubscriptionCreateResponse
 private constructor(
+    private val addons: JsonField<List<AddonCartResponseItem>>,
     private val customer: JsonField<CustomerLimitedDetails>,
     private val metadata: JsonField<Metadata>,
     private val recurringPreTaxAmount: JsonField<Long>,
@@ -31,6 +33,9 @@ private constructor(
 
     @JsonCreator
     private constructor(
+        @JsonProperty("addons")
+        @ExcludeMissing
+        addons: JsonField<List<AddonCartResponseItem>> = JsonMissing.of(),
         @JsonProperty("customer")
         @ExcludeMissing
         customer: JsonField<CustomerLimitedDetails> = JsonMissing.of(),
@@ -51,6 +56,7 @@ private constructor(
         @ExcludeMissing
         paymentLink: JsonField<String> = JsonMissing.of(),
     ) : this(
+        addons,
         customer,
         metadata,
         recurringPreTaxAmount,
@@ -60,6 +66,14 @@ private constructor(
         paymentLink,
         mutableMapOf(),
     )
+
+    /**
+     * Addons associated with this subscription
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun addons(): List<AddonCartResponseItem> = addons.getRequired("addons")
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
@@ -113,6 +127,15 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun paymentLink(): String? = paymentLink.getNullable("payment_link")
+
+    /**
+     * Returns the raw JSON value of [addons].
+     *
+     * Unlike [addons], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("addons")
+    @ExcludeMissing
+    fun _addons(): JsonField<List<AddonCartResponseItem>> = addons
 
     /**
      * Returns the raw JSON value of [customer].
@@ -193,6 +216,7 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
+         * .addons()
          * .customer()
          * .metadata()
          * .recurringPreTaxAmount()
@@ -205,6 +229,7 @@ private constructor(
     /** A builder for [SubscriptionCreateResponse]. */
     class Builder internal constructor() {
 
+        private var addons: JsonField<MutableList<AddonCartResponseItem>>? = null
         private var customer: JsonField<CustomerLimitedDetails>? = null
         private var metadata: JsonField<Metadata>? = null
         private var recurringPreTaxAmount: JsonField<Long>? = null
@@ -215,6 +240,7 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(subscriptionCreateResponse: SubscriptionCreateResponse) = apply {
+            addons = subscriptionCreateResponse.addons.map { it.toMutableList() }
             customer = subscriptionCreateResponse.customer
             metadata = subscriptionCreateResponse.metadata
             recurringPreTaxAmount = subscriptionCreateResponse.recurringPreTaxAmount
@@ -223,6 +249,32 @@ private constructor(
             discountId = subscriptionCreateResponse.discountId
             paymentLink = subscriptionCreateResponse.paymentLink
             additionalProperties = subscriptionCreateResponse.additionalProperties.toMutableMap()
+        }
+
+        /** Addons associated with this subscription */
+        fun addons(addons: List<AddonCartResponseItem>) = addons(JsonField.of(addons))
+
+        /**
+         * Sets [Builder.addons] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.addons] with a well-typed `List<AddonCartResponseItem>`
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
+        fun addons(addons: JsonField<List<AddonCartResponseItem>>) = apply {
+            this.addons = addons.map { it.toMutableList() }
+        }
+
+        /**
+         * Adds a single [AddonCartResponseItem] to [addons].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addAddon(addon: AddonCartResponseItem) = apply {
+            addons =
+                (addons ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("addons", it).add(addon)
+                }
         }
 
         fun customer(customer: CustomerLimitedDetails) = customer(JsonField.of(customer))
@@ -344,6 +396,7 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
+         * .addons()
          * .customer()
          * .metadata()
          * .recurringPreTaxAmount()
@@ -354,6 +407,7 @@ private constructor(
          */
         fun build(): SubscriptionCreateResponse =
             SubscriptionCreateResponse(
+                checkRequired("addons", addons).map { it.toImmutable() },
                 checkRequired("customer", customer),
                 checkRequired("metadata", metadata),
                 checkRequired("recurringPreTaxAmount", recurringPreTaxAmount),
@@ -372,6 +426,7 @@ private constructor(
             return@apply
         }
 
+        addons().forEach { it.validate() }
         customer().validate()
         metadata().validate()
         recurringPreTaxAmount()
@@ -396,7 +451,8 @@ private constructor(
      * Used for best match union deserialization.
      */
     internal fun validity(): Int =
-        (customer.asKnown()?.validity() ?: 0) +
+        (addons.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (customer.asKnown()?.validity() ?: 0) +
             (metadata.asKnown()?.validity() ?: 0) +
             (if (recurringPreTaxAmount.asKnown() == null) 0 else 1) +
             (if (subscriptionId.asKnown() == null) 0 else 1) +
@@ -508,15 +564,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionCreateResponse && customer == other.customer && metadata == other.metadata && recurringPreTaxAmount == other.recurringPreTaxAmount && subscriptionId == other.subscriptionId && clientSecret == other.clientSecret && discountId == other.discountId && paymentLink == other.paymentLink && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is SubscriptionCreateResponse && addons == other.addons && customer == other.customer && metadata == other.metadata && recurringPreTaxAmount == other.recurringPreTaxAmount && subscriptionId == other.subscriptionId && clientSecret == other.clientSecret && discountId == other.discountId && paymentLink == other.paymentLink && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(customer, metadata, recurringPreTaxAmount, subscriptionId, clientSecret, discountId, paymentLink, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(addons, customer, metadata, recurringPreTaxAmount, subscriptionId, clientSecret, discountId, paymentLink, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "SubscriptionCreateResponse{customer=$customer, metadata=$metadata, recurringPreTaxAmount=$recurringPreTaxAmount, subscriptionId=$subscriptionId, clientSecret=$clientSecret, discountId=$discountId, paymentLink=$paymentLink, additionalProperties=$additionalProperties}"
+        "SubscriptionCreateResponse{addons=$addons, customer=$customer, metadata=$metadata, recurringPreTaxAmount=$recurringPreTaxAmount, subscriptionId=$subscriptionId, clientSecret=$clientSecret, discountId=$discountId, paymentLink=$paymentLink, additionalProperties=$additionalProperties}"
 }

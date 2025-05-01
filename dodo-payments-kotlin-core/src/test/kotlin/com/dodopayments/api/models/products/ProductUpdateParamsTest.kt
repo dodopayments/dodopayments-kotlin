@@ -2,6 +2,8 @@
 
 package com.dodopayments.api.models.products
 
+import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.misc.TaxCategory
 import com.dodopayments.api.models.subscriptions.TimeInterval
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -24,7 +26,7 @@ internal class ProductUpdateParamsTest {
             .name("name")
             .price(
                 Price.OneTimePrice.builder()
-                    .currency(Price.OneTimePrice.Currency.AED)
+                    .currency(Currency.AED)
                     .discount(0.0)
                     .price(0L)
                     .purchasingPowerParity(true)
@@ -34,7 +36,7 @@ internal class ProductUpdateParamsTest {
                     .taxInclusive(true)
                     .build()
             )
-            .taxCategory(ProductUpdateParams.TaxCategory.DIGITAL_PRODUCTS)
+            .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
             .build()
     }
 
@@ -64,7 +66,7 @@ internal class ProductUpdateParamsTest {
                 .name("name")
                 .price(
                     Price.OneTimePrice.builder()
-                        .currency(Price.OneTimePrice.Currency.AED)
+                        .currency(Currency.AED)
                         .discount(0.0)
                         .price(0L)
                         .purchasingPowerParity(true)
@@ -74,7 +76,7 @@ internal class ProductUpdateParamsTest {
                         .taxInclusive(true)
                         .build()
                 )
-                .taxCategory(ProductUpdateParams.TaxCategory.DIGITAL_PRODUCTS)
+                .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
                 .build()
 
         val body = params._body()
@@ -92,7 +94,7 @@ internal class ProductUpdateParamsTest {
             .isEqualTo(
                 Price.ofOneTime(
                     Price.OneTimePrice.builder()
-                        .currency(Price.OneTimePrice.Currency.AED)
+                        .currency(Currency.AED)
                         .discount(0.0)
                         .price(0L)
                         .purchasingPowerParity(true)
@@ -103,7 +105,7 @@ internal class ProductUpdateParamsTest {
                         .build()
                 )
             )
-        assertThat(body.taxCategory()).isEqualTo(ProductUpdateParams.TaxCategory.DIGITAL_PRODUCTS)
+        assertThat(body.taxCategory()).isEqualTo(TaxCategory.DIGITAL_PRODUCTS)
     }
 
     @Test

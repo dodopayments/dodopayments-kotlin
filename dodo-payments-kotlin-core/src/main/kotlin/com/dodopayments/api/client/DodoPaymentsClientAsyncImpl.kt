@@ -4,6 +4,8 @@ package com.dodopayments.api.client
 
 import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.getPackageVersion
+import com.dodopayments.api.services.async.AddonServiceAsync
+import com.dodopayments.api.services.async.AddonServiceAsyncImpl
 import com.dodopayments.api.services.async.CustomerServiceAsync
 import com.dodopayments.api.services.async.CustomerServiceAsyncImpl
 import com.dodopayments.api.services.async.DiscountServiceAsync
@@ -105,6 +107,10 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
         DiscountServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
+    private val addons: AddonServiceAsync by lazy {
+        AddonServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
+
     override fun sync(): DodoPaymentsClient = sync
 
     override fun withRawResponse(): DodoPaymentsClientAsync.WithRawResponse = withRawResponse
@@ -136,6 +142,8 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
     override fun misc(): MiscServiceAsync = misc
 
     override fun discounts(): DiscountServiceAsync = discounts
+
+    override fun addons(): AddonServiceAsync = addons
 
     override fun close() = clientOptions.httpClient.close()
 
@@ -198,6 +206,10 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
             DiscountServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val addons: AddonServiceAsync.WithRawResponse by lazy {
+            AddonServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun payments(): PaymentServiceAsync.WithRawResponse = payments
 
         override fun subscriptions(): SubscriptionServiceAsync.WithRawResponse = subscriptions
@@ -226,5 +238,7 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
         override fun misc(): MiscServiceAsync.WithRawResponse = misc
 
         override fun discounts(): DiscountServiceAsync.WithRawResponse = discounts
+
+        override fun addons(): AddonServiceAsync.WithRawResponse = addons
     }
 }

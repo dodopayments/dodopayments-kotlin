@@ -3,6 +3,8 @@
 package com.dodopayments.api.models.products
 
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.misc.TaxCategory
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -18,16 +20,16 @@ internal class ProductListResponseTest {
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .isRecurring(true)
                 .productId("product_id")
-                .taxCategory(ProductListResponse.TaxCategory.DIGITAL_PRODUCTS)
+                .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
                 .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .currency(ProductListResponse.Currency.AED)
+                .currency(Currency.AED)
                 .description("description")
                 .image("image")
                 .name("name")
                 .price(0L)
                 .priceDetail(
                     Price.OneTimePrice.builder()
-                        .currency(Price.OneTimePrice.Currency.AED)
+                        .currency(Currency.AED)
                         .discount(0.0)
                         .price(0L)
                         .purchasingPowerParity(true)
@@ -45,11 +47,10 @@ internal class ProductListResponseTest {
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(productListResponse.isRecurring()).isEqualTo(true)
         assertThat(productListResponse.productId()).isEqualTo("product_id")
-        assertThat(productListResponse.taxCategory())
-            .isEqualTo(ProductListResponse.TaxCategory.DIGITAL_PRODUCTS)
+        assertThat(productListResponse.taxCategory()).isEqualTo(TaxCategory.DIGITAL_PRODUCTS)
         assertThat(productListResponse.updatedAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(productListResponse.currency()).isEqualTo(ProductListResponse.Currency.AED)
+        assertThat(productListResponse.currency()).isEqualTo(Currency.AED)
         assertThat(productListResponse.description()).isEqualTo("description")
         assertThat(productListResponse.image()).isEqualTo("image")
         assertThat(productListResponse.name()).isEqualTo("name")
@@ -58,7 +59,7 @@ internal class ProductListResponseTest {
             .isEqualTo(
                 Price.ofOneTime(
                     Price.OneTimePrice.builder()
-                        .currency(Price.OneTimePrice.Currency.AED)
+                        .currency(Currency.AED)
                         .discount(0.0)
                         .price(0L)
                         .purchasingPowerParity(true)
@@ -81,16 +82,16 @@ internal class ProductListResponseTest {
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .isRecurring(true)
                 .productId("product_id")
-                .taxCategory(ProductListResponse.TaxCategory.DIGITAL_PRODUCTS)
+                .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
                 .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .currency(ProductListResponse.Currency.AED)
+                .currency(Currency.AED)
                 .description("description")
                 .image("image")
                 .name("name")
                 .price(0L)
                 .priceDetail(
                     Price.OneTimePrice.builder()
-                        .currency(Price.OneTimePrice.Currency.AED)
+                        .currency(Currency.AED)
                         .discount(0.0)
                         .price(0L)
                         .purchasingPowerParity(true)

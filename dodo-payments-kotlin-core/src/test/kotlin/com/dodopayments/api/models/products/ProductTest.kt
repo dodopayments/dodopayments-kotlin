@@ -3,6 +3,8 @@
 package com.dodopayments.api.models.products
 
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.misc.TaxCategory
 import com.dodopayments.api.models.subscriptions.TimeInterval
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
@@ -21,7 +23,7 @@ internal class ProductTest {
                 .licenseKeyEnabled(true)
                 .price(
                     Price.OneTimePrice.builder()
-                        .currency(Price.OneTimePrice.Currency.AED)
+                        .currency(Currency.AED)
                         .discount(0.0)
                         .price(0L)
                         .purchasingPowerParity(true)
@@ -32,7 +34,7 @@ internal class ProductTest {
                         .build()
                 )
                 .productId("product_id")
-                .taxCategory(Product.TaxCategory.DIGITAL_PRODUCTS)
+                .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
                 .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addAddon("string")
                 .description("description")
@@ -53,7 +55,7 @@ internal class ProductTest {
             .isEqualTo(
                 Price.ofOneTime(
                     Price.OneTimePrice.builder()
-                        .currency(Price.OneTimePrice.Currency.AED)
+                        .currency(Currency.AED)
                         .discount(0.0)
                         .price(0L)
                         .purchasingPowerParity(true)
@@ -65,7 +67,7 @@ internal class ProductTest {
                 )
             )
         assertThat(product.productId()).isEqualTo("product_id")
-        assertThat(product.taxCategory()).isEqualTo(Product.TaxCategory.DIGITAL_PRODUCTS)
+        assertThat(product.taxCategory()).isEqualTo(TaxCategory.DIGITAL_PRODUCTS)
         assertThat(product.updatedAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(product.addons()).containsExactly("string")
         assertThat(product.description()).isEqualTo("description")
@@ -89,7 +91,7 @@ internal class ProductTest {
                 .licenseKeyEnabled(true)
                 .price(
                     Price.OneTimePrice.builder()
-                        .currency(Price.OneTimePrice.Currency.AED)
+                        .currency(Currency.AED)
                         .discount(0.0)
                         .price(0L)
                         .purchasingPowerParity(true)
@@ -100,7 +102,7 @@ internal class ProductTest {
                         .build()
                 )
                 .productId("product_id")
-                .taxCategory(Product.TaxCategory.DIGITAL_PRODUCTS)
+                .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
                 .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addAddon("string")
                 .description("description")

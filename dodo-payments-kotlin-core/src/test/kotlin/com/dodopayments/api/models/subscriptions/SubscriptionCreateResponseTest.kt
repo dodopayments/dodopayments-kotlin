@@ -15,6 +15,7 @@ internal class SubscriptionCreateResponseTest {
     fun create() {
         val subscriptionCreateResponse =
             SubscriptionCreateResponse.builder()
+                .addAddon(AddonCartResponseItem.builder().addonId("addon_id").quantity(0L).build())
                 .customer(
                     CustomerLimitedDetails.builder()
                         .customerId("customer_id")
@@ -34,6 +35,10 @@ internal class SubscriptionCreateResponseTest {
                 .paymentLink("payment_link")
                 .build()
 
+        assertThat(subscriptionCreateResponse.addons())
+            .containsExactly(
+                AddonCartResponseItem.builder().addonId("addon_id").quantity(0L).build()
+            )
         assertThat(subscriptionCreateResponse.customer())
             .isEqualTo(
                 CustomerLimitedDetails.builder()
@@ -60,6 +65,7 @@ internal class SubscriptionCreateResponseTest {
         val jsonMapper = jsonMapper()
         val subscriptionCreateResponse =
             SubscriptionCreateResponse.builder()
+                .addAddon(AddonCartResponseItem.builder().addonId("addon_id").quantity(0L).build())
                 .customer(
                     CustomerLimitedDetails.builder()
                         .customerId("customer_id")

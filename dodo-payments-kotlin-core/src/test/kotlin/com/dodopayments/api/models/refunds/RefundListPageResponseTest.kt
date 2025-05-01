@@ -3,6 +3,7 @@
 package com.dodopayments.api.models.refunds
 
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.misc.Currency
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -22,7 +23,7 @@ internal class RefundListPageResponseTest {
                         .refundId("refund_id")
                         .status(RefundStatus.SUCCEEDED)
                         .amount(0L)
-                        .currency(Refund.Currency.AED)
+                        .currency(Currency.AED)
                         .reason("reason")
                         .build()
                 )
@@ -37,7 +38,7 @@ internal class RefundListPageResponseTest {
                     .refundId("refund_id")
                     .status(RefundStatus.SUCCEEDED)
                     .amount(0L)
-                    .currency(Refund.Currency.AED)
+                    .currency(Currency.AED)
                     .reason("reason")
                     .build()
             )
@@ -56,7 +57,7 @@ internal class RefundListPageResponseTest {
                         .refundId("refund_id")
                         .status(RefundStatus.SUCCEEDED)
                         .amount(0L)
-                        .currency(Refund.Currency.AED)
+                        .currency(Currency.AED)
                         .reason("reason")
                         .build()
                 )

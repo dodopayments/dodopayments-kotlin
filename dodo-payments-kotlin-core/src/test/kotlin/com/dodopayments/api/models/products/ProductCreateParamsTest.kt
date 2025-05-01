@@ -2,6 +2,8 @@
 
 package com.dodopayments.api.models.products
 
+import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.misc.TaxCategory
 import com.dodopayments.api.models.subscriptions.TimeInterval
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -13,7 +15,7 @@ internal class ProductCreateParamsTest {
         ProductCreateParams.builder()
             .price(
                 Price.OneTimePrice.builder()
-                    .currency(Price.OneTimePrice.Currency.AED)
+                    .currency(Currency.AED)
                     .discount(0.0)
                     .price(0L)
                     .purchasingPowerParity(true)
@@ -23,7 +25,7 @@ internal class ProductCreateParamsTest {
                     .taxInclusive(true)
                     .build()
             )
-            .taxCategory(ProductCreateParams.TaxCategory.DIGITAL_PRODUCTS)
+            .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
             .addAddon("string")
             .description("description")
             .licenseKeyActivationMessage("license_key_activation_message")
@@ -42,7 +44,7 @@ internal class ProductCreateParamsTest {
             ProductCreateParams.builder()
                 .price(
                     Price.OneTimePrice.builder()
-                        .currency(Price.OneTimePrice.Currency.AED)
+                        .currency(Currency.AED)
                         .discount(0.0)
                         .price(0L)
                         .purchasingPowerParity(true)
@@ -52,7 +54,7 @@ internal class ProductCreateParamsTest {
                         .taxInclusive(true)
                         .build()
                 )
-                .taxCategory(ProductCreateParams.TaxCategory.DIGITAL_PRODUCTS)
+                .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
                 .addAddon("string")
                 .description("description")
                 .licenseKeyActivationMessage("license_key_activation_message")
@@ -70,7 +72,7 @@ internal class ProductCreateParamsTest {
             .isEqualTo(
                 Price.ofOneTime(
                     Price.OneTimePrice.builder()
-                        .currency(Price.OneTimePrice.Currency.AED)
+                        .currency(Currency.AED)
                         .discount(0.0)
                         .price(0L)
                         .purchasingPowerParity(true)
@@ -81,7 +83,7 @@ internal class ProductCreateParamsTest {
                         .build()
                 )
             )
-        assertThat(body.taxCategory()).isEqualTo(ProductCreateParams.TaxCategory.DIGITAL_PRODUCTS)
+        assertThat(body.taxCategory()).isEqualTo(TaxCategory.DIGITAL_PRODUCTS)
         assertThat(body.addons()).containsExactly("string")
         assertThat(body.description()).isEqualTo("description")
         assertThat(body.licenseKeyActivationMessage()).isEqualTo("license_key_activation_message")
@@ -98,14 +100,14 @@ internal class ProductCreateParamsTest {
             ProductCreateParams.builder()
                 .price(
                     Price.OneTimePrice.builder()
-                        .currency(Price.OneTimePrice.Currency.AED)
+                        .currency(Currency.AED)
                         .discount(0.0)
                         .price(0L)
                         .purchasingPowerParity(true)
                         .type(Price.OneTimePrice.Type.ONE_TIME_PRICE)
                         .build()
                 )
-                .taxCategory(ProductCreateParams.TaxCategory.DIGITAL_PRODUCTS)
+                .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
                 .build()
 
         val body = params._body()
@@ -114,7 +116,7 @@ internal class ProductCreateParamsTest {
             .isEqualTo(
                 Price.ofOneTime(
                     Price.OneTimePrice.builder()
-                        .currency(Price.OneTimePrice.Currency.AED)
+                        .currency(Currency.AED)
                         .discount(0.0)
                         .price(0L)
                         .purchasingPowerParity(true)
@@ -122,6 +124,6 @@ internal class ProductCreateParamsTest {
                         .build()
                 )
             )
-        assertThat(body.taxCategory()).isEqualTo(ProductCreateParams.TaxCategory.DIGITAL_PRODUCTS)
+        assertThat(body.taxCategory()).isEqualTo(TaxCategory.DIGITAL_PRODUCTS)
     }
 }
