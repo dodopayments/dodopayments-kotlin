@@ -98,7 +98,7 @@ import com.dodopayments.api.client.DodoPaymentsClient
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
 
 val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.builder()
-    .bearerToken("My Bearer Token")
+    .apiKey("My API Key")
     .build()
 ```
 
@@ -111,16 +111,16 @@ import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
 val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.builder()
     // Configures using the `DODO_PAYMENTS_API_KEY` and `DODO_PAYMENTS_BASE_URL` environment variables
     .fromEnv()
-    .bearerToken("My Bearer Token")
+    .apiKey("My API Key")
     .build()
 ```
 
 See this table for the available options:
 
-| Setter        | Environment variable     | Required | Default value                     |
-| ------------- | ------------------------ | -------- | --------------------------------- |
-| `bearerToken` | `DODO_PAYMENTS_API_KEY`  | true     | -                                 |
-| `baseUrl`     | `DODO_PAYMENTS_BASE_URL` | true     | `"https://live.dodopayments.com"` |
+| Setter    | Environment variable     | Required | Default value                     |
+| --------- | ------------------------ | -------- | --------------------------------- |
+| `apiKey`  | `DODO_PAYMENTS_API_KEY`  | true     | -                                 |
+| `baseUrl` | `DODO_PAYMENTS_BASE_URL` | true     | `"https://live.dodopayments.com"` |
 
 > [!TIP]
 > Don't create more than one client in the same application. Each client has a connection pool and

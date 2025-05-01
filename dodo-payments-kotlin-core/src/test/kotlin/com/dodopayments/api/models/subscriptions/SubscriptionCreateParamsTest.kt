@@ -4,6 +4,7 @@ package com.dodopayments.api.models.subscriptions
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.misc.CountryCode
+import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.CustomerRequest
@@ -27,8 +28,11 @@ internal class SubscriptionCreateParamsTest {
             .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
             .productId("product_id")
             .quantity(0L)
+            .addAddon(
+                SubscriptionCreateParams.Addon.builder().addonId("addon_id").quantity(0L).build()
+            )
             .addAllowedPaymentMethodType(SubscriptionCreateParams.AllowedPaymentMethodType.CREDIT)
-            .billingCurrency(SubscriptionCreateParams.BillingCurrency.AED)
+            .billingCurrency(Currency.AED)
             .discountCode("discount_code")
             .metadata(
                 SubscriptionCreateParams.Metadata.builder()
@@ -65,10 +69,16 @@ internal class SubscriptionCreateParamsTest {
                 .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
                 .productId("product_id")
                 .quantity(0L)
+                .addAddon(
+                    SubscriptionCreateParams.Addon.builder()
+                        .addonId("addon_id")
+                        .quantity(0L)
+                        .build()
+                )
                 .addAllowedPaymentMethodType(
                     SubscriptionCreateParams.AllowedPaymentMethodType.CREDIT
                 )
-                .billingCurrency(SubscriptionCreateParams.BillingCurrency.AED)
+                .billingCurrency(Currency.AED)
                 .discountCode("discount_code")
                 .metadata(
                     SubscriptionCreateParams.Metadata.builder()
@@ -108,9 +118,13 @@ internal class SubscriptionCreateParamsTest {
             )
         assertThat(body.productId()).isEqualTo("product_id")
         assertThat(body.quantity()).isEqualTo(0L)
+        assertThat(body.addons())
+            .containsExactly(
+                SubscriptionCreateParams.Addon.builder().addonId("addon_id").quantity(0L).build()
+            )
         assertThat(body.allowedPaymentMethodTypes())
             .containsExactly(SubscriptionCreateParams.AllowedPaymentMethodType.CREDIT)
-        assertThat(body.billingCurrency()).isEqualTo(SubscriptionCreateParams.BillingCurrency.AED)
+        assertThat(body.billingCurrency()).isEqualTo(Currency.AED)
         assertThat(body.discountCode()).isEqualTo("discount_code")
         assertThat(body.metadata())
             .isEqualTo(

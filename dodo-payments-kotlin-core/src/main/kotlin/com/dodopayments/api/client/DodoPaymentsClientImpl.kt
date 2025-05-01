@@ -4,6 +4,8 @@ package com.dodopayments.api.client
 
 import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.getPackageVersion
+import com.dodopayments.api.services.blocking.AddonService
+import com.dodopayments.api.services.blocking.AddonServiceImpl
 import com.dodopayments.api.services.blocking.CustomerService
 import com.dodopayments.api.services.blocking.CustomerServiceImpl
 import com.dodopayments.api.services.blocking.DiscountService
@@ -92,6 +94,8 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
         DiscountServiceImpl(clientOptionsWithUserAgent)
     }
 
+    private val addons: AddonService by lazy { AddonServiceImpl(clientOptionsWithUserAgent) }
+
     override fun async(): DodoPaymentsClientAsync = async
 
     override fun withRawResponse(): DodoPaymentsClient.WithRawResponse = withRawResponse
@@ -123,6 +127,8 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
     override fun misc(): MiscService = misc
 
     override fun discounts(): DiscountService = discounts
+
+    override fun addons(): AddonService = addons
 
     override fun close() = clientOptions.httpClient.close()
 
@@ -185,6 +191,10 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
             DiscountServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val addons: AddonService.WithRawResponse by lazy {
+            AddonServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun payments(): PaymentService.WithRawResponse = payments
 
         override fun subscriptions(): SubscriptionService.WithRawResponse = subscriptions
@@ -213,5 +223,7 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
         override fun misc(): MiscService.WithRawResponse = misc
 
         override fun discounts(): DiscountService.WithRawResponse = discounts
+
+        override fun addons(): AddonService.WithRawResponse = addons
     }
 }

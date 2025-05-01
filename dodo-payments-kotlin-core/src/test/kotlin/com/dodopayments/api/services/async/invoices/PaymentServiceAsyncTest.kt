@@ -16,7 +16,7 @@ internal class PaymentServiceAsyncTest {
         val client =
             DodoPaymentsOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val paymentServiceAsync = client.invoices().payments()
 

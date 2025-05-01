@@ -3,6 +3,7 @@
 package com.dodopayments.api.models.payouts
 
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.misc.Currency
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -20,7 +21,7 @@ internal class PayoutListPageResponseTest {
                         .businessId("business_id")
                         .chargebacks(0L)
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .currency(PayoutListResponse.Currency.AED)
+                        .currency(Currency.AED)
                         .fee(0L)
                         .paymentMethod("payment_method")
                         .payoutId("payout_id")
@@ -42,7 +43,7 @@ internal class PayoutListPageResponseTest {
                     .businessId("business_id")
                     .chargebacks(0L)
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .currency(PayoutListResponse.Currency.AED)
+                    .currency(Currency.AED)
                     .fee(0L)
                     .paymentMethod("payment_method")
                     .payoutId("payout_id")
@@ -68,7 +69,7 @@ internal class PayoutListPageResponseTest {
                         .businessId("business_id")
                         .chargebacks(0L)
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .currency(PayoutListResponse.Currency.AED)
+                        .currency(Currency.AED)
                         .fee(0L)
                         .paymentMethod("payment_method")
                         .payoutId("payout_id")

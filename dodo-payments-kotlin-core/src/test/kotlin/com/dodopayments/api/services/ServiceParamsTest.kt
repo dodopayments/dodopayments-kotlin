@@ -6,6 +6,7 @@ import com.dodopayments.api.client.DodoPaymentsClient
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.misc.CountryCode
+import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.OneTimeProductCartItem
@@ -35,7 +36,7 @@ internal class ServiceParamsTest {
         client =
             DodoPaymentsOkHttpClient.builder()
                 .baseUrl(wmRuntimeInfo.httpBaseUrl)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
     }
 
@@ -64,7 +65,7 @@ internal class ServiceParamsTest {
                         .build()
                 )
                 .addAllowedPaymentMethodType(PaymentCreateParams.AllowedPaymentMethodType.CREDIT)
-                .billingCurrency(PaymentCreateParams.BillingCurrency.AED)
+                .billingCurrency(Currency.AED)
                 .discountCode("discount_code")
                 .metadata(
                     PaymentCreateParams.Metadata.builder()
