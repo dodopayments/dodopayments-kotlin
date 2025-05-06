@@ -21,7 +21,7 @@ internal class DiscountServiceTest {
         val client =
             DodoPaymentsOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
                 .build()
         val discountService = client.discounts()
 
@@ -46,7 +46,7 @@ internal class DiscountServiceTest {
         val client =
             DodoPaymentsOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
                 .build()
         val discountService = client.discounts()
 
@@ -63,7 +63,7 @@ internal class DiscountServiceTest {
         val client =
             DodoPaymentsOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
                 .build()
         val discountService = client.discounts()
 
@@ -89,7 +89,7 @@ internal class DiscountServiceTest {
         val client =
             DodoPaymentsOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
                 .build()
         val discountService = client.discounts()
 
@@ -103,7 +103,7 @@ internal class DiscountServiceTest {
         val client =
             DodoPaymentsOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
                 .build()
         val discountService = client.discounts()
 

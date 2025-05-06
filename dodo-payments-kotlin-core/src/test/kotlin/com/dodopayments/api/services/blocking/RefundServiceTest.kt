@@ -17,7 +17,7 @@ internal class RefundServiceTest {
         val client =
             DodoPaymentsOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
                 .build()
         val refundService = client.refunds()
 
@@ -34,7 +34,7 @@ internal class RefundServiceTest {
         val client =
             DodoPaymentsOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
                 .build()
         val refundService = client.refunds()
 
@@ -49,7 +49,7 @@ internal class RefundServiceTest {
         val client =
             DodoPaymentsOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
                 .build()
         val refundService = client.refunds()
 

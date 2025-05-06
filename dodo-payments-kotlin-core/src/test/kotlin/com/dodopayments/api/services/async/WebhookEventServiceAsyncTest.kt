@@ -16,7 +16,7 @@ internal class WebhookEventServiceAsyncTest {
         val client =
             DodoPaymentsOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
                 .build()
         val webhookEventServiceAsync = client.webhookEvents()
 
@@ -33,7 +33,7 @@ internal class WebhookEventServiceAsyncTest {
         val client =
             DodoPaymentsOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
                 .build()
         val webhookEventServiceAsync = client.webhookEvents()
 
