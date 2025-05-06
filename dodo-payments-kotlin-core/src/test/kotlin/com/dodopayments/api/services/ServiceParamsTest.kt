@@ -36,7 +36,7 @@ internal class ServiceParamsTest {
         client =
             DodoPaymentsOkHttpClient.builder()
                 .baseUrl(wmRuntimeInfo.httpBaseUrl)
-                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
                 .build()
     }
 

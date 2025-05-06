@@ -27,7 +27,7 @@ internal class SubscriptionServiceAsyncTest {
         val client =
             DodoPaymentsOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
                 .build()
         val subscriptionServiceAsync = client.subscriptions()
 
@@ -84,7 +84,7 @@ internal class SubscriptionServiceAsyncTest {
         val client =
             DodoPaymentsOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
                 .build()
         val subscriptionServiceAsync = client.subscriptions()
 
@@ -101,7 +101,7 @@ internal class SubscriptionServiceAsyncTest {
         val client =
             DodoPaymentsOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
                 .build()
         val subscriptionServiceAsync = client.subscriptions()
 
@@ -141,7 +141,7 @@ internal class SubscriptionServiceAsyncTest {
         val client =
             DodoPaymentsOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
                 .build()
         val subscriptionServiceAsync = client.subscriptions()
 
@@ -155,7 +155,7 @@ internal class SubscriptionServiceAsyncTest {
         val client =
             DodoPaymentsOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
                 .build()
         val subscriptionServiceAsync = client.subscriptions()
 
@@ -176,7 +176,7 @@ internal class SubscriptionServiceAsyncTest {
         val client =
             DodoPaymentsOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
                 .build()
         val subscriptionServiceAsync = client.subscriptions()
 

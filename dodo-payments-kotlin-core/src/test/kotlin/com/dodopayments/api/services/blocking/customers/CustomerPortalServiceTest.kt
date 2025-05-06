@@ -16,7 +16,7 @@ internal class CustomerPortalServiceTest {
         val client =
             DodoPaymentsOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
                 .build()
         val customerPortalService = client.customers().customerPortal()
 

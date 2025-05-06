@@ -18,7 +18,7 @@ internal class LicenseKeyServiceTest {
         val client =
             DodoPaymentsOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
                 .build()
         val licenseKeyService = client.licenseKeys()
 
@@ -33,7 +33,7 @@ internal class LicenseKeyServiceTest {
         val client =
             DodoPaymentsOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
                 .build()
         val licenseKeyService = client.licenseKeys()
 
@@ -55,7 +55,7 @@ internal class LicenseKeyServiceTest {
         val client =
             DodoPaymentsOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
+                .bearerToken("My Bearer Token")
                 .build()
         val licenseKeyService = client.licenseKeys()
 
