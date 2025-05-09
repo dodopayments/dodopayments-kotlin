@@ -16,22 +16,9 @@ interface PaymentServiceAsync {
 
     @MustBeClosed
     suspend fun retrieve(
-        paymentId: String,
-        params: PaymentRetrieveParams = PaymentRetrieveParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): HttpResponse = retrieve(params.toBuilder().paymentId(paymentId).build(), requestOptions)
-
-    /** @see [retrieve] */
-    @MustBeClosed
-    suspend fun retrieve(
         params: PaymentRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): HttpResponse
-
-    /** @see [retrieve] */
-    @MustBeClosed
-    suspend fun retrieve(paymentId: String, requestOptions: RequestOptions): HttpResponse =
-        retrieve(paymentId, PaymentRetrieveParams.none(), requestOptions)
 
     /**
      * A view of [PaymentServiceAsync] that provides access to raw HTTP responses for each method.
@@ -44,21 +31,8 @@ interface PaymentServiceAsync {
          */
         @MustBeClosed
         suspend fun retrieve(
-            paymentId: String,
-            params: PaymentRetrieveParams = PaymentRetrieveParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse = retrieve(params.toBuilder().paymentId(paymentId).build(), requestOptions)
-
-        /** @see [retrieve] */
-        @MustBeClosed
-        suspend fun retrieve(
             params: PaymentRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
-
-        /** @see [retrieve] */
-        @MustBeClosed
-        suspend fun retrieve(paymentId: String, requestOptions: RequestOptions): HttpResponse =
-            retrieve(paymentId, PaymentRetrieveParams.none(), requestOptions)
     }
 }

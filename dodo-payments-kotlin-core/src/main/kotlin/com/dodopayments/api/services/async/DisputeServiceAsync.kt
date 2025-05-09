@@ -18,23 +18,9 @@ interface DisputeServiceAsync {
     fun withRawResponse(): WithRawResponse
 
     suspend fun retrieve(
-        disputeId: String,
-        params: DisputeRetrieveParams = DisputeRetrieveParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): DisputeRetrieveResponse =
-        retrieve(params.toBuilder().disputeId(disputeId).build(), requestOptions)
-
-    /** @see [retrieve] */
-    suspend fun retrieve(
         params: DisputeRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): DisputeRetrieveResponse
-
-    /** @see [retrieve] */
-    suspend fun retrieve(
-        disputeId: String,
-        requestOptions: RequestOptions,
-    ): DisputeRetrieveResponse = retrieve(disputeId, DisputeRetrieveParams.none(), requestOptions)
 
     suspend fun list(
         params: DisputeListParams = DisputeListParams.none(),
@@ -56,26 +42,9 @@ interface DisputeServiceAsync {
          */
         @MustBeClosed
         suspend fun retrieve(
-            disputeId: String,
-            params: DisputeRetrieveParams = DisputeRetrieveParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<DisputeRetrieveResponse> =
-            retrieve(params.toBuilder().disputeId(disputeId).build(), requestOptions)
-
-        /** @see [retrieve] */
-        @MustBeClosed
-        suspend fun retrieve(
             params: DisputeRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<DisputeRetrieveResponse>
-
-        /** @see [retrieve] */
-        @MustBeClosed
-        suspend fun retrieve(
-            disputeId: String,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<DisputeRetrieveResponse> =
-            retrieve(disputeId, DisputeRetrieveParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /disputes`, but is otherwise the same as

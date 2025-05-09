@@ -4,6 +4,7 @@ package com.dodopayments.api.services.async
 
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClientAsync
+import com.dodopayments.api.models.webhookevents.WebhookEventRetrieveParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -19,7 +20,10 @@ internal class WebhookEventServiceAsyncTest {
                 .build()
         val webhookEventServiceAsync = client.webhookEvents()
 
-        val webhookEvent = webhookEventServiceAsync.retrieve("webhook_event_id")
+        val webhookEvent =
+            webhookEventServiceAsync.retrieve(
+                WebhookEventRetrieveParams.builder().webhookEventId("webhook_event_id").build()
+            )
 
         webhookEvent.validate()
     }

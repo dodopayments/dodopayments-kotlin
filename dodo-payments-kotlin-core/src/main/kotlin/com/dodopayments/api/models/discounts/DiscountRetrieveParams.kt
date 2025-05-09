@@ -3,6 +3,7 @@
 package com.dodopayments.api.models.discounts
 
 import com.dodopayments.api.core.Params
+import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
 import java.util.Objects
@@ -10,12 +11,12 @@ import java.util.Objects
 /** GET /discounts/{discount_id} */
 class DiscountRetrieveParams
 private constructor(
-    private val discountId: String?,
+    private val discountId: String,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun discountId(): String? = discountId
+    fun discountId(): String = discountId
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -25,9 +26,14 @@ private constructor(
 
     companion object {
 
-        fun none(): DiscountRetrieveParams = builder().build()
-
-        /** Returns a mutable builder for constructing an instance of [DiscountRetrieveParams]. */
+        /**
+         * Returns a mutable builder for constructing an instance of [DiscountRetrieveParams].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .discountId()
+         * ```
+         */
         fun builder() = Builder()
     }
 
@@ -44,7 +50,7 @@ private constructor(
             additionalQueryParams = discountRetrieveParams.additionalQueryParams.toBuilder()
         }
 
-        fun discountId(discountId: String?) = apply { this.discountId = discountId }
+        fun discountId(discountId: String) = apply { this.discountId = discountId }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -148,10 +154,17 @@ private constructor(
          * Returns an immutable instance of [DiscountRetrieveParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .discountId()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): DiscountRetrieveParams =
             DiscountRetrieveParams(
-                discountId,
+                checkRequired("discountId", discountId),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -159,7 +172,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> discountId ?: ""
+            0 -> discountId
             else -> ""
         }
 

@@ -4,6 +4,7 @@ package com.dodopayments.api.models.addons
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.Params
+import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
 import com.dodopayments.api.core.toImmutable
@@ -11,13 +12,13 @@ import java.util.Objects
 
 class AddonUpdateImagesParams
 private constructor(
-    private val id: String?,
+    private val id: String,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    fun id(): String? = id
+    fun id(): String = id
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
@@ -29,9 +30,14 @@ private constructor(
 
     companion object {
 
-        fun none(): AddonUpdateImagesParams = builder().build()
-
-        /** Returns a mutable builder for constructing an instance of [AddonUpdateImagesParams]. */
+        /**
+         * Returns a mutable builder for constructing an instance of [AddonUpdateImagesParams].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .id()
+         * ```
+         */
         fun builder() = Builder()
     }
 
@@ -51,7 +57,7 @@ private constructor(
                 addonUpdateImagesParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun id(id: String?) = apply { this.id = id }
+        fun id(id: String) = apply { this.id = id }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -177,10 +183,17 @@ private constructor(
          * Returns an immutable instance of [AddonUpdateImagesParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .id()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): AddonUpdateImagesParams =
             AddonUpdateImagesParams(
-                id,
+                checkRequired("id", id),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -191,7 +204,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> id ?: ""
+            0 -> id
             else -> ""
         }
 

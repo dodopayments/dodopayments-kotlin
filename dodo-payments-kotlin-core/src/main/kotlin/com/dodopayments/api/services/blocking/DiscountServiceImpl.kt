@@ -5,7 +5,6 @@ package com.dodopayments.api.services.blocking
 import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.RequestOptions
-import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.handlers.emptyHandler
 import com.dodopayments.api.core.handlers.errorHandler
 import com.dodopayments.api.core.handlers.jsonHandler
@@ -102,9 +101,6 @@ class DiscountServiceImpl internal constructor(private val clientOptions: Client
             params: DiscountRetrieveParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Discount> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
-            checkRequired("discountId", params.discountId())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -131,9 +127,6 @@ class DiscountServiceImpl internal constructor(private val clientOptions: Client
             params: DiscountUpdateParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Discount> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
-            checkRequired("discountId", params.discountId())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PATCH)
@@ -194,9 +187,6 @@ class DiscountServiceImpl internal constructor(private val clientOptions: Client
             params: DiscountDeleteParams,
             requestOptions: RequestOptions,
         ): HttpResponse {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
-            checkRequired("discountId", params.discountId())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)

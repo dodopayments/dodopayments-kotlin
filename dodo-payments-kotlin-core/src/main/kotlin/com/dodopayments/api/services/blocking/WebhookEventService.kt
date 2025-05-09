@@ -18,21 +18,9 @@ interface WebhookEventService {
     fun withRawResponse(): WithRawResponse
 
     fun retrieve(
-        webhookEventId: String,
-        params: WebhookEventRetrieveParams = WebhookEventRetrieveParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): WebhookEvent =
-        retrieve(params.toBuilder().webhookEventId(webhookEventId).build(), requestOptions)
-
-    /** @see [retrieve] */
-    fun retrieve(
         params: WebhookEventRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): WebhookEvent
-
-    /** @see [retrieve] */
-    fun retrieve(webhookEventId: String, requestOptions: RequestOptions): WebhookEvent =
-        retrieve(webhookEventId, WebhookEventRetrieveParams.none(), requestOptions)
 
     fun list(
         params: WebhookEventListParams = WebhookEventListParams.none(),
@@ -54,26 +42,9 @@ interface WebhookEventService {
          */
         @MustBeClosed
         fun retrieve(
-            webhookEventId: String,
-            params: WebhookEventRetrieveParams = WebhookEventRetrieveParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<WebhookEvent> =
-            retrieve(params.toBuilder().webhookEventId(webhookEventId).build(), requestOptions)
-
-        /** @see [retrieve] */
-        @MustBeClosed
-        fun retrieve(
             params: WebhookEventRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<WebhookEvent>
-
-        /** @see [retrieve] */
-        @MustBeClosed
-        fun retrieve(
-            webhookEventId: String,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<WebhookEvent> =
-            retrieve(webhookEventId, WebhookEventRetrieveParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /webhook_events`, but is otherwise the same as

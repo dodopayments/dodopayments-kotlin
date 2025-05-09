@@ -5,6 +5,7 @@ package com.dodopayments.api.services.async
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClientAsync
 import com.dodopayments.api.models.customers.CustomerCreateParams
+import com.dodopayments.api.models.customers.CustomerRetrieveParams
 import com.dodopayments.api.models.customers.CustomerUpdateParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -42,7 +43,10 @@ internal class CustomerServiceAsyncTest {
                 .build()
         val customerServiceAsync = client.customers()
 
-        val customer = customerServiceAsync.retrieve("customer_id")
+        val customer =
+            customerServiceAsync.retrieve(
+                CustomerRetrieveParams.builder().customerId("customer_id").build()
+            )
 
         customer.validate()
     }
