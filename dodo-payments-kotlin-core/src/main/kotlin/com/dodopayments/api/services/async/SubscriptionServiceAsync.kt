@@ -30,14 +30,38 @@ interface SubscriptionServiceAsync {
     ): SubscriptionCreateResponse
 
     suspend fun retrieve(
+        subscriptionId: String,
+        params: SubscriptionRetrieveParams = SubscriptionRetrieveParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Subscription =
+        retrieve(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
+
+    /** @see [retrieve] */
+    suspend fun retrieve(
         params: SubscriptionRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Subscription
 
+    /** @see [retrieve] */
+    suspend fun retrieve(subscriptionId: String, requestOptions: RequestOptions): Subscription =
+        retrieve(subscriptionId, SubscriptionRetrieveParams.none(), requestOptions)
+
+    suspend fun update(
+        subscriptionId: String,
+        params: SubscriptionUpdateParams = SubscriptionUpdateParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Subscription =
+        update(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
+
+    /** @see [update] */
     suspend fun update(
         params: SubscriptionUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Subscription
+
+    /** @see [update] */
+    suspend fun update(subscriptionId: String, requestOptions: RequestOptions): Subscription =
+        update(subscriptionId, SubscriptionUpdateParams.none(), requestOptions)
 
     suspend fun list(
         params: SubscriptionListParams = SubscriptionListParams.none(),
@@ -49,10 +73,25 @@ interface SubscriptionServiceAsync {
         list(SubscriptionListParams.none(), requestOptions)
 
     suspend fun changePlan(
+        subscriptionId: String,
+        params: SubscriptionChangePlanParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ) = changePlan(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
+
+    /** @see [changePlan] */
+    suspend fun changePlan(
         params: SubscriptionChangePlanParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     )
 
+    suspend fun charge(
+        subscriptionId: String,
+        params: SubscriptionChargeParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): SubscriptionChargeResponse =
+        charge(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
+
+    /** @see [charge] */
     suspend fun charge(
         params: SubscriptionChargeParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -80,9 +119,26 @@ interface SubscriptionServiceAsync {
          */
         @MustBeClosed
         suspend fun retrieve(
+            subscriptionId: String,
+            params: SubscriptionRetrieveParams = SubscriptionRetrieveParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Subscription> =
+            retrieve(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        suspend fun retrieve(
             params: SubscriptionRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Subscription>
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        suspend fun retrieve(
+            subscriptionId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<Subscription> =
+            retrieve(subscriptionId, SubscriptionRetrieveParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `patch /subscriptions/{subscription_id}`, but is
@@ -90,9 +146,26 @@ interface SubscriptionServiceAsync {
          */
         @MustBeClosed
         suspend fun update(
+            subscriptionId: String,
+            params: SubscriptionUpdateParams = SubscriptionUpdateParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Subscription> =
+            update(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
+
+        /** @see [update] */
+        @MustBeClosed
+        suspend fun update(
             params: SubscriptionUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Subscription>
+
+        /** @see [update] */
+        @MustBeClosed
+        suspend fun update(
+            subscriptionId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<Subscription> =
+            update(subscriptionId, SubscriptionUpdateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /subscriptions`, but is otherwise the same as
@@ -117,6 +190,15 @@ interface SubscriptionServiceAsync {
          */
         @MustBeClosed
         suspend fun changePlan(
+            subscriptionId: String,
+            params: SubscriptionChangePlanParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse =
+            changePlan(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
+
+        /** @see [changePlan] */
+        @MustBeClosed
+        suspend fun changePlan(
             params: SubscriptionChangePlanParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
@@ -125,6 +207,15 @@ interface SubscriptionServiceAsync {
          * Returns a raw HTTP response for `post /subscriptions/{subscription_id}/charge`, but is
          * otherwise the same as [SubscriptionServiceAsync.charge].
          */
+        @MustBeClosed
+        suspend fun charge(
+            subscriptionId: String,
+            params: SubscriptionChargeParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionChargeResponse> =
+            charge(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
+
+        /** @see [charge] */
         @MustBeClosed
         suspend fun charge(
             params: SubscriptionChargeParams,

@@ -25,9 +25,20 @@ interface PaymentServiceAsync {
     ): PaymentCreateResponse
 
     suspend fun retrieve(
+        paymentId: String,
+        params: PaymentRetrieveParams = PaymentRetrieveParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Payment = retrieve(params.toBuilder().paymentId(paymentId).build(), requestOptions)
+
+    /** @see [retrieve] */
+    suspend fun retrieve(
         params: PaymentRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Payment
+
+    /** @see [retrieve] */
+    suspend fun retrieve(paymentId: String, requestOptions: RequestOptions): Payment =
+        retrieve(paymentId, PaymentRetrieveParams.none(), requestOptions)
 
     suspend fun list(
         params: PaymentListParams = PaymentListParams.none(),
@@ -59,9 +70,26 @@ interface PaymentServiceAsync {
          */
         @MustBeClosed
         suspend fun retrieve(
+            paymentId: String,
+            params: PaymentRetrieveParams = PaymentRetrieveParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Payment> =
+            retrieve(params.toBuilder().paymentId(paymentId).build(), requestOptions)
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        suspend fun retrieve(
             params: PaymentRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Payment>
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        suspend fun retrieve(
+            paymentId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<Payment> =
+            retrieve(paymentId, PaymentRetrieveParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /payments`, but is otherwise the same as
