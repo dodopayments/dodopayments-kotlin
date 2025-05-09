@@ -12,18 +12,18 @@ internal class OneTimeProductCartItemTest {
     @Test
     fun create() {
         val oneTimeProductCartItem =
-            OneTimeProductCartItem.builder().productId("product_id").quantity(0L).amount(0L).build()
+            OneTimeProductCartItem.builder().productId("product_id").quantity(0).amount(0).build()
 
         assertThat(oneTimeProductCartItem.productId()).isEqualTo("product_id")
-        assertThat(oneTimeProductCartItem.quantity()).isEqualTo(0L)
-        assertThat(oneTimeProductCartItem.amount()).isEqualTo(0L)
+        assertThat(oneTimeProductCartItem.quantity()).isEqualTo(0)
+        assertThat(oneTimeProductCartItem.amount()).isEqualTo(0)
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
         val oneTimeProductCartItem =
-            OneTimeProductCartItem.builder().productId("product_id").quantity(0L).amount(0L).build()
+            OneTimeProductCartItem.builder().productId("product_id").quantity(0).amount(0).build()
 
         val roundtrippedOneTimeProductCartItem =
             jsonMapper.readValue(

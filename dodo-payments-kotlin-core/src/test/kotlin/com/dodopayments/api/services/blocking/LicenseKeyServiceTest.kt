@@ -39,7 +39,7 @@ internal class LicenseKeyServiceTest {
             licenseKeyService.update(
                 LicenseKeyUpdateParams.builder()
                     .id("lic_123")
-                    .activationsLimit(0L)
+                    .activationsLimit(0)
                     .disabled(true)
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .build()

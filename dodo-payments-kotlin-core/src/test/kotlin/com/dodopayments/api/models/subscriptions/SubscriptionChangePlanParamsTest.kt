@@ -15,12 +15,9 @@ internal class SubscriptionChangePlanParamsTest {
             .prorationBillingMode(
                 SubscriptionChangePlanParams.ProrationBillingMode.PRORATED_IMMEDIATELY
             )
-            .quantity(0L)
+            .quantity(0)
             .addAddon(
-                SubscriptionChangePlanParams.Addon.builder()
-                    .addonId("addon_id")
-                    .quantity(0L)
-                    .build()
+                SubscriptionChangePlanParams.Addon.builder().addonId("addon_id").quantity(0).build()
             )
             .build()
     }
@@ -34,7 +31,7 @@ internal class SubscriptionChangePlanParamsTest {
                 .prorationBillingMode(
                     SubscriptionChangePlanParams.ProrationBillingMode.PRORATED_IMMEDIATELY
                 )
-                .quantity(0L)
+                .quantity(0)
                 .build()
 
         assertThat(params._pathParam(0)).isEqualTo("subscription_id")
@@ -51,11 +48,11 @@ internal class SubscriptionChangePlanParamsTest {
                 .prorationBillingMode(
                     SubscriptionChangePlanParams.ProrationBillingMode.PRORATED_IMMEDIATELY
                 )
-                .quantity(0L)
+                .quantity(0)
                 .addAddon(
                     SubscriptionChangePlanParams.Addon.builder()
                         .addonId("addon_id")
-                        .quantity(0L)
+                        .quantity(0)
                         .build()
                 )
                 .build()
@@ -65,13 +62,10 @@ internal class SubscriptionChangePlanParamsTest {
         assertThat(body.productId()).isEqualTo("product_id")
         assertThat(body.prorationBillingMode())
             .isEqualTo(SubscriptionChangePlanParams.ProrationBillingMode.PRORATED_IMMEDIATELY)
-        assertThat(body.quantity()).isEqualTo(0L)
+        assertThat(body.quantity()).isEqualTo(0)
         assertThat(body.addons())
             .containsExactly(
-                SubscriptionChangePlanParams.Addon.builder()
-                    .addonId("addon_id")
-                    .quantity(0L)
-                    .build()
+                SubscriptionChangePlanParams.Addon.builder().addonId("addon_id").quantity(0).build()
             )
     }
 
@@ -84,7 +78,7 @@ internal class SubscriptionChangePlanParamsTest {
                 .prorationBillingMode(
                     SubscriptionChangePlanParams.ProrationBillingMode.PRORATED_IMMEDIATELY
                 )
-                .quantity(0L)
+                .quantity(0)
                 .build()
 
         val body = params._body()
@@ -92,6 +86,6 @@ internal class SubscriptionChangePlanParamsTest {
         assertThat(body.productId()).isEqualTo("product_id")
         assertThat(body.prorationBillingMode())
             .isEqualTo(SubscriptionChangePlanParams.ProrationBillingMode.PRORATED_IMMEDIATELY)
-        assertThat(body.quantity()).isEqualTo(0L)
+        assertThat(body.quantity()).isEqualTo(0)
     }
 }

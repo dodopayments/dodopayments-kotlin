@@ -20,23 +20,23 @@ import java.util.Objects
 
 class Discount
 private constructor(
-    private val amount: JsonField<Long>,
+    private val amount: JsonField<Int>,
     private val businessId: JsonField<String>,
     private val code: JsonField<String>,
     private val createdAt: JsonField<OffsetDateTime>,
     private val discountId: JsonField<String>,
     private val restrictedTo: JsonField<List<String>>,
-    private val timesUsed: JsonField<Long>,
+    private val timesUsed: JsonField<Int>,
     private val type: JsonField<DiscountType>,
     private val expiresAt: JsonField<OffsetDateTime>,
     private val name: JsonField<String>,
-    private val usageLimit: JsonField<Long>,
+    private val usageLimit: JsonField<Int>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("amount") @ExcludeMissing amount: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("amount") @ExcludeMissing amount: JsonField<Int> = JsonMissing.of(),
         @JsonProperty("business_id")
         @ExcludeMissing
         businessId: JsonField<String> = JsonMissing.of(),
@@ -50,13 +50,13 @@ private constructor(
         @JsonProperty("restricted_to")
         @ExcludeMissing
         restrictedTo: JsonField<List<String>> = JsonMissing.of(),
-        @JsonProperty("times_used") @ExcludeMissing timesUsed: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("times_used") @ExcludeMissing timesUsed: JsonField<Int> = JsonMissing.of(),
         @JsonProperty("type") @ExcludeMissing type: JsonField<DiscountType> = JsonMissing.of(),
         @JsonProperty("expires_at")
         @ExcludeMissing
         expiresAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("usage_limit") @ExcludeMissing usageLimit: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("usage_limit") @ExcludeMissing usageLimit: JsonField<Int> = JsonMissing.of(),
     ) : this(
         amount,
         businessId,
@@ -80,7 +80,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun amount(): Long = amount.getRequired("amount")
+    fun amount(): Int = amount.getRequired("amount")
 
     /**
      * The business this discount belongs to.
@@ -128,7 +128,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun timesUsed(): Long = timesUsed.getRequired("times_used")
+    fun timesUsed(): Int = timesUsed.getRequired("times_used")
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
@@ -158,14 +158,14 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
-    fun usageLimit(): Long? = usageLimit.getNullable("usage_limit")
+    fun usageLimit(): Int? = usageLimit.getNullable("usage_limit")
 
     /**
      * Returns the raw JSON value of [amount].
      *
      * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Long> = amount
+    @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Int> = amount
 
     /**
      * Returns the raw JSON value of [businessId].
@@ -211,7 +211,7 @@ private constructor(
      *
      * Unlike [timesUsed], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("times_used") @ExcludeMissing fun _timesUsed(): JsonField<Long> = timesUsed
+    @JsonProperty("times_used") @ExcludeMissing fun _timesUsed(): JsonField<Int> = timesUsed
 
     /**
      * Returns the raw JSON value of [type].
@@ -241,7 +241,7 @@ private constructor(
      *
      * Unlike [usageLimit], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("usage_limit") @ExcludeMissing fun _usageLimit(): JsonField<Long> = usageLimit
+    @JsonProperty("usage_limit") @ExcludeMissing fun _usageLimit(): JsonField<Int> = usageLimit
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -278,17 +278,17 @@ private constructor(
     /** A builder for [Discount]. */
     class Builder internal constructor() {
 
-        private var amount: JsonField<Long>? = null
+        private var amount: JsonField<Int>? = null
         private var businessId: JsonField<String>? = null
         private var code: JsonField<String>? = null
         private var createdAt: JsonField<OffsetDateTime>? = null
         private var discountId: JsonField<String>? = null
         private var restrictedTo: JsonField<MutableList<String>>? = null
-        private var timesUsed: JsonField<Long>? = null
+        private var timesUsed: JsonField<Int>? = null
         private var type: JsonField<DiscountType>? = null
         private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var name: JsonField<String> = JsonMissing.of()
-        private var usageLimit: JsonField<Long> = JsonMissing.of()
+        private var usageLimit: JsonField<Int> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(discount: Discount) = apply {
@@ -311,15 +311,15 @@ private constructor(
          * - If `discount_type` is `percentage`, this is in **basis points** (e.g., 540 => 5.4%).
          * - Otherwise, this is **USD cents** (e.g., 100 => `$1.00`).
          */
-        fun amount(amount: Long) = amount(JsonField.of(amount))
+        fun amount(amount: Int) = amount(JsonField.of(amount))
 
         /**
          * Sets [Builder.amount] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.amount] with a well-typed [Long] value instead. This
+         * You should usually call [Builder.amount] with a well-typed [Int] value instead. This
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun amount(amount: JsonField<Long>) = apply { this.amount = amount }
+        fun amount(amount: JsonField<Int>) = apply { this.amount = amount }
 
         /** The business this discount belongs to. */
         fun businessId(businessId: String) = businessId(JsonField.of(businessId))
@@ -395,15 +395,15 @@ private constructor(
         }
 
         /** How many times this discount has been used. */
-        fun timesUsed(timesUsed: Long) = timesUsed(JsonField.of(timesUsed))
+        fun timesUsed(timesUsed: Int) = timesUsed(JsonField.of(timesUsed))
 
         /**
          * Sets [Builder.timesUsed] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.timesUsed] with a well-typed [Long] value instead. This
+         * You should usually call [Builder.timesUsed] with a well-typed [Int] value instead. This
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun timesUsed(timesUsed: JsonField<Long>) = apply { this.timesUsed = timesUsed }
+        fun timesUsed(timesUsed: JsonField<Int>) = apply { this.timesUsed = timesUsed }
 
         fun type(type: DiscountType) = type(JsonField.of(type))
 
@@ -440,22 +440,22 @@ private constructor(
         fun name(name: JsonField<String>) = apply { this.name = name }
 
         /** Usage limit for this discount, if any. */
-        fun usageLimit(usageLimit: Long?) = usageLimit(JsonField.ofNullable(usageLimit))
+        fun usageLimit(usageLimit: Int?) = usageLimit(JsonField.ofNullable(usageLimit))
 
         /**
          * Alias for [Builder.usageLimit].
          *
          * This unboxed primitive overload exists for backwards compatibility.
          */
-        fun usageLimit(usageLimit: Long) = usageLimit(usageLimit as Long?)
+        fun usageLimit(usageLimit: Int) = usageLimit(usageLimit as Int?)
 
         /**
          * Sets [Builder.usageLimit] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.usageLimit] with a well-typed [Long] value instead. This
+         * You should usually call [Builder.usageLimit] with a well-typed [Int] value instead. This
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun usageLimit(usageLimit: JsonField<Long>) = apply { this.usageLimit = usageLimit }
+        fun usageLimit(usageLimit: JsonField<Int>) = apply { this.usageLimit = usageLimit }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()

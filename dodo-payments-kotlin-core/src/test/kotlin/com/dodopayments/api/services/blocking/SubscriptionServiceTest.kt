@@ -44,11 +44,11 @@ internal class SubscriptionServiceTest {
                     )
                     .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
                     .productId("product_id")
-                    .quantity(0L)
+                    .quantity(0)
                     .addAddon(
                         SubscriptionCreateParams.Addon.builder()
                             .addonId("addon_id")
-                            .quantity(0L)
+                            .quantity(0)
                             .build()
                     )
                     .addAllowedPaymentMethodType(
@@ -64,14 +64,14 @@ internal class SubscriptionServiceTest {
                     .onDemand(
                         SubscriptionCreateParams.OnDemand.builder()
                             .mandateOnly(true)
-                            .productPrice(0L)
+                            .productPrice(0)
                             .build()
                     )
                     .paymentLink(true)
                     .returnUrl("return_url")
                     .showSavedPaymentMethods(true)
                     .taxId("tax_id")
-                    .trialPeriodDays(0L)
+                    .trialPeriodDays(0)
                     .build()
             )
 
@@ -162,11 +162,11 @@ internal class SubscriptionServiceTest {
                 .prorationBillingMode(
                     SubscriptionChangePlanParams.ProrationBillingMode.PRORATED_IMMEDIATELY
                 )
-                .quantity(0L)
+                .quantity(0)
                 .addAddon(
                     SubscriptionChangePlanParams.Addon.builder()
                         .addonId("addon_id")
-                        .quantity(0L)
+                        .quantity(0)
                         .build()
                 )
                 .build()
@@ -186,7 +186,7 @@ internal class SubscriptionServiceTest {
             subscriptionService.charge(
                 SubscriptionChargeParams.builder()
                     .subscriptionId("subscription_id")
-                    .productPrice(0L)
+                    .productPrice(0)
                     .build()
             )
 

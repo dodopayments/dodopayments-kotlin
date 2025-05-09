@@ -10,12 +10,12 @@ internal class AddonListParamsTest {
 
     @Test
     fun create() {
-        AddonListParams.builder().pageNumber(0L).pageSize(0L).build()
+        AddonListParams.builder().pageNumber(0).pageSize(0).build()
     }
 
     @Test
     fun queryParams() {
-        val params = AddonListParams.builder().pageNumber(0L).pageSize(0L).build()
+        val params = AddonListParams.builder().pageNumber(0).pageSize(0).build()
 
         val queryParams = params._queryParams()
 

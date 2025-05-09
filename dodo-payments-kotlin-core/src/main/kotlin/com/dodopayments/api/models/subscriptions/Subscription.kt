@@ -32,18 +32,18 @@ private constructor(
     private val metadata: JsonField<Metadata>,
     private val nextBillingDate: JsonField<OffsetDateTime>,
     private val onDemand: JsonField<Boolean>,
-    private val paymentFrequencyCount: JsonField<Long>,
+    private val paymentFrequencyCount: JsonField<Int>,
     private val paymentFrequencyInterval: JsonField<TimeInterval>,
     private val previousBillingDate: JsonField<OffsetDateTime>,
     private val productId: JsonField<String>,
-    private val quantity: JsonField<Long>,
-    private val recurringPreTaxAmount: JsonField<Long>,
+    private val quantity: JsonField<Int>,
+    private val recurringPreTaxAmount: JsonField<Int>,
     private val status: JsonField<SubscriptionStatus>,
     private val subscriptionId: JsonField<String>,
-    private val subscriptionPeriodCount: JsonField<Long>,
+    private val subscriptionPeriodCount: JsonField<Int>,
     private val subscriptionPeriodInterval: JsonField<TimeInterval>,
     private val taxInclusive: JsonField<Boolean>,
-    private val trialPeriodDays: JsonField<Long>,
+    private val trialPeriodDays: JsonField<Int>,
     private val cancelledAt: JsonField<OffsetDateTime>,
     private val discountId: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -71,7 +71,7 @@ private constructor(
         @JsonProperty("on_demand") @ExcludeMissing onDemand: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("payment_frequency_count")
         @ExcludeMissing
-        paymentFrequencyCount: JsonField<Long> = JsonMissing.of(),
+        paymentFrequencyCount: JsonField<Int> = JsonMissing.of(),
         @JsonProperty("payment_frequency_interval")
         @ExcludeMissing
         paymentFrequencyInterval: JsonField<TimeInterval> = JsonMissing.of(),
@@ -79,10 +79,10 @@ private constructor(
         @ExcludeMissing
         previousBillingDate: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("product_id") @ExcludeMissing productId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("quantity") @ExcludeMissing quantity: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("quantity") @ExcludeMissing quantity: JsonField<Int> = JsonMissing.of(),
         @JsonProperty("recurring_pre_tax_amount")
         @ExcludeMissing
-        recurringPreTaxAmount: JsonField<Long> = JsonMissing.of(),
+        recurringPreTaxAmount: JsonField<Int> = JsonMissing.of(),
         @JsonProperty("status")
         @ExcludeMissing
         status: JsonField<SubscriptionStatus> = JsonMissing.of(),
@@ -91,7 +91,7 @@ private constructor(
         subscriptionId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("subscription_period_count")
         @ExcludeMissing
-        subscriptionPeriodCount: JsonField<Long> = JsonMissing.of(),
+        subscriptionPeriodCount: JsonField<Int> = JsonMissing.of(),
         @JsonProperty("subscription_period_interval")
         @ExcludeMissing
         subscriptionPeriodInterval: JsonField<TimeInterval> = JsonMissing.of(),
@@ -100,7 +100,7 @@ private constructor(
         taxInclusive: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("trial_period_days")
         @ExcludeMissing
-        trialPeriodDays: JsonField<Long> = JsonMissing.of(),
+        trialPeriodDays: JsonField<Int> = JsonMissing.of(),
         @JsonProperty("cancelled_at")
         @ExcludeMissing
         cancelledAt: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -195,7 +195,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun paymentFrequencyCount(): Long = paymentFrequencyCount.getRequired("payment_frequency_count")
+    fun paymentFrequencyCount(): Int = paymentFrequencyCount.getRequired("payment_frequency_count")
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
@@ -227,7 +227,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun quantity(): Long = quantity.getRequired("quantity")
+    fun quantity(): Int = quantity.getRequired("quantity")
 
     /**
      * Amount charged before tax for each recurring payment in smallest currency unit (e.g. cents)
@@ -235,8 +235,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun recurringPreTaxAmount(): Long =
-        recurringPreTaxAmount.getRequired("recurring_pre_tax_amount")
+    fun recurringPreTaxAmount(): Int = recurringPreTaxAmount.getRequired("recurring_pre_tax_amount")
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
@@ -258,7 +257,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun subscriptionPeriodCount(): Long =
+    fun subscriptionPeriodCount(): Int =
         subscriptionPeriodCount.getRequired("subscription_period_count")
 
     /**
@@ -282,7 +281,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun trialPeriodDays(): Long = trialPeriodDays.getRequired("trial_period_days")
+    fun trialPeriodDays(): Int = trialPeriodDays.getRequired("trial_period_days")
 
     /**
      * Cancelled timestamp if the subscription is cancelled
@@ -372,7 +371,7 @@ private constructor(
      */
     @JsonProperty("payment_frequency_count")
     @ExcludeMissing
-    fun _paymentFrequencyCount(): JsonField<Long> = paymentFrequencyCount
+    fun _paymentFrequencyCount(): JsonField<Int> = paymentFrequencyCount
 
     /**
      * Returns the raw JSON value of [paymentFrequencyInterval].
@@ -406,7 +405,7 @@ private constructor(
      *
      * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Long> = quantity
+    @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Int> = quantity
 
     /**
      * Returns the raw JSON value of [recurringPreTaxAmount].
@@ -416,7 +415,7 @@ private constructor(
      */
     @JsonProperty("recurring_pre_tax_amount")
     @ExcludeMissing
-    fun _recurringPreTaxAmount(): JsonField<Long> = recurringPreTaxAmount
+    fun _recurringPreTaxAmount(): JsonField<Int> = recurringPreTaxAmount
 
     /**
      * Returns the raw JSON value of [status].
@@ -442,7 +441,7 @@ private constructor(
      */
     @JsonProperty("subscription_period_count")
     @ExcludeMissing
-    fun _subscriptionPeriodCount(): JsonField<Long> = subscriptionPeriodCount
+    fun _subscriptionPeriodCount(): JsonField<Int> = subscriptionPeriodCount
 
     /**
      * Returns the raw JSON value of [subscriptionPeriodInterval].
@@ -470,7 +469,7 @@ private constructor(
      */
     @JsonProperty("trial_period_days")
     @ExcludeMissing
-    fun _trialPeriodDays(): JsonField<Long> = trialPeriodDays
+    fun _trialPeriodDays(): JsonField<Int> = trialPeriodDays
 
     /**
      * Returns the raw JSON value of [cancelledAt].
@@ -543,18 +542,18 @@ private constructor(
         private var metadata: JsonField<Metadata>? = null
         private var nextBillingDate: JsonField<OffsetDateTime>? = null
         private var onDemand: JsonField<Boolean>? = null
-        private var paymentFrequencyCount: JsonField<Long>? = null
+        private var paymentFrequencyCount: JsonField<Int>? = null
         private var paymentFrequencyInterval: JsonField<TimeInterval>? = null
         private var previousBillingDate: JsonField<OffsetDateTime>? = null
         private var productId: JsonField<String>? = null
-        private var quantity: JsonField<Long>? = null
-        private var recurringPreTaxAmount: JsonField<Long>? = null
+        private var quantity: JsonField<Int>? = null
+        private var recurringPreTaxAmount: JsonField<Int>? = null
         private var status: JsonField<SubscriptionStatus>? = null
         private var subscriptionId: JsonField<String>? = null
-        private var subscriptionPeriodCount: JsonField<Long>? = null
+        private var subscriptionPeriodCount: JsonField<Int>? = null
         private var subscriptionPeriodInterval: JsonField<TimeInterval>? = null
         private var taxInclusive: JsonField<Boolean>? = null
-        private var trialPeriodDays: JsonField<Long>? = null
+        private var trialPeriodDays: JsonField<Int>? = null
         private var cancelledAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var discountId: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -697,17 +696,17 @@ private constructor(
         fun onDemand(onDemand: JsonField<Boolean>) = apply { this.onDemand = onDemand }
 
         /** Number of payment frequency intervals */
-        fun paymentFrequencyCount(paymentFrequencyCount: Long) =
+        fun paymentFrequencyCount(paymentFrequencyCount: Int) =
             paymentFrequencyCount(JsonField.of(paymentFrequencyCount))
 
         /**
          * Sets [Builder.paymentFrequencyCount] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.paymentFrequencyCount] with a well-typed [Long] value
+         * You should usually call [Builder.paymentFrequencyCount] with a well-typed [Int] value
          * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun paymentFrequencyCount(paymentFrequencyCount: JsonField<Long>) = apply {
+        fun paymentFrequencyCount(paymentFrequencyCount: JsonField<Int>) = apply {
             this.paymentFrequencyCount = paymentFrequencyCount
         }
 
@@ -753,31 +752,31 @@ private constructor(
         fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
         /** Number of units/items included in the subscription */
-        fun quantity(quantity: Long) = quantity(JsonField.of(quantity))
+        fun quantity(quantity: Int) = quantity(JsonField.of(quantity))
 
         /**
          * Sets [Builder.quantity] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.quantity] with a well-typed [Long] value instead. This
+         * You should usually call [Builder.quantity] with a well-typed [Int] value instead. This
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun quantity(quantity: JsonField<Long>) = apply { this.quantity = quantity }
+        fun quantity(quantity: JsonField<Int>) = apply { this.quantity = quantity }
 
         /**
          * Amount charged before tax for each recurring payment in smallest currency unit (e.g.
          * cents)
          */
-        fun recurringPreTaxAmount(recurringPreTaxAmount: Long) =
+        fun recurringPreTaxAmount(recurringPreTaxAmount: Int) =
             recurringPreTaxAmount(JsonField.of(recurringPreTaxAmount))
 
         /**
          * Sets [Builder.recurringPreTaxAmount] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.recurringPreTaxAmount] with a well-typed [Long] value
+         * You should usually call [Builder.recurringPreTaxAmount] with a well-typed [Int] value
          * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun recurringPreTaxAmount(recurringPreTaxAmount: JsonField<Long>) = apply {
+        fun recurringPreTaxAmount(recurringPreTaxAmount: JsonField<Int>) = apply {
             this.recurringPreTaxAmount = recurringPreTaxAmount
         }
 
@@ -807,17 +806,17 @@ private constructor(
         }
 
         /** Number of subscription period intervals */
-        fun subscriptionPeriodCount(subscriptionPeriodCount: Long) =
+        fun subscriptionPeriodCount(subscriptionPeriodCount: Int) =
             subscriptionPeriodCount(JsonField.of(subscriptionPeriodCount))
 
         /**
          * Sets [Builder.subscriptionPeriodCount] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.subscriptionPeriodCount] with a well-typed [Long] value
+         * You should usually call [Builder.subscriptionPeriodCount] with a well-typed [Int] value
          * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun subscriptionPeriodCount(subscriptionPeriodCount: JsonField<Long>) = apply {
+        fun subscriptionPeriodCount(subscriptionPeriodCount: JsonField<Int>) = apply {
             this.subscriptionPeriodCount = subscriptionPeriodCount
         }
 
@@ -851,16 +850,16 @@ private constructor(
         }
 
         /** Number of days in the trial period (0 if no trial) */
-        fun trialPeriodDays(trialPeriodDays: Long) = trialPeriodDays(JsonField.of(trialPeriodDays))
+        fun trialPeriodDays(trialPeriodDays: Int) = trialPeriodDays(JsonField.of(trialPeriodDays))
 
         /**
          * Sets [Builder.trialPeriodDays] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.trialPeriodDays] with a well-typed [Long] value instead.
+         * You should usually call [Builder.trialPeriodDays] with a well-typed [Int] value instead.
          * This method is primarily for setting the field to an undocumented or not yet supported
          * value.
          */
-        fun trialPeriodDays(trialPeriodDays: JsonField<Long>) = apply {
+        fun trialPeriodDays(trialPeriodDays: JsonField<Int>) = apply {
             this.trialPeriodDays = trialPeriodDays
         }
 

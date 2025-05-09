@@ -2,6 +2,8 @@
 
 package com.dodopayments.api.models.subscriptions
 
+import com.dodopayments.api.core.AutoPager
+import com.dodopayments.api.core.Page
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.blocking.SubscriptionService
 import java.util.Objects
@@ -12,30 +14,26 @@ private constructor(
     private val service: SubscriptionService,
     private val params: SubscriptionListParams,
     private val response: SubscriptionListPageResponse,
-) {
+) : Page<SubscriptionListResponse> {
 
     /**
      * Delegates to [SubscriptionListPageResponse], but gracefully handles missing data.
      *
      * @see [SubscriptionListPageResponse.items]
      */
-    fun items(): List<SubscriptionListResponse> =
+    override fun items(): List<SubscriptionListResponse> =
         response._items().getNullable("items") ?: emptyList()
 
-    fun hasNextPage(): Boolean = items().isNotEmpty()
+    override fun hasNextPage(): Boolean = items().isNotEmpty()
 
-    fun getNextPageParams(): SubscriptionListParams? {
-        if (!hasNextPage()) {
-            return null
-        }
-
+    fun nextPageParams(): SubscriptionListParams {
         val pageNumber = params.pageNumber() ?: 1
         return params.toBuilder().pageNumber(pageNumber + 1).build()
     }
 
-    fun getNextPage(): SubscriptionListPage? = getNextPageParams()?.let { service.list(it) }
+    override fun nextPage(): SubscriptionListPage = service.list(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPager<SubscriptionListResponse> = AutoPager.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): SubscriptionListParams = params
@@ -101,22 +99,6 @@ private constructor(
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: SubscriptionListPage) :
-        Sequence<SubscriptionListResponse> {
-
-        override fun iterator(): Iterator<SubscriptionListResponse> = iterator {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.items().size) {
-                    yield(page.items()[index++])
-                }
-                page = page.getNextPage() ?: break
-                index = 0
-            }
-        }
     }
 
     override fun equals(other: Any?): Boolean {

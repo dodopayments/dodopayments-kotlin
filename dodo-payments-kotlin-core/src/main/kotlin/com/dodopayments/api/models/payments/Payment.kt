@@ -33,9 +33,9 @@ private constructor(
     private val metadata: JsonField<Metadata>,
     private val paymentId: JsonField<String>,
     private val refunds: JsonField<List<Refund>>,
-    private val settlementAmount: JsonField<Long>,
+    private val settlementAmount: JsonField<Int>,
     private val settlementCurrency: JsonField<Currency>,
-    private val totalAmount: JsonField<Long>,
+    private val totalAmount: JsonField<Int>,
     private val cardIssuingCountry: JsonField<CountryCode>,
     private val cardLastFour: JsonField<String>,
     private val cardNetwork: JsonField<String>,
@@ -46,10 +46,10 @@ private constructor(
     private val paymentMethod: JsonField<String>,
     private val paymentMethodType: JsonField<String>,
     private val productCart: JsonField<List<ProductCart>>,
-    private val settlementTax: JsonField<Long>,
+    private val settlementTax: JsonField<Int>,
     private val status: JsonField<IntentStatus>,
     private val subscriptionId: JsonField<String>,
-    private val tax: JsonField<Long>,
+    private val tax: JsonField<Int>,
     private val updatedAt: JsonField<OffsetDateTime>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -79,13 +79,13 @@ private constructor(
         refunds: JsonField<List<Refund>> = JsonMissing.of(),
         @JsonProperty("settlement_amount")
         @ExcludeMissing
-        settlementAmount: JsonField<Long> = JsonMissing.of(),
+        settlementAmount: JsonField<Int> = JsonMissing.of(),
         @JsonProperty("settlement_currency")
         @ExcludeMissing
         settlementCurrency: JsonField<Currency> = JsonMissing.of(),
         @JsonProperty("total_amount")
         @ExcludeMissing
-        totalAmount: JsonField<Long> = JsonMissing.of(),
+        totalAmount: JsonField<Int> = JsonMissing.of(),
         @JsonProperty("card_issuing_country")
         @ExcludeMissing
         cardIssuingCountry: JsonField<CountryCode> = JsonMissing.of(),
@@ -116,12 +116,12 @@ private constructor(
         productCart: JsonField<List<ProductCart>> = JsonMissing.of(),
         @JsonProperty("settlement_tax")
         @ExcludeMissing
-        settlementTax: JsonField<Long> = JsonMissing.of(),
+        settlementTax: JsonField<Int> = JsonMissing.of(),
         @JsonProperty("status") @ExcludeMissing status: JsonField<IntentStatus> = JsonMissing.of(),
         @JsonProperty("subscription_id")
         @ExcludeMissing
         subscriptionId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("tax") @ExcludeMissing tax: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("tax") @ExcludeMissing tax: JsonField<Int> = JsonMissing.of(),
         @JsonProperty("updated_at")
         @ExcludeMissing
         updatedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -228,7 +228,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun settlementAmount(): Long = settlementAmount.getRequired("settlement_amount")
+    fun settlementAmount(): Int = settlementAmount.getRequired("settlement_amount")
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
@@ -242,7 +242,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun totalAmount(): Long = totalAmount.getRequired("total_amount")
+    fun totalAmount(): Int = totalAmount.getRequired("total_amount")
 
     /**
      * ISO country code alpha2 variant
@@ -332,7 +332,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
-    fun settlementTax(): Long? = settlementTax.getNullable("settlement_tax")
+    fun settlementTax(): Int? = settlementTax.getNullable("settlement_tax")
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -354,7 +354,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
-    fun tax(): Long? = tax.getNullable("tax")
+    fun tax(): Int? = tax.getNullable("tax")
 
     /**
      * Timestamp when the payment was last updated
@@ -439,7 +439,7 @@ private constructor(
      */
     @JsonProperty("settlement_amount")
     @ExcludeMissing
-    fun _settlementAmount(): JsonField<Long> = settlementAmount
+    fun _settlementAmount(): JsonField<Int> = settlementAmount
 
     /**
      * Returns the raw JSON value of [settlementCurrency].
@@ -456,7 +456,7 @@ private constructor(
      *
      * Unlike [totalAmount], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("total_amount") @ExcludeMissing fun _totalAmount(): JsonField<Long> = totalAmount
+    @JsonProperty("total_amount") @ExcludeMissing fun _totalAmount(): JsonField<Int> = totalAmount
 
     /**
      * Returns the raw JSON value of [cardIssuingCountry].
@@ -553,7 +553,7 @@ private constructor(
      */
     @JsonProperty("settlement_tax")
     @ExcludeMissing
-    fun _settlementTax(): JsonField<Long> = settlementTax
+    fun _settlementTax(): JsonField<Int> = settlementTax
 
     /**
      * Returns the raw JSON value of [status].
@@ -576,7 +576,7 @@ private constructor(
      *
      * Unlike [tax], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("tax") @ExcludeMissing fun _tax(): JsonField<Long> = tax
+    @JsonProperty("tax") @ExcludeMissing fun _tax(): JsonField<Int> = tax
 
     /**
      * Returns the raw JSON value of [updatedAt].
@@ -635,9 +635,9 @@ private constructor(
         private var metadata: JsonField<Metadata>? = null
         private var paymentId: JsonField<String>? = null
         private var refunds: JsonField<MutableList<Refund>>? = null
-        private var settlementAmount: JsonField<Long>? = null
+        private var settlementAmount: JsonField<Int>? = null
         private var settlementCurrency: JsonField<Currency>? = null
-        private var totalAmount: JsonField<Long>? = null
+        private var totalAmount: JsonField<Int>? = null
         private var cardIssuingCountry: JsonField<CountryCode> = JsonMissing.of()
         private var cardLastFour: JsonField<String> = JsonMissing.of()
         private var cardNetwork: JsonField<String> = JsonMissing.of()
@@ -648,10 +648,10 @@ private constructor(
         private var paymentMethod: JsonField<String> = JsonMissing.of()
         private var paymentMethodType: JsonField<String> = JsonMissing.of()
         private var productCart: JsonField<MutableList<ProductCart>>? = null
-        private var settlementTax: JsonField<Long> = JsonMissing.of()
+        private var settlementTax: JsonField<Int> = JsonMissing.of()
         private var status: JsonField<IntentStatus> = JsonMissing.of()
         private var subscriptionId: JsonField<String> = JsonMissing.of()
-        private var tax: JsonField<Long> = JsonMissing.of()
+        private var tax: JsonField<Int> = JsonMissing.of()
         private var updatedAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -825,17 +825,17 @@ private constructor(
          * processing. Especially relevant for adaptive pricing where the customer's payment
          * currency differs from your settlement currency.
          */
-        fun settlementAmount(settlementAmount: Long) =
+        fun settlementAmount(settlementAmount: Int) =
             settlementAmount(JsonField.of(settlementAmount))
 
         /**
          * Sets [Builder.settlementAmount] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.settlementAmount] with a well-typed [Long] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.settlementAmount] with a well-typed [Int] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun settlementAmount(settlementAmount: JsonField<Long>) = apply {
+        fun settlementAmount(settlementAmount: JsonField<Int>) = apply {
             this.settlementAmount = settlementAmount
         }
 
@@ -857,16 +857,15 @@ private constructor(
          * Total amount charged to the customer including tax, in smallest currency unit (e.g.
          * cents)
          */
-        fun totalAmount(totalAmount: Long) = totalAmount(JsonField.of(totalAmount))
+        fun totalAmount(totalAmount: Int) = totalAmount(JsonField.of(totalAmount))
 
         /**
          * Sets [Builder.totalAmount] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.totalAmount] with a well-typed [Long] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
+         * You should usually call [Builder.totalAmount] with a well-typed [Int] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun totalAmount(totalAmount: JsonField<Long>) = apply { this.totalAmount = totalAmount }
+        fun totalAmount(totalAmount: JsonField<Int>) = apply { this.totalAmount = totalAmount }
 
         /** ISO country code alpha2 variant */
         fun cardIssuingCountry(cardIssuingCountry: CountryCode?) =
@@ -1020,23 +1019,23 @@ private constructor(
          * Especially relevant for adaptive pricing where the tax component must be tracked
          * separately in your Dodo balance.
          */
-        fun settlementTax(settlementTax: Long?) = settlementTax(JsonField.ofNullable(settlementTax))
+        fun settlementTax(settlementTax: Int?) = settlementTax(JsonField.ofNullable(settlementTax))
 
         /**
          * Alias for [Builder.settlementTax].
          *
          * This unboxed primitive overload exists for backwards compatibility.
          */
-        fun settlementTax(settlementTax: Long) = settlementTax(settlementTax as Long?)
+        fun settlementTax(settlementTax: Int) = settlementTax(settlementTax as Int?)
 
         /**
          * Sets [Builder.settlementTax] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.settlementTax] with a well-typed [Long] value instead.
+         * You should usually call [Builder.settlementTax] with a well-typed [Int] value instead.
          * This method is primarily for setting the field to an undocumented or not yet supported
          * value.
          */
-        fun settlementTax(settlementTax: JsonField<Long>) = apply {
+        fun settlementTax(settlementTax: JsonField<Int>) = apply {
             this.settlementTax = settlementTax
         }
 
@@ -1067,22 +1066,22 @@ private constructor(
         }
 
         /** Amount of tax collected in smallest currency unit (e.g. cents) */
-        fun tax(tax: Long?) = tax(JsonField.ofNullable(tax))
+        fun tax(tax: Int?) = tax(JsonField.ofNullable(tax))
 
         /**
          * Alias for [Builder.tax].
          *
          * This unboxed primitive overload exists for backwards compatibility.
          */
-        fun tax(tax: Long) = tax(tax as Long?)
+        fun tax(tax: Int) = tax(tax as Int?)
 
         /**
          * Sets [Builder.tax] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.tax] with a well-typed [Long] value instead. This method
+         * You should usually call [Builder.tax] with a well-typed [Int] value instead. This method
          * is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun tax(tax: JsonField<Long>) = apply { this.tax = tax }
+        fun tax(tax: JsonField<Int>) = apply { this.tax = tax }
 
         /** Timestamp when the payment was last updated */
         fun updatedAt(updatedAt: OffsetDateTime?) = updatedAt(JsonField.ofNullable(updatedAt))
@@ -1352,7 +1351,7 @@ private constructor(
     class ProductCart
     private constructor(
         private val productId: JsonField<String>,
-        private val quantity: JsonField<Long>,
+        private val quantity: JsonField<Int>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -1361,7 +1360,7 @@ private constructor(
             @JsonProperty("product_id")
             @ExcludeMissing
             productId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("quantity") @ExcludeMissing quantity: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("quantity") @ExcludeMissing quantity: JsonField<Int> = JsonMissing.of(),
         ) : this(productId, quantity, mutableMapOf())
 
         /**
@@ -1374,7 +1373,7 @@ private constructor(
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun quantity(): Long = quantity.getRequired("quantity")
+        fun quantity(): Int = quantity.getRequired("quantity")
 
         /**
          * Returns the raw JSON value of [productId].
@@ -1388,7 +1387,7 @@ private constructor(
          *
          * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Long> = quantity
+        @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Int> = quantity
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -1420,7 +1419,7 @@ private constructor(
         class Builder internal constructor() {
 
             private var productId: JsonField<String>? = null
-            private var quantity: JsonField<Long>? = null
+            private var quantity: JsonField<Int>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(productCart: ProductCart) = apply {
@@ -1440,16 +1439,16 @@ private constructor(
              */
             fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
-            fun quantity(quantity: Long) = quantity(JsonField.of(quantity))
+            fun quantity(quantity: Int) = quantity(JsonField.of(quantity))
 
             /**
              * Sets [Builder.quantity] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.quantity] with a well-typed [Long] value instead.
+             * You should usually call [Builder.quantity] with a well-typed [Int] value instead.
              * This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun quantity(quantity: JsonField<Long>) = apply { this.quantity = quantity }
+            fun quantity(quantity: JsonField<Int>) = apply { this.quantity = quantity }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()

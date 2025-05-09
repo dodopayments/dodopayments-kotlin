@@ -10,12 +10,7 @@ internal class ProductListParamsTest {
 
     @Test
     fun create() {
-        ProductListParams.builder()
-            .archived(true)
-            .pageNumber(0L)
-            .pageSize(0L)
-            .recurring(true)
-            .build()
+        ProductListParams.builder().archived(true).pageNumber(0).pageSize(0).recurring(true).build()
     }
 
     @Test
@@ -23,8 +18,8 @@ internal class ProductListParamsTest {
         val params =
             ProductListParams.builder()
                 .archived(true)
-                .pageNumber(0L)
-                .pageSize(0L)
+                .pageNumber(0)
+                .pageSize(0)
                 .recurring(true)
                 .build()
 

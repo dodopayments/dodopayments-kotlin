@@ -35,7 +35,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
-    fun activationsLimit(): Long? = body.activationsLimit()
+    fun activationsLimit(): Int? = body.activationsLimit()
 
     /**
      * Indicates whether the license key should be disabled. A value of `true` disables the key,
@@ -61,7 +61,7 @@ private constructor(
      * Unlike [activationsLimit], this method doesn't throw if the JSON field has an unexpected
      * type.
      */
-    fun _activationsLimit(): JsonField<Long> = body._activationsLimit()
+    fun _activationsLimit(): JsonField<Int> = body._activationsLimit()
 
     /**
      * Returns the raw JSON value of [disabled].
@@ -125,7 +125,7 @@ private constructor(
          * The updated activation limit for the license key. Use `null` to remove the limit, or omit
          * this field to leave it unchanged.
          */
-        fun activationsLimit(activationsLimit: Long?) = apply {
+        fun activationsLimit(activationsLimit: Int?) = apply {
             body.activationsLimit(activationsLimit)
         }
 
@@ -134,16 +134,16 @@ private constructor(
          *
          * This unboxed primitive overload exists for backwards compatibility.
          */
-        fun activationsLimit(activationsLimit: Long) = activationsLimit(activationsLimit as Long?)
+        fun activationsLimit(activationsLimit: Int) = activationsLimit(activationsLimit as Int?)
 
         /**
          * Sets [Builder.activationsLimit] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.activationsLimit] with a well-typed [Long] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.activationsLimit] with a well-typed [Int] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun activationsLimit(activationsLimit: JsonField<Long>) = apply {
+        fun activationsLimit(activationsLimit: JsonField<Int>) = apply {
             body.activationsLimit(activationsLimit)
         }
 
@@ -329,7 +329,7 @@ private constructor(
 
     class Body
     private constructor(
-        private val activationsLimit: JsonField<Long>,
+        private val activationsLimit: JsonField<Int>,
         private val disabled: JsonField<Boolean>,
         private val expiresAt: JsonField<OffsetDateTime>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -339,7 +339,7 @@ private constructor(
         private constructor(
             @JsonProperty("activations_limit")
             @ExcludeMissing
-            activationsLimit: JsonField<Long> = JsonMissing.of(),
+            activationsLimit: JsonField<Int> = JsonMissing.of(),
             @JsonProperty("disabled")
             @ExcludeMissing
             disabled: JsonField<Boolean> = JsonMissing.of(),
@@ -355,7 +355,7 @@ private constructor(
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
-        fun activationsLimit(): Long? = activationsLimit.getNullable("activations_limit")
+        fun activationsLimit(): Int? = activationsLimit.getNullable("activations_limit")
 
         /**
          * Indicates whether the license key should be disabled. A value of `true` disables the key,
@@ -383,7 +383,7 @@ private constructor(
          */
         @JsonProperty("activations_limit")
         @ExcludeMissing
-        fun _activationsLimit(): JsonField<Long> = activationsLimit
+        fun _activationsLimit(): JsonField<Int> = activationsLimit
 
         /**
          * Returns the raw JSON value of [disabled].
@@ -422,7 +422,7 @@ private constructor(
         /** A builder for [Body]. */
         class Builder internal constructor() {
 
-            private var activationsLimit: JsonField<Long> = JsonMissing.of()
+            private var activationsLimit: JsonField<Int> = JsonMissing.of()
             private var disabled: JsonField<Boolean> = JsonMissing.of()
             private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -438,7 +438,7 @@ private constructor(
              * The updated activation limit for the license key. Use `null` to remove the limit, or
              * omit this field to leave it unchanged.
              */
-            fun activationsLimit(activationsLimit: Long?) =
+            fun activationsLimit(activationsLimit: Int?) =
                 activationsLimit(JsonField.ofNullable(activationsLimit))
 
             /**
@@ -446,17 +446,16 @@ private constructor(
              *
              * This unboxed primitive overload exists for backwards compatibility.
              */
-            fun activationsLimit(activationsLimit: Long) =
-                activationsLimit(activationsLimit as Long?)
+            fun activationsLimit(activationsLimit: Int) = activationsLimit(activationsLimit as Int?)
 
             /**
              * Sets [Builder.activationsLimit] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.activationsLimit] with a well-typed [Long] value
+             * You should usually call [Builder.activationsLimit] with a well-typed [Int] value
              * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun activationsLimit(activationsLimit: JsonField<Long>) = apply {
+            fun activationsLimit(activationsLimit: JsonField<Int>) = apply {
                 this.activationsLimit = activationsLimit
             }
 

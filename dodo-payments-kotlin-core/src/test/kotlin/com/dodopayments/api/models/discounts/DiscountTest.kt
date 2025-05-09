@@ -14,30 +14,30 @@ internal class DiscountTest {
     fun create() {
         val discount =
             Discount.builder()
-                .amount(0L)
+                .amount(0)
                 .businessId("business_id")
                 .code("code")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .discountId("discount_id")
                 .addRestrictedTo("string")
-                .timesUsed(0L)
+                .timesUsed(0)
                 .type(DiscountType.PERCENTAGE)
                 .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .name("name")
-                .usageLimit(0L)
+                .usageLimit(0)
                 .build()
 
-        assertThat(discount.amount()).isEqualTo(0L)
+        assertThat(discount.amount()).isEqualTo(0)
         assertThat(discount.businessId()).isEqualTo("business_id")
         assertThat(discount.code()).isEqualTo("code")
         assertThat(discount.createdAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(discount.discountId()).isEqualTo("discount_id")
         assertThat(discount.restrictedTo()).containsExactly("string")
-        assertThat(discount.timesUsed()).isEqualTo(0L)
+        assertThat(discount.timesUsed()).isEqualTo(0)
         assertThat(discount.type()).isEqualTo(DiscountType.PERCENTAGE)
         assertThat(discount.expiresAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(discount.name()).isEqualTo("name")
-        assertThat(discount.usageLimit()).isEqualTo(0L)
+        assertThat(discount.usageLimit()).isEqualTo(0)
     }
 
     @Test
@@ -45,17 +45,17 @@ internal class DiscountTest {
         val jsonMapper = jsonMapper()
         val discount =
             Discount.builder()
-                .amount(0L)
+                .amount(0)
                 .businessId("business_id")
                 .code("code")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .discountId("discount_id")
                 .addRestrictedTo("string")
-                .timesUsed(0L)
+                .timesUsed(0)
                 .type(DiscountType.PERCENTAGE)
                 .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .name("name")
-                .usageLimit(0L)
+                .usageLimit(0)
                 .build()
 
         val roundtrippedDiscount =

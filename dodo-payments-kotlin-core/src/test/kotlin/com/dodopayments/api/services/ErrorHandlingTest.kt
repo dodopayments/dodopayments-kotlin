@@ -92,8 +92,8 @@ internal class ErrorHandlingTest {
                         .addProductCart(
                             OneTimeProductCartItem.builder()
                                 .productId("product_id")
-                                .quantity(0L)
-                                .amount(0L)
+                                .quantity(0)
+                                .amount(0)
                                 .build()
                         )
                         .addAllowedPaymentMethodType(
@@ -148,8 +148,8 @@ internal class ErrorHandlingTest {
                         .addProductCart(
                             OneTimeProductCartItem.builder()
                                 .productId("product_id")
-                                .quantity(0L)
-                                .amount(0L)
+                                .quantity(0)
+                                .amount(0)
                                 .build()
                         )
                         .addAllowedPaymentMethodType(
@@ -204,8 +204,8 @@ internal class ErrorHandlingTest {
                         .addProductCart(
                             OneTimeProductCartItem.builder()
                                 .productId("product_id")
-                                .quantity(0L)
-                                .amount(0L)
+                                .quantity(0)
+                                .amount(0)
                                 .build()
                         )
                         .addAllowedPaymentMethodType(
@@ -260,8 +260,8 @@ internal class ErrorHandlingTest {
                         .addProductCart(
                             OneTimeProductCartItem.builder()
                                 .productId("product_id")
-                                .quantity(0L)
-                                .amount(0L)
+                                .quantity(0)
+                                .amount(0)
                                 .build()
                         )
                         .addAllowedPaymentMethodType(
@@ -316,8 +316,8 @@ internal class ErrorHandlingTest {
                         .addProductCart(
                             OneTimeProductCartItem.builder()
                                 .productId("product_id")
-                                .quantity(0L)
-                                .amount(0L)
+                                .quantity(0)
+                                .amount(0)
                                 .build()
                         )
                         .addAllowedPaymentMethodType(
@@ -372,8 +372,8 @@ internal class ErrorHandlingTest {
                         .addProductCart(
                             OneTimeProductCartItem.builder()
                                 .productId("product_id")
-                                .quantity(0L)
-                                .amount(0L)
+                                .quantity(0)
+                                .amount(0)
                                 .build()
                         )
                         .addAllowedPaymentMethodType(
@@ -428,8 +428,8 @@ internal class ErrorHandlingTest {
                         .addProductCart(
                             OneTimeProductCartItem.builder()
                                 .productId("product_id")
-                                .quantity(0L)
-                                .amount(0L)
+                                .quantity(0)
+                                .amount(0)
                                 .build()
                         )
                         .addAllowedPaymentMethodType(
@@ -484,8 +484,8 @@ internal class ErrorHandlingTest {
                         .addProductCart(
                             OneTimeProductCartItem.builder()
                                 .productId("product_id")
-                                .quantity(0L)
-                                .amount(0L)
+                                .quantity(0)
+                                .amount(0)
                                 .build()
                         )
                         .addAllowedPaymentMethodType(
@@ -538,8 +538,8 @@ internal class ErrorHandlingTest {
                         .addProductCart(
                             OneTimeProductCartItem.builder()
                                 .productId("product_id")
-                                .quantity(0L)
-                                .amount(0L)
+                                .quantity(0)
+                                .amount(0)
                                 .build()
                         )
                         .addAllowedPaymentMethodType(

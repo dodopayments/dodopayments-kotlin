@@ -14,8 +14,8 @@ private constructor(
     private val createdAtGte: OffsetDateTime?,
     private val createdAtLte: OffsetDateTime?,
     private val customerId: String?,
-    private val pageNumber: Long?,
-    private val pageSize: Long?,
+    private val pageNumber: Int?,
+    private val pageSize: Int?,
     private val status: IntentStatus?,
     private val subscriptionId: String?,
     private val additionalHeaders: Headers,
@@ -32,10 +32,10 @@ private constructor(
     fun customerId(): String? = customerId
 
     /** Page number default is 0 */
-    fun pageNumber(): Long? = pageNumber
+    fun pageNumber(): Int? = pageNumber
 
     /** Page size default is 10 max is 100 */
-    fun pageSize(): Long? = pageSize
+    fun pageSize(): Int? = pageSize
 
     /** Filter by status */
     fun status(): IntentStatus? = status
@@ -63,8 +63,8 @@ private constructor(
         private var createdAtGte: OffsetDateTime? = null
         private var createdAtLte: OffsetDateTime? = null
         private var customerId: String? = null
-        private var pageNumber: Long? = null
-        private var pageSize: Long? = null
+        private var pageNumber: Int? = null
+        private var pageSize: Int? = null
         private var status: IntentStatus? = null
         private var subscriptionId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -92,24 +92,24 @@ private constructor(
         fun customerId(customerId: String?) = apply { this.customerId = customerId }
 
         /** Page number default is 0 */
-        fun pageNumber(pageNumber: Long?) = apply { this.pageNumber = pageNumber }
+        fun pageNumber(pageNumber: Int?) = apply { this.pageNumber = pageNumber }
 
         /**
          * Alias for [Builder.pageNumber].
          *
          * This unboxed primitive overload exists for backwards compatibility.
          */
-        fun pageNumber(pageNumber: Long) = pageNumber(pageNumber as Long?)
+        fun pageNumber(pageNumber: Int) = pageNumber(pageNumber as Int?)
 
         /** Page size default is 10 max is 100 */
-        fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
+        fun pageSize(pageSize: Int?) = apply { this.pageSize = pageSize }
 
         /**
          * Alias for [Builder.pageSize].
          *
          * This unboxed primitive overload exists for backwards compatibility.
          */
-        fun pageSize(pageSize: Long) = pageSize(pageSize as Long?)
+        fun pageSize(pageSize: Int) = pageSize(pageSize as Int?)
 
         /** Filter by status */
         fun status(status: IntentStatus?) = apply { this.status = status }

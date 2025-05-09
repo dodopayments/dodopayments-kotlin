@@ -25,7 +25,7 @@ private constructor(
     private val customer: JsonField<CustomerLimitedDetails>,
     private val metadata: JsonField<Metadata>,
     private val paymentId: JsonField<String>,
-    private val totalAmount: JsonField<Long>,
+    private val totalAmount: JsonField<Int>,
     private val paymentMethod: JsonField<String>,
     private val paymentMethodType: JsonField<String>,
     private val status: JsonField<IntentStatus>,
@@ -46,7 +46,7 @@ private constructor(
         @JsonProperty("payment_id") @ExcludeMissing paymentId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("total_amount")
         @ExcludeMissing
-        totalAmount: JsonField<Long> = JsonMissing.of(),
+        totalAmount: JsonField<Int> = JsonMissing.of(),
         @JsonProperty("payment_method")
         @ExcludeMissing
         paymentMethod: JsonField<String> = JsonMissing.of(),
@@ -105,7 +105,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun totalAmount(): Long = totalAmount.getRequired("total_amount")
+    fun totalAmount(): Int = totalAmount.getRequired("total_amount")
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -175,7 +175,7 @@ private constructor(
      *
      * Unlike [totalAmount], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("total_amount") @ExcludeMissing fun _totalAmount(): JsonField<Long> = totalAmount
+    @JsonProperty("total_amount") @ExcludeMissing fun _totalAmount(): JsonField<Int> = totalAmount
 
     /**
      * Returns the raw JSON value of [paymentMethod].
@@ -250,7 +250,7 @@ private constructor(
         private var customer: JsonField<CustomerLimitedDetails>? = null
         private var metadata: JsonField<Metadata>? = null
         private var paymentId: JsonField<String>? = null
-        private var totalAmount: JsonField<Long>? = null
+        private var totalAmount: JsonField<Int>? = null
         private var paymentMethod: JsonField<String> = JsonMissing.of()
         private var paymentMethodType: JsonField<String> = JsonMissing.of()
         private var status: JsonField<IntentStatus> = JsonMissing.of()
@@ -328,16 +328,15 @@ private constructor(
          */
         fun paymentId(paymentId: JsonField<String>) = apply { this.paymentId = paymentId }
 
-        fun totalAmount(totalAmount: Long) = totalAmount(JsonField.of(totalAmount))
+        fun totalAmount(totalAmount: Int) = totalAmount(JsonField.of(totalAmount))
 
         /**
          * Sets [Builder.totalAmount] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.totalAmount] with a well-typed [Long] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
+         * You should usually call [Builder.totalAmount] with a well-typed [Int] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun totalAmount(totalAmount: JsonField<Long>) = apply { this.totalAmount = totalAmount }
+        fun totalAmount(totalAmount: JsonField<Int>) = apply { this.totalAmount = totalAmount }
 
         fun paymentMethod(paymentMethod: String?) =
             paymentMethod(JsonField.ofNullable(paymentMethod))

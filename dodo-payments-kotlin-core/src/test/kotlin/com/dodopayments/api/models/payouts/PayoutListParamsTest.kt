@@ -10,12 +10,12 @@ internal class PayoutListParamsTest {
 
     @Test
     fun create() {
-        PayoutListParams.builder().pageNumber(0L).pageSize(0L).build()
+        PayoutListParams.builder().pageNumber(0).pageSize(0).build()
     }
 
     @Test
     fun queryParams() {
-        val params = PayoutListParams.builder().pageNumber(0L).pageSize(0L).build()
+        val params = PayoutListParams.builder().pageNumber(0).pageSize(0).build()
 
         val queryParams = params._queryParams()
 

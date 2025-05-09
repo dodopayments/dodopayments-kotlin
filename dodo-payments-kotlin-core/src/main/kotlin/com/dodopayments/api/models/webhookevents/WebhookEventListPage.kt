@@ -2,6 +2,8 @@
 
 package com.dodopayments.api.models.webhookevents
 
+import com.dodopayments.api.core.AutoPager
+import com.dodopayments.api.core.Page
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.blocking.WebhookEventService
 import java.util.Objects
@@ -12,29 +14,25 @@ private constructor(
     private val service: WebhookEventService,
     private val params: WebhookEventListParams,
     private val response: WebhookEventListPageResponse,
-) {
+) : Page<WebhookEvent> {
 
     /**
      * Delegates to [WebhookEventListPageResponse], but gracefully handles missing data.
      *
      * @see [WebhookEventListPageResponse.items]
      */
-    fun items(): List<WebhookEvent> = response._items().getNullable("items") ?: emptyList()
+    override fun items(): List<WebhookEvent> = response._items().getNullable("items") ?: emptyList()
 
-    fun hasNextPage(): Boolean = items().isNotEmpty()
+    override fun hasNextPage(): Boolean = items().isNotEmpty()
 
-    fun getNextPageParams(): WebhookEventListParams? {
-        if (!hasNextPage()) {
-            return null
-        }
-
+    fun nextPageParams(): WebhookEventListParams {
         val pageNumber = params.pageNumber() ?: 1
         return params.toBuilder().pageNumber(pageNumber + 1).build()
     }
 
-    fun getNextPage(): WebhookEventListPage? = getNextPageParams()?.let { service.list(it) }
+    override fun nextPage(): WebhookEventListPage = service.list(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPager<WebhookEvent> = AutoPager.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): WebhookEventListParams = params
@@ -100,21 +98,6 @@ private constructor(
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: WebhookEventListPage) : Sequence<WebhookEvent> {
-
-        override fun iterator(): Iterator<WebhookEvent> = iterator {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.items().size) {
-                    yield(page.items()[index++])
-                }
-                page = page.getNextPage() ?: break
-                index = 0
-            }
-        }
     }
 
     override fun equals(other: Any?): Boolean {

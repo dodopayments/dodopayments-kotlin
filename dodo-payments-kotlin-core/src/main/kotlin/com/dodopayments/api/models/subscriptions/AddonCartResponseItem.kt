@@ -19,14 +19,14 @@ import java.util.Objects
 class AddonCartResponseItem
 private constructor(
     private val addonId: JsonField<String>,
-    private val quantity: JsonField<Long>,
+    private val quantity: JsonField<Int>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
         @JsonProperty("addon_id") @ExcludeMissing addonId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("quantity") @ExcludeMissing quantity: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("quantity") @ExcludeMissing quantity: JsonField<Int> = JsonMissing.of(),
     ) : this(addonId, quantity, mutableMapOf())
 
     /**
@@ -39,7 +39,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun quantity(): Long = quantity.getRequired("quantity")
+    fun quantity(): Int = quantity.getRequired("quantity")
 
     /**
      * Returns the raw JSON value of [addonId].
@@ -53,7 +53,7 @@ private constructor(
      *
      * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Long> = quantity
+    @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Int> = quantity
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -85,7 +85,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var addonId: JsonField<String>? = null
-        private var quantity: JsonField<Long>? = null
+        private var quantity: JsonField<Int>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(addonCartResponseItem: AddonCartResponseItem) = apply {
@@ -104,15 +104,15 @@ private constructor(
          */
         fun addonId(addonId: JsonField<String>) = apply { this.addonId = addonId }
 
-        fun quantity(quantity: Long) = quantity(JsonField.of(quantity))
+        fun quantity(quantity: Int) = quantity(JsonField.of(quantity))
 
         /**
          * Sets [Builder.quantity] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.quantity] with a well-typed [Long] value instead. This
+         * You should usually call [Builder.quantity] with a well-typed [Int] value instead. This
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun quantity(quantity: JsonField<Long>) = apply { this.quantity = quantity }
+        fun quantity(quantity: JsonField<Int>) = apply { this.quantity = quantity }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()

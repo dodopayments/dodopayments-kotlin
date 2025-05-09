@@ -12,8 +12,8 @@ internal class LicenseKeyInstanceListParamsTest {
     fun create() {
         LicenseKeyInstanceListParams.builder()
             .licenseKeyId("license_key_id")
-            .pageNumber(0L)
-            .pageSize(0L)
+            .pageNumber(0)
+            .pageSize(0)
             .build()
     }
 
@@ -22,8 +22,8 @@ internal class LicenseKeyInstanceListParamsTest {
         val params =
             LicenseKeyInstanceListParams.builder()
                 .licenseKeyId("license_key_id")
-                .pageNumber(0L)
-                .pageSize(0L)
+                .pageNumber(0)
+                .pageSize(0)
                 .build()
 
         val queryParams = params._queryParams()

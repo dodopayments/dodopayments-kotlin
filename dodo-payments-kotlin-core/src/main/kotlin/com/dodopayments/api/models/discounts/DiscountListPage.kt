@@ -2,6 +2,8 @@
 
 package com.dodopayments.api.models.discounts
 
+import com.dodopayments.api.core.AutoPager
+import com.dodopayments.api.core.Page
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.blocking.DiscountService
 import java.util.Objects
@@ -12,29 +14,25 @@ private constructor(
     private val service: DiscountService,
     private val params: DiscountListParams,
     private val response: DiscountListPageResponse,
-) {
+) : Page<Discount> {
 
     /**
      * Delegates to [DiscountListPageResponse], but gracefully handles missing data.
      *
      * @see [DiscountListPageResponse.items]
      */
-    fun items(): List<Discount> = response._items().getNullable("items") ?: emptyList()
+    override fun items(): List<Discount> = response._items().getNullable("items") ?: emptyList()
 
-    fun hasNextPage(): Boolean = items().isNotEmpty()
+    override fun hasNextPage(): Boolean = items().isNotEmpty()
 
-    fun getNextPageParams(): DiscountListParams? {
-        if (!hasNextPage()) {
-            return null
-        }
-
+    fun nextPageParams(): DiscountListParams {
         val pageNumber = params.pageNumber() ?: 1
         return params.toBuilder().pageNumber(pageNumber + 1).build()
     }
 
-    fun getNextPage(): DiscountListPage? = getNextPageParams()?.let { service.list(it) }
+    override fun nextPage(): DiscountListPage = service.list(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPager<Discount> = AutoPager.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): DiscountListParams = params
@@ -100,21 +98,6 @@ private constructor(
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: DiscountListPage) : Sequence<Discount> {
-
-        override fun iterator(): Iterator<Discount> = iterator {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.items().size) {
-                    yield(page.items()[index++])
-                }
-                page = page.getNextPage() ?: break
-                index = 0
-            }
-        }
     }
 
     override fun equals(other: Any?): Boolean {

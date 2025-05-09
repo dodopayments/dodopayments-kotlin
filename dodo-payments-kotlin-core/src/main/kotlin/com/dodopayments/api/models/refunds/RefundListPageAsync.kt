@@ -2,11 +2,11 @@
 
 package com.dodopayments.api.models.refunds
 
+import com.dodopayments.api.core.AutoPagerAsync
+import com.dodopayments.api.core.PageAsync
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.async.RefundServiceAsync
 import java.util.Objects
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
 
 /** @see [RefundServiceAsync.list] */
 class RefundListPageAsync
@@ -14,29 +14,25 @@ private constructor(
     private val service: RefundServiceAsync,
     private val params: RefundListParams,
     private val response: RefundListPageResponse,
-) {
+) : PageAsync<Refund> {
 
     /**
      * Delegates to [RefundListPageResponse], but gracefully handles missing data.
      *
      * @see [RefundListPageResponse.items]
      */
-    fun items(): List<Refund> = response._items().getNullable("items") ?: emptyList()
+    override fun items(): List<Refund> = response._items().getNullable("items") ?: emptyList()
 
-    fun hasNextPage(): Boolean = items().isNotEmpty()
+    override fun hasNextPage(): Boolean = items().isNotEmpty()
 
-    fun getNextPageParams(): RefundListParams? {
-        if (!hasNextPage()) {
-            return null
-        }
-
+    fun nextPageParams(): RefundListParams {
         val pageNumber = params.pageNumber() ?: 1
         return params.toBuilder().pageNumber(pageNumber + 1).build()
     }
 
-    suspend fun getNextPage(): RefundListPageAsync? = getNextPageParams()?.let { service.list(it) }
+    override suspend fun nextPage(): RefundListPageAsync = service.list(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPagerAsync<Refund> = AutoPagerAsync.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): RefundListParams = params
@@ -102,21 +98,6 @@ private constructor(
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: RefundListPageAsync) : Flow<Refund> {
-
-        override suspend fun collect(collector: FlowCollector<Refund>) {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.items().size) {
-                    collector.emit(page.items()[index++])
-                }
-                page = page.getNextPage() ?: break
-                index = 0
-            }
-        }
     }
 
     override fun equals(other: Any?): Boolean {

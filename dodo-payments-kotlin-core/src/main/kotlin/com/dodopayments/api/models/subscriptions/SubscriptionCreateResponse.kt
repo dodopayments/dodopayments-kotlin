@@ -23,7 +23,7 @@ private constructor(
     private val addons: JsonField<List<AddonCartResponseItem>>,
     private val customer: JsonField<CustomerLimitedDetails>,
     private val metadata: JsonField<Metadata>,
-    private val recurringPreTaxAmount: JsonField<Long>,
+    private val recurringPreTaxAmount: JsonField<Int>,
     private val subscriptionId: JsonField<String>,
     private val clientSecret: JsonField<String>,
     private val discountId: JsonField<String>,
@@ -42,7 +42,7 @@ private constructor(
         @JsonProperty("metadata") @ExcludeMissing metadata: JsonField<Metadata> = JsonMissing.of(),
         @JsonProperty("recurring_pre_tax_amount")
         @ExcludeMissing
-        recurringPreTaxAmount: JsonField<Long> = JsonMissing.of(),
+        recurringPreTaxAmount: JsonField<Int> = JsonMissing.of(),
         @JsonProperty("subscription_id")
         @ExcludeMissing
         subscriptionId: JsonField<String> = JsonMissing.of(),
@@ -93,8 +93,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun recurringPreTaxAmount(): Long =
-        recurringPreTaxAmount.getRequired("recurring_pre_tax_amount")
+    fun recurringPreTaxAmount(): Int = recurringPreTaxAmount.getRequired("recurring_pre_tax_amount")
 
     /**
      * Unique identifier for the subscription
@@ -161,7 +160,7 @@ private constructor(
      */
     @JsonProperty("recurring_pre_tax_amount")
     @ExcludeMissing
-    fun _recurringPreTaxAmount(): JsonField<Long> = recurringPreTaxAmount
+    fun _recurringPreTaxAmount(): JsonField<Int> = recurringPreTaxAmount
 
     /**
      * Returns the raw JSON value of [subscriptionId].
@@ -232,7 +231,7 @@ private constructor(
         private var addons: JsonField<MutableList<AddonCartResponseItem>>? = null
         private var customer: JsonField<CustomerLimitedDetails>? = null
         private var metadata: JsonField<Metadata>? = null
-        private var recurringPreTaxAmount: JsonField<Long>? = null
+        private var recurringPreTaxAmount: JsonField<Int>? = null
         private var subscriptionId: JsonField<String>? = null
         private var clientSecret: JsonField<String> = JsonMissing.of()
         private var discountId: JsonField<String> = JsonMissing.of()
@@ -302,17 +301,17 @@ private constructor(
         fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
         /** Tax will be added to the amount and charged to the customer on each billing cycle */
-        fun recurringPreTaxAmount(recurringPreTaxAmount: Long) =
+        fun recurringPreTaxAmount(recurringPreTaxAmount: Int) =
             recurringPreTaxAmount(JsonField.of(recurringPreTaxAmount))
 
         /**
          * Sets [Builder.recurringPreTaxAmount] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.recurringPreTaxAmount] with a well-typed [Long] value
+         * You should usually call [Builder.recurringPreTaxAmount] with a well-typed [Int] value
          * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun recurringPreTaxAmount(recurringPreTaxAmount: JsonField<Long>) = apply {
+        fun recurringPreTaxAmount(recurringPreTaxAmount: JsonField<Int>) = apply {
             this.recurringPreTaxAmount = recurringPreTaxAmount
         }
 

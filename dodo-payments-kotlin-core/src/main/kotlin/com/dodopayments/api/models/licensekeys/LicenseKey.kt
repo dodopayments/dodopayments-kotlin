@@ -22,12 +22,12 @@ private constructor(
     private val businessId: JsonField<String>,
     private val createdAt: JsonField<OffsetDateTime>,
     private val customerId: JsonField<String>,
-    private val instancesCount: JsonField<Long>,
+    private val instancesCount: JsonField<Int>,
     private val key: JsonField<String>,
     private val paymentId: JsonField<String>,
     private val productId: JsonField<String>,
     private val status: JsonField<LicenseKeyStatus>,
-    private val activationsLimit: JsonField<Long>,
+    private val activationsLimit: JsonField<Int>,
     private val expiresAt: JsonField<OffsetDateTime>,
     private val subscriptionId: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -47,7 +47,7 @@ private constructor(
         customerId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("instances_count")
         @ExcludeMissing
-        instancesCount: JsonField<Long> = JsonMissing.of(),
+        instancesCount: JsonField<Int> = JsonMissing.of(),
         @JsonProperty("key") @ExcludeMissing key: JsonField<String> = JsonMissing.of(),
         @JsonProperty("payment_id") @ExcludeMissing paymentId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("product_id") @ExcludeMissing productId: JsonField<String> = JsonMissing.of(),
@@ -56,7 +56,7 @@ private constructor(
         status: JsonField<LicenseKeyStatus> = JsonMissing.of(),
         @JsonProperty("activations_limit")
         @ExcludeMissing
-        activationsLimit: JsonField<Long> = JsonMissing.of(),
+        activationsLimit: JsonField<Int> = JsonMissing.of(),
         @JsonProperty("expires_at")
         @ExcludeMissing
         expiresAt: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -117,7 +117,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun instancesCount(): Long = instancesCount.getRequired("instances_count")
+    fun instancesCount(): Int = instancesCount.getRequired("instances_count")
 
     /**
      * The license key string.
@@ -155,7 +155,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
-    fun activationsLimit(): Long? = activationsLimit.getNullable("activations_limit")
+    fun activationsLimit(): Int? = activationsLimit.getNullable("activations_limit")
 
     /**
      * The timestamp indicating when the license key expires, in UTC.
@@ -210,7 +210,7 @@ private constructor(
      */
     @JsonProperty("instances_count")
     @ExcludeMissing
-    fun _instancesCount(): JsonField<Long> = instancesCount
+    fun _instancesCount(): JsonField<Int> = instancesCount
 
     /**
      * Returns the raw JSON value of [key].
@@ -248,7 +248,7 @@ private constructor(
      */
     @JsonProperty("activations_limit")
     @ExcludeMissing
-    fun _activationsLimit(): JsonField<Long> = activationsLimit
+    fun _activationsLimit(): JsonField<Int> = activationsLimit
 
     /**
      * Returns the raw JSON value of [expiresAt].
@@ -308,12 +308,12 @@ private constructor(
         private var businessId: JsonField<String>? = null
         private var createdAt: JsonField<OffsetDateTime>? = null
         private var customerId: JsonField<String>? = null
-        private var instancesCount: JsonField<Long>? = null
+        private var instancesCount: JsonField<Int>? = null
         private var key: JsonField<String>? = null
         private var paymentId: JsonField<String>? = null
         private var productId: JsonField<String>? = null
         private var status: JsonField<LicenseKeyStatus>? = null
-        private var activationsLimit: JsonField<Long> = JsonMissing.of()
+        private var activationsLimit: JsonField<Int> = JsonMissing.of()
         private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var subscriptionId: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -382,16 +382,16 @@ private constructor(
         fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
 
         /** The current number of instances activated for this license key. */
-        fun instancesCount(instancesCount: Long) = instancesCount(JsonField.of(instancesCount))
+        fun instancesCount(instancesCount: Int) = instancesCount(JsonField.of(instancesCount))
 
         /**
          * Sets [Builder.instancesCount] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.instancesCount] with a well-typed [Long] value instead.
+         * You should usually call [Builder.instancesCount] with a well-typed [Int] value instead.
          * This method is primarily for setting the field to an undocumented or not yet supported
          * value.
          */
-        fun instancesCount(instancesCount: JsonField<Long>) = apply {
+        fun instancesCount(instancesCount: JsonField<Int>) = apply {
             this.instancesCount = instancesCount
         }
 
@@ -442,7 +442,7 @@ private constructor(
         fun status(status: JsonField<LicenseKeyStatus>) = apply { this.status = status }
 
         /** The maximum number of activations allowed for this license key. */
-        fun activationsLimit(activationsLimit: Long?) =
+        fun activationsLimit(activationsLimit: Int?) =
             activationsLimit(JsonField.ofNullable(activationsLimit))
 
         /**
@@ -450,16 +450,16 @@ private constructor(
          *
          * This unboxed primitive overload exists for backwards compatibility.
          */
-        fun activationsLimit(activationsLimit: Long) = activationsLimit(activationsLimit as Long?)
+        fun activationsLimit(activationsLimit: Int) = activationsLimit(activationsLimit as Int?)
 
         /**
          * Sets [Builder.activationsLimit] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.activationsLimit] with a well-typed [Long] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.activationsLimit] with a well-typed [Int] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun activationsLimit(activationsLimit: JsonField<Long>) = apply {
+        fun activationsLimit(activationsLimit: JsonField<Int>) = apply {
             this.activationsLimit = activationsLimit
         }
 

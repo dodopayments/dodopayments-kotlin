@@ -2,11 +2,11 @@
 
 package com.dodopayments.api.models.subscriptions
 
+import com.dodopayments.api.core.AutoPagerAsync
+import com.dodopayments.api.core.PageAsync
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.async.SubscriptionServiceAsync
 import java.util.Objects
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
 
 /** @see [SubscriptionServiceAsync.list] */
 class SubscriptionListPageAsync
@@ -14,31 +14,26 @@ private constructor(
     private val service: SubscriptionServiceAsync,
     private val params: SubscriptionListParams,
     private val response: SubscriptionListPageResponse,
-) {
+) : PageAsync<SubscriptionListResponse> {
 
     /**
      * Delegates to [SubscriptionListPageResponse], but gracefully handles missing data.
      *
      * @see [SubscriptionListPageResponse.items]
      */
-    fun items(): List<SubscriptionListResponse> =
+    override fun items(): List<SubscriptionListResponse> =
         response._items().getNullable("items") ?: emptyList()
 
-    fun hasNextPage(): Boolean = items().isNotEmpty()
+    override fun hasNextPage(): Boolean = items().isNotEmpty()
 
-    fun getNextPageParams(): SubscriptionListParams? {
-        if (!hasNextPage()) {
-            return null
-        }
-
+    fun nextPageParams(): SubscriptionListParams {
         val pageNumber = params.pageNumber() ?: 1
         return params.toBuilder().pageNumber(pageNumber + 1).build()
     }
 
-    suspend fun getNextPage(): SubscriptionListPageAsync? =
-        getNextPageParams()?.let { service.list(it) }
+    override suspend fun nextPage(): SubscriptionListPageAsync = service.list(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPagerAsync<SubscriptionListResponse> = AutoPagerAsync.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): SubscriptionListParams = params
@@ -104,22 +99,6 @@ private constructor(
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: SubscriptionListPageAsync) :
-        Flow<SubscriptionListResponse> {
-
-        override suspend fun collect(collector: FlowCollector<SubscriptionListResponse>) {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.items().size) {
-                    collector.emit(page.items()[index++])
-                }
-                page = page.getNextPage() ?: break
-                index = 0
-            }
-        }
     }
 
     override fun equals(other: Any?): Boolean {
