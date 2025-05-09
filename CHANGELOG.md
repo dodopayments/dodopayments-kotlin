@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.22.0 (2025-05-09)
+
+Full Changelog: [v1.21.0...v1.22.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.21.0...v1.22.0)
+
+### Features
+
+* **client:** allow providing some params positionally ([51abdcb](https://github.com/dodopayments/dodopayments-kotlin/commit/51abdcb9c2352f5d7e198d2cc5007668c8bf0d8e))
+
 ## 1.21.0 (2025-05-09)
 
 Full Changelog: [v1.20.0...v1.21.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.20.0...v1.21.0)
