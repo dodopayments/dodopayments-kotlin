@@ -5,6 +5,7 @@ package com.dodopayments.api.services.blocking.invoices
 import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.RequestOptions
+import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.handlers.errorHandler
 import com.dodopayments.api.core.http.HttpMethod
 import com.dodopayments.api.core.http.HttpRequest
@@ -38,6 +39,9 @@ class PaymentServiceImpl internal constructor(private val clientOptions: ClientO
             params: PaymentRetrieveParams,
             requestOptions: RequestOptions,
         ): HttpResponse {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("paymentId", params.paymentId())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

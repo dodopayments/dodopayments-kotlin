@@ -3,19 +3,18 @@
 package com.dodopayments.api.models.licensekeyinstances
 
 import com.dodopayments.api.core.Params
-import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
 import java.util.Objects
 
 class LicenseKeyInstanceRetrieveParams
 private constructor(
-    private val id: String,
+    private val id: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun id(): String = id
+    fun id(): String? = id
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -25,14 +24,11 @@ private constructor(
 
     companion object {
 
+        fun none(): LicenseKeyInstanceRetrieveParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of
          * [LicenseKeyInstanceRetrieveParams].
-         *
-         * The following fields are required:
-         * ```kotlin
-         * .id()
-         * ```
          */
         fun builder() = Builder()
     }
@@ -52,7 +48,7 @@ private constructor(
                     licenseKeyInstanceRetrieveParams.additionalQueryParams.toBuilder()
             }
 
-        fun id(id: String) = apply { this.id = id }
+        fun id(id: String?) = apply { this.id = id }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -156,17 +152,10 @@ private constructor(
          * Returns an immutable instance of [LicenseKeyInstanceRetrieveParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```kotlin
-         * .id()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): LicenseKeyInstanceRetrieveParams =
             LicenseKeyInstanceRetrieveParams(
-                checkRequired("id", id),
+                id,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -174,7 +163,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> id
+            0 -> id ?: ""
             else -> ""
         }
 

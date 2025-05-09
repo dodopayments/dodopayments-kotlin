@@ -3,19 +3,18 @@
 package com.dodopayments.api.models.subscriptions
 
 import com.dodopayments.api.core.Params
-import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
 import java.util.Objects
 
 class SubscriptionRetrieveParams
 private constructor(
-    private val subscriptionId: String,
+    private val subscriptionId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun subscriptionId(): String = subscriptionId
+    fun subscriptionId(): String? = subscriptionId
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -25,13 +24,10 @@ private constructor(
 
     companion object {
 
+        fun none(): SubscriptionRetrieveParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of [SubscriptionRetrieveParams].
-         *
-         * The following fields are required:
-         * ```kotlin
-         * .subscriptionId()
-         * ```
          */
         fun builder() = Builder()
     }
@@ -49,7 +45,7 @@ private constructor(
             additionalQueryParams = subscriptionRetrieveParams.additionalQueryParams.toBuilder()
         }
 
-        fun subscriptionId(subscriptionId: String) = apply { this.subscriptionId = subscriptionId }
+        fun subscriptionId(subscriptionId: String?) = apply { this.subscriptionId = subscriptionId }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -153,17 +149,10 @@ private constructor(
          * Returns an immutable instance of [SubscriptionRetrieveParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```kotlin
-         * .subscriptionId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): SubscriptionRetrieveParams =
             SubscriptionRetrieveParams(
-                checkRequired("subscriptionId", subscriptionId),
+                subscriptionId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -171,7 +160,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> subscriptionId
+            0 -> subscriptionId ?: ""
             else -> ""
         }
 

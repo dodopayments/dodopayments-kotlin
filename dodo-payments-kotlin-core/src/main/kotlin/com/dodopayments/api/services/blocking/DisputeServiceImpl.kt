@@ -5,6 +5,7 @@ package com.dodopayments.api.services.blocking
 import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.RequestOptions
+import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.handlers.errorHandler
 import com.dodopayments.api.core.handlers.jsonHandler
 import com.dodopayments.api.core.handlers.withErrorHandler
@@ -53,6 +54,9 @@ class DisputeServiceImpl internal constructor(private val clientOptions: ClientO
             params: DisputeRetrieveParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<DisputeRetrieveResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("disputeId", params.disputeId())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
