@@ -4,7 +4,6 @@ package com.dodopayments.api.services.blocking
 
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
-import com.dodopayments.api.models.disputes.DisputeRetrieveParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -20,8 +19,7 @@ internal class DisputeServiceTest {
                 .build()
         val disputeService = client.disputes()
 
-        val dispute =
-            disputeService.retrieve(DisputeRetrieveParams.builder().disputeId("dispute_id").build())
+        val dispute = disputeService.retrieve("dispute_id")
 
         dispute.validate()
     }

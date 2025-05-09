@@ -20,13 +20,13 @@ import java.util.Objects
 
 class LicenseKeyInstanceUpdateParams
 private constructor(
-    private val id: String,
+    private val id: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun id(): String = id
+    fun id(): String? = id
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
@@ -57,7 +57,6 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
-         * .id()
          * .name()
          * ```
          */
@@ -79,7 +78,7 @@ private constructor(
             additionalQueryParams = licenseKeyInstanceUpdateParams.additionalQueryParams.toBuilder()
         }
 
-        fun id(id: String) = apply { this.id = id }
+        fun id(id: String?) = apply { this.id = id }
 
         /**
          * Sets the entire request body.
@@ -224,7 +223,6 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
-         * .id()
          * .name()
          * ```
          *
@@ -232,7 +230,7 @@ private constructor(
          */
         fun build(): LicenseKeyInstanceUpdateParams =
             LicenseKeyInstanceUpdateParams(
-                checkRequired("id", id),
+                id,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -243,7 +241,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> id
+            0 -> id ?: ""
             else -> ""
         }
 

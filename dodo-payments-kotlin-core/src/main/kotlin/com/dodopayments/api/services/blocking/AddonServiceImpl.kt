@@ -5,6 +5,7 @@ package com.dodopayments.api.services.blocking
 import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.RequestOptions
+import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.handlers.errorHandler
 import com.dodopayments.api.core.handlers.jsonHandler
 import com.dodopayments.api.core.handlers.withErrorHandler
@@ -99,6 +100,9 @@ class AddonServiceImpl internal constructor(private val clientOptions: ClientOpt
             params: AddonRetrieveParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<AddonResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -125,6 +129,9 @@ class AddonServiceImpl internal constructor(private val clientOptions: ClientOpt
             params: AddonUpdateParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<AddonResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PATCH)
@@ -187,6 +194,9 @@ class AddonServiceImpl internal constructor(private val clientOptions: ClientOpt
             params: AddonUpdateImagesParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<AddonUpdateImagesResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
