@@ -31,14 +31,36 @@ interface ProductServiceAsync {
     ): Product
 
     suspend fun retrieve(
+        id: String,
+        params: ProductRetrieveParams = ProductRetrieveParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Product = retrieve(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see [retrieve] */
+    suspend fun retrieve(
         params: ProductRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Product
 
+    /** @see [retrieve] */
+    suspend fun retrieve(id: String, requestOptions: RequestOptions): Product =
+        retrieve(id, ProductRetrieveParams.none(), requestOptions)
+
+    suspend fun update(
+        id: String,
+        params: ProductUpdateParams = ProductUpdateParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ) = update(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see [update] */
     suspend fun update(
         params: ProductUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     )
+
+    /** @see [update] */
+    suspend fun update(id: String, requestOptions: RequestOptions) =
+        update(id, ProductUpdateParams.none(), requestOptions)
 
     suspend fun list(
         params: ProductListParams = ProductListParams.none(),
@@ -50,14 +72,36 @@ interface ProductServiceAsync {
         list(ProductListParams.none(), requestOptions)
 
     suspend fun delete(
+        id: String,
+        params: ProductDeleteParams = ProductDeleteParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ) = delete(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see [delete] */
+    suspend fun delete(
         params: ProductDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     )
 
+    /** @see [delete] */
+    suspend fun delete(id: String, requestOptions: RequestOptions) =
+        delete(id, ProductDeleteParams.none(), requestOptions)
+
+    suspend fun unarchive(
+        id: String,
+        params: ProductUnarchiveParams = ProductUnarchiveParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ) = unarchive(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see [unarchive] */
     suspend fun unarchive(
         params: ProductUnarchiveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     )
+
+    /** @see [unarchive] */
+    suspend fun unarchive(id: String, requestOptions: RequestOptions) =
+        unarchive(id, ProductUnarchiveParams.none(), requestOptions)
 
     /**
      * A view of [ProductServiceAsync] that provides access to raw HTTP responses for each method.
@@ -82,9 +126,22 @@ interface ProductServiceAsync {
          */
         @MustBeClosed
         suspend fun retrieve(
+            id: String,
+            params: ProductRetrieveParams = ProductRetrieveParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Product> = retrieve(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        suspend fun retrieve(
             params: ProductRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Product>
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        suspend fun retrieve(id: String, requestOptions: RequestOptions): HttpResponseFor<Product> =
+            retrieve(id, ProductRetrieveParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `patch /products/{id}`, but is otherwise the same as
@@ -92,9 +149,22 @@ interface ProductServiceAsync {
          */
         @MustBeClosed
         suspend fun update(
+            id: String,
+            params: ProductUpdateParams = ProductUpdateParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse = update(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see [update] */
+        @MustBeClosed
+        suspend fun update(
             params: ProductUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
+
+        /** @see [update] */
+        @MustBeClosed
+        suspend fun update(id: String, requestOptions: RequestOptions): HttpResponse =
+            update(id, ProductUpdateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /products`, but is otherwise the same as
@@ -117,9 +187,22 @@ interface ProductServiceAsync {
          */
         @MustBeClosed
         suspend fun delete(
+            id: String,
+            params: ProductDeleteParams = ProductDeleteParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse = delete(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see [delete] */
+        @MustBeClosed
+        suspend fun delete(
             params: ProductDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
+
+        /** @see [delete] */
+        @MustBeClosed
+        suspend fun delete(id: String, requestOptions: RequestOptions): HttpResponse =
+            delete(id, ProductDeleteParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /products/{id}/unarchive`, but is otherwise the
@@ -127,8 +210,21 @@ interface ProductServiceAsync {
          */
         @MustBeClosed
         suspend fun unarchive(
+            id: String,
+            params: ProductUnarchiveParams = ProductUnarchiveParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse = unarchive(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see [unarchive] */
+        @MustBeClosed
+        suspend fun unarchive(
             params: ProductUnarchiveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
+
+        /** @see [unarchive] */
+        @MustBeClosed
+        suspend fun unarchive(id: String, requestOptions: RequestOptions): HttpResponse =
+            unarchive(id, ProductUnarchiveParams.none(), requestOptions)
     }
 }

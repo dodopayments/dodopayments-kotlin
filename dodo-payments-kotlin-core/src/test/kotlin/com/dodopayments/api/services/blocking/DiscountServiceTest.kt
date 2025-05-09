@@ -5,8 +5,6 @@ package com.dodopayments.api.services.blocking
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
 import com.dodopayments.api.models.discounts.DiscountCreateParams
-import com.dodopayments.api.models.discounts.DiscountDeleteParams
-import com.dodopayments.api.models.discounts.DiscountRetrieveParams
 import com.dodopayments.api.models.discounts.DiscountType
 import com.dodopayments.api.models.discounts.DiscountUpdateParams
 import java.time.OffsetDateTime
@@ -50,10 +48,7 @@ internal class DiscountServiceTest {
                 .build()
         val discountService = client.discounts()
 
-        val discount =
-            discountService.retrieve(
-                DiscountRetrieveParams.builder().discountId("discount_id").build()
-            )
+        val discount = discountService.retrieve("discount_id")
 
         discount.validate()
     }
@@ -107,6 +102,6 @@ internal class DiscountServiceTest {
                 .build()
         val discountService = client.discounts()
 
-        discountService.delete(DiscountDeleteParams.builder().discountId("discount_id").build())
+        discountService.delete("discount_id")
     }
 }

@@ -3,19 +3,18 @@
 package com.dodopayments.api.models.customers
 
 import com.dodopayments.api.core.Params
-import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
 import java.util.Objects
 
 class CustomerRetrieveParams
 private constructor(
-    private val customerId: String,
+    private val customerId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun customerId(): String = customerId
+    fun customerId(): String? = customerId
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -25,14 +24,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [CustomerRetrieveParams].
-         *
-         * The following fields are required:
-         * ```kotlin
-         * .customerId()
-         * ```
-         */
+        fun none(): CustomerRetrieveParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [CustomerRetrieveParams]. */
         fun builder() = Builder()
     }
 
@@ -49,7 +43,7 @@ private constructor(
             additionalQueryParams = customerRetrieveParams.additionalQueryParams.toBuilder()
         }
 
-        fun customerId(customerId: String) = apply { this.customerId = customerId }
+        fun customerId(customerId: String?) = apply { this.customerId = customerId }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -153,17 +147,10 @@ private constructor(
          * Returns an immutable instance of [CustomerRetrieveParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```kotlin
-         * .customerId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): CustomerRetrieveParams =
             CustomerRetrieveParams(
-                checkRequired("customerId", customerId),
+                customerId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -171,7 +158,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> customerId
+            0 -> customerId ?: ""
             else -> ""
         }
 
