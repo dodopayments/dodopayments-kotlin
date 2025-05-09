@@ -167,6 +167,12 @@ internal class SubscriptionServiceTest {
                     SubscriptionChangePlanParams.ProrationBillingMode.PRORATED_IMMEDIATELY
                 )
                 .quantity(0L)
+                .addAddon(
+                    SubscriptionChangePlanParams.Addon.builder()
+                        .addonId("addon_id")
+                        .quantity(0L)
+                        .build()
+                )
                 .build()
         )
     }

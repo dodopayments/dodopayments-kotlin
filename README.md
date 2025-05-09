@@ -212,6 +212,49 @@ val payment: PaymentCreateResponse = client.payments().create(params)
 
 The asynchronous client supports the same options as the synchronous one, except most methods are [suspending](https://kotlinlang.org/docs/coroutines-guide.html).
 
+## Binary responses
+
+The SDK defines methods that return binary responses, which are used for API responses that shouldn't necessarily be parsed, like non-JSON data.
+
+These methods return [`HttpResponse`](dodo-payments-kotlin-core/src/main/kotlin/com/dodopayments/api/core/http/HttpResponse.kt):
+
+```kotlin
+import com.dodopayments.api.core.http.HttpResponse
+import com.dodopayments.api.models.invoices.payments.PaymentRetrieveParams
+
+val params: PaymentRetrieveParams = PaymentRetrieveParams.builder()
+    .paymentId("payment_id")
+    .build()
+val payment: HttpResponse = client.invoices().payments().retrieve(params)
+```
+
+To save the response content to a file, use the [`Files.copy(...)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#copy-java.io.InputStream-java.nio.file.Path-java.nio.file.CopyOption...-) method:
+
+```kotlin
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
+
+client.invoices().payments().retrieve(params).use {
+    Files.copy(
+        it.body(),
+        Paths.get(path),
+        StandardCopyOption.REPLACE_EXISTING
+    )
+}
+```
+
+Or transfer the response content to any [`OutputStream`](https://docs.oracle.com/javase/8/docs/api/java/io/OutputStream.html):
+
+```kotlin
+import java.nio.file.Files
+import java.nio.file.Paths
+
+client.invoices().payments().retrieve(params).use {
+    it.body().transferTo(Files.newOutputStream(Paths.get(path)))
+}
+```
+
 ## Raw responses
 
 The SDK defines methods that deserialize responses into instances of Kotlin classes. However, these methods don't provide access to the response headers, status code, or the raw response body.

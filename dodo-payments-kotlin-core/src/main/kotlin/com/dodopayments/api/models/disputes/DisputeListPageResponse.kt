@@ -19,27 +19,31 @@ import java.util.Objects
 
 class DisputeListPageResponse
 private constructor(
-    private val items: JsonField<List<Dispute>>,
+    private val items: JsonField<List<DisputeListResponse>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("items") @ExcludeMissing items: JsonField<List<Dispute>> = JsonMissing.of()
+        @JsonProperty("items")
+        @ExcludeMissing
+        items: JsonField<List<DisputeListResponse>> = JsonMissing.of()
     ) : this(items, mutableMapOf())
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun items(): List<Dispute> = items.getRequired("items")
+    fun items(): List<DisputeListResponse> = items.getRequired("items")
 
     /**
      * Returns the raw JSON value of [items].
      *
      * Unlike [items], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("items") @ExcludeMissing fun _items(): JsonField<List<Dispute>> = items
+    @JsonProperty("items")
+    @ExcludeMissing
+    fun _items(): JsonField<List<DisputeListResponse>> = items
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -69,7 +73,7 @@ private constructor(
     /** A builder for [DisputeListPageResponse]. */
     class Builder internal constructor() {
 
-        private var items: JsonField<MutableList<Dispute>>? = null
+        private var items: JsonField<MutableList<DisputeListResponse>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(disputeListPageResponse: DisputeListPageResponse) = apply {
@@ -77,25 +81,25 @@ private constructor(
             additionalProperties = disputeListPageResponse.additionalProperties.toMutableMap()
         }
 
-        fun items(items: List<Dispute>) = items(JsonField.of(items))
+        fun items(items: List<DisputeListResponse>) = items(JsonField.of(items))
 
         /**
          * Sets [Builder.items] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.items] with a well-typed `List<Dispute>` value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
+         * You should usually call [Builder.items] with a well-typed `List<DisputeListResponse>`
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
          */
-        fun items(items: JsonField<List<Dispute>>) = apply {
+        fun items(items: JsonField<List<DisputeListResponse>>) = apply {
             this.items = items.map { it.toMutableList() }
         }
 
         /**
-         * Adds a single [Dispute] to [items].
+         * Adds a single [DisputeListResponse] to [items].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addItem(item: Dispute) = apply {
+        fun addItem(item: DisputeListResponse) = apply {
             items =
                 (items ?: JsonField.of(mutableListOf())).also { checkKnown("items", it).add(item) }
         }

@@ -14,11 +14,11 @@ import com.dodopayments.api.core.http.HttpResponse.Handler
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepareAsync
-import com.dodopayments.api.models.disputes.Dispute
 import com.dodopayments.api.models.disputes.DisputeListPageAsync
 import com.dodopayments.api.models.disputes.DisputeListPageResponse
 import com.dodopayments.api.models.disputes.DisputeListParams
 import com.dodopayments.api.models.disputes.DisputeRetrieveParams
+import com.dodopayments.api.models.disputes.DisputeRetrieveResponse
 
 class DisputeServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     DisputeServiceAsync {
@@ -32,7 +32,7 @@ class DisputeServiceAsyncImpl internal constructor(private val clientOptions: Cl
     override suspend fun retrieve(
         params: DisputeRetrieveParams,
         requestOptions: RequestOptions,
-    ): Dispute =
+    ): DisputeRetrieveResponse =
         // get /disputes/{dispute_id}
         withRawResponse().retrieve(params, requestOptions).parse()
 
@@ -48,13 +48,14 @@ class DisputeServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
-        private val retrieveHandler: Handler<Dispute> =
-            jsonHandler<Dispute>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val retrieveHandler: Handler<DisputeRetrieveResponse> =
+            jsonHandler<DisputeRetrieveResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
         override suspend fun retrieve(
             params: DisputeRetrieveParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<Dispute> {
+        ): HttpResponseFor<DisputeRetrieveResponse> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
