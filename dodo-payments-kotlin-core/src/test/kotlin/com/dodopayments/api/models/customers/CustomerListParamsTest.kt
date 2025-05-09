@@ -10,12 +10,12 @@ internal class CustomerListParamsTest {
 
     @Test
     fun create() {
-        CustomerListParams.builder().pageNumber(0L).pageSize(0L).build()
+        CustomerListParams.builder().pageNumber(0).pageSize(0).build()
     }
 
     @Test
     fun queryParams() {
-        val params = CustomerListParams.builder().pageNumber(0L).pageSize(0L).build()
+        val params = CustomerListParams.builder().pageNumber(0).pageSize(0).build()
 
         val queryParams = params._queryParams()
 

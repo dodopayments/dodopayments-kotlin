@@ -17,8 +17,8 @@ internal class DisputeListParamsTest {
             .customerId("customer_id")
             .disputeStage(DisputeStage.PRE_DISPUTE)
             .disputeStatus(DisputeStatus.DISPUTE_OPENED)
-            .pageNumber(0L)
-            .pageSize(0L)
+            .pageNumber(0)
+            .pageSize(0)
             .build()
     }
 
@@ -31,8 +31,8 @@ internal class DisputeListParamsTest {
                 .customerId("customer_id")
                 .disputeStage(DisputeStage.PRE_DISPUTE)
                 .disputeStatus(DisputeStatus.DISPUTE_OPENED)
-                .pageNumber(0L)
-                .pageSize(0L)
+                .pageNumber(0)
+                .pageSize(0)
                 .build()
 
         val queryParams = params._queryParams()

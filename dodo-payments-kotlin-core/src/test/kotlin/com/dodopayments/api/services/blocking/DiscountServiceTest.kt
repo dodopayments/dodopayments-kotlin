@@ -26,13 +26,13 @@ internal class DiscountServiceTest {
         val discount =
             discountService.create(
                 DiscountCreateParams.builder()
-                    .amount(0L)
+                    .amount(0)
                     .type(DiscountType.PERCENTAGE)
                     .code("code")
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .name("name")
                     .addRestrictedTo("string")
-                    .usageLimit(0L)
+                    .usageLimit(0)
                     .build()
             )
 
@@ -66,13 +66,13 @@ internal class DiscountServiceTest {
             discountService.update(
                 DiscountUpdateParams.builder()
                     .discountId("discount_id")
-                    .amount(0L)
+                    .amount(0)
                     .code("code")
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .name("name")
                     .addRestrictedTo("string")
                     .type(DiscountType.PERCENTAGE)
-                    .usageLimit(0L)
+                    .usageLimit(0)
                     .build()
             )
 

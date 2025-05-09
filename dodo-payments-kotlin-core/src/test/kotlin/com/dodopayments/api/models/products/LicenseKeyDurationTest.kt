@@ -13,9 +13,9 @@ internal class LicenseKeyDurationTest {
     @Test
     fun create() {
         val licenseKeyDuration =
-            LicenseKeyDuration.builder().count(0L).interval(TimeInterval.DAY).build()
+            LicenseKeyDuration.builder().count(0).interval(TimeInterval.DAY).build()
 
-        assertThat(licenseKeyDuration.count()).isEqualTo(0L)
+        assertThat(licenseKeyDuration.count()).isEqualTo(0)
         assertThat(licenseKeyDuration.interval()).isEqualTo(TimeInterval.DAY)
     }
 
@@ -23,7 +23,7 @@ internal class LicenseKeyDurationTest {
     fun roundtrip() {
         val jsonMapper = jsonMapper()
         val licenseKeyDuration =
-            LicenseKeyDuration.builder().count(0L).interval(TimeInterval.DAY).build()
+            LicenseKeyDuration.builder().count(0).interval(TimeInterval.DAY).build()
 
         val roundtrippedLicenseKeyDuration =
             jsonMapper.readValue(

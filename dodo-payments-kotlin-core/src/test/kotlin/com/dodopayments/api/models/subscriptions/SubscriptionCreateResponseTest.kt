@@ -15,7 +15,7 @@ internal class SubscriptionCreateResponseTest {
     fun create() {
         val subscriptionCreateResponse =
             SubscriptionCreateResponse.builder()
-                .addAddon(AddonCartResponseItem.builder().addonId("addon_id").quantity(0L).build())
+                .addAddon(AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build())
                 .customer(
                     CustomerLimitedDetails.builder()
                         .customerId("customer_id")
@@ -28,7 +28,7 @@ internal class SubscriptionCreateResponseTest {
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
-                .recurringPreTaxAmount(0L)
+                .recurringPreTaxAmount(0)
                 .subscriptionId("subscription_id")
                 .clientSecret("client_secret")
                 .discountId("discount_id")
@@ -37,7 +37,7 @@ internal class SubscriptionCreateResponseTest {
 
         assertThat(subscriptionCreateResponse.addons())
             .containsExactly(
-                AddonCartResponseItem.builder().addonId("addon_id").quantity(0L).build()
+                AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build()
             )
         assertThat(subscriptionCreateResponse.customer())
             .isEqualTo(
@@ -53,7 +53,7 @@ internal class SubscriptionCreateResponseTest {
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
-        assertThat(subscriptionCreateResponse.recurringPreTaxAmount()).isEqualTo(0L)
+        assertThat(subscriptionCreateResponse.recurringPreTaxAmount()).isEqualTo(0)
         assertThat(subscriptionCreateResponse.subscriptionId()).isEqualTo("subscription_id")
         assertThat(subscriptionCreateResponse.clientSecret()).isEqualTo("client_secret")
         assertThat(subscriptionCreateResponse.discountId()).isEqualTo("discount_id")
@@ -65,7 +65,7 @@ internal class SubscriptionCreateResponseTest {
         val jsonMapper = jsonMapper()
         val subscriptionCreateResponse =
             SubscriptionCreateResponse.builder()
-                .addAddon(AddonCartResponseItem.builder().addonId("addon_id").quantity(0L).build())
+                .addAddon(AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build())
                 .customer(
                     CustomerLimitedDetails.builder()
                         .customerId("customer_id")
@@ -78,7 +78,7 @@ internal class SubscriptionCreateResponseTest {
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
-                .recurringPreTaxAmount(0L)
+                .recurringPreTaxAmount(0)
                 .subscriptionId("subscription_id")
                 .clientSecret("client_secret")
                 .discountId("discount_id")

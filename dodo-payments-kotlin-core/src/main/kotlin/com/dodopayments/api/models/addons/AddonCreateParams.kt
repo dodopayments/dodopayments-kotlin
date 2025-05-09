@@ -47,7 +47,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun price(): Long = body.price()
+    fun price(): Int = body.price()
 
     /**
      * Represents the different categories of taxation applicable to various products and services.
@@ -84,7 +84,7 @@ private constructor(
      *
      * Unlike [price], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _price(): JsonField<Long> = body._price()
+    fun _price(): JsonField<Int> = body._price()
 
     /**
      * Returns the raw JSON value of [taxCategory].
@@ -174,15 +174,15 @@ private constructor(
         fun name(name: JsonField<String>) = apply { body.name(name) }
 
         /** Amount of the addon */
-        fun price(price: Long) = apply { body.price(price) }
+        fun price(price: Int) = apply { body.price(price) }
 
         /**
          * Sets [Builder.price] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.price] with a well-typed [Long] value instead. This
+         * You should usually call [Builder.price] with a well-typed [Int] value instead. This
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun price(price: JsonField<Long>) = apply { body.price(price) }
+        fun price(price: JsonField<Int>) = apply { body.price(price) }
 
         /**
          * Represents the different categories of taxation applicable to various products and
@@ -363,7 +363,7 @@ private constructor(
     private constructor(
         private val currency: JsonField<Currency>,
         private val name: JsonField<String>,
-        private val price: JsonField<Long>,
+        private val price: JsonField<Int>,
         private val taxCategory: JsonField<TaxCategory>,
         private val description: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -375,7 +375,7 @@ private constructor(
             @ExcludeMissing
             currency: JsonField<Currency> = JsonMissing.of(),
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("price") @ExcludeMissing price: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("price") @ExcludeMissing price: JsonField<Int> = JsonMissing.of(),
             @JsonProperty("tax_category")
             @ExcludeMissing
             taxCategory: JsonField<TaxCategory> = JsonMissing.of(),
@@ -404,7 +404,7 @@ private constructor(
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun price(): Long = price.getRequired("price")
+        fun price(): Int = price.getRequired("price")
 
         /**
          * Represents the different categories of taxation applicable to various products and
@@ -442,7 +442,7 @@ private constructor(
          *
          * Unlike [price], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Long> = price
+        @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Int> = price
 
         /**
          * Returns the raw JSON value of [taxCategory].
@@ -495,7 +495,7 @@ private constructor(
 
             private var currency: JsonField<Currency>? = null
             private var name: JsonField<String>? = null
-            private var price: JsonField<Long>? = null
+            private var price: JsonField<Int>? = null
             private var taxCategory: JsonField<TaxCategory>? = null
             private var description: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -533,16 +533,16 @@ private constructor(
             fun name(name: JsonField<String>) = apply { this.name = name }
 
             /** Amount of the addon */
-            fun price(price: Long) = price(JsonField.of(price))
+            fun price(price: Int) = price(JsonField.of(price))
 
             /**
              * Sets [Builder.price] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.price] with a well-typed [Long] value instead. This
+             * You should usually call [Builder.price] with a well-typed [Int] value instead. This
              * method is primarily for setting the field to an undocumented or not yet supported
              * value.
              */
-            fun price(price: JsonField<Long>) = apply { this.price = price }
+            fun price(price: JsonField<Int>) = apply { this.price = price }
 
             /**
              * Represents the different categories of taxation applicable to various products and

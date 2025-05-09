@@ -10,12 +10,12 @@ internal class DiscountListParamsTest {
 
     @Test
     fun create() {
-        DiscountListParams.builder().pageNumber(0L).pageSize(0L).build()
+        DiscountListParams.builder().pageNumber(0).pageSize(0).build()
     }
 
     @Test
     fun queryParams() {
-        val params = DiscountListParams.builder().pageNumber(0L).pageSize(0L).build()
+        val params = DiscountListParams.builder().pageNumber(0).pageSize(0).build()
 
         val queryParams = params._queryParams()
 

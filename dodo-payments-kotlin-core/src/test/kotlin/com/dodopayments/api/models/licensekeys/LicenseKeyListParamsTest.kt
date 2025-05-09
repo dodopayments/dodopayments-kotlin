@@ -12,8 +12,8 @@ internal class LicenseKeyListParamsTest {
     fun create() {
         LicenseKeyListParams.builder()
             .customerId("customer_id")
-            .pageNumber(0L)
-            .pageSize(0L)
+            .pageNumber(0)
+            .pageSize(0)
             .productId("product_id")
             .status(LicenseKeyStatus.ACTIVE)
             .build()
@@ -24,8 +24,8 @@ internal class LicenseKeyListParamsTest {
         val params =
             LicenseKeyListParams.builder()
                 .customerId("customer_id")
-                .pageNumber(0L)
-                .pageSize(0L)
+                .pageNumber(0)
+                .pageSize(0)
                 .productId("product_id")
                 .status(LicenseKeyStatus.ACTIVE)
                 .build()
