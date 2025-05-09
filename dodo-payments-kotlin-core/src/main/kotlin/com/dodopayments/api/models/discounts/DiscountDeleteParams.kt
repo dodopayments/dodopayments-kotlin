@@ -4,7 +4,6 @@ package com.dodopayments.api.models.discounts
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.Params
-import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
 import com.dodopayments.api.core.toImmutable
@@ -13,13 +12,13 @@ import java.util.Objects
 /** DELETE /discounts/{discount_id} */
 class DiscountDeleteParams
 private constructor(
-    private val discountId: String,
+    private val discountId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    fun discountId(): String = discountId
+    fun discountId(): String? = discountId
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
@@ -31,14 +30,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [DiscountDeleteParams].
-         *
-         * The following fields are required:
-         * ```kotlin
-         * .discountId()
-         * ```
-         */
+        fun none(): DiscountDeleteParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [DiscountDeleteParams]. */
         fun builder() = Builder()
     }
 
@@ -57,7 +51,7 @@ private constructor(
             additionalBodyProperties = discountDeleteParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun discountId(discountId: String) = apply { this.discountId = discountId }
+        fun discountId(discountId: String?) = apply { this.discountId = discountId }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -183,17 +177,10 @@ private constructor(
          * Returns an immutable instance of [DiscountDeleteParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```kotlin
-         * .discountId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): DiscountDeleteParams =
             DiscountDeleteParams(
-                checkRequired("discountId", discountId),
+                discountId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -204,7 +191,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> discountId
+            0 -> discountId ?: ""
             else -> ""
         }
 

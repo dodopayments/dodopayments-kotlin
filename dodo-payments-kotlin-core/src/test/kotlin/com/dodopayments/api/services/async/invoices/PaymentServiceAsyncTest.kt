@@ -4,7 +4,6 @@ package com.dodopayments.api.services.async.invoices
 
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClientAsync
-import com.dodopayments.api.models.invoices.payments.PaymentRetrieveParams
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.ok
@@ -31,10 +30,7 @@ internal class PaymentServiceAsyncTest {
         val paymentServiceAsync = client.invoices().payments()
         stubFor(get(anyUrl()).willReturn(ok().withBody("abc")))
 
-        val payment =
-            paymentServiceAsync.retrieve(
-                PaymentRetrieveParams.builder().paymentId("payment_id").build()
-            )
+        val payment = paymentServiceAsync.retrieve("payment_id")
 
         assertThat(payment.body()).hasContent("abc")
     }
