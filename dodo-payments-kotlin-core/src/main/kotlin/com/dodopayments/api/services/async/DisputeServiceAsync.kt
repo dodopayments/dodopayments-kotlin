@@ -4,10 +4,10 @@ package com.dodopayments.api.services.async
 
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponseFor
-import com.dodopayments.api.models.disputes.Dispute
 import com.dodopayments.api.models.disputes.DisputeListPageAsync
 import com.dodopayments.api.models.disputes.DisputeListParams
 import com.dodopayments.api.models.disputes.DisputeRetrieveParams
+import com.dodopayments.api.models.disputes.DisputeRetrieveResponse
 import com.google.errorprone.annotations.MustBeClosed
 
 interface DisputeServiceAsync {
@@ -20,7 +20,7 @@ interface DisputeServiceAsync {
     suspend fun retrieve(
         params: DisputeRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Dispute
+    ): DisputeRetrieveResponse
 
     suspend fun list(
         params: DisputeListParams = DisputeListParams.none(),
@@ -44,7 +44,7 @@ interface DisputeServiceAsync {
         suspend fun retrieve(
             params: DisputeRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Dispute>
+        ): HttpResponseFor<DisputeRetrieveResponse>
 
         /**
          * Returns a raw HTTP response for `get /disputes`, but is otherwise the same as

@@ -15,7 +15,7 @@ internal class DisputeListPageResponseTest {
         val disputeListPageResponse =
             DisputeListPageResponse.builder()
                 .addItem(
-                    Dispute.builder()
+                    DisputeListResponse.builder()
                         .amount("amount")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -30,7 +30,7 @@ internal class DisputeListPageResponseTest {
 
         assertThat(disputeListPageResponse.items())
             .containsExactly(
-                Dispute.builder()
+                DisputeListResponse.builder()
                     .amount("amount")
                     .businessId("business_id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -49,7 +49,7 @@ internal class DisputeListPageResponseTest {
         val disputeListPageResponse =
             DisputeListPageResponse.builder()
                 .addItem(
-                    Dispute.builder()
+                    DisputeListResponse.builder()
                         .amount("amount")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

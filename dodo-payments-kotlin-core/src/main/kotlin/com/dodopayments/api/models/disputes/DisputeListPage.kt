@@ -19,7 +19,7 @@ private constructor(
      *
      * @see [DisputeListPageResponse.items]
      */
-    fun items(): List<Dispute> = response._items().getNullable("items") ?: emptyList()
+    fun items(): List<DisputeListResponse> = response._items().getNullable("items") ?: emptyList()
 
     fun hasNextPage(): Boolean = items().isNotEmpty()
 
@@ -102,9 +102,9 @@ private constructor(
             )
     }
 
-    class AutoPager(private val firstPage: DisputeListPage) : Sequence<Dispute> {
+    class AutoPager(private val firstPage: DisputeListPage) : Sequence<DisputeListResponse> {
 
-        override fun iterator(): Iterator<Dispute> = iterator {
+        override fun iterator(): Iterator<DisputeListResponse> = iterator {
             var page = firstPage
             var index = 0
             while (true) {

@@ -16,7 +16,7 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
-class Dispute
+class DisputeListResponse
 private constructor(
     private val amount: JsonField<String>,
     private val businessId: JsonField<String>,
@@ -26,7 +26,6 @@ private constructor(
     private val disputeStage: JsonField<DisputeStage>,
     private val disputeStatus: JsonField<DisputeStatus>,
     private val paymentId: JsonField<String>,
-    private val remarks: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -48,7 +47,6 @@ private constructor(
         @ExcludeMissing
         disputeStatus: JsonField<DisputeStatus> = JsonMissing.of(),
         @JsonProperty("payment_id") @ExcludeMissing paymentId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("remarks") @ExcludeMissing remarks: JsonField<String> = JsonMissing.of(),
     ) : this(
         amount,
         businessId,
@@ -58,7 +56,6 @@ private constructor(
         disputeStage,
         disputeStatus,
         paymentId,
-        remarks,
         mutableMapOf(),
     )
 
@@ -123,14 +120,6 @@ private constructor(
     fun paymentId(): String = paymentId.getRequired("payment_id")
 
     /**
-     * Remarks
-     *
-     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
-    fun remarks(): String? = remarks.getNullable("remarks")
-
-    /**
      * Returns the raw JSON value of [amount].
      *
      * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
@@ -192,13 +181,6 @@ private constructor(
      */
     @JsonProperty("payment_id") @ExcludeMissing fun _paymentId(): JsonField<String> = paymentId
 
-    /**
-     * Returns the raw JSON value of [remarks].
-     *
-     * Unlike [remarks], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("remarks") @ExcludeMissing fun _remarks(): JsonField<String> = remarks
-
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -214,7 +196,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [Dispute].
+         * Returns a mutable builder for constructing an instance of [DisputeListResponse].
          *
          * The following fields are required:
          * ```kotlin
@@ -231,7 +213,7 @@ private constructor(
         fun builder() = Builder()
     }
 
-    /** A builder for [Dispute]. */
+    /** A builder for [DisputeListResponse]. */
     class Builder internal constructor() {
 
         private var amount: JsonField<String>? = null
@@ -242,20 +224,18 @@ private constructor(
         private var disputeStage: JsonField<DisputeStage>? = null
         private var disputeStatus: JsonField<DisputeStatus>? = null
         private var paymentId: JsonField<String>? = null
-        private var remarks: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(dispute: Dispute) = apply {
-            amount = dispute.amount
-            businessId = dispute.businessId
-            createdAt = dispute.createdAt
-            currency = dispute.currency
-            disputeId = dispute.disputeId
-            disputeStage = dispute.disputeStage
-            disputeStatus = dispute.disputeStatus
-            paymentId = dispute.paymentId
-            remarks = dispute.remarks
-            additionalProperties = dispute.additionalProperties.toMutableMap()
+        internal fun from(disputeListResponse: DisputeListResponse) = apply {
+            amount = disputeListResponse.amount
+            businessId = disputeListResponse.businessId
+            createdAt = disputeListResponse.createdAt
+            currency = disputeListResponse.currency
+            disputeId = disputeListResponse.disputeId
+            disputeStage = disputeListResponse.disputeStage
+            disputeStatus = disputeListResponse.disputeStatus
+            paymentId = disputeListResponse.paymentId
+            additionalProperties = disputeListResponse.additionalProperties.toMutableMap()
         }
 
         /** The amount involved in the dispute, represented as a string to accommodate precision. */
@@ -354,17 +334,6 @@ private constructor(
          */
         fun paymentId(paymentId: JsonField<String>) = apply { this.paymentId = paymentId }
 
-        /** Remarks */
-        fun remarks(remarks: String?) = remarks(JsonField.ofNullable(remarks))
-
-        /**
-         * Sets [Builder.remarks] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.remarks] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun remarks(remarks: JsonField<String>) = apply { this.remarks = remarks }
-
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -385,7 +354,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [Dispute].
+         * Returns an immutable instance of [DisputeListResponse].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -403,8 +372,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): Dispute =
-            Dispute(
+        fun build(): DisputeListResponse =
+            DisputeListResponse(
                 checkRequired("amount", amount),
                 checkRequired("businessId", businessId),
                 checkRequired("createdAt", createdAt),
@@ -413,14 +382,13 @@ private constructor(
                 checkRequired("disputeStage", disputeStage),
                 checkRequired("disputeStatus", disputeStatus),
                 checkRequired("paymentId", paymentId),
-                remarks,
                 additionalProperties.toMutableMap(),
             )
     }
 
     private var validated: Boolean = false
 
-    fun validate(): Dispute = apply {
+    fun validate(): DisputeListResponse = apply {
         if (validated) {
             return@apply
         }
@@ -433,7 +401,6 @@ private constructor(
         disputeStage().validate()
         disputeStatus().validate()
         paymentId()
-        remarks()
         validated = true
     }
 
@@ -458,23 +425,22 @@ private constructor(
             (if (disputeId.asKnown() == null) 0 else 1) +
             (disputeStage.asKnown()?.validity() ?: 0) +
             (disputeStatus.asKnown()?.validity() ?: 0) +
-            (if (paymentId.asKnown() == null) 0 else 1) +
-            (if (remarks.asKnown() == null) 0 else 1)
+            (if (paymentId.asKnown() == null) 0 else 1)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is Dispute && amount == other.amount && businessId == other.businessId && createdAt == other.createdAt && currency == other.currency && disputeId == other.disputeId && disputeStage == other.disputeStage && disputeStatus == other.disputeStatus && paymentId == other.paymentId && remarks == other.remarks && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is DisputeListResponse && amount == other.amount && businessId == other.businessId && createdAt == other.createdAt && currency == other.currency && disputeId == other.disputeId && disputeStage == other.disputeStage && disputeStatus == other.disputeStatus && paymentId == other.paymentId && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(amount, businessId, createdAt, currency, disputeId, disputeStage, disputeStatus, paymentId, remarks, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(amount, businessId, createdAt, currency, disputeId, disputeStage, disputeStatus, paymentId, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Dispute{amount=$amount, businessId=$businessId, createdAt=$createdAt, currency=$currency, disputeId=$disputeId, disputeStage=$disputeStage, disputeStatus=$disputeStatus, paymentId=$paymentId, remarks=$remarks, additionalProperties=$additionalProperties}"
+        "DisputeListResponse{amount=$amount, businessId=$businessId, createdAt=$createdAt, currency=$currency, disputeId=$disputeId, disputeStage=$disputeStage, disputeStatus=$disputeStatus, paymentId=$paymentId, additionalProperties=$additionalProperties}"
 }
