@@ -2,11 +2,11 @@
 
 package com.dodopayments.api.models.customers
 
+import com.dodopayments.api.core.AutoPagerAsync
+import com.dodopayments.api.core.PageAsync
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.async.CustomerServiceAsync
 import java.util.Objects
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
 
 /** @see [CustomerServiceAsync.list] */
 class CustomerListPageAsync
@@ -14,30 +14,25 @@ private constructor(
     private val service: CustomerServiceAsync,
     private val params: CustomerListParams,
     private val response: CustomerListPageResponse,
-) {
+) : PageAsync<Customer> {
 
     /**
      * Delegates to [CustomerListPageResponse], but gracefully handles missing data.
      *
      * @see [CustomerListPageResponse.items]
      */
-    fun items(): List<Customer> = response._items().getNullable("items") ?: emptyList()
+    override fun items(): List<Customer> = response._items().getNullable("items") ?: emptyList()
 
-    fun hasNextPage(): Boolean = items().isNotEmpty()
+    override fun hasNextPage(): Boolean = items().isNotEmpty()
 
-    fun getNextPageParams(): CustomerListParams? {
-        if (!hasNextPage()) {
-            return null
-        }
-
+    fun nextPageParams(): CustomerListParams {
         val pageNumber = params.pageNumber() ?: 1
         return params.toBuilder().pageNumber(pageNumber + 1).build()
     }
 
-    suspend fun getNextPage(): CustomerListPageAsync? =
-        getNextPageParams()?.let { service.list(it) }
+    override suspend fun nextPage(): CustomerListPageAsync = service.list(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPagerAsync<Customer> = AutoPagerAsync.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): CustomerListParams = params
@@ -103,21 +98,6 @@ private constructor(
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: CustomerListPageAsync) : Flow<Customer> {
-
-        override suspend fun collect(collector: FlowCollector<Customer>) {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.items().size) {
-                    collector.emit(page.items()[index++])
-                }
-                page = page.getNextPage() ?: break
-                index = 0
-            }
-        }
     }
 
     override fun equals(other: Any?): Boolean {

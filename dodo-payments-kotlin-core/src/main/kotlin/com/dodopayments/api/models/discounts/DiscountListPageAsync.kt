@@ -2,11 +2,11 @@
 
 package com.dodopayments.api.models.discounts
 
+import com.dodopayments.api.core.AutoPagerAsync
+import com.dodopayments.api.core.PageAsync
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.async.DiscountServiceAsync
 import java.util.Objects
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
 
 /** @see [DiscountServiceAsync.list] */
 class DiscountListPageAsync
@@ -14,30 +14,25 @@ private constructor(
     private val service: DiscountServiceAsync,
     private val params: DiscountListParams,
     private val response: DiscountListPageResponse,
-) {
+) : PageAsync<Discount> {
 
     /**
      * Delegates to [DiscountListPageResponse], but gracefully handles missing data.
      *
      * @see [DiscountListPageResponse.items]
      */
-    fun items(): List<Discount> = response._items().getNullable("items") ?: emptyList()
+    override fun items(): List<Discount> = response._items().getNullable("items") ?: emptyList()
 
-    fun hasNextPage(): Boolean = items().isNotEmpty()
+    override fun hasNextPage(): Boolean = items().isNotEmpty()
 
-    fun getNextPageParams(): DiscountListParams? {
-        if (!hasNextPage()) {
-            return null
-        }
-
+    fun nextPageParams(): DiscountListParams {
         val pageNumber = params.pageNumber() ?: 1
         return params.toBuilder().pageNumber(pageNumber + 1).build()
     }
 
-    suspend fun getNextPage(): DiscountListPageAsync? =
-        getNextPageParams()?.let { service.list(it) }
+    override suspend fun nextPage(): DiscountListPageAsync = service.list(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPagerAsync<Discount> = AutoPagerAsync.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): DiscountListParams = params
@@ -103,21 +98,6 @@ private constructor(
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: DiscountListPageAsync) : Flow<Discount> {
-
-        override suspend fun collect(collector: FlowCollector<Discount>) {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.items().size) {
-                    collector.emit(page.items()[index++])
-                }
-                page = page.getNextPage() ?: break
-                index = 0
-            }
-        }
     }
 
     override fun equals(other: Any?): Boolean {

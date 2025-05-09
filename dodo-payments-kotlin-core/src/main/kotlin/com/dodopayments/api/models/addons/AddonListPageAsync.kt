@@ -2,11 +2,11 @@
 
 package com.dodopayments.api.models.addons
 
+import com.dodopayments.api.core.AutoPagerAsync
+import com.dodopayments.api.core.PageAsync
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.async.AddonServiceAsync
 import java.util.Objects
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
 
 /** @see [AddonServiceAsync.list] */
 class AddonListPageAsync
@@ -14,29 +14,26 @@ private constructor(
     private val service: AddonServiceAsync,
     private val params: AddonListParams,
     private val response: AddonListPageResponse,
-) {
+) : PageAsync<AddonResponse> {
 
     /**
      * Delegates to [AddonListPageResponse], but gracefully handles missing data.
      *
      * @see [AddonListPageResponse.items]
      */
-    fun items(): List<AddonResponse> = response._items().getNullable("items") ?: emptyList()
+    override fun items(): List<AddonResponse> =
+        response._items().getNullable("items") ?: emptyList()
 
-    fun hasNextPage(): Boolean = items().isNotEmpty()
+    override fun hasNextPage(): Boolean = items().isNotEmpty()
 
-    fun getNextPageParams(): AddonListParams? {
-        if (!hasNextPage()) {
-            return null
-        }
-
+    fun nextPageParams(): AddonListParams {
         val pageNumber = params.pageNumber() ?: 1
         return params.toBuilder().pageNumber(pageNumber + 1).build()
     }
 
-    suspend fun getNextPage(): AddonListPageAsync? = getNextPageParams()?.let { service.list(it) }
+    override suspend fun nextPage(): AddonListPageAsync = service.list(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPagerAsync<AddonResponse> = AutoPagerAsync.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): AddonListParams = params
@@ -102,21 +99,6 @@ private constructor(
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: AddonListPageAsync) : Flow<AddonResponse> {
-
-        override suspend fun collect(collector: FlowCollector<AddonResponse>) {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.items().size) {
-                    collector.emit(page.items()[index++])
-                }
-                page = page.getNextPage() ?: break
-                index = 0
-            }
-        }
     }
 
     override fun equals(other: Any?): Boolean {
