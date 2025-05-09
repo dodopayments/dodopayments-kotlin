@@ -16,9 +16,22 @@ interface PaymentService {
 
     @MustBeClosed
     fun retrieve(
+        paymentId: String,
+        params: PaymentRetrieveParams = PaymentRetrieveParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): HttpResponse = retrieve(params.toBuilder().paymentId(paymentId).build(), requestOptions)
+
+    /** @see [retrieve] */
+    @MustBeClosed
+    fun retrieve(
         params: PaymentRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): HttpResponse
+
+    /** @see [retrieve] */
+    @MustBeClosed
+    fun retrieve(paymentId: String, requestOptions: RequestOptions): HttpResponse =
+        retrieve(paymentId, PaymentRetrieveParams.none(), requestOptions)
 
     /** A view of [PaymentService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -29,8 +42,21 @@ interface PaymentService {
          */
         @MustBeClosed
         fun retrieve(
+            paymentId: String,
+            params: PaymentRetrieveParams = PaymentRetrieveParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse = retrieve(params.toBuilder().paymentId(paymentId).build(), requestOptions)
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        fun retrieve(
             params: PaymentRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
+
+        /** @see [retrieve] */
+        @MustBeClosed
+        fun retrieve(paymentId: String, requestOptions: RequestOptions): HttpResponse =
+            retrieve(paymentId, PaymentRetrieveParams.none(), requestOptions)
     }
 }

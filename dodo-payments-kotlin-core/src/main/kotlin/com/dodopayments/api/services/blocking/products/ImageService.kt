@@ -16,9 +16,20 @@ interface ImageService {
     fun withRawResponse(): WithRawResponse
 
     fun update(
+        id: String,
+        params: ImageUpdateParams = ImageUpdateParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ImageUpdateResponse = update(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see [update] */
+    fun update(
         params: ImageUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ImageUpdateResponse
+
+    /** @see [update] */
+    fun update(id: String, requestOptions: RequestOptions): ImageUpdateResponse =
+        update(id, ImageUpdateParams.none(), requestOptions)
 
     /** A view of [ImageService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -29,8 +40,25 @@ interface ImageService {
          */
         @MustBeClosed
         fun update(
+            id: String,
+            params: ImageUpdateParams = ImageUpdateParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ImageUpdateResponse> =
+            update(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
             params: ImageUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ImageUpdateResponse>
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<ImageUpdateResponse> =
+            update(id, ImageUpdateParams.none(), requestOptions)
     }
 }

@@ -3,19 +3,18 @@
 package com.dodopayments.api.models.refunds
 
 import com.dodopayments.api.core.Params
-import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
 import java.util.Objects
 
 class RefundRetrieveParams
 private constructor(
-    private val refundId: String,
+    private val refundId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun refundId(): String = refundId
+    fun refundId(): String? = refundId
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -25,14 +24,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [RefundRetrieveParams].
-         *
-         * The following fields are required:
-         * ```kotlin
-         * .refundId()
-         * ```
-         */
+        fun none(): RefundRetrieveParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [RefundRetrieveParams]. */
         fun builder() = Builder()
     }
 
@@ -49,7 +43,7 @@ private constructor(
             additionalQueryParams = refundRetrieveParams.additionalQueryParams.toBuilder()
         }
 
-        fun refundId(refundId: String) = apply { this.refundId = refundId }
+        fun refundId(refundId: String?) = apply { this.refundId = refundId }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -153,25 +147,14 @@ private constructor(
          * Returns an immutable instance of [RefundRetrieveParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```kotlin
-         * .refundId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): RefundRetrieveParams =
-            RefundRetrieveParams(
-                checkRequired("refundId", refundId),
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+            RefundRetrieveParams(refundId, additionalHeaders.build(), additionalQueryParams.build())
     }
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> refundId
+            0 -> refundId ?: ""
             else -> ""
         }
 
