@@ -7,6 +7,7 @@ import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.Params
+import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
@@ -19,13 +20,13 @@ import java.util.Objects
 
 class CustomerUpdateParams
 private constructor(
-    private val customerId: String?,
+    private val customerId: String,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun customerId(): String? = customerId
+    fun customerId(): String = customerId
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -63,9 +64,14 @@ private constructor(
 
     companion object {
 
-        fun none(): CustomerUpdateParams = builder().build()
-
-        /** Returns a mutable builder for constructing an instance of [CustomerUpdateParams]. */
+        /**
+         * Returns a mutable builder for constructing an instance of [CustomerUpdateParams].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .customerId()
+         * ```
+         */
         fun builder() = Builder()
     }
 
@@ -84,7 +90,7 @@ private constructor(
             additionalQueryParams = customerUpdateParams.additionalQueryParams.toBuilder()
         }
 
-        fun customerId(customerId: String?) = apply { this.customerId = customerId }
+        fun customerId(customerId: String) = apply { this.customerId = customerId }
 
         /**
          * Sets the entire request body.
@@ -238,10 +244,17 @@ private constructor(
          * Returns an immutable instance of [CustomerUpdateParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .customerId()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): CustomerUpdateParams =
             CustomerUpdateParams(
-                customerId,
+                checkRequired("customerId", customerId),
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -252,7 +265,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> customerId ?: ""
+            0 -> customerId
             else -> ""
         }
 

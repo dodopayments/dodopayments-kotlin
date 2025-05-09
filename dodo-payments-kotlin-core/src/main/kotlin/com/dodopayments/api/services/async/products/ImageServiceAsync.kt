@@ -16,20 +16,9 @@ interface ImageServiceAsync {
     fun withRawResponse(): WithRawResponse
 
     suspend fun update(
-        id: String,
-        params: ImageUpdateParams = ImageUpdateParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): ImageUpdateResponse = update(params.toBuilder().id(id).build(), requestOptions)
-
-    /** @see [update] */
-    suspend fun update(
         params: ImageUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ImageUpdateResponse
-
-    /** @see [update] */
-    suspend fun update(id: String, requestOptions: RequestOptions): ImageUpdateResponse =
-        update(id, ImageUpdateParams.none(), requestOptions)
 
     /** A view of [ImageServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -40,25 +29,8 @@ interface ImageServiceAsync {
          */
         @MustBeClosed
         suspend fun update(
-            id: String,
-            params: ImageUpdateParams = ImageUpdateParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<ImageUpdateResponse> =
-            update(params.toBuilder().id(id).build(), requestOptions)
-
-        /** @see [update] */
-        @MustBeClosed
-        suspend fun update(
             params: ImageUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ImageUpdateResponse>
-
-        /** @see [update] */
-        @MustBeClosed
-        suspend fun update(
-            id: String,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<ImageUpdateResponse> =
-            update(id, ImageUpdateParams.none(), requestOptions)
     }
 }

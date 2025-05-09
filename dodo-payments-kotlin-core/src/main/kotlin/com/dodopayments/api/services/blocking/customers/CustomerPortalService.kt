@@ -16,21 +16,9 @@ interface CustomerPortalService {
     fun withRawResponse(): WithRawResponse
 
     fun create(
-        customerId: String,
-        params: CustomerPortalCreateParams = CustomerPortalCreateParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CustomerPortalSession =
-        create(params.toBuilder().customerId(customerId).build(), requestOptions)
-
-    /** @see [create] */
-    fun create(
         params: CustomerPortalCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerPortalSession
-
-    /** @see [create] */
-    fun create(customerId: String, requestOptions: RequestOptions): CustomerPortalSession =
-        create(customerId, CustomerPortalCreateParams.none(), requestOptions)
 
     /**
      * A view of [CustomerPortalService] that provides access to raw HTTP responses for each method.
@@ -43,25 +31,8 @@ interface CustomerPortalService {
          */
         @MustBeClosed
         fun create(
-            customerId: String,
-            params: CustomerPortalCreateParams = CustomerPortalCreateParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<CustomerPortalSession> =
-            create(params.toBuilder().customerId(customerId).build(), requestOptions)
-
-        /** @see [create] */
-        @MustBeClosed
-        fun create(
             params: CustomerPortalCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CustomerPortalSession>
-
-        /** @see [create] */
-        @MustBeClosed
-        fun create(
-            customerId: String,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<CustomerPortalSession> =
-            create(customerId, CustomerPortalCreateParams.none(), requestOptions)
     }
 }

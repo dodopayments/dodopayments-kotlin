@@ -24,20 +24,9 @@ interface RefundServiceAsync {
     ): Refund
 
     suspend fun retrieve(
-        refundId: String,
-        params: RefundRetrieveParams = RefundRetrieveParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): Refund = retrieve(params.toBuilder().refundId(refundId).build(), requestOptions)
-
-    /** @see [retrieve] */
-    suspend fun retrieve(
         params: RefundRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Refund
-
-    /** @see [retrieve] */
-    suspend fun retrieve(refundId: String, requestOptions: RequestOptions): Refund =
-        retrieve(refundId, RefundRetrieveParams.none(), requestOptions)
 
     suspend fun list(
         params: RefundListParams = RefundListParams.none(),
@@ -69,25 +58,9 @@ interface RefundServiceAsync {
          */
         @MustBeClosed
         suspend fun retrieve(
-            refundId: String,
-            params: RefundRetrieveParams = RefundRetrieveParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Refund> =
-            retrieve(params.toBuilder().refundId(refundId).build(), requestOptions)
-
-        /** @see [retrieve] */
-        @MustBeClosed
-        suspend fun retrieve(
             params: RefundRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Refund>
-
-        /** @see [retrieve] */
-        @MustBeClosed
-        suspend fun retrieve(
-            refundId: String,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<Refund> = retrieve(refundId, RefundRetrieveParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /refunds`, but is otherwise the same as

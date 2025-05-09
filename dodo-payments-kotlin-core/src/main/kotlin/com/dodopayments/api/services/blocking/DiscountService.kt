@@ -29,37 +29,15 @@ interface DiscountService {
 
     /** GET /discounts/{discount_id} */
     fun retrieve(
-        discountId: String,
-        params: DiscountRetrieveParams = DiscountRetrieveParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): Discount = retrieve(params.toBuilder().discountId(discountId).build(), requestOptions)
-
-    /** @see [retrieve] */
-    fun retrieve(
         params: DiscountRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Discount
 
-    /** @see [retrieve] */
-    fun retrieve(discountId: String, requestOptions: RequestOptions): Discount =
-        retrieve(discountId, DiscountRetrieveParams.none(), requestOptions)
-
     /** PATCH /discounts/{discount_id} */
-    fun update(
-        discountId: String,
-        params: DiscountUpdateParams = DiscountUpdateParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): Discount = update(params.toBuilder().discountId(discountId).build(), requestOptions)
-
-    /** @see [update] */
     fun update(
         params: DiscountUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Discount
-
-    /** @see [update] */
-    fun update(discountId: String, requestOptions: RequestOptions): Discount =
-        update(discountId, DiscountUpdateParams.none(), requestOptions)
 
     /** GET /discounts */
     fun list(
@@ -72,18 +50,7 @@ interface DiscountService {
         list(DiscountListParams.none(), requestOptions)
 
     /** DELETE /discounts/{discount_id} */
-    fun delete(
-        discountId: String,
-        params: DiscountDeleteParams = DiscountDeleteParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ) = delete(params.toBuilder().discountId(discountId).build(), requestOptions)
-
-    /** @see [delete] */
     fun delete(params: DiscountDeleteParams, requestOptions: RequestOptions = RequestOptions.none())
-
-    /** @see [delete] */
-    fun delete(discountId: String, requestOptions: RequestOptions) =
-        delete(discountId, DiscountDeleteParams.none(), requestOptions)
 
     /** A view of [DiscountService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -104,26 +71,9 @@ interface DiscountService {
          */
         @MustBeClosed
         fun retrieve(
-            discountId: String,
-            params: DiscountRetrieveParams = DiscountRetrieveParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Discount> =
-            retrieve(params.toBuilder().discountId(discountId).build(), requestOptions)
-
-        /** @see [retrieve] */
-        @MustBeClosed
-        fun retrieve(
             params: DiscountRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Discount>
-
-        /** @see [retrieve] */
-        @MustBeClosed
-        fun retrieve(
-            discountId: String,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<Discount> =
-            retrieve(discountId, DiscountRetrieveParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `patch /discounts/{discount_id}`, but is otherwise the
@@ -131,23 +81,9 @@ interface DiscountService {
          */
         @MustBeClosed
         fun update(
-            discountId: String,
-            params: DiscountUpdateParams = DiscountUpdateParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Discount> =
-            update(params.toBuilder().discountId(discountId).build(), requestOptions)
-
-        /** @see [update] */
-        @MustBeClosed
-        fun update(
             params: DiscountUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Discount>
-
-        /** @see [update] */
-        @MustBeClosed
-        fun update(discountId: String, requestOptions: RequestOptions): HttpResponseFor<Discount> =
-            update(discountId, DiscountUpdateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /discounts`, but is otherwise the same as
@@ -170,21 +106,8 @@ interface DiscountService {
          */
         @MustBeClosed
         fun delete(
-            discountId: String,
-            params: DiscountDeleteParams = DiscountDeleteParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse = delete(params.toBuilder().discountId(discountId).build(), requestOptions)
-
-        /** @see [delete] */
-        @MustBeClosed
-        fun delete(
             params: DiscountDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
-
-        /** @see [delete] */
-        @MustBeClosed
-        fun delete(discountId: String, requestOptions: RequestOptions): HttpResponse =
-            delete(discountId, DiscountDeleteParams.none(), requestOptions)
     }
 }

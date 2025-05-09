@@ -28,36 +28,14 @@ interface CustomerServiceAsync {
     ): Customer
 
     suspend fun retrieve(
-        customerId: String,
-        params: CustomerRetrieveParams = CustomerRetrieveParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): Customer = retrieve(params.toBuilder().customerId(customerId).build(), requestOptions)
-
-    /** @see [retrieve] */
-    suspend fun retrieve(
         params: CustomerRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Customer
 
-    /** @see [retrieve] */
-    suspend fun retrieve(customerId: String, requestOptions: RequestOptions): Customer =
-        retrieve(customerId, CustomerRetrieveParams.none(), requestOptions)
-
-    suspend fun update(
-        customerId: String,
-        params: CustomerUpdateParams = CustomerUpdateParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): Customer = update(params.toBuilder().customerId(customerId).build(), requestOptions)
-
-    /** @see [update] */
     suspend fun update(
         params: CustomerUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Customer
-
-    /** @see [update] */
-    suspend fun update(customerId: String, requestOptions: RequestOptions): Customer =
-        update(customerId, CustomerUpdateParams.none(), requestOptions)
 
     suspend fun list(
         params: CustomerListParams = CustomerListParams.none(),
@@ -91,26 +69,9 @@ interface CustomerServiceAsync {
          */
         @MustBeClosed
         suspend fun retrieve(
-            customerId: String,
-            params: CustomerRetrieveParams = CustomerRetrieveParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Customer> =
-            retrieve(params.toBuilder().customerId(customerId).build(), requestOptions)
-
-        /** @see [retrieve] */
-        @MustBeClosed
-        suspend fun retrieve(
             params: CustomerRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Customer>
-
-        /** @see [retrieve] */
-        @MustBeClosed
-        suspend fun retrieve(
-            customerId: String,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<Customer> =
-            retrieve(customerId, CustomerRetrieveParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `patch /customers/{customer_id}`, but is otherwise the
@@ -118,26 +79,9 @@ interface CustomerServiceAsync {
          */
         @MustBeClosed
         suspend fun update(
-            customerId: String,
-            params: CustomerUpdateParams = CustomerUpdateParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Customer> =
-            update(params.toBuilder().customerId(customerId).build(), requestOptions)
-
-        /** @see [update] */
-        @MustBeClosed
-        suspend fun update(
             params: CustomerUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Customer>
-
-        /** @see [update] */
-        @MustBeClosed
-        suspend fun update(
-            customerId: String,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<Customer> =
-            update(customerId, CustomerUpdateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /customers`, but is otherwise the same as

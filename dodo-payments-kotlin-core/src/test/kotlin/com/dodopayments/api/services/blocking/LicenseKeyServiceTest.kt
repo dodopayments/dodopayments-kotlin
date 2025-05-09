@@ -4,6 +4,7 @@ package com.dodopayments.api.services.blocking
 
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
+import com.dodopayments.api.models.licensekeys.LicenseKeyRetrieveParams
 import com.dodopayments.api.models.licensekeys.LicenseKeyUpdateParams
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
@@ -21,7 +22,8 @@ internal class LicenseKeyServiceTest {
                 .build()
         val licenseKeyService = client.licenseKeys()
 
-        val licenseKey = licenseKeyService.retrieve("lic_123")
+        val licenseKey =
+            licenseKeyService.retrieve(LicenseKeyRetrieveParams.builder().id("lic_123").build())
 
         licenseKey.validate()
     }
