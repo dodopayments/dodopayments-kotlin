@@ -4,6 +4,7 @@ package com.dodopayments.api.services.blocking.invoices
 
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
+import com.dodopayments.api.models.invoices.payments.PaymentRetrieveParams
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.ok
@@ -30,7 +31,8 @@ internal class PaymentServiceTest {
         val paymentService = client.invoices().payments()
         stubFor(get(anyUrl()).willReturn(ok().withBody("abc")))
 
-        val payment = paymentService.retrieve("payment_id")
+        val payment =
+            paymentService.retrieve(PaymentRetrieveParams.builder().paymentId("payment_id").build())
 
         assertThat(payment.body()).hasContent("abc")
     }

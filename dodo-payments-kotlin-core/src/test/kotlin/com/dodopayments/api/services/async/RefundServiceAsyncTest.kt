@@ -5,6 +5,7 @@ package com.dodopayments.api.services.async
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClientAsync
 import com.dodopayments.api.models.refunds.RefundCreateParams
+import com.dodopayments.api.models.refunds.RefundRetrieveParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -37,7 +38,10 @@ internal class RefundServiceAsyncTest {
                 .build()
         val refundServiceAsync = client.refunds()
 
-        val refund = refundServiceAsync.retrieve("refund_id")
+        val refund =
+            refundServiceAsync.retrieve(
+                RefundRetrieveParams.builder().refundId("refund_id").build()
+            )
 
         refund.validate()
     }

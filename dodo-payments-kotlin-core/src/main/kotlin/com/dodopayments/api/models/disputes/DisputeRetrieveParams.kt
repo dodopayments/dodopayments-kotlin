@@ -3,18 +3,19 @@
 package com.dodopayments.api.models.disputes
 
 import com.dodopayments.api.core.Params
+import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
 import java.util.Objects
 
 class DisputeRetrieveParams
 private constructor(
-    private val disputeId: String?,
+    private val disputeId: String,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun disputeId(): String? = disputeId
+    fun disputeId(): String = disputeId
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -24,9 +25,14 @@ private constructor(
 
     companion object {
 
-        fun none(): DisputeRetrieveParams = builder().build()
-
-        /** Returns a mutable builder for constructing an instance of [DisputeRetrieveParams]. */
+        /**
+         * Returns a mutable builder for constructing an instance of [DisputeRetrieveParams].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .disputeId()
+         * ```
+         */
         fun builder() = Builder()
     }
 
@@ -43,7 +49,7 @@ private constructor(
             additionalQueryParams = disputeRetrieveParams.additionalQueryParams.toBuilder()
         }
 
-        fun disputeId(disputeId: String?) = apply { this.disputeId = disputeId }
+        fun disputeId(disputeId: String) = apply { this.disputeId = disputeId }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -147,10 +153,17 @@ private constructor(
          * Returns an immutable instance of [DisputeRetrieveParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .disputeId()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): DisputeRetrieveParams =
             DisputeRetrieveParams(
-                disputeId,
+                checkRequired("disputeId", disputeId),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -158,7 +171,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> disputeId ?: ""
+            0 -> disputeId
             else -> ""
         }
 

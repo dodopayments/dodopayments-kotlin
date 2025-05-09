@@ -11,6 +11,7 @@ import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.OneTimeProductCartItem
 import com.dodopayments.api.models.payments.PaymentCreateParams
+import com.dodopayments.api.models.payments.PaymentRetrieveParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -75,7 +76,8 @@ internal class PaymentServiceTest {
                 .build()
         val paymentService = client.payments()
 
-        val payment = paymentService.retrieve("payment_id")
+        val payment =
+            paymentService.retrieve(PaymentRetrieveParams.builder().paymentId("payment_id").build())
 
         payment.validate()
     }

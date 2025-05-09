@@ -28,36 +28,14 @@ interface CustomerService {
     ): Customer
 
     fun retrieve(
-        customerId: String,
-        params: CustomerRetrieveParams = CustomerRetrieveParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): Customer = retrieve(params.toBuilder().customerId(customerId).build(), requestOptions)
-
-    /** @see [retrieve] */
-    fun retrieve(
         params: CustomerRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Customer
 
-    /** @see [retrieve] */
-    fun retrieve(customerId: String, requestOptions: RequestOptions): Customer =
-        retrieve(customerId, CustomerRetrieveParams.none(), requestOptions)
-
-    fun update(
-        customerId: String,
-        params: CustomerUpdateParams = CustomerUpdateParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): Customer = update(params.toBuilder().customerId(customerId).build(), requestOptions)
-
-    /** @see [update] */
     fun update(
         params: CustomerUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Customer
-
-    /** @see [update] */
-    fun update(customerId: String, requestOptions: RequestOptions): Customer =
-        update(customerId, CustomerUpdateParams.none(), requestOptions)
 
     fun list(
         params: CustomerListParams = CustomerListParams.none(),
@@ -89,26 +67,9 @@ interface CustomerService {
          */
         @MustBeClosed
         fun retrieve(
-            customerId: String,
-            params: CustomerRetrieveParams = CustomerRetrieveParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Customer> =
-            retrieve(params.toBuilder().customerId(customerId).build(), requestOptions)
-
-        /** @see [retrieve] */
-        @MustBeClosed
-        fun retrieve(
             params: CustomerRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Customer>
-
-        /** @see [retrieve] */
-        @MustBeClosed
-        fun retrieve(
-            customerId: String,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<Customer> =
-            retrieve(customerId, CustomerRetrieveParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `patch /customers/{customer_id}`, but is otherwise the
@@ -116,23 +77,9 @@ interface CustomerService {
          */
         @MustBeClosed
         fun update(
-            customerId: String,
-            params: CustomerUpdateParams = CustomerUpdateParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Customer> =
-            update(params.toBuilder().customerId(customerId).build(), requestOptions)
-
-        /** @see [update] */
-        @MustBeClosed
-        fun update(
             params: CustomerUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Customer>
-
-        /** @see [update] */
-        @MustBeClosed
-        fun update(customerId: String, requestOptions: RequestOptions): HttpResponseFor<Customer> =
-            update(customerId, CustomerUpdateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /customers`, but is otherwise the same as

@@ -4,6 +4,7 @@ package com.dodopayments.api.models.customers.customerportal
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.Params
+import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
 import com.dodopayments.api.core.toImmutable
@@ -11,14 +12,14 @@ import java.util.Objects
 
 class CustomerPortalCreateParams
 private constructor(
-    private val customerId: String?,
+    private val customerId: String,
     private val sendEmail: Boolean?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    fun customerId(): String? = customerId
+    fun customerId(): String = customerId
 
     /** If true, will send link to user. */
     fun sendEmail(): Boolean? = sendEmail
@@ -33,10 +34,13 @@ private constructor(
 
     companion object {
 
-        fun none(): CustomerPortalCreateParams = builder().build()
-
         /**
          * Returns a mutable builder for constructing an instance of [CustomerPortalCreateParams].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .customerId()
+         * ```
          */
         fun builder() = Builder()
     }
@@ -59,7 +63,7 @@ private constructor(
                 customerPortalCreateParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun customerId(customerId: String?) = apply { this.customerId = customerId }
+        fun customerId(customerId: String) = apply { this.customerId = customerId }
 
         /** If true, will send link to user. */
         fun sendEmail(sendEmail: Boolean?) = apply { this.sendEmail = sendEmail }
@@ -195,10 +199,17 @@ private constructor(
          * Returns an immutable instance of [CustomerPortalCreateParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .customerId()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): CustomerPortalCreateParams =
             CustomerPortalCreateParams(
-                customerId,
+                checkRequired("customerId", customerId),
                 sendEmail,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -210,7 +221,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> customerId ?: ""
+            0 -> customerId
             else -> ""
         }
 

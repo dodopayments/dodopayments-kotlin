@@ -5,6 +5,7 @@ package com.dodopayments.api.services.blocking
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
 import com.dodopayments.api.models.refunds.RefundCreateParams
+import com.dodopayments.api.models.refunds.RefundRetrieveParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -37,7 +38,8 @@ internal class RefundServiceTest {
                 .build()
         val refundService = client.refunds()
 
-        val refund = refundService.retrieve("refund_id")
+        val refund =
+            refundService.retrieve(RefundRetrieveParams.builder().refundId("refund_id").build())
 
         refund.validate()
     }
