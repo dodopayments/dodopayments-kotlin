@@ -16,8 +16,8 @@ internal class WebhookEventListParamsTest {
             .createdAtLte(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .limit(0L)
             .objectId("object_id")
-            .pageNumber(0L)
-            .pageSize(0L)
+            .pageNumber(0)
+            .pageSize(0)
             .build()
     }
 
@@ -29,8 +29,8 @@ internal class WebhookEventListParamsTest {
                 .createdAtLte(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .limit(0L)
                 .objectId("object_id")
-                .pageNumber(0L)
-                .pageSize(0L)
+                .pageNumber(0)
+                .pageSize(0)
                 .build()
 
         val queryParams = params._queryParams()

@@ -9,10 +9,7 @@ internal class SubscriptionChargeParamsTest {
 
     @Test
     fun create() {
-        SubscriptionChargeParams.builder()
-            .subscriptionId("subscription_id")
-            .productPrice(0L)
-            .build()
+        SubscriptionChargeParams.builder().subscriptionId("subscription_id").productPrice(0).build()
     }
 
     @Test
@@ -20,7 +17,7 @@ internal class SubscriptionChargeParamsTest {
         val params =
             SubscriptionChargeParams.builder()
                 .subscriptionId("subscription_id")
-                .productPrice(0L)
+                .productPrice(0)
                 .build()
 
         assertThat(params._pathParam(0)).isEqualTo("subscription_id")
@@ -33,11 +30,11 @@ internal class SubscriptionChargeParamsTest {
         val params =
             SubscriptionChargeParams.builder()
                 .subscriptionId("subscription_id")
-                .productPrice(0L)
+                .productPrice(0)
                 .build()
 
         val body = params._body()
 
-        assertThat(body.productPrice()).isEqualTo(0L)
+        assertThat(body.productPrice()).isEqualTo(0)
     }
 }
