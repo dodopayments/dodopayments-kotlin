@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.21.0 (2025-05-09)
+
+Full Changelog: [v1.20.0...v1.21.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.20.0...v1.21.0)
+
+### Features
+
+* **api:** fixed api key schema to bearer ([af546dc](https://github.com/dodopayments/dodopayments-kotlin/commit/af546dc5d448b461a5ef4f49296eea3413f5484e))
+* **api:** manual updates ([9aace49](https://github.com/dodopayments/dodopayments-kotlin/commit/9aace49503c80d636c9b595d3ebd13b2236ce9a6))
+* **api:** updated openapi spec ([5b3572b](https://github.com/dodopayments/dodopayments-kotlin/commit/5b3572ba40c3404aaf15a43d013d6967d56c784b))
+
+
+### Chores
+
+* **internal:** codegen related update ([4ce7671](https://github.com/dodopayments/dodopayments-kotlin/commit/4ce76716c831795b0e2ab594af518aa5a3bc3f1d))
+* **internal:** remove flaky `-Xbackend-threads=0` option ([3e0d295](https://github.com/dodopayments/dodopayments-kotlin/commit/3e0d295a9a30bada33d14d15e5a6b618073f65de))
+* **internal:** update java toolchain ([401440b](https://github.com/dodopayments/dodopayments-kotlin/commit/401440bee3d86437ae9043d2b7280d7197bbf6ad))
+
 ## 1.20.0 (2025-05-01)
 
 Full Changelog: [v1.19.0...v1.20.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.19.0...v1.20.0)
