@@ -15,8 +15,8 @@ internal class RefundListParamsTest {
             .createdAtGte(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .createdAtLte(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .customerId("customer_id")
-            .pageNumber(0L)
-            .pageSize(0L)
+            .pageNumber(0)
+            .pageSize(0)
             .status(RefundStatus.SUCCEEDED)
             .build()
     }
@@ -28,8 +28,8 @@ internal class RefundListParamsTest {
                 .createdAtGte(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .createdAtLte(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .customerId("customer_id")
-                .pageNumber(0L)
-                .pageSize(0L)
+                .pageNumber(0)
+                .pageSize(0)
                 .status(RefundStatus.SUCCEEDED)
                 .build()
 

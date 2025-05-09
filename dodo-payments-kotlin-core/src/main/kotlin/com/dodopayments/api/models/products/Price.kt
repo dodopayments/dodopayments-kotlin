@@ -191,12 +191,12 @@ private constructor(
     class OneTimePrice
     private constructor(
         private val currency: JsonField<Currency>,
-        private val discount: JsonField<Double>,
-        private val price: JsonField<Long>,
+        private val discount: JsonField<Float>,
+        private val price: JsonField<Int>,
         private val purchasingPowerParity: JsonField<Boolean>,
         private val type: JsonField<Type>,
         private val payWhatYouWant: JsonField<Boolean>,
-        private val suggestedPrice: JsonField<Long>,
+        private val suggestedPrice: JsonField<Int>,
         private val taxInclusive: JsonField<Boolean>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -206,10 +206,8 @@ private constructor(
             @JsonProperty("currency")
             @ExcludeMissing
             currency: JsonField<Currency> = JsonMissing.of(),
-            @JsonProperty("discount")
-            @ExcludeMissing
-            discount: JsonField<Double> = JsonMissing.of(),
-            @JsonProperty("price") @ExcludeMissing price: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("discount") @ExcludeMissing discount: JsonField<Float> = JsonMissing.of(),
+            @JsonProperty("price") @ExcludeMissing price: JsonField<Int> = JsonMissing.of(),
             @JsonProperty("purchasing_power_parity")
             @ExcludeMissing
             purchasingPowerParity: JsonField<Boolean> = JsonMissing.of(),
@@ -219,7 +217,7 @@ private constructor(
             payWhatYouWant: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("suggested_price")
             @ExcludeMissing
-            suggestedPrice: JsonField<Long> = JsonMissing.of(),
+            suggestedPrice: JsonField<Int> = JsonMissing.of(),
             @JsonProperty("tax_inclusive")
             @ExcludeMissing
             taxInclusive: JsonField<Boolean> = JsonMissing.of(),
@@ -247,7 +245,7 @@ private constructor(
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun discount(): Double = discount.getRequired("discount")
+        fun discount(): Float = discount.getRequired("discount")
 
         /**
          * The payment amount, in the smallest denomination of the currency (e.g., cents for USD).
@@ -259,7 +257,7 @@ private constructor(
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun price(): Long = price.getRequired("price")
+        fun price(): Int = price.getRequired("price")
 
         /**
          * Indicates if purchasing power parity adjustments are applied to the price. Purchasing
@@ -293,7 +291,7 @@ private constructor(
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
-        fun suggestedPrice(): Long? = suggestedPrice.getNullable("suggested_price")
+        fun suggestedPrice(): Int? = suggestedPrice.getNullable("suggested_price")
 
         /**
          * Indicates if the price is tax inclusive.
@@ -315,14 +313,14 @@ private constructor(
          *
          * Unlike [discount], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("discount") @ExcludeMissing fun _discount(): JsonField<Double> = discount
+        @JsonProperty("discount") @ExcludeMissing fun _discount(): JsonField<Float> = discount
 
         /**
          * Returns the raw JSON value of [price].
          *
          * Unlike [price], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Long> = price
+        @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Int> = price
 
         /**
          * Returns the raw JSON value of [purchasingPowerParity].
@@ -359,7 +357,7 @@ private constructor(
          */
         @JsonProperty("suggested_price")
         @ExcludeMissing
-        fun _suggestedPrice(): JsonField<Long> = suggestedPrice
+        fun _suggestedPrice(): JsonField<Int> = suggestedPrice
 
         /**
          * Returns the raw JSON value of [taxInclusive].
@@ -404,12 +402,12 @@ private constructor(
         class Builder internal constructor() {
 
             private var currency: JsonField<Currency>? = null
-            private var discount: JsonField<Double>? = null
-            private var price: JsonField<Long>? = null
+            private var discount: JsonField<Float>? = null
+            private var price: JsonField<Int>? = null
             private var purchasingPowerParity: JsonField<Boolean>? = null
             private var type: JsonField<Type>? = null
             private var payWhatYouWant: JsonField<Boolean> = JsonMissing.of()
-            private var suggestedPrice: JsonField<Long> = JsonMissing.of()
+            private var suggestedPrice: JsonField<Int> = JsonMissing.of()
             private var taxInclusive: JsonField<Boolean> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -437,16 +435,16 @@ private constructor(
             fun currency(currency: JsonField<Currency>) = apply { this.currency = currency }
 
             /** Discount applied to the price, represented as a percentage (0 to 100). */
-            fun discount(discount: Double) = discount(JsonField.of(discount))
+            fun discount(discount: Float) = discount(JsonField.of(discount))
 
             /**
              * Sets [Builder.discount] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.discount] with a well-typed [Double] value instead.
+             * You should usually call [Builder.discount] with a well-typed [Float] value instead.
              * This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun discount(discount: JsonField<Double>) = apply { this.discount = discount }
+            fun discount(discount: JsonField<Float>) = apply { this.discount = discount }
 
             /**
              * The payment amount, in the smallest denomination of the currency (e.g., cents for
@@ -455,16 +453,16 @@ private constructor(
              * If [`pay_what_you_want`](Self::pay_what_you_want) is set to `true`, this field
              * represents the **minimum** amount the customer must pay.
              */
-            fun price(price: Long) = price(JsonField.of(price))
+            fun price(price: Int) = price(JsonField.of(price))
 
             /**
              * Sets [Builder.price] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.price] with a well-typed [Long] value instead. This
+             * You should usually call [Builder.price] with a well-typed [Int] value instead. This
              * method is primarily for setting the field to an undocumented or not yet supported
              * value.
              */
-            fun price(price: JsonField<Long>) = apply { this.price = price }
+            fun price(price: JsonField<Int>) = apply { this.price = price }
 
             /**
              * Indicates if purchasing power parity adjustments are applied to the price. Purchasing
@@ -517,7 +515,7 @@ private constructor(
              * A suggested price for the user to pay. This value is only considered if
              * [`pay_what_you_want`](Self::pay_what_you_want) is `true`. Otherwise, it is ignored.
              */
-            fun suggestedPrice(suggestedPrice: Long?) =
+            fun suggestedPrice(suggestedPrice: Int?) =
                 suggestedPrice(JsonField.ofNullable(suggestedPrice))
 
             /**
@@ -525,16 +523,16 @@ private constructor(
              *
              * This unboxed primitive overload exists for backwards compatibility.
              */
-            fun suggestedPrice(suggestedPrice: Long) = suggestedPrice(suggestedPrice as Long?)
+            fun suggestedPrice(suggestedPrice: Int) = suggestedPrice(suggestedPrice as Int?)
 
             /**
              * Sets [Builder.suggestedPrice] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.suggestedPrice] with a well-typed [Long] value
+             * You should usually call [Builder.suggestedPrice] with a well-typed [Int] value
              * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun suggestedPrice(suggestedPrice: JsonField<Long>) = apply {
+            fun suggestedPrice(suggestedPrice: JsonField<Int>) = apply {
                 this.suggestedPrice = suggestedPrice
             }
 
@@ -792,16 +790,16 @@ private constructor(
     class RecurringPrice
     private constructor(
         private val currency: JsonField<Currency>,
-        private val discount: JsonField<Double>,
-        private val paymentFrequencyCount: JsonField<Long>,
+        private val discount: JsonField<Float>,
+        private val paymentFrequencyCount: JsonField<Int>,
         private val paymentFrequencyInterval: JsonField<TimeInterval>,
-        private val price: JsonField<Long>,
+        private val price: JsonField<Int>,
         private val purchasingPowerParity: JsonField<Boolean>,
-        private val subscriptionPeriodCount: JsonField<Long>,
+        private val subscriptionPeriodCount: JsonField<Int>,
         private val subscriptionPeriodInterval: JsonField<TimeInterval>,
         private val type: JsonField<Type>,
         private val taxInclusive: JsonField<Boolean>,
-        private val trialPeriodDays: JsonField<Long>,
+        private val trialPeriodDays: JsonField<Int>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -810,22 +808,20 @@ private constructor(
             @JsonProperty("currency")
             @ExcludeMissing
             currency: JsonField<Currency> = JsonMissing.of(),
-            @JsonProperty("discount")
-            @ExcludeMissing
-            discount: JsonField<Double> = JsonMissing.of(),
+            @JsonProperty("discount") @ExcludeMissing discount: JsonField<Float> = JsonMissing.of(),
             @JsonProperty("payment_frequency_count")
             @ExcludeMissing
-            paymentFrequencyCount: JsonField<Long> = JsonMissing.of(),
+            paymentFrequencyCount: JsonField<Int> = JsonMissing.of(),
             @JsonProperty("payment_frequency_interval")
             @ExcludeMissing
             paymentFrequencyInterval: JsonField<TimeInterval> = JsonMissing.of(),
-            @JsonProperty("price") @ExcludeMissing price: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("price") @ExcludeMissing price: JsonField<Int> = JsonMissing.of(),
             @JsonProperty("purchasing_power_parity")
             @ExcludeMissing
             purchasingPowerParity: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("subscription_period_count")
             @ExcludeMissing
-            subscriptionPeriodCount: JsonField<Long> = JsonMissing.of(),
+            subscriptionPeriodCount: JsonField<Int> = JsonMissing.of(),
             @JsonProperty("subscription_period_interval")
             @ExcludeMissing
             subscriptionPeriodInterval: JsonField<TimeInterval> = JsonMissing.of(),
@@ -835,7 +831,7 @@ private constructor(
             taxInclusive: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("trial_period_days")
             @ExcludeMissing
-            trialPeriodDays: JsonField<Long> = JsonMissing.of(),
+            trialPeriodDays: JsonField<Int> = JsonMissing.of(),
         ) : this(
             currency,
             discount,
@@ -863,7 +859,7 @@ private constructor(
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun discount(): Double = discount.getRequired("discount")
+        fun discount(): Float = discount.getRequired("discount")
 
         /**
          * Number of units for the payment frequency. For example, a value of `1` with a
@@ -872,7 +868,7 @@ private constructor(
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun paymentFrequencyCount(): Long =
+        fun paymentFrequencyCount(): Int =
             paymentFrequencyCount.getRequired("payment_frequency_count")
 
         /**
@@ -889,7 +885,7 @@ private constructor(
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun price(): Long = price.getRequired("price")
+        fun price(): Int = price.getRequired("price")
 
         /**
          * Indicates if purchasing power parity adjustments are applied to the price. Purchasing
@@ -908,7 +904,7 @@ private constructor(
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun subscriptionPeriodCount(): Long =
+        fun subscriptionPeriodCount(): Int =
             subscriptionPeriodCount.getRequired("subscription_period_count")
 
         /**
@@ -938,7 +934,7 @@ private constructor(
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
-        fun trialPeriodDays(): Long? = trialPeriodDays.getNullable("trial_period_days")
+        fun trialPeriodDays(): Int? = trialPeriodDays.getNullable("trial_period_days")
 
         /**
          * Returns the raw JSON value of [currency].
@@ -952,7 +948,7 @@ private constructor(
          *
          * Unlike [discount], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("discount") @ExcludeMissing fun _discount(): JsonField<Double> = discount
+        @JsonProperty("discount") @ExcludeMissing fun _discount(): JsonField<Float> = discount
 
         /**
          * Returns the raw JSON value of [paymentFrequencyCount].
@@ -962,7 +958,7 @@ private constructor(
          */
         @JsonProperty("payment_frequency_count")
         @ExcludeMissing
-        fun _paymentFrequencyCount(): JsonField<Long> = paymentFrequencyCount
+        fun _paymentFrequencyCount(): JsonField<Int> = paymentFrequencyCount
 
         /**
          * Returns the raw JSON value of [paymentFrequencyInterval].
@@ -979,7 +975,7 @@ private constructor(
          *
          * Unlike [price], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Long> = price
+        @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Int> = price
 
         /**
          * Returns the raw JSON value of [purchasingPowerParity].
@@ -999,7 +995,7 @@ private constructor(
          */
         @JsonProperty("subscription_period_count")
         @ExcludeMissing
-        fun _subscriptionPeriodCount(): JsonField<Long> = subscriptionPeriodCount
+        fun _subscriptionPeriodCount(): JsonField<Int> = subscriptionPeriodCount
 
         /**
          * Returns the raw JSON value of [subscriptionPeriodInterval].
@@ -1036,7 +1032,7 @@ private constructor(
          */
         @JsonProperty("trial_period_days")
         @ExcludeMissing
-        fun _trialPeriodDays(): JsonField<Long> = trialPeriodDays
+        fun _trialPeriodDays(): JsonField<Int> = trialPeriodDays
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -1075,16 +1071,16 @@ private constructor(
         class Builder internal constructor() {
 
             private var currency: JsonField<Currency>? = null
-            private var discount: JsonField<Double>? = null
-            private var paymentFrequencyCount: JsonField<Long>? = null
+            private var discount: JsonField<Float>? = null
+            private var paymentFrequencyCount: JsonField<Int>? = null
             private var paymentFrequencyInterval: JsonField<TimeInterval>? = null
-            private var price: JsonField<Long>? = null
+            private var price: JsonField<Int>? = null
             private var purchasingPowerParity: JsonField<Boolean>? = null
-            private var subscriptionPeriodCount: JsonField<Long>? = null
+            private var subscriptionPeriodCount: JsonField<Int>? = null
             private var subscriptionPeriodInterval: JsonField<TimeInterval>? = null
             private var type: JsonField<Type>? = null
             private var taxInclusive: JsonField<Boolean> = JsonMissing.of()
-            private var trialPeriodDays: JsonField<Long> = JsonMissing.of()
+            private var trialPeriodDays: JsonField<Int> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(recurringPrice: RecurringPrice) = apply {
@@ -1114,32 +1110,32 @@ private constructor(
             fun currency(currency: JsonField<Currency>) = apply { this.currency = currency }
 
             /** Discount applied to the price, represented as a percentage (0 to 100). */
-            fun discount(discount: Double) = discount(JsonField.of(discount))
+            fun discount(discount: Float) = discount(JsonField.of(discount))
 
             /**
              * Sets [Builder.discount] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.discount] with a well-typed [Double] value instead.
+             * You should usually call [Builder.discount] with a well-typed [Float] value instead.
              * This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun discount(discount: JsonField<Double>) = apply { this.discount = discount }
+            fun discount(discount: JsonField<Float>) = apply { this.discount = discount }
 
             /**
              * Number of units for the payment frequency. For example, a value of `1` with a
              * `payment_frequency_interval` of `month` represents monthly payments.
              */
-            fun paymentFrequencyCount(paymentFrequencyCount: Long) =
+            fun paymentFrequencyCount(paymentFrequencyCount: Int) =
                 paymentFrequencyCount(JsonField.of(paymentFrequencyCount))
 
             /**
              * Sets [Builder.paymentFrequencyCount] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.paymentFrequencyCount] with a well-typed [Long]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
+             * You should usually call [Builder.paymentFrequencyCount] with a well-typed [Int] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            fun paymentFrequencyCount(paymentFrequencyCount: JsonField<Long>) = apply {
+            fun paymentFrequencyCount(paymentFrequencyCount: JsonField<Int>) = apply {
                 this.paymentFrequencyCount = paymentFrequencyCount
             }
 
@@ -1162,16 +1158,16 @@ private constructor(
              * The payment amount. Represented in the lowest denomination of the currency (e.g.,
              * cents for USD). For example, to charge $1.00, pass `100`.
              */
-            fun price(price: Long) = price(JsonField.of(price))
+            fun price(price: Int) = price(JsonField.of(price))
 
             /**
              * Sets [Builder.price] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.price] with a well-typed [Long] value instead. This
+             * You should usually call [Builder.price] with a well-typed [Int] value instead. This
              * method is primarily for setting the field to an undocumented or not yet supported
              * value.
              */
-            fun price(price: JsonField<Long>) = apply { this.price = price }
+            fun price(price: JsonField<Int>) = apply { this.price = price }
 
             /**
              * Indicates if purchasing power parity adjustments are applied to the price. Purchasing
@@ -1195,17 +1191,17 @@ private constructor(
              * Number of units for the subscription period. For example, a value of `12` with a
              * `subscription_period_interval` of `month` represents a one-year subscription.
              */
-            fun subscriptionPeriodCount(subscriptionPeriodCount: Long) =
+            fun subscriptionPeriodCount(subscriptionPeriodCount: Int) =
                 subscriptionPeriodCount(JsonField.of(subscriptionPeriodCount))
 
             /**
              * Sets [Builder.subscriptionPeriodCount] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.subscriptionPeriodCount] with a well-typed [Long]
+             * You should usually call [Builder.subscriptionPeriodCount] with a well-typed [Int]
              * value instead. This method is primarily for setting the field to an undocumented or
              * not yet supported value.
              */
-            fun subscriptionPeriodCount(subscriptionPeriodCount: JsonField<Long>) = apply {
+            fun subscriptionPeriodCount(subscriptionPeriodCount: JsonField<Int>) = apply {
                 this.subscriptionPeriodCount = subscriptionPeriodCount
             }
 
@@ -1258,17 +1254,17 @@ private constructor(
             }
 
             /** Number of days for the trial period. A value of `0` indicates no trial period. */
-            fun trialPeriodDays(trialPeriodDays: Long) =
+            fun trialPeriodDays(trialPeriodDays: Int) =
                 trialPeriodDays(JsonField.of(trialPeriodDays))
 
             /**
              * Sets [Builder.trialPeriodDays] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.trialPeriodDays] with a well-typed [Long] value
+             * You should usually call [Builder.trialPeriodDays] with a well-typed [Int] value
              * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun trialPeriodDays(trialPeriodDays: JsonField<Long>) = apply {
+            fun trialPeriodDays(trialPeriodDays: JsonField<Int>) = apply {
                 this.trialPeriodDays = trialPeriodDays
             }
 

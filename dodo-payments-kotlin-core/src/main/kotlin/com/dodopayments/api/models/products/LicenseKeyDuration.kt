@@ -18,14 +18,14 @@ import java.util.Objects
 
 class LicenseKeyDuration
 private constructor(
-    private val count: JsonField<Long>,
+    private val count: JsonField<Int>,
     private val interval: JsonField<TimeInterval>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("count") @ExcludeMissing count: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("count") @ExcludeMissing count: JsonField<Int> = JsonMissing.of(),
         @JsonProperty("interval")
         @ExcludeMissing
         interval: JsonField<TimeInterval> = JsonMissing.of(),
@@ -35,7 +35,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun count(): Long = count.getRequired("count")
+    fun count(): Int = count.getRequired("count")
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
@@ -48,7 +48,7 @@ private constructor(
      *
      * Unlike [count], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("count") @ExcludeMissing fun _count(): JsonField<Long> = count
+    @JsonProperty("count") @ExcludeMissing fun _count(): JsonField<Int> = count
 
     /**
      * Returns the raw JSON value of [interval].
@@ -86,7 +86,7 @@ private constructor(
     /** A builder for [LicenseKeyDuration]. */
     class Builder internal constructor() {
 
-        private var count: JsonField<Long>? = null
+        private var count: JsonField<Int>? = null
         private var interval: JsonField<TimeInterval>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -96,15 +96,15 @@ private constructor(
             additionalProperties = licenseKeyDuration.additionalProperties.toMutableMap()
         }
 
-        fun count(count: Long) = count(JsonField.of(count))
+        fun count(count: Int) = count(JsonField.of(count))
 
         /**
          * Sets [Builder.count] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.count] with a well-typed [Long] value instead. This
+         * You should usually call [Builder.count] with a well-typed [Int] value instead. This
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun count(count: JsonField<Long>) = apply { this.count = count }
+        fun count(count: JsonField<Int>) = apply { this.count = count }
 
         fun interval(interval: TimeInterval) = interval(JsonField.of(interval))
 

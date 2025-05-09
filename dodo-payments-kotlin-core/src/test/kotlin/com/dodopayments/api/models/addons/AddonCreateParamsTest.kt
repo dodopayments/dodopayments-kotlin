@@ -14,7 +14,7 @@ internal class AddonCreateParamsTest {
         AddonCreateParams.builder()
             .currency(Currency.AED)
             .name("name")
-            .price(0L)
+            .price(0)
             .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
             .description("description")
             .build()
@@ -26,7 +26,7 @@ internal class AddonCreateParamsTest {
             AddonCreateParams.builder()
                 .currency(Currency.AED)
                 .name("name")
-                .price(0L)
+                .price(0)
                 .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
                 .description("description")
                 .build()
@@ -35,7 +35,7 @@ internal class AddonCreateParamsTest {
 
         assertThat(body.currency()).isEqualTo(Currency.AED)
         assertThat(body.name()).isEqualTo("name")
-        assertThat(body.price()).isEqualTo(0L)
+        assertThat(body.price()).isEqualTo(0)
         assertThat(body.taxCategory()).isEqualTo(TaxCategory.DIGITAL_PRODUCTS)
         assertThat(body.description()).isEqualTo("description")
     }
@@ -46,7 +46,7 @@ internal class AddonCreateParamsTest {
             AddonCreateParams.builder()
                 .currency(Currency.AED)
                 .name("name")
-                .price(0L)
+                .price(0)
                 .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
                 .build()
 
@@ -54,7 +54,7 @@ internal class AddonCreateParamsTest {
 
         assertThat(body.currency()).isEqualTo(Currency.AED)
         assertThat(body.name()).isEqualTo("name")
-        assertThat(body.price()).isEqualTo(0L)
+        assertThat(body.price()).isEqualTo(0)
         assertThat(body.taxCategory()).isEqualTo(TaxCategory.DIGITAL_PRODUCTS)
     }
 }
