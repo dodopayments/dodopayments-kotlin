@@ -2,11 +2,11 @@
 
 package com.dodopayments.api.models.webhookevents
 
+import com.dodopayments.api.core.AutoPagerAsync
+import com.dodopayments.api.core.PageAsync
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.async.WebhookEventServiceAsync
 import java.util.Objects
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
 
 /** @see [WebhookEventServiceAsync.list] */
 class WebhookEventListPageAsync
@@ -14,30 +14,25 @@ private constructor(
     private val service: WebhookEventServiceAsync,
     private val params: WebhookEventListParams,
     private val response: WebhookEventListPageResponse,
-) {
+) : PageAsync<WebhookEvent> {
 
     /**
      * Delegates to [WebhookEventListPageResponse], but gracefully handles missing data.
      *
      * @see [WebhookEventListPageResponse.items]
      */
-    fun items(): List<WebhookEvent> = response._items().getNullable("items") ?: emptyList()
+    override fun items(): List<WebhookEvent> = response._items().getNullable("items") ?: emptyList()
 
-    fun hasNextPage(): Boolean = items().isNotEmpty()
+    override fun hasNextPage(): Boolean = items().isNotEmpty()
 
-    fun getNextPageParams(): WebhookEventListParams? {
-        if (!hasNextPage()) {
-            return null
-        }
-
+    fun nextPageParams(): WebhookEventListParams {
         val pageNumber = params.pageNumber() ?: 1
         return params.toBuilder().pageNumber(pageNumber + 1).build()
     }
 
-    suspend fun getNextPage(): WebhookEventListPageAsync? =
-        getNextPageParams()?.let { service.list(it) }
+    override suspend fun nextPage(): WebhookEventListPageAsync = service.list(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPagerAsync<WebhookEvent> = AutoPagerAsync.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): WebhookEventListParams = params
@@ -103,21 +98,6 @@ private constructor(
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: WebhookEventListPageAsync) : Flow<WebhookEvent> {
-
-        override suspend fun collect(collector: FlowCollector<WebhookEvent>) {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.items().size) {
-                    collector.emit(page.items()[index++])
-                }
-                page = page.getNextPage() ?: break
-                index = 0
-            }
-        }
     }
 
     override fun equals(other: Any?): Boolean {

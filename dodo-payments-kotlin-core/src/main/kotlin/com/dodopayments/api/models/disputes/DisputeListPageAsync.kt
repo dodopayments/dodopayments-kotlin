@@ -2,11 +2,11 @@
 
 package com.dodopayments.api.models.disputes
 
+import com.dodopayments.api.core.AutoPagerAsync
+import com.dodopayments.api.core.PageAsync
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.async.DisputeServiceAsync
 import java.util.Objects
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
 
 /** @see [DisputeServiceAsync.list] */
 class DisputeListPageAsync
@@ -14,29 +14,26 @@ private constructor(
     private val service: DisputeServiceAsync,
     private val params: DisputeListParams,
     private val response: DisputeListPageResponse,
-) {
+) : PageAsync<DisputeListResponse> {
 
     /**
      * Delegates to [DisputeListPageResponse], but gracefully handles missing data.
      *
      * @see [DisputeListPageResponse.items]
      */
-    fun items(): List<DisputeListResponse> = response._items().getNullable("items") ?: emptyList()
+    override fun items(): List<DisputeListResponse> =
+        response._items().getNullable("items") ?: emptyList()
 
-    fun hasNextPage(): Boolean = items().isNotEmpty()
+    override fun hasNextPage(): Boolean = items().isNotEmpty()
 
-    fun getNextPageParams(): DisputeListParams? {
-        if (!hasNextPage()) {
-            return null
-        }
-
+    fun nextPageParams(): DisputeListParams {
         val pageNumber = params.pageNumber() ?: 1
         return params.toBuilder().pageNumber(pageNumber + 1).build()
     }
 
-    suspend fun getNextPage(): DisputeListPageAsync? = getNextPageParams()?.let { service.list(it) }
+    override suspend fun nextPage(): DisputeListPageAsync = service.list(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPagerAsync<DisputeListResponse> = AutoPagerAsync.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): DisputeListParams = params
@@ -102,21 +99,6 @@ private constructor(
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: DisputeListPageAsync) : Flow<DisputeListResponse> {
-
-        override suspend fun collect(collector: FlowCollector<DisputeListResponse>) {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.items().size) {
-                    collector.emit(page.items()[index++])
-                }
-                page = page.getNextPage() ?: break
-                index = 0
-            }
-        }
     }
 
     override fun equals(other: Any?): Boolean {

@@ -2,11 +2,11 @@
 
 package com.dodopayments.api.models.payouts
 
+import com.dodopayments.api.core.AutoPagerAsync
+import com.dodopayments.api.core.PageAsync
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.async.PayoutServiceAsync
 import java.util.Objects
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
 
 /** @see [PayoutServiceAsync.list] */
 class PayoutListPageAsync
@@ -14,29 +14,26 @@ private constructor(
     private val service: PayoutServiceAsync,
     private val params: PayoutListParams,
     private val response: PayoutListPageResponse,
-) {
+) : PageAsync<PayoutListResponse> {
 
     /**
      * Delegates to [PayoutListPageResponse], but gracefully handles missing data.
      *
      * @see [PayoutListPageResponse.items]
      */
-    fun items(): List<PayoutListResponse> = response._items().getNullable("items") ?: emptyList()
+    override fun items(): List<PayoutListResponse> =
+        response._items().getNullable("items") ?: emptyList()
 
-    fun hasNextPage(): Boolean = items().isNotEmpty()
+    override fun hasNextPage(): Boolean = items().isNotEmpty()
 
-    fun getNextPageParams(): PayoutListParams? {
-        if (!hasNextPage()) {
-            return null
-        }
-
+    fun nextPageParams(): PayoutListParams {
         val pageNumber = params.pageNumber() ?: 1
         return params.toBuilder().pageNumber(pageNumber + 1).build()
     }
 
-    suspend fun getNextPage(): PayoutListPageAsync? = getNextPageParams()?.let { service.list(it) }
+    override suspend fun nextPage(): PayoutListPageAsync = service.list(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPagerAsync<PayoutListResponse> = AutoPagerAsync.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): PayoutListParams = params
@@ -102,21 +99,6 @@ private constructor(
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: PayoutListPageAsync) : Flow<PayoutListResponse> {
-
-        override suspend fun collect(collector: FlowCollector<PayoutListResponse>) {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.items().size) {
-                    collector.emit(page.items()[index++])
-                }
-                page = page.getNextPage() ?: break
-                index = 0
-            }
-        }
     }
 
     override fun equals(other: Any?): Boolean {

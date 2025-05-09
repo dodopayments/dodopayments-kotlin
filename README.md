@@ -323,48 +323,54 @@ The SDK throws custom unchecked exception types:
 
 ## Pagination
 
-For methods that return a paginated list of results, this library provides convenient ways access the results either one page at a time, or item-by-item across all pages.
+The SDK defines methods that return a paginated lists of results. It provides convenient ways to access the results either one page at a time or item-by-item across all pages.
 
 ### Auto-pagination
 
-To iterate through all results across all pages, you can use `autoPager`, which automatically handles fetching more pages for you:
+To iterate through all results across all pages, use the `autoPager()` method, which automatically fetches more pages as needed.
 
-### Synchronous
+When using the synchronous client, the method returns a [`Sequence`](https://kotlinlang.org/docs/sequences.html)
 
 ```kotlin
 import com.dodopayments.api.models.payments.PaymentListPage
-import com.dodopayments.api.models.payments.PaymentListResponse
 
-// As a Sequence:
-client.payments().list(params).autoPager()
+val page: PaymentListPage = client.payments().list()
+page.autoPager()
     .take(50)
-    .forEach { payment -> print(payment) }
+    .forEach { payment -> println(payment) }
 ```
 
-### Asynchronous
+When using the asynchronous client, the method returns a [`Flow`](https://kotlinlang.org/docs/flow.html):
 
 ```kotlin
-// As a Flow:
-asyncClient.payments().list(params).autoPager()
+import com.dodopayments.api.models.payments.PaymentListPageAsync
+
+val page: PaymentListPageAsync = client.async().payments().list()
+page.autoPager()
     .take(50)
-    .collect { payment -> print(payment) }
+    .forEach { payment -> println(payment) }
 ```
 
 ### Manual pagination
 
-If none of the above helpers meet your needs, you can also manually request pages one-by-one. A page of results has a `data()` method to fetch the list of objects, as well as top-level `response` and other methods to fetch top-level data about the page. It also has methods `hasNextPage`, `getNextPage`, and `getNextPageParams` methods to help with pagination.
+To access individual page items and manually request the next page, use the `items()`,
+`hasNextPage()`, and `nextPage()` methods:
 
 ```kotlin
 import com.dodopayments.api.models.payments.PaymentListPage
 import com.dodopayments.api.models.payments.PaymentListResponse
 
-val page = client.payments().list(params)
-while (page != null) {
-    for (payment in page.items) {
-        print(payment)
+val page: PaymentListPage = client.payments().list()
+while (true) {
+    for (payment in page.items()) {
+        println(payment)
     }
 
-    page = page.getNextPage()
+    if (!page.hasNextPage()) {
+        break
+    }
+
+    page = page.nextPage()
 }
 ```
 
@@ -430,11 +436,6 @@ Requests time out after 1 minute by default.
 To set a custom timeout, configure the method call using the `timeout` method:
 
 ```kotlin
-import com.dodopayments.api.models.misc.CountryCode
-import com.dodopayments.api.models.payments.AttachExistingCustomer
-import com.dodopayments.api.models.payments.BillingAddress
-import com.dodopayments.api.models.payments.OneTimeProductCartItem
-import com.dodopayments.api.models.payments.PaymentCreateParams
 import com.dodopayments.api.models.payments.PaymentCreateResponse
 
 val payment: PaymentCreateResponse = client.payments().create(
@@ -700,11 +701,6 @@ val payment: PaymentCreateResponse = client.payments().create(params).validate()
 Or configure the method call to validate the response using the `responseValidation` method:
 
 ```kotlin
-import com.dodopayments.api.models.misc.CountryCode
-import com.dodopayments.api.models.payments.AttachExistingCustomer
-import com.dodopayments.api.models.payments.BillingAddress
-import com.dodopayments.api.models.payments.OneTimeProductCartItem
-import com.dodopayments.api.models.payments.PaymentCreateParams
 import com.dodopayments.api.models.payments.PaymentCreateResponse
 
 val payment: PaymentCreateResponse = client.payments().create(
