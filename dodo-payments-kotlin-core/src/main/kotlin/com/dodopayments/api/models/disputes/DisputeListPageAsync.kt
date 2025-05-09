@@ -21,7 +21,7 @@ private constructor(
      *
      * @see [DisputeListPageResponse.items]
      */
-    fun items(): List<Dispute> = response._items().getNullable("items") ?: emptyList()
+    fun items(): List<DisputeListResponse> = response._items().getNullable("items") ?: emptyList()
 
     fun hasNextPage(): Boolean = items().isNotEmpty()
 
@@ -104,9 +104,9 @@ private constructor(
             )
     }
 
-    class AutoPager(private val firstPage: DisputeListPageAsync) : Flow<Dispute> {
+    class AutoPager(private val firstPage: DisputeListPageAsync) : Flow<DisputeListResponse> {
 
-        override suspend fun collect(collector: FlowCollector<Dispute>) {
+        override suspend fun collect(collector: FlowCollector<DisputeListResponse>) {
             var page = firstPage
             var index = 0
             while (true) {

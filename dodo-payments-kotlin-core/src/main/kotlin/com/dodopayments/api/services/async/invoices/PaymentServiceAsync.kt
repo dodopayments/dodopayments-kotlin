@@ -14,10 +14,11 @@ interface PaymentServiceAsync {
      */
     fun withRawResponse(): WithRawResponse
 
+    @MustBeClosed
     suspend fun retrieve(
         params: PaymentRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    )
+    ): HttpResponse
 
     /**
      * A view of [PaymentServiceAsync] that provides access to raw HTTP responses for each method.

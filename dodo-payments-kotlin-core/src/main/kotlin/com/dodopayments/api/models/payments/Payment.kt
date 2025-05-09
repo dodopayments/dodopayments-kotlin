@@ -11,6 +11,7 @@ import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.dodopayments.api.models.disputes.Dispute
+import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.refunds.Refund
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -35,6 +36,10 @@ private constructor(
     private val settlementAmount: JsonField<Long>,
     private val settlementCurrency: JsonField<Currency>,
     private val totalAmount: JsonField<Long>,
+    private val cardIssuingCountry: JsonField<CountryCode>,
+    private val cardLastFour: JsonField<String>,
+    private val cardNetwork: JsonField<String>,
+    private val cardType: JsonField<String>,
     private val discountId: JsonField<String>,
     private val errorMessage: JsonField<String>,
     private val paymentLink: JsonField<String>,
@@ -81,6 +86,16 @@ private constructor(
         @JsonProperty("total_amount")
         @ExcludeMissing
         totalAmount: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("card_issuing_country")
+        @ExcludeMissing
+        cardIssuingCountry: JsonField<CountryCode> = JsonMissing.of(),
+        @JsonProperty("card_last_four")
+        @ExcludeMissing
+        cardLastFour: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("card_network")
+        @ExcludeMissing
+        cardNetwork: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("card_type") @ExcludeMissing cardType: JsonField<String> = JsonMissing.of(),
         @JsonProperty("discount_id")
         @ExcludeMissing
         discountId: JsonField<String> = JsonMissing.of(),
@@ -123,6 +138,10 @@ private constructor(
         settlementAmount,
         settlementCurrency,
         totalAmount,
+        cardIssuingCountry,
+        cardLastFour,
+        cardNetwork,
+        cardType,
         discountId,
         errorMessage,
         paymentLink,
@@ -224,6 +243,38 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun totalAmount(): Long = totalAmount.getRequired("total_amount")
+
+    /**
+     * ISO country code alpha2 variant
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun cardIssuingCountry(): CountryCode? = cardIssuingCountry.getNullable("card_issuing_country")
+
+    /**
+     * The last four digits of the card
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun cardLastFour(): String? = cardLastFour.getNullable("card_last_four")
+
+    /**
+     * Card network like VISA, MASTERCARD etc.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun cardNetwork(): String? = cardNetwork.getNullable("card_network")
+
+    /**
+     * The type of card DEBIT or CREDIT
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun cardType(): String? = cardType.getNullable("card_type")
 
     /**
      * The discount id if discount is applied
@@ -408,6 +459,41 @@ private constructor(
     @JsonProperty("total_amount") @ExcludeMissing fun _totalAmount(): JsonField<Long> = totalAmount
 
     /**
+     * Returns the raw JSON value of [cardIssuingCountry].
+     *
+     * Unlike [cardIssuingCountry], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("card_issuing_country")
+    @ExcludeMissing
+    fun _cardIssuingCountry(): JsonField<CountryCode> = cardIssuingCountry
+
+    /**
+     * Returns the raw JSON value of [cardLastFour].
+     *
+     * Unlike [cardLastFour], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("card_last_four")
+    @ExcludeMissing
+    fun _cardLastFour(): JsonField<String> = cardLastFour
+
+    /**
+     * Returns the raw JSON value of [cardNetwork].
+     *
+     * Unlike [cardNetwork], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("card_network")
+    @ExcludeMissing
+    fun _cardNetwork(): JsonField<String> = cardNetwork
+
+    /**
+     * Returns the raw JSON value of [cardType].
+     *
+     * Unlike [cardType], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("card_type") @ExcludeMissing fun _cardType(): JsonField<String> = cardType
+
+    /**
      * Returns the raw JSON value of [discountId].
      *
      * Unlike [discountId], this method doesn't throw if the JSON field has an unexpected type.
@@ -552,6 +638,10 @@ private constructor(
         private var settlementAmount: JsonField<Long>? = null
         private var settlementCurrency: JsonField<Currency>? = null
         private var totalAmount: JsonField<Long>? = null
+        private var cardIssuingCountry: JsonField<CountryCode> = JsonMissing.of()
+        private var cardLastFour: JsonField<String> = JsonMissing.of()
+        private var cardNetwork: JsonField<String> = JsonMissing.of()
+        private var cardType: JsonField<String> = JsonMissing.of()
         private var discountId: JsonField<String> = JsonMissing.of()
         private var errorMessage: JsonField<String> = JsonMissing.of()
         private var paymentLink: JsonField<String> = JsonMissing.of()
@@ -578,6 +668,10 @@ private constructor(
             settlementAmount = payment.settlementAmount
             settlementCurrency = payment.settlementCurrency
             totalAmount = payment.totalAmount
+            cardIssuingCountry = payment.cardIssuingCountry
+            cardLastFour = payment.cardLastFour
+            cardNetwork = payment.cardNetwork
+            cardType = payment.cardType
             discountId = payment.discountId
             errorMessage = payment.errorMessage
             paymentLink = payment.paymentLink
@@ -773,6 +867,58 @@ private constructor(
          * value.
          */
         fun totalAmount(totalAmount: JsonField<Long>) = apply { this.totalAmount = totalAmount }
+
+        /** ISO country code alpha2 variant */
+        fun cardIssuingCountry(cardIssuingCountry: CountryCode?) =
+            cardIssuingCountry(JsonField.ofNullable(cardIssuingCountry))
+
+        /**
+         * Sets [Builder.cardIssuingCountry] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cardIssuingCountry] with a well-typed [CountryCode]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
+        fun cardIssuingCountry(cardIssuingCountry: JsonField<CountryCode>) = apply {
+            this.cardIssuingCountry = cardIssuingCountry
+        }
+
+        /** The last four digits of the card */
+        fun cardLastFour(cardLastFour: String?) = cardLastFour(JsonField.ofNullable(cardLastFour))
+
+        /**
+         * Sets [Builder.cardLastFour] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cardLastFour] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun cardLastFour(cardLastFour: JsonField<String>) = apply {
+            this.cardLastFour = cardLastFour
+        }
+
+        /** Card network like VISA, MASTERCARD etc. */
+        fun cardNetwork(cardNetwork: String?) = cardNetwork(JsonField.ofNullable(cardNetwork))
+
+        /**
+         * Sets [Builder.cardNetwork] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cardNetwork] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun cardNetwork(cardNetwork: JsonField<String>) = apply { this.cardNetwork = cardNetwork }
+
+        /** The type of card DEBIT or CREDIT */
+        fun cardType(cardType: String?) = cardType(JsonField.ofNullable(cardType))
+
+        /**
+         * Sets [Builder.cardType] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cardType] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun cardType(cardType: JsonField<String>) = apply { this.cardType = cardType }
 
         /** The discount id if discount is applied */
         fun discountId(discountId: String?) = discountId(JsonField.ofNullable(discountId))
@@ -1006,6 +1152,10 @@ private constructor(
                 checkRequired("settlementAmount", settlementAmount),
                 checkRequired("settlementCurrency", settlementCurrency),
                 checkRequired("totalAmount", totalAmount),
+                cardIssuingCountry,
+                cardLastFour,
+                cardNetwork,
+                cardType,
                 discountId,
                 errorMessage,
                 paymentLink,
@@ -1040,6 +1190,10 @@ private constructor(
         settlementAmount()
         settlementCurrency().validate()
         totalAmount()
+        cardIssuingCountry()?.validate()
+        cardLastFour()
+        cardNetwork()
+        cardType()
         discountId()
         errorMessage()
         paymentLink()
@@ -1080,6 +1234,10 @@ private constructor(
             (if (settlementAmount.asKnown() == null) 0 else 1) +
             (settlementCurrency.asKnown()?.validity() ?: 0) +
             (if (totalAmount.asKnown() == null) 0 else 1) +
+            (cardIssuingCountry.asKnown()?.validity() ?: 0) +
+            (if (cardLastFour.asKnown() == null) 0 else 1) +
+            (if (cardNetwork.asKnown() == null) 0 else 1) +
+            (if (cardType.asKnown() == null) 0 else 1) +
             (if (discountId.asKnown() == null) 0 else 1) +
             (if (errorMessage.asKnown() == null) 0 else 1) +
             (if (paymentLink.asKnown() == null) 0 else 1) +
@@ -1385,15 +1543,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Payment && billing == other.billing && businessId == other.businessId && createdAt == other.createdAt && currency == other.currency && customer == other.customer && disputes == other.disputes && metadata == other.metadata && paymentId == other.paymentId && refunds == other.refunds && settlementAmount == other.settlementAmount && settlementCurrency == other.settlementCurrency && totalAmount == other.totalAmount && discountId == other.discountId && errorMessage == other.errorMessage && paymentLink == other.paymentLink && paymentMethod == other.paymentMethod && paymentMethodType == other.paymentMethodType && productCart == other.productCart && settlementTax == other.settlementTax && status == other.status && subscriptionId == other.subscriptionId && tax == other.tax && updatedAt == other.updatedAt && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Payment && billing == other.billing && businessId == other.businessId && createdAt == other.createdAt && currency == other.currency && customer == other.customer && disputes == other.disputes && metadata == other.metadata && paymentId == other.paymentId && refunds == other.refunds && settlementAmount == other.settlementAmount && settlementCurrency == other.settlementCurrency && totalAmount == other.totalAmount && cardIssuingCountry == other.cardIssuingCountry && cardLastFour == other.cardLastFour && cardNetwork == other.cardNetwork && cardType == other.cardType && discountId == other.discountId && errorMessage == other.errorMessage && paymentLink == other.paymentLink && paymentMethod == other.paymentMethod && paymentMethodType == other.paymentMethodType && productCart == other.productCart && settlementTax == other.settlementTax && status == other.status && subscriptionId == other.subscriptionId && tax == other.tax && updatedAt == other.updatedAt && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(billing, businessId, createdAt, currency, customer, disputes, metadata, paymentId, refunds, settlementAmount, settlementCurrency, totalAmount, discountId, errorMessage, paymentLink, paymentMethod, paymentMethodType, productCart, settlementTax, status, subscriptionId, tax, updatedAt, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(billing, businessId, createdAt, currency, customer, disputes, metadata, paymentId, refunds, settlementAmount, settlementCurrency, totalAmount, cardIssuingCountry, cardLastFour, cardNetwork, cardType, discountId, errorMessage, paymentLink, paymentMethod, paymentMethodType, productCart, settlementTax, status, subscriptionId, tax, updatedAt, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Payment{billing=$billing, businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, disputes=$disputes, metadata=$metadata, paymentId=$paymentId, refunds=$refunds, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, totalAmount=$totalAmount, discountId=$discountId, errorMessage=$errorMessage, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, productCart=$productCart, settlementTax=$settlementTax, status=$status, subscriptionId=$subscriptionId, tax=$tax, updatedAt=$updatedAt, additionalProperties=$additionalProperties}"
+        "Payment{billing=$billing, businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, disputes=$disputes, metadata=$metadata, paymentId=$paymentId, refunds=$refunds, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, totalAmount=$totalAmount, cardIssuingCountry=$cardIssuingCountry, cardLastFour=$cardLastFour, cardNetwork=$cardNetwork, cardType=$cardType, discountId=$discountId, errorMessage=$errorMessage, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, productCart=$productCart, settlementTax=$settlementTax, status=$status, subscriptionId=$subscriptionId, tax=$tax, updatedAt=$updatedAt, additionalProperties=$additionalProperties}"
 }
