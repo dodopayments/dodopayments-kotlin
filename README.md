@@ -565,20 +565,13 @@ These properties can be accessed on the nested built object later using the `_ad
 To set a documented parameter or property to an undocumented or not yet supported _value_, pass a [`JsonValue`](dodo-payments-kotlin-core/src/main/kotlin/com/dodopayments/api/core/Values.kt) object to its setter:
 
 ```kotlin
-import com.dodopayments.api.models.misc.CountryCode
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.payments.AttachExistingCustomer
-import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.OneTimeProductCartItem
 import com.dodopayments.api.models.payments.PaymentCreateParams
 
 val params: PaymentCreateParams = PaymentCreateParams.builder()
-    .billing(BillingAddress.builder()
-        .city("city")
-        .country(CountryCode.AF)
-        .state("state")
-        .street("street")
-        .zipcode("zipcode")
-        .build())
+    .billing(JsonValue.from(42))
     .customer(AttachExistingCustomer.builder()
         .customerId("customer_id")
         .build())
