@@ -187,6 +187,11 @@ internal class SubscriptionServiceAsyncTest {
                 SubscriptionChargeParams.builder()
                     .subscriptionId("subscription_id")
                     .productPrice(0)
+                    .metadata(
+                        SubscriptionChargeParams.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .build()
             )
 

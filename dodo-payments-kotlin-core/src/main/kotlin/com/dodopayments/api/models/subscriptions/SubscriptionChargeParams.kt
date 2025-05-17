@@ -10,6 +10,7 @@ import com.dodopayments.api.core.Params
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
+import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -38,11 +39,24 @@ private constructor(
     fun productPrice(): Int = body.productPrice()
 
     /**
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun metadata(): Metadata? = body.metadata()
+
+    /**
      * Returns the raw JSON value of [productPrice].
      *
      * Unlike [productPrice], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _productPrice(): JsonField<Int> = body._productPrice()
+
+    /**
+     * Returns the raw JSON value of [metadata].
+     *
+     * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _metadata(): JsonField<Metadata> = body._metadata()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -88,6 +102,7 @@ private constructor(
          * This is generally only useful if you are already constructing the body separately.
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [productPrice]
+         * - [metadata]
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
@@ -105,6 +120,17 @@ private constructor(
          * value.
          */
         fun productPrice(productPrice: JsonField<Int>) = apply { body.productPrice(productPrice) }
+
+        fun metadata(metadata: Metadata?) = apply { body.metadata(metadata) }
+
+        /**
+         * Sets [Builder.metadata] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.metadata] with a well-typed [Metadata] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun metadata(metadata: JsonField<Metadata>) = apply { body.metadata(metadata) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -259,6 +285,7 @@ private constructor(
     class Body
     private constructor(
         private val productPrice: JsonField<Int>,
+        private val metadata: JsonField<Metadata>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -266,8 +293,11 @@ private constructor(
         private constructor(
             @JsonProperty("product_price")
             @ExcludeMissing
-            productPrice: JsonField<Int> = JsonMissing.of()
-        ) : this(productPrice, mutableMapOf())
+            productPrice: JsonField<Int> = JsonMissing.of(),
+            @JsonProperty("metadata")
+            @ExcludeMissing
+            metadata: JsonField<Metadata> = JsonMissing.of(),
+        ) : this(productPrice, metadata, mutableMapOf())
 
         /**
          * The product price. Represented in the lowest denomination of the currency (e.g., cents
@@ -279,6 +309,12 @@ private constructor(
         fun productPrice(): Int = productPrice.getRequired("product_price")
 
         /**
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun metadata(): Metadata? = metadata.getNullable("metadata")
+
+        /**
          * Returns the raw JSON value of [productPrice].
          *
          * Unlike [productPrice], this method doesn't throw if the JSON field has an unexpected
@@ -287,6 +323,13 @@ private constructor(
         @JsonProperty("product_price")
         @ExcludeMissing
         fun _productPrice(): JsonField<Int> = productPrice
+
+        /**
+         * Returns the raw JSON value of [metadata].
+         *
+         * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -317,10 +360,12 @@ private constructor(
         class Builder internal constructor() {
 
             private var productPrice: JsonField<Int>? = null
+            private var metadata: JsonField<Metadata> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(body: Body) = apply {
                 productPrice = body.productPrice
+                metadata = body.metadata
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
@@ -340,6 +385,17 @@ private constructor(
             fun productPrice(productPrice: JsonField<Int>) = apply {
                 this.productPrice = productPrice
             }
+
+            fun metadata(metadata: Metadata?) = metadata(JsonField.ofNullable(metadata))
+
+            /**
+             * Sets [Builder.metadata] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -375,6 +431,7 @@ private constructor(
             fun build(): Body =
                 Body(
                     checkRequired("productPrice", productPrice),
+                    metadata,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -387,6 +444,7 @@ private constructor(
             }
 
             productPrice()
+            metadata()?.validate()
             validated = true
         }
 
@@ -404,24 +462,124 @@ private constructor(
          *
          * Used for best match union deserialization.
          */
-        internal fun validity(): Int = (if (productPrice.asKnown() == null) 0 else 1)
+        internal fun validity(): Int =
+            (if (productPrice.asKnown() == null) 0 else 1) + (metadata.asKnown()?.validity() ?: 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is Body && productPrice == other.productPrice && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && productPrice == other.productPrice && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(productPrice, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(productPrice, metadata, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{productPrice=$productPrice, additionalProperties=$additionalProperties}"
+            "Body{productPrice=$productPrice, metadata=$metadata, additionalProperties=$additionalProperties}"
+    }
+
+    class Metadata
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Metadata]. */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [Metadata]. */
+        class Builder internal constructor() {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(metadata: Metadata) = apply {
+                additionalProperties = metadata.additionalProperties.toMutableMap()
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Metadata].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Metadata = Metadata(additionalProperties.toImmutable())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Metadata = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
