@@ -1,5 +1,39 @@
 # Changelog
 
+## 1.25.0 (2025-05-17)
+
+Full Changelog: [v1.22.0...v1.25.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.22.0...v1.25.0)
+
+### ⚠ BREAKING CHANGES
+
+* **client:** change precision of some numeric types
+* **client:** extract auto pagination to shared classes
+* **client:** **Migration:** - If you were referencing the `AutoPager` class on a specific `*Page` or `*PageAsync` type, then you should instead reference the shared `AutoPager` and `AutoPagerAsync` types, under the `core` package
+    - If you were referencing `getNextPage` or `getNextPageParams`:
+       - Swap to `nextPage()` and `nextPageParams()`
+       - Note that these both now return non-nullable types (use `hasNextPage()` before calling these, since they will throw if it's impossible to get another page)
+
+### Features
+
+* **api:** updated openapi spec ([dd15274](https://github.com/dodopayments/dodopayments-kotlin/commit/dd15274b7ca00e2ef10170cb6c78363e3365f770))
+* **client:** extract auto pagination to shared classes ([7d2edc9](https://github.com/dodopayments/dodopayments-kotlin/commit/7d2edc95ef3df102d75d6444448f62b1e2df3d9c))
+
+
+### Chores
+
+* **internal:** codegen related update ([b4aa216](https://github.com/dodopayments/dodopayments-kotlin/commit/b4aa216037c32b481c63064deafade58caab5cb9))
+* **internal:** version bump ([c8cb33f](https://github.com/dodopayments/dodopayments-kotlin/commit/c8cb33f6484a6695f39068764f005d71b8d4a9d5))
+
+
+### Documentation
+
+* remove or fix invalid readme examples ([dcd598c](https://github.com/dodopayments/dodopayments-kotlin/commit/dcd598c4708e098d81b282d2426546dee3c7db65))
+
+
+### Refactors
+
+* **client:** change precision of some numeric types ([e0e83b9](https://github.com/dodopayments/dodopayments-kotlin/commit/e0e83b97ec2996b9dfbb004e002732ea3ce3da53))
+
 ## 1.22.0 (2025-05-09)
 
 Full Changelog: [v1.21.0...v1.22.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.21.0...v1.22.0)
