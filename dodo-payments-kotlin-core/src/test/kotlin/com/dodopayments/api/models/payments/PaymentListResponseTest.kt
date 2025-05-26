@@ -16,6 +16,7 @@ internal class PaymentListResponseTest {
     fun create() {
         val paymentListResponse =
             PaymentListResponse.builder()
+                .brandId("brand_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .currency(Currency.AED)
                 .customer(
@@ -38,6 +39,7 @@ internal class PaymentListResponseTest {
                 .subscriptionId("subscription_id")
                 .build()
 
+        assertThat(paymentListResponse.brandId()).isEqualTo("brand_id")
         assertThat(paymentListResponse.createdAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(paymentListResponse.currency()).isEqualTo(Currency.AED)
@@ -68,6 +70,7 @@ internal class PaymentListResponseTest {
         val jsonMapper = jsonMapper()
         val paymentListResponse =
             PaymentListResponse.builder()
+                .brandId("brand_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .currency(Currency.AED)
                 .customer(

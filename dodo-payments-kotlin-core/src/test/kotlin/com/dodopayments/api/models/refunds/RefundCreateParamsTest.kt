@@ -9,16 +9,45 @@ internal class RefundCreateParamsTest {
 
     @Test
     fun create() {
-        RefundCreateParams.builder().paymentId("payment_id").reason("reason").build()
+        RefundCreateParams.builder()
+            .paymentId("payment_id")
+            .addItem(
+                RefundCreateParams.Item.builder()
+                    .itemId("item_id")
+                    .amount(0)
+                    .taxInclusive(true)
+                    .build()
+            )
+            .reason("reason")
+            .build()
     }
 
     @Test
     fun body() {
-        val params = RefundCreateParams.builder().paymentId("payment_id").reason("reason").build()
+        val params =
+            RefundCreateParams.builder()
+                .paymentId("payment_id")
+                .addItem(
+                    RefundCreateParams.Item.builder()
+                        .itemId("item_id")
+                        .amount(0)
+                        .taxInclusive(true)
+                        .build()
+                )
+                .reason("reason")
+                .build()
 
         val body = params._body()
 
         assertThat(body.paymentId()).isEqualTo("payment_id")
+        assertThat(body.items())
+            .containsExactly(
+                RefundCreateParams.Item.builder()
+                    .itemId("item_id")
+                    .amount(0)
+                    .taxInclusive(true)
+                    .build()
+            )
         assertThat(body.reason()).isEqualTo("reason")
     }
 

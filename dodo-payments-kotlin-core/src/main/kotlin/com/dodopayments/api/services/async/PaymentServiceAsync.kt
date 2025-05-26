@@ -9,6 +9,8 @@ import com.dodopayments.api.models.payments.PaymentCreateParams
 import com.dodopayments.api.models.payments.PaymentCreateResponse
 import com.dodopayments.api.models.payments.PaymentListPageAsync
 import com.dodopayments.api.models.payments.PaymentListParams
+import com.dodopayments.api.models.payments.PaymentRetrieveLineItemsParams
+import com.dodopayments.api.models.payments.PaymentRetrieveLineItemsResponse
 import com.dodopayments.api.models.payments.PaymentRetrieveParams
 import com.google.errorprone.annotations.MustBeClosed
 
@@ -48,6 +50,26 @@ interface PaymentServiceAsync {
     /** @see [list] */
     suspend fun list(requestOptions: RequestOptions): PaymentListPageAsync =
         list(PaymentListParams.none(), requestOptions)
+
+    suspend fun retrieveLineItems(
+        paymentId: String,
+        params: PaymentRetrieveLineItemsParams = PaymentRetrieveLineItemsParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): PaymentRetrieveLineItemsResponse =
+        retrieveLineItems(params.toBuilder().paymentId(paymentId).build(), requestOptions)
+
+    /** @see [retrieveLineItems] */
+    suspend fun retrieveLineItems(
+        params: PaymentRetrieveLineItemsParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): PaymentRetrieveLineItemsResponse
+
+    /** @see [retrieveLineItems] */
+    suspend fun retrieveLineItems(
+        paymentId: String,
+        requestOptions: RequestOptions,
+    ): PaymentRetrieveLineItemsResponse =
+        retrieveLineItems(paymentId, PaymentRetrieveLineItemsParams.none(), requestOptions)
 
     /**
      * A view of [PaymentServiceAsync] that provides access to raw HTTP responses for each method.
@@ -105,5 +127,32 @@ interface PaymentServiceAsync {
         @MustBeClosed
         suspend fun list(requestOptions: RequestOptions): HttpResponseFor<PaymentListPageAsync> =
             list(PaymentListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /payments/{payment_id}/line-items`, but is otherwise
+         * the same as [PaymentServiceAsync.retrieveLineItems].
+         */
+        @MustBeClosed
+        suspend fun retrieveLineItems(
+            paymentId: String,
+            params: PaymentRetrieveLineItemsParams = PaymentRetrieveLineItemsParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<PaymentRetrieveLineItemsResponse> =
+            retrieveLineItems(params.toBuilder().paymentId(paymentId).build(), requestOptions)
+
+        /** @see [retrieveLineItems] */
+        @MustBeClosed
+        suspend fun retrieveLineItems(
+            params: PaymentRetrieveLineItemsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<PaymentRetrieveLineItemsResponse>
+
+        /** @see [retrieveLineItems] */
+        @MustBeClosed
+        suspend fun retrieveLineItems(
+            paymentId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<PaymentRetrieveLineItemsResponse> =
+            retrieveLineItems(paymentId, PaymentRetrieveLineItemsParams.none(), requestOptions)
     }
 }

@@ -18,6 +18,7 @@ internal class PaymentListPageResponseTest {
             PaymentListPageResponse.builder()
                 .addItem(
                     PaymentListResponse.builder()
+                        .brandId("brand_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .currency(Currency.AED)
                         .customer(
@@ -45,6 +46,7 @@ internal class PaymentListPageResponseTest {
         assertThat(paymentListPageResponse.items())
             .containsExactly(
                 PaymentListResponse.builder()
+                    .brandId("brand_id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .currency(Currency.AED)
                     .customer(
@@ -76,6 +78,7 @@ internal class PaymentListPageResponseTest {
             PaymentListPageResponse.builder()
                 .addItem(
                     PaymentListResponse.builder()
+                        .brandId("brand_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .currency(Currency.AED)
                         .customer(

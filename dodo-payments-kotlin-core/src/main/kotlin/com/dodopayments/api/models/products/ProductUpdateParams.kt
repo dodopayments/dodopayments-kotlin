@@ -39,6 +39,12 @@ private constructor(
     fun addons(): List<String>? = body.addons()
 
     /**
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun brandId(): String? = body.brandId()
+
+    /**
      * Description of the product, optional and must be at most 1000 characters.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -121,6 +127,13 @@ private constructor(
      * Unlike [addons], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _addons(): JsonField<List<String>> = body._addons()
+
+    /**
+     * Returns the raw JSON value of [brandId].
+     *
+     * Unlike [brandId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _brandId(): JsonField<String> = body._brandId()
 
     /**
      * Returns the raw JSON value of [description].
@@ -228,10 +241,10 @@ private constructor(
          * This is generally only useful if you are already constructing the body separately.
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [addons]
+         * - [brandId]
          * - [description]
          * - [imageId]
          * - [licenseKeyActivationMessage]
-         * - [licenseKeyActivationsLimit]
          * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
@@ -254,6 +267,16 @@ private constructor(
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
         fun addAddon(addon: String) = apply { body.addAddon(addon) }
+
+        fun brandId(brandId: String?) = apply { body.brandId(brandId) }
+
+        /**
+         * Sets [Builder.brandId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.brandId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun brandId(brandId: JsonField<String>) = apply { body.brandId(brandId) }
 
         /** Description of the product, optional and must be at most 1000 characters. */
         fun description(description: String?) = apply { body.description(description) }
@@ -562,6 +585,7 @@ private constructor(
     class Body
     private constructor(
         private val addons: JsonField<List<String>>,
+        private val brandId: JsonField<String>,
         private val description: JsonField<String>,
         private val imageId: JsonField<String>,
         private val licenseKeyActivationMessage: JsonField<String>,
@@ -579,6 +603,7 @@ private constructor(
             @JsonProperty("addons")
             @ExcludeMissing
             addons: JsonField<List<String>> = JsonMissing.of(),
+            @JsonProperty("brand_id") @ExcludeMissing brandId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("description")
             @ExcludeMissing
             description: JsonField<String> = JsonMissing.of(),
@@ -602,6 +627,7 @@ private constructor(
             taxCategory: JsonField<TaxCategory> = JsonMissing.of(),
         ) : this(
             addons,
+            brandId,
             description,
             imageId,
             licenseKeyActivationMessage,
@@ -621,6 +647,12 @@ private constructor(
          *   if the server responded with an unexpected value).
          */
         fun addons(): List<String>? = addons.getNullable("addons")
+
+        /**
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun brandId(): String? = brandId.getNullable("brand_id")
 
         /**
          * Description of the product, optional and must be at most 1000 characters.
@@ -709,6 +741,13 @@ private constructor(
          * Unlike [addons], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("addons") @ExcludeMissing fun _addons(): JsonField<List<String>> = addons
+
+        /**
+         * Returns the raw JSON value of [brandId].
+         *
+         * Unlike [brandId], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("brand_id") @ExcludeMissing fun _brandId(): JsonField<String> = brandId
 
         /**
          * Returns the raw JSON value of [description].
@@ -811,6 +850,7 @@ private constructor(
         class Builder internal constructor() {
 
             private var addons: JsonField<MutableList<String>>? = null
+            private var brandId: JsonField<String> = JsonMissing.of()
             private var description: JsonField<String> = JsonMissing.of()
             private var imageId: JsonField<String> = JsonMissing.of()
             private var licenseKeyActivationMessage: JsonField<String> = JsonMissing.of()
@@ -824,6 +864,7 @@ private constructor(
 
             internal fun from(body: Body) = apply {
                 addons = body.addons.map { it.toMutableList() }
+                brandId = body.brandId
                 description = body.description
                 imageId = body.imageId
                 licenseKeyActivationMessage = body.licenseKeyActivationMessage
@@ -861,6 +902,17 @@ private constructor(
                         checkKnown("addons", it).add(addon)
                     }
             }
+
+            fun brandId(brandId: String?) = brandId(JsonField.ofNullable(brandId))
+
+            /**
+             * Sets [Builder.brandId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.brandId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun brandId(brandId: JsonField<String>) = apply { this.brandId = brandId }
 
             /** Description of the product, optional and must be at most 1000 characters. */
             fun description(description: String?) = description(JsonField.ofNullable(description))
@@ -1053,6 +1105,7 @@ private constructor(
             fun build(): Body =
                 Body(
                     (addons ?: JsonMissing.of()).map { it.toImmutable() },
+                    brandId,
                     description,
                     imageId,
                     licenseKeyActivationMessage,
@@ -1074,6 +1127,7 @@ private constructor(
             }
 
             addons()
+            brandId()
             description()
             imageId()
             licenseKeyActivationMessage()
@@ -1102,6 +1156,7 @@ private constructor(
          */
         internal fun validity(): Int =
             (addons.asKnown()?.size ?: 0) +
+                (if (brandId.asKnown() == null) 0 else 1) +
                 (if (description.asKnown() == null) 0 else 1) +
                 (if (imageId.asKnown() == null) 0 else 1) +
                 (if (licenseKeyActivationMessage.asKnown() == null) 0 else 1) +
@@ -1117,17 +1172,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && addons == other.addons && description == other.description && imageId == other.imageId && licenseKeyActivationMessage == other.licenseKeyActivationMessage && licenseKeyActivationsLimit == other.licenseKeyActivationsLimit && licenseKeyDuration == other.licenseKeyDuration && licenseKeyEnabled == other.licenseKeyEnabled && name == other.name && price == other.price && taxCategory == other.taxCategory && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && addons == other.addons && brandId == other.brandId && description == other.description && imageId == other.imageId && licenseKeyActivationMessage == other.licenseKeyActivationMessage && licenseKeyActivationsLimit == other.licenseKeyActivationsLimit && licenseKeyDuration == other.licenseKeyDuration && licenseKeyEnabled == other.licenseKeyEnabled && name == other.name && price == other.price && taxCategory == other.taxCategory && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(addons, description, imageId, licenseKeyActivationMessage, licenseKeyActivationsLimit, licenseKeyDuration, licenseKeyEnabled, name, price, taxCategory, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(addons, brandId, description, imageId, licenseKeyActivationMessage, licenseKeyActivationsLimit, licenseKeyDuration, licenseKeyEnabled, name, price, taxCategory, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{addons=$addons, description=$description, imageId=$imageId, licenseKeyActivationMessage=$licenseKeyActivationMessage, licenseKeyActivationsLimit=$licenseKeyActivationsLimit, licenseKeyDuration=$licenseKeyDuration, licenseKeyEnabled=$licenseKeyEnabled, name=$name, price=$price, taxCategory=$taxCategory, additionalProperties=$additionalProperties}"
+            "Body{addons=$addons, brandId=$brandId, description=$description, imageId=$imageId, licenseKeyActivationMessage=$licenseKeyActivationMessage, licenseKeyActivationsLimit=$licenseKeyActivationsLimit, licenseKeyDuration=$licenseKeyDuration, licenseKeyEnabled=$licenseKeyEnabled, name=$name, price=$price, taxCategory=$taxCategory, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
