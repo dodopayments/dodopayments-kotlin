@@ -11,6 +11,7 @@ import java.util.Objects
 
 class SubscriptionListParams
 private constructor(
+    private val brandId: String?,
     private val createdAtGte: OffsetDateTime?,
     private val createdAtLte: OffsetDateTime?,
     private val customerId: String?,
@@ -20,6 +21,9 @@ private constructor(
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
+
+    /** filter by Brand id */
+    fun brandId(): String? = brandId
 
     /** Get events after this created time */
     fun createdAtGte(): OffsetDateTime? = createdAtGte
@@ -56,6 +60,7 @@ private constructor(
     /** A builder for [SubscriptionListParams]. */
     class Builder internal constructor() {
 
+        private var brandId: String? = null
         private var createdAtGte: OffsetDateTime? = null
         private var createdAtLte: OffsetDateTime? = null
         private var customerId: String? = null
@@ -66,6 +71,7 @@ private constructor(
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(subscriptionListParams: SubscriptionListParams) = apply {
+            brandId = subscriptionListParams.brandId
             createdAtGte = subscriptionListParams.createdAtGte
             createdAtLte = subscriptionListParams.createdAtLte
             customerId = subscriptionListParams.customerId
@@ -75,6 +81,9 @@ private constructor(
             additionalHeaders = subscriptionListParams.additionalHeaders.toBuilder()
             additionalQueryParams = subscriptionListParams.additionalQueryParams.toBuilder()
         }
+
+        /** filter by Brand id */
+        fun brandId(brandId: String?) = apply { this.brandId = brandId }
 
         /** Get events after this created time */
         fun createdAtGte(createdAtGte: OffsetDateTime?) = apply { this.createdAtGte = createdAtGte }
@@ -213,6 +222,7 @@ private constructor(
          */
         fun build(): SubscriptionListParams =
             SubscriptionListParams(
+                brandId,
                 createdAtGte,
                 createdAtLte,
                 customerId,
@@ -229,6 +239,7 @@ private constructor(
     override fun _queryParams(): QueryParams =
         QueryParams.builder()
             .apply {
+                brandId?.let { put("brand_id", it) }
                 createdAtGte?.let {
                     put("created_at_gte", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
                 }
@@ -248,11 +259,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionListParams && createdAtGte == other.createdAtGte && createdAtLte == other.createdAtLte && customerId == other.customerId && pageNumber == other.pageNumber && pageSize == other.pageSize && status == other.status && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is SubscriptionListParams && brandId == other.brandId && createdAtGte == other.createdAtGte && createdAtLte == other.createdAtLte && customerId == other.customerId && pageNumber == other.pageNumber && pageSize == other.pageSize && status == other.status && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(createdAtGte, createdAtLte, customerId, pageNumber, pageSize, status, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(brandId, createdAtGte, createdAtLte, customerId, pageNumber, pageSize, status, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "SubscriptionListParams{createdAtGte=$createdAtGte, createdAtLte=$createdAtLte, customerId=$customerId, pageNumber=$pageNumber, pageSize=$pageSize, status=$status, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "SubscriptionListParams{brandId=$brandId, createdAtGte=$createdAtGte, createdAtLte=$createdAtLte, customerId=$customerId, pageNumber=$pageNumber, pageSize=$pageSize, status=$status, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

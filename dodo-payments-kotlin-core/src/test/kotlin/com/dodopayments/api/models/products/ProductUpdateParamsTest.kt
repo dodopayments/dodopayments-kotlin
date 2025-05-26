@@ -15,6 +15,7 @@ internal class ProductUpdateParamsTest {
         ProductUpdateParams.builder()
             .id("id")
             .addAddon("string")
+            .brandId("brand_id")
             .description("description")
             .imageId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .licenseKeyActivationMessage("license_key_activation_message")
@@ -55,6 +56,7 @@ internal class ProductUpdateParamsTest {
             ProductUpdateParams.builder()
                 .id("id")
                 .addAddon("string")
+                .brandId("brand_id")
                 .description("description")
                 .imageId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .licenseKeyActivationMessage("license_key_activation_message")
@@ -82,6 +84,7 @@ internal class ProductUpdateParamsTest {
         val body = params._body()
 
         assertThat(body.addons()).containsExactly("string")
+        assertThat(body.brandId()).isEqualTo("brand_id")
         assertThat(body.description()).isEqualTo("description")
         assertThat(body.imageId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(body.licenseKeyActivationMessage()).isEqualTo("license_key_activation_message")

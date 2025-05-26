@@ -93,4 +93,18 @@ internal class PaymentServiceTest {
 
         page.response().validate()
     }
+
+    @Test
+    fun retrieveLineItems() {
+        val client =
+            DodoPaymentsOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val paymentService = client.payments()
+
+        val response = paymentService.retrieveLineItems("payment_id")
+
+        response.validate()
+    }
 }

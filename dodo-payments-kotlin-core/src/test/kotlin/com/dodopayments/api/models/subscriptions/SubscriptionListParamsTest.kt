@@ -12,6 +12,7 @@ internal class SubscriptionListParamsTest {
     @Test
     fun create() {
         SubscriptionListParams.builder()
+            .brandId("brand_id")
             .createdAtGte(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .createdAtLte(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .customerId("customer_id")
@@ -25,6 +26,7 @@ internal class SubscriptionListParamsTest {
     fun queryParams() {
         val params =
             SubscriptionListParams.builder()
+                .brandId("brand_id")
                 .createdAtGte(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .createdAtLte(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .customerId("customer_id")
@@ -38,6 +40,7 @@ internal class SubscriptionListParamsTest {
         assertThat(queryParams)
             .isEqualTo(
                 QueryParams.builder()
+                    .put("brand_id", "brand_id")
                     .put("created_at_gte", "2019-12-27T18:11:19.117Z")
                     .put("created_at_lte", "2019-12-27T18:11:19.117Z")
                     .put("customer_id", "customer_id")

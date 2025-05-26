@@ -1,42 +1,20 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.dodopayments.api.models.products
+package com.dodopayments.api.models.payments
 
 import com.dodopayments.api.core.Params
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
 import java.util.Objects
 
-class ProductListParams
+class PaymentRetrieveLineItemsParams
 private constructor(
-    private val archived: Boolean?,
-    private val brandId: String?,
-    private val pageNumber: Int?,
-    private val pageSize: Int?,
-    private val recurring: Boolean?,
+    private val paymentId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** List archived products */
-    fun archived(): Boolean? = archived
-
-    /** filter by Brand id */
-    fun brandId(): String? = brandId
-
-    /** Page number default is 0 */
-    fun pageNumber(): Int? = pageNumber
-
-    /** Page size default is 10 max is 100 */
-    fun pageSize(): Int? = pageSize
-
-    /**
-     * Filter products by pricing type:
-     * - `true`: Show only recurring pricing products (e.g. subscriptions)
-     * - `false`: Show only one-time price products
-     * - `null` or absent: Show both types of products
-     */
-    fun recurring(): Boolean? = recurring
+    fun paymentId(): String? = paymentId
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -46,80 +24,29 @@ private constructor(
 
     companion object {
 
-        fun none(): ProductListParams = builder().build()
+        fun none(): PaymentRetrieveLineItemsParams = builder().build()
 
-        /** Returns a mutable builder for constructing an instance of [ProductListParams]. */
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [PaymentRetrieveLineItemsParams].
+         */
         fun builder() = Builder()
     }
 
-    /** A builder for [ProductListParams]. */
+    /** A builder for [PaymentRetrieveLineItemsParams]. */
     class Builder internal constructor() {
 
-        private var archived: Boolean? = null
-        private var brandId: String? = null
-        private var pageNumber: Int? = null
-        private var pageSize: Int? = null
-        private var recurring: Boolean? = null
+        private var paymentId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
-        internal fun from(productListParams: ProductListParams) = apply {
-            archived = productListParams.archived
-            brandId = productListParams.brandId
-            pageNumber = productListParams.pageNumber
-            pageSize = productListParams.pageSize
-            recurring = productListParams.recurring
-            additionalHeaders = productListParams.additionalHeaders.toBuilder()
-            additionalQueryParams = productListParams.additionalQueryParams.toBuilder()
+        internal fun from(paymentRetrieveLineItemsParams: PaymentRetrieveLineItemsParams) = apply {
+            paymentId = paymentRetrieveLineItemsParams.paymentId
+            additionalHeaders = paymentRetrieveLineItemsParams.additionalHeaders.toBuilder()
+            additionalQueryParams = paymentRetrieveLineItemsParams.additionalQueryParams.toBuilder()
         }
 
-        /** List archived products */
-        fun archived(archived: Boolean?) = apply { this.archived = archived }
-
-        /**
-         * Alias for [Builder.archived].
-         *
-         * This unboxed primitive overload exists for backwards compatibility.
-         */
-        fun archived(archived: Boolean) = archived(archived as Boolean?)
-
-        /** filter by Brand id */
-        fun brandId(brandId: String?) = apply { this.brandId = brandId }
-
-        /** Page number default is 0 */
-        fun pageNumber(pageNumber: Int?) = apply { this.pageNumber = pageNumber }
-
-        /**
-         * Alias for [Builder.pageNumber].
-         *
-         * This unboxed primitive overload exists for backwards compatibility.
-         */
-        fun pageNumber(pageNumber: Int) = pageNumber(pageNumber as Int?)
-
-        /** Page size default is 10 max is 100 */
-        fun pageSize(pageSize: Int?) = apply { this.pageSize = pageSize }
-
-        /**
-         * Alias for [Builder.pageSize].
-         *
-         * This unboxed primitive overload exists for backwards compatibility.
-         */
-        fun pageSize(pageSize: Int) = pageSize(pageSize as Int?)
-
-        /**
-         * Filter products by pricing type:
-         * - `true`: Show only recurring pricing products (e.g. subscriptions)
-         * - `false`: Show only one-time price products
-         * - `null` or absent: Show both types of products
-         */
-        fun recurring(recurring: Boolean?) = apply { this.recurring = recurring }
-
-        /**
-         * Alias for [Builder.recurring].
-         *
-         * This unboxed primitive overload exists for backwards compatibility.
-         */
-        fun recurring(recurring: Boolean) = recurring(recurring as Boolean?)
+        fun paymentId(paymentId: String?) = apply { this.paymentId = paymentId }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -220,46 +147,38 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [ProductListParams].
+         * Returns an immutable instance of [PaymentRetrieveLineItemsParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          */
-        fun build(): ProductListParams =
-            ProductListParams(
-                archived,
-                brandId,
-                pageNumber,
-                pageSize,
-                recurring,
+        fun build(): PaymentRetrieveLineItemsParams =
+            PaymentRetrieveLineItemsParams(
+                paymentId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
     }
 
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> paymentId ?: ""
+            else -> ""
+        }
+
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams =
-        QueryParams.builder()
-            .apply {
-                archived?.let { put("archived", it.toString()) }
-                brandId?.let { put("brand_id", it) }
-                pageNumber?.let { put("page_number", it.toString()) }
-                pageSize?.let { put("page_size", it.toString()) }
-                recurring?.let { put("recurring", it.toString()) }
-                putAll(additionalQueryParams)
-            }
-            .build()
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is ProductListParams && archived == other.archived && brandId == other.brandId && pageNumber == other.pageNumber && pageSize == other.pageSize && recurring == other.recurring && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is PaymentRetrieveLineItemsParams && paymentId == other.paymentId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(archived, brandId, pageNumber, pageSize, recurring, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(paymentId, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ProductListParams{archived=$archived, brandId=$brandId, pageNumber=$pageNumber, pageSize=$pageSize, recurring=$recurring, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "PaymentRetrieveLineItemsParams{paymentId=$paymentId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
