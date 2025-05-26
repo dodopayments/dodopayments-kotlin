@@ -10,7 +10,13 @@ internal class ProductListParamsTest {
 
     @Test
     fun create() {
-        ProductListParams.builder().archived(true).pageNumber(0).pageSize(0).recurring(true).build()
+        ProductListParams.builder()
+            .archived(true)
+            .brandId("brand_id")
+            .pageNumber(0)
+            .pageSize(0)
+            .recurring(true)
+            .build()
     }
 
     @Test
@@ -18,6 +24,7 @@ internal class ProductListParamsTest {
         val params =
             ProductListParams.builder()
                 .archived(true)
+                .brandId("brand_id")
                 .pageNumber(0)
                 .pageSize(0)
                 .recurring(true)
@@ -29,6 +36,7 @@ internal class ProductListParamsTest {
             .isEqualTo(
                 QueryParams.builder()
                     .put("archived", "true")
+                    .put("brand_id", "brand_id")
                     .put("page_number", "0")
                     .put("page_size", "0")
                     .put("recurring", "true")

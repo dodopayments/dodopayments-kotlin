@@ -17,6 +17,7 @@ internal class ProductTest {
     fun create() {
         val product =
             Product.builder()
+                .brandId("brand_id")
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .isRecurring(true)
@@ -47,6 +48,7 @@ internal class ProductTest {
                 .name("name")
                 .build()
 
+        assertThat(product.brandId()).isEqualTo("brand_id")
         assertThat(product.businessId()).isEqualTo("business_id")
         assertThat(product.createdAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(product.isRecurring()).isEqualTo(true)
@@ -85,6 +87,7 @@ internal class ProductTest {
         val jsonMapper = jsonMapper()
         val product =
             Product.builder()
+                .brandId("brand_id")
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .isRecurring(true)

@@ -20,6 +20,7 @@ import java.util.Objects
 
 class PaymentListResponse
 private constructor(
+    private val brandId: JsonField<String>,
     private val createdAt: JsonField<OffsetDateTime>,
     private val currency: JsonField<Currency>,
     private val customer: JsonField<CustomerLimitedDetails>,
@@ -35,6 +36,7 @@ private constructor(
 
     @JsonCreator
     private constructor(
+        @JsonProperty("brand_id") @ExcludeMissing brandId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("created_at")
         @ExcludeMissing
         createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -58,6 +60,7 @@ private constructor(
         @ExcludeMissing
         subscriptionId: JsonField<String> = JsonMissing.of(),
     ) : this(
+        brandId,
         createdAt,
         currency,
         customer,
@@ -70,6 +73,12 @@ private constructor(
         subscriptionId,
         mutableMapOf(),
     )
+
+    /**
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun brandId(): String = brandId.getRequired("brand_id")
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
@@ -130,6 +139,13 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun subscriptionId(): String? = subscriptionId.getNullable("subscription_id")
+
+    /**
+     * Returns the raw JSON value of [brandId].
+     *
+     * Unlike [brandId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("brand_id") @ExcludeMissing fun _brandId(): JsonField<String> = brandId
 
     /**
      * Returns the raw JSON value of [createdAt].
@@ -231,6 +247,7 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
+         * .brandId()
          * .createdAt()
          * .currency()
          * .customer()
@@ -245,6 +262,7 @@ private constructor(
     /** A builder for [PaymentListResponse]. */
     class Builder internal constructor() {
 
+        private var brandId: JsonField<String>? = null
         private var createdAt: JsonField<OffsetDateTime>? = null
         private var currency: JsonField<Currency>? = null
         private var customer: JsonField<CustomerLimitedDetails>? = null
@@ -258,6 +276,7 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(paymentListResponse: PaymentListResponse) = apply {
+            brandId = paymentListResponse.brandId
             createdAt = paymentListResponse.createdAt
             currency = paymentListResponse.currency
             customer = paymentListResponse.customer
@@ -270,6 +289,16 @@ private constructor(
             subscriptionId = paymentListResponse.subscriptionId
             additionalProperties = paymentListResponse.additionalProperties.toMutableMap()
         }
+
+        fun brandId(brandId: String) = brandId(JsonField.of(brandId))
+
+        /**
+         * Sets [Builder.brandId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.brandId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun brandId(brandId: JsonField<String>) = apply { this.brandId = brandId }
 
         fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
 
@@ -417,6 +446,7 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
+         * .brandId()
          * .createdAt()
          * .currency()
          * .customer()
@@ -429,6 +459,7 @@ private constructor(
          */
         fun build(): PaymentListResponse =
             PaymentListResponse(
+                checkRequired("brandId", brandId),
                 checkRequired("createdAt", createdAt),
                 checkRequired("currency", currency),
                 checkRequired("customer", customer),
@@ -450,6 +481,7 @@ private constructor(
             return@apply
         }
 
+        brandId()
         createdAt()
         currency().validate()
         customer().validate()
@@ -477,7 +509,8 @@ private constructor(
      * Used for best match union deserialization.
      */
     internal fun validity(): Int =
-        (if (createdAt.asKnown() == null) 0 else 1) +
+        (if (brandId.asKnown() == null) 0 else 1) +
+            (if (createdAt.asKnown() == null) 0 else 1) +
             (currency.asKnown()?.validity() ?: 0) +
             (customer.asKnown()?.validity() ?: 0) +
             (metadata.asKnown()?.validity() ?: 0) +
@@ -592,15 +625,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is PaymentListResponse && createdAt == other.createdAt && currency == other.currency && customer == other.customer && metadata == other.metadata && paymentId == other.paymentId && totalAmount == other.totalAmount && paymentMethod == other.paymentMethod && paymentMethodType == other.paymentMethodType && status == other.status && subscriptionId == other.subscriptionId && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is PaymentListResponse && brandId == other.brandId && createdAt == other.createdAt && currency == other.currency && customer == other.customer && metadata == other.metadata && paymentId == other.paymentId && totalAmount == other.totalAmount && paymentMethod == other.paymentMethod && paymentMethodType == other.paymentMethodType && status == other.status && subscriptionId == other.subscriptionId && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(createdAt, currency, customer, metadata, paymentId, totalAmount, paymentMethod, paymentMethodType, status, subscriptionId, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(brandId, createdAt, currency, customer, metadata, paymentId, totalAmount, paymentMethod, paymentMethodType, status, subscriptionId, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "PaymentListResponse{createdAt=$createdAt, currency=$currency, customer=$customer, metadata=$metadata, paymentId=$paymentId, totalAmount=$totalAmount, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, status=$status, subscriptionId=$subscriptionId, additionalProperties=$additionalProperties}"
+        "PaymentListResponse{brandId=$brandId, createdAt=$createdAt, currency=$currency, customer=$customer, metadata=$metadata, paymentId=$paymentId, totalAmount=$totalAmount, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, status=$status, subscriptionId=$subscriptionId, additionalProperties=$additionalProperties}"
 }

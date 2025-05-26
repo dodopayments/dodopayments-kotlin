@@ -22,6 +22,8 @@ import com.dodopayments.api.models.payments.PaymentCreateResponse
 import com.dodopayments.api.models.payments.PaymentListPageAsync
 import com.dodopayments.api.models.payments.PaymentListPageResponse
 import com.dodopayments.api.models.payments.PaymentListParams
+import com.dodopayments.api.models.payments.PaymentRetrieveLineItemsParams
+import com.dodopayments.api.models.payments.PaymentRetrieveLineItemsResponse
 import com.dodopayments.api.models.payments.PaymentRetrieveParams
 
 class PaymentServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -53,6 +55,13 @@ class PaymentServiceAsyncImpl internal constructor(private val clientOptions: Cl
     ): PaymentListPageAsync =
         // get /payments
         withRawResponse().list(params, requestOptions).parse()
+
+    override suspend fun retrieveLineItems(
+        params: PaymentRetrieveLineItemsParams,
+        requestOptions: RequestOptions,
+    ): PaymentRetrieveLineItemsResponse =
+        // get /payments/{payment_id}/line-items
+        withRawResponse().retrieveLineItems(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         PaymentServiceAsync.WithRawResponse {
@@ -146,6 +155,36 @@ class PaymentServiceAsyncImpl internal constructor(private val clientOptions: Cl
                             .params(params)
                             .response(it)
                             .build()
+                    }
+            }
+        }
+
+        private val retrieveLineItemsHandler: Handler<PaymentRetrieveLineItemsResponse> =
+            jsonHandler<PaymentRetrieveLineItemsResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override suspend fun retrieveLineItems(
+            params: PaymentRetrieveLineItemsParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<PaymentRetrieveLineItemsResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("paymentId", params.paymentId())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("payments", params._pathParam(0), "line-items")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { retrieveLineItemsHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
                     }
             }
         }

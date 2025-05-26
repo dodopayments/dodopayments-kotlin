@@ -17,6 +17,7 @@ internal class RefundTest {
             Refund.builder()
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .isPartial(true)
                 .paymentId("payment_id")
                 .refundId("refund_id")
                 .status(RefundStatus.SUCCEEDED)
@@ -27,6 +28,7 @@ internal class RefundTest {
 
         assertThat(refund.businessId()).isEqualTo("business_id")
         assertThat(refund.createdAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(refund.isPartial()).isEqualTo(true)
         assertThat(refund.paymentId()).isEqualTo("payment_id")
         assertThat(refund.refundId()).isEqualTo("refund_id")
         assertThat(refund.status()).isEqualTo(RefundStatus.SUCCEEDED)
@@ -42,6 +44,7 @@ internal class RefundTest {
             Refund.builder()
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .isPartial(true)
                 .paymentId("payment_id")
                 .refundId("refund_id")
                 .status(RefundStatus.SUCCEEDED)

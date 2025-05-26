@@ -22,7 +22,17 @@ internal class RefundServiceTest {
 
         val refund =
             refundService.create(
-                RefundCreateParams.builder().paymentId("payment_id").reason("reason").build()
+                RefundCreateParams.builder()
+                    .paymentId("payment_id")
+                    .addItem(
+                        RefundCreateParams.Item.builder()
+                            .itemId("item_id")
+                            .amount(0)
+                            .taxInclusive(true)
+                            .build()
+                    )
+                    .reason("reason")
+                    .build()
             )
 
         refund.validate()
