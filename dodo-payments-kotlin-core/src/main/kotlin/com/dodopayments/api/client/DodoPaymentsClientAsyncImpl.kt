@@ -6,6 +6,8 @@ import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.getPackageVersion
 import com.dodopayments.api.services.async.AddonServiceAsync
 import com.dodopayments.api.services.async.AddonServiceAsyncImpl
+import com.dodopayments.api.services.async.BrandServiceAsync
+import com.dodopayments.api.services.async.BrandServiceAsyncImpl
 import com.dodopayments.api.services.async.CustomerServiceAsync
 import com.dodopayments.api.services.async.CustomerServiceAsyncImpl
 import com.dodopayments.api.services.async.DiscountServiceAsync
@@ -111,6 +113,10 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
         AddonServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
+    private val brands: BrandServiceAsync by lazy {
+        BrandServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
+
     override fun sync(): DodoPaymentsClient = sync
 
     override fun withRawResponse(): DodoPaymentsClientAsync.WithRawResponse = withRawResponse
@@ -144,6 +150,8 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
     override fun discounts(): DiscountServiceAsync = discounts
 
     override fun addons(): AddonServiceAsync = addons
+
+    override fun brands(): BrandServiceAsync = brands
 
     override fun close() = clientOptions.httpClient.close()
 
@@ -210,6 +218,10 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
             AddonServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val brands: BrandServiceAsync.WithRawResponse by lazy {
+            BrandServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun payments(): PaymentServiceAsync.WithRawResponse = payments
 
         override fun subscriptions(): SubscriptionServiceAsync.WithRawResponse = subscriptions
@@ -240,5 +252,7 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
         override fun discounts(): DiscountServiceAsync.WithRawResponse = discounts
 
         override fun addons(): AddonServiceAsync.WithRawResponse = addons
+
+        override fun brands(): BrandServiceAsync.WithRawResponse = brands
     }
 }

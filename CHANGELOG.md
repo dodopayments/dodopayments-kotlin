@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.27.1 (2025-05-27)
+
+Full Changelog: [v1.27.0...v1.27.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.27.0...v1.27.1)
+
+### Chores
+
+* configure new SDK language ([e4e3e0b](https://github.com/dodopayments/dodopayments-kotlin/commit/e4e3e0bfd5f3539b585b075602ef92d6b05da77b))
+
 ## 1.27.0 (2025-05-26)
 
 Full Changelog: [v1.25.0...v1.27.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.25.0...v1.27.0)

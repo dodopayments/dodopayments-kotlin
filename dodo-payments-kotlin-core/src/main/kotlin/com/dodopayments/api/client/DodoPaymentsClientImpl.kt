@@ -6,6 +6,8 @@ import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.getPackageVersion
 import com.dodopayments.api.services.blocking.AddonService
 import com.dodopayments.api.services.blocking.AddonServiceImpl
+import com.dodopayments.api.services.blocking.BrandService
+import com.dodopayments.api.services.blocking.BrandServiceImpl
 import com.dodopayments.api.services.blocking.CustomerService
 import com.dodopayments.api.services.blocking.CustomerServiceImpl
 import com.dodopayments.api.services.blocking.DiscountService
@@ -96,6 +98,8 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
 
     private val addons: AddonService by lazy { AddonServiceImpl(clientOptionsWithUserAgent) }
 
+    private val brands: BrandService by lazy { BrandServiceImpl(clientOptionsWithUserAgent) }
+
     override fun async(): DodoPaymentsClientAsync = async
 
     override fun withRawResponse(): DodoPaymentsClient.WithRawResponse = withRawResponse
@@ -129,6 +133,8 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
     override fun discounts(): DiscountService = discounts
 
     override fun addons(): AddonService = addons
+
+    override fun brands(): BrandService = brands
 
     override fun close() = clientOptions.httpClient.close()
 
@@ -195,6 +201,10 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
             AddonServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val brands: BrandService.WithRawResponse by lazy {
+            BrandServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun payments(): PaymentService.WithRawResponse = payments
 
         override fun subscriptions(): SubscriptionService.WithRawResponse = subscriptions
@@ -225,5 +235,7 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
         override fun discounts(): DiscountService.WithRawResponse = discounts
 
         override fun addons(): AddonService.WithRawResponse = addons
+
+        override fun brands(): BrandService.WithRawResponse = brands
     }
 }
