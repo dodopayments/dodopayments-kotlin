@@ -9,7 +9,6 @@ import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
-import com.dodopayments.api.models.subscriptions.SubscriptionChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeParams
 import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
 import com.dodopayments.api.models.subscriptions.SubscriptionStatus
@@ -155,22 +154,7 @@ internal class SubscriptionServiceTest {
                 .build()
         val subscriptionService = client.subscriptions()
 
-        subscriptionService.changePlan(
-            SubscriptionChangePlanParams.builder()
-                .subscriptionId("subscription_id")
-                .productId("product_id")
-                .prorationBillingMode(
-                    SubscriptionChangePlanParams.ProrationBillingMode.PRORATED_IMMEDIATELY
-                )
-                .quantity(0)
-                .addAddon(
-                    SubscriptionChangePlanParams.Addon.builder()
-                        .addonId("addon_id")
-                        .quantity(0)
-                        .build()
-                )
-                .build()
-        )
+        subscriptionService.changePlan("subscription_id")
     }
 
     @Test
