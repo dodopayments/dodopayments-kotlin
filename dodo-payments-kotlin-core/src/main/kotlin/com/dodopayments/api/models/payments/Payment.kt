@@ -42,6 +42,7 @@ private constructor(
     private val cardNetwork: JsonField<String>,
     private val cardType: JsonField<String>,
     private val discountId: JsonField<String>,
+    private val errorCode: JsonField<String>,
     private val errorMessage: JsonField<String>,
     private val paymentLink: JsonField<String>,
     private val paymentMethod: JsonField<String>,
@@ -101,6 +102,7 @@ private constructor(
         @JsonProperty("discount_id")
         @ExcludeMissing
         discountId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("error_code") @ExcludeMissing errorCode: JsonField<String> = JsonMissing.of(),
         @JsonProperty("error_message")
         @ExcludeMissing
         errorMessage: JsonField<String> = JsonMissing.of(),
@@ -146,6 +148,7 @@ private constructor(
         cardNetwork,
         cardType,
         discountId,
+        errorCode,
         errorMessage,
         paymentLink,
         paymentMethod,
@@ -294,6 +297,14 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun discountId(): String? = discountId.getNullable("discount_id")
+
+    /**
+     * An error code if the payment failed
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun errorCode(): String? = errorCode.getNullable("error_code")
 
     /**
      * An error message if the payment failed
@@ -519,6 +530,13 @@ private constructor(
     @JsonProperty("discount_id") @ExcludeMissing fun _discountId(): JsonField<String> = discountId
 
     /**
+     * Returns the raw JSON value of [errorCode].
+     *
+     * Unlike [errorCode], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("error_code") @ExcludeMissing fun _errorCode(): JsonField<String> = errorCode
+
+    /**
      * Returns the raw JSON value of [errorMessage].
      *
      * Unlike [errorMessage], this method doesn't throw if the JSON field has an unexpected type.
@@ -663,6 +681,7 @@ private constructor(
         private var cardNetwork: JsonField<String> = JsonMissing.of()
         private var cardType: JsonField<String> = JsonMissing.of()
         private var discountId: JsonField<String> = JsonMissing.of()
+        private var errorCode: JsonField<String> = JsonMissing.of()
         private var errorMessage: JsonField<String> = JsonMissing.of()
         private var paymentLink: JsonField<String> = JsonMissing.of()
         private var paymentMethod: JsonField<String> = JsonMissing.of()
@@ -694,6 +713,7 @@ private constructor(
             cardNetwork = payment.cardNetwork
             cardType = payment.cardType
             discountId = payment.discountId
+            errorCode = payment.errorCode
             errorMessage = payment.errorMessage
             paymentLink = payment.paymentLink
             paymentMethod = payment.paymentMethod
@@ -963,6 +983,18 @@ private constructor(
          */
         fun discountId(discountId: JsonField<String>) = apply { this.discountId = discountId }
 
+        /** An error code if the payment failed */
+        fun errorCode(errorCode: String?) = errorCode(JsonField.ofNullable(errorCode))
+
+        /**
+         * Sets [Builder.errorCode] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.errorCode] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun errorCode(errorCode: JsonField<String>) = apply { this.errorCode = errorCode }
+
         /** An error message if the payment failed */
         fun errorMessage(errorMessage: String?) = errorMessage(JsonField.ofNullable(errorMessage))
 
@@ -1190,6 +1222,7 @@ private constructor(
                 cardNetwork,
                 cardType,
                 discountId,
+                errorCode,
                 errorMessage,
                 paymentLink,
                 paymentMethod,
@@ -1229,6 +1262,7 @@ private constructor(
         cardNetwork()
         cardType()
         discountId()
+        errorCode()
         errorMessage()
         paymentLink()
         paymentMethod()
@@ -1274,6 +1308,7 @@ private constructor(
             (if (cardNetwork.asKnown() == null) 0 else 1) +
             (if (cardType.asKnown() == null) 0 else 1) +
             (if (discountId.asKnown() == null) 0 else 1) +
+            (if (errorCode.asKnown() == null) 0 else 1) +
             (if (errorMessage.asKnown() == null) 0 else 1) +
             (if (paymentLink.asKnown() == null) 0 else 1) +
             (if (paymentMethod.asKnown() == null) 0 else 1) +
@@ -1578,15 +1613,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Payment && billing == other.billing && brandId == other.brandId && businessId == other.businessId && createdAt == other.createdAt && currency == other.currency && customer == other.customer && disputes == other.disputes && metadata == other.metadata && paymentId == other.paymentId && refunds == other.refunds && settlementAmount == other.settlementAmount && settlementCurrency == other.settlementCurrency && totalAmount == other.totalAmount && cardIssuingCountry == other.cardIssuingCountry && cardLastFour == other.cardLastFour && cardNetwork == other.cardNetwork && cardType == other.cardType && discountId == other.discountId && errorMessage == other.errorMessage && paymentLink == other.paymentLink && paymentMethod == other.paymentMethod && paymentMethodType == other.paymentMethodType && productCart == other.productCart && settlementTax == other.settlementTax && status == other.status && subscriptionId == other.subscriptionId && tax == other.tax && updatedAt == other.updatedAt && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Payment && billing == other.billing && brandId == other.brandId && businessId == other.businessId && createdAt == other.createdAt && currency == other.currency && customer == other.customer && disputes == other.disputes && metadata == other.metadata && paymentId == other.paymentId && refunds == other.refunds && settlementAmount == other.settlementAmount && settlementCurrency == other.settlementCurrency && totalAmount == other.totalAmount && cardIssuingCountry == other.cardIssuingCountry && cardLastFour == other.cardLastFour && cardNetwork == other.cardNetwork && cardType == other.cardType && discountId == other.discountId && errorCode == other.errorCode && errorMessage == other.errorMessage && paymentLink == other.paymentLink && paymentMethod == other.paymentMethod && paymentMethodType == other.paymentMethodType && productCart == other.productCart && settlementTax == other.settlementTax && status == other.status && subscriptionId == other.subscriptionId && tax == other.tax && updatedAt == other.updatedAt && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(billing, brandId, businessId, createdAt, currency, customer, disputes, metadata, paymentId, refunds, settlementAmount, settlementCurrency, totalAmount, cardIssuingCountry, cardLastFour, cardNetwork, cardType, discountId, errorMessage, paymentLink, paymentMethod, paymentMethodType, productCart, settlementTax, status, subscriptionId, tax, updatedAt, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(billing, brandId, businessId, createdAt, currency, customer, disputes, metadata, paymentId, refunds, settlementAmount, settlementCurrency, totalAmount, cardIssuingCountry, cardLastFour, cardNetwork, cardType, discountId, errorCode, errorMessage, paymentLink, paymentMethod, paymentMethodType, productCart, settlementTax, status, subscriptionId, tax, updatedAt, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Payment{billing=$billing, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, disputes=$disputes, metadata=$metadata, paymentId=$paymentId, refunds=$refunds, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, totalAmount=$totalAmount, cardIssuingCountry=$cardIssuingCountry, cardLastFour=$cardLastFour, cardNetwork=$cardNetwork, cardType=$cardType, discountId=$discountId, errorMessage=$errorMessage, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, productCart=$productCart, settlementTax=$settlementTax, status=$status, subscriptionId=$subscriptionId, tax=$tax, updatedAt=$updatedAt, additionalProperties=$additionalProperties}"
+        "Payment{billing=$billing, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, disputes=$disputes, metadata=$metadata, paymentId=$paymentId, refunds=$refunds, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, totalAmount=$totalAmount, cardIssuingCountry=$cardIssuingCountry, cardLastFour=$cardLastFour, cardNetwork=$cardNetwork, cardType=$cardType, discountId=$discountId, errorCode=$errorCode, errorMessage=$errorMessage, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, productCart=$productCart, settlementTax=$settlementTax, status=$status, subscriptionId=$subscriptionId, tax=$tax, updatedAt=$updatedAt, additionalProperties=$additionalProperties}"
 }

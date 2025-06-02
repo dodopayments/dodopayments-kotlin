@@ -5,7 +5,6 @@ package com.dodopayments.api.services.blocking
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
 import com.dodopayments.api.models.customers.CustomerCreateParams
-import com.dodopayments.api.models.customers.CustomerUpdateParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -56,14 +55,7 @@ internal class CustomerServiceTest {
                 .build()
         val customerService = client.customers()
 
-        val customer =
-            customerService.update(
-                CustomerUpdateParams.builder()
-                    .customerId("customer_id")
-                    .name("name")
-                    .phoneNumber("phone_number")
-                    .build()
-            )
+        val customer = customerService.update("customer_id")
 
         customer.validate()
     }
