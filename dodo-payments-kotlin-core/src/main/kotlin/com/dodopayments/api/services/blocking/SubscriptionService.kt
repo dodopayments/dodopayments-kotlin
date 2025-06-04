@@ -74,7 +74,7 @@ interface SubscriptionService {
 
     fun changePlan(
         subscriptionId: String,
-        params: SubscriptionChangePlanParams = SubscriptionChangePlanParams.none(),
+        params: SubscriptionChangePlanParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ) = changePlan(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
 
@@ -83,10 +83,6 @@ interface SubscriptionService {
         params: SubscriptionChangePlanParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     )
-
-    /** @see [changePlan] */
-    fun changePlan(subscriptionId: String, requestOptions: RequestOptions) =
-        changePlan(subscriptionId, SubscriptionChangePlanParams.none(), requestOptions)
 
     fun charge(
         subscriptionId: String,
@@ -192,7 +188,7 @@ interface SubscriptionService {
         @MustBeClosed
         fun changePlan(
             subscriptionId: String,
-            params: SubscriptionChangePlanParams = SubscriptionChangePlanParams.none(),
+            params: SubscriptionChangePlanParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse =
             changePlan(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
@@ -203,11 +199,6 @@ interface SubscriptionService {
             params: SubscriptionChangePlanParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
-
-        /** @see [changePlan] */
-        @MustBeClosed
-        fun changePlan(subscriptionId: String, requestOptions: RequestOptions): HttpResponse =
-            changePlan(subscriptionId, SubscriptionChangePlanParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /subscriptions/{subscription_id}/charge`, but is
