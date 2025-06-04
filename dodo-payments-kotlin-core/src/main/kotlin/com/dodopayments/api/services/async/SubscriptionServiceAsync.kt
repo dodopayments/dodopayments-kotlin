@@ -74,7 +74,7 @@ interface SubscriptionServiceAsync {
 
     suspend fun changePlan(
         subscriptionId: String,
-        params: SubscriptionChangePlanParams = SubscriptionChangePlanParams.none(),
+        params: SubscriptionChangePlanParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ) = changePlan(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
 
@@ -83,10 +83,6 @@ interface SubscriptionServiceAsync {
         params: SubscriptionChangePlanParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     )
-
-    /** @see [changePlan] */
-    suspend fun changePlan(subscriptionId: String, requestOptions: RequestOptions) =
-        changePlan(subscriptionId, SubscriptionChangePlanParams.none(), requestOptions)
 
     suspend fun charge(
         subscriptionId: String,
@@ -195,7 +191,7 @@ interface SubscriptionServiceAsync {
         @MustBeClosed
         suspend fun changePlan(
             subscriptionId: String,
-            params: SubscriptionChangePlanParams = SubscriptionChangePlanParams.none(),
+            params: SubscriptionChangePlanParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse =
             changePlan(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
@@ -206,14 +202,6 @@ interface SubscriptionServiceAsync {
             params: SubscriptionChangePlanParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
-
-        /** @see [changePlan] */
-        @MustBeClosed
-        suspend fun changePlan(
-            subscriptionId: String,
-            requestOptions: RequestOptions,
-        ): HttpResponse =
-            changePlan(subscriptionId, SubscriptionChangePlanParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /subscriptions/{subscription_id}/charge`, but is
