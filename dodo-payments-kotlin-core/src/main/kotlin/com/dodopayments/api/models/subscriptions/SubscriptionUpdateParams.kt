@@ -41,6 +41,12 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
+    fun cancelAtNextBillingDate(): Boolean? = body.cancelAtNextBillingDate()
+
+    /**
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
     fun disableOnDemand(): DisableOnDemand? = body.disableOnDemand()
 
     /**
@@ -67,6 +73,14 @@ private constructor(
      * Unlike [billing], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _billing(): JsonField<BillingAddress> = body._billing()
+
+    /**
+     * Returns the raw JSON value of [cancelAtNextBillingDate].
+     *
+     * Unlike [cancelAtNextBillingDate], this method doesn't throw if the JSON field has an
+     * unexpected type.
+     */
+    fun _cancelAtNextBillingDate(): JsonField<Boolean> = body._cancelAtNextBillingDate()
 
     /**
      * Returns the raw JSON value of [disableOnDemand].
@@ -135,10 +149,10 @@ private constructor(
          * This is generally only useful if you are already constructing the body separately.
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [billing]
+         * - [cancelAtNextBillingDate]
          * - [disableOnDemand]
          * - [metadata]
          * - [status]
-         * - [taxId]
          * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
@@ -153,6 +167,29 @@ private constructor(
          * supported value.
          */
         fun billing(billing: JsonField<BillingAddress>) = apply { body.billing(billing) }
+
+        fun cancelAtNextBillingDate(cancelAtNextBillingDate: Boolean?) = apply {
+            body.cancelAtNextBillingDate(cancelAtNextBillingDate)
+        }
+
+        /**
+         * Alias for [Builder.cancelAtNextBillingDate].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun cancelAtNextBillingDate(cancelAtNextBillingDate: Boolean) =
+            cancelAtNextBillingDate(cancelAtNextBillingDate as Boolean?)
+
+        /**
+         * Sets [Builder.cancelAtNextBillingDate] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cancelAtNextBillingDate] with a well-typed [Boolean]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
+        fun cancelAtNextBillingDate(cancelAtNextBillingDate: JsonField<Boolean>) = apply {
+            body.cancelAtNextBillingDate(cancelAtNextBillingDate)
+        }
 
         fun disableOnDemand(disableOnDemand: DisableOnDemand?) = apply {
             body.disableOnDemand(disableOnDemand)
@@ -347,6 +384,7 @@ private constructor(
     class Body
     private constructor(
         private val billing: JsonField<BillingAddress>,
+        private val cancelAtNextBillingDate: JsonField<Boolean>,
         private val disableOnDemand: JsonField<DisableOnDemand>,
         private val metadata: JsonField<Metadata>,
         private val status: JsonField<SubscriptionStatus>,
@@ -359,6 +397,9 @@ private constructor(
             @JsonProperty("billing")
             @ExcludeMissing
             billing: JsonField<BillingAddress> = JsonMissing.of(),
+            @JsonProperty("cancel_at_next_billing_date")
+            @ExcludeMissing
+            cancelAtNextBillingDate: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("disable_on_demand")
             @ExcludeMissing
             disableOnDemand: JsonField<DisableOnDemand> = JsonMissing.of(),
@@ -369,13 +410,28 @@ private constructor(
             @ExcludeMissing
             status: JsonField<SubscriptionStatus> = JsonMissing.of(),
             @JsonProperty("tax_id") @ExcludeMissing taxId: JsonField<String> = JsonMissing.of(),
-        ) : this(billing, disableOnDemand, metadata, status, taxId, mutableMapOf())
+        ) : this(
+            billing,
+            cancelAtNextBillingDate,
+            disableOnDemand,
+            metadata,
+            status,
+            taxId,
+            mutableMapOf(),
+        )
 
         /**
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
         fun billing(): BillingAddress? = billing.getNullable("billing")
+
+        /**
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun cancelAtNextBillingDate(): Boolean? =
+            cancelAtNextBillingDate.getNullable("cancel_at_next_billing_date")
 
         /**
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
@@ -407,6 +463,16 @@ private constructor(
          * Unlike [billing], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("billing") @ExcludeMissing fun _billing(): JsonField<BillingAddress> = billing
+
+        /**
+         * Returns the raw JSON value of [cancelAtNextBillingDate].
+         *
+         * Unlike [cancelAtNextBillingDate], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("cancel_at_next_billing_date")
+        @ExcludeMissing
+        fun _cancelAtNextBillingDate(): JsonField<Boolean> = cancelAtNextBillingDate
 
         /**
          * Returns the raw JSON value of [disableOnDemand].
@@ -463,6 +529,7 @@ private constructor(
         class Builder internal constructor() {
 
             private var billing: JsonField<BillingAddress> = JsonMissing.of()
+            private var cancelAtNextBillingDate: JsonField<Boolean> = JsonMissing.of()
             private var disableOnDemand: JsonField<DisableOnDemand> = JsonMissing.of()
             private var metadata: JsonField<Metadata> = JsonMissing.of()
             private var status: JsonField<SubscriptionStatus> = JsonMissing.of()
@@ -471,6 +538,7 @@ private constructor(
 
             internal fun from(body: Body) = apply {
                 billing = body.billing
+                cancelAtNextBillingDate = body.cancelAtNextBillingDate
                 disableOnDemand = body.disableOnDemand
                 metadata = body.metadata
                 status = body.status
@@ -488,6 +556,28 @@ private constructor(
              * supported value.
              */
             fun billing(billing: JsonField<BillingAddress>) = apply { this.billing = billing }
+
+            fun cancelAtNextBillingDate(cancelAtNextBillingDate: Boolean?) =
+                cancelAtNextBillingDate(JsonField.ofNullable(cancelAtNextBillingDate))
+
+            /**
+             * Alias for [Builder.cancelAtNextBillingDate].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun cancelAtNextBillingDate(cancelAtNextBillingDate: Boolean) =
+                cancelAtNextBillingDate(cancelAtNextBillingDate as Boolean?)
+
+            /**
+             * Sets [Builder.cancelAtNextBillingDate] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.cancelAtNextBillingDate] with a well-typed [Boolean]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun cancelAtNextBillingDate(cancelAtNextBillingDate: JsonField<Boolean>) = apply {
+                this.cancelAtNextBillingDate = cancelAtNextBillingDate
+            }
 
             fun disableOnDemand(disableOnDemand: DisableOnDemand?) =
                 disableOnDemand(JsonField.ofNullable(disableOnDemand))
@@ -563,6 +653,7 @@ private constructor(
             fun build(): Body =
                 Body(
                     billing,
+                    cancelAtNextBillingDate,
                     disableOnDemand,
                     metadata,
                     status,
@@ -579,6 +670,7 @@ private constructor(
             }
 
             billing()?.validate()
+            cancelAtNextBillingDate()
             disableOnDemand()?.validate()
             metadata()?.validate()
             status()?.validate()
@@ -602,6 +694,7 @@ private constructor(
          */
         internal fun validity(): Int =
             (billing.asKnown()?.validity() ?: 0) +
+                (if (cancelAtNextBillingDate.asKnown() == null) 0 else 1) +
                 (disableOnDemand.asKnown()?.validity() ?: 0) +
                 (metadata.asKnown()?.validity() ?: 0) +
                 (status.asKnown()?.validity() ?: 0) +
@@ -612,17 +705,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && billing == other.billing && disableOnDemand == other.disableOnDemand && metadata == other.metadata && status == other.status && taxId == other.taxId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && billing == other.billing && cancelAtNextBillingDate == other.cancelAtNextBillingDate && disableOnDemand == other.disableOnDemand && metadata == other.metadata && status == other.status && taxId == other.taxId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(billing, disableOnDemand, metadata, status, taxId, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(billing, cancelAtNextBillingDate, disableOnDemand, metadata, status, taxId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{billing=$billing, disableOnDemand=$disableOnDemand, metadata=$metadata, status=$status, taxId=$taxId, additionalProperties=$additionalProperties}"
+            "Body{billing=$billing, cancelAtNextBillingDate=$cancelAtNextBillingDate, disableOnDemand=$disableOnDemand, metadata=$metadata, status=$status, taxId=$taxId, additionalProperties=$additionalProperties}"
     }
 
     class DisableOnDemand
