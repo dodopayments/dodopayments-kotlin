@@ -28,6 +28,7 @@ internal class SubscriptionListResponseTest {
                         .zipcode("zipcode")
                         .build()
                 )
+                .cancelAtNextBillingDate(true)
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .currency(Currency.AED)
                 .customer(
@@ -70,6 +71,7 @@ internal class SubscriptionListResponseTest {
                     .zipcode("zipcode")
                     .build()
             )
+        assertThat(subscriptionListResponse.cancelAtNextBillingDate()).isEqualTo(true)
         assertThat(subscriptionListResponse.createdAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(subscriptionListResponse.currency()).isEqualTo(Currency.AED)
@@ -123,6 +125,7 @@ internal class SubscriptionListResponseTest {
                         .zipcode("zipcode")
                         .build()
                 )
+                .cancelAtNextBillingDate(true)
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .currency(Currency.AED)
                 .customer(
