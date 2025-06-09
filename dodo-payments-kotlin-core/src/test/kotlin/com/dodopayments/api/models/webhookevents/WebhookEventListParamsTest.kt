@@ -18,6 +18,7 @@ internal class WebhookEventListParamsTest {
             .objectId("object_id")
             .pageNumber(0)
             .pageSize(0)
+            .webhookId("webhook_id")
             .build()
     }
 
@@ -31,6 +32,7 @@ internal class WebhookEventListParamsTest {
                 .objectId("object_id")
                 .pageNumber(0)
                 .pageSize(0)
+                .webhookId("webhook_id")
                 .build()
 
         val queryParams = params._queryParams()
@@ -44,6 +46,7 @@ internal class WebhookEventListParamsTest {
                     .put("object_id", "object_id")
                     .put("page_number", "0")
                     .put("page_size", "0")
+                    .put("webhook_id", "webhook_id")
                     .build()
             )
     }

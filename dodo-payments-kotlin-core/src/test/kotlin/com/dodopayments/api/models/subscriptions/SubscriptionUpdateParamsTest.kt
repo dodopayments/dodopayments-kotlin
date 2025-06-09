@@ -24,6 +24,7 @@ internal class SubscriptionUpdateParamsTest {
                     .zipcode("zipcode")
                     .build()
             )
+            .cancelAtNextBillingDate(true)
             .disableOnDemand(
                 SubscriptionUpdateParams.DisableOnDemand.builder()
                     .nextBillingDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -62,6 +63,7 @@ internal class SubscriptionUpdateParamsTest {
                         .zipcode("zipcode")
                         .build()
                 )
+                .cancelAtNextBillingDate(true)
                 .disableOnDemand(
                     SubscriptionUpdateParams.DisableOnDemand.builder()
                         .nextBillingDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -88,6 +90,7 @@ internal class SubscriptionUpdateParamsTest {
                     .zipcode("zipcode")
                     .build()
             )
+        assertThat(body.cancelAtNextBillingDate()).isEqualTo(true)
         assertThat(body.disableOnDemand())
             .isEqualTo(
                 SubscriptionUpdateParams.DisableOnDemand.builder()
