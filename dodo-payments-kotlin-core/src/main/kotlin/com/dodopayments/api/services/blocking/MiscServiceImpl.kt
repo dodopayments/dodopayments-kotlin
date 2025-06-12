@@ -47,6 +47,7 @@ class MiscServiceImpl internal constructor(private val clientOptions: ClientOpti
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("checkout", "supported_countries")
                     .build()
                     .prepare(clientOptions, params)

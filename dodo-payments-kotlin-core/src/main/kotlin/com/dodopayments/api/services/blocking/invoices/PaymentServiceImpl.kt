@@ -45,6 +45,7 @@ class PaymentServiceImpl internal constructor(private val clientOptions: ClientO
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("invoices", "payments", params._pathParam(0))
                     .build()
                     .prepare(clientOptions, params)
