@@ -50,6 +50,7 @@ class PayoutServiceAsyncImpl internal constructor(private val clientOptions: Cli
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("payouts")
                     .build()
                     .prepareAsync(clientOptions, params)
