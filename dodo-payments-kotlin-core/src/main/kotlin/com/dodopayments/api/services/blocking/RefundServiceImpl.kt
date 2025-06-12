@@ -59,6 +59,7 @@ class RefundServiceImpl internal constructor(private val clientOptions: ClientOp
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("refunds")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -89,6 +90,7 @@ class RefundServiceImpl internal constructor(private val clientOptions: ClientOp
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("refunds", params._pathParam(0))
                     .build()
                     .prepare(clientOptions, params)
@@ -116,6 +118,7 @@ class RefundServiceImpl internal constructor(private val clientOptions: ClientOp
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("refunds")
                     .build()
                     .prepare(clientOptions, params)

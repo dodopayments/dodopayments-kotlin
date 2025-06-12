@@ -79,6 +79,7 @@ class PaymentServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("payments")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -109,6 +110,7 @@ class PaymentServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("payments", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -136,6 +138,7 @@ class PaymentServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("payments")
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -173,6 +176,7 @@ class PaymentServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("payments", params._pathParam(0), "line-items")
                     .build()
                     .prepareAsync(clientOptions, params)

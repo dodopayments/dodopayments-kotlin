@@ -48,6 +48,7 @@ class MiscServiceAsyncImpl internal constructor(private val clientOptions: Clien
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("checkout", "supported_countries")
                     .build()
                     .prepareAsync(clientOptions, params)
