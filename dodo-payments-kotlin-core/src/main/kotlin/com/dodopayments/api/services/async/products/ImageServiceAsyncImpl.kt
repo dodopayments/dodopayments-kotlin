@@ -28,6 +28,9 @@ class ImageServiceAsyncImpl internal constructor(private val clientOptions: Clie
 
     override fun withRawResponse(): ImageServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ImageServiceAsync =
+        ImageServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun update(
         params: ImageUpdateParams,
         requestOptions: RequestOptions,
@@ -39,6 +42,13 @@ class ImageServiceAsyncImpl internal constructor(private val clientOptions: Clie
         ImageServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): ImageServiceAsync.WithRawResponse =
+            ImageServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val updateHandler: Handler<ImageUpdateResponse> =
             jsonHandler<ImageUpdateResponse>(clientOptions.jsonMapper)

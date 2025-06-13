@@ -32,6 +32,9 @@ class RefundServiceAsyncImpl internal constructor(private val clientOptions: Cli
 
     override fun withRawResponse(): RefundServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): RefundServiceAsync =
+        RefundServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun create(
         params: RefundCreateParams,
         requestOptions: RequestOptions,
@@ -57,6 +60,13 @@ class RefundServiceAsyncImpl internal constructor(private val clientOptions: Cli
         RefundServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): RefundServiceAsync.WithRawResponse =
+            RefundServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val createHandler: Handler<Refund> =
             jsonHandler<Refund>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

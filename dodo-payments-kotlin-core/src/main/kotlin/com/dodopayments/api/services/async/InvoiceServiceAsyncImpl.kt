@@ -17,6 +17,9 @@ class InvoiceServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
     override fun withRawResponse(): InvoiceServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): InvoiceServiceAsync =
+        InvoiceServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun payments(): PaymentServiceAsync = payments
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -25,6 +28,13 @@ class InvoiceServiceAsyncImpl internal constructor(private val clientOptions: Cl
         private val payments: PaymentServiceAsync.WithRawResponse by lazy {
             PaymentServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): InvoiceServiceAsync.WithRawResponse =
+            InvoiceServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         override fun payments(): PaymentServiceAsync.WithRawResponse = payments
     }

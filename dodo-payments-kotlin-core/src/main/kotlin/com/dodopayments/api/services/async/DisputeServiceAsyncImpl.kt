@@ -30,6 +30,9 @@ class DisputeServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
     override fun withRawResponse(): DisputeServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): DisputeServiceAsync =
+        DisputeServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun retrieve(
         params: DisputeRetrieveParams,
         requestOptions: RequestOptions,
@@ -48,6 +51,13 @@ class DisputeServiceAsyncImpl internal constructor(private val clientOptions: Cl
         DisputeServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): DisputeServiceAsync.WithRawResponse =
+            DisputeServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val retrieveHandler: Handler<DisputeRetrieveResponse> =
             jsonHandler<DisputeRetrieveResponse>(clientOptions.jsonMapper)

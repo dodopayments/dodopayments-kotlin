@@ -26,6 +26,9 @@ class MiscServiceAsyncImpl internal constructor(private val clientOptions: Clien
 
     override fun withRawResponse(): MiscServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MiscServiceAsync =
+        MiscServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun listSupportedCountries(
         params: MiscListSupportedCountriesParams,
         requestOptions: RequestOptions,
@@ -37,6 +40,13 @@ class MiscServiceAsyncImpl internal constructor(private val clientOptions: Clien
         MiscServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): MiscServiceAsync.WithRawResponse =
+            MiscServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val listSupportedCountriesHandler: Handler<List<CountryCode>> =
             jsonHandler<List<CountryCode>>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

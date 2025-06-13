@@ -104,6 +104,9 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
 
     override fun withRawResponse(): DodoPaymentsClient.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): DodoPaymentsClient =
+        DodoPaymentsClientImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun payments(): PaymentService = payments
 
     override fun subscriptions(): SubscriptionService = subscriptions
@@ -204,6 +207,13 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
         private val brands: BrandService.WithRawResponse by lazy {
             BrandServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): DodoPaymentsClient.WithRawResponse =
+            DodoPaymentsClientImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         override fun payments(): PaymentService.WithRawResponse = payments
 

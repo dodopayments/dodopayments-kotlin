@@ -28,6 +28,9 @@ class ImageServiceImpl internal constructor(private val clientOptions: ClientOpt
 
     override fun withRawResponse(): ImageService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ImageService =
+        ImageServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun update(
         params: ImageUpdateParams,
         requestOptions: RequestOptions,
@@ -39,6 +42,11 @@ class ImageServiceImpl internal constructor(private val clientOptions: ClientOpt
         ImageService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): ImageService.WithRawResponse =
+            ImageServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
 
         private val updateHandler: Handler<ImageUpdateResponse> =
             jsonHandler<ImageUpdateResponse>(clientOptions.jsonMapper)

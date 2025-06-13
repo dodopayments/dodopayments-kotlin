@@ -32,6 +32,9 @@ class LicenseServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
     override fun withRawResponse(): LicenseServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): LicenseServiceAsync =
+        LicenseServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun activate(
         params: LicenseActivateParams,
         requestOptions: RequestOptions,
@@ -58,6 +61,13 @@ class LicenseServiceAsyncImpl internal constructor(private val clientOptions: Cl
         LicenseServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): LicenseServiceAsync.WithRawResponse =
+            LicenseServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val activateHandler: Handler<LicenseKeyInstance> =
             jsonHandler<LicenseKeyInstance>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
