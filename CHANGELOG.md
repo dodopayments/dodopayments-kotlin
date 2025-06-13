@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.33.0 (2025-06-13)
+
+Full Changelog: [v1.32.0...v1.33.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.32.0...v1.33.0)
+
+### Features
+
+* **client:** add a `withOptions` method ([7e00244](https://github.com/dodopayments/dodopayments-kotlin/commit/7e0024420948ba46db4744d6b361c6a7e4ef65b7))
+* **client:** implement per-endpoint base URL support ([ccbef01](https://github.com/dodopayments/dodopayments-kotlin/commit/ccbef01a45d2a343814b188c7c3cae02a9b953ee))
+
 ## 1.32.0 (2025-06-09)
 
 Full Changelog: [v1.30.2...v1.32.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.30.2...v1.32.0)
