@@ -35,6 +35,9 @@ class AddonServiceAsyncImpl internal constructor(private val clientOptions: Clie
 
     override fun withRawResponse(): AddonServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): AddonServiceAsync =
+        AddonServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun create(
         params: AddonCreateParams,
         requestOptions: RequestOptions,
@@ -74,6 +77,13 @@ class AddonServiceAsyncImpl internal constructor(private val clientOptions: Clie
         AddonServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): AddonServiceAsync.WithRawResponse =
+            AddonServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val createHandler: Handler<AddonResponse> =
             jsonHandler<AddonResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

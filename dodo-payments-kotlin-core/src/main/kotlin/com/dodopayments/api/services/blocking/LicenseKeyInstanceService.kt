@@ -2,6 +2,7 @@
 
 package com.dodopayments.api.services.blocking
 
+import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.models.licensekeyinstances.LicenseKeyInstance
@@ -17,6 +18,13 @@ interface LicenseKeyInstanceService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: (ClientOptions.Builder) -> Unit): LicenseKeyInstanceService
 
     fun retrieve(
         id: String,
@@ -60,6 +68,15 @@ interface LicenseKeyInstanceService {
      * method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): LicenseKeyInstanceService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /license_key_instances/{id}`, but is otherwise the

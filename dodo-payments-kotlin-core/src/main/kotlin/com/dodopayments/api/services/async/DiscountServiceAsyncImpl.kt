@@ -36,6 +36,9 @@ class DiscountServiceAsyncImpl internal constructor(private val clientOptions: C
 
     override fun withRawResponse(): DiscountServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): DiscountServiceAsync =
+        DiscountServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun create(
         params: DiscountCreateParams,
         requestOptions: RequestOptions,
@@ -73,6 +76,13 @@ class DiscountServiceAsyncImpl internal constructor(private val clientOptions: C
         DiscountServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): DiscountServiceAsync.WithRawResponse =
+            DiscountServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val createHandler: Handler<Discount> =
             jsonHandler<Discount>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

@@ -36,6 +36,9 @@ class BrandServiceAsyncImpl internal constructor(private val clientOptions: Clie
 
     override fun withRawResponse(): BrandServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): BrandServiceAsync =
+        BrandServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun create(
         params: BrandCreateParams,
         requestOptions: RequestOptions,
@@ -75,6 +78,13 @@ class BrandServiceAsyncImpl internal constructor(private val clientOptions: Clie
         BrandServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): BrandServiceAsync.WithRawResponse =
+            BrandServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val createHandler: Handler<BrandCreateResponse> =
             jsonHandler<BrandCreateResponse>(clientOptions.jsonMapper)

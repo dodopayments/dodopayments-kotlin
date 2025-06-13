@@ -28,6 +28,11 @@ internal constructor(private val clientOptions: ClientOptions) : CustomerPortalS
 
     override fun withRawResponse(): CustomerPortalServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(
+        modifier: (ClientOptions.Builder) -> Unit
+    ): CustomerPortalServiceAsync =
+        CustomerPortalServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun create(
         params: CustomerPortalCreateParams,
         requestOptions: RequestOptions,
@@ -39,6 +44,13 @@ internal constructor(private val clientOptions: ClientOptions) : CustomerPortalS
         CustomerPortalServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): CustomerPortalServiceAsync.WithRawResponse =
+            CustomerPortalServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val createHandler: Handler<CustomerPortalSession> =
             jsonHandler<CustomerPortalSession>(clientOptions.jsonMapper)

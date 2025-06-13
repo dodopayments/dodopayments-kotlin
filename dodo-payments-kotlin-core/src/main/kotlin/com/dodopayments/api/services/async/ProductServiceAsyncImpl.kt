@@ -41,6 +41,9 @@ class ProductServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
     override fun withRawResponse(): ProductServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ProductServiceAsync =
+        ProductServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun images(): ImageServiceAsync = images
 
     override suspend fun create(
@@ -87,6 +90,13 @@ class ProductServiceAsyncImpl internal constructor(private val clientOptions: Cl
         private val images: ImageServiceAsync.WithRawResponse by lazy {
             ImageServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): ProductServiceAsync.WithRawResponse =
+            ProductServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         override fun images(): ImageServiceAsync.WithRawResponse = images
 

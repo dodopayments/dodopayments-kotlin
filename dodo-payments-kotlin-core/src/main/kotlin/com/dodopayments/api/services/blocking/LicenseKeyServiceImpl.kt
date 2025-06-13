@@ -32,6 +32,9 @@ class LicenseKeyServiceImpl internal constructor(private val clientOptions: Clie
 
     override fun withRawResponse(): LicenseKeyService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): LicenseKeyService =
+        LicenseKeyServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun retrieve(
         params: LicenseKeyRetrieveParams,
         requestOptions: RequestOptions,
@@ -57,6 +60,13 @@ class LicenseKeyServiceImpl internal constructor(private val clientOptions: Clie
         LicenseKeyService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): LicenseKeyService.WithRawResponse =
+            LicenseKeyServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val retrieveHandler: Handler<LicenseKey> =
             jsonHandler<LicenseKey>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

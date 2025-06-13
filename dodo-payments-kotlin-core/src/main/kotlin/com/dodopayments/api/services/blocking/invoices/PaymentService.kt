@@ -2,6 +2,7 @@
 
 package com.dodopayments.api.services.blocking.invoices
 
+import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponse
 import com.dodopayments.api.models.invoices.payments.PaymentRetrieveParams
@@ -13,6 +14,13 @@ interface PaymentService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: (ClientOptions.Builder) -> Unit): PaymentService
 
     @MustBeClosed
     fun retrieve(
@@ -35,6 +43,13 @@ interface PaymentService {
 
     /** A view of [PaymentService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: (ClientOptions.Builder) -> Unit): PaymentService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /invoices/payments/{payment_id}`, but is otherwise

@@ -36,6 +36,9 @@ class BrandServiceImpl internal constructor(private val clientOptions: ClientOpt
 
     override fun withRawResponse(): BrandService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): BrandService =
+        BrandServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun create(
         params: BrandCreateParams,
         requestOptions: RequestOptions,
@@ -72,6 +75,11 @@ class BrandServiceImpl internal constructor(private val clientOptions: ClientOpt
         BrandService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): BrandService.WithRawResponse =
+            BrandServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
 
         private val createHandler: Handler<BrandCreateResponse> =
             jsonHandler<BrandCreateResponse>(clientOptions.jsonMapper)

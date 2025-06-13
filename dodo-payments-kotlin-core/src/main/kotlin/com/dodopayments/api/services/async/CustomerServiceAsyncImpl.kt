@@ -39,6 +39,9 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
 
     override fun withRawResponse(): CustomerServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): CustomerServiceAsync =
+        CustomerServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun customerPortal(): CustomerPortalServiceAsync = customerPortal
 
     override suspend fun create(
@@ -77,6 +80,13 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
         private val customerPortal: CustomerPortalServiceAsync.WithRawResponse by lazy {
             CustomerPortalServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): CustomerServiceAsync.WithRawResponse =
+            CustomerServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         override fun customerPortal(): CustomerPortalServiceAsync.WithRawResponse = customerPortal
 

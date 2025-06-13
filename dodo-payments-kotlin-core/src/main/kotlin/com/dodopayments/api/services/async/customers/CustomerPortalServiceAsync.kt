@@ -2,6 +2,7 @@
 
 package com.dodopayments.api.services.async.customers
 
+import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.models.customers.CustomerPortalSession
@@ -14,6 +15,13 @@ interface CustomerPortalServiceAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: (ClientOptions.Builder) -> Unit): CustomerPortalServiceAsync
 
     suspend fun create(
         customerId: String,
@@ -37,6 +45,15 @@ interface CustomerPortalServiceAsync {
      * method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): CustomerPortalServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /customers/{customer_id}/customer-portal/session`,

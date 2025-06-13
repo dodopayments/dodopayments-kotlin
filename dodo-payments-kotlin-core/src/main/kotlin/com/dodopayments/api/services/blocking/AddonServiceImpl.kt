@@ -35,6 +35,9 @@ class AddonServiceImpl internal constructor(private val clientOptions: ClientOpt
 
     override fun withRawResponse(): AddonService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): AddonService =
+        AddonServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun create(params: AddonCreateParams, requestOptions: RequestOptions): AddonResponse =
         // post /addons
         withRawResponse().create(params, requestOptions).parse()
@@ -65,6 +68,11 @@ class AddonServiceImpl internal constructor(private val clientOptions: ClientOpt
         AddonService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): AddonService.WithRawResponse =
+            AddonServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
 
         private val createHandler: Handler<AddonResponse> =
             jsonHandler<AddonResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
