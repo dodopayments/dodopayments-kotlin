@@ -23,6 +23,9 @@ class PaymentServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
     override fun withRawResponse(): PaymentServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): PaymentServiceAsync =
+        PaymentServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun retrieve(
         params: PaymentRetrieveParams,
         requestOptions: RequestOptions,
@@ -35,6 +38,13 @@ class PaymentServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): PaymentServiceAsync.WithRawResponse =
+            PaymentServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
+
         override suspend fun retrieve(
             params: PaymentRetrieveParams,
             requestOptions: RequestOptions,
@@ -45,6 +55,7 @@ class PaymentServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("invoices", "payments", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)

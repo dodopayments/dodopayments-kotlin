@@ -32,6 +32,9 @@ class LicenseServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
     override fun withRawResponse(): LicenseServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): LicenseServiceAsync =
+        LicenseServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun activate(
         params: LicenseActivateParams,
         requestOptions: RequestOptions,
@@ -59,6 +62,13 @@ class LicenseServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): LicenseServiceAsync.WithRawResponse =
+            LicenseServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
+
         private val activateHandler: Handler<LicenseKeyInstance> =
             jsonHandler<LicenseKeyInstance>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
@@ -69,6 +79,7 @@ class LicenseServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("licenses", "activate")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -96,6 +107,7 @@ class LicenseServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("licenses", "deactivate")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -116,6 +128,7 @@ class LicenseServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("licenses", "validate")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()

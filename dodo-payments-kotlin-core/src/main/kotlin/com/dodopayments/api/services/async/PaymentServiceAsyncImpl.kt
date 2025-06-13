@@ -35,6 +35,9 @@ class PaymentServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
     override fun withRawResponse(): PaymentServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): PaymentServiceAsync =
+        PaymentServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun create(
         params: PaymentCreateParams,
         requestOptions: RequestOptions,
@@ -68,6 +71,13 @@ class PaymentServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): PaymentServiceAsync.WithRawResponse =
+            PaymentServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
+
         private val createHandler: Handler<PaymentCreateResponse> =
             jsonHandler<PaymentCreateResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
@@ -79,6 +89,7 @@ class PaymentServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("payments")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -109,6 +120,7 @@ class PaymentServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("payments", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -136,6 +148,7 @@ class PaymentServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("payments")
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -173,6 +186,7 @@ class PaymentServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("payments", params._pathParam(0), "line-items")
                     .build()
                     .prepareAsync(clientOptions, params)

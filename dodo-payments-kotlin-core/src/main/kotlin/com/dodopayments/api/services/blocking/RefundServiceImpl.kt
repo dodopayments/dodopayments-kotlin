@@ -32,6 +32,9 @@ class RefundServiceImpl internal constructor(private val clientOptions: ClientOp
 
     override fun withRawResponse(): RefundService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): RefundService =
+        RefundServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun create(params: RefundCreateParams, requestOptions: RequestOptions): Refund =
         // post /refunds
         withRawResponse().create(params, requestOptions).parse()
@@ -49,6 +52,11 @@ class RefundServiceImpl internal constructor(private val clientOptions: ClientOp
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): RefundService.WithRawResponse =
+            RefundServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
+
         private val createHandler: Handler<Refund> =
             jsonHandler<Refund>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
@@ -59,6 +67,7 @@ class RefundServiceImpl internal constructor(private val clientOptions: ClientOp
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("refunds")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -89,6 +98,7 @@ class RefundServiceImpl internal constructor(private val clientOptions: ClientOp
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("refunds", params._pathParam(0))
                     .build()
                     .prepare(clientOptions, params)
@@ -116,6 +126,7 @@ class RefundServiceImpl internal constructor(private val clientOptions: ClientOp
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("refunds")
                     .build()
                     .prepare(clientOptions, params)

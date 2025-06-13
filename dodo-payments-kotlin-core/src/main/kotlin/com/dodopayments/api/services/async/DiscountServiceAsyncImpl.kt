@@ -36,6 +36,9 @@ class DiscountServiceAsyncImpl internal constructor(private val clientOptions: C
 
     override fun withRawResponse(): DiscountServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): DiscountServiceAsync =
+        DiscountServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun create(
         params: DiscountCreateParams,
         requestOptions: RequestOptions,
@@ -74,6 +77,13 @@ class DiscountServiceAsyncImpl internal constructor(private val clientOptions: C
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): DiscountServiceAsync.WithRawResponse =
+            DiscountServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
+
         private val createHandler: Handler<Discount> =
             jsonHandler<Discount>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
@@ -84,6 +94,7 @@ class DiscountServiceAsyncImpl internal constructor(private val clientOptions: C
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("discounts")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -114,6 +125,7 @@ class DiscountServiceAsyncImpl internal constructor(private val clientOptions: C
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("discounts", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -143,6 +155,7 @@ class DiscountServiceAsyncImpl internal constructor(private val clientOptions: C
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PATCH)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("discounts", params._pathParam(0))
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -171,6 +184,7 @@ class DiscountServiceAsyncImpl internal constructor(private val clientOptions: C
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("discounts")
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -206,6 +220,7 @@ class DiscountServiceAsyncImpl internal constructor(private val clientOptions: C
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("discounts", params._pathParam(0))
                     .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                     .build()

@@ -30,6 +30,9 @@ class DisputeServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
     override fun withRawResponse(): DisputeServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): DisputeServiceAsync =
+        DisputeServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun retrieve(
         params: DisputeRetrieveParams,
         requestOptions: RequestOptions,
@@ -49,6 +52,13 @@ class DisputeServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): DisputeServiceAsync.WithRawResponse =
+            DisputeServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
+
         private val retrieveHandler: Handler<DisputeRetrieveResponse> =
             jsonHandler<DisputeRetrieveResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
@@ -63,6 +73,7 @@ class DisputeServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("disputes", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -90,6 +101,7 @@ class DisputeServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("disputes")
                     .build()
                     .prepareAsync(clientOptions, params)

@@ -41,6 +41,9 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
 
     override fun withRawResponse(): ProductService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ProductService =
+        ProductServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun images(): ImageService = images
 
     override fun create(params: ProductCreateParams, requestOptions: RequestOptions): Product =
@@ -79,6 +82,13 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
             ImageServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): ProductService.WithRawResponse =
+            ProductServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
+
         override fun images(): ImageService.WithRawResponse = images
 
         private val createHandler: Handler<Product> =
@@ -91,6 +101,7 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("products")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -121,6 +132,7 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("products", params._pathParam(0))
                     .build()
                     .prepare(clientOptions, params)
@@ -149,6 +161,7 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PATCH)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("products", params._pathParam(0))
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -169,6 +182,7 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("products")
                     .build()
                     .prepare(clientOptions, params)
@@ -204,6 +218,7 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("products", params._pathParam(0))
                     .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
@@ -225,6 +240,7 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("products", params._pathParam(0), "unarchive")
                     .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
                     .build()

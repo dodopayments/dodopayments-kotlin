@@ -27,6 +27,9 @@ class PayoutServiceImpl internal constructor(private val clientOptions: ClientOp
 
     override fun withRawResponse(): PayoutService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): PayoutService =
+        PayoutServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun list(params: PayoutListParams, requestOptions: RequestOptions): PayoutListPage =
         // get /payouts
         withRawResponse().list(params, requestOptions).parse()
@@ -35,6 +38,11 @@ class PayoutServiceImpl internal constructor(private val clientOptions: ClientOp
         PayoutService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): PayoutService.WithRawResponse =
+            PayoutServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
 
         private val listHandler: Handler<PayoutListPageResponse> =
             jsonHandler<PayoutListPageResponse>(clientOptions.jsonMapper)
@@ -47,6 +55,7 @@ class PayoutServiceImpl internal constructor(private val clientOptions: ClientOp
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("payouts")
                     .build()
                     .prepare(clientOptions, params)

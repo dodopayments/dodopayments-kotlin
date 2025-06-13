@@ -17,6 +17,9 @@ class InvoiceServiceImpl internal constructor(private val clientOptions: ClientO
 
     override fun withRawResponse(): InvoiceService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): InvoiceService =
+        InvoiceServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun payments(): PaymentService = payments
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -25,6 +28,13 @@ class InvoiceServiceImpl internal constructor(private val clientOptions: ClientO
         private val payments: PaymentService.WithRawResponse by lazy {
             PaymentServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): InvoiceService.WithRawResponse =
+            InvoiceServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         override fun payments(): PaymentService.WithRawResponse = payments
     }

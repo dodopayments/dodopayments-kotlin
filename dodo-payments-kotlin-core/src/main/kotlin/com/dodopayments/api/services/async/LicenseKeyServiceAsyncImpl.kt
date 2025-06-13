@@ -32,6 +32,9 @@ class LicenseKeyServiceAsyncImpl internal constructor(private val clientOptions:
 
     override fun withRawResponse(): LicenseKeyServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): LicenseKeyServiceAsync =
+        LicenseKeyServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun retrieve(
         params: LicenseKeyRetrieveParams,
         requestOptions: RequestOptions,
@@ -58,6 +61,13 @@ class LicenseKeyServiceAsyncImpl internal constructor(private val clientOptions:
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): LicenseKeyServiceAsync.WithRawResponse =
+            LicenseKeyServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
+
         private val retrieveHandler: Handler<LicenseKey> =
             jsonHandler<LicenseKey>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
@@ -71,6 +81,7 @@ class LicenseKeyServiceAsyncImpl internal constructor(private val clientOptions:
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("license_keys", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -100,6 +111,7 @@ class LicenseKeyServiceAsyncImpl internal constructor(private val clientOptions:
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PATCH)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("license_keys", params._pathParam(0))
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -128,6 +140,7 @@ class LicenseKeyServiceAsyncImpl internal constructor(private val clientOptions:
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("license_keys")
                     .build()
                     .prepareAsync(clientOptions, params)

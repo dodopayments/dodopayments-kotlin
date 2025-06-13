@@ -2,6 +2,7 @@
 
 package com.dodopayments.api.services.blocking
 
+import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponse
 import com.dodopayments.api.core.http.HttpResponseFor
@@ -18,6 +19,13 @@ interface LicenseService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: (ClientOptions.Builder) -> Unit): LicenseService
 
     fun activate(
         params: LicenseActivateParams,
@@ -36,6 +44,13 @@ interface LicenseService {
 
     /** A view of [LicenseService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: (ClientOptions.Builder) -> Unit): LicenseService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /licenses/activate`, but is otherwise the same as

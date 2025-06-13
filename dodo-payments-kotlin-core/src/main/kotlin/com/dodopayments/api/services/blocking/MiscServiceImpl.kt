@@ -25,6 +25,9 @@ class MiscServiceImpl internal constructor(private val clientOptions: ClientOpti
 
     override fun withRawResponse(): MiscService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MiscService =
+        MiscServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun listSupportedCountries(
         params: MiscListSupportedCountriesParams,
         requestOptions: RequestOptions,
@@ -37,6 +40,11 @@ class MiscServiceImpl internal constructor(private val clientOptions: ClientOpti
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): MiscService.WithRawResponse =
+            MiscServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
+
         private val listSupportedCountriesHandler: Handler<List<CountryCode>> =
             jsonHandler<List<CountryCode>>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
@@ -47,6 +55,7 @@ class MiscServiceImpl internal constructor(private val clientOptions: ClientOpti
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("checkout", "supported_countries")
                     .build()
                     .prepare(clientOptions, params)

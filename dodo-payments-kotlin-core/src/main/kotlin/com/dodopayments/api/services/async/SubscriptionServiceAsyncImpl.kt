@@ -39,6 +39,9 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
 
     override fun withRawResponse(): SubscriptionServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): SubscriptionServiceAsync =
+        SubscriptionServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun create(
         params: SubscriptionCreateParams,
         requestOptions: RequestOptions,
@@ -87,6 +90,13 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): SubscriptionServiceAsync.WithRawResponse =
+            SubscriptionServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
+
         private val createHandler: Handler<SubscriptionCreateResponse> =
             jsonHandler<SubscriptionCreateResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
@@ -98,6 +108,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("subscriptions")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -128,6 +139,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("subscriptions", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -157,6 +169,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PATCH)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("subscriptions", params._pathParam(0))
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -185,6 +198,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("subscriptions")
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -221,6 +235,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("subscriptions", params._pathParam(0), "change-plan")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -244,6 +259,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("subscriptions", params._pathParam(0), "charge")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()

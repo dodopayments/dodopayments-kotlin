@@ -32,6 +32,9 @@ class LicenseKeyServiceImpl internal constructor(private val clientOptions: Clie
 
     override fun withRawResponse(): LicenseKeyService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): LicenseKeyService =
+        LicenseKeyServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun retrieve(
         params: LicenseKeyRetrieveParams,
         requestOptions: RequestOptions,
@@ -58,6 +61,13 @@ class LicenseKeyServiceImpl internal constructor(private val clientOptions: Clie
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): LicenseKeyService.WithRawResponse =
+            LicenseKeyServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
+
         private val retrieveHandler: Handler<LicenseKey> =
             jsonHandler<LicenseKey>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
@@ -71,6 +81,7 @@ class LicenseKeyServiceImpl internal constructor(private val clientOptions: Clie
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("license_keys", params._pathParam(0))
                     .build()
                     .prepare(clientOptions, params)
@@ -100,6 +111,7 @@ class LicenseKeyServiceImpl internal constructor(private val clientOptions: Clie
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PATCH)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("license_keys", params._pathParam(0))
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -128,6 +140,7 @@ class LicenseKeyServiceImpl internal constructor(private val clientOptions: Clie
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("license_keys")
                     .build()
                     .prepare(clientOptions, params)

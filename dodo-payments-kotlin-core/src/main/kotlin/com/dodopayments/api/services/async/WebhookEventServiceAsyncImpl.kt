@@ -30,6 +30,9 @@ class WebhookEventServiceAsyncImpl internal constructor(private val clientOption
 
     override fun withRawResponse(): WebhookEventServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): WebhookEventServiceAsync =
+        WebhookEventServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun retrieve(
         params: WebhookEventRetrieveParams,
         requestOptions: RequestOptions,
@@ -49,6 +52,13 @@ class WebhookEventServiceAsyncImpl internal constructor(private val clientOption
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): WebhookEventServiceAsync.WithRawResponse =
+            WebhookEventServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
+
         private val retrieveHandler: Handler<WebhookEvent> =
             jsonHandler<WebhookEvent>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
@@ -62,6 +72,7 @@ class WebhookEventServiceAsyncImpl internal constructor(private val clientOption
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("webhook_events", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -89,6 +100,7 @@ class WebhookEventServiceAsyncImpl internal constructor(private val clientOption
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("webhook_events")
                     .build()
                     .prepareAsync(clientOptions, params)

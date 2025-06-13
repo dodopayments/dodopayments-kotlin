@@ -2,6 +2,7 @@
 
 package com.dodopayments.api.client
 
+import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.services.async.AddonServiceAsync
 import com.dodopayments.api.services.async.BrandServiceAsync
 import com.dodopayments.api.services.async.CustomerServiceAsync
@@ -47,6 +48,13 @@ interface DodoPaymentsClientAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: (ClientOptions.Builder) -> Unit): DodoPaymentsClientAsync
 
     fun payments(): PaymentServiceAsync
 
@@ -98,6 +106,15 @@ interface DodoPaymentsClientAsync {
      * method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): DodoPaymentsClientAsync.WithRawResponse
 
         fun payments(): PaymentServiceAsync.WithRawResponse
 

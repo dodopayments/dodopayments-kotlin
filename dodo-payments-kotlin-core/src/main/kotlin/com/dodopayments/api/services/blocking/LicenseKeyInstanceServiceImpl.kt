@@ -32,6 +32,9 @@ class LicenseKeyInstanceServiceImpl internal constructor(private val clientOptio
 
     override fun withRawResponse(): LicenseKeyInstanceService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): LicenseKeyInstanceService =
+        LicenseKeyInstanceServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun retrieve(
         params: LicenseKeyInstanceRetrieveParams,
         requestOptions: RequestOptions,
@@ -58,6 +61,13 @@ class LicenseKeyInstanceServiceImpl internal constructor(private val clientOptio
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): LicenseKeyInstanceService.WithRawResponse =
+            LicenseKeyInstanceServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
+
         private val retrieveHandler: Handler<LicenseKeyInstance> =
             jsonHandler<LicenseKeyInstance>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
@@ -71,6 +81,7 @@ class LicenseKeyInstanceServiceImpl internal constructor(private val clientOptio
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("license_key_instances", params._pathParam(0))
                     .build()
                     .prepare(clientOptions, params)
@@ -100,6 +111,7 @@ class LicenseKeyInstanceServiceImpl internal constructor(private val clientOptio
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PATCH)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("license_key_instances", params._pathParam(0))
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -128,6 +140,7 @@ class LicenseKeyInstanceServiceImpl internal constructor(private val clientOptio
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("license_key_instances")
                     .build()
                     .prepare(clientOptions, params)

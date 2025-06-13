@@ -30,6 +30,9 @@ class DisputeServiceImpl internal constructor(private val clientOptions: ClientO
 
     override fun withRawResponse(): DisputeService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): DisputeService =
+        DisputeServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun retrieve(
         params: DisputeRetrieveParams,
         requestOptions: RequestOptions,
@@ -46,6 +49,13 @@ class DisputeServiceImpl internal constructor(private val clientOptions: ClientO
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): DisputeService.WithRawResponse =
+            DisputeServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
+
         private val retrieveHandler: Handler<DisputeRetrieveResponse> =
             jsonHandler<DisputeRetrieveResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
@@ -60,6 +70,7 @@ class DisputeServiceImpl internal constructor(private val clientOptions: ClientO
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("disputes", params._pathParam(0))
                     .build()
                     .prepare(clientOptions, params)
@@ -87,6 +98,7 @@ class DisputeServiceImpl internal constructor(private val clientOptions: ClientO
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("disputes")
                     .build()
                     .prepare(clientOptions, params)
