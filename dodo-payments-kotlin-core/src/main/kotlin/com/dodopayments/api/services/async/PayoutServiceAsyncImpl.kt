@@ -27,6 +27,9 @@ class PayoutServiceAsyncImpl internal constructor(private val clientOptions: Cli
 
     override fun withRawResponse(): PayoutServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): PayoutServiceAsync =
+        PayoutServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override suspend fun list(
         params: PayoutListParams,
         requestOptions: RequestOptions,
@@ -38,6 +41,13 @@ class PayoutServiceAsyncImpl internal constructor(private val clientOptions: Cli
         PayoutServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): PayoutServiceAsync.WithRawResponse =
+            PayoutServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val listHandler: Handler<PayoutListPageResponse> =
             jsonHandler<PayoutListPageResponse>(clientOptions.jsonMapper)

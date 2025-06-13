@@ -2,6 +2,7 @@
 
 package com.dodopayments.api.services.async
 
+import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponse
 import com.dodopayments.api.core.http.HttpResponseFor
@@ -23,6 +24,13 @@ interface SubscriptionServiceAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: (ClientOptions.Builder) -> Unit): SubscriptionServiceAsync
 
     suspend fun create(
         params: SubscriptionCreateParams,
@@ -102,6 +110,15 @@ interface SubscriptionServiceAsync {
      * method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): SubscriptionServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /subscriptions`, but is otherwise the same as

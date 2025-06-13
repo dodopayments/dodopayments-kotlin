@@ -32,6 +32,9 @@ class LicenseKeyInstanceServiceImpl internal constructor(private val clientOptio
 
     override fun withRawResponse(): LicenseKeyInstanceService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): LicenseKeyInstanceService =
+        LicenseKeyInstanceServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun retrieve(
         params: LicenseKeyInstanceRetrieveParams,
         requestOptions: RequestOptions,
@@ -57,6 +60,13 @@ class LicenseKeyInstanceServiceImpl internal constructor(private val clientOptio
         LicenseKeyInstanceService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): LicenseKeyInstanceService.WithRawResponse =
+            LicenseKeyInstanceServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val retrieveHandler: Handler<LicenseKeyInstance> =
             jsonHandler<LicenseKeyInstance>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

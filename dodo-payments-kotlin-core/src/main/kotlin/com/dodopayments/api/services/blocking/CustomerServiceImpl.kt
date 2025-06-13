@@ -39,6 +39,9 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
 
     override fun withRawResponse(): CustomerService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): CustomerService =
+        CustomerServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun customerPortal(): CustomerPortalService = customerPortal
 
     override fun create(params: CustomerCreateParams, requestOptions: RequestOptions): Customer =
@@ -71,6 +74,13 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
         private val customerPortal: CustomerPortalService.WithRawResponse by lazy {
             CustomerPortalServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): CustomerService.WithRawResponse =
+            CustomerServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         override fun customerPortal(): CustomerPortalService.WithRawResponse = customerPortal
 

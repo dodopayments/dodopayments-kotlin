@@ -30,6 +30,9 @@ class DisputeServiceImpl internal constructor(private val clientOptions: ClientO
 
     override fun withRawResponse(): DisputeService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): DisputeService =
+        DisputeServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun retrieve(
         params: DisputeRetrieveParams,
         requestOptions: RequestOptions,
@@ -45,6 +48,13 @@ class DisputeServiceImpl internal constructor(private val clientOptions: ClientO
         DisputeService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): DisputeService.WithRawResponse =
+            DisputeServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val retrieveHandler: Handler<DisputeRetrieveResponse> =
             jsonHandler<DisputeRetrieveResponse>(clientOptions.jsonMapper)

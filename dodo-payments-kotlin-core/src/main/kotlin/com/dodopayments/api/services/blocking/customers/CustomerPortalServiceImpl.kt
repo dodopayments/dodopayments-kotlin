@@ -28,6 +28,9 @@ class CustomerPortalServiceImpl internal constructor(private val clientOptions: 
 
     override fun withRawResponse(): CustomerPortalService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): CustomerPortalService =
+        CustomerPortalServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun create(
         params: CustomerPortalCreateParams,
         requestOptions: RequestOptions,
@@ -39,6 +42,13 @@ class CustomerPortalServiceImpl internal constructor(private val clientOptions: 
         CustomerPortalService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): CustomerPortalService.WithRawResponse =
+            CustomerPortalServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         private val createHandler: Handler<CustomerPortalSession> =
             jsonHandler<CustomerPortalSession>(clientOptions.jsonMapper)

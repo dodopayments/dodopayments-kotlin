@@ -41,6 +41,9 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
 
     override fun withRawResponse(): ProductService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ProductService =
+        ProductServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
     override fun images(): ImageService = images
 
     override fun create(params: ProductCreateParams, requestOptions: RequestOptions): Product =
@@ -78,6 +81,13 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
         private val images: ImageService.WithRawResponse by lazy {
             ImageServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): ProductService.WithRawResponse =
+            ProductServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
 
         override fun images(): ImageService.WithRawResponse = images
 
