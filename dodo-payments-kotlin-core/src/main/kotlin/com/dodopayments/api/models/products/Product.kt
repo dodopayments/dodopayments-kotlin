@@ -32,6 +32,7 @@ private constructor(
     private val updatedAt: JsonField<OffsetDateTime>,
     private val addons: JsonField<List<String>>,
     private val description: JsonField<String>,
+    private val digitalProductDelivery: JsonField<DigitalProductDelivery>,
     private val image: JsonField<String>,
     private val licenseKeyActivationMessage: JsonField<String>,
     private val licenseKeyActivationsLimit: JsonField<Int>,
@@ -67,6 +68,9 @@ private constructor(
         @JsonProperty("description")
         @ExcludeMissing
         description: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("digital_product_delivery")
+        @ExcludeMissing
+        digitalProductDelivery: JsonField<DigitalProductDelivery> = JsonMissing.of(),
         @JsonProperty("image") @ExcludeMissing image: JsonField<String> = JsonMissing.of(),
         @JsonProperty("license_key_activation_message")
         @ExcludeMissing
@@ -90,6 +94,7 @@ private constructor(
         updatedAt,
         addons,
         description,
+        digitalProductDelivery,
         image,
         licenseKeyActivationMessage,
         licenseKeyActivationsLimit,
@@ -181,6 +186,13 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun description(): String? = description.getNullable("description")
+
+    /**
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun digitalProductDelivery(): DigitalProductDelivery? =
+        digitalProductDelivery.getNullable("digital_product_delivery")
 
     /**
      * URL of the product image, optional.
@@ -312,6 +324,16 @@ private constructor(
     @JsonProperty("description") @ExcludeMissing fun _description(): JsonField<String> = description
 
     /**
+     * Returns the raw JSON value of [digitalProductDelivery].
+     *
+     * Unlike [digitalProductDelivery], this method doesn't throw if the JSON field has an
+     * unexpected type.
+     */
+    @JsonProperty("digital_product_delivery")
+    @ExcludeMissing
+    fun _digitalProductDelivery(): JsonField<DigitalProductDelivery> = digitalProductDelivery
+
+    /**
      * Returns the raw JSON value of [image].
      *
      * Unlike [image], this method doesn't throw if the JSON field has an unexpected type.
@@ -402,6 +424,7 @@ private constructor(
         private var updatedAt: JsonField<OffsetDateTime>? = null
         private var addons: JsonField<MutableList<String>>? = null
         private var description: JsonField<String> = JsonMissing.of()
+        private var digitalProductDelivery: JsonField<DigitalProductDelivery> = JsonMissing.of()
         private var image: JsonField<String> = JsonMissing.of()
         private var licenseKeyActivationMessage: JsonField<String> = JsonMissing.of()
         private var licenseKeyActivationsLimit: JsonField<Int> = JsonMissing.of()
@@ -421,6 +444,7 @@ private constructor(
             updatedAt = product.updatedAt
             addons = product.addons.map { it.toMutableList() }
             description = product.description
+            digitalProductDelivery = product.digitalProductDelivery
             image = product.image
             licenseKeyActivationMessage = product.licenseKeyActivationMessage
             licenseKeyActivationsLimit = product.licenseKeyActivationsLimit
@@ -585,6 +609,21 @@ private constructor(
          */
         fun description(description: JsonField<String>) = apply { this.description = description }
 
+        fun digitalProductDelivery(digitalProductDelivery: DigitalProductDelivery?) =
+            digitalProductDelivery(JsonField.ofNullable(digitalProductDelivery))
+
+        /**
+         * Sets [Builder.digitalProductDelivery] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.digitalProductDelivery] with a well-typed
+         * [DigitalProductDelivery] value instead. This method is primarily for setting the field to
+         * an undocumented or not yet supported value.
+         */
+        fun digitalProductDelivery(digitalProductDelivery: JsonField<DigitalProductDelivery>) =
+            apply {
+                this.digitalProductDelivery = digitalProductDelivery
+            }
+
         /** URL of the product image, optional. */
         fun image(image: String?) = image(JsonField.ofNullable(image))
 
@@ -711,6 +750,7 @@ private constructor(
                 checkRequired("updatedAt", updatedAt),
                 (addons ?: JsonMissing.of()).map { it.toImmutable() },
                 description,
+                digitalProductDelivery,
                 image,
                 licenseKeyActivationMessage,
                 licenseKeyActivationsLimit,
@@ -738,6 +778,7 @@ private constructor(
         updatedAt()
         addons()
         description()
+        digitalProductDelivery()?.validate()
         image()
         licenseKeyActivationMessage()
         licenseKeyActivationsLimit()
@@ -771,26 +812,501 @@ private constructor(
             (if (updatedAt.asKnown() == null) 0 else 1) +
             (addons.asKnown()?.size ?: 0) +
             (if (description.asKnown() == null) 0 else 1) +
+            (digitalProductDelivery.asKnown()?.validity() ?: 0) +
             (if (image.asKnown() == null) 0 else 1) +
             (if (licenseKeyActivationMessage.asKnown() == null) 0 else 1) +
             (if (licenseKeyActivationsLimit.asKnown() == null) 0 else 1) +
             (licenseKeyDuration.asKnown()?.validity() ?: 0) +
             (if (name.asKnown() == null) 0 else 1)
 
+    class DigitalProductDelivery
+    private constructor(
+        private val externalUrl: JsonField<String>,
+        private val files: JsonField<List<File>>,
+        private val instructions: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("external_url")
+            @ExcludeMissing
+            externalUrl: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("files") @ExcludeMissing files: JsonField<List<File>> = JsonMissing.of(),
+            @JsonProperty("instructions")
+            @ExcludeMissing
+            instructions: JsonField<String> = JsonMissing.of(),
+        ) : this(externalUrl, files, instructions, mutableMapOf())
+
+        /**
+         * External URL to digital product
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun externalUrl(): String? = externalUrl.getNullable("external_url")
+
+        /**
+         * Uploaded files ids of digital product
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun files(): List<File>? = files.getNullable("files")
+
+        /**
+         * Instructions to download and use the digital product
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun instructions(): String? = instructions.getNullable("instructions")
+
+        /**
+         * Returns the raw JSON value of [externalUrl].
+         *
+         * Unlike [externalUrl], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("external_url")
+        @ExcludeMissing
+        fun _externalUrl(): JsonField<String> = externalUrl
+
+        /**
+         * Returns the raw JSON value of [files].
+         *
+         * Unlike [files], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("files") @ExcludeMissing fun _files(): JsonField<List<File>> = files
+
+        /**
+         * Returns the raw JSON value of [instructions].
+         *
+         * Unlike [instructions], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("instructions")
+        @ExcludeMissing
+        fun _instructions(): JsonField<String> = instructions
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [DigitalProductDelivery].
+             */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [DigitalProductDelivery]. */
+        class Builder internal constructor() {
+
+            private var externalUrl: JsonField<String> = JsonMissing.of()
+            private var files: JsonField<MutableList<File>>? = null
+            private var instructions: JsonField<String> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(digitalProductDelivery: DigitalProductDelivery) = apply {
+                externalUrl = digitalProductDelivery.externalUrl
+                files = digitalProductDelivery.files.map { it.toMutableList() }
+                instructions = digitalProductDelivery.instructions
+                additionalProperties = digitalProductDelivery.additionalProperties.toMutableMap()
+            }
+
+            /** External URL to digital product */
+            fun externalUrl(externalUrl: String?) = externalUrl(JsonField.ofNullable(externalUrl))
+
+            /**
+             * Sets [Builder.externalUrl] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.externalUrl] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun externalUrl(externalUrl: JsonField<String>) = apply {
+                this.externalUrl = externalUrl
+            }
+
+            /** Uploaded files ids of digital product */
+            fun files(files: List<File>?) = files(JsonField.ofNullable(files))
+
+            /**
+             * Sets [Builder.files] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.files] with a well-typed `List<File>` value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun files(files: JsonField<List<File>>) = apply {
+                this.files = files.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [File] to [files].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addFile(file: File) = apply {
+                files =
+                    (files ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("files", it).add(file)
+                    }
+            }
+
+            /** Instructions to download and use the digital product */
+            fun instructions(instructions: String?) =
+                instructions(JsonField.ofNullable(instructions))
+
+            /**
+             * Sets [Builder.instructions] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.instructions] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun instructions(instructions: JsonField<String>) = apply {
+                this.instructions = instructions
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [DigitalProductDelivery].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): DigitalProductDelivery =
+                DigitalProductDelivery(
+                    externalUrl,
+                    (files ?: JsonMissing.of()).map { it.toImmutable() },
+                    instructions,
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): DigitalProductDelivery = apply {
+            if (validated) {
+                return@apply
+            }
+
+            externalUrl()
+            files()?.forEach { it.validate() }
+            instructions()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            (if (externalUrl.asKnown() == null) 0 else 1) +
+                (files.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                (if (instructions.asKnown() == null) 0 else 1)
+
+        class File
+        private constructor(
+            private val fileId: JsonField<String>,
+            private val fileName: JsonField<String>,
+            private val url: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("file_id")
+                @ExcludeMissing
+                fileId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("file_name")
+                @ExcludeMissing
+                fileName: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
+            ) : this(fileId, fileName, url, mutableMapOf())
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun fileId(): String = fileId.getRequired("file_id")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun fileName(): String = fileName.getRequired("file_name")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun url(): String = url.getRequired("url")
+
+            /**
+             * Returns the raw JSON value of [fileId].
+             *
+             * Unlike [fileId], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("file_id") @ExcludeMissing fun _fileId(): JsonField<String> = fileId
+
+            /**
+             * Returns the raw JSON value of [fileName].
+             *
+             * Unlike [fileName], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("file_name") @ExcludeMissing fun _fileName(): JsonField<String> = fileName
+
+            /**
+             * Returns the raw JSON value of [url].
+             *
+             * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of [File].
+                 *
+                 * The following fields are required:
+                 * ```kotlin
+                 * .fileId()
+                 * .fileName()
+                 * .url()
+                 * ```
+                 */
+                fun builder() = Builder()
+            }
+
+            /** A builder for [File]. */
+            class Builder internal constructor() {
+
+                private var fileId: JsonField<String>? = null
+                private var fileName: JsonField<String>? = null
+                private var url: JsonField<String>? = null
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                internal fun from(file: File) = apply {
+                    fileId = file.fileId
+                    fileName = file.fileName
+                    url = file.url
+                    additionalProperties = file.additionalProperties.toMutableMap()
+                }
+
+                fun fileId(fileId: String) = fileId(JsonField.of(fileId))
+
+                /**
+                 * Sets [Builder.fileId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.fileId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun fileId(fileId: JsonField<String>) = apply { this.fileId = fileId }
+
+                fun fileName(fileName: String) = fileName(JsonField.of(fileName))
+
+                /**
+                 * Sets [Builder.fileName] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.fileName] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun fileName(fileName: JsonField<String>) = apply { this.fileName = fileName }
+
+                fun url(url: String) = url(JsonField.of(url))
+
+                /**
+                 * Sets [Builder.url] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.url] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
+                fun url(url: JsonField<String>) = apply { this.url = url }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [File].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```kotlin
+                 * .fileId()
+                 * .fileName()
+                 * .url()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
+                fun build(): File =
+                    File(
+                        checkRequired("fileId", fileId),
+                        checkRequired("fileName", fileName),
+                        checkRequired("url", url),
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): File = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                fileId()
+                fileName()
+                url()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: DodoPaymentsInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            internal fun validity(): Int =
+                (if (fileId.asKnown() == null) 0 else 1) +
+                    (if (fileName.asKnown() == null) 0 else 1) +
+                    (if (url.asKnown() == null) 0 else 1)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is File && fileId == other.fileId && fileName == other.fileName && url == other.url && additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(fileId, fileName, url, additionalProperties) }
+            /* spotless:on */
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "File{fileId=$fileId, fileName=$fileName, url=$url, additionalProperties=$additionalProperties}"
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is DigitalProductDelivery && externalUrl == other.externalUrl && files == other.files && instructions == other.instructions && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(externalUrl, files, instructions, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "DigitalProductDelivery{externalUrl=$externalUrl, files=$files, instructions=$instructions, additionalProperties=$additionalProperties}"
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is Product && brandId == other.brandId && businessId == other.businessId && createdAt == other.createdAt && isRecurring == other.isRecurring && licenseKeyEnabled == other.licenseKeyEnabled && price == other.price && productId == other.productId && taxCategory == other.taxCategory && updatedAt == other.updatedAt && addons == other.addons && description == other.description && image == other.image && licenseKeyActivationMessage == other.licenseKeyActivationMessage && licenseKeyActivationsLimit == other.licenseKeyActivationsLimit && licenseKeyDuration == other.licenseKeyDuration && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Product && brandId == other.brandId && businessId == other.businessId && createdAt == other.createdAt && isRecurring == other.isRecurring && licenseKeyEnabled == other.licenseKeyEnabled && price == other.price && productId == other.productId && taxCategory == other.taxCategory && updatedAt == other.updatedAt && addons == other.addons && description == other.description && digitalProductDelivery == other.digitalProductDelivery && image == other.image && licenseKeyActivationMessage == other.licenseKeyActivationMessage && licenseKeyActivationsLimit == other.licenseKeyActivationsLimit && licenseKeyDuration == other.licenseKeyDuration && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(brandId, businessId, createdAt, isRecurring, licenseKeyEnabled, price, productId, taxCategory, updatedAt, addons, description, image, licenseKeyActivationMessage, licenseKeyActivationsLimit, licenseKeyDuration, name, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(brandId, businessId, createdAt, isRecurring, licenseKeyEnabled, price, productId, taxCategory, updatedAt, addons, description, digitalProductDelivery, image, licenseKeyActivationMessage, licenseKeyActivationsLimit, licenseKeyDuration, name, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Product{brandId=$brandId, businessId=$businessId, createdAt=$createdAt, isRecurring=$isRecurring, licenseKeyEnabled=$licenseKeyEnabled, price=$price, productId=$productId, taxCategory=$taxCategory, updatedAt=$updatedAt, addons=$addons, description=$description, image=$image, licenseKeyActivationMessage=$licenseKeyActivationMessage, licenseKeyActivationsLimit=$licenseKeyActivationsLimit, licenseKeyDuration=$licenseKeyDuration, name=$name, additionalProperties=$additionalProperties}"
+        "Product{brandId=$brandId, businessId=$businessId, createdAt=$createdAt, isRecurring=$isRecurring, licenseKeyEnabled=$licenseKeyEnabled, price=$price, productId=$productId, taxCategory=$taxCategory, updatedAt=$updatedAt, addons=$addons, description=$description, digitalProductDelivery=$digitalProductDelivery, image=$image, licenseKeyActivationMessage=$licenseKeyActivationMessage, licenseKeyActivationsLimit=$licenseKeyActivationsLimit, licenseKeyDuration=$licenseKeyDuration, name=$name, additionalProperties=$additionalProperties}"
 }

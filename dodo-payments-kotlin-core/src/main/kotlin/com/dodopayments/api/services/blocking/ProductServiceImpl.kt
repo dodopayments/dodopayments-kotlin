@@ -26,6 +26,8 @@ import com.dodopayments.api.models.products.ProductListPageResponse
 import com.dodopayments.api.models.products.ProductListParams
 import com.dodopayments.api.models.products.ProductRetrieveParams
 import com.dodopayments.api.models.products.ProductUnarchiveParams
+import com.dodopayments.api.models.products.ProductUpdateFilesParams
+import com.dodopayments.api.models.products.ProductUpdateFilesResponse
 import com.dodopayments.api.models.products.ProductUpdateParams
 import com.dodopayments.api.services.blocking.products.ImageService
 import com.dodopayments.api.services.blocking.products.ImageServiceImpl
@@ -72,6 +74,13 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
         // post /products/{id}/unarchive
         withRawResponse().unarchive(params, requestOptions)
     }
+
+    override fun updateFiles(
+        params: ProductUpdateFilesParams,
+        requestOptions: RequestOptions,
+    ): ProductUpdateFilesResponse =
+        // put /products/{id}/files
+        withRawResponse().updateFiles(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ProductService.WithRawResponse {
@@ -248,6 +257,38 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return response.parseable { response.use { unarchiveHandler.handle(it) } }
+        }
+
+        private val updateFilesHandler: Handler<ProductUpdateFilesResponse> =
+            jsonHandler<ProductUpdateFilesResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun updateFiles(
+            params: ProductUpdateFilesParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<ProductUpdateFilesResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("products", params._pathParam(0), "files")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { updateFilesHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
     }
 }
