@@ -29,6 +29,12 @@ internal class ProductCreateParamsTest {
             .addAddon("string")
             .brandId("brand_id")
             .description("description")
+            .digitalProductDelivery(
+                ProductCreateParams.DigitalProductDelivery.builder()
+                    .externalUrl("external_url")
+                    .instructions("instructions")
+                    .build()
+            )
             .licenseKeyActivationMessage("license_key_activation_message")
             .licenseKeyActivationsLimit(0)
             .licenseKeyDuration(
@@ -59,6 +65,12 @@ internal class ProductCreateParamsTest {
                 .addAddon("string")
                 .brandId("brand_id")
                 .description("description")
+                .digitalProductDelivery(
+                    ProductCreateParams.DigitalProductDelivery.builder()
+                        .externalUrl("external_url")
+                        .instructions("instructions")
+                        .build()
+                )
                 .licenseKeyActivationMessage("license_key_activation_message")
                 .licenseKeyActivationsLimit(0)
                 .licenseKeyDuration(
@@ -89,6 +101,13 @@ internal class ProductCreateParamsTest {
         assertThat(body.addons()).containsExactly("string")
         assertThat(body.brandId()).isEqualTo("brand_id")
         assertThat(body.description()).isEqualTo("description")
+        assertThat(body.digitalProductDelivery())
+            .isEqualTo(
+                ProductCreateParams.DigitalProductDelivery.builder()
+                    .externalUrl("external_url")
+                    .instructions("instructions")
+                    .build()
+            )
         assertThat(body.licenseKeyActivationMessage()).isEqualTo("license_key_activation_message")
         assertThat(body.licenseKeyActivationsLimit()).isEqualTo(0)
         assertThat(body.licenseKeyDuration())

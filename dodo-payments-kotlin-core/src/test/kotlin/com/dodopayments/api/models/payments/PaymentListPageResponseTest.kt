@@ -28,6 +28,7 @@ internal class PaymentListPageResponseTest {
                                 .name("name")
                                 .build()
                         )
+                        .digitalProductsDelivered(true)
                         .metadata(
                             PaymentListResponse.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -56,6 +57,7 @@ internal class PaymentListPageResponseTest {
                             .name("name")
                             .build()
                     )
+                    .digitalProductsDelivered(true)
                     .metadata(
                         PaymentListResponse.Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -88,6 +90,7 @@ internal class PaymentListPageResponseTest {
                                 .name("name")
                                 .build()
                         )
+                        .digitalProductsDelivered(true)
                         .metadata(
                             PaymentListResponse.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
