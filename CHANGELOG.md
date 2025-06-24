@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.34.2 (2025-06-24)
+
+Full Changelog: [v1.34.1...v1.34.2](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.34.1...v1.34.2)
+
+### Bug Fixes
+
+* **client:** bump max requests per host to max requests (5 -&gt; 64) ([0be8736](https://github.com/dodopayments/dodopayments-kotlin/commit/0be8736200d60c8835ae851d8b96416607270037))
+
 ## 1.34.1 (2025-06-21)
 
 Full Changelog: [v1.34.0...v1.34.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.34.0...v1.34.1)
