@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.34.3 (2025-06-30)
+
+Full Changelog: [v1.34.2...v1.34.3](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.34.2...v1.34.3)
+
+### Bug Fixes
+
+* **ci:** release-doctor — report correct token name ([9e245db](https://github.com/dodopayments/dodopayments-kotlin/commit/9e245dbfe2c52c4fde0de76944861968345e88c5))
+* **client:** don't close client on `withOptions` usage when original is gc'd ([98cf334](https://github.com/dodopayments/dodopayments-kotlin/commit/98cf334e094affde215efcf28fdbb0f984bcad8e))
+
+
+### Chores
+
+* **ci:** only run for pushes and fork pull requests ([667ed24](https://github.com/dodopayments/dodopayments-kotlin/commit/667ed24af962ff14ec5839965cfef8c298c04389))
+
 ## 1.34.2 (2025-06-24)
 
 Full Changelog: [v1.34.1...v1.34.2](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.34.1...v1.34.2)
