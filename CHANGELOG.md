@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.37.0 (2025-07-02)
+
+Full Changelog: [v1.34.2...v1.37.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.34.2...v1.37.0)
+
+### Features
+
+* **api:** updated openapi spec for v1.37.0 ([1a8daae](https://github.com/dodopayments/dodopayments-kotlin/commit/1a8daae4c3035dafd90ff62d3213cd013f6c36f5))
+
+
+### Bug Fixes
+
+* **ci:** release-doctor — report correct token name ([9e245db](https://github.com/dodopayments/dodopayments-kotlin/commit/9e245dbfe2c52c4fde0de76944861968345e88c5))
+* **client:** don't close client on `withOptions` usage when original is gc'd ([98cf334](https://github.com/dodopayments/dodopayments-kotlin/commit/98cf334e094affde215efcf28fdbb0f984bcad8e))
+
+
+### Chores
+
+* **ci:** only run for pushes and fork pull requests ([667ed24](https://github.com/dodopayments/dodopayments-kotlin/commit/667ed24af962ff14ec5839965cfef8c298c04389))
+
+
+### Refactors
+
+* **internal:** minor `ClientOptionsTest` change ([629c064](https://github.com/dodopayments/dodopayments-kotlin/commit/629c0642587149a7ea6a7b8ca06bfd5044490157))
+
 ## 1.34.2 (2025-06-24)
 
 Full Changelog: [v1.34.1...v1.34.2](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.34.1...v1.34.2)
