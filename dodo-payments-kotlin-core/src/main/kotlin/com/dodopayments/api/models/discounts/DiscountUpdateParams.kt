@@ -74,6 +74,8 @@ private constructor(
     fun restrictedTo(): List<String>? = body.restrictedTo()
 
     /**
+     * If present, update the discount type.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
@@ -262,6 +264,7 @@ private constructor(
          */
         fun addRestrictedTo(restrictedTo: String) = apply { body.addRestrictedTo(restrictedTo) }
 
+        /** If present, update the discount type. */
         fun type(type: DiscountType?) = apply { body.type(type) }
 
         /**
@@ -510,6 +513,8 @@ private constructor(
         fun restrictedTo(): List<String>? = restrictedTo.getNullable("restricted_to")
 
         /**
+         * If present, update the discount type.
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
@@ -708,6 +713,7 @@ private constructor(
                     }
             }
 
+            /** If present, update the discount type. */
             fun type(type: DiscountType?) = type(JsonField.ofNullable(type))
 
             /**

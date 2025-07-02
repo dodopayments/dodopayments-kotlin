@@ -39,6 +39,8 @@ private constructor(
     fun productPrice(): Int = body.productPrice()
 
     /**
+     * Metadata for the payment. If not passed, the metadata of the subscription will be taken
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
@@ -121,6 +123,9 @@ private constructor(
          */
         fun productPrice(productPrice: JsonField<Int>) = apply { body.productPrice(productPrice) }
 
+        /**
+         * Metadata for the payment. If not passed, the metadata of the subscription will be taken
+         */
         fun metadata(metadata: Metadata?) = apply { body.metadata(metadata) }
 
         /**
@@ -309,6 +314,8 @@ private constructor(
         fun productPrice(): Int = productPrice.getRequired("product_price")
 
         /**
+         * Metadata for the payment. If not passed, the metadata of the subscription will be taken
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
@@ -386,6 +393,10 @@ private constructor(
                 this.productPrice = productPrice
             }
 
+            /**
+             * Metadata for the payment. If not passed, the metadata of the subscription will be
+             * taken
+             */
             fun metadata(metadata: Metadata?) = metadata(JsonField.ofNullable(metadata))
 
             /**
@@ -483,6 +494,7 @@ private constructor(
             "Body{productPrice=$productPrice, metadata=$metadata, additionalProperties=$additionalProperties}"
     }
 
+    /** Metadata for the payment. If not passed, the metadata of the subscription will be taken */
     class Metadata
     @JsonCreator
     private constructor(

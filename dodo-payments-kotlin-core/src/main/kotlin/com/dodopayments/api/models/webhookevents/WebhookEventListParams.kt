@@ -17,6 +17,7 @@ private constructor(
     private val objectId: String?,
     private val pageNumber: Int?,
     private val pageSize: Int?,
+    private val webhookEventId: String?,
     private val webhookId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -39,6 +40,9 @@ private constructor(
 
     /** Page size default is 10 max is 100 */
     fun pageSize(): Int? = pageSize
+
+    /** Filter by webhook event id */
+    fun webhookEventId(): String? = webhookEventId
 
     /** Filter by webhook destination */
     fun webhookId(): String? = webhookId
@@ -66,6 +70,7 @@ private constructor(
         private var objectId: String? = null
         private var pageNumber: Int? = null
         private var pageSize: Int? = null
+        private var webhookEventId: String? = null
         private var webhookId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -77,6 +82,7 @@ private constructor(
             objectId = webhookEventListParams.objectId
             pageNumber = webhookEventListParams.pageNumber
             pageSize = webhookEventListParams.pageSize
+            webhookEventId = webhookEventListParams.webhookEventId
             webhookId = webhookEventListParams.webhookId
             additionalHeaders = webhookEventListParams.additionalHeaders.toBuilder()
             additionalQueryParams = webhookEventListParams.additionalQueryParams.toBuilder()
@@ -120,6 +126,9 @@ private constructor(
          * This unboxed primitive overload exists for backwards compatibility.
          */
         fun pageSize(pageSize: Int) = pageSize(pageSize as Int?)
+
+        /** Filter by webhook event id */
+        fun webhookEventId(webhookEventId: String?) = apply { this.webhookEventId = webhookEventId }
 
         /** Filter by webhook destination */
         fun webhookId(webhookId: String?) = apply { this.webhookId = webhookId }
@@ -235,6 +244,7 @@ private constructor(
                 objectId,
                 pageNumber,
                 pageSize,
+                webhookEventId,
                 webhookId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -256,6 +266,7 @@ private constructor(
                 objectId?.let { put("object_id", it) }
                 pageNumber?.let { put("page_number", it.toString()) }
                 pageSize?.let { put("page_size", it.toString()) }
+                webhookEventId?.let { put("webhook_event_id", it) }
                 webhookId?.let { put("webhook_id", it) }
                 putAll(additionalQueryParams)
             }
@@ -266,11 +277,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is WebhookEventListParams && createdAtGte == other.createdAtGte && createdAtLte == other.createdAtLte && limit == other.limit && objectId == other.objectId && pageNumber == other.pageNumber && pageSize == other.pageSize && webhookId == other.webhookId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is WebhookEventListParams && createdAtGte == other.createdAtGte && createdAtLte == other.createdAtLte && limit == other.limit && objectId == other.objectId && pageNumber == other.pageNumber && pageSize == other.pageSize && webhookEventId == other.webhookEventId && webhookId == other.webhookId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(createdAtGte, createdAtLte, limit, objectId, pageNumber, pageSize, webhookId, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(createdAtGte, createdAtLte, limit, objectId, pageNumber, pageSize, webhookEventId, webhookId, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "WebhookEventListParams{createdAtGte=$createdAtGte, createdAtLte=$createdAtLte, limit=$limit, objectId=$objectId, pageNumber=$pageNumber, pageSize=$pageSize, webhookId=$webhookId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "WebhookEventListParams{createdAtGte=$createdAtGte, createdAtLte=$createdAtLte, limit=$limit, objectId=$objectId, pageNumber=$pageNumber, pageSize=$pageSize, webhookEventId=$webhookEventId, webhookId=$webhookId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

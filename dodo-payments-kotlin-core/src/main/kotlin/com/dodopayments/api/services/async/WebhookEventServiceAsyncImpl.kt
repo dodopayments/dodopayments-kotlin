@@ -33,6 +33,7 @@ class WebhookEventServiceAsyncImpl internal constructor(private val clientOption
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): WebhookEventServiceAsync =
         WebhookEventServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
 
+    @Deprecated("deprecated")
     override suspend fun retrieve(
         params: WebhookEventRetrieveParams,
         requestOptions: RequestOptions,
@@ -62,6 +63,7 @@ class WebhookEventServiceAsyncImpl internal constructor(private val clientOption
         private val retrieveHandler: Handler<WebhookEvent> =
             jsonHandler<WebhookEvent>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
+        @Deprecated("deprecated")
         override suspend fun retrieve(
             params: WebhookEventRetrieveParams,
             requestOptions: RequestOptions,

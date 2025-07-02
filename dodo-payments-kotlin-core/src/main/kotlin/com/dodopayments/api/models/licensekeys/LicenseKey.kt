@@ -144,6 +144,8 @@ private constructor(
     fun productId(): String = productId.getRequired("product_id")
 
     /**
+     * The current status of the license key (e.g., active, inactive, expired).
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -430,6 +432,7 @@ private constructor(
          */
         fun productId(productId: JsonField<String>) = apply { this.productId = productId }
 
+        /** The current status of the license key (e.g., active, inactive, expired). */
         fun status(status: LicenseKeyStatus) = status(JsonField.of(status))
 
         /**
