@@ -18,7 +18,7 @@ internal class PaymentListParamsTest {
             .customerId("customer_id")
             .pageNumber(0)
             .pageSize(0)
-            .status(IntentStatus.SUCCEEDED)
+            .status(PaymentListParams.Status.SUCCEEDED)
             .subscriptionId("subscription_id")
             .build()
     }
@@ -33,7 +33,7 @@ internal class PaymentListParamsTest {
                 .customerId("customer_id")
                 .pageNumber(0)
                 .pageSize(0)
-                .status(IntentStatus.SUCCEEDED)
+                .status(PaymentListParams.Status.SUCCEEDED)
                 .subscriptionId("subscription_id")
                 .build()
 

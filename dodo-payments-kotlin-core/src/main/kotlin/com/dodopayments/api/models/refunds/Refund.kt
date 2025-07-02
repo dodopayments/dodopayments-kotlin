@@ -102,6 +102,8 @@ private constructor(
     fun refundId(): String = refundId.getRequired("refund_id")
 
     /**
+     * The current status of the refund.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -116,6 +118,8 @@ private constructor(
     fun amount(): Int? = amount.getNullable("amount")
 
     /**
+     * The currency of the refund, represented as an ISO 4217 currency code.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
@@ -310,6 +314,7 @@ private constructor(
          */
         fun refundId(refundId: JsonField<String>) = apply { this.refundId = refundId }
 
+        /** The current status of the refund. */
         fun status(status: RefundStatus) = status(JsonField.of(status))
 
         /**
@@ -339,6 +344,7 @@ private constructor(
          */
         fun amount(amount: JsonField<Int>) = apply { this.amount = amount }
 
+        /** The currency of the refund, represented as an ISO 4217 currency code. */
         fun currency(currency: Currency?) = currency(JsonField.ofNullable(currency))
 
         /**

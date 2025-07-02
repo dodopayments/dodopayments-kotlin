@@ -2,9 +2,13 @@
 
 package com.dodopayments.api.models.refunds
 
+import com.dodopayments.api.core.Enum
+import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.Params
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
+import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
+import com.fasterxml.jackson.annotation.JsonCreator
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Objects
@@ -16,7 +20,7 @@ private constructor(
     private val customerId: String?,
     private val pageNumber: Int?,
     private val pageSize: Int?,
-    private val status: RefundStatus?,
+    private val status: Status?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -37,7 +41,7 @@ private constructor(
     fun pageSize(): Int? = pageSize
 
     /** Filter by status */
-    fun status(): RefundStatus? = status
+    fun status(): Status? = status
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -61,7 +65,7 @@ private constructor(
         private var customerId: String? = null
         private var pageNumber: Int? = null
         private var pageSize: Int? = null
-        private var status: RefundStatus? = null
+        private var status: Status? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -106,7 +110,7 @@ private constructor(
         fun pageSize(pageSize: Int) = pageSize(pageSize as Int?)
 
         /** Filter by status */
-        fun status(status: RefundStatus?) = apply { this.status = status }
+        fun status(status: Status?) = apply { this.status = status }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -242,6 +246,144 @@ private constructor(
                 putAll(additionalQueryParams)
             }
             .build()
+
+    /** Filter by status */
+    class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            val SUCCEEDED = of("succeeded")
+
+            val FAILED = of("failed")
+
+            val PENDING = of("pending")
+
+            val REVIEW = of("review")
+
+            fun of(value: String) = Status(JsonField.of(value))
+        }
+
+        /** An enum containing [Status]'s known values. */
+        enum class Known {
+            SUCCEEDED,
+            FAILED,
+            PENDING,
+            REVIEW,
+        }
+
+        /**
+         * An enum containing [Status]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [Status] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            SUCCEEDED,
+            FAILED,
+            PENDING,
+            REVIEW,
+            /** An enum member indicating that [Status] was instantiated with an unknown value. */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                SUCCEEDED -> Value.SUCCEEDED
+                FAILED -> Value.FAILED
+                PENDING -> Value.PENDING
+                REVIEW -> Value.REVIEW
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws DodoPaymentsInvalidDataException if this class instance's value is a not a known
+         *   member.
+         */
+        fun known(): Known =
+            when (this) {
+                SUCCEEDED -> Known.SUCCEEDED
+                FAILED -> Known.FAILED
+                PENDING -> Known.PENDING
+                REVIEW -> Known.REVIEW
+                else -> throw DodoPaymentsInvalidDataException("Unknown Status: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws DodoPaymentsInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString() ?: throw DodoPaymentsInvalidDataException("Value is not a String")
+
+        private var validated: Boolean = false
+
+        fun validate(): Status = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Status && value == other.value /* spotless:on */
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

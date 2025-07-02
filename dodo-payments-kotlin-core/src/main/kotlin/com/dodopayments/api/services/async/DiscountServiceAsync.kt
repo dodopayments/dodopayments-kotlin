@@ -29,7 +29,9 @@ interface DiscountServiceAsync {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): DiscountServiceAsync
 
-    /** If `code` is omitted or empty, a random 16-char uppercase code is generated. */
+    /**
+     * POST /discounts If `code` is omitted or empty, a random 16-char uppercase code is generated.
+     */
     suspend fun create(
         params: DiscountCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),

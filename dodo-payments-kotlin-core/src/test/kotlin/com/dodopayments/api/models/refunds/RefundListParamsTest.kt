@@ -17,7 +17,7 @@ internal class RefundListParamsTest {
             .customerId("customer_id")
             .pageNumber(0)
             .pageSize(0)
-            .status(RefundStatus.SUCCEEDED)
+            .status(RefundListParams.Status.SUCCEEDED)
             .build()
     }
 
@@ -30,7 +30,7 @@ internal class RefundListParamsTest {
                 .customerId("customer_id")
                 .pageNumber(0)
                 .pageSize(0)
-                .status(RefundStatus.SUCCEEDED)
+                .status(RefundListParams.Status.SUCCEEDED)
                 .build()
 
         val queryParams = params._queryParams()

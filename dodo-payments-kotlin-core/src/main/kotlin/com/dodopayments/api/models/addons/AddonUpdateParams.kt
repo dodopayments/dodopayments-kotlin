@@ -30,6 +30,8 @@ private constructor(
     fun id(): String? = id
 
     /**
+     * The currency of the Addon
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
@@ -68,7 +70,7 @@ private constructor(
     fun price(): Int? = body.price()
 
     /**
-     * Represents the different categories of taxation applicable to various products and services.
+     * Tax category of the Addon.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
@@ -164,6 +166,7 @@ private constructor(
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
+        /** The currency of the Addon */
         fun currency(currency: Currency?) = apply { body.currency(currency) }
 
         /**
@@ -227,10 +230,7 @@ private constructor(
          */
         fun price(price: JsonField<Int>) = apply { body.price(price) }
 
-        /**
-         * Represents the different categories of taxation applicable to various products and
-         * services.
-         */
+        /** Tax category of the Addon. */
         fun taxCategory(taxCategory: TaxCategory?) = apply { body.taxCategory(taxCategory) }
 
         /**
@@ -415,6 +415,8 @@ private constructor(
         ) : this(currency, description, imageId, name, price, taxCategory, mutableMapOf())
 
         /**
+         * The currency of the Addon
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
@@ -453,8 +455,7 @@ private constructor(
         fun price(): Int? = price.getNullable("price")
 
         /**
-         * Represents the different categories of taxation applicable to various products and
-         * services.
+         * Tax category of the Addon.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
@@ -546,6 +547,7 @@ private constructor(
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
+            /** The currency of the Addon */
             fun currency(currency: Currency?) = currency(JsonField.ofNullable(currency))
 
             /**
@@ -614,10 +616,7 @@ private constructor(
              */
             fun price(price: JsonField<Int>) = apply { this.price = price }
 
-            /**
-             * Represents the different categories of taxation applicable to various products and
-             * services.
-             */
+            /** Tax category of the Addon. */
             fun taxCategory(taxCategory: TaxCategory?) =
                 taxCategory(JsonField.ofNullable(taxCategory))
 

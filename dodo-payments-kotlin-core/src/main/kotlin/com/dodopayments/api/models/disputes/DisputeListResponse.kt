@@ -100,12 +100,16 @@ private constructor(
     fun disputeId(): String = disputeId.getRequired("dispute_id")
 
     /**
+     * The current stage of the dispute process.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun disputeStage(): DisputeStage = disputeStage.getRequired("dispute_stage")
 
     /**
+     * The current status of the dispute.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -296,6 +300,7 @@ private constructor(
          */
         fun disputeId(disputeId: JsonField<String>) = apply { this.disputeId = disputeId }
 
+        /** The current stage of the dispute process. */
         fun disputeStage(disputeStage: DisputeStage) = disputeStage(JsonField.of(disputeStage))
 
         /**
@@ -309,6 +314,7 @@ private constructor(
             this.disputeStage = disputeStage
         }
 
+        /** The current status of the dispute. */
         fun disputeStatus(disputeStatus: DisputeStatus) = disputeStatus(JsonField.of(disputeStatus))
 
         /**

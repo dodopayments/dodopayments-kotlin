@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
@@ -25,6 +26,7 @@ private constructor(
     private val paymentId: JsonField<String>,
     private val totalAmount: JsonField<Int>,
     private val discountId: JsonField<String>,
+    private val expiresOn: JsonField<OffsetDateTime>,
     private val paymentLink: JsonField<String>,
     private val productCart: JsonField<List<OneTimeProductCartItem>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -46,6 +48,9 @@ private constructor(
         @JsonProperty("discount_id")
         @ExcludeMissing
         discountId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("expires_on")
+        @ExcludeMissing
+        expiresOn: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("payment_link")
         @ExcludeMissing
         paymentLink: JsonField<String> = JsonMissing.of(),
@@ -59,6 +64,7 @@ private constructor(
         paymentId,
         totalAmount,
         discountId,
+        expiresOn,
         paymentLink,
         productCart,
         mutableMapOf(),
@@ -73,12 +79,16 @@ private constructor(
     fun clientSecret(): String = clientSecret.getRequired("client_secret")
 
     /**
+     * Limited details about the customer making the payment
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun customer(): CustomerLimitedDetails = customer.getRequired("customer")
 
     /**
+     * Additional metadata associated with the payment
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -107,6 +117,14 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun discountId(): String? = discountId.getNullable("discount_id")
+
+    /**
+     * Expiry timestamp of the payment link
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun expiresOn(): OffsetDateTime? = expiresOn.getNullable("expires_on")
 
     /**
      * Optional URL to a hosted payment page
@@ -171,6 +189,15 @@ private constructor(
     @JsonProperty("discount_id") @ExcludeMissing fun _discountId(): JsonField<String> = discountId
 
     /**
+     * Returns the raw JSON value of [expiresOn].
+     *
+     * Unlike [expiresOn], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("expires_on")
+    @ExcludeMissing
+    fun _expiresOn(): JsonField<OffsetDateTime> = expiresOn
+
+    /**
      * Returns the raw JSON value of [paymentLink].
      *
      * Unlike [paymentLink], this method doesn't throw if the JSON field has an unexpected type.
@@ -226,6 +253,7 @@ private constructor(
         private var paymentId: JsonField<String>? = null
         private var totalAmount: JsonField<Int>? = null
         private var discountId: JsonField<String> = JsonMissing.of()
+        private var expiresOn: JsonField<OffsetDateTime> = JsonMissing.of()
         private var paymentLink: JsonField<String> = JsonMissing.of()
         private var productCart: JsonField<MutableList<OneTimeProductCartItem>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -237,6 +265,7 @@ private constructor(
             paymentId = paymentCreateResponse.paymentId
             totalAmount = paymentCreateResponse.totalAmount
             discountId = paymentCreateResponse.discountId
+            expiresOn = paymentCreateResponse.expiresOn
             paymentLink = paymentCreateResponse.paymentLink
             productCart = paymentCreateResponse.productCart.map { it.toMutableList() }
             additionalProperties = paymentCreateResponse.additionalProperties.toMutableMap()
@@ -258,6 +287,7 @@ private constructor(
             this.clientSecret = clientSecret
         }
 
+        /** Limited details about the customer making the payment */
         fun customer(customer: CustomerLimitedDetails) = customer(JsonField.of(customer))
 
         /**
@@ -271,6 +301,7 @@ private constructor(
             this.customer = customer
         }
 
+        /** Additional metadata associated with the payment */
         fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
         /**
@@ -316,6 +347,18 @@ private constructor(
          * value.
          */
         fun discountId(discountId: JsonField<String>) = apply { this.discountId = discountId }
+
+        /** Expiry timestamp of the payment link */
+        fun expiresOn(expiresOn: OffsetDateTime?) = expiresOn(JsonField.ofNullable(expiresOn))
+
+        /**
+         * Sets [Builder.expiresOn] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.expiresOn] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun expiresOn(expiresOn: JsonField<OffsetDateTime>) = apply { this.expiresOn = expiresOn }
 
         /** Optional URL to a hosted payment page */
         fun paymentLink(paymentLink: String?) = paymentLink(JsonField.ofNullable(paymentLink))
@@ -399,6 +442,7 @@ private constructor(
                 checkRequired("paymentId", paymentId),
                 checkRequired("totalAmount", totalAmount),
                 discountId,
+                expiresOn,
                 paymentLink,
                 (productCart ?: JsonMissing.of()).map { it.toImmutable() },
                 additionalProperties.toMutableMap(),
@@ -418,6 +462,7 @@ private constructor(
         paymentId()
         totalAmount()
         discountId()
+        expiresOn()
         paymentLink()
         productCart()?.forEach { it.validate() }
         validated = true
@@ -443,9 +488,11 @@ private constructor(
             (if (paymentId.asKnown() == null) 0 else 1) +
             (if (totalAmount.asKnown() == null) 0 else 1) +
             (if (discountId.asKnown() == null) 0 else 1) +
+            (if (expiresOn.asKnown() == null) 0 else 1) +
             (if (paymentLink.asKnown() == null) 0 else 1) +
             (productCart.asKnown()?.sumOf { it.validity().toInt() } ?: 0)
 
+    /** Additional metadata associated with the payment */
     class Metadata
     @JsonCreator
     private constructor(
@@ -550,15 +597,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is PaymentCreateResponse && clientSecret == other.clientSecret && customer == other.customer && metadata == other.metadata && paymentId == other.paymentId && totalAmount == other.totalAmount && discountId == other.discountId && paymentLink == other.paymentLink && productCart == other.productCart && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is PaymentCreateResponse && clientSecret == other.clientSecret && customer == other.customer && metadata == other.metadata && paymentId == other.paymentId && totalAmount == other.totalAmount && discountId == other.discountId && expiresOn == other.expiresOn && paymentLink == other.paymentLink && productCart == other.productCart && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(clientSecret, customer, metadata, paymentId, totalAmount, discountId, paymentLink, productCart, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(clientSecret, customer, metadata, paymentId, totalAmount, discountId, expiresOn, paymentLink, productCart, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "PaymentCreateResponse{clientSecret=$clientSecret, customer=$customer, metadata=$metadata, paymentId=$paymentId, totalAmount=$totalAmount, discountId=$discountId, paymentLink=$paymentLink, productCart=$productCart, additionalProperties=$additionalProperties}"
+        "PaymentCreateResponse{clientSecret=$clientSecret, customer=$customer, metadata=$metadata, paymentId=$paymentId, totalAmount=$totalAmount, discountId=$discountId, expiresOn=$expiresOn, paymentLink=$paymentLink, productCart=$productCart, additionalProperties=$additionalProperties}"
 }
