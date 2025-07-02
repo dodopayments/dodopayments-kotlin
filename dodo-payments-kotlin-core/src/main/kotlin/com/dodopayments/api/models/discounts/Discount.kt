@@ -131,6 +131,8 @@ private constructor(
     fun timesUsed(): Int = timesUsed.getRequired("times_used")
 
     /**
+     * The type of discount, e.g. `percentage`, `flat`, or `flat_per_unit`.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -405,6 +407,7 @@ private constructor(
          */
         fun timesUsed(timesUsed: JsonField<Int>) = apply { this.timesUsed = timesUsed }
 
+        /** The type of discount, e.g. `percentage`, `flat`, or `flat_per_unit`. */
         fun type(type: DiscountType) = type(JsonField.of(type))
 
         /**

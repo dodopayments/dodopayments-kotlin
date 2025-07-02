@@ -29,7 +29,9 @@ interface DiscountService {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): DiscountService
 
-    /** If `code` is omitted or empty, a random 16-char uppercase code is generated. */
+    /**
+     * POST /discounts If `code` is omitted or empty, a random 16-char uppercase code is generated.
+     */
     fun create(
         params: DiscountCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),

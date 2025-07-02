@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
@@ -28,6 +29,7 @@ private constructor(
     private val subscriptionId: JsonField<String>,
     private val clientSecret: JsonField<String>,
     private val discountId: JsonField<String>,
+    private val expiresOn: JsonField<OffsetDateTime>,
     private val paymentLink: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -54,6 +56,9 @@ private constructor(
         @JsonProperty("discount_id")
         @ExcludeMissing
         discountId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("expires_on")
+        @ExcludeMissing
+        expiresOn: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("payment_link")
         @ExcludeMissing
         paymentLink: JsonField<String> = JsonMissing.of(),
@@ -66,6 +71,7 @@ private constructor(
         subscriptionId,
         clientSecret,
         discountId,
+        expiresOn,
         paymentLink,
         mutableMapOf(),
     )
@@ -79,12 +85,16 @@ private constructor(
     fun addons(): List<AddonCartResponseItem> = addons.getRequired("addons")
 
     /**
+     * Customer details associated with this subscription
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun customer(): CustomerLimitedDetails = customer.getRequired("customer")
 
     /**
+     * Additional metadata associated with the subscription
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -129,6 +139,14 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun discountId(): String? = discountId.getNullable("discount_id")
+
+    /**
+     * Expiry timestamp of the payment link
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun expiresOn(): OffsetDateTime? = expiresOn.getNullable("expires_on")
 
     /**
      * URL to checkout page
@@ -206,6 +224,15 @@ private constructor(
     @JsonProperty("discount_id") @ExcludeMissing fun _discountId(): JsonField<String> = discountId
 
     /**
+     * Returns the raw JSON value of [expiresOn].
+     *
+     * Unlike [expiresOn], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("expires_on")
+    @ExcludeMissing
+    fun _expiresOn(): JsonField<OffsetDateTime> = expiresOn
+
+    /**
      * Returns the raw JSON value of [paymentLink].
      *
      * Unlike [paymentLink], this method doesn't throw if the JSON field has an unexpected type.
@@ -255,6 +282,7 @@ private constructor(
         private var subscriptionId: JsonField<String>? = null
         private var clientSecret: JsonField<String> = JsonMissing.of()
         private var discountId: JsonField<String> = JsonMissing.of()
+        private var expiresOn: JsonField<OffsetDateTime> = JsonMissing.of()
         private var paymentLink: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -267,6 +295,7 @@ private constructor(
             subscriptionId = subscriptionCreateResponse.subscriptionId
             clientSecret = subscriptionCreateResponse.clientSecret
             discountId = subscriptionCreateResponse.discountId
+            expiresOn = subscriptionCreateResponse.expiresOn
             paymentLink = subscriptionCreateResponse.paymentLink
             additionalProperties = subscriptionCreateResponse.additionalProperties.toMutableMap()
         }
@@ -297,6 +326,7 @@ private constructor(
                 }
         }
 
+        /** Customer details associated with this subscription */
         fun customer(customer: CustomerLimitedDetails) = customer(JsonField.of(customer))
 
         /**
@@ -310,6 +340,7 @@ private constructor(
             this.customer = customer
         }
 
+        /** Additional metadata associated with the subscription */
         fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
         /**
@@ -390,6 +421,18 @@ private constructor(
          */
         fun discountId(discountId: JsonField<String>) = apply { this.discountId = discountId }
 
+        /** Expiry timestamp of the payment link */
+        fun expiresOn(expiresOn: OffsetDateTime?) = expiresOn(JsonField.ofNullable(expiresOn))
+
+        /**
+         * Sets [Builder.expiresOn] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.expiresOn] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun expiresOn(expiresOn: JsonField<OffsetDateTime>) = apply { this.expiresOn = expiresOn }
+
         /** URL to checkout page */
         fun paymentLink(paymentLink: String?) = paymentLink(JsonField.ofNullable(paymentLink))
 
@@ -448,6 +491,7 @@ private constructor(
                 checkRequired("subscriptionId", subscriptionId),
                 clientSecret,
                 discountId,
+                expiresOn,
                 paymentLink,
                 additionalProperties.toMutableMap(),
             )
@@ -468,6 +512,7 @@ private constructor(
         subscriptionId()
         clientSecret()
         discountId()
+        expiresOn()
         paymentLink()
         validated = true
     }
@@ -494,8 +539,10 @@ private constructor(
             (if (subscriptionId.asKnown() == null) 0 else 1) +
             (if (clientSecret.asKnown() == null) 0 else 1) +
             (if (discountId.asKnown() == null) 0 else 1) +
+            (if (expiresOn.asKnown() == null) 0 else 1) +
             (if (paymentLink.asKnown() == null) 0 else 1)
 
+    /** Additional metadata associated with the subscription */
     class Metadata
     @JsonCreator
     private constructor(
@@ -600,15 +647,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionCreateResponse && addons == other.addons && customer == other.customer && metadata == other.metadata && paymentId == other.paymentId && recurringPreTaxAmount == other.recurringPreTaxAmount && subscriptionId == other.subscriptionId && clientSecret == other.clientSecret && discountId == other.discountId && paymentLink == other.paymentLink && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is SubscriptionCreateResponse && addons == other.addons && customer == other.customer && metadata == other.metadata && paymentId == other.paymentId && recurringPreTaxAmount == other.recurringPreTaxAmount && subscriptionId == other.subscriptionId && clientSecret == other.clientSecret && discountId == other.discountId && expiresOn == other.expiresOn && paymentLink == other.paymentLink && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(addons, customer, metadata, paymentId, recurringPreTaxAmount, subscriptionId, clientSecret, discountId, paymentLink, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(addons, customer, metadata, paymentId, recurringPreTaxAmount, subscriptionId, clientSecret, discountId, expiresOn, paymentLink, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "SubscriptionCreateResponse{addons=$addons, customer=$customer, metadata=$metadata, paymentId=$paymentId, recurringPreTaxAmount=$recurringPreTaxAmount, subscriptionId=$subscriptionId, clientSecret=$clientSecret, discountId=$discountId, paymentLink=$paymentLink, additionalProperties=$additionalProperties}"
+        "SubscriptionCreateResponse{addons=$addons, customer=$customer, metadata=$metadata, paymentId=$paymentId, recurringPreTaxAmount=$recurringPreTaxAmount, subscriptionId=$subscriptionId, clientSecret=$clientSecret, discountId=$discountId, expiresOn=$expiresOn, paymentLink=$paymentLink, additionalProperties=$additionalProperties}"
 }

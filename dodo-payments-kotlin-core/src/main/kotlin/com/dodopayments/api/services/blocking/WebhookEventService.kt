@@ -25,6 +25,7 @@ interface WebhookEventService {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): WebhookEventService
 
+    @Deprecated("deprecated")
     fun retrieve(
         webhookEventId: String,
         params: WebhookEventRetrieveParams = WebhookEventRetrieveParams.none(),
@@ -33,12 +34,14 @@ interface WebhookEventService {
         retrieve(params.toBuilder().webhookEventId(webhookEventId).build(), requestOptions)
 
     /** @see [retrieve] */
+    @Deprecated("deprecated")
     fun retrieve(
         params: WebhookEventRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): WebhookEvent
 
     /** @see [retrieve] */
+    @Deprecated("deprecated")
     fun retrieve(webhookEventId: String, requestOptions: RequestOptions): WebhookEvent =
         retrieve(webhookEventId, WebhookEventRetrieveParams.none(), requestOptions)
 
@@ -69,6 +72,7 @@ interface WebhookEventService {
          * Returns a raw HTTP response for `get /webhook_events/{webhook_event_id}`, but is
          * otherwise the same as [WebhookEventService.retrieve].
          */
+        @Deprecated("deprecated")
         @MustBeClosed
         fun retrieve(
             webhookEventId: String,
@@ -78,6 +82,7 @@ interface WebhookEventService {
             retrieve(params.toBuilder().webhookEventId(webhookEventId).build(), requestOptions)
 
         /** @see [retrieve] */
+        @Deprecated("deprecated")
         @MustBeClosed
         fun retrieve(
             params: WebhookEventRetrieveParams,
@@ -85,6 +90,7 @@ interface WebhookEventService {
         ): HttpResponseFor<WebhookEvent>
 
         /** @see [retrieve] */
+        @Deprecated("deprecated")
         @MustBeClosed
         fun retrieve(
             webhookEventId: String,

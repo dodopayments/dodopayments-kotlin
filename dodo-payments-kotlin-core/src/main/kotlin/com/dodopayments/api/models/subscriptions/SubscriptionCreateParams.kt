@@ -34,12 +34,16 @@ private constructor(
 ) : Params {
 
     /**
+     * Billing address information for the subscription
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun billing(): BillingAddress = body.billing()
 
     /**
+     * Customer details for the subscription
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -83,6 +87,9 @@ private constructor(
         body.allowedPaymentMethodTypes()
 
     /**
+     * Fix the currency in which the end customer is billed. If Dodo Payments cannot support that
+     * currency for this transaction, it will not proceed
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
@@ -97,6 +104,8 @@ private constructor(
     fun discountCode(): String? = body.discountCode()
 
     /**
+     * Additional metadata for the subscription Defaults to empty if not specified
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
@@ -308,6 +317,7 @@ private constructor(
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
+        /** Billing address information for the subscription */
         fun billing(billing: BillingAddress) = apply { body.billing(billing) }
 
         /**
@@ -319,6 +329,7 @@ private constructor(
          */
         fun billing(billing: JsonField<BillingAddress>) = apply { body.billing(billing) }
 
+        /** Customer details for the subscription */
         fun customer(customer: CustomerRequest) = apply { body.customer(customer) }
 
         /**
@@ -421,6 +432,10 @@ private constructor(
                 body.addAllowedPaymentMethodType(allowedPaymentMethodType)
             }
 
+        /**
+         * Fix the currency in which the end customer is billed. If Dodo Payments cannot support
+         * that currency for this transaction, it will not proceed
+         */
         fun billingCurrency(billingCurrency: Currency?) = apply {
             body.billingCurrency(billingCurrency)
         }
@@ -450,6 +465,7 @@ private constructor(
             body.discountCode(discountCode)
         }
 
+        /** Additional metadata for the subscription Defaults to empty if not specified */
         fun metadata(metadata: Metadata) = apply { body.metadata(metadata) }
 
         /**
@@ -792,12 +808,16 @@ private constructor(
         )
 
         /**
+         * Billing address information for the subscription
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun billing(): BillingAddress = billing.getRequired("billing")
 
         /**
+         * Customer details for the subscription
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
@@ -841,6 +861,9 @@ private constructor(
             allowedPaymentMethodTypes.getNullable("allowed_payment_method_types")
 
         /**
+         * Fix the currency in which the end customer is billed. If Dodo Payments cannot support
+         * that currency for this transaction, it will not proceed
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
@@ -855,6 +878,8 @@ private constructor(
         fun discountCode(): String? = discountCode.getNullable("discount_code")
 
         /**
+         * Additional metadata for the subscription Defaults to empty if not specified
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
@@ -1104,6 +1129,7 @@ private constructor(
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
+            /** Billing address information for the subscription */
             fun billing(billing: BillingAddress) = billing(JsonField.of(billing))
 
             /**
@@ -1115,6 +1141,7 @@ private constructor(
              */
             fun billing(billing: JsonField<BillingAddress>) = apply { this.billing = billing }
 
+            /** Customer details for the subscription */
             fun customer(customer: CustomerRequest) = customer(JsonField.of(customer))
 
             /**
@@ -1229,6 +1256,10 @@ private constructor(
                         }
                 }
 
+            /**
+             * Fix the currency in which the end customer is billed. If Dodo Payments cannot support
+             * that currency for this transaction, it will not proceed
+             */
             fun billingCurrency(billingCurrency: Currency?) =
                 billingCurrency(JsonField.ofNullable(billingCurrency))
 
@@ -1258,6 +1289,7 @@ private constructor(
                 this.discountCode = discountCode
             }
 
+            /** Additional metadata for the subscription Defaults to empty if not specified */
             fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
             /**
@@ -1915,6 +1947,7 @@ private constructor(
         override fun toString() = value.toString()
     }
 
+    /** Additional metadata for the subscription Defaults to empty if not specified */
     class Metadata
     @JsonCreator
     private constructor(

@@ -18,6 +18,7 @@ internal class WebhookEventListParamsTest {
             .objectId("object_id")
             .pageNumber(0)
             .pageSize(0)
+            .webhookEventId("webhook_event_id")
             .webhookId("webhook_id")
             .build()
     }
@@ -32,6 +33,7 @@ internal class WebhookEventListParamsTest {
                 .objectId("object_id")
                 .pageNumber(0)
                 .pageSize(0)
+                .webhookEventId("webhook_event_id")
                 .webhookId("webhook_id")
                 .build()
 
@@ -46,6 +48,7 @@ internal class WebhookEventListParamsTest {
                     .put("object_id", "object_id")
                     .put("page_number", "0")
                     .put("page_size", "0")
+                    .put("webhook_event_id", "webhook_event_id")
                     .put("webhook_id", "webhook_id")
                     .build()
             )

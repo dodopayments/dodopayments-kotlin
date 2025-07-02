@@ -9,6 +9,7 @@ import com.dodopayments.api.core.ExcludeMissing
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
+import com.dodopayments.api.core.allMaxBy
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.getOrThrow
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
@@ -28,6 +29,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.util.Collections
 import java.util.Objects
 
+/** One-time price details. */
 @JsonDeserialize(using = Price.Deserializer::class)
 @JsonSerialize(using = Price.Serializer::class)
 class Price
@@ -37,16 +39,20 @@ private constructor(
     private val _json: JsonValue? = null,
 ) {
 
+    /** One-time price details. */
     fun oneTime(): OneTimePrice? = oneTime
 
+    /** Recurring price details. */
     fun recurring(): RecurringPrice? = recurring
 
     fun isOneTime(): Boolean = oneTime != null
 
     fun isRecurring(): Boolean = recurring != null
 
+    /** One-time price details. */
     fun asOneTime(): OneTimePrice = oneTime.getOrThrow("oneTime")
 
+    /** Recurring price details. */
     fun asRecurring(): RecurringPrice = recurring.getOrThrow("recurring")
 
     fun _json(): JsonValue? = _json
@@ -123,16 +129,20 @@ private constructor(
 
     companion object {
 
+        /** One-time price details. */
         fun ofOneTime(oneTime: OneTimePrice) = Price(oneTime = oneTime)
 
+        /** Recurring price details. */
         fun ofRecurring(recurring: RecurringPrice) = Price(recurring = recurring)
     }
 
     /** An interface that defines how to map each variant of [Price] to a value of type [T]. */
     interface Visitor<out T> {
 
+        /** One-time price details. */
         fun visitOneTime(oneTime: OneTimePrice): T
 
+        /** Recurring price details. */
         fun visitRecurring(recurring: RecurringPrice): T
 
         /**
@@ -153,22 +163,28 @@ private constructor(
 
         override fun ObjectCodec.deserialize(node: JsonNode): Price {
             val json = JsonValue.fromJsonNode(node)
-            val type = json.asObject()?.get("type")?.asString()
 
-            when (type) {
-                "one_time_price" -> {
-                    return tryDeserialize(node, jacksonTypeRef<OneTimePrice>())?.let {
-                        Price(oneTime = it, _json = json)
-                    } ?: Price(_json = json)
-                }
-                "recurring_price" -> {
-                    return tryDeserialize(node, jacksonTypeRef<RecurringPrice>())?.let {
-                        Price(recurring = it, _json = json)
-                    } ?: Price(_json = json)
-                }
+            val bestMatches =
+                sequenceOf(
+                        tryDeserialize(node, jacksonTypeRef<OneTimePrice>())?.let {
+                            Price(oneTime = it, _json = json)
+                        },
+                        tryDeserialize(node, jacksonTypeRef<RecurringPrice>())?.let {
+                            Price(recurring = it, _json = json)
+                        },
+                    )
+                    .filterNotNull()
+                    .allMaxBy { it.validity() }
+                    .toList()
+            return when (bestMatches.size) {
+                // This can happen if what we're deserializing is completely incompatible with all
+                // the possible variants (e.g. deserializing from boolean).
+                0 -> Price(_json = json)
+                1 -> bestMatches.single()
+                // If there's more than one match with the highest validity, then use the first
+                // completely valid match, or simply the first match if none are completely valid.
+                else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
             }
-
-            return Price(_json = json)
         }
     }
 
@@ -188,6 +204,7 @@ private constructor(
         }
     }
 
+    /** One-time price details. */
     class OneTimePrice
     private constructor(
         private val currency: JsonField<Currency>,
@@ -234,6 +251,8 @@ private constructor(
         )
 
         /**
+         * The currency in which the payment is made.
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
@@ -423,6 +442,7 @@ private constructor(
                 additionalProperties = oneTimePrice.additionalProperties.toMutableMap()
             }
 
+            /** The currency in which the payment is made. */
             fun currency(currency: Currency) = currency(JsonField.of(currency))
 
             /**
@@ -787,6 +807,7 @@ private constructor(
             "OneTimePrice{currency=$currency, discount=$discount, price=$price, purchasingPowerParity=$purchasingPowerParity, type=$type, payWhatYouWant=$payWhatYouWant, suggestedPrice=$suggestedPrice, taxInclusive=$taxInclusive, additionalProperties=$additionalProperties}"
     }
 
+    /** Recurring price details. */
     class RecurringPrice
     private constructor(
         private val currency: JsonField<Currency>,
@@ -848,6 +869,8 @@ private constructor(
         )
 
         /**
+         * The currency in which the payment is made.
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
@@ -872,6 +895,8 @@ private constructor(
             paymentFrequencyCount.getRequired("payment_frequency_count")
 
         /**
+         * The time interval for the payment frequency (e.g., day, month, year).
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
@@ -908,6 +933,8 @@ private constructor(
             subscriptionPeriodCount.getRequired("subscription_period_count")
 
         /**
+         * The time interval for the subscription period (e.g., day, month, year).
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
@@ -1098,6 +1125,7 @@ private constructor(
                 additionalProperties = recurringPrice.additionalProperties.toMutableMap()
             }
 
+            /** The currency in which the payment is made. */
             fun currency(currency: Currency) = currency(JsonField.of(currency))
 
             /**
@@ -1139,6 +1167,7 @@ private constructor(
                 this.paymentFrequencyCount = paymentFrequencyCount
             }
 
+            /** The time interval for the payment frequency (e.g., day, month, year). */
             fun paymentFrequencyInterval(paymentFrequencyInterval: TimeInterval) =
                 paymentFrequencyInterval(JsonField.of(paymentFrequencyInterval))
 
@@ -1205,6 +1234,7 @@ private constructor(
                 this.subscriptionPeriodCount = subscriptionPeriodCount
             }
 
+            /** The time interval for the subscription period (e.g., day, month, year). */
             fun subscriptionPeriodInterval(subscriptionPeriodInterval: TimeInterval) =
                 subscriptionPeriodInterval(JsonField.of(subscriptionPeriodInterval))
 

@@ -15,7 +15,7 @@ internal class LicenseKeyListParamsTest {
             .pageNumber(0)
             .pageSize(0)
             .productId("product_id")
-            .status(LicenseKeyStatus.ACTIVE)
+            .status(LicenseKeyListParams.Status.ACTIVE)
             .build()
     }
 
@@ -27,7 +27,7 @@ internal class LicenseKeyListParamsTest {
                 .pageNumber(0)
                 .pageSize(0)
                 .productId("product_id")
-                .status(LicenseKeyStatus.ACTIVE)
+                .status(LicenseKeyListParams.Status.ACTIVE)
                 .build()
 
         val queryParams = params._queryParams()

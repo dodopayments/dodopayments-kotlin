@@ -18,7 +18,7 @@ internal class SubscriptionListParamsTest {
             .customerId("customer_id")
             .pageNumber(0)
             .pageSize(0)
-            .status(SubscriptionStatus.PENDING)
+            .status(SubscriptionListParams.Status.PENDING)
             .build()
     }
 
@@ -32,7 +32,7 @@ internal class SubscriptionListParamsTest {
                 .customerId("customer_id")
                 .pageNumber(0)
                 .pageSize(0)
-                .status(SubscriptionStatus.PENDING)
+                .status(SubscriptionListParams.Status.PENDING)
                 .build()
 
         val queryParams = params._queryParams()
