@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.37.1 (2025-07-03)
+
+Full Changelog: [v1.37.0...v1.37.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.37.0...v1.37.1)
+
+### Features
+
+* **api:** added webhook event type model ([24882eb](https://github.com/dodopayments/dodopayments-kotlin/commit/24882eb4e53a380711621bfa63be5ed8cedf6992))
+* **api:** added webhook payload model ([e94cc27](https://github.com/dodopayments/dodopayments-kotlin/commit/e94cc27b4b346fd84fddbee61db4814fe0886bda))
+
 ## 1.37.0 (2025-07-02)
 
 Full Changelog: [v1.34.2...v1.37.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.34.2...v1.37.0)
