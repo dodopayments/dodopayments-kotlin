@@ -52,7 +52,7 @@ private constructor(
     private val businessId: JsonField<String>,
     private val data: JsonField<Data>,
     private val timestamp: JsonField<OffsetDateTime>,
-    private val type: JsonField<Type>,
+    private val type: JsonField<WebhookEventType>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -65,7 +65,7 @@ private constructor(
         @JsonProperty("timestamp")
         @ExcludeMissing
         timestamp: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
+        @JsonProperty("type") @ExcludeMissing type: JsonField<WebhookEventType> = JsonMissing.of(),
     ) : this(businessId, data, timestamp, type, mutableMapOf())
 
     /**
@@ -96,7 +96,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun type(): Type = type.getRequired("type")
+    fun type(): WebhookEventType = type.getRequired("type")
 
     /**
      * Returns the raw JSON value of [businessId].
@@ -126,7 +126,7 @@ private constructor(
      *
      * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
+    @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<WebhookEventType> = type
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -162,7 +162,7 @@ private constructor(
         private var businessId: JsonField<String>? = null
         private var data: JsonField<Data>? = null
         private var timestamp: JsonField<OffsetDateTime>? = null
-        private var type: JsonField<Type>? = null
+        private var type: JsonField<WebhookEventType>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(webhookPayload: WebhookPayload) = apply {
@@ -226,15 +226,16 @@ private constructor(
         fun timestamp(timestamp: JsonField<OffsetDateTime>) = apply { this.timestamp = timestamp }
 
         /** Event types for Dodo events */
-        fun type(type: Type) = type(JsonField.of(type))
+        fun type(type: WebhookEventType) = type(JsonField.of(type))
 
         /**
          * Sets [Builder.type] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.type] with a well-typed [Type] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
+         * You should usually call [Builder.type] with a well-typed [WebhookEventType] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun type(type: JsonField<Type>) = apply { this.type = type }
+        fun type(type: JsonField<WebhookEventType>) = apply { this.type = type }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -5904,252 +5905,6 @@ private constructor(
             override fun toString() =
                 "LicenseKey{id=$id, businessId=$businessId, createdAt=$createdAt, customerId=$customerId, instancesCount=$instancesCount, key=$key, paymentId=$paymentId, productId=$productId, status=$status, activationsLimit=$activationsLimit, expiresAt=$expiresAt, subscriptionId=$subscriptionId, payloadType=$payloadType, additionalProperties=$additionalProperties}"
         }
-    }
-
-    /** Event types for Dodo events */
-    class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
-
-        /**
-         * Returns this class instance's raw value.
-         *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
-         */
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-        companion object {
-
-            val PAYMENT_SUCCEEDED = of("payment.succeeded")
-
-            val PAYMENT_FAILED = of("payment.failed")
-
-            val PAYMENT_PROCESSING = of("payment.processing")
-
-            val PAYMENT_CANCELLED = of("payment.cancelled")
-
-            val REFUND_SUCCEEDED = of("refund.succeeded")
-
-            val REFUND_FAILED = of("refund.failed")
-
-            val DISPUTE_OPENED = of("dispute.opened")
-
-            val DISPUTE_EXPIRED = of("dispute.expired")
-
-            val DISPUTE_ACCEPTED = of("dispute.accepted")
-
-            val DISPUTE_CANCELLED = of("dispute.cancelled")
-
-            val DISPUTE_CHALLENGED = of("dispute.challenged")
-
-            val DISPUTE_WON = of("dispute.won")
-
-            val DISPUTE_LOST = of("dispute.lost")
-
-            val SUBSCRIPTION_ACTIVE = of("subscription.active")
-
-            val SUBSCRIPTION_RENEWED = of("subscription.renewed")
-
-            val SUBSCRIPTION_ON_HOLD = of("subscription.on_hold")
-
-            val SUBSCRIPTION_PAUSED = of("subscription.paused")
-
-            val SUBSCRIPTION_CANCELLED = of("subscription.cancelled")
-
-            val SUBSCRIPTION_FAILED = of("subscription.failed")
-
-            val SUBSCRIPTION_EXPIRED = of("subscription.expired")
-
-            val SUBSCRIPTION_PLAN_CHANGED = of("subscription.plan_changed")
-
-            val LICENSE_KEY_CREATED = of("license_key.created")
-
-            fun of(value: String) = Type(JsonField.of(value))
-        }
-
-        /** An enum containing [Type]'s known values. */
-        enum class Known {
-            PAYMENT_SUCCEEDED,
-            PAYMENT_FAILED,
-            PAYMENT_PROCESSING,
-            PAYMENT_CANCELLED,
-            REFUND_SUCCEEDED,
-            REFUND_FAILED,
-            DISPUTE_OPENED,
-            DISPUTE_EXPIRED,
-            DISPUTE_ACCEPTED,
-            DISPUTE_CANCELLED,
-            DISPUTE_CHALLENGED,
-            DISPUTE_WON,
-            DISPUTE_LOST,
-            SUBSCRIPTION_ACTIVE,
-            SUBSCRIPTION_RENEWED,
-            SUBSCRIPTION_ON_HOLD,
-            SUBSCRIPTION_PAUSED,
-            SUBSCRIPTION_CANCELLED,
-            SUBSCRIPTION_FAILED,
-            SUBSCRIPTION_EXPIRED,
-            SUBSCRIPTION_PLAN_CHANGED,
-            LICENSE_KEY_CREATED,
-        }
-
-        /**
-         * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
-         *
-         * An instance of [Type] can contain an unknown value in a couple of cases:
-         * - It was deserialized from data that doesn't match any known member. For example, if the
-         *   SDK is on an older version than the API, then the API may respond with new members that
-         *   the SDK is unaware of.
-         * - It was constructed with an arbitrary value using the [of] method.
-         */
-        enum class Value {
-            PAYMENT_SUCCEEDED,
-            PAYMENT_FAILED,
-            PAYMENT_PROCESSING,
-            PAYMENT_CANCELLED,
-            REFUND_SUCCEEDED,
-            REFUND_FAILED,
-            DISPUTE_OPENED,
-            DISPUTE_EXPIRED,
-            DISPUTE_ACCEPTED,
-            DISPUTE_CANCELLED,
-            DISPUTE_CHALLENGED,
-            DISPUTE_WON,
-            DISPUTE_LOST,
-            SUBSCRIPTION_ACTIVE,
-            SUBSCRIPTION_RENEWED,
-            SUBSCRIPTION_ON_HOLD,
-            SUBSCRIPTION_PAUSED,
-            SUBSCRIPTION_CANCELLED,
-            SUBSCRIPTION_FAILED,
-            SUBSCRIPTION_EXPIRED,
-            SUBSCRIPTION_PLAN_CHANGED,
-            LICENSE_KEY_CREATED,
-            /** An enum member indicating that [Type] was instantiated with an unknown value. */
-            _UNKNOWN,
-        }
-
-        /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
-         * if the class was instantiated with an unknown value.
-         *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
-         */
-        fun value(): Value =
-            when (this) {
-                PAYMENT_SUCCEEDED -> Value.PAYMENT_SUCCEEDED
-                PAYMENT_FAILED -> Value.PAYMENT_FAILED
-                PAYMENT_PROCESSING -> Value.PAYMENT_PROCESSING
-                PAYMENT_CANCELLED -> Value.PAYMENT_CANCELLED
-                REFUND_SUCCEEDED -> Value.REFUND_SUCCEEDED
-                REFUND_FAILED -> Value.REFUND_FAILED
-                DISPUTE_OPENED -> Value.DISPUTE_OPENED
-                DISPUTE_EXPIRED -> Value.DISPUTE_EXPIRED
-                DISPUTE_ACCEPTED -> Value.DISPUTE_ACCEPTED
-                DISPUTE_CANCELLED -> Value.DISPUTE_CANCELLED
-                DISPUTE_CHALLENGED -> Value.DISPUTE_CHALLENGED
-                DISPUTE_WON -> Value.DISPUTE_WON
-                DISPUTE_LOST -> Value.DISPUTE_LOST
-                SUBSCRIPTION_ACTIVE -> Value.SUBSCRIPTION_ACTIVE
-                SUBSCRIPTION_RENEWED -> Value.SUBSCRIPTION_RENEWED
-                SUBSCRIPTION_ON_HOLD -> Value.SUBSCRIPTION_ON_HOLD
-                SUBSCRIPTION_PAUSED -> Value.SUBSCRIPTION_PAUSED
-                SUBSCRIPTION_CANCELLED -> Value.SUBSCRIPTION_CANCELLED
-                SUBSCRIPTION_FAILED -> Value.SUBSCRIPTION_FAILED
-                SUBSCRIPTION_EXPIRED -> Value.SUBSCRIPTION_EXPIRED
-                SUBSCRIPTION_PLAN_CHANGED -> Value.SUBSCRIPTION_PLAN_CHANGED
-                LICENSE_KEY_CREATED -> Value.LICENSE_KEY_CREATED
-                else -> Value._UNKNOWN
-            }
-
-        /**
-         * Returns an enum member corresponding to this class instance's value.
-         *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
-         *
-         * @throws DodoPaymentsInvalidDataException if this class instance's value is a not a known
-         *   member.
-         */
-        fun known(): Known =
-            when (this) {
-                PAYMENT_SUCCEEDED -> Known.PAYMENT_SUCCEEDED
-                PAYMENT_FAILED -> Known.PAYMENT_FAILED
-                PAYMENT_PROCESSING -> Known.PAYMENT_PROCESSING
-                PAYMENT_CANCELLED -> Known.PAYMENT_CANCELLED
-                REFUND_SUCCEEDED -> Known.REFUND_SUCCEEDED
-                REFUND_FAILED -> Known.REFUND_FAILED
-                DISPUTE_OPENED -> Known.DISPUTE_OPENED
-                DISPUTE_EXPIRED -> Known.DISPUTE_EXPIRED
-                DISPUTE_ACCEPTED -> Known.DISPUTE_ACCEPTED
-                DISPUTE_CANCELLED -> Known.DISPUTE_CANCELLED
-                DISPUTE_CHALLENGED -> Known.DISPUTE_CHALLENGED
-                DISPUTE_WON -> Known.DISPUTE_WON
-                DISPUTE_LOST -> Known.DISPUTE_LOST
-                SUBSCRIPTION_ACTIVE -> Known.SUBSCRIPTION_ACTIVE
-                SUBSCRIPTION_RENEWED -> Known.SUBSCRIPTION_RENEWED
-                SUBSCRIPTION_ON_HOLD -> Known.SUBSCRIPTION_ON_HOLD
-                SUBSCRIPTION_PAUSED -> Known.SUBSCRIPTION_PAUSED
-                SUBSCRIPTION_CANCELLED -> Known.SUBSCRIPTION_CANCELLED
-                SUBSCRIPTION_FAILED -> Known.SUBSCRIPTION_FAILED
-                SUBSCRIPTION_EXPIRED -> Known.SUBSCRIPTION_EXPIRED
-                SUBSCRIPTION_PLAN_CHANGED -> Known.SUBSCRIPTION_PLAN_CHANGED
-                LICENSE_KEY_CREATED -> Known.LICENSE_KEY_CREATED
-                else -> throw DodoPaymentsInvalidDataException("Unknown Type: $value")
-            }
-
-        /**
-         * Returns this class instance's primitive wire representation.
-         *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
-         *
-         * @throws DodoPaymentsInvalidDataException if this class instance's value does not have the
-         *   expected primitive type.
-         */
-        fun asString(): String =
-            _value().asString() ?: throw DodoPaymentsInvalidDataException("Value is not a String")
-
-        private var validated: Boolean = false
-
-        fun validate(): Type = apply {
-            if (validated) {
-                return@apply
-            }
-
-            known()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: DodoPaymentsInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Type && value == other.value /* spotless:on */
-        }
-
-        override fun hashCode() = value.hashCode()
-
-        override fun toString() = value.toString()
     }
 
     override fun equals(other: Any?): Boolean {
