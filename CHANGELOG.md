@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.38.1 (2025-07-09)
+
+Full Changelog: [v1.38.0...v1.38.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.38.0...v1.38.1)
+
+### Chores
+
+* **ci:** ensure docs generation always succeeds ([ada6cd7](https://github.com/dodopayments/dodopayments-kotlin/commit/ada6cd7e186102a6de643ee11790d74b7519fe39))
+
 ## 1.38.0 (2025-07-05)
 
 Full Changelog: [v1.37.1...v1.38.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.37.1...v1.38.0)
