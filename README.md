@@ -2,8 +2,8 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.dodopayments.api/dodo-payments-kotlin)](https://central.sonatype.com/artifact/com.dodopayments.api/dodo-payments-kotlin/1.38.0)
-[![javadoc](https://javadoc.io/badge2/com.dodopayments.api/dodo-payments-kotlin/1.38.0/javadoc.svg)](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/1.38.0)
+[![Maven Central](https://img.shields.io/maven-central/v/com.dodopayments.api/dodo-payments-kotlin)](https://central.sonatype.com/artifact/com.dodopayments.api/dodo-payments-kotlin/1.38.1)
+[![javadoc](https://javadoc.io/badge2/com.dodopayments.api/dodo-payments-kotlin/1.38.1/javadoc.svg)](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/1.38.1)
 
 <!-- x-release-please-end -->
 
@@ -15,7 +15,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 <!-- x-release-please-start-version -->
 
-The REST API documentation can be found on [docs.dodopayments.com](https://docs.dodopayments.com). KDocs are available on [javadoc.io](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/1.38.0).
+The REST API documentation can be found on [docs.dodopayments.com](https://docs.dodopayments.com). KDocs are available on [javadoc.io](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/1.38.1).
 
 <!-- x-release-please-end -->
 
@@ -26,7 +26,7 @@ The REST API documentation can be found on [docs.dodopayments.com](https://docs.
 ### Gradle
 
 ```kotlin
-implementation("com.dodopayments.api:dodo-payments-kotlin:1.38.0")
+implementation("com.dodopayments.api:dodo-payments-kotlin:1.38.1")
 ```
 
 ### Maven
@@ -35,7 +35,7 @@ implementation("com.dodopayments.api:dodo-payments-kotlin:1.38.0")
 <dependency>
   <groupId>com.dodopayments.api</groupId>
   <artifactId>dodo-payments-kotlin</artifactId>
-  <version>1.38.0</version>
+  <version>1.38.1</version>
 </dependency>
 ```
 
