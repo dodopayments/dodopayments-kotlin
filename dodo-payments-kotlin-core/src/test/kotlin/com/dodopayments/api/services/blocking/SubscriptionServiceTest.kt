@@ -64,6 +64,8 @@ internal class SubscriptionServiceTest {
                     .onDemand(
                         SubscriptionCreateParams.OnDemand.builder()
                             .mandateOnly(true)
+                            .adaptiveCurrencyFeesInclusive(true)
+                            .productCurrency(Currency.AED)
                             .productPrice(0)
                             .build()
                     )
@@ -188,11 +190,13 @@ internal class SubscriptionServiceTest {
                 SubscriptionChargeParams.builder()
                     .subscriptionId("subscription_id")
                     .productPrice(0)
+                    .adaptiveCurrencyFeesInclusive(true)
                     .metadata(
                         SubscriptionChargeParams.Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
+                    .productCurrency(Currency.AED)
                     .build()
             )
 
