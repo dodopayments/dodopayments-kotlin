@@ -12,6 +12,7 @@ import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
 import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
+import com.dodopayments.api.models.misc.Currency
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -39,12 +40,30 @@ private constructor(
     fun productPrice(): Int = body.productPrice()
 
     /**
+     * Whether adaptive currency fees should be included in the product_price (true) or added on top
+     * (false). This field is ignored if adaptive pricing is not enabled for the business.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun adaptiveCurrencyFeesInclusive(): Boolean? = body.adaptiveCurrencyFeesInclusive()
+
+    /**
      * Metadata for the payment. If not passed, the metadata of the subscription will be taken
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
     fun metadata(): Metadata? = body.metadata()
+
+    /**
+     * Optional currency of the product price. If not specified, defaults to the currency of the
+     * product.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun productCurrency(): Currency? = body.productCurrency()
 
     /**
      * Returns the raw JSON value of [productPrice].
@@ -54,11 +73,26 @@ private constructor(
     fun _productPrice(): JsonField<Int> = body._productPrice()
 
     /**
+     * Returns the raw JSON value of [adaptiveCurrencyFeesInclusive].
+     *
+     * Unlike [adaptiveCurrencyFeesInclusive], this method doesn't throw if the JSON field has an
+     * unexpected type.
+     */
+    fun _adaptiveCurrencyFeesInclusive(): JsonField<Boolean> = body._adaptiveCurrencyFeesInclusive()
+
+    /**
      * Returns the raw JSON value of [metadata].
      *
      * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _metadata(): JsonField<Metadata> = body._metadata()
+
+    /**
+     * Returns the raw JSON value of [productCurrency].
+     *
+     * Unlike [productCurrency], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _productCurrency(): JsonField<Currency> = body._productCurrency()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -104,7 +138,9 @@ private constructor(
          * This is generally only useful if you are already constructing the body separately.
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [productPrice]
+         * - [adaptiveCurrencyFeesInclusive]
          * - [metadata]
+         * - [productCurrency]
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
@@ -124,6 +160,34 @@ private constructor(
         fun productPrice(productPrice: JsonField<Int>) = apply { body.productPrice(productPrice) }
 
         /**
+         * Whether adaptive currency fees should be included in the product_price (true) or added on
+         * top (false). This field is ignored if adaptive pricing is not enabled for the business.
+         */
+        fun adaptiveCurrencyFeesInclusive(adaptiveCurrencyFeesInclusive: Boolean?) = apply {
+            body.adaptiveCurrencyFeesInclusive(adaptiveCurrencyFeesInclusive)
+        }
+
+        /**
+         * Alias for [Builder.adaptiveCurrencyFeesInclusive].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun adaptiveCurrencyFeesInclusive(adaptiveCurrencyFeesInclusive: Boolean) =
+            adaptiveCurrencyFeesInclusive(adaptiveCurrencyFeesInclusive as Boolean?)
+
+        /**
+         * Sets [Builder.adaptiveCurrencyFeesInclusive] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.adaptiveCurrencyFeesInclusive] with a well-typed
+         * [Boolean] value instead. This method is primarily for setting the field to an
+         * undocumented or not yet supported value.
+         */
+        fun adaptiveCurrencyFeesInclusive(adaptiveCurrencyFeesInclusive: JsonField<Boolean>) =
+            apply {
+                body.adaptiveCurrencyFeesInclusive(adaptiveCurrencyFeesInclusive)
+            }
+
+        /**
          * Metadata for the payment. If not passed, the metadata of the subscription will be taken
          */
         fun metadata(metadata: Metadata?) = apply { body.metadata(metadata) }
@@ -136,6 +200,25 @@ private constructor(
          * value.
          */
         fun metadata(metadata: JsonField<Metadata>) = apply { body.metadata(metadata) }
+
+        /**
+         * Optional currency of the product price. If not specified, defaults to the currency of the
+         * product.
+         */
+        fun productCurrency(productCurrency: Currency?) = apply {
+            body.productCurrency(productCurrency)
+        }
+
+        /**
+         * Sets [Builder.productCurrency] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.productCurrency] with a well-typed [Currency] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun productCurrency(productCurrency: JsonField<Currency>) = apply {
+            body.productCurrency(productCurrency)
+        }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -290,7 +373,9 @@ private constructor(
     class Body
     private constructor(
         private val productPrice: JsonField<Int>,
+        private val adaptiveCurrencyFeesInclusive: JsonField<Boolean>,
         private val metadata: JsonField<Metadata>,
+        private val productCurrency: JsonField<Currency>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -299,10 +384,22 @@ private constructor(
             @JsonProperty("product_price")
             @ExcludeMissing
             productPrice: JsonField<Int> = JsonMissing.of(),
+            @JsonProperty("adaptive_currency_fees_inclusive")
+            @ExcludeMissing
+            adaptiveCurrencyFeesInclusive: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("metadata")
             @ExcludeMissing
             metadata: JsonField<Metadata> = JsonMissing.of(),
-        ) : this(productPrice, metadata, mutableMapOf())
+            @JsonProperty("product_currency")
+            @ExcludeMissing
+            productCurrency: JsonField<Currency> = JsonMissing.of(),
+        ) : this(
+            productPrice,
+            adaptiveCurrencyFeesInclusive,
+            metadata,
+            productCurrency,
+            mutableMapOf(),
+        )
 
         /**
          * The product price. Represented in the lowest denomination of the currency (e.g., cents
@@ -314,12 +411,31 @@ private constructor(
         fun productPrice(): Int = productPrice.getRequired("product_price")
 
         /**
+         * Whether adaptive currency fees should be included in the product_price (true) or added on
+         * top (false). This field is ignored if adaptive pricing is not enabled for the business.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun adaptiveCurrencyFeesInclusive(): Boolean? =
+            adaptiveCurrencyFeesInclusive.getNullable("adaptive_currency_fees_inclusive")
+
+        /**
          * Metadata for the payment. If not passed, the metadata of the subscription will be taken
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
         fun metadata(): Metadata? = metadata.getNullable("metadata")
+
+        /**
+         * Optional currency of the product price. If not specified, defaults to the currency of the
+         * product.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun productCurrency(): Currency? = productCurrency.getNullable("product_currency")
 
         /**
          * Returns the raw JSON value of [productPrice].
@@ -332,11 +448,31 @@ private constructor(
         fun _productPrice(): JsonField<Int> = productPrice
 
         /**
+         * Returns the raw JSON value of [adaptiveCurrencyFeesInclusive].
+         *
+         * Unlike [adaptiveCurrencyFeesInclusive], this method doesn't throw if the JSON field has
+         * an unexpected type.
+         */
+        @JsonProperty("adaptive_currency_fees_inclusive")
+        @ExcludeMissing
+        fun _adaptiveCurrencyFeesInclusive(): JsonField<Boolean> = adaptiveCurrencyFeesInclusive
+
+        /**
          * Returns the raw JSON value of [metadata].
          *
          * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
+
+        /**
+         * Returns the raw JSON value of [productCurrency].
+         *
+         * Unlike [productCurrency], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("product_currency")
+        @ExcludeMissing
+        fun _productCurrency(): JsonField<Currency> = productCurrency
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -367,12 +503,16 @@ private constructor(
         class Builder internal constructor() {
 
             private var productPrice: JsonField<Int>? = null
+            private var adaptiveCurrencyFeesInclusive: JsonField<Boolean> = JsonMissing.of()
             private var metadata: JsonField<Metadata> = JsonMissing.of()
+            private var productCurrency: JsonField<Currency> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(body: Body) = apply {
                 productPrice = body.productPrice
+                adaptiveCurrencyFeesInclusive = body.adaptiveCurrencyFeesInclusive
                 metadata = body.metadata
+                productCurrency = body.productCurrency
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
@@ -394,6 +534,34 @@ private constructor(
             }
 
             /**
+             * Whether adaptive currency fees should be included in the product_price (true) or
+             * added on top (false). This field is ignored if adaptive pricing is not enabled for
+             * the business.
+             */
+            fun adaptiveCurrencyFeesInclusive(adaptiveCurrencyFeesInclusive: Boolean?) =
+                adaptiveCurrencyFeesInclusive(JsonField.ofNullable(adaptiveCurrencyFeesInclusive))
+
+            /**
+             * Alias for [Builder.adaptiveCurrencyFeesInclusive].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun adaptiveCurrencyFeesInclusive(adaptiveCurrencyFeesInclusive: Boolean) =
+                adaptiveCurrencyFeesInclusive(adaptiveCurrencyFeesInclusive as Boolean?)
+
+            /**
+             * Sets [Builder.adaptiveCurrencyFeesInclusive] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.adaptiveCurrencyFeesInclusive] with a well-typed
+             * [Boolean] value instead. This method is primarily for setting the field to an
+             * undocumented or not yet supported value.
+             */
+            fun adaptiveCurrencyFeesInclusive(adaptiveCurrencyFeesInclusive: JsonField<Boolean>) =
+                apply {
+                    this.adaptiveCurrencyFeesInclusive = adaptiveCurrencyFeesInclusive
+                }
+
+            /**
              * Metadata for the payment. If not passed, the metadata of the subscription will be
              * taken
              */
@@ -407,6 +575,24 @@ private constructor(
              * supported value.
              */
             fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
+
+            /**
+             * Optional currency of the product price. If not specified, defaults to the currency of
+             * the product.
+             */
+            fun productCurrency(productCurrency: Currency?) =
+                productCurrency(JsonField.ofNullable(productCurrency))
+
+            /**
+             * Sets [Builder.productCurrency] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.productCurrency] with a well-typed [Currency] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun productCurrency(productCurrency: JsonField<Currency>) = apply {
+                this.productCurrency = productCurrency
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -442,7 +628,9 @@ private constructor(
             fun build(): Body =
                 Body(
                     checkRequired("productPrice", productPrice),
+                    adaptiveCurrencyFeesInclusive,
                     metadata,
+                    productCurrency,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -455,7 +643,9 @@ private constructor(
             }
 
             productPrice()
+            adaptiveCurrencyFeesInclusive()
             metadata()?.validate()
+            productCurrency()?.validate()
             validated = true
         }
 
@@ -474,24 +664,27 @@ private constructor(
          * Used for best match union deserialization.
          */
         internal fun validity(): Int =
-            (if (productPrice.asKnown() == null) 0 else 1) + (metadata.asKnown()?.validity() ?: 0)
+            (if (productPrice.asKnown() == null) 0 else 1) +
+                (if (adaptiveCurrencyFeesInclusive.asKnown() == null) 0 else 1) +
+                (metadata.asKnown()?.validity() ?: 0) +
+                (productCurrency.asKnown()?.validity() ?: 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is Body && productPrice == other.productPrice && metadata == other.metadata && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && productPrice == other.productPrice && adaptiveCurrencyFeesInclusive == other.adaptiveCurrencyFeesInclusive && metadata == other.metadata && productCurrency == other.productCurrency && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(productPrice, metadata, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(productPrice, adaptiveCurrencyFeesInclusive, metadata, productCurrency, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{productPrice=$productPrice, metadata=$metadata, additionalProperties=$additionalProperties}"
+            "Body{productPrice=$productPrice, adaptiveCurrencyFeesInclusive=$adaptiveCurrencyFeesInclusive, metadata=$metadata, productCurrency=$productCurrency, additionalProperties=$additionalProperties}"
     }
 
     /** Metadata for the payment. If not passed, the metadata of the subscription will be taken */
