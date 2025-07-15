@@ -3,6 +3,7 @@
 package com.dodopayments.api.models.subscriptions
 
 import com.dodopayments.api.core.JsonValue
+import com.dodopayments.api.models.misc.Currency
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -13,11 +14,13 @@ internal class SubscriptionChargeParamsTest {
         SubscriptionChargeParams.builder()
             .subscriptionId("subscription_id")
             .productPrice(0)
+            .adaptiveCurrencyFeesInclusive(true)
             .metadata(
                 SubscriptionChargeParams.Metadata.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
+            .productCurrency(Currency.AED)
             .build()
     }
 
@@ -40,22 +43,26 @@ internal class SubscriptionChargeParamsTest {
             SubscriptionChargeParams.builder()
                 .subscriptionId("subscription_id")
                 .productPrice(0)
+                .adaptiveCurrencyFeesInclusive(true)
                 .metadata(
                     SubscriptionChargeParams.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
+                .productCurrency(Currency.AED)
                 .build()
 
         val body = params._body()
 
         assertThat(body.productPrice()).isEqualTo(0)
+        assertThat(body.adaptiveCurrencyFeesInclusive()).isEqualTo(true)
         assertThat(body.metadata())
             .isEqualTo(
                 SubscriptionChargeParams.Metadata.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
+        assertThat(body.productCurrency()).isEqualTo(Currency.AED)
     }
 
     @Test
