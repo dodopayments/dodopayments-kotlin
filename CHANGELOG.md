@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.42.0 (2025-07-16)
+
+Full Changelog: [v1.39.0...v1.42.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.39.0...v1.42.0)
+
+### Features
+
+* **api:** updated open api spec to v1.42.0 ([be6f535](https://github.com/dodopayments/dodopayments-kotlin/commit/be6f535c9eb700ca5285dccb0e2524f07b52d424))
+
+
+### Chores
+
+* **ci:** bump `actions/setup-java` to v4 ([6314623](https://github.com/dodopayments/dodopayments-kotlin/commit/631462395ba4240ee8554a5d3d46d61a257fdb58))
+
 ## 1.39.0 (2025-07-15)
 
 Full Changelog: [v1.38.1...v1.39.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.38.1...v1.39.0)
