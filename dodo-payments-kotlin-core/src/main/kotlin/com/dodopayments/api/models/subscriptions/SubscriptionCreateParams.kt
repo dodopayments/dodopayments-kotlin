@@ -2052,6 +2052,7 @@ private constructor(
         private val mandateOnly: JsonField<Boolean>,
         private val adaptiveCurrencyFeesInclusive: JsonField<Boolean>,
         private val productCurrency: JsonField<Currency>,
+        private val productDescription: JsonField<String>,
         private val productPrice: JsonField<Int>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -2067,6 +2068,9 @@ private constructor(
             @JsonProperty("product_currency")
             @ExcludeMissing
             productCurrency: JsonField<Currency> = JsonMissing.of(),
+            @JsonProperty("product_description")
+            @ExcludeMissing
+            productDescription: JsonField<String> = JsonMissing.of(),
             @JsonProperty("product_price")
             @ExcludeMissing
             productPrice: JsonField<Int> = JsonMissing.of(),
@@ -2074,6 +2078,7 @@ private constructor(
             mandateOnly,
             adaptiveCurrencyFeesInclusive,
             productCurrency,
+            productDescription,
             productPrice,
             mutableMapOf(),
         )
@@ -2105,6 +2110,15 @@ private constructor(
          *   if the server responded with an unexpected value).
          */
         fun productCurrency(): Currency? = productCurrency.getNullable("product_currency")
+
+        /**
+         * Optional product description override for billing and line items. If not specified, the
+         * stored description of the product will be used.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun productDescription(): String? = productDescription.getNullable("product_description")
 
         /**
          * Product price for the initial charge to customer If not specified the stored price of the
@@ -2144,6 +2158,16 @@ private constructor(
         @JsonProperty("product_currency")
         @ExcludeMissing
         fun _productCurrency(): JsonField<Currency> = productCurrency
+
+        /**
+         * Returns the raw JSON value of [productDescription].
+         *
+         * Unlike [productDescription], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("product_description")
+        @ExcludeMissing
+        fun _productDescription(): JsonField<String> = productDescription
 
         /**
          * Returns the raw JSON value of [productPrice].
@@ -2186,6 +2210,7 @@ private constructor(
             private var mandateOnly: JsonField<Boolean>? = null
             private var adaptiveCurrencyFeesInclusive: JsonField<Boolean> = JsonMissing.of()
             private var productCurrency: JsonField<Currency> = JsonMissing.of()
+            private var productDescription: JsonField<String> = JsonMissing.of()
             private var productPrice: JsonField<Int> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -2193,6 +2218,7 @@ private constructor(
                 mandateOnly = onDemand.mandateOnly
                 adaptiveCurrencyFeesInclusive = onDemand.adaptiveCurrencyFeesInclusive
                 productCurrency = onDemand.productCurrency
+                productDescription = onDemand.productDescription
                 productPrice = onDemand.productPrice
                 additionalProperties = onDemand.additionalProperties.toMutableMap()
             }
@@ -2261,6 +2287,24 @@ private constructor(
             }
 
             /**
+             * Optional product description override for billing and line items. If not specified,
+             * the stored description of the product will be used.
+             */
+            fun productDescription(productDescription: String?) =
+                productDescription(JsonField.ofNullable(productDescription))
+
+            /**
+             * Sets [Builder.productDescription] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.productDescription] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun productDescription(productDescription: JsonField<String>) = apply {
+                this.productDescription = productDescription
+            }
+
+            /**
              * Product price for the initial charge to customer If not specified the stored price of
              * the product will be used Represented in the lowest denomination of the currency
              * (e.g., cents for USD). For example, to charge $1.00, pass `100`.
@@ -2321,6 +2365,7 @@ private constructor(
                     checkRequired("mandateOnly", mandateOnly),
                     adaptiveCurrencyFeesInclusive,
                     productCurrency,
+                    productDescription,
                     productPrice,
                     additionalProperties.toMutableMap(),
                 )
@@ -2336,6 +2381,7 @@ private constructor(
             mandateOnly()
             adaptiveCurrencyFeesInclusive()
             productCurrency()?.validate()
+            productDescription()
             productPrice()
             validated = true
         }
@@ -2358,6 +2404,7 @@ private constructor(
             (if (mandateOnly.asKnown() == null) 0 else 1) +
                 (if (adaptiveCurrencyFeesInclusive.asKnown() == null) 0 else 1) +
                 (productCurrency.asKnown()?.validity() ?: 0) +
+                (if (productDescription.asKnown() == null) 0 else 1) +
                 (if (productPrice.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
@@ -2365,17 +2412,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is OnDemand && mandateOnly == other.mandateOnly && adaptiveCurrencyFeesInclusive == other.adaptiveCurrencyFeesInclusive && productCurrency == other.productCurrency && productPrice == other.productPrice && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is OnDemand && mandateOnly == other.mandateOnly && adaptiveCurrencyFeesInclusive == other.adaptiveCurrencyFeesInclusive && productCurrency == other.productCurrency && productDescription == other.productDescription && productPrice == other.productPrice && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(mandateOnly, adaptiveCurrencyFeesInclusive, productCurrency, productPrice, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(mandateOnly, adaptiveCurrencyFeesInclusive, productCurrency, productDescription, productPrice, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "OnDemand{mandateOnly=$mandateOnly, adaptiveCurrencyFeesInclusive=$adaptiveCurrencyFeesInclusive, productCurrency=$productCurrency, productPrice=$productPrice, additionalProperties=$additionalProperties}"
+            "OnDemand{mandateOnly=$mandateOnly, adaptiveCurrencyFeesInclusive=$adaptiveCurrencyFeesInclusive, productCurrency=$productCurrency, productDescription=$productDescription, productPrice=$productPrice, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

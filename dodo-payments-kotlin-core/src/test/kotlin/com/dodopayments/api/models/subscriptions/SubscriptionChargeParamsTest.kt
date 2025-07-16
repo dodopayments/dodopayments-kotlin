@@ -21,6 +21,7 @@ internal class SubscriptionChargeParamsTest {
                     .build()
             )
             .productCurrency(Currency.AED)
+            .productDescription("product_description")
             .build()
     }
 
@@ -50,6 +51,7 @@ internal class SubscriptionChargeParamsTest {
                         .build()
                 )
                 .productCurrency(Currency.AED)
+                .productDescription("product_description")
                 .build()
 
         val body = params._body()
@@ -63,6 +65,7 @@ internal class SubscriptionChargeParamsTest {
                     .build()
             )
         assertThat(body.productCurrency()).isEqualTo(Currency.AED)
+        assertThat(body.productDescription()).isEqualTo("product_description")
     }
 
     @Test
