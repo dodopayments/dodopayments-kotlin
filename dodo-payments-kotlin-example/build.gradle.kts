@@ -8,5 +8,12 @@ dependencies {
 }
 
 application {
-    mainClass = "com.dodopayments.api.example.MainKt"
+    // Use `./gradlew :dodo-payments-kotlin-example:run` to run `Main`
+    // Use `./gradlew :dodo-payments-kotlin-example:run -Dexample=Something` to run `SomethingExample`
+    mainClass = "com.dodopayments.api.example.${
+        if (project.hasProperty("example"))
+            "${project.property("example")}ExampleKt"
+        else
+            "MainKt"
+    }"
 }
