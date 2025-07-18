@@ -3,13 +3,13 @@
 package com.dodopayments.api.services.blocking
 
 import com.dodopayments.api.core.ClientOptions
-import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.RequestOptions
+import com.dodopayments.api.core.handlers.errorBodyHandler
 import com.dodopayments.api.core.handlers.errorHandler
 import com.dodopayments.api.core.handlers.jsonHandler
-import com.dodopayments.api.core.handlers.withErrorHandler
 import com.dodopayments.api.core.http.HttpMethod
 import com.dodopayments.api.core.http.HttpRequest
+import com.dodopayments.api.core.http.HttpResponse
 import com.dodopayments.api.core.http.HttpResponse.Handler
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.core.http.parseable
@@ -37,7 +37,8 @@ class PayoutServiceImpl internal constructor(private val clientOptions: ClientOp
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         PayoutService.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
@@ -46,7 +47,6 @@ class PayoutServiceImpl internal constructor(private val clientOptions: ClientOp
 
         private val listHandler: Handler<PayoutListPageResponse> =
             jsonHandler<PayoutListPageResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun list(
             params: PayoutListParams,
@@ -61,7 +61,7 @@ class PayoutServiceImpl internal constructor(private val clientOptions: ClientOp
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { listHandler.handle(it) }
                     .also {

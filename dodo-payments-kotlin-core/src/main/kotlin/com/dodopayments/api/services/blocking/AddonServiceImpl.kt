@@ -3,14 +3,14 @@
 package com.dodopayments.api.services.blocking
 
 import com.dodopayments.api.core.ClientOptions
-import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.checkRequired
+import com.dodopayments.api.core.handlers.errorBodyHandler
 import com.dodopayments.api.core.handlers.errorHandler
 import com.dodopayments.api.core.handlers.jsonHandler
-import com.dodopayments.api.core.handlers.withErrorHandler
 import com.dodopayments.api.core.http.HttpMethod
 import com.dodopayments.api.core.http.HttpRequest
+import com.dodopayments.api.core.http.HttpResponse
 import com.dodopayments.api.core.http.HttpResponse.Handler
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.core.http.json
@@ -67,7 +67,8 @@ class AddonServiceImpl internal constructor(private val clientOptions: ClientOpt
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         AddonService.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
@@ -75,7 +76,7 @@ class AddonServiceImpl internal constructor(private val clientOptions: ClientOpt
             AddonServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
 
         private val createHandler: Handler<AddonResponse> =
-            jsonHandler<AddonResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<AddonResponse>(clientOptions.jsonMapper)
 
         override fun create(
             params: AddonCreateParams,
@@ -91,7 +92,7 @@ class AddonServiceImpl internal constructor(private val clientOptions: ClientOpt
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { createHandler.handle(it) }
                     .also {
@@ -103,7 +104,7 @@ class AddonServiceImpl internal constructor(private val clientOptions: ClientOpt
         }
 
         private val retrieveHandler: Handler<AddonResponse> =
-            jsonHandler<AddonResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<AddonResponse>(clientOptions.jsonMapper)
 
         override fun retrieve(
             params: AddonRetrieveParams,
@@ -121,7 +122,7 @@ class AddonServiceImpl internal constructor(private val clientOptions: ClientOpt
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { retrieveHandler.handle(it) }
                     .also {
@@ -133,7 +134,7 @@ class AddonServiceImpl internal constructor(private val clientOptions: ClientOpt
         }
 
         private val updateHandler: Handler<AddonResponse> =
-            jsonHandler<AddonResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<AddonResponse>(clientOptions.jsonMapper)
 
         override fun update(
             params: AddonUpdateParams,
@@ -152,7 +153,7 @@ class AddonServiceImpl internal constructor(private val clientOptions: ClientOpt
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { updateHandler.handle(it) }
                     .also {
@@ -165,7 +166,6 @@ class AddonServiceImpl internal constructor(private val clientOptions: ClientOpt
 
         private val listHandler: Handler<AddonListPageResponse> =
             jsonHandler<AddonListPageResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun list(
             params: AddonListParams,
@@ -180,7 +180,7 @@ class AddonServiceImpl internal constructor(private val clientOptions: ClientOpt
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { listHandler.handle(it) }
                     .also {
@@ -200,7 +200,6 @@ class AddonServiceImpl internal constructor(private val clientOptions: ClientOpt
 
         private val updateImagesHandler: Handler<AddonUpdateImagesResponse> =
             jsonHandler<AddonUpdateImagesResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun updateImages(
             params: AddonUpdateImagesParams,
@@ -219,7 +218,7 @@ class AddonServiceImpl internal constructor(private val clientOptions: ClientOpt
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { updateImagesHandler.handle(it) }
                     .also {
