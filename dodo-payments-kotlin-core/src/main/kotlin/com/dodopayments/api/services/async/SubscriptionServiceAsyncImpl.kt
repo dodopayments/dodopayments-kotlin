@@ -3,13 +3,12 @@
 package com.dodopayments.api.services.async
 
 import com.dodopayments.api.core.ClientOptions
-import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.handlers.emptyHandler
+import com.dodopayments.api.core.handlers.errorBodyHandler
 import com.dodopayments.api.core.handlers.errorHandler
 import com.dodopayments.api.core.handlers.jsonHandler
-import com.dodopayments.api.core.handlers.withErrorHandler
 import com.dodopayments.api.core.http.HttpMethod
 import com.dodopayments.api.core.http.HttpRequest
 import com.dodopayments.api.core.http.HttpResponse
@@ -88,7 +87,8 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         SubscriptionServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
@@ -99,7 +99,6 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
 
         private val createHandler: Handler<SubscriptionCreateResponse> =
             jsonHandler<SubscriptionCreateResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override suspend fun create(
             params: SubscriptionCreateParams,
@@ -115,7 +114,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { createHandler.handle(it) }
                     .also {
@@ -127,7 +126,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
         }
 
         private val retrieveHandler: Handler<Subscription> =
-            jsonHandler<Subscription>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<Subscription>(clientOptions.jsonMapper)
 
         override suspend fun retrieve(
             params: SubscriptionRetrieveParams,
@@ -145,7 +144,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { retrieveHandler.handle(it) }
                     .also {
@@ -157,7 +156,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
         }
 
         private val updateHandler: Handler<Subscription> =
-            jsonHandler<Subscription>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<Subscription>(clientOptions.jsonMapper)
 
         override suspend fun update(
             params: SubscriptionUpdateParams,
@@ -176,7 +175,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { updateHandler.handle(it) }
                     .also {
@@ -189,7 +188,6 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
 
         private val listHandler: Handler<SubscriptionListPageResponse> =
             jsonHandler<SubscriptionListPageResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override suspend fun list(
             params: SubscriptionListParams,
@@ -204,7 +202,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { listHandler.handle(it) }
                     .also {
@@ -222,8 +220,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
             }
         }
 
-        private val changePlanHandler: Handler<Void?> =
-            emptyHandler().withErrorHandler(errorHandler)
+        private val changePlanHandler: Handler<Void?> = emptyHandler()
 
         override suspend fun changePlan(
             params: SubscriptionChangePlanParams,
@@ -242,12 +239,13 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
-            return response.parseable { response.use { changePlanHandler.handle(it) } }
+            return errorHandler.handle(response).parseable {
+                response.use { changePlanHandler.handle(it) }
+            }
         }
 
         private val chargeHandler: Handler<SubscriptionChargeResponse> =
             jsonHandler<SubscriptionChargeResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override suspend fun charge(
             params: SubscriptionChargeParams,
@@ -266,7 +264,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { chargeHandler.handle(it) }
                     .also {

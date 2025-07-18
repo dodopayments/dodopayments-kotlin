@@ -3,12 +3,11 @@
 package com.dodopayments.api.services.blocking
 
 import com.dodopayments.api.core.ClientOptions
-import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.handlers.emptyHandler
+import com.dodopayments.api.core.handlers.errorBodyHandler
 import com.dodopayments.api.core.handlers.errorHandler
 import com.dodopayments.api.core.handlers.jsonHandler
-import com.dodopayments.api.core.handlers.withErrorHandler
 import com.dodopayments.api.core.http.HttpMethod
 import com.dodopayments.api.core.http.HttpRequest
 import com.dodopayments.api.core.http.HttpResponse
@@ -57,7 +56,8 @@ class LicenseServiceImpl internal constructor(private val clientOptions: ClientO
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         LicenseService.WithRawResponse {
 
-        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
@@ -67,7 +67,7 @@ class LicenseServiceImpl internal constructor(private val clientOptions: ClientO
             )
 
         private val activateHandler: Handler<LicenseKeyInstance> =
-            jsonHandler<LicenseKeyInstance>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+            jsonHandler<LicenseKeyInstance>(clientOptions.jsonMapper)
 
         override fun activate(
             params: LicenseActivateParams,
@@ -83,7 +83,7 @@ class LicenseServiceImpl internal constructor(private val clientOptions: ClientO
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { activateHandler.handle(it) }
                     .also {
@@ -94,8 +94,7 @@ class LicenseServiceImpl internal constructor(private val clientOptions: ClientO
             }
         }
 
-        private val deactivateHandler: Handler<Void?> =
-            emptyHandler().withErrorHandler(errorHandler)
+        private val deactivateHandler: Handler<Void?> = emptyHandler()
 
         override fun deactivate(
             params: LicenseDeactivateParams,
@@ -111,12 +110,13 @@ class LicenseServiceImpl internal constructor(private val clientOptions: ClientO
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable { response.use { deactivateHandler.handle(it) } }
+            return errorHandler.handle(response).parseable {
+                response.use { deactivateHandler.handle(it) }
+            }
         }
 
         private val validateHandler: Handler<LicenseValidateResponse> =
             jsonHandler<LicenseValidateResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
 
         override fun validate(
             params: LicenseValidateParams,
@@ -132,7 +132,7 @@ class LicenseServiceImpl internal constructor(private val clientOptions: ClientO
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
+            return errorHandler.handle(response).parseable {
                 response
                     .use { validateHandler.handle(it) }
                     .also {
