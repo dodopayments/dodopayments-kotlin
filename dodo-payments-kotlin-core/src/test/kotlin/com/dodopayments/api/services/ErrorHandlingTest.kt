@@ -120,8 +120,120 @@ internal class ErrorHandlingTest {
     }
 
     @Test
+    fun paymentsCreate400WithRawResponse() {
+        val paymentService = client.payments().withRawResponse()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(400).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<BadRequestException> {
+                paymentService.create(
+                    PaymentCreateParams.builder()
+                        .billing(
+                            BillingAddress.builder()
+                                .city("city")
+                                .country(CountryCode.AF)
+                                .state("state")
+                                .street("street")
+                                .zipcode("zipcode")
+                                .build()
+                        )
+                        .customer(
+                            AttachExistingCustomer.builder().customerId("customer_id").build()
+                        )
+                        .addProductCart(
+                            OneTimeProductCartItem.builder()
+                                .productId("product_id")
+                                .quantity(0)
+                                .amount(0)
+                                .build()
+                        )
+                        .addAllowedPaymentMethodType(
+                            PaymentCreateParams.AllowedPaymentMethodType.CREDIT
+                        )
+                        .billingCurrency(Currency.AED)
+                        .discountCode("discount_code")
+                        .metadata(
+                            PaymentCreateParams.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .paymentLink(true)
+                        .returnUrl("return_url")
+                        .showSavedPaymentMethods(true)
+                        .taxId("tax_id")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(400)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
+    @Test
     fun paymentsCreate401() {
         val paymentService = client.payments()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(401).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<UnauthorizedException> {
+                paymentService.create(
+                    PaymentCreateParams.builder()
+                        .billing(
+                            BillingAddress.builder()
+                                .city("city")
+                                .country(CountryCode.AF)
+                                .state("state")
+                                .street("street")
+                                .zipcode("zipcode")
+                                .build()
+                        )
+                        .customer(
+                            AttachExistingCustomer.builder().customerId("customer_id").build()
+                        )
+                        .addProductCart(
+                            OneTimeProductCartItem.builder()
+                                .productId("product_id")
+                                .quantity(0)
+                                .amount(0)
+                                .build()
+                        )
+                        .addAllowedPaymentMethodType(
+                            PaymentCreateParams.AllowedPaymentMethodType.CREDIT
+                        )
+                        .billingCurrency(Currency.AED)
+                        .discountCode("discount_code")
+                        .metadata(
+                            PaymentCreateParams.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .paymentLink(true)
+                        .returnUrl("return_url")
+                        .showSavedPaymentMethods(true)
+                        .taxId("tax_id")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(401)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
+    @Test
+    fun paymentsCreate401WithRawResponse() {
+        val paymentService = client.payments().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -232,8 +344,120 @@ internal class ErrorHandlingTest {
     }
 
     @Test
+    fun paymentsCreate403WithRawResponse() {
+        val paymentService = client.payments().withRawResponse()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(403).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<PermissionDeniedException> {
+                paymentService.create(
+                    PaymentCreateParams.builder()
+                        .billing(
+                            BillingAddress.builder()
+                                .city("city")
+                                .country(CountryCode.AF)
+                                .state("state")
+                                .street("street")
+                                .zipcode("zipcode")
+                                .build()
+                        )
+                        .customer(
+                            AttachExistingCustomer.builder().customerId("customer_id").build()
+                        )
+                        .addProductCart(
+                            OneTimeProductCartItem.builder()
+                                .productId("product_id")
+                                .quantity(0)
+                                .amount(0)
+                                .build()
+                        )
+                        .addAllowedPaymentMethodType(
+                            PaymentCreateParams.AllowedPaymentMethodType.CREDIT
+                        )
+                        .billingCurrency(Currency.AED)
+                        .discountCode("discount_code")
+                        .metadata(
+                            PaymentCreateParams.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .paymentLink(true)
+                        .returnUrl("return_url")
+                        .showSavedPaymentMethods(true)
+                        .taxId("tax_id")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(403)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
+    @Test
     fun paymentsCreate404() {
         val paymentService = client.payments()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(404).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<NotFoundException> {
+                paymentService.create(
+                    PaymentCreateParams.builder()
+                        .billing(
+                            BillingAddress.builder()
+                                .city("city")
+                                .country(CountryCode.AF)
+                                .state("state")
+                                .street("street")
+                                .zipcode("zipcode")
+                                .build()
+                        )
+                        .customer(
+                            AttachExistingCustomer.builder().customerId("customer_id").build()
+                        )
+                        .addProductCart(
+                            OneTimeProductCartItem.builder()
+                                .productId("product_id")
+                                .quantity(0)
+                                .amount(0)
+                                .build()
+                        )
+                        .addAllowedPaymentMethodType(
+                            PaymentCreateParams.AllowedPaymentMethodType.CREDIT
+                        )
+                        .billingCurrency(Currency.AED)
+                        .discountCode("discount_code")
+                        .metadata(
+                            PaymentCreateParams.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .paymentLink(true)
+                        .returnUrl("return_url")
+                        .showSavedPaymentMethods(true)
+                        .taxId("tax_id")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(404)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
+    @Test
+    fun paymentsCreate404WithRawResponse() {
+        val paymentService = client.payments().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -344,8 +568,120 @@ internal class ErrorHandlingTest {
     }
 
     @Test
+    fun paymentsCreate422WithRawResponse() {
+        val paymentService = client.payments().withRawResponse()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(422).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<UnprocessableEntityException> {
+                paymentService.create(
+                    PaymentCreateParams.builder()
+                        .billing(
+                            BillingAddress.builder()
+                                .city("city")
+                                .country(CountryCode.AF)
+                                .state("state")
+                                .street("street")
+                                .zipcode("zipcode")
+                                .build()
+                        )
+                        .customer(
+                            AttachExistingCustomer.builder().customerId("customer_id").build()
+                        )
+                        .addProductCart(
+                            OneTimeProductCartItem.builder()
+                                .productId("product_id")
+                                .quantity(0)
+                                .amount(0)
+                                .build()
+                        )
+                        .addAllowedPaymentMethodType(
+                            PaymentCreateParams.AllowedPaymentMethodType.CREDIT
+                        )
+                        .billingCurrency(Currency.AED)
+                        .discountCode("discount_code")
+                        .metadata(
+                            PaymentCreateParams.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .paymentLink(true)
+                        .returnUrl("return_url")
+                        .showSavedPaymentMethods(true)
+                        .taxId("tax_id")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(422)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
+    @Test
     fun paymentsCreate429() {
         val paymentService = client.payments()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(429).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<RateLimitException> {
+                paymentService.create(
+                    PaymentCreateParams.builder()
+                        .billing(
+                            BillingAddress.builder()
+                                .city("city")
+                                .country(CountryCode.AF)
+                                .state("state")
+                                .street("street")
+                                .zipcode("zipcode")
+                                .build()
+                        )
+                        .customer(
+                            AttachExistingCustomer.builder().customerId("customer_id").build()
+                        )
+                        .addProductCart(
+                            OneTimeProductCartItem.builder()
+                                .productId("product_id")
+                                .quantity(0)
+                                .amount(0)
+                                .build()
+                        )
+                        .addAllowedPaymentMethodType(
+                            PaymentCreateParams.AllowedPaymentMethodType.CREDIT
+                        )
+                        .billingCurrency(Currency.AED)
+                        .discountCode("discount_code")
+                        .metadata(
+                            PaymentCreateParams.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .paymentLink(true)
+                        .returnUrl("return_url")
+                        .showSavedPaymentMethods(true)
+                        .taxId("tax_id")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(429)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
+    @Test
+    fun paymentsCreate429WithRawResponse() {
+        val paymentService = client.payments().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -456,8 +792,120 @@ internal class ErrorHandlingTest {
     }
 
     @Test
+    fun paymentsCreate500WithRawResponse() {
+        val paymentService = client.payments().withRawResponse()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(500).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<InternalServerException> {
+                paymentService.create(
+                    PaymentCreateParams.builder()
+                        .billing(
+                            BillingAddress.builder()
+                                .city("city")
+                                .country(CountryCode.AF)
+                                .state("state")
+                                .street("street")
+                                .zipcode("zipcode")
+                                .build()
+                        )
+                        .customer(
+                            AttachExistingCustomer.builder().customerId("customer_id").build()
+                        )
+                        .addProductCart(
+                            OneTimeProductCartItem.builder()
+                                .productId("product_id")
+                                .quantity(0)
+                                .amount(0)
+                                .build()
+                        )
+                        .addAllowedPaymentMethodType(
+                            PaymentCreateParams.AllowedPaymentMethodType.CREDIT
+                        )
+                        .billingCurrency(Currency.AED)
+                        .discountCode("discount_code")
+                        .metadata(
+                            PaymentCreateParams.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .paymentLink(true)
+                        .returnUrl("return_url")
+                        .showSavedPaymentMethods(true)
+                        .taxId("tax_id")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(500)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
+    @Test
     fun paymentsCreate999() {
         val paymentService = client.payments()
+        stubFor(
+            post(anyUrl())
+                .willReturn(
+                    status(999).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
+                )
+        )
+
+        val e =
+            assertThrows<UnexpectedStatusCodeException> {
+                paymentService.create(
+                    PaymentCreateParams.builder()
+                        .billing(
+                            BillingAddress.builder()
+                                .city("city")
+                                .country(CountryCode.AF)
+                                .state("state")
+                                .street("street")
+                                .zipcode("zipcode")
+                                .build()
+                        )
+                        .customer(
+                            AttachExistingCustomer.builder().customerId("customer_id").build()
+                        )
+                        .addProductCart(
+                            OneTimeProductCartItem.builder()
+                                .productId("product_id")
+                                .quantity(0)
+                                .amount(0)
+                                .build()
+                        )
+                        .addAllowedPaymentMethodType(
+                            PaymentCreateParams.AllowedPaymentMethodType.CREDIT
+                        )
+                        .billingCurrency(Currency.AED)
+                        .discountCode("discount_code")
+                        .metadata(
+                            PaymentCreateParams.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .paymentLink(true)
+                        .returnUrl("return_url")
+                        .showSavedPaymentMethods(true)
+                        .taxId("tax_id")
+                        .build()
+                )
+            }
+
+        assertThat(e.statusCode()).isEqualTo(999)
+        assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
+        assertThat(e.body()).isEqualTo(ERROR_JSON)
+    }
+
+    @Test
+    fun paymentsCreate999WithRawResponse() {
+        val paymentService = client.payments().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
