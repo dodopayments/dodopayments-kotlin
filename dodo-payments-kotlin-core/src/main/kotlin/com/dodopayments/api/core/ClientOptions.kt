@@ -218,8 +218,10 @@ private constructor(
         fun timeout(): Timeout = timeout
 
         fun fromEnv() = apply {
-            System.getenv("DODO_PAYMENTS_BASE_URL")?.let { baseUrl(it) }
-            System.getenv("DODO_PAYMENTS_API_KEY")?.let { bearerToken(it) }
+            (System.getProperty("dodopayments.baseUrl") ?: System.getenv("DODO_PAYMENTS_BASE_URL"))
+                ?.let { baseUrl(it) }
+            (System.getProperty("dodopayments.apiKey") ?: System.getenv("DODO_PAYMENTS_API_KEY"))
+                ?.let { bearerToken(it) }
         }
 
         /**
