@@ -9,6 +9,8 @@ import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
+import com.dodopayments.api.models.payments.PaymentMethodTypes
+import com.dodopayments.api.models.subscriptions.AttachAddon
 import com.dodopayments.api.models.subscriptions.SubscriptionChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeParams
 import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
@@ -45,15 +47,8 @@ internal class SubscriptionServiceTest {
                     .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
                     .productId("product_id")
                     .quantity(0)
-                    .addAddon(
-                        SubscriptionCreateParams.Addon.builder()
-                            .addonId("addon_id")
-                            .quantity(0)
-                            .build()
-                    )
-                    .addAllowedPaymentMethodType(
-                        SubscriptionCreateParams.AllowedPaymentMethodType.CREDIT
-                    )
+                    .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
+                    .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
                     .billingCurrency(Currency.AED)
                     .discountCode("discount_code")
                     .metadata(
@@ -167,12 +162,7 @@ internal class SubscriptionServiceTest {
                     SubscriptionChangePlanParams.ProrationBillingMode.PRORATED_IMMEDIATELY
                 )
                 .quantity(0)
-                .addAddon(
-                    SubscriptionChangePlanParams.Addon.builder()
-                        .addonId("addon_id")
-                        .quantity(0)
-                        .build()
-                )
+                .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
                 .build()
         )
     }

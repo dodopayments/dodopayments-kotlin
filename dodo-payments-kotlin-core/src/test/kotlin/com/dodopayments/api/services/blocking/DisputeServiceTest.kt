@@ -19,9 +19,9 @@ internal class DisputeServiceTest {
                 .build()
         val disputeService = client.disputes()
 
-        val dispute = disputeService.retrieve("dispute_id")
+        val getDispute = disputeService.retrieve("dispute_id")
 
-        dispute.validate()
+        getDispute.validate()
     }
 
     @Test

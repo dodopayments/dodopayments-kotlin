@@ -16,16 +16,14 @@ import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepareAsync
+import com.dodopayments.api.models.brands.Brand
 import com.dodopayments.api.models.brands.BrandCreateParams
-import com.dodopayments.api.models.brands.BrandCreateResponse
 import com.dodopayments.api.models.brands.BrandListParams
 import com.dodopayments.api.models.brands.BrandListResponse
 import com.dodopayments.api.models.brands.BrandRetrieveParams
-import com.dodopayments.api.models.brands.BrandRetrieveResponse
 import com.dodopayments.api.models.brands.BrandUpdateImagesParams
 import com.dodopayments.api.models.brands.BrandUpdateImagesResponse
 import com.dodopayments.api.models.brands.BrandUpdateParams
-import com.dodopayments.api.models.brands.BrandUpdateResponse
 
 class BrandServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     BrandServiceAsync {
@@ -39,24 +37,18 @@ class BrandServiceAsyncImpl internal constructor(private val clientOptions: Clie
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): BrandServiceAsync =
         BrandServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
 
-    override suspend fun create(
-        params: BrandCreateParams,
-        requestOptions: RequestOptions,
-    ): BrandCreateResponse =
+    override suspend fun create(params: BrandCreateParams, requestOptions: RequestOptions): Brand =
         // post /brands
         withRawResponse().create(params, requestOptions).parse()
 
     override suspend fun retrieve(
         params: BrandRetrieveParams,
         requestOptions: RequestOptions,
-    ): BrandRetrieveResponse =
+    ): Brand =
         // get /brands/{id}
         withRawResponse().retrieve(params, requestOptions).parse()
 
-    override suspend fun update(
-        params: BrandUpdateParams,
-        requestOptions: RequestOptions,
-    ): BrandUpdateResponse =
+    override suspend fun update(params: BrandUpdateParams, requestOptions: RequestOptions): Brand =
         // patch /brands/{id}
         withRawResponse().update(params, requestOptions).parse()
 
@@ -87,13 +79,12 @@ class BrandServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 clientOptions.toBuilder().apply(modifier).build()
             )
 
-        private val createHandler: Handler<BrandCreateResponse> =
-            jsonHandler<BrandCreateResponse>(clientOptions.jsonMapper)
+        private val createHandler: Handler<Brand> = jsonHandler<Brand>(clientOptions.jsonMapper)
 
         override suspend fun create(
             params: BrandCreateParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<BrandCreateResponse> {
+        ): HttpResponseFor<Brand> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -115,13 +106,12 @@ class BrandServiceAsyncImpl internal constructor(private val clientOptions: Clie
             }
         }
 
-        private val retrieveHandler: Handler<BrandRetrieveResponse> =
-            jsonHandler<BrandRetrieveResponse>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<Brand> = jsonHandler<Brand>(clientOptions.jsonMapper)
 
         override suspend fun retrieve(
             params: BrandRetrieveParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<BrandRetrieveResponse> {
+        ): HttpResponseFor<Brand> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id())
@@ -145,13 +135,12 @@ class BrandServiceAsyncImpl internal constructor(private val clientOptions: Clie
             }
         }
 
-        private val updateHandler: Handler<BrandUpdateResponse> =
-            jsonHandler<BrandUpdateResponse>(clientOptions.jsonMapper)
+        private val updateHandler: Handler<Brand> = jsonHandler<Brand>(clientOptions.jsonMapper)
 
         override suspend fun update(
             params: BrandUpdateParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<BrandUpdateResponse> {
+        ): HttpResponseFor<Brand> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id())

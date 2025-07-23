@@ -11,6 +11,7 @@ import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.OneTimeProductCartItem
 import com.dodopayments.api.models.payments.PaymentCreateParams
+import com.dodopayments.api.models.payments.PaymentMethodTypes
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import com.github.tomakehurst.wiremock.client.WireMock.matchingJsonPath
@@ -64,7 +65,7 @@ internal class ServiceParamsTest {
                         .amount(0)
                         .build()
                 )
-                .addAllowedPaymentMethodType(PaymentCreateParams.AllowedPaymentMethodType.CREDIT)
+                .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
                 .billingCurrency(Currency.AED)
                 .discountCode("discount_code")
                 .metadata(

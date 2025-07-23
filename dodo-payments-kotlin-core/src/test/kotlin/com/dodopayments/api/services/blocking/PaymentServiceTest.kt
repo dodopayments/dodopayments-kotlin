@@ -11,6 +11,7 @@ import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.OneTimeProductCartItem
 import com.dodopayments.api.models.payments.PaymentCreateParams
+import com.dodopayments.api.models.payments.PaymentMethodTypes
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -46,9 +47,7 @@ internal class PaymentServiceTest {
                             .amount(0)
                             .build()
                     )
-                    .addAllowedPaymentMethodType(
-                        PaymentCreateParams.AllowedPaymentMethodType.CREDIT
-                    )
+                    .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
                     .billingCurrency(Currency.AED)
                     .discountCode("discount_code")
                     .metadata(

@@ -19,7 +19,7 @@ import com.dodopayments.api.models.disputes.DisputeListPageAsync
 import com.dodopayments.api.models.disputes.DisputeListPageResponse
 import com.dodopayments.api.models.disputes.DisputeListParams
 import com.dodopayments.api.models.disputes.DisputeRetrieveParams
-import com.dodopayments.api.models.disputes.DisputeRetrieveResponse
+import com.dodopayments.api.models.disputes.GetDispute
 
 class DisputeServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     DisputeServiceAsync {
@@ -36,7 +36,7 @@ class DisputeServiceAsyncImpl internal constructor(private val clientOptions: Cl
     override suspend fun retrieve(
         params: DisputeRetrieveParams,
         requestOptions: RequestOptions,
-    ): DisputeRetrieveResponse =
+    ): GetDispute =
         // get /disputes/{dispute_id}
         withRawResponse().retrieve(params, requestOptions).parse()
 
@@ -60,13 +60,13 @@ class DisputeServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 clientOptions.toBuilder().apply(modifier).build()
             )
 
-        private val retrieveHandler: Handler<DisputeRetrieveResponse> =
-            jsonHandler<DisputeRetrieveResponse>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<GetDispute> =
+            jsonHandler<GetDispute>(clientOptions.jsonMapper)
 
         override suspend fun retrieve(
             params: DisputeRetrieveParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<DisputeRetrieveResponse> {
+        ): HttpResponseFor<GetDispute> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("disputeId", params.disputeId())

@@ -19,9 +19,9 @@ internal class DisputeServiceAsyncTest {
                 .build()
         val disputeServiceAsync = client.disputes()
 
-        val dispute = disputeServiceAsync.retrieve("dispute_id")
+        val getDispute = disputeServiceAsync.retrieve("dispute_id")
 
-        dispute.validate()
+        getDispute.validate()
     }
 
     @Test
