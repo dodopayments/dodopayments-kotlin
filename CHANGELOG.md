@@ -1,5 +1,27 @@
 # Changelog
 
+## 1.43.0 (2025-07-23)
+
+Full Changelog: [v1.42.0...v1.43.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.42.0...v1.43.0)
+
+### Features
+
+* **api:** updated openapi spec to v1.42.5 ([d613975](https://github.com/dodopayments/dodopayments-kotlin/commit/d61397556e2aeb58c4faa2eaa083db09949c0d9a))
+* **client:** add `{QueryParams,Headers}#put(String, JsonValue)` methods ([e3b2adb](https://github.com/dodopayments/dodopayments-kotlin/commit/e3b2adb6020f9ed0a1bbb75951a334e35ac460b9))
+* **client:** add https config options ([19cf13e](https://github.com/dodopayments/dodopayments-kotlin/commit/19cf13e7e897556321ade784e4592b6604a76a0b))
+* **client:** allow configuring env via system properties ([a94a773](https://github.com/dodopayments/dodopayments-kotlin/commit/a94a773e6761967896014f71fe458bc302f81e46))
+
+
+### Bug Fixes
+
+* **client:** ensure error handling always occurs ([55241c9](https://github.com/dodopayments/dodopayments-kotlin/commit/55241c9209816b3b57248caa7be85436331f7758))
+
+
+### Chores
+
+* **internal:** allow running specific example from cli ([bb5f3b0](https://github.com/dodopayments/dodopayments-kotlin/commit/bb5f3b05bb48e38bad976d3cdf2edb59d94a6eda))
+* **internal:** refactor delegating from client to options ([e500a7f](https://github.com/dodopayments/dodopayments-kotlin/commit/e500a7fb3f0854e17e724c788dfd2267c3beaab9))
+
 ## 1.42.0 (2025-07-16)
 
 Full Changelog: [v1.39.0...v1.42.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.39.0...v1.42.0)
