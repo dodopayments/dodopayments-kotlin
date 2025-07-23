@@ -19,7 +19,7 @@ import com.dodopayments.api.models.disputes.DisputeListPage
 import com.dodopayments.api.models.disputes.DisputeListPageResponse
 import com.dodopayments.api.models.disputes.DisputeListParams
 import com.dodopayments.api.models.disputes.DisputeRetrieveParams
-import com.dodopayments.api.models.disputes.DisputeRetrieveResponse
+import com.dodopayments.api.models.disputes.GetDispute
 
 class DisputeServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     DisputeService {
@@ -36,7 +36,7 @@ class DisputeServiceImpl internal constructor(private val clientOptions: ClientO
     override fun retrieve(
         params: DisputeRetrieveParams,
         requestOptions: RequestOptions,
-    ): DisputeRetrieveResponse =
+    ): GetDispute =
         // get /disputes/{dispute_id}
         withRawResponse().retrieve(params, requestOptions).parse()
 
@@ -57,13 +57,13 @@ class DisputeServiceImpl internal constructor(private val clientOptions: ClientO
                 clientOptions.toBuilder().apply(modifier).build()
             )
 
-        private val retrieveHandler: Handler<DisputeRetrieveResponse> =
-            jsonHandler<DisputeRetrieveResponse>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<GetDispute> =
+            jsonHandler<GetDispute>(clientOptions.jsonMapper)
 
         override fun retrieve(
             params: DisputeRetrieveParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<DisputeRetrieveResponse> {
+        ): HttpResponseFor<GetDispute> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("disputeId", params.disputeId())
