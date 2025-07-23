@@ -14,13 +14,13 @@ internal class BrandListResponseTest {
         val brandListResponse =
             BrandListResponse.builder()
                 .addItem(
-                    BrandListResponse.Item.builder()
+                    Brand.builder()
                         .brandId("brand_id")
                         .businessId("business_id")
                         .enabled(true)
                         .statementDescriptor("statement_descriptor")
                         .verificationEnabled(true)
-                        .verificationStatus(BrandListResponse.Item.VerificationStatus.SUCCESS)
+                        .verificationStatus(Brand.VerificationStatus.SUCCESS)
                         .description("description")
                         .image("image")
                         .name("name")
@@ -33,13 +33,13 @@ internal class BrandListResponseTest {
 
         assertThat(brandListResponse.items())
             .containsExactly(
-                BrandListResponse.Item.builder()
+                Brand.builder()
                     .brandId("brand_id")
                     .businessId("business_id")
                     .enabled(true)
                     .statementDescriptor("statement_descriptor")
                     .verificationEnabled(true)
-                    .verificationStatus(BrandListResponse.Item.VerificationStatus.SUCCESS)
+                    .verificationStatus(Brand.VerificationStatus.SUCCESS)
                     .description("description")
                     .image("image")
                     .name("name")
@@ -56,13 +56,13 @@ internal class BrandListResponseTest {
         val brandListResponse =
             BrandListResponse.builder()
                 .addItem(
-                    BrandListResponse.Item.builder()
+                    Brand.builder()
                         .brandId("brand_id")
                         .businessId("business_id")
                         .enabled(true)
                         .statementDescriptor("statement_descriptor")
                         .verificationEnabled(true)
-                        .verificationStatus(BrandListResponse.Item.VerificationStatus.SUCCESS)
+                        .verificationStatus(Brand.VerificationStatus.SUCCESS)
                         .description("description")
                         .image("image")
                         .name("name")

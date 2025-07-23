@@ -9,12 +9,12 @@ import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class DisputeRetrieveResponseTest {
+internal class GetDisputeTest {
 
     @Test
     fun create() {
-        val disputeRetrieveResponse =
-            DisputeRetrieveResponse.builder()
+        val getDispute =
+            GetDispute.builder()
                 .amount("amount")
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -34,12 +34,12 @@ internal class DisputeRetrieveResponseTest {
                 .remarks("remarks")
                 .build()
 
-        assertThat(disputeRetrieveResponse.amount()).isEqualTo("amount")
-        assertThat(disputeRetrieveResponse.businessId()).isEqualTo("business_id")
-        assertThat(disputeRetrieveResponse.createdAt())
+        assertThat(getDispute.amount()).isEqualTo("amount")
+        assertThat(getDispute.businessId()).isEqualTo("business_id")
+        assertThat(getDispute.createdAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(disputeRetrieveResponse.currency()).isEqualTo("currency")
-        assertThat(disputeRetrieveResponse.customer())
+        assertThat(getDispute.currency()).isEqualTo("currency")
+        assertThat(getDispute.customer())
             .isEqualTo(
                 CustomerLimitedDetails.builder()
                     .customerId("customer_id")
@@ -47,19 +47,19 @@ internal class DisputeRetrieveResponseTest {
                     .name("name")
                     .build()
             )
-        assertThat(disputeRetrieveResponse.disputeId()).isEqualTo("dispute_id")
-        assertThat(disputeRetrieveResponse.disputeStage()).isEqualTo(DisputeStage.PRE_DISPUTE)
-        assertThat(disputeRetrieveResponse.disputeStatus()).isEqualTo(DisputeStatus.DISPUTE_OPENED)
-        assertThat(disputeRetrieveResponse.paymentId()).isEqualTo("payment_id")
-        assertThat(disputeRetrieveResponse.reason()).isEqualTo("reason")
-        assertThat(disputeRetrieveResponse.remarks()).isEqualTo("remarks")
+        assertThat(getDispute.disputeId()).isEqualTo("dispute_id")
+        assertThat(getDispute.disputeStage()).isEqualTo(DisputeStage.PRE_DISPUTE)
+        assertThat(getDispute.disputeStatus()).isEqualTo(DisputeStatus.DISPUTE_OPENED)
+        assertThat(getDispute.paymentId()).isEqualTo("payment_id")
+        assertThat(getDispute.reason()).isEqualTo("reason")
+        assertThat(getDispute.remarks()).isEqualTo("remarks")
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val disputeRetrieveResponse =
-            DisputeRetrieveResponse.builder()
+        val getDispute =
+            GetDispute.builder()
                 .amount("amount")
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -79,12 +79,12 @@ internal class DisputeRetrieveResponseTest {
                 .remarks("remarks")
                 .build()
 
-        val roundtrippedDisputeRetrieveResponse =
+        val roundtrippedGetDispute =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(disputeRetrieveResponse),
-                jacksonTypeRef<DisputeRetrieveResponse>(),
+                jsonMapper.writeValueAsString(getDispute),
+                jacksonTypeRef<GetDispute>(),
             )
 
-        assertThat(roundtrippedDisputeRetrieveResponse).isEqualTo(disputeRetrieveResponse)
+        assertThat(roundtrippedGetDispute).isEqualTo(getDispute)
     }
 }

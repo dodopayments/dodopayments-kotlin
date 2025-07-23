@@ -5,16 +5,14 @@ package com.dodopayments.api.services.async
 import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponseFor
+import com.dodopayments.api.models.brands.Brand
 import com.dodopayments.api.models.brands.BrandCreateParams
-import com.dodopayments.api.models.brands.BrandCreateResponse
 import com.dodopayments.api.models.brands.BrandListParams
 import com.dodopayments.api.models.brands.BrandListResponse
 import com.dodopayments.api.models.brands.BrandRetrieveParams
-import com.dodopayments.api.models.brands.BrandRetrieveResponse
 import com.dodopayments.api.models.brands.BrandUpdateImagesParams
 import com.dodopayments.api.models.brands.BrandUpdateImagesResponse
 import com.dodopayments.api.models.brands.BrandUpdateParams
-import com.dodopayments.api.models.brands.BrandUpdateResponse
 import com.google.errorprone.annotations.MustBeClosed
 
 interface BrandServiceAsync {
@@ -34,10 +32,10 @@ interface BrandServiceAsync {
     suspend fun create(
         params: BrandCreateParams = BrandCreateParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): BrandCreateResponse
+    ): Brand
 
     /** @see [create] */
-    suspend fun create(requestOptions: RequestOptions): BrandCreateResponse =
+    suspend fun create(requestOptions: RequestOptions): Brand =
         create(BrandCreateParams.none(), requestOptions)
 
     /** Thin handler just calls `get_brand` and wraps in `Json(...)` */
@@ -45,32 +43,32 @@ interface BrandServiceAsync {
         id: String,
         params: BrandRetrieveParams = BrandRetrieveParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): BrandRetrieveResponse = retrieve(params.toBuilder().id(id).build(), requestOptions)
+    ): Brand = retrieve(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see [retrieve] */
     suspend fun retrieve(
         params: BrandRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): BrandRetrieveResponse
+    ): Brand
 
     /** @see [retrieve] */
-    suspend fun retrieve(id: String, requestOptions: RequestOptions): BrandRetrieveResponse =
+    suspend fun retrieve(id: String, requestOptions: RequestOptions): Brand =
         retrieve(id, BrandRetrieveParams.none(), requestOptions)
 
     suspend fun update(
         id: String,
         params: BrandUpdateParams = BrandUpdateParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): BrandUpdateResponse = update(params.toBuilder().id(id).build(), requestOptions)
+    ): Brand = update(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see [update] */
     suspend fun update(
         params: BrandUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): BrandUpdateResponse
+    ): Brand
 
     /** @see [update] */
-    suspend fun update(id: String, requestOptions: RequestOptions): BrandUpdateResponse =
+    suspend fun update(id: String, requestOptions: RequestOptions): Brand =
         update(id, BrandUpdateParams.none(), requestOptions)
 
     suspend fun list(
@@ -120,11 +118,11 @@ interface BrandServiceAsync {
         suspend fun create(
             params: BrandCreateParams = BrandCreateParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<BrandCreateResponse>
+        ): HttpResponseFor<Brand>
 
         /** @see [create] */
         @MustBeClosed
-        suspend fun create(requestOptions: RequestOptions): HttpResponseFor<BrandCreateResponse> =
+        suspend fun create(requestOptions: RequestOptions): HttpResponseFor<Brand> =
             create(BrandCreateParams.none(), requestOptions)
 
         /**
@@ -136,22 +134,18 @@ interface BrandServiceAsync {
             id: String,
             params: BrandRetrieveParams = BrandRetrieveParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<BrandRetrieveResponse> =
-            retrieve(params.toBuilder().id(id).build(), requestOptions)
+        ): HttpResponseFor<Brand> = retrieve(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see [retrieve] */
         @MustBeClosed
         suspend fun retrieve(
             params: BrandRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<BrandRetrieveResponse>
+        ): HttpResponseFor<Brand>
 
         /** @see [retrieve] */
         @MustBeClosed
-        suspend fun retrieve(
-            id: String,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<BrandRetrieveResponse> =
+        suspend fun retrieve(id: String, requestOptions: RequestOptions): HttpResponseFor<Brand> =
             retrieve(id, BrandRetrieveParams.none(), requestOptions)
 
         /**
@@ -163,22 +157,18 @@ interface BrandServiceAsync {
             id: String,
             params: BrandUpdateParams = BrandUpdateParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<BrandUpdateResponse> =
-            update(params.toBuilder().id(id).build(), requestOptions)
+        ): HttpResponseFor<Brand> = update(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see [update] */
         @MustBeClosed
         suspend fun update(
             params: BrandUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<BrandUpdateResponse>
+        ): HttpResponseFor<Brand>
 
         /** @see [update] */
         @MustBeClosed
-        suspend fun update(
-            id: String,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<BrandUpdateResponse> =
+        suspend fun update(id: String, requestOptions: RequestOptions): HttpResponseFor<Brand> =
             update(id, BrandUpdateParams.none(), requestOptions)
 
         /**

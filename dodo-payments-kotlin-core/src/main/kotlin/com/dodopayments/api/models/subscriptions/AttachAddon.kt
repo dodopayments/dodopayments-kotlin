@@ -1,14 +1,12 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.dodopayments.api.models.brands
+package com.dodopayments.api.models.subscriptions
 
 import com.dodopayments.api.core.ExcludeMissing
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
-import com.dodopayments.api.core.checkKnown
 import com.dodopayments.api.core.checkRequired
-import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -17,31 +15,44 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
 
-class BrandListResponse
+class AttachAddon
 private constructor(
-    private val items: JsonField<List<Brand>>,
+    private val addonId: JsonField<String>,
+    private val quantity: JsonField<Int>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("items") @ExcludeMissing items: JsonField<List<Brand>> = JsonMissing.of()
-    ) : this(items, mutableMapOf())
+        @JsonProperty("addon_id") @ExcludeMissing addonId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("quantity") @ExcludeMissing quantity: JsonField<Int> = JsonMissing.of(),
+    ) : this(addonId, quantity, mutableMapOf())
 
     /**
-     * List of brands for this business
-     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun items(): List<Brand> = items.getRequired("items")
+    fun addonId(): String = addonId.getRequired("addon_id")
 
     /**
-     * Returns the raw JSON value of [items].
-     *
-     * Unlike [items], this method doesn't throw if the JSON field has an unexpected type.
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    @JsonProperty("items") @ExcludeMissing fun _items(): JsonField<List<Brand>> = items
+    fun quantity(): Int = quantity.getRequired("quantity")
+
+    /**
+     * Returns the raw JSON value of [addonId].
+     *
+     * Unlike [addonId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("addon_id") @ExcludeMissing fun _addonId(): JsonField<String> = addonId
+
+    /**
+     * Returns the raw JSON value of [quantity].
+     *
+     * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Int> = quantity
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -58,50 +69,49 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [BrandListResponse].
+         * Returns a mutable builder for constructing an instance of [AttachAddon].
          *
          * The following fields are required:
          * ```kotlin
-         * .items()
+         * .addonId()
+         * .quantity()
          * ```
          */
         fun builder() = Builder()
     }
 
-    /** A builder for [BrandListResponse]. */
+    /** A builder for [AttachAddon]. */
     class Builder internal constructor() {
 
-        private var items: JsonField<MutableList<Brand>>? = null
+        private var addonId: JsonField<String>? = null
+        private var quantity: JsonField<Int>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(brandListResponse: BrandListResponse) = apply {
-            items = brandListResponse.items.map { it.toMutableList() }
-            additionalProperties = brandListResponse.additionalProperties.toMutableMap()
+        internal fun from(attachAddon: AttachAddon) = apply {
+            addonId = attachAddon.addonId
+            quantity = attachAddon.quantity
+            additionalProperties = attachAddon.additionalProperties.toMutableMap()
         }
 
-        /** List of brands for this business */
-        fun items(items: List<Brand>) = items(JsonField.of(items))
-
-        /**
-         * Sets [Builder.items] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.items] with a well-typed `List<Brand>` value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun items(items: JsonField<List<Brand>>) = apply {
-            this.items = items.map { it.toMutableList() }
-        }
+        fun addonId(addonId: String) = addonId(JsonField.of(addonId))
 
         /**
-         * Adds a single [Brand] to [items].
+         * Sets [Builder.addonId] to an arbitrary JSON value.
          *
-         * @throws IllegalStateException if the field was previously set to a non-list.
+         * You should usually call [Builder.addonId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun addItem(item: Brand) = apply {
-            items =
-                (items ?: JsonField.of(mutableListOf())).also { checkKnown("items", it).add(item) }
-        }
+        fun addonId(addonId: JsonField<String>) = apply { this.addonId = addonId }
+
+        fun quantity(quantity: Int) = quantity(JsonField.of(quantity))
+
+        /**
+         * Sets [Builder.quantity] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.quantity] with a well-typed [Int] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun quantity(quantity: JsonField<Int>) = apply { this.quantity = quantity }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -123,32 +133,35 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [BrandListResponse].
+         * Returns an immutable instance of [AttachAddon].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
          * ```kotlin
-         * .items()
+         * .addonId()
+         * .quantity()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): BrandListResponse =
-            BrandListResponse(
-                checkRequired("items", items).map { it.toImmutable() },
+        fun build(): AttachAddon =
+            AttachAddon(
+                checkRequired("addonId", addonId),
+                checkRequired("quantity", quantity),
                 additionalProperties.toMutableMap(),
             )
     }
 
     private var validated: Boolean = false
 
-    fun validate(): BrandListResponse = apply {
+    fun validate(): AttachAddon = apply {
         if (validated) {
             return@apply
         }
 
-        items().forEach { it.validate() }
+        addonId()
+        quantity()
         validated = true
     }
 
@@ -165,22 +178,23 @@ private constructor(
      *
      * Used for best match union deserialization.
      */
-    internal fun validity(): Int = (items.asKnown()?.sumOf { it.validity().toInt() } ?: 0)
+    internal fun validity(): Int =
+        (if (addonId.asKnown() == null) 0 else 1) + (if (quantity.asKnown() == null) 0 else 1)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is BrandListResponse && items == other.items && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is AttachAddon && addonId == other.addonId && quantity == other.quantity && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(items, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(addonId, quantity, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "BrandListResponse{items=$items, additionalProperties=$additionalProperties}"
+        "AttachAddon{addonId=$addonId, quantity=$quantity, additionalProperties=$additionalProperties}"
 }
