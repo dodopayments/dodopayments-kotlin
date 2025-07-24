@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.43.1 (2025-07-24)
+
+Full Changelog: [v1.43.0...v1.43.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.43.0...v1.43.1)
+
+### Documentation
+
+* fix missing readme comment ([97ef98e](https://github.com/dodopayments/dodopayments-kotlin/commit/97ef98ea4977d21f2ecdcc820638eaa0cf88b87e))
+
 ## 1.43.0 (2025-07-23)
 
 Full Changelog: [v1.42.0...v1.43.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.42.0...v1.43.0)
