@@ -112,7 +112,7 @@ import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
 
 val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.builder()
     // Configures using the `dodopayments.apiKey` and `dodopayments.baseUrl` system properties
-    Or configures using the `DODO_PAYMENTS_API_KEY` and `DODO_PAYMENTS_BASE_URL` environment variables
+    // Or configures using the `DODO_PAYMENTS_API_KEY` and `DODO_PAYMENTS_BASE_URL` environment variables
     .fromEnv()
     .bearerToken("My Bearer Token")
     .build()
