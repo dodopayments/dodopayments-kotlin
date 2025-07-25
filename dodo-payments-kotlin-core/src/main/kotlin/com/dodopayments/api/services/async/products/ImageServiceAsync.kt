@@ -29,13 +29,13 @@ interface ImageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ImageUpdateResponse = update(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [update] */
+    /** @see update */
     suspend fun update(
         params: ImageUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ImageUpdateResponse
 
-    /** @see [update] */
+    /** @see update */
     suspend fun update(id: String, requestOptions: RequestOptions): ImageUpdateResponse =
         update(id, ImageUpdateParams.none(), requestOptions)
 
@@ -63,14 +63,14 @@ interface ImageServiceAsync {
         ): HttpResponseFor<ImageUpdateResponse> =
             update(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         suspend fun update(
             params: ImageUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ImageUpdateResponse>
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         suspend fun update(
             id: String,

@@ -40,13 +40,13 @@ interface PaymentService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Payment = retrieve(params.toBuilder().paymentId(paymentId).build(), requestOptions)
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         params: PaymentRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Payment
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(paymentId: String, requestOptions: RequestOptions): Payment =
         retrieve(paymentId, PaymentRetrieveParams.none(), requestOptions)
 
@@ -55,7 +55,7 @@ interface PaymentService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): PaymentListPage
 
-    /** @see [list] */
+    /** @see list */
     fun list(requestOptions: RequestOptions): PaymentListPage =
         list(PaymentListParams.none(), requestOptions)
 
@@ -66,13 +66,13 @@ interface PaymentService {
     ): PaymentRetrieveLineItemsResponse =
         retrieveLineItems(params.toBuilder().paymentId(paymentId).build(), requestOptions)
 
-    /** @see [retrieveLineItems] */
+    /** @see retrieveLineItems */
     fun retrieveLineItems(
         params: PaymentRetrieveLineItemsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): PaymentRetrieveLineItemsResponse
 
-    /** @see [retrieveLineItems] */
+    /** @see retrieveLineItems */
     fun retrieveLineItems(
         paymentId: String,
         requestOptions: RequestOptions,
@@ -111,14 +111,14 @@ interface PaymentService {
         ): HttpResponseFor<Payment> =
             retrieve(params.toBuilder().paymentId(paymentId).build(), requestOptions)
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             params: PaymentRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Payment>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(paymentId: String, requestOptions: RequestOptions): HttpResponseFor<Payment> =
             retrieve(paymentId, PaymentRetrieveParams.none(), requestOptions)
@@ -133,7 +133,7 @@ interface PaymentService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<PaymentListPage>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<PaymentListPage> =
             list(PaymentListParams.none(), requestOptions)
@@ -150,14 +150,14 @@ interface PaymentService {
         ): HttpResponseFor<PaymentRetrieveLineItemsResponse> =
             retrieveLineItems(params.toBuilder().paymentId(paymentId).build(), requestOptions)
 
-        /** @see [retrieveLineItems] */
+        /** @see retrieveLineItems */
         @MustBeClosed
         fun retrieveLineItems(
             params: PaymentRetrieveLineItemsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<PaymentRetrieveLineItemsResponse>
 
-        /** @see [retrieveLineItems] */
+        /** @see retrieveLineItems */
         @MustBeClosed
         fun retrieveLineItems(
             paymentId: String,

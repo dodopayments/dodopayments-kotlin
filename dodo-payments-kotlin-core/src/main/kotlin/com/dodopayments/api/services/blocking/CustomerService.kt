@@ -41,13 +41,13 @@ interface CustomerService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Customer = retrieve(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         params: CustomerRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Customer
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(customerId: String, requestOptions: RequestOptions): Customer =
         retrieve(customerId, CustomerRetrieveParams.none(), requestOptions)
 
@@ -57,13 +57,13 @@ interface CustomerService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Customer = update(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         params: CustomerUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Customer
 
-    /** @see [update] */
+    /** @see update */
     fun update(customerId: String, requestOptions: RequestOptions): Customer =
         update(customerId, CustomerUpdateParams.none(), requestOptions)
 
@@ -72,7 +72,7 @@ interface CustomerService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerListPage
 
-    /** @see [list] */
+    /** @see list */
     fun list(requestOptions: RequestOptions): CustomerListPage =
         list(CustomerListParams.none(), requestOptions)
 
@@ -110,14 +110,14 @@ interface CustomerService {
         ): HttpResponseFor<Customer> =
             retrieve(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             params: CustomerRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Customer>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             customerId: String,
@@ -137,14 +137,14 @@ interface CustomerService {
         ): HttpResponseFor<Customer> =
             update(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         fun update(
             params: CustomerUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Customer>
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         fun update(customerId: String, requestOptions: RequestOptions): HttpResponseFor<Customer> =
             update(customerId, CustomerUpdateParams.none(), requestOptions)
@@ -159,7 +159,7 @@ interface CustomerService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CustomerListPage>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<CustomerListPage> =
             list(CustomerListParams.none(), requestOptions)

@@ -8,7 +8,7 @@ import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.async.WebhookEventServiceAsync
 import java.util.Objects
 
-/** @see [WebhookEventServiceAsync.list] */
+/** @see WebhookEventServiceAsync.list */
 class WebhookEventListPageAsync
 private constructor(
     private val service: WebhookEventServiceAsync,
@@ -19,7 +19,7 @@ private constructor(
     /**
      * Delegates to [WebhookEventListPageResponse], but gracefully handles missing data.
      *
-     * @see [WebhookEventListPageResponse.items]
+     * @see WebhookEventListPageResponse.items
      */
     override fun items(): List<WebhookEvent> = response._items().getNullable("items") ?: emptyList()
 

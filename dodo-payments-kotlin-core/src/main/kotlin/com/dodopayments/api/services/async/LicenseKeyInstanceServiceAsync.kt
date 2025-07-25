@@ -32,13 +32,13 @@ interface LicenseKeyInstanceServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): LicenseKeyInstance = retrieve(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     suspend fun retrieve(
         params: LicenseKeyInstanceRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): LicenseKeyInstance
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     suspend fun retrieve(id: String, requestOptions: RequestOptions): LicenseKeyInstance =
         retrieve(id, LicenseKeyInstanceRetrieveParams.none(), requestOptions)
 
@@ -48,7 +48,7 @@ interface LicenseKeyInstanceServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): LicenseKeyInstance = update(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [update] */
+    /** @see update */
     suspend fun update(
         params: LicenseKeyInstanceUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -59,7 +59,7 @@ interface LicenseKeyInstanceServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): LicenseKeyInstanceListPageAsync
 
-    /** @see [list] */
+    /** @see list */
     suspend fun list(requestOptions: RequestOptions): LicenseKeyInstanceListPageAsync =
         list(LicenseKeyInstanceListParams.none(), requestOptions)
 
@@ -90,14 +90,14 @@ interface LicenseKeyInstanceServiceAsync {
         ): HttpResponseFor<LicenseKeyInstance> =
             retrieve(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(
             params: LicenseKeyInstanceRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<LicenseKeyInstance>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(
             id: String,
@@ -117,7 +117,7 @@ interface LicenseKeyInstanceServiceAsync {
         ): HttpResponseFor<LicenseKeyInstance> =
             update(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         suspend fun update(
             params: LicenseKeyInstanceUpdateParams,
@@ -134,7 +134,7 @@ interface LicenseKeyInstanceServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<LicenseKeyInstanceListPageAsync>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         suspend fun list(
             requestOptions: RequestOptions
