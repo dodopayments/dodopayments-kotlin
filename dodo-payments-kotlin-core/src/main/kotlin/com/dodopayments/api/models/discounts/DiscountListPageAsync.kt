@@ -8,7 +8,7 @@ import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.async.DiscountServiceAsync
 import java.util.Objects
 
-/** @see [DiscountServiceAsync.list] */
+/** @see DiscountServiceAsync.list */
 class DiscountListPageAsync
 private constructor(
     private val service: DiscountServiceAsync,
@@ -19,7 +19,7 @@ private constructor(
     /**
      * Delegates to [DiscountListPageResponse], but gracefully handles missing data.
      *
-     * @see [DiscountListPageResponse.items]
+     * @see DiscountListPageResponse.items
      */
     override fun items(): List<Discount> = response._items().getNullable("items") ?: emptyList()
 

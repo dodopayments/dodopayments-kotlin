@@ -29,14 +29,14 @@ interface PaymentServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): HttpResponse = retrieve(params.toBuilder().paymentId(paymentId).build(), requestOptions)
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     @MustBeClosed
     suspend fun retrieve(
         params: PaymentRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): HttpResponse
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     @MustBeClosed
     suspend fun retrieve(paymentId: String, requestOptions: RequestOptions): HttpResponse =
         retrieve(paymentId, PaymentRetrieveParams.none(), requestOptions)
@@ -66,14 +66,14 @@ interface PaymentServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse = retrieve(params.toBuilder().paymentId(paymentId).build(), requestOptions)
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(
             params: PaymentRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(paymentId: String, requestOptions: RequestOptions): HttpResponse =
             retrieve(paymentId, PaymentRetrieveParams.none(), requestOptions)

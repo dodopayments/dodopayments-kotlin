@@ -44,13 +44,13 @@ interface DiscountServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Discount = retrieve(params.toBuilder().discountId(discountId).build(), requestOptions)
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     suspend fun retrieve(
         params: DiscountRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Discount
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     suspend fun retrieve(discountId: String, requestOptions: RequestOptions): Discount =
         retrieve(discountId, DiscountRetrieveParams.none(), requestOptions)
 
@@ -61,13 +61,13 @@ interface DiscountServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Discount = update(params.toBuilder().discountId(discountId).build(), requestOptions)
 
-    /** @see [update] */
+    /** @see update */
     suspend fun update(
         params: DiscountUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Discount
 
-    /** @see [update] */
+    /** @see update */
     suspend fun update(discountId: String, requestOptions: RequestOptions): Discount =
         update(discountId, DiscountUpdateParams.none(), requestOptions)
 
@@ -77,7 +77,7 @@ interface DiscountServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): DiscountListPageAsync
 
-    /** @see [list] */
+    /** @see list */
     suspend fun list(requestOptions: RequestOptions): DiscountListPageAsync =
         list(DiscountListParams.none(), requestOptions)
 
@@ -88,13 +88,13 @@ interface DiscountServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ) = delete(params.toBuilder().discountId(discountId).build(), requestOptions)
 
-    /** @see [delete] */
+    /** @see delete */
     suspend fun delete(
         params: DiscountDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     )
 
-    /** @see [delete] */
+    /** @see delete */
     suspend fun delete(discountId: String, requestOptions: RequestOptions) =
         delete(discountId, DiscountDeleteParams.none(), requestOptions)
 
@@ -134,14 +134,14 @@ interface DiscountServiceAsync {
         ): HttpResponseFor<Discount> =
             retrieve(params.toBuilder().discountId(discountId).build(), requestOptions)
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(
             params: DiscountRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Discount>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(
             discountId: String,
@@ -161,14 +161,14 @@ interface DiscountServiceAsync {
         ): HttpResponseFor<Discount> =
             update(params.toBuilder().discountId(discountId).build(), requestOptions)
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         suspend fun update(
             params: DiscountUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Discount>
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         suspend fun update(
             discountId: String,
@@ -186,7 +186,7 @@ interface DiscountServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<DiscountListPageAsync>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         suspend fun list(requestOptions: RequestOptions): HttpResponseFor<DiscountListPageAsync> =
             list(DiscountListParams.none(), requestOptions)
@@ -202,14 +202,14 @@ interface DiscountServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse = delete(params.toBuilder().discountId(discountId).build(), requestOptions)
 
-        /** @see [delete] */
+        /** @see delete */
         @MustBeClosed
         suspend fun delete(
             params: DiscountDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
 
-        /** @see [delete] */
+        /** @see delete */
         @MustBeClosed
         suspend fun delete(discountId: String, requestOptions: RequestOptions): HttpResponse =
             delete(discountId, DiscountDeleteParams.none(), requestOptions)

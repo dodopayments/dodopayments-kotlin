@@ -31,13 +31,13 @@ interface DisputeService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): GetDispute = retrieve(params.toBuilder().disputeId(disputeId).build(), requestOptions)
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         params: DisputeRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): GetDispute
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(disputeId: String, requestOptions: RequestOptions): GetDispute =
         retrieve(disputeId, DisputeRetrieveParams.none(), requestOptions)
 
@@ -46,7 +46,7 @@ interface DisputeService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): DisputeListPage
 
-    /** @see [list] */
+    /** @see list */
     fun list(requestOptions: RequestOptions): DisputeListPage =
         list(DisputeListParams.none(), requestOptions)
 
@@ -72,14 +72,14 @@ interface DisputeService {
         ): HttpResponseFor<GetDispute> =
             retrieve(params.toBuilder().disputeId(disputeId).build(), requestOptions)
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             params: DisputeRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<GetDispute>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             disputeId: String,
@@ -97,7 +97,7 @@ interface DisputeService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<DisputeListPage>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<DisputeListPage> =
             list(DisputeListParams.none(), requestOptions)

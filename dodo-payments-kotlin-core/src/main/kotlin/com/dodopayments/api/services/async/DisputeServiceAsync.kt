@@ -31,13 +31,13 @@ interface DisputeServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): GetDispute = retrieve(params.toBuilder().disputeId(disputeId).build(), requestOptions)
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     suspend fun retrieve(
         params: DisputeRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): GetDispute
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     suspend fun retrieve(disputeId: String, requestOptions: RequestOptions): GetDispute =
         retrieve(disputeId, DisputeRetrieveParams.none(), requestOptions)
 
@@ -46,7 +46,7 @@ interface DisputeServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): DisputeListPageAsync
 
-    /** @see [list] */
+    /** @see list */
     suspend fun list(requestOptions: RequestOptions): DisputeListPageAsync =
         list(DisputeListParams.none(), requestOptions)
 
@@ -76,14 +76,14 @@ interface DisputeServiceAsync {
         ): HttpResponseFor<GetDispute> =
             retrieve(params.toBuilder().disputeId(disputeId).build(), requestOptions)
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(
             params: DisputeRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<GetDispute>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(
             disputeId: String,
@@ -101,7 +101,7 @@ interface DisputeServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<DisputeListPageAsync>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         suspend fun list(requestOptions: RequestOptions): HttpResponseFor<DisputeListPageAsync> =
             list(DisputeListParams.none(), requestOptions)

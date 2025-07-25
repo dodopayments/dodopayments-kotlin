@@ -28,7 +28,7 @@ interface MiscServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): List<CountryCode>
 
-    /** @see [listSupportedCountries] */
+    /** @see listSupportedCountries */
     suspend fun listSupportedCountries(requestOptions: RequestOptions): List<CountryCode> =
         listSupportedCountries(MiscListSupportedCountriesParams.none(), requestOptions)
 
@@ -52,7 +52,7 @@ interface MiscServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<List<CountryCode>>
 
-        /** @see [listSupportedCountries] */
+        /** @see listSupportedCountries */
         @MustBeClosed
         suspend fun listSupportedCountries(
             requestOptions: RequestOptions

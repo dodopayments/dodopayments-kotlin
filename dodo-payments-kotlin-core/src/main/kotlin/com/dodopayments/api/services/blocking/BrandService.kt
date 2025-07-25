@@ -34,7 +34,7 @@ interface BrandService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Brand
 
-    /** @see [create] */
+    /** @see create */
     fun create(requestOptions: RequestOptions): Brand =
         create(BrandCreateParams.none(), requestOptions)
 
@@ -45,13 +45,13 @@ interface BrandService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Brand = retrieve(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         params: BrandRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Brand
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(id: String, requestOptions: RequestOptions): Brand =
         retrieve(id, BrandRetrieveParams.none(), requestOptions)
 
@@ -61,13 +61,13 @@ interface BrandService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Brand = update(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         params: BrandUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Brand
 
-    /** @see [update] */
+    /** @see update */
     fun update(id: String, requestOptions: RequestOptions): Brand =
         update(id, BrandUpdateParams.none(), requestOptions)
 
@@ -76,7 +76,7 @@ interface BrandService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BrandListResponse
 
-    /** @see [list] */
+    /** @see list */
     fun list(requestOptions: RequestOptions): BrandListResponse =
         list(BrandListParams.none(), requestOptions)
 
@@ -86,13 +86,13 @@ interface BrandService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BrandUpdateImagesResponse = updateImages(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [updateImages] */
+    /** @see updateImages */
     fun updateImages(
         params: BrandUpdateImagesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BrandUpdateImagesResponse
 
-    /** @see [updateImages] */
+    /** @see updateImages */
     fun updateImages(id: String, requestOptions: RequestOptions): BrandUpdateImagesResponse =
         updateImages(id, BrandUpdateImagesParams.none(), requestOptions)
 
@@ -116,7 +116,7 @@ interface BrandService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Brand>
 
-        /** @see [create] */
+        /** @see create */
         @MustBeClosed
         fun create(requestOptions: RequestOptions): HttpResponseFor<Brand> =
             create(BrandCreateParams.none(), requestOptions)
@@ -132,14 +132,14 @@ interface BrandService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Brand> = retrieve(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             params: BrandRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Brand>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(id: String, requestOptions: RequestOptions): HttpResponseFor<Brand> =
             retrieve(id, BrandRetrieveParams.none(), requestOptions)
@@ -155,14 +155,14 @@ interface BrandService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Brand> = update(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         fun update(
             params: BrandUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Brand>
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         fun update(id: String, requestOptions: RequestOptions): HttpResponseFor<Brand> =
             update(id, BrandUpdateParams.none(), requestOptions)
@@ -177,7 +177,7 @@ interface BrandService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BrandListResponse>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<BrandListResponse> =
             list(BrandListParams.none(), requestOptions)
@@ -194,14 +194,14 @@ interface BrandService {
         ): HttpResponseFor<BrandUpdateImagesResponse> =
             updateImages(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [updateImages] */
+        /** @see updateImages */
         @MustBeClosed
         fun updateImages(
             params: BrandUpdateImagesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BrandUpdateImagesResponse>
 
-        /** @see [updateImages] */
+        /** @see updateImages */
         @MustBeClosed
         fun updateImages(
             id: String,

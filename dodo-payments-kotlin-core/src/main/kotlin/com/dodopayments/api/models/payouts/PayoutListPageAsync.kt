@@ -8,7 +8,7 @@ import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.async.PayoutServiceAsync
 import java.util.Objects
 
-/** @see [PayoutServiceAsync.list] */
+/** @see PayoutServiceAsync.list */
 class PayoutListPageAsync
 private constructor(
     private val service: PayoutServiceAsync,
@@ -19,7 +19,7 @@ private constructor(
     /**
      * Delegates to [PayoutListPageResponse], but gracefully handles missing data.
      *
-     * @see [PayoutListPageResponse.items]
+     * @see PayoutListPageResponse.items
      */
     override fun items(): List<PayoutListResponse> =
         response._items().getNullable("items") ?: emptyList()

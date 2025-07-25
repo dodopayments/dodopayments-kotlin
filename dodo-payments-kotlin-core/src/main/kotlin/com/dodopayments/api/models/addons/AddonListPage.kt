@@ -8,7 +8,7 @@ import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.blocking.AddonService
 import java.util.Objects
 
-/** @see [AddonService.list] */
+/** @see AddonService.list */
 class AddonListPage
 private constructor(
     private val service: AddonService,
@@ -19,7 +19,7 @@ private constructor(
     /**
      * Delegates to [AddonListPageResponse], but gracefully handles missing data.
      *
-     * @see [AddonListPageResponse.items]
+     * @see AddonListPageResponse.items
      */
     override fun items(): List<AddonResponse> =
         response._items().getNullable("items") ?: emptyList()

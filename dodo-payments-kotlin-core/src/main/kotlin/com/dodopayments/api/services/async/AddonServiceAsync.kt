@@ -40,13 +40,13 @@ interface AddonServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AddonResponse = retrieve(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     suspend fun retrieve(
         params: AddonRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AddonResponse
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     suspend fun retrieve(id: String, requestOptions: RequestOptions): AddonResponse =
         retrieve(id, AddonRetrieveParams.none(), requestOptions)
 
@@ -56,13 +56,13 @@ interface AddonServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AddonResponse = update(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [update] */
+    /** @see update */
     suspend fun update(
         params: AddonUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AddonResponse
 
-    /** @see [update] */
+    /** @see update */
     suspend fun update(id: String, requestOptions: RequestOptions): AddonResponse =
         update(id, AddonUpdateParams.none(), requestOptions)
 
@@ -71,7 +71,7 @@ interface AddonServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AddonListPageAsync
 
-    /** @see [list] */
+    /** @see list */
     suspend fun list(requestOptions: RequestOptions): AddonListPageAsync =
         list(AddonListParams.none(), requestOptions)
 
@@ -81,13 +81,13 @@ interface AddonServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AddonUpdateImagesResponse = updateImages(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [updateImages] */
+    /** @see updateImages */
     suspend fun updateImages(
         params: AddonUpdateImagesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AddonUpdateImagesResponse
 
-    /** @see [updateImages] */
+    /** @see updateImages */
     suspend fun updateImages(
         id: String,
         requestOptions: RequestOptions,
@@ -127,14 +127,14 @@ interface AddonServiceAsync {
         ): HttpResponseFor<AddonResponse> =
             retrieve(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(
             params: AddonRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<AddonResponse>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(
             id: String,
@@ -153,14 +153,14 @@ interface AddonServiceAsync {
         ): HttpResponseFor<AddonResponse> =
             update(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         suspend fun update(
             params: AddonUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<AddonResponse>
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         suspend fun update(
             id: String,
@@ -177,7 +177,7 @@ interface AddonServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<AddonListPageAsync>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         suspend fun list(requestOptions: RequestOptions): HttpResponseFor<AddonListPageAsync> =
             list(AddonListParams.none(), requestOptions)
@@ -194,14 +194,14 @@ interface AddonServiceAsync {
         ): HttpResponseFor<AddonUpdateImagesResponse> =
             updateImages(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [updateImages] */
+        /** @see updateImages */
         @MustBeClosed
         suspend fun updateImages(
             params: AddonUpdateImagesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<AddonUpdateImagesResponse>
 
-        /** @see [updateImages] */
+        /** @see updateImages */
         @MustBeClosed
         suspend fun updateImages(
             id: String,
