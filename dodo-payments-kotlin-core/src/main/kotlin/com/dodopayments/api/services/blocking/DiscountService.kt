@@ -44,13 +44,13 @@ interface DiscountService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Discount = retrieve(params.toBuilder().discountId(discountId).build(), requestOptions)
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         params: DiscountRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Discount
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(discountId: String, requestOptions: RequestOptions): Discount =
         retrieve(discountId, DiscountRetrieveParams.none(), requestOptions)
 
@@ -61,13 +61,13 @@ interface DiscountService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Discount = update(params.toBuilder().discountId(discountId).build(), requestOptions)
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         params: DiscountUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Discount
 
-    /** @see [update] */
+    /** @see update */
     fun update(discountId: String, requestOptions: RequestOptions): Discount =
         update(discountId, DiscountUpdateParams.none(), requestOptions)
 
@@ -77,7 +77,7 @@ interface DiscountService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): DiscountListPage
 
-    /** @see [list] */
+    /** @see list */
     fun list(requestOptions: RequestOptions): DiscountListPage =
         list(DiscountListParams.none(), requestOptions)
 
@@ -88,10 +88,10 @@ interface DiscountService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ) = delete(params.toBuilder().discountId(discountId).build(), requestOptions)
 
-    /** @see [delete] */
+    /** @see delete */
     fun delete(params: DiscountDeleteParams, requestOptions: RequestOptions = RequestOptions.none())
 
-    /** @see [delete] */
+    /** @see delete */
     fun delete(discountId: String, requestOptions: RequestOptions) =
         delete(discountId, DiscountDeleteParams.none(), requestOptions)
 
@@ -127,14 +127,14 @@ interface DiscountService {
         ): HttpResponseFor<Discount> =
             retrieve(params.toBuilder().discountId(discountId).build(), requestOptions)
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             params: DiscountRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Discount>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             discountId: String,
@@ -154,14 +154,14 @@ interface DiscountService {
         ): HttpResponseFor<Discount> =
             update(params.toBuilder().discountId(discountId).build(), requestOptions)
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         fun update(
             params: DiscountUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Discount>
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         fun update(discountId: String, requestOptions: RequestOptions): HttpResponseFor<Discount> =
             update(discountId, DiscountUpdateParams.none(), requestOptions)
@@ -176,7 +176,7 @@ interface DiscountService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<DiscountListPage>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<DiscountListPage> =
             list(DiscountListParams.none(), requestOptions)
@@ -192,14 +192,14 @@ interface DiscountService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse = delete(params.toBuilder().discountId(discountId).build(), requestOptions)
 
-        /** @see [delete] */
+        /** @see delete */
         @MustBeClosed
         fun delete(
             params: DiscountDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
 
-        /** @see [delete] */
+        /** @see delete */
         @MustBeClosed
         fun delete(discountId: String, requestOptions: RequestOptions): HttpResponse =
             delete(discountId, DiscountDeleteParams.none(), requestOptions)

@@ -37,13 +37,13 @@ interface RefundService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Refund = retrieve(params.toBuilder().refundId(refundId).build(), requestOptions)
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         params: RefundRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Refund
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(refundId: String, requestOptions: RequestOptions): Refund =
         retrieve(refundId, RefundRetrieveParams.none(), requestOptions)
 
@@ -52,7 +52,7 @@ interface RefundService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): RefundListPage
 
-    /** @see [list] */
+    /** @see list */
     fun list(requestOptions: RequestOptions): RefundListPage =
         list(RefundListParams.none(), requestOptions)
 
@@ -88,14 +88,14 @@ interface RefundService {
         ): HttpResponseFor<Refund> =
             retrieve(params.toBuilder().refundId(refundId).build(), requestOptions)
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             params: RefundRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Refund>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(refundId: String, requestOptions: RequestOptions): HttpResponseFor<Refund> =
             retrieve(refundId, RefundRetrieveParams.none(), requestOptions)
@@ -110,7 +110,7 @@ interface RefundService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<RefundListPage>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<RefundListPage> =
             list(RefundListParams.none(), requestOptions)

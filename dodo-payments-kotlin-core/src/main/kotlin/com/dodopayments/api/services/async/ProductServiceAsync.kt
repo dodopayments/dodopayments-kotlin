@@ -46,13 +46,13 @@ interface ProductServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Product = retrieve(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     suspend fun retrieve(
         params: ProductRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Product
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     suspend fun retrieve(id: String, requestOptions: RequestOptions): Product =
         retrieve(id, ProductRetrieveParams.none(), requestOptions)
 
@@ -62,13 +62,13 @@ interface ProductServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ) = update(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [update] */
+    /** @see update */
     suspend fun update(
         params: ProductUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     )
 
-    /** @see [update] */
+    /** @see update */
     suspend fun update(id: String, requestOptions: RequestOptions) =
         update(id, ProductUpdateParams.none(), requestOptions)
 
@@ -77,7 +77,7 @@ interface ProductServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ProductListPageAsync
 
-    /** @see [list] */
+    /** @see list */
     suspend fun list(requestOptions: RequestOptions): ProductListPageAsync =
         list(ProductListParams.none(), requestOptions)
 
@@ -87,13 +87,13 @@ interface ProductServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ) = delete(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [delete] */
+    /** @see delete */
     suspend fun delete(
         params: ProductDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     )
 
-    /** @see [delete] */
+    /** @see delete */
     suspend fun delete(id: String, requestOptions: RequestOptions) =
         delete(id, ProductDeleteParams.none(), requestOptions)
 
@@ -103,13 +103,13 @@ interface ProductServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ) = unarchive(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [unarchive] */
+    /** @see unarchive */
     suspend fun unarchive(
         params: ProductUnarchiveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     )
 
-    /** @see [unarchive] */
+    /** @see unarchive */
     suspend fun unarchive(id: String, requestOptions: RequestOptions) =
         unarchive(id, ProductUnarchiveParams.none(), requestOptions)
 
@@ -119,7 +119,7 @@ interface ProductServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ProductUpdateFilesResponse = updateFiles(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [updateFiles] */
+    /** @see updateFiles */
     suspend fun updateFiles(
         params: ProductUpdateFilesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -162,14 +162,14 @@ interface ProductServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Product> = retrieve(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(
             params: ProductRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Product>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(id: String, requestOptions: RequestOptions): HttpResponseFor<Product> =
             retrieve(id, ProductRetrieveParams.none(), requestOptions)
@@ -185,14 +185,14 @@ interface ProductServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse = update(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         suspend fun update(
             params: ProductUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         suspend fun update(id: String, requestOptions: RequestOptions): HttpResponse =
             update(id, ProductUpdateParams.none(), requestOptions)
@@ -207,7 +207,7 @@ interface ProductServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ProductListPageAsync>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         suspend fun list(requestOptions: RequestOptions): HttpResponseFor<ProductListPageAsync> =
             list(ProductListParams.none(), requestOptions)
@@ -223,14 +223,14 @@ interface ProductServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse = delete(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [delete] */
+        /** @see delete */
         @MustBeClosed
         suspend fun delete(
             params: ProductDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
 
-        /** @see [delete] */
+        /** @see delete */
         @MustBeClosed
         suspend fun delete(id: String, requestOptions: RequestOptions): HttpResponse =
             delete(id, ProductDeleteParams.none(), requestOptions)
@@ -246,14 +246,14 @@ interface ProductServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse = unarchive(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [unarchive] */
+        /** @see unarchive */
         @MustBeClosed
         suspend fun unarchive(
             params: ProductUnarchiveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
 
-        /** @see [unarchive] */
+        /** @see unarchive */
         @MustBeClosed
         suspend fun unarchive(id: String, requestOptions: RequestOptions): HttpResponse =
             unarchive(id, ProductUnarchiveParams.none(), requestOptions)
@@ -270,7 +270,7 @@ interface ProductServiceAsync {
         ): HttpResponseFor<ProductUpdateFilesResponse> =
             updateFiles(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [updateFiles] */
+        /** @see updateFiles */
         @MustBeClosed
         suspend fun updateFiles(
             params: ProductUpdateFilesParams,

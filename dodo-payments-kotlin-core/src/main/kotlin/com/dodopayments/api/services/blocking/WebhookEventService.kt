@@ -33,14 +33,14 @@ interface WebhookEventService {
     ): WebhookEvent =
         retrieve(params.toBuilder().webhookEventId(webhookEventId).build(), requestOptions)
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     @Deprecated("deprecated")
     fun retrieve(
         params: WebhookEventRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): WebhookEvent
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     @Deprecated("deprecated")
     fun retrieve(webhookEventId: String, requestOptions: RequestOptions): WebhookEvent =
         retrieve(webhookEventId, WebhookEventRetrieveParams.none(), requestOptions)
@@ -50,7 +50,7 @@ interface WebhookEventService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): WebhookEventListPage
 
-    /** @see [list] */
+    /** @see list */
     fun list(requestOptions: RequestOptions): WebhookEventListPage =
         list(WebhookEventListParams.none(), requestOptions)
 
@@ -81,7 +81,7 @@ interface WebhookEventService {
         ): HttpResponseFor<WebhookEvent> =
             retrieve(params.toBuilder().webhookEventId(webhookEventId).build(), requestOptions)
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @Deprecated("deprecated")
         @MustBeClosed
         fun retrieve(
@@ -89,7 +89,7 @@ interface WebhookEventService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<WebhookEvent>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @Deprecated("deprecated")
         @MustBeClosed
         fun retrieve(
@@ -108,7 +108,7 @@ interface WebhookEventService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<WebhookEventListPage>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<WebhookEventListPage> =
             list(WebhookEventListParams.none(), requestOptions)

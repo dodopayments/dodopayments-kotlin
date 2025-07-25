@@ -34,7 +34,7 @@ interface BrandServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Brand
 
-    /** @see [create] */
+    /** @see create */
     suspend fun create(requestOptions: RequestOptions): Brand =
         create(BrandCreateParams.none(), requestOptions)
 
@@ -45,13 +45,13 @@ interface BrandServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Brand = retrieve(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     suspend fun retrieve(
         params: BrandRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Brand
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     suspend fun retrieve(id: String, requestOptions: RequestOptions): Brand =
         retrieve(id, BrandRetrieveParams.none(), requestOptions)
 
@@ -61,13 +61,13 @@ interface BrandServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Brand = update(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [update] */
+    /** @see update */
     suspend fun update(
         params: BrandUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Brand
 
-    /** @see [update] */
+    /** @see update */
     suspend fun update(id: String, requestOptions: RequestOptions): Brand =
         update(id, BrandUpdateParams.none(), requestOptions)
 
@@ -76,7 +76,7 @@ interface BrandServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BrandListResponse
 
-    /** @see [list] */
+    /** @see list */
     suspend fun list(requestOptions: RequestOptions): BrandListResponse =
         list(BrandListParams.none(), requestOptions)
 
@@ -86,13 +86,13 @@ interface BrandServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BrandUpdateImagesResponse = updateImages(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [updateImages] */
+    /** @see updateImages */
     suspend fun updateImages(
         params: BrandUpdateImagesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BrandUpdateImagesResponse
 
-    /** @see [updateImages] */
+    /** @see updateImages */
     suspend fun updateImages(
         id: String,
         requestOptions: RequestOptions,
@@ -120,7 +120,7 @@ interface BrandServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Brand>
 
-        /** @see [create] */
+        /** @see create */
         @MustBeClosed
         suspend fun create(requestOptions: RequestOptions): HttpResponseFor<Brand> =
             create(BrandCreateParams.none(), requestOptions)
@@ -136,14 +136,14 @@ interface BrandServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Brand> = retrieve(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(
             params: BrandRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Brand>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(id: String, requestOptions: RequestOptions): HttpResponseFor<Brand> =
             retrieve(id, BrandRetrieveParams.none(), requestOptions)
@@ -159,14 +159,14 @@ interface BrandServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Brand> = update(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         suspend fun update(
             params: BrandUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Brand>
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         suspend fun update(id: String, requestOptions: RequestOptions): HttpResponseFor<Brand> =
             update(id, BrandUpdateParams.none(), requestOptions)
@@ -181,7 +181,7 @@ interface BrandServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BrandListResponse>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         suspend fun list(requestOptions: RequestOptions): HttpResponseFor<BrandListResponse> =
             list(BrandListParams.none(), requestOptions)
@@ -198,14 +198,14 @@ interface BrandServiceAsync {
         ): HttpResponseFor<BrandUpdateImagesResponse> =
             updateImages(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [updateImages] */
+        /** @see updateImages */
         @MustBeClosed
         suspend fun updateImages(
             params: BrandUpdateImagesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BrandUpdateImagesResponse>
 
-        /** @see [updateImages] */
+        /** @see updateImages */
         @MustBeClosed
         suspend fun updateImages(
             id: String,

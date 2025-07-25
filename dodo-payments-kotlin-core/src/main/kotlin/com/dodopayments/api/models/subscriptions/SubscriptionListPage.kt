@@ -8,7 +8,7 @@ import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.blocking.SubscriptionService
 import java.util.Objects
 
-/** @see [SubscriptionService.list] */
+/** @see SubscriptionService.list */
 class SubscriptionListPage
 private constructor(
     private val service: SubscriptionService,
@@ -19,7 +19,7 @@ private constructor(
     /**
      * Delegates to [SubscriptionListPageResponse], but gracefully handles missing data.
      *
-     * @see [SubscriptionListPageResponse.items]
+     * @see SubscriptionListPageResponse.items
      */
     override fun items(): List<SubscriptionListResponse> =
         response._items().getNullable("items") ?: emptyList()

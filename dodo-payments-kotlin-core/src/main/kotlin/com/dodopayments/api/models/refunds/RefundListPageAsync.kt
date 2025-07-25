@@ -8,7 +8,7 @@ import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.async.RefundServiceAsync
 import java.util.Objects
 
-/** @see [RefundServiceAsync.list] */
+/** @see RefundServiceAsync.list */
 class RefundListPageAsync
 private constructor(
     private val service: RefundServiceAsync,
@@ -19,7 +19,7 @@ private constructor(
     /**
      * Delegates to [RefundListPageResponse], but gracefully handles missing data.
      *
-     * @see [RefundListPageResponse.items]
+     * @see RefundListPageResponse.items
      */
     override fun items(): List<Refund> = response._items().getNullable("items") ?: emptyList()
 

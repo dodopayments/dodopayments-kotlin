@@ -28,7 +28,7 @@ interface PayoutService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): PayoutListPage
 
-    /** @see [list] */
+    /** @see list */
     fun list(requestOptions: RequestOptions): PayoutListPage =
         list(PayoutListParams.none(), requestOptions)
 
@@ -52,7 +52,7 @@ interface PayoutService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<PayoutListPage>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<PayoutListPage> =
             list(PayoutListParams.none(), requestOptions)

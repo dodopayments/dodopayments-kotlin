@@ -32,13 +32,13 @@ interface LicenseKeyService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): LicenseKey = retrieve(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(
         params: LicenseKeyRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): LicenseKey
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     fun retrieve(id: String, requestOptions: RequestOptions): LicenseKey =
         retrieve(id, LicenseKeyRetrieveParams.none(), requestOptions)
 
@@ -48,13 +48,13 @@ interface LicenseKeyService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): LicenseKey = update(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see [update] */
+    /** @see update */
     fun update(
         params: LicenseKeyUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): LicenseKey
 
-    /** @see [update] */
+    /** @see update */
     fun update(id: String, requestOptions: RequestOptions): LicenseKey =
         update(id, LicenseKeyUpdateParams.none(), requestOptions)
 
@@ -63,7 +63,7 @@ interface LicenseKeyService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): LicenseKeyListPage
 
-    /** @see [list] */
+    /** @see list */
     fun list(requestOptions: RequestOptions): LicenseKeyListPage =
         list(LicenseKeyListParams.none(), requestOptions)
 
@@ -90,14 +90,14 @@ interface LicenseKeyService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<LicenseKey> = retrieve(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             params: LicenseKeyRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<LicenseKey>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         fun retrieve(id: String, requestOptions: RequestOptions): HttpResponseFor<LicenseKey> =
             retrieve(id, LicenseKeyRetrieveParams.none(), requestOptions)
@@ -113,14 +113,14 @@ interface LicenseKeyService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<LicenseKey> = update(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         fun update(
             params: LicenseKeyUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<LicenseKey>
 
-        /** @see [update] */
+        /** @see update */
         @MustBeClosed
         fun update(id: String, requestOptions: RequestOptions): HttpResponseFor<LicenseKey> =
             update(id, LicenseKeyUpdateParams.none(), requestOptions)
@@ -135,7 +135,7 @@ interface LicenseKeyService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<LicenseKeyListPage>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<LicenseKeyListPage> =
             list(LicenseKeyListParams.none(), requestOptions)

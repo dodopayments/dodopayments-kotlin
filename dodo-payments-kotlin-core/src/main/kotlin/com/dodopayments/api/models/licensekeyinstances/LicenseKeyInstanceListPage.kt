@@ -8,7 +8,7 @@ import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.blocking.LicenseKeyInstanceService
 import java.util.Objects
 
-/** @see [LicenseKeyInstanceService.list] */
+/** @see LicenseKeyInstanceService.list */
 class LicenseKeyInstanceListPage
 private constructor(
     private val service: LicenseKeyInstanceService,
@@ -19,7 +19,7 @@ private constructor(
     /**
      * Delegates to [LicenseKeyInstanceListPageResponse], but gracefully handles missing data.
      *
-     * @see [LicenseKeyInstanceListPageResponse.items]
+     * @see LicenseKeyInstanceListPageResponse.items
      */
     override fun items(): List<LicenseKeyInstance> =
         response._items().getNullable("items") ?: emptyList()

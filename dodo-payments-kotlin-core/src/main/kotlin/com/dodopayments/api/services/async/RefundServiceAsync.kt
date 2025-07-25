@@ -37,13 +37,13 @@ interface RefundServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Refund = retrieve(params.toBuilder().refundId(refundId).build(), requestOptions)
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     suspend fun retrieve(
         params: RefundRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Refund
 
-    /** @see [retrieve] */
+    /** @see retrieve */
     suspend fun retrieve(refundId: String, requestOptions: RequestOptions): Refund =
         retrieve(refundId, RefundRetrieveParams.none(), requestOptions)
 
@@ -52,7 +52,7 @@ interface RefundServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): RefundListPageAsync
 
-    /** @see [list] */
+    /** @see list */
     suspend fun list(requestOptions: RequestOptions): RefundListPageAsync =
         list(RefundListParams.none(), requestOptions)
 
@@ -92,14 +92,14 @@ interface RefundServiceAsync {
         ): HttpResponseFor<Refund> =
             retrieve(params.toBuilder().refundId(refundId).build(), requestOptions)
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(
             params: RefundRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Refund>
 
-        /** @see [retrieve] */
+        /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(
             refundId: String,
@@ -116,7 +116,7 @@ interface RefundServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<RefundListPageAsync>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         suspend fun list(requestOptions: RequestOptions): HttpResponseFor<RefundListPageAsync> =
             list(RefundListParams.none(), requestOptions)

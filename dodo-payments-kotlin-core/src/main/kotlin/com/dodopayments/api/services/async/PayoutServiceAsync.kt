@@ -28,7 +28,7 @@ interface PayoutServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): PayoutListPageAsync
 
-    /** @see [list] */
+    /** @see list */
     suspend fun list(requestOptions: RequestOptions): PayoutListPageAsync =
         list(PayoutListParams.none(), requestOptions)
 
@@ -56,7 +56,7 @@ interface PayoutServiceAsync {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<PayoutListPageAsync>
 
-        /** @see [list] */
+        /** @see list */
         @MustBeClosed
         suspend fun list(requestOptions: RequestOptions): HttpResponseFor<PayoutListPageAsync> =
             list(PayoutListParams.none(), requestOptions)

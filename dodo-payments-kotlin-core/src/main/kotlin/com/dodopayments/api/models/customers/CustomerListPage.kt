@@ -8,7 +8,7 @@ import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.blocking.CustomerService
 import java.util.Objects
 
-/** @see [CustomerService.list] */
+/** @see CustomerService.list */
 class CustomerListPage
 private constructor(
     private val service: CustomerService,
@@ -19,7 +19,7 @@ private constructor(
     /**
      * Delegates to [CustomerListPageResponse], but gracefully handles missing data.
      *
-     * @see [CustomerListPageResponse.items]
+     * @see CustomerListPageResponse.items
      */
     override fun items(): List<Customer> = response._items().getNullable("items") ?: emptyList()
 

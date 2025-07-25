@@ -8,7 +8,7 @@ import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.services.blocking.DisputeService
 import java.util.Objects
 
-/** @see [DisputeService.list] */
+/** @see DisputeService.list */
 class DisputeListPage
 private constructor(
     private val service: DisputeService,
@@ -19,7 +19,7 @@ private constructor(
     /**
      * Delegates to [DisputeListPageResponse], but gracefully handles missing data.
      *
-     * @see [DisputeListPageResponse.items]
+     * @see DisputeListPageResponse.items
      */
     override fun items(): List<DisputeListResponse> =
         response._items().getNullable("items") ?: emptyList()

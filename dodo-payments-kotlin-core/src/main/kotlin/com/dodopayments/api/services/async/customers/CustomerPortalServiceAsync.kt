@@ -30,13 +30,13 @@ interface CustomerPortalServiceAsync {
     ): CustomerPortalSession =
         create(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-    /** @see [create] */
+    /** @see create */
     suspend fun create(
         params: CustomerPortalCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CustomerPortalSession
 
-    /** @see [create] */
+    /** @see create */
     suspend fun create(customerId: String, requestOptions: RequestOptions): CustomerPortalSession =
         create(customerId, CustomerPortalCreateParams.none(), requestOptions)
 
@@ -67,14 +67,14 @@ interface CustomerPortalServiceAsync {
         ): HttpResponseFor<CustomerPortalSession> =
             create(params.toBuilder().customerId(customerId).build(), requestOptions)
 
-        /** @see [create] */
+        /** @see create */
         @MustBeClosed
         suspend fun create(
             params: CustomerPortalCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CustomerPortalSession>
 
-        /** @see [create] */
+        /** @see create */
         @MustBeClosed
         suspend fun create(
             customerId: String,
