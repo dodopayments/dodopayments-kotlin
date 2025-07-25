@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.43.2 (2025-07-25)
+
+Full Changelog: [v1.43.1...v1.43.2](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.43.1...v1.43.2)
+
+### Chores
+
+* **internal:** remove unnecessary `[...]` in `[@see](https://github.com/see)` ([783e477](https://github.com/dodopayments/dodopayments-kotlin/commit/783e47745c9e5be52fe2acd880c0fd158c711800))
+
+
+### Documentation
+
+* more code comments ([beac7b7](https://github.com/dodopayments/dodopayments-kotlin/commit/beac7b7929a2a6aa63f4a6256325a139056192b8))
+
 ## 1.43.1 (2025-07-24)
 
 Full Changelog: [v1.43.0...v1.43.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.43.0...v1.43.1)
