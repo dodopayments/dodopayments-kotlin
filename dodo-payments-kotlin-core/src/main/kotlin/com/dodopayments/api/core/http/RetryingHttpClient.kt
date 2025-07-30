@@ -3,6 +3,7 @@ package com.dodopayments.api.core.http
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.errors.DodoPaymentsIoException
+import com.dodopayments.api.errors.DodoPaymentsRetryableException
 import java.io.IOException
 import java.time.Clock
 import java.time.Duration
@@ -159,10 +160,10 @@ private constructor(
     }
 
     private fun shouldRetry(throwable: Throwable): Boolean =
-        // Only retry IOException and DodoPaymentsIoException, other exceptions are not intended to
-        // be
-        // retried.
-        throwable is IOException || throwable is DodoPaymentsIoException
+        // Only retry known retryable exceptions, other exceptions are not intended to be retried.
+        throwable is IOException ||
+            throwable is DodoPaymentsIoException ||
+            throwable is DodoPaymentsRetryableException
 
     private fun getRetryBackoffDuration(retries: Int, response: HttpResponse?): Duration {
         // About the Retry-After header:
