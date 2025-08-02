@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.44.0 (2025-08-02)
+
+Full Changelog: [v1.43.2...v1.44.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.43.2...v1.44.0)
+
+### Features
+
+* add retryable exception ([1473a6b](https://github.com/dodopayments/dodopayments-kotlin/commit/1473a6b30c95898c164927d010a97fe82737bc86))
+* **api:** updated openapi spec to 1.44.0 ([93b2b19](https://github.com/dodopayments/dodopayments-kotlin/commit/93b2b191f1035aa2ef9b95c16c06ddc406f3f1af))
+* **client:** ensure compat with proguard ([7616bb7](https://github.com/dodopayments/dodopayments-kotlin/commit/7616bb78567cce5027c78213a9ad4466283edd5a))
+
+
+### Bug Fixes
+
+* **client:** r8 support ([ffe200b](https://github.com/dodopayments/dodopayments-kotlin/commit/ffe200b0f950f0c64ab928c5724fbc8025ae9122))
+
+
+### Chores
+
+* **internal:** bump ci test timeout ([b066aa6](https://github.com/dodopayments/dodopayments-kotlin/commit/b066aa6ce49bc5e97c6a4f054c5492639a9f2782))
+* **internal:** reduce proguard ci logging ([5ffa9a1](https://github.com/dodopayments/dodopayments-kotlin/commit/5ffa9a100f17848450ac86be12f6b663dc22eb7c))
+
 ## 1.43.2 (2025-07-25)
 
 Full Changelog: [v1.43.1...v1.43.2](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.43.1...v1.43.2)
