@@ -54,8 +54,6 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
 
         val SUBSCRIPTION_ON_HOLD = of("subscription.on_hold")
 
-        val SUBSCRIPTION_PAUSED = of("subscription.paused")
-
         val SUBSCRIPTION_CANCELLED = of("subscription.cancelled")
 
         val SUBSCRIPTION_FAILED = of("subscription.failed")
@@ -87,7 +85,6 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         SUBSCRIPTION_ACTIVE,
         SUBSCRIPTION_RENEWED,
         SUBSCRIPTION_ON_HOLD,
-        SUBSCRIPTION_PAUSED,
         SUBSCRIPTION_CANCELLED,
         SUBSCRIPTION_FAILED,
         SUBSCRIPTION_EXPIRED,
@@ -121,7 +118,6 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         SUBSCRIPTION_ACTIVE,
         SUBSCRIPTION_RENEWED,
         SUBSCRIPTION_ON_HOLD,
-        SUBSCRIPTION_PAUSED,
         SUBSCRIPTION_CANCELLED,
         SUBSCRIPTION_FAILED,
         SUBSCRIPTION_EXPIRED,
@@ -158,7 +154,6 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             SUBSCRIPTION_ACTIVE -> Value.SUBSCRIPTION_ACTIVE
             SUBSCRIPTION_RENEWED -> Value.SUBSCRIPTION_RENEWED
             SUBSCRIPTION_ON_HOLD -> Value.SUBSCRIPTION_ON_HOLD
-            SUBSCRIPTION_PAUSED -> Value.SUBSCRIPTION_PAUSED
             SUBSCRIPTION_CANCELLED -> Value.SUBSCRIPTION_CANCELLED
             SUBSCRIPTION_FAILED -> Value.SUBSCRIPTION_FAILED
             SUBSCRIPTION_EXPIRED -> Value.SUBSCRIPTION_EXPIRED
@@ -194,7 +189,6 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             SUBSCRIPTION_ACTIVE -> Known.SUBSCRIPTION_ACTIVE
             SUBSCRIPTION_RENEWED -> Known.SUBSCRIPTION_RENEWED
             SUBSCRIPTION_ON_HOLD -> Known.SUBSCRIPTION_ON_HOLD
-            SUBSCRIPTION_PAUSED -> Known.SUBSCRIPTION_PAUSED
             SUBSCRIPTION_CANCELLED -> Known.SUBSCRIPTION_CANCELLED
             SUBSCRIPTION_FAILED -> Known.SUBSCRIPTION_FAILED
             SUBSCRIPTION_EXPIRED -> Known.SUBSCRIPTION_EXPIRED
