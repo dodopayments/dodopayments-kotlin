@@ -110,6 +110,14 @@ private constructor(
     fun licenseKeyEnabled(): Boolean? = body.licenseKeyEnabled()
 
     /**
+     * Additional metadata for the product
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun metadata(): Metadata? = body.metadata()
+
+    /**
      * Optional name of the product
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -192,6 +200,13 @@ private constructor(
      * type.
      */
     fun _licenseKeyEnabled(): JsonField<Boolean> = body._licenseKeyEnabled()
+
+    /**
+     * Returns the raw JSON value of [metadata].
+     *
+     * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _metadata(): JsonField<Metadata> = body._metadata()
 
     /**
      * Returns the raw JSON value of [name].
@@ -425,6 +440,18 @@ private constructor(
             body.licenseKeyEnabled(licenseKeyEnabled)
         }
 
+        /** Additional metadata for the product */
+        fun metadata(metadata: Metadata) = apply { body.metadata(metadata) }
+
+        /**
+         * Sets [Builder.metadata] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.metadata] with a well-typed [Metadata] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun metadata(metadata: JsonField<Metadata>) = apply { body.metadata(metadata) }
+
         /** Optional name of the product */
         fun name(name: String?) = apply { body.name(name) }
 
@@ -592,6 +619,7 @@ private constructor(
         private val licenseKeyActivationsLimit: JsonField<Int>,
         private val licenseKeyDuration: JsonField<LicenseKeyDuration>,
         private val licenseKeyEnabled: JsonField<Boolean>,
+        private val metadata: JsonField<Metadata>,
         private val name: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -624,6 +652,9 @@ private constructor(
             @JsonProperty("license_key_enabled")
             @ExcludeMissing
             licenseKeyEnabled: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("metadata")
+            @ExcludeMissing
+            metadata: JsonField<Metadata> = JsonMissing.of(),
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
         ) : this(
             price,
@@ -636,6 +667,7 @@ private constructor(
             licenseKeyActivationsLimit,
             licenseKeyDuration,
             licenseKeyEnabled,
+            metadata,
             name,
             mutableMapOf(),
         )
@@ -725,6 +757,14 @@ private constructor(
          *   if the server responded with an unexpected value).
          */
         fun licenseKeyEnabled(): Boolean? = licenseKeyEnabled.getNullable("license_key_enabled")
+
+        /**
+         * Additional metadata for the product
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun metadata(): Metadata? = metadata.getNullable("metadata")
 
         /**
          * Optional name of the product
@@ -824,6 +864,13 @@ private constructor(
         fun _licenseKeyEnabled(): JsonField<Boolean> = licenseKeyEnabled
 
         /**
+         * Returns the raw JSON value of [metadata].
+         *
+         * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
+
+        /**
          * Returns the raw JSON value of [name].
          *
          * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
@@ -869,6 +916,7 @@ private constructor(
             private var licenseKeyActivationsLimit: JsonField<Int> = JsonMissing.of()
             private var licenseKeyDuration: JsonField<LicenseKeyDuration> = JsonMissing.of()
             private var licenseKeyEnabled: JsonField<Boolean> = JsonMissing.of()
+            private var metadata: JsonField<Metadata> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -883,6 +931,7 @@ private constructor(
                 licenseKeyActivationsLimit = body.licenseKeyActivationsLimit
                 licenseKeyDuration = body.licenseKeyDuration
                 licenseKeyEnabled = body.licenseKeyEnabled
+                metadata = body.metadata
                 name = body.name
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
@@ -1068,6 +1117,18 @@ private constructor(
                 this.licenseKeyEnabled = licenseKeyEnabled
             }
 
+            /** Additional metadata for the product */
+            fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
+
+            /**
+             * Sets [Builder.metadata] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
+
             /** Optional name of the product */
             fun name(name: String?) = name(JsonField.ofNullable(name))
 
@@ -1124,6 +1185,7 @@ private constructor(
                     licenseKeyActivationsLimit,
                     licenseKeyDuration,
                     licenseKeyEnabled,
+                    metadata,
                     name,
                     additionalProperties.toMutableMap(),
                 )
@@ -1146,6 +1208,7 @@ private constructor(
             licenseKeyActivationsLimit()
             licenseKeyDuration()?.validate()
             licenseKeyEnabled()
+            metadata()?.validate()
             name()
             validated = true
         }
@@ -1175,6 +1238,7 @@ private constructor(
                 (if (licenseKeyActivationsLimit.asKnown() == null) 0 else 1) +
                 (licenseKeyDuration.asKnown()?.validity() ?: 0) +
                 (if (licenseKeyEnabled.asKnown() == null) 0 else 1) +
+                (metadata.asKnown()?.validity() ?: 0) +
                 (if (name.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
@@ -1182,17 +1246,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && price == other.price && taxCategory == other.taxCategory && addons == other.addons && brandId == other.brandId && description == other.description && digitalProductDelivery == other.digitalProductDelivery && licenseKeyActivationMessage == other.licenseKeyActivationMessage && licenseKeyActivationsLimit == other.licenseKeyActivationsLimit && licenseKeyDuration == other.licenseKeyDuration && licenseKeyEnabled == other.licenseKeyEnabled && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && price == other.price && taxCategory == other.taxCategory && addons == other.addons && brandId == other.brandId && description == other.description && digitalProductDelivery == other.digitalProductDelivery && licenseKeyActivationMessage == other.licenseKeyActivationMessage && licenseKeyActivationsLimit == other.licenseKeyActivationsLimit && licenseKeyDuration == other.licenseKeyDuration && licenseKeyEnabled == other.licenseKeyEnabled && metadata == other.metadata && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(price, taxCategory, addons, brandId, description, digitalProductDelivery, licenseKeyActivationMessage, licenseKeyActivationsLimit, licenseKeyDuration, licenseKeyEnabled, name, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(price, taxCategory, addons, brandId, description, digitalProductDelivery, licenseKeyActivationMessage, licenseKeyActivationsLimit, licenseKeyDuration, licenseKeyEnabled, metadata, name, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{price=$price, taxCategory=$taxCategory, addons=$addons, brandId=$brandId, description=$description, digitalProductDelivery=$digitalProductDelivery, licenseKeyActivationMessage=$licenseKeyActivationMessage, licenseKeyActivationsLimit=$licenseKeyActivationsLimit, licenseKeyDuration=$licenseKeyDuration, licenseKeyEnabled=$licenseKeyEnabled, name=$name, additionalProperties=$additionalProperties}"
+            "Body{price=$price, taxCategory=$taxCategory, addons=$addons, brandId=$brandId, description=$description, digitalProductDelivery=$digitalProductDelivery, licenseKeyActivationMessage=$licenseKeyActivationMessage, licenseKeyActivationsLimit=$licenseKeyActivationsLimit, licenseKeyDuration=$licenseKeyDuration, licenseKeyEnabled=$licenseKeyEnabled, metadata=$metadata, name=$name, additionalProperties=$additionalProperties}"
     }
 
     /** Choose how you would like you digital product delivered */
@@ -1388,6 +1452,106 @@ private constructor(
 
         override fun toString() =
             "DigitalProductDelivery{externalUrl=$externalUrl, instructions=$instructions, additionalProperties=$additionalProperties}"
+    }
+
+    /** Additional metadata for the product */
+    class Metadata
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Metadata]. */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [Metadata]. */
+        class Builder internal constructor() {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(metadata: Metadata) = apply {
+                additionalProperties = metadata.additionalProperties.toMutableMap()
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Metadata].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Metadata = Metadata(additionalProperties.toImmutable())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Metadata = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

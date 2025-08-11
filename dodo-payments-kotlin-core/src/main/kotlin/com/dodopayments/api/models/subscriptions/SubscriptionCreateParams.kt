@@ -16,8 +16,8 @@ import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
-import com.dodopayments.api.models.payments.CreateNewCustomer
 import com.dodopayments.api.models.payments.CustomerRequest
+import com.dodopayments.api.models.payments.NewCustomer
 import com.dodopayments.api.models.payments.PaymentMethodTypes
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -350,13 +350,8 @@ private constructor(
             body.customer(attachExistingCustomer)
         }
 
-        /**
-         * Alias for calling [customer] with
-         * `CustomerRequest.ofCreateNewCustomer(createNewCustomer)`.
-         */
-        fun customer(createNewCustomer: CreateNewCustomer) = apply {
-            body.customer(createNewCustomer)
-        }
+        /** Alias for calling [customer] with `CustomerRequest.ofNewCustomer(newCustomer)`. */
+        fun customer(newCustomer: NewCustomer) = apply { body.customer(newCustomer) }
 
         /** Unique identifier of the product to subscribe to */
         fun productId(productId: String) = apply { body.productId(productId) }
@@ -1159,12 +1154,9 @@ private constructor(
             fun customer(attachExistingCustomer: AttachExistingCustomer) =
                 customer(CustomerRequest.ofAttachExistingCustomer(attachExistingCustomer))
 
-            /**
-             * Alias for calling [customer] with
-             * `CustomerRequest.ofCreateNewCustomer(createNewCustomer)`.
-             */
-            fun customer(createNewCustomer: CreateNewCustomer) =
-                customer(CustomerRequest.ofCreateNewCustomer(createNewCustomer))
+            /** Alias for calling [customer] with `CustomerRequest.ofNewCustomer(newCustomer)`. */
+            fun customer(newCustomer: NewCustomer) =
+                customer(CustomerRequest.ofNewCustomer(newCustomer))
 
             /** Unique identifier of the product to subscribe to */
             fun productId(productId: String) = productId(JsonField.of(productId))

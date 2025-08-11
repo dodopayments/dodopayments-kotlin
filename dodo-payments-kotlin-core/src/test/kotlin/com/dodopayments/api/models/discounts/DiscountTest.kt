@@ -24,6 +24,7 @@ internal class DiscountTest {
                 .type(DiscountType.PERCENTAGE)
                 .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .name("name")
+                .subscriptionCycles(0)
                 .usageLimit(0)
                 .build()
 
@@ -37,6 +38,7 @@ internal class DiscountTest {
         assertThat(discount.type()).isEqualTo(DiscountType.PERCENTAGE)
         assertThat(discount.expiresAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(discount.name()).isEqualTo("name")
+        assertThat(discount.subscriptionCycles()).isEqualTo(0)
         assertThat(discount.usageLimit()).isEqualTo(0)
     }
 
@@ -55,6 +57,7 @@ internal class DiscountTest {
                 .type(DiscountType.PERCENTAGE)
                 .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .name("name")
+                .subscriptionCycles(0)
                 .usageLimit(0)
                 .build()
 

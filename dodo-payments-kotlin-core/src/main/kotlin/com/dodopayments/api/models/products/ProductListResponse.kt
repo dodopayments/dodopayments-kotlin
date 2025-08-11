@@ -7,6 +7,7 @@ import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.checkRequired
+import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.TaxCategory
@@ -23,6 +24,7 @@ private constructor(
     private val businessId: JsonField<String>,
     private val createdAt: JsonField<OffsetDateTime>,
     private val isRecurring: JsonField<Boolean>,
+    private val metadata: JsonField<Metadata>,
     private val productId: JsonField<String>,
     private val taxCategory: JsonField<TaxCategory>,
     private val updatedAt: JsonField<OffsetDateTime>,
@@ -47,6 +49,7 @@ private constructor(
         @JsonProperty("is_recurring")
         @ExcludeMissing
         isRecurring: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("metadata") @ExcludeMissing metadata: JsonField<Metadata> = JsonMissing.of(),
         @JsonProperty("product_id") @ExcludeMissing productId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("tax_category")
         @ExcludeMissing
@@ -71,6 +74,7 @@ private constructor(
         businessId,
         createdAt,
         isRecurring,
+        metadata,
         productId,
         taxCategory,
         updatedAt,
@@ -107,6 +111,14 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun isRecurring(): Boolean = isRecurring.getRequired("is_recurring")
+
+    /**
+     * Additional custom data associated with the product
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun metadata(): Metadata = metadata.getRequired("metadata")
 
     /**
      * Unique identifier for the product.
@@ -221,6 +233,13 @@ private constructor(
     fun _isRecurring(): JsonField<Boolean> = isRecurring
 
     /**
+     * Returns the raw JSON value of [metadata].
+     *
+     * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
+
+    /**
      * Returns the raw JSON value of [productId].
      *
      * Unlike [productId], this method doesn't throw if the JSON field has an unexpected type.
@@ -318,6 +337,7 @@ private constructor(
          * .businessId()
          * .createdAt()
          * .isRecurring()
+         * .metadata()
          * .productId()
          * .taxCategory()
          * .updatedAt()
@@ -332,6 +352,7 @@ private constructor(
         private var businessId: JsonField<String>? = null
         private var createdAt: JsonField<OffsetDateTime>? = null
         private var isRecurring: JsonField<Boolean>? = null
+        private var metadata: JsonField<Metadata>? = null
         private var productId: JsonField<String>? = null
         private var taxCategory: JsonField<TaxCategory>? = null
         private var updatedAt: JsonField<OffsetDateTime>? = null
@@ -348,6 +369,7 @@ private constructor(
             businessId = productListResponse.businessId
             createdAt = productListResponse.createdAt
             isRecurring = productListResponse.isRecurring
+            metadata = productListResponse.metadata
             productId = productListResponse.productId
             taxCategory = productListResponse.taxCategory
             updatedAt = productListResponse.updatedAt
@@ -396,6 +418,18 @@ private constructor(
          * value.
          */
         fun isRecurring(isRecurring: JsonField<Boolean>) = apply { this.isRecurring = isRecurring }
+
+        /** Additional custom data associated with the product */
+        fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
+
+        /**
+         * Sets [Builder.metadata] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.metadata] with a well-typed [Metadata] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
         /** Unique identifier for the product. */
         fun productId(productId: String) = productId(JsonField.of(productId))
@@ -576,6 +610,7 @@ private constructor(
          * .businessId()
          * .createdAt()
          * .isRecurring()
+         * .metadata()
          * .productId()
          * .taxCategory()
          * .updatedAt()
@@ -588,6 +623,7 @@ private constructor(
                 checkRequired("businessId", businessId),
                 checkRequired("createdAt", createdAt),
                 checkRequired("isRecurring", isRecurring),
+                checkRequired("metadata", metadata),
                 checkRequired("productId", productId),
                 checkRequired("taxCategory", taxCategory),
                 checkRequired("updatedAt", updatedAt),
@@ -612,6 +648,7 @@ private constructor(
         businessId()
         createdAt()
         isRecurring()
+        metadata().validate()
         productId()
         taxCategory().validate()
         updatedAt()
@@ -642,6 +679,7 @@ private constructor(
         (if (businessId.asKnown() == null) 0 else 1) +
             (if (createdAt.asKnown() == null) 0 else 1) +
             (if (isRecurring.asKnown() == null) 0 else 1) +
+            (metadata.asKnown()?.validity() ?: 0) +
             (if (productId.asKnown() == null) 0 else 1) +
             (taxCategory.asKnown()?.validity() ?: 0) +
             (if (updatedAt.asKnown() == null) 0 else 1) +
@@ -653,20 +691,120 @@ private constructor(
             (priceDetail.asKnown()?.validity() ?: 0) +
             (if (taxInclusive.asKnown() == null) 0 else 1)
 
+    /** Additional custom data associated with the product */
+    class Metadata
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Metadata]. */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [Metadata]. */
+        class Builder internal constructor() {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(metadata: Metadata) = apply {
+                additionalProperties = metadata.additionalProperties.toMutableMap()
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Metadata].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Metadata = Metadata(additionalProperties.toImmutable())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Metadata = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is ProductListResponse && businessId == other.businessId && createdAt == other.createdAt && isRecurring == other.isRecurring && productId == other.productId && taxCategory == other.taxCategory && updatedAt == other.updatedAt && currency == other.currency && description == other.description && image == other.image && name == other.name && price == other.price && priceDetail == other.priceDetail && taxInclusive == other.taxInclusive && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ProductListResponse && businessId == other.businessId && createdAt == other.createdAt && isRecurring == other.isRecurring && metadata == other.metadata && productId == other.productId && taxCategory == other.taxCategory && updatedAt == other.updatedAt && currency == other.currency && description == other.description && image == other.image && name == other.name && price == other.price && priceDetail == other.priceDetail && taxInclusive == other.taxInclusive && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(businessId, createdAt, isRecurring, productId, taxCategory, updatedAt, currency, description, image, name, price, priceDetail, taxInclusive, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(businessId, createdAt, isRecurring, metadata, productId, taxCategory, updatedAt, currency, description, image, name, price, priceDetail, taxInclusive, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ProductListResponse{businessId=$businessId, createdAt=$createdAt, isRecurring=$isRecurring, productId=$productId, taxCategory=$taxCategory, updatedAt=$updatedAt, currency=$currency, description=$description, image=$image, name=$name, price=$price, priceDetail=$priceDetail, taxInclusive=$taxInclusive, additionalProperties=$additionalProperties}"
+        "ProductListResponse{businessId=$businessId, createdAt=$createdAt, isRecurring=$isRecurring, metadata=$metadata, productId=$productId, taxCategory=$taxCategory, updatedAt=$updatedAt, currency=$currency, description=$description, image=$image, name=$name, price=$price, priceDetail=$priceDetail, taxInclusive=$taxInclusive, additionalProperties=$additionalProperties}"
 }

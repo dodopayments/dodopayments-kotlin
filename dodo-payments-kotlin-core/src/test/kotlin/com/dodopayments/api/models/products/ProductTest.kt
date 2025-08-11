@@ -2,6 +2,7 @@
 
 package com.dodopayments.api.models.products
 
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.TaxCategory
@@ -22,6 +23,11 @@ internal class ProductTest {
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .isRecurring(true)
                 .licenseKeyEnabled(true)
+                .metadata(
+                    Product.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .price(
                     Price.OneTimePrice.builder()
                         .currency(Currency.AED)
@@ -66,6 +72,12 @@ internal class ProductTest {
         assertThat(product.createdAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(product.isRecurring()).isEqualTo(true)
         assertThat(product.licenseKeyEnabled()).isEqualTo(true)
+        assertThat(product.metadata())
+            .isEqualTo(
+                Product.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(product.price())
             .isEqualTo(
                 Price.ofOneTime(
@@ -119,6 +131,11 @@ internal class ProductTest {
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .isRecurring(true)
                 .licenseKeyEnabled(true)
+                .metadata(
+                    Product.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .price(
                     Price.OneTimePrice.builder()
                         .currency(Currency.AED)
