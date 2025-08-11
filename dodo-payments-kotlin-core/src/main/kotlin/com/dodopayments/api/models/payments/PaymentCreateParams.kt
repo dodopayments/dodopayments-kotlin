@@ -285,13 +285,8 @@ private constructor(
             body.customer(attachExistingCustomer)
         }
 
-        /**
-         * Alias for calling [customer] with
-         * `CustomerRequest.ofCreateNewCustomer(createNewCustomer)`.
-         */
-        fun customer(createNewCustomer: CreateNewCustomer) = apply {
-            body.customer(createNewCustomer)
-        }
+        /** Alias for calling [customer] with `CustomerRequest.ofNewCustomer(newCustomer)`. */
+        fun customer(newCustomer: NewCustomer) = apply { body.customer(newCustomer) }
 
         /** List of products in the cart. Must contain at least 1 and at most 100 items. */
         fun productCart(productCart: List<OneTimeProductCartItem>) = apply {
@@ -948,12 +943,9 @@ private constructor(
             fun customer(attachExistingCustomer: AttachExistingCustomer) =
                 customer(CustomerRequest.ofAttachExistingCustomer(attachExistingCustomer))
 
-            /**
-             * Alias for calling [customer] with
-             * `CustomerRequest.ofCreateNewCustomer(createNewCustomer)`.
-             */
-            fun customer(createNewCustomer: CreateNewCustomer) =
-                customer(CustomerRequest.ofCreateNewCustomer(createNewCustomer))
+            /** Alias for calling [customer] with `CustomerRequest.ofNewCustomer(newCustomer)`. */
+            fun customer(newCustomer: NewCustomer) =
+                customer(CustomerRequest.ofNewCustomer(newCustomer))
 
             /** List of products in the cart. Must contain at least 1 and at most 100 items. */
             fun productCart(productCart: List<OneTimeProductCartItem>) =

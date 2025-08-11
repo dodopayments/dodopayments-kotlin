@@ -2,6 +2,7 @@
 
 package com.dodopayments.api.models.products
 
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.TaxCategory
@@ -19,6 +20,11 @@ internal class ProductListResponseTest {
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .isRecurring(true)
+                .metadata(
+                    ProductListResponse.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .productId("product_id")
                 .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
                 .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -46,6 +52,12 @@ internal class ProductListResponseTest {
         assertThat(productListResponse.createdAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(productListResponse.isRecurring()).isEqualTo(true)
+        assertThat(productListResponse.metadata())
+            .isEqualTo(
+                ProductListResponse.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(productListResponse.productId()).isEqualTo("product_id")
         assertThat(productListResponse.taxCategory()).isEqualTo(TaxCategory.DIGITAL_PRODUCTS)
         assertThat(productListResponse.updatedAt())
@@ -81,6 +93,11 @@ internal class ProductListResponseTest {
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .isRecurring(true)
+                .metadata(
+                    ProductListResponse.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .productId("product_id")
                 .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
                 .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

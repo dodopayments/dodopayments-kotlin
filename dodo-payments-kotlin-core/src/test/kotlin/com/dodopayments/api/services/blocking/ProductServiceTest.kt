@@ -4,6 +4,7 @@ package com.dodopayments.api.services.blocking
 
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.TaxCategory
 import com.dodopayments.api.models.products.LicenseKeyDuration
@@ -58,6 +59,11 @@ internal class ProductServiceTest {
                         LicenseKeyDuration.builder().count(0).interval(TimeInterval.DAY).build()
                     )
                     .licenseKeyEnabled(true)
+                    .metadata(
+                        ProductCreateParams.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .name("name")
                     .build()
             )
@@ -108,6 +114,11 @@ internal class ProductServiceTest {
                     LicenseKeyDuration.builder().count(0).interval(TimeInterval.DAY).build()
                 )
                 .licenseKeyEnabled(true)
+                .metadata(
+                    ProductUpdateParams.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .name("name")
                 .price(
                     Price.OneTimePrice.builder()

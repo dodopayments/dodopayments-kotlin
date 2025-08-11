@@ -26,6 +26,7 @@ private constructor(
     private val createdAt: JsonField<OffsetDateTime>,
     private val isRecurring: JsonField<Boolean>,
     private val licenseKeyEnabled: JsonField<Boolean>,
+    private val metadata: JsonField<Metadata>,
     private val price: JsonField<Price>,
     private val productId: JsonField<String>,
     private val taxCategory: JsonField<TaxCategory>,
@@ -56,6 +57,7 @@ private constructor(
         @JsonProperty("license_key_enabled")
         @ExcludeMissing
         licenseKeyEnabled: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("metadata") @ExcludeMissing metadata: JsonField<Metadata> = JsonMissing.of(),
         @JsonProperty("price") @ExcludeMissing price: JsonField<Price> = JsonMissing.of(),
         @JsonProperty("product_id") @ExcludeMissing productId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("tax_category")
@@ -88,6 +90,7 @@ private constructor(
         createdAt,
         isRecurring,
         licenseKeyEnabled,
+        metadata,
         price,
         productId,
         taxCategory,
@@ -140,6 +143,14 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun licenseKeyEnabled(): Boolean = licenseKeyEnabled.getRequired("license_key_enabled")
+
+    /**
+     * Additional custom data associated with the product
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun metadata(): Metadata = metadata.getRequired("metadata")
 
     /**
      * Pricing information for the product.
@@ -282,6 +293,13 @@ private constructor(
     fun _licenseKeyEnabled(): JsonField<Boolean> = licenseKeyEnabled
 
     /**
+     * Returns the raw JSON value of [metadata].
+     *
+     * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
+
+    /**
      * Returns the raw JSON value of [price].
      *
      * Unlike [price], this method doesn't throw if the JSON field has an unexpected type.
@@ -405,6 +423,7 @@ private constructor(
          * .createdAt()
          * .isRecurring()
          * .licenseKeyEnabled()
+         * .metadata()
          * .price()
          * .productId()
          * .taxCategory()
@@ -422,6 +441,7 @@ private constructor(
         private var createdAt: JsonField<OffsetDateTime>? = null
         private var isRecurring: JsonField<Boolean>? = null
         private var licenseKeyEnabled: JsonField<Boolean>? = null
+        private var metadata: JsonField<Metadata>? = null
         private var price: JsonField<Price>? = null
         private var productId: JsonField<String>? = null
         private var taxCategory: JsonField<TaxCategory>? = null
@@ -442,6 +462,7 @@ private constructor(
             createdAt = product.createdAt
             isRecurring = product.isRecurring
             licenseKeyEnabled = product.licenseKeyEnabled
+            metadata = product.metadata
             price = product.price
             productId = product.productId
             taxCategory = product.taxCategory
@@ -517,6 +538,18 @@ private constructor(
         fun licenseKeyEnabled(licenseKeyEnabled: JsonField<Boolean>) = apply {
             this.licenseKeyEnabled = licenseKeyEnabled
         }
+
+        /** Additional custom data associated with the product */
+        fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
+
+        /**
+         * Sets [Builder.metadata] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.metadata] with a well-typed [Metadata] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
         /** Pricing information for the product. */
         fun price(price: Price) = price(JsonField.of(price))
@@ -732,6 +765,7 @@ private constructor(
          * .createdAt()
          * .isRecurring()
          * .licenseKeyEnabled()
+         * .metadata()
          * .price()
          * .productId()
          * .taxCategory()
@@ -747,6 +781,7 @@ private constructor(
                 checkRequired("createdAt", createdAt),
                 checkRequired("isRecurring", isRecurring),
                 checkRequired("licenseKeyEnabled", licenseKeyEnabled),
+                checkRequired("metadata", metadata),
                 checkRequired("price", price),
                 checkRequired("productId", productId),
                 checkRequired("taxCategory", taxCategory),
@@ -775,6 +810,7 @@ private constructor(
         createdAt()
         isRecurring()
         licenseKeyEnabled()
+        metadata().validate()
         price().validate()
         productId()
         taxCategory().validate()
@@ -809,6 +845,7 @@ private constructor(
             (if (createdAt.asKnown() == null) 0 else 1) +
             (if (isRecurring.asKnown() == null) 0 else 1) +
             (if (licenseKeyEnabled.asKnown() == null) 0 else 1) +
+            (metadata.asKnown()?.validity() ?: 0) +
             (price.asKnown()?.validity() ?: 0) +
             (if (productId.asKnown() == null) 0 else 1) +
             (taxCategory.asKnown()?.validity() ?: 0) +
@@ -821,6 +858,106 @@ private constructor(
             (if (licenseKeyActivationsLimit.asKnown() == null) 0 else 1) +
             (licenseKeyDuration.asKnown()?.validity() ?: 0) +
             (if (name.asKnown() == null) 0 else 1)
+
+    /** Additional custom data associated with the product */
+    class Metadata
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Metadata]. */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [Metadata]. */
+        class Builder internal constructor() {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(metadata: Metadata) = apply {
+                additionalProperties = metadata.additionalProperties.toMutableMap()
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Metadata].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Metadata = Metadata(additionalProperties.toImmutable())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Metadata = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
+    }
 
     class DigitalProductDelivery
     private constructor(
@@ -1301,15 +1438,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Product && brandId == other.brandId && businessId == other.businessId && createdAt == other.createdAt && isRecurring == other.isRecurring && licenseKeyEnabled == other.licenseKeyEnabled && price == other.price && productId == other.productId && taxCategory == other.taxCategory && updatedAt == other.updatedAt && addons == other.addons && description == other.description && digitalProductDelivery == other.digitalProductDelivery && image == other.image && licenseKeyActivationMessage == other.licenseKeyActivationMessage && licenseKeyActivationsLimit == other.licenseKeyActivationsLimit && licenseKeyDuration == other.licenseKeyDuration && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Product && brandId == other.brandId && businessId == other.businessId && createdAt == other.createdAt && isRecurring == other.isRecurring && licenseKeyEnabled == other.licenseKeyEnabled && metadata == other.metadata && price == other.price && productId == other.productId && taxCategory == other.taxCategory && updatedAt == other.updatedAt && addons == other.addons && description == other.description && digitalProductDelivery == other.digitalProductDelivery && image == other.image && licenseKeyActivationMessage == other.licenseKeyActivationMessage && licenseKeyActivationsLimit == other.licenseKeyActivationsLimit && licenseKeyDuration == other.licenseKeyDuration && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(brandId, businessId, createdAt, isRecurring, licenseKeyEnabled, price, productId, taxCategory, updatedAt, addons, description, digitalProductDelivery, image, licenseKeyActivationMessage, licenseKeyActivationsLimit, licenseKeyDuration, name, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(brandId, businessId, createdAt, isRecurring, licenseKeyEnabled, metadata, price, productId, taxCategory, updatedAt, addons, description, digitalProductDelivery, image, licenseKeyActivationMessage, licenseKeyActivationsLimit, licenseKeyDuration, name, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Product{brandId=$brandId, businessId=$businessId, createdAt=$createdAt, isRecurring=$isRecurring, licenseKeyEnabled=$licenseKeyEnabled, price=$price, productId=$productId, taxCategory=$taxCategory, updatedAt=$updatedAt, addons=$addons, description=$description, digitalProductDelivery=$digitalProductDelivery, image=$image, licenseKeyActivationMessage=$licenseKeyActivationMessage, licenseKeyActivationsLimit=$licenseKeyActivationsLimit, licenseKeyDuration=$licenseKeyDuration, name=$name, additionalProperties=$additionalProperties}"
+        "Product{brandId=$brandId, businessId=$businessId, createdAt=$createdAt, isRecurring=$isRecurring, licenseKeyEnabled=$licenseKeyEnabled, metadata=$metadata, price=$price, productId=$productId, taxCategory=$taxCategory, updatedAt=$updatedAt, addons=$addons, description=$description, digitalProductDelivery=$digitalProductDelivery, image=$image, licenseKeyActivationMessage=$licenseKeyActivationMessage, licenseKeyActivationsLimit=$licenseKeyActivationsLimit, licenseKeyDuration=$licenseKeyDuration, name=$name, additionalProperties=$additionalProperties}"
 }
