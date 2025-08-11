@@ -22,22 +22,22 @@ import java.util.Objects
 class CustomerRequest
 private constructor(
     private val attachExistingCustomer: AttachExistingCustomer? = null,
-    private val createNewCustomer: CreateNewCustomer? = null,
+    private val newCustomer: NewCustomer? = null,
     private val _json: JsonValue? = null,
 ) {
 
     fun attachExistingCustomer(): AttachExistingCustomer? = attachExistingCustomer
 
-    fun createNewCustomer(): CreateNewCustomer? = createNewCustomer
+    fun newCustomer(): NewCustomer? = newCustomer
 
     fun isAttachExistingCustomer(): Boolean = attachExistingCustomer != null
 
-    fun isCreateNewCustomer(): Boolean = createNewCustomer != null
+    fun isNewCustomer(): Boolean = newCustomer != null
 
     fun asAttachExistingCustomer(): AttachExistingCustomer =
         attachExistingCustomer.getOrThrow("attachExistingCustomer")
 
-    fun asCreateNewCustomer(): CreateNewCustomer = createNewCustomer.getOrThrow("createNewCustomer")
+    fun asNewCustomer(): NewCustomer = newCustomer.getOrThrow("newCustomer")
 
     fun _json(): JsonValue? = _json
 
@@ -45,7 +45,7 @@ private constructor(
         when {
             attachExistingCustomer != null ->
                 visitor.visitAttachExistingCustomer(attachExistingCustomer)
-            createNewCustomer != null -> visitor.visitCreateNewCustomer(createNewCustomer)
+            newCustomer != null -> visitor.visitNewCustomer(newCustomer)
             else -> visitor.unknown(_json)
         }
 
@@ -64,8 +64,8 @@ private constructor(
                     attachExistingCustomer.validate()
                 }
 
-                override fun visitCreateNewCustomer(createNewCustomer: CreateNewCustomer) {
-                    createNewCustomer.validate()
+                override fun visitNewCustomer(newCustomer: NewCustomer) {
+                    newCustomer.validate()
                 }
             }
         )
@@ -92,8 +92,7 @@ private constructor(
                     attachExistingCustomer: AttachExistingCustomer
                 ) = attachExistingCustomer.validity()
 
-                override fun visitCreateNewCustomer(createNewCustomer: CreateNewCustomer) =
-                    createNewCustomer.validity()
+                override fun visitNewCustomer(newCustomer: NewCustomer) = newCustomer.validity()
 
                 override fun unknown(json: JsonValue?) = 0
             }
@@ -104,16 +103,16 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerRequest && attachExistingCustomer == other.attachExistingCustomer && createNewCustomer == other.createNewCustomer /* spotless:on */
+        return /* spotless:off */ other is CustomerRequest && attachExistingCustomer == other.attachExistingCustomer && newCustomer == other.newCustomer /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(attachExistingCustomer, createNewCustomer) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(attachExistingCustomer, newCustomer) /* spotless:on */
 
     override fun toString(): String =
         when {
             attachExistingCustomer != null ->
                 "CustomerRequest{attachExistingCustomer=$attachExistingCustomer}"
-            createNewCustomer != null -> "CustomerRequest{createNewCustomer=$createNewCustomer}"
+            newCustomer != null -> "CustomerRequest{newCustomer=$newCustomer}"
             _json != null -> "CustomerRequest{_unknown=$_json}"
             else -> throw IllegalStateException("Invalid CustomerRequest")
         }
@@ -123,8 +122,7 @@ private constructor(
         fun ofAttachExistingCustomer(attachExistingCustomer: AttachExistingCustomer) =
             CustomerRequest(attachExistingCustomer = attachExistingCustomer)
 
-        fun ofCreateNewCustomer(createNewCustomer: CreateNewCustomer) =
-            CustomerRequest(createNewCustomer = createNewCustomer)
+        fun ofNewCustomer(newCustomer: NewCustomer) = CustomerRequest(newCustomer = newCustomer)
     }
 
     /**
@@ -135,7 +133,7 @@ private constructor(
 
         fun visitAttachExistingCustomer(attachExistingCustomer: AttachExistingCustomer): T
 
-        fun visitCreateNewCustomer(createNewCustomer: CreateNewCustomer): T
+        fun visitNewCustomer(newCustomer: NewCustomer): T
 
         /**
          * Maps an unknown variant of [CustomerRequest] to a value of type [T].
@@ -162,8 +160,8 @@ private constructor(
                         tryDeserialize(node, jacksonTypeRef<AttachExistingCustomer>())?.let {
                             CustomerRequest(attachExistingCustomer = it, _json = json)
                         },
-                        tryDeserialize(node, jacksonTypeRef<CreateNewCustomer>())?.let {
-                            CustomerRequest(createNewCustomer = it, _json = json)
+                        tryDeserialize(node, jacksonTypeRef<NewCustomer>())?.let {
+                            CustomerRequest(newCustomer = it, _json = json)
                         },
                     )
                     .filterNotNull()
@@ -191,7 +189,7 @@ private constructor(
             when {
                 value.attachExistingCustomer != null ->
                     generator.writeObject(value.attachExistingCustomer)
-                value.createNewCustomer != null -> generator.writeObject(value.createNewCustomer)
+                value.newCustomer != null -> generator.writeObject(value.newCustomer)
                 value._json != null -> generator.writeObject(value._json)
                 else -> throw IllegalStateException("Invalid CustomerRequest")
             }

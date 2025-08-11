@@ -19,6 +19,8 @@ import com.dodopayments.api.services.blocking.ProductService
 import com.dodopayments.api.services.blocking.RefundService
 import com.dodopayments.api.services.blocking.SubscriptionService
 import com.dodopayments.api.services.blocking.WebhookEventService
+import com.dodopayments.api.services.blocking.WebhookService
+import com.dodopayments.api.services.blocking.YourWebhookUrlService
 
 /**
  * A client for interacting with the Dodo Payments REST API synchronously. You can also switch to
@@ -88,6 +90,10 @@ interface DodoPaymentsClient {
 
     fun brands(): BrandService
 
+    fun webhooks(): WebhookService
+
+    fun yourWebhookUrl(): YourWebhookUrlService
+
     /**
      * Closes this client, relinquishing any underlying resources.
      *
@@ -146,5 +152,9 @@ interface DodoPaymentsClient {
         fun addons(): AddonService.WithRawResponse
 
         fun brands(): BrandService.WithRawResponse
+
+        fun webhooks(): WebhookService.WithRawResponse
+
+        fun yourWebhookUrl(): YourWebhookUrlService.WithRawResponse
     }
 }

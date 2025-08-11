@@ -58,6 +58,7 @@ internal class SubscriptionListResponseTest {
                 .taxInclusive(true)
                 .trialPeriodDays(0)
                 .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .discountCyclesRemaining(0)
                 .discountId("discount_id")
                 .build()
 
@@ -108,6 +109,7 @@ internal class SubscriptionListResponseTest {
         assertThat(subscriptionListResponse.trialPeriodDays()).isEqualTo(0)
         assertThat(subscriptionListResponse.cancelledAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(subscriptionListResponse.discountCyclesRemaining()).isEqualTo(0)
         assertThat(subscriptionListResponse.discountId()).isEqualTo("discount_id")
     }
 
@@ -155,6 +157,7 @@ internal class SubscriptionListResponseTest {
                 .taxInclusive(true)
                 .trialPeriodDays(0)
                 .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .discountCyclesRemaining(0)
                 .discountId("discount_id")
                 .build()
 

@@ -22,7 +22,7 @@ internal class CustomerRequestTest {
         val customerRequest = CustomerRequest.ofAttachExistingCustomer(attachExistingCustomer)
 
         assertThat(customerRequest.attachExistingCustomer()).isEqualTo(attachExistingCustomer)
-        assertThat(customerRequest.createNewCustomer()).isNull()
+        assertThat(customerRequest.newCustomer()).isNull()
     }
 
     @Test
@@ -43,30 +43,24 @@ internal class CustomerRequestTest {
     }
 
     @Test
-    fun ofCreateNewCustomer() {
-        val createNewCustomer =
-            CreateNewCustomer.builder()
-                .email("email")
-                .name("name")
-                .createNewCustomer(true)
-                .phoneNumber("phone_number")
-                .build()
+    fun ofNewCustomer() {
+        val newCustomer =
+            NewCustomer.builder().email("email").name("name").phoneNumber("phone_number").build()
 
-        val customerRequest = CustomerRequest.ofCreateNewCustomer(createNewCustomer)
+        val customerRequest = CustomerRequest.ofNewCustomer(newCustomer)
 
         assertThat(customerRequest.attachExistingCustomer()).isNull()
-        assertThat(customerRequest.createNewCustomer()).isEqualTo(createNewCustomer)
+        assertThat(customerRequest.newCustomer()).isEqualTo(newCustomer)
     }
 
     @Test
-    fun ofCreateNewCustomerRoundtrip() {
+    fun ofNewCustomerRoundtrip() {
         val jsonMapper = jsonMapper()
         val customerRequest =
-            CustomerRequest.ofCreateNewCustomer(
-                CreateNewCustomer.builder()
+            CustomerRequest.ofNewCustomer(
+                NewCustomer.builder()
                     .email("email")
                     .name("name")
-                    .createNewCustomer(true)
                     .phoneNumber("phone_number")
                     .build()
             )
