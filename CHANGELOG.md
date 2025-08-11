@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.47.0 (2025-08-11)
+
+Full Changelog: [v1.44.0...v1.47.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.44.0...v1.47.0)
+
+### Features
+
+* **api:** updated openapi spec to 1.47.0 ([f45b171](https://github.com/dodopayments/dodopayments-kotlin/commit/f45b1710905603b024e8be08fa7726857c472ebe))
+
+
+### Chores
+
+* **example:** fix run example comment ([98271df](https://github.com/dodopayments/dodopayments-kotlin/commit/98271df7ba788e89ad6dc1192479264d47c8e113))
+* increase max gradle JVM heap to 8GB ([e7e9be4](https://github.com/dodopayments/dodopayments-kotlin/commit/e7e9be42922aa3eb35fb9d6537c606f9f584427c))
+* **internal:** add lock helper ([15b4c92](https://github.com/dodopayments/dodopayments-kotlin/commit/15b4c920d4afd8bd87326a573e946ba314117c1f))
+* **internal:** update comment in script ([0b7a973](https://github.com/dodopayments/dodopayments-kotlin/commit/0b7a9732a3f99f063eb701fb3c88cb9354fb847f))
+* update @stainless-api/prism-cli to v5.15.0 ([d138e3c](https://github.com/dodopayments/dodopayments-kotlin/commit/d138e3c501d8161310cc251cd0306cedc188d65a))
+
 ## 1.44.0 (2025-08-02)
 
 Full Changelog: [v1.43.2...v1.44.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.43.2...v1.44.0)
