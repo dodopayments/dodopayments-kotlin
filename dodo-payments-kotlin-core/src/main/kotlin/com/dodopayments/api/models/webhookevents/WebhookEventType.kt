@@ -240,7 +240,7 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             return true
         }
 
-        return /* spotless:off */ other is WebhookEventType && value == other.value /* spotless:on */
+        return other is WebhookEventType && value == other.value
     }
 
     override fun hashCode() = value.hashCode()

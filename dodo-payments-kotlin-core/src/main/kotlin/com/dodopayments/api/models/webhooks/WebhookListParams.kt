@@ -194,10 +194,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is WebhookListParams && iterator == other.iterator && limit == other.limit && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is WebhookListParams &&
+            iterator == other.iterator &&
+            limit == other.limit &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(iterator, limit, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(iterator, limit, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "WebhookListParams{iterator=$iterator, limit=$limit, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

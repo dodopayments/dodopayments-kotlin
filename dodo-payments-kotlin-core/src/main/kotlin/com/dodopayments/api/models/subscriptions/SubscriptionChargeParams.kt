@@ -761,12 +761,25 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && productPrice == other.productPrice && adaptiveCurrencyFeesInclusive == other.adaptiveCurrencyFeesInclusive && metadata == other.metadata && productCurrency == other.productCurrency && productDescription == other.productDescription && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Body &&
+                productPrice == other.productPrice &&
+                adaptiveCurrencyFeesInclusive == other.adaptiveCurrencyFeesInclusive &&
+                metadata == other.metadata &&
+                productCurrency == other.productCurrency &&
+                productDescription == other.productDescription &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(productPrice, adaptiveCurrencyFeesInclusive, metadata, productCurrency, productDescription, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                productPrice,
+                adaptiveCurrencyFeesInclusive,
+                metadata,
+                productCurrency,
+                productDescription,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -862,12 +875,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Metadata && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -879,10 +890,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionChargeParams && subscriptionId == other.subscriptionId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is SubscriptionChargeParams &&
+            subscriptionId == other.subscriptionId &&
+            body == other.body &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(subscriptionId, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "SubscriptionChargeParams{subscriptionId=$subscriptionId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

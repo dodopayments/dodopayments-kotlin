@@ -651,12 +651,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Metadata && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -668,12 +666,39 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is PaymentListResponse && brandId == other.brandId && createdAt == other.createdAt && currency == other.currency && customer == other.customer && digitalProductsDelivered == other.digitalProductsDelivered && metadata == other.metadata && paymentId == other.paymentId && totalAmount == other.totalAmount && paymentMethod == other.paymentMethod && paymentMethodType == other.paymentMethodType && status == other.status && subscriptionId == other.subscriptionId && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is PaymentListResponse &&
+            brandId == other.brandId &&
+            createdAt == other.createdAt &&
+            currency == other.currency &&
+            customer == other.customer &&
+            digitalProductsDelivered == other.digitalProductsDelivered &&
+            metadata == other.metadata &&
+            paymentId == other.paymentId &&
+            totalAmount == other.totalAmount &&
+            paymentMethod == other.paymentMethod &&
+            paymentMethodType == other.paymentMethodType &&
+            status == other.status &&
+            subscriptionId == other.subscriptionId &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(brandId, createdAt, currency, customer, digitalProductsDelivered, metadata, paymentId, totalAmount, paymentMethod, paymentMethodType, status, subscriptionId, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            brandId,
+            createdAt,
+            currency,
+            customer,
+            digitalProductsDelivered,
+            metadata,
+            paymentId,
+            totalAmount,
+            paymentMethod,
+            paymentMethodType,
+            status,
+            subscriptionId,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

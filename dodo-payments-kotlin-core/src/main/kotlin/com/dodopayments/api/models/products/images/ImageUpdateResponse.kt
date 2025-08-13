@@ -184,12 +184,13 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ImageUpdateResponse && url == other.url && imageId == other.imageId && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is ImageUpdateResponse &&
+            url == other.url &&
+            imageId == other.imageId &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
     private val hashCode: Int by lazy { Objects.hash(url, imageId, additionalProperties) }
-    /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
