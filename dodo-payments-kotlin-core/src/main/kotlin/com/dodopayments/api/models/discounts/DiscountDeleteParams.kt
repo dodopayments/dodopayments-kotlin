@@ -207,10 +207,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is DiscountDeleteParams && discountId == other.discountId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return other is DiscountDeleteParams &&
+            discountId == other.discountId &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams &&
+            additionalBodyProperties == other.additionalBodyProperties
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(discountId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(discountId, additionalHeaders, additionalQueryParams, additionalBodyProperties)
 
     override fun toString() =
         "DiscountDeleteParams{discountId=$discountId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"

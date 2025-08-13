@@ -691,7 +691,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is VerificationStatus && value == other.value /* spotless:on */
+            return other is VerificationStatus && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -704,12 +704,39 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Brand && brandId == other.brandId && businessId == other.businessId && enabled == other.enabled && statementDescriptor == other.statementDescriptor && verificationEnabled == other.verificationEnabled && verificationStatus == other.verificationStatus && description == other.description && image == other.image && name == other.name && reasonForHold == other.reasonForHold && supportEmail == other.supportEmail && url == other.url && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is Brand &&
+            brandId == other.brandId &&
+            businessId == other.businessId &&
+            enabled == other.enabled &&
+            statementDescriptor == other.statementDescriptor &&
+            verificationEnabled == other.verificationEnabled &&
+            verificationStatus == other.verificationStatus &&
+            description == other.description &&
+            image == other.image &&
+            name == other.name &&
+            reasonForHold == other.reasonForHold &&
+            supportEmail == other.supportEmail &&
+            url == other.url &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(brandId, businessId, enabled, statementDescriptor, verificationEnabled, verificationStatus, description, image, name, reasonForHold, supportEmail, url, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            brandId,
+            businessId,
+            enabled,
+            statementDescriptor,
+            verificationEnabled,
+            verificationStatus,
+            description,
+            image,
+            name,
+            reasonForHold,
+            supportEmail,
+            url,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

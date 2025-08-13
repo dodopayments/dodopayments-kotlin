@@ -508,12 +508,35 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is AddonResponse && id == other.id && businessId == other.businessId && createdAt == other.createdAt && currency == other.currency && name == other.name && price == other.price && taxCategory == other.taxCategory && updatedAt == other.updatedAt && description == other.description && image == other.image && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is AddonResponse &&
+            id == other.id &&
+            businessId == other.businessId &&
+            createdAt == other.createdAt &&
+            currency == other.currency &&
+            name == other.name &&
+            price == other.price &&
+            taxCategory == other.taxCategory &&
+            updatedAt == other.updatedAt &&
+            description == other.description &&
+            image == other.image &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, businessId, createdAt, currency, name, price, taxCategory, updatedAt, description, image, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            id,
+            businessId,
+            createdAt,
+            currency,
+            name,
+            price,
+            taxCategory,
+            updatedAt,
+            description,
+            image,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

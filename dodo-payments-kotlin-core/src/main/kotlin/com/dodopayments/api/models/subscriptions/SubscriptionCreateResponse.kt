@@ -630,12 +630,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Metadata && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -647,12 +645,35 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionCreateResponse && addons == other.addons && customer == other.customer && metadata == other.metadata && paymentId == other.paymentId && recurringPreTaxAmount == other.recurringPreTaxAmount && subscriptionId == other.subscriptionId && clientSecret == other.clientSecret && discountId == other.discountId && expiresOn == other.expiresOn && paymentLink == other.paymentLink && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is SubscriptionCreateResponse &&
+            addons == other.addons &&
+            customer == other.customer &&
+            metadata == other.metadata &&
+            paymentId == other.paymentId &&
+            recurringPreTaxAmount == other.recurringPreTaxAmount &&
+            subscriptionId == other.subscriptionId &&
+            clientSecret == other.clientSecret &&
+            discountId == other.discountId &&
+            expiresOn == other.expiresOn &&
+            paymentLink == other.paymentLink &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(addons, customer, metadata, paymentId, recurringPreTaxAmount, subscriptionId, clientSecret, discountId, expiresOn, paymentLink, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            addons,
+            customer,
+            metadata,
+            paymentId,
+            recurringPreTaxAmount,
+            subscriptionId,
+            clientSecret,
+            discountId,
+            expiresOn,
+            paymentLink,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

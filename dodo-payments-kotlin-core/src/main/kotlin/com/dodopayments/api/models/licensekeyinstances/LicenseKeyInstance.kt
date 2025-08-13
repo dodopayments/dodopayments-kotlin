@@ -299,12 +299,18 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is LicenseKeyInstance && id == other.id && businessId == other.businessId && createdAt == other.createdAt && licenseKeyId == other.licenseKeyId && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is LicenseKeyInstance &&
+            id == other.id &&
+            businessId == other.businessId &&
+            createdAt == other.createdAt &&
+            licenseKeyId == other.licenseKeyId &&
+            name == other.name &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, businessId, createdAt, licenseKeyId, name, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(id, businessId, createdAt, licenseKeyId, name, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 

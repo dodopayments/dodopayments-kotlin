@@ -211,10 +211,16 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerListParams && email == other.email && pageNumber == other.pageNumber && pageSize == other.pageSize && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is CustomerListParams &&
+            email == other.email &&
+            pageNumber == other.pageNumber &&
+            pageSize == other.pageSize &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(email, pageNumber, pageSize, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(email, pageNumber, pageSize, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "CustomerListParams{email=$email, pageNumber=$pageNumber, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

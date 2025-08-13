@@ -234,12 +234,16 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is OneTimeProductCartItem && productId == other.productId && quantity == other.quantity && amount == other.amount && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is OneTimeProductCartItem &&
+            productId == other.productId &&
+            quantity == other.quantity &&
+            amount == other.amount &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(productId, quantity, amount, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(productId, quantity, amount, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 

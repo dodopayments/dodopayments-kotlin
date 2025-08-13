@@ -174,10 +174,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is DiscountRetrieveParams && discountId == other.discountId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is DiscountRetrieveParams &&
+            discountId == other.discountId &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(discountId, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(discountId, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "DiscountRetrieveParams{discountId=$discountId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

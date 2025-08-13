@@ -438,12 +438,31 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is DisputeListResponse && amount == other.amount && businessId == other.businessId && createdAt == other.createdAt && currency == other.currency && disputeId == other.disputeId && disputeStage == other.disputeStage && disputeStatus == other.disputeStatus && paymentId == other.paymentId && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is DisputeListResponse &&
+            amount == other.amount &&
+            businessId == other.businessId &&
+            createdAt == other.createdAt &&
+            currency == other.currency &&
+            disputeId == other.disputeId &&
+            disputeStage == other.disputeStage &&
+            disputeStatus == other.disputeStatus &&
+            paymentId == other.paymentId &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(amount, businessId, createdAt, currency, disputeId, disputeStage, disputeStatus, paymentId, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            amount,
+            businessId,
+            createdAt,
+            currency,
+            disputeId,
+            disputeStage,
+            disputeStatus,
+            paymentId,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

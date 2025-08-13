@@ -1244,12 +1244,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Metadata && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -1261,12 +1259,63 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Subscription && addons == other.addons && billing == other.billing && cancelAtNextBillingDate == other.cancelAtNextBillingDate && createdAt == other.createdAt && currency == other.currency && customer == other.customer && metadata == other.metadata && nextBillingDate == other.nextBillingDate && onDemand == other.onDemand && paymentFrequencyCount == other.paymentFrequencyCount && paymentFrequencyInterval == other.paymentFrequencyInterval && previousBillingDate == other.previousBillingDate && productId == other.productId && quantity == other.quantity && recurringPreTaxAmount == other.recurringPreTaxAmount && status == other.status && subscriptionId == other.subscriptionId && subscriptionPeriodCount == other.subscriptionPeriodCount && subscriptionPeriodInterval == other.subscriptionPeriodInterval && taxInclusive == other.taxInclusive && trialPeriodDays == other.trialPeriodDays && cancelledAt == other.cancelledAt && discountCyclesRemaining == other.discountCyclesRemaining && discountId == other.discountId && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is Subscription &&
+            addons == other.addons &&
+            billing == other.billing &&
+            cancelAtNextBillingDate == other.cancelAtNextBillingDate &&
+            createdAt == other.createdAt &&
+            currency == other.currency &&
+            customer == other.customer &&
+            metadata == other.metadata &&
+            nextBillingDate == other.nextBillingDate &&
+            onDemand == other.onDemand &&
+            paymentFrequencyCount == other.paymentFrequencyCount &&
+            paymentFrequencyInterval == other.paymentFrequencyInterval &&
+            previousBillingDate == other.previousBillingDate &&
+            productId == other.productId &&
+            quantity == other.quantity &&
+            recurringPreTaxAmount == other.recurringPreTaxAmount &&
+            status == other.status &&
+            subscriptionId == other.subscriptionId &&
+            subscriptionPeriodCount == other.subscriptionPeriodCount &&
+            subscriptionPeriodInterval == other.subscriptionPeriodInterval &&
+            taxInclusive == other.taxInclusive &&
+            trialPeriodDays == other.trialPeriodDays &&
+            cancelledAt == other.cancelledAt &&
+            discountCyclesRemaining == other.discountCyclesRemaining &&
+            discountId == other.discountId &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(addons, billing, cancelAtNextBillingDate, createdAt, currency, customer, metadata, nextBillingDate, onDemand, paymentFrequencyCount, paymentFrequencyInterval, previousBillingDate, productId, quantity, recurringPreTaxAmount, status, subscriptionId, subscriptionPeriodCount, subscriptionPeriodInterval, taxInclusive, trialPeriodDays, cancelledAt, discountCyclesRemaining, discountId, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            addons,
+            billing,
+            cancelAtNextBillingDate,
+            createdAt,
+            currency,
+            customer,
+            metadata,
+            nextBillingDate,
+            onDemand,
+            paymentFrequencyCount,
+            paymentFrequencyInterval,
+            previousBillingDate,
+            productId,
+            quantity,
+            recurringPreTaxAmount,
+            status,
+            subscriptionId,
+            subscriptionPeriodCount,
+            subscriptionPeriodInterval,
+            taxInclusive,
+            trialPeriodDays,
+            cancelledAt,
+            discountCyclesRemaining,
+            discountId,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 
