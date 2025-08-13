@@ -938,12 +938,31 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && amount == other.amount && code == other.code && expiresAt == other.expiresAt && name == other.name && restrictedTo == other.restrictedTo && subscriptionCycles == other.subscriptionCycles && type == other.type && usageLimit == other.usageLimit && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Body &&
+                amount == other.amount &&
+                code == other.code &&
+                expiresAt == other.expiresAt &&
+                name == other.name &&
+                restrictedTo == other.restrictedTo &&
+                subscriptionCycles == other.subscriptionCycles &&
+                type == other.type &&
+                usageLimit == other.usageLimit &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(amount, code, expiresAt, name, restrictedTo, subscriptionCycles, type, usageLimit, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(
+                amount,
+                code,
+                expiresAt,
+                name,
+                restrictedTo,
+                subscriptionCycles,
+                type,
+                usageLimit,
+                additionalProperties,
+            )
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -956,10 +975,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is DiscountUpdateParams && discountId == other.discountId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is DiscountUpdateParams &&
+            discountId == other.discountId &&
+            body == other.body &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(discountId, body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(discountId, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "DiscountUpdateParams{discountId=$discountId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

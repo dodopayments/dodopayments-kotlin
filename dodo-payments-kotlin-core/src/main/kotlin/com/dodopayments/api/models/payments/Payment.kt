@@ -1476,12 +1476,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Metadata && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -1664,12 +1662,15 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ProductCart && productId == other.productId && quantity == other.quantity && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is ProductCart &&
+                productId == other.productId &&
+                quantity == other.quantity &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(productId, quantity, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(productId, quantity, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -1682,12 +1683,75 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Payment && billing == other.billing && brandId == other.brandId && businessId == other.businessId && createdAt == other.createdAt && currency == other.currency && customer == other.customer && digitalProductsDelivered == other.digitalProductsDelivered && disputes == other.disputes && metadata == other.metadata && paymentId == other.paymentId && refunds == other.refunds && settlementAmount == other.settlementAmount && settlementCurrency == other.settlementCurrency && totalAmount == other.totalAmount && cardIssuingCountry == other.cardIssuingCountry && cardLastFour == other.cardLastFour && cardNetwork == other.cardNetwork && cardType == other.cardType && discountId == other.discountId && errorCode == other.errorCode && errorMessage == other.errorMessage && paymentLink == other.paymentLink && paymentMethod == other.paymentMethod && paymentMethodType == other.paymentMethodType && productCart == other.productCart && settlementTax == other.settlementTax && status == other.status && subscriptionId == other.subscriptionId && tax == other.tax && updatedAt == other.updatedAt && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is Payment &&
+            billing == other.billing &&
+            brandId == other.brandId &&
+            businessId == other.businessId &&
+            createdAt == other.createdAt &&
+            currency == other.currency &&
+            customer == other.customer &&
+            digitalProductsDelivered == other.digitalProductsDelivered &&
+            disputes == other.disputes &&
+            metadata == other.metadata &&
+            paymentId == other.paymentId &&
+            refunds == other.refunds &&
+            settlementAmount == other.settlementAmount &&
+            settlementCurrency == other.settlementCurrency &&
+            totalAmount == other.totalAmount &&
+            cardIssuingCountry == other.cardIssuingCountry &&
+            cardLastFour == other.cardLastFour &&
+            cardNetwork == other.cardNetwork &&
+            cardType == other.cardType &&
+            discountId == other.discountId &&
+            errorCode == other.errorCode &&
+            errorMessage == other.errorMessage &&
+            paymentLink == other.paymentLink &&
+            paymentMethod == other.paymentMethod &&
+            paymentMethodType == other.paymentMethodType &&
+            productCart == other.productCart &&
+            settlementTax == other.settlementTax &&
+            status == other.status &&
+            subscriptionId == other.subscriptionId &&
+            tax == other.tax &&
+            updatedAt == other.updatedAt &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(billing, brandId, businessId, createdAt, currency, customer, digitalProductsDelivered, disputes, metadata, paymentId, refunds, settlementAmount, settlementCurrency, totalAmount, cardIssuingCountry, cardLastFour, cardNetwork, cardType, discountId, errorCode, errorMessage, paymentLink, paymentMethod, paymentMethodType, productCart, settlementTax, status, subscriptionId, tax, updatedAt, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            billing,
+            brandId,
+            businessId,
+            createdAt,
+            currency,
+            customer,
+            digitalProductsDelivered,
+            disputes,
+            metadata,
+            paymentId,
+            refunds,
+            settlementAmount,
+            settlementCurrency,
+            totalAmount,
+            cardIssuingCountry,
+            cardLastFour,
+            cardNetwork,
+            cardType,
+            discountId,
+            errorCode,
+            errorMessage,
+            paymentLink,
+            paymentMethod,
+            paymentMethodType,
+            productCart,
+            settlementTax,
+            status,
+            subscriptionId,
+            tax,
+            updatedAt,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

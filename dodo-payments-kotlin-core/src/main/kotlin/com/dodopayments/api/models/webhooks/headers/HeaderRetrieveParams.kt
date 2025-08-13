@@ -174,10 +174,13 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is HeaderRetrieveParams && webhookId == other.webhookId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is HeaderRetrieveParams &&
+            webhookId == other.webhookId &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(webhookId, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = Objects.hash(webhookId, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "HeaderRetrieveParams{webhookId=$webhookId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

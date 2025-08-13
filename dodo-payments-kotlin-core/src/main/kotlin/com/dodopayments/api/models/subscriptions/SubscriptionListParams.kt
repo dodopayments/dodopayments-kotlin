@@ -402,7 +402,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Status && value == other.value /* spotless:on */
+            return other is Status && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -415,10 +415,30 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionListParams && brandId == other.brandId && createdAtGte == other.createdAtGte && createdAtLte == other.createdAtLte && customerId == other.customerId && pageNumber == other.pageNumber && pageSize == other.pageSize && status == other.status && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is SubscriptionListParams &&
+            brandId == other.brandId &&
+            createdAtGte == other.createdAtGte &&
+            createdAtLte == other.createdAtLte &&
+            customerId == other.customerId &&
+            pageNumber == other.pageNumber &&
+            pageSize == other.pageSize &&
+            status == other.status &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(brandId, createdAtGte, createdAtLte, customerId, pageNumber, pageSize, status, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(
+            brandId,
+            createdAtGte,
+            createdAtLte,
+            customerId,
+            pageNumber,
+            pageSize,
+            status,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
         "SubscriptionListParams{brandId=$brandId, createdAtGte=$createdAtGte, createdAtLte=$createdAtLte, customerId=$customerId, pageNumber=$pageNumber, pageSize=$pageSize, status=$status, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

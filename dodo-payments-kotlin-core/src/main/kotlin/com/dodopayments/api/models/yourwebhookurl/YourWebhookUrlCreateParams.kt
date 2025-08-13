@@ -230,10 +230,24 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is YourWebhookUrlCreateParams && webhookId == other.webhookId && webhookSignature == other.webhookSignature && webhookTimestamp == other.webhookTimestamp && webhookPayload == other.webhookPayload && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is YourWebhookUrlCreateParams &&
+            webhookId == other.webhookId &&
+            webhookSignature == other.webhookSignature &&
+            webhookTimestamp == other.webhookTimestamp &&
+            webhookPayload == other.webhookPayload &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(webhookId, webhookSignature, webhookTimestamp, webhookPayload, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(
+            webhookId,
+            webhookSignature,
+            webhookTimestamp,
+            webhookPayload,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
         "YourWebhookUrlCreateParams{webhookId=$webhookId, webhookSignature=$webhookSignature, webhookTimestamp=$webhookTimestamp, webhookPayload=$webhookPayload, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

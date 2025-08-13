@@ -947,12 +947,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Metadata && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -1402,12 +1400,16 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is File && fileId == other.fileId && fileName == other.fileName && url == other.url && additionalProperties == other.additionalProperties /* spotless:on */
+                return other is File &&
+                    fileId == other.fileId &&
+                    fileName == other.fileName &&
+                    url == other.url &&
+                    additionalProperties == other.additionalProperties
             }
 
-            /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(fileId, fileName, url, additionalProperties) }
-            /* spotless:on */
+            private val hashCode: Int by lazy {
+                Objects.hash(fileId, fileName, url, additionalProperties)
+            }
 
             override fun hashCode(): Int = hashCode
 
@@ -1420,12 +1422,16 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is DigitalProductDelivery && externalUrl == other.externalUrl && files == other.files && instructions == other.instructions && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is DigitalProductDelivery &&
+                externalUrl == other.externalUrl &&
+                files == other.files &&
+                instructions == other.instructions &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(externalUrl, files, instructions, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(externalUrl, files, instructions, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -1438,12 +1444,51 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Product && brandId == other.brandId && businessId == other.businessId && createdAt == other.createdAt && isRecurring == other.isRecurring && licenseKeyEnabled == other.licenseKeyEnabled && metadata == other.metadata && price == other.price && productId == other.productId && taxCategory == other.taxCategory && updatedAt == other.updatedAt && addons == other.addons && description == other.description && digitalProductDelivery == other.digitalProductDelivery && image == other.image && licenseKeyActivationMessage == other.licenseKeyActivationMessage && licenseKeyActivationsLimit == other.licenseKeyActivationsLimit && licenseKeyDuration == other.licenseKeyDuration && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is Product &&
+            brandId == other.brandId &&
+            businessId == other.businessId &&
+            createdAt == other.createdAt &&
+            isRecurring == other.isRecurring &&
+            licenseKeyEnabled == other.licenseKeyEnabled &&
+            metadata == other.metadata &&
+            price == other.price &&
+            productId == other.productId &&
+            taxCategory == other.taxCategory &&
+            updatedAt == other.updatedAt &&
+            addons == other.addons &&
+            description == other.description &&
+            digitalProductDelivery == other.digitalProductDelivery &&
+            image == other.image &&
+            licenseKeyActivationMessage == other.licenseKeyActivationMessage &&
+            licenseKeyActivationsLimit == other.licenseKeyActivationsLimit &&
+            licenseKeyDuration == other.licenseKeyDuration &&
+            name == other.name &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(brandId, businessId, createdAt, isRecurring, licenseKeyEnabled, metadata, price, productId, taxCategory, updatedAt, addons, description, digitalProductDelivery, image, licenseKeyActivationMessage, licenseKeyActivationsLimit, licenseKeyDuration, name, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            brandId,
+            businessId,
+            createdAt,
+            isRecurring,
+            licenseKeyEnabled,
+            metadata,
+            price,
+            productId,
+            taxCategory,
+            updatedAt,
+            addons,
+            description,
+            digitalProductDelivery,
+            image,
+            licenseKeyActivationMessage,
+            licenseKeyActivationsLimit,
+            licenseKeyDuration,
+            name,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

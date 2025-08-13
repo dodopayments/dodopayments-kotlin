@@ -623,12 +623,39 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is Discount && amount == other.amount && businessId == other.businessId && code == other.code && createdAt == other.createdAt && discountId == other.discountId && restrictedTo == other.restrictedTo && timesUsed == other.timesUsed && type == other.type && expiresAt == other.expiresAt && name == other.name && subscriptionCycles == other.subscriptionCycles && usageLimit == other.usageLimit && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is Discount &&
+            amount == other.amount &&
+            businessId == other.businessId &&
+            code == other.code &&
+            createdAt == other.createdAt &&
+            discountId == other.discountId &&
+            restrictedTo == other.restrictedTo &&
+            timesUsed == other.timesUsed &&
+            type == other.type &&
+            expiresAt == other.expiresAt &&
+            name == other.name &&
+            subscriptionCycles == other.subscriptionCycles &&
+            usageLimit == other.usageLimit &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(amount, businessId, code, createdAt, discountId, restrictedTo, timesUsed, type, expiresAt, name, subscriptionCycles, usageLimit, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            amount,
+            businessId,
+            code,
+            createdAt,
+            discountId,
+            restrictedTo,
+            timesUsed,
+            type,
+            expiresAt,
+            name,
+            subscriptionCycles,
+            usageLimit,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

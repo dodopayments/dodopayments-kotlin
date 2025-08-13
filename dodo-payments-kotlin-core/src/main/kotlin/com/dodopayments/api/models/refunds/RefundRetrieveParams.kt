@@ -169,10 +169,13 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is RefundRetrieveParams && refundId == other.refundId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is RefundRetrieveParams &&
+            refundId == other.refundId &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(refundId, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = Objects.hash(refundId, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "RefundRetrieveParams{refundId=$refundId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
