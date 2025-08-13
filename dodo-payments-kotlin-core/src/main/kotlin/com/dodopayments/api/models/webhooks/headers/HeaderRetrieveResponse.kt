@@ -299,12 +299,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Headers && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Headers && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -316,12 +314,13 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is HeaderRetrieveResponse && headers == other.headers && sensitive == other.sensitive && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is HeaderRetrieveResponse &&
+            headers == other.headers &&
+            sensitive == other.sensitive &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
     private val hashCode: Int by lazy { Objects.hash(headers, sensitive, additionalProperties) }
-    /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 

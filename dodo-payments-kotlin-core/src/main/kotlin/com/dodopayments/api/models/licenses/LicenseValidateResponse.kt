@@ -154,12 +154,12 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is LicenseValidateResponse && valid == other.valid && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is LicenseValidateResponse &&
+            valid == other.valid &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
     private val hashCode: Int by lazy { Objects.hash(valid, additionalProperties) }
-    /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 

@@ -103,10 +103,12 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerRequest && attachExistingCustomer == other.attachExistingCustomer && newCustomer == other.newCustomer /* spotless:on */
+        return other is CustomerRequest &&
+            attachExistingCustomer == other.attachExistingCustomer &&
+            newCustomer == other.newCustomer
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(attachExistingCustomer, newCustomer) /* spotless:on */
+    override fun hashCode(): Int = Objects.hash(attachExistingCustomer, newCustomer)
 
     override fun toString(): String =
         when {

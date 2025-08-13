@@ -356,7 +356,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Status && value == other.value /* spotless:on */
+            return other is Status && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -369,10 +369,26 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is LicenseKeyListParams && customerId == other.customerId && pageNumber == other.pageNumber && pageSize == other.pageSize && productId == other.productId && status == other.status && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is LicenseKeyListParams &&
+            customerId == other.customerId &&
+            pageNumber == other.pageNumber &&
+            pageSize == other.pageSize &&
+            productId == other.productId &&
+            status == other.status &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, pageNumber, pageSize, productId, status, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(
+            customerId,
+            pageNumber,
+            pageSize,
+            productId,
+            status,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
         "LicenseKeyListParams{customerId=$customerId, pageNumber=$pageNumber, pageSize=$pageSize, productId=$productId, status=$status, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

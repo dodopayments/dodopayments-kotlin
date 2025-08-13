@@ -637,12 +637,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && productId == other.productId && prorationBillingMode == other.prorationBillingMode && quantity == other.quantity && addons == other.addons && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Body &&
+                productId == other.productId &&
+                prorationBillingMode == other.prorationBillingMode &&
+                quantity == other.quantity &&
+                addons == other.addons &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(productId, prorationBillingMode, quantity, addons, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(productId, prorationBillingMode, quantity, addons, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -781,7 +786,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is ProrationBillingMode && value == other.value /* spotless:on */
+            return other is ProrationBillingMode && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -794,10 +799,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionChangePlanParams && subscriptionId == other.subscriptionId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is SubscriptionChangePlanParams &&
+            subscriptionId == other.subscriptionId &&
+            body == other.body &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(subscriptionId, body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(subscriptionId, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "SubscriptionChangePlanParams{subscriptionId=$subscriptionId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

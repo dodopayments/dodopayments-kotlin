@@ -580,12 +580,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Metadata && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -597,12 +595,33 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is WebhookListResponse && id == other.id && createdAt == other.createdAt && description == other.description && metadata == other.metadata && updatedAt == other.updatedAt && url == other.url && disabled == other.disabled && filterTypes == other.filterTypes && rateLimit == other.rateLimit && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is WebhookListResponse &&
+            id == other.id &&
+            createdAt == other.createdAt &&
+            description == other.description &&
+            metadata == other.metadata &&
+            updatedAt == other.updatedAt &&
+            url == other.url &&
+            disabled == other.disabled &&
+            filterTypes == other.filterTypes &&
+            rateLimit == other.rateLimit &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, createdAt, description, metadata, updatedAt, url, disabled, filterTypes, rateLimit, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            id,
+            createdAt,
+            description,
+            metadata,
+            updatedAt,
+            url,
+            disabled,
+            filterTypes,
+            rateLimit,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

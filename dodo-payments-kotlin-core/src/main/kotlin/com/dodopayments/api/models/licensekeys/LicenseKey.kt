@@ -604,12 +604,39 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is LicenseKey && id == other.id && businessId == other.businessId && createdAt == other.createdAt && customerId == other.customerId && instancesCount == other.instancesCount && key == other.key && paymentId == other.paymentId && productId == other.productId && status == other.status && activationsLimit == other.activationsLimit && expiresAt == other.expiresAt && subscriptionId == other.subscriptionId && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is LicenseKey &&
+            id == other.id &&
+            businessId == other.businessId &&
+            createdAt == other.createdAt &&
+            customerId == other.customerId &&
+            instancesCount == other.instancesCount &&
+            key == other.key &&
+            paymentId == other.paymentId &&
+            productId == other.productId &&
+            status == other.status &&
+            activationsLimit == other.activationsLimit &&
+            expiresAt == other.expiresAt &&
+            subscriptionId == other.subscriptionId &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, businessId, createdAt, customerId, instancesCount, key, paymentId, productId, status, activationsLimit, expiresAt, subscriptionId, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            id,
+            businessId,
+            createdAt,
+            customerId,
+            instancesCount,
+            key,
+            paymentId,
+            productId,
+            status,
+            activationsLimit,
+            expiresAt,
+            subscriptionId,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

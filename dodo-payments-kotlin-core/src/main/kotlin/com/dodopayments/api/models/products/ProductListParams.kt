@@ -257,10 +257,26 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ProductListParams && archived == other.archived && brandId == other.brandId && pageNumber == other.pageNumber && pageSize == other.pageSize && recurring == other.recurring && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is ProductListParams &&
+            archived == other.archived &&
+            brandId == other.brandId &&
+            pageNumber == other.pageNumber &&
+            pageSize == other.pageSize &&
+            recurring == other.recurring &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(archived, brandId, pageNumber, pageSize, recurring, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(
+            archived,
+            brandId,
+            pageNumber,
+            pageSize,
+            recurring,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
         "ProductListParams{archived=$archived, brandId=$brandId, pageNumber=$pageNumber, pageSize=$pageSize, recurring=$recurring, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

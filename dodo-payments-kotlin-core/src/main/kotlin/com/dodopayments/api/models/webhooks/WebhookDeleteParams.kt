@@ -207,10 +207,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is WebhookDeleteParams && webhookId == other.webhookId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return other is WebhookDeleteParams &&
+            webhookId == other.webhookId &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams &&
+            additionalBodyProperties == other.additionalBodyProperties
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(webhookId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(webhookId, additionalHeaders, additionalQueryParams, additionalBodyProperties)
 
     override fun toString() =
         "WebhookDeleteParams{webhookId=$webhookId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"

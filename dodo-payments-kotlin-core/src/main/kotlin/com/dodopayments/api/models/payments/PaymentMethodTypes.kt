@@ -222,7 +222,7 @@ class PaymentMethodTypes @JsonCreator private constructor(private val value: Jso
             return true
         }
 
-        return /* spotless:off */ other is PaymentMethodTypes && value == other.value /* spotless:on */
+        return other is PaymentMethodTypes && value == other.value
     }
 
     override fun hashCode() = value.hashCode()

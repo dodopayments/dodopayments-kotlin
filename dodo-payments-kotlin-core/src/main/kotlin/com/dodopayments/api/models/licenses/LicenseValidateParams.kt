@@ -453,12 +453,15 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && licenseKey == other.licenseKey && licenseKeyInstanceId == other.licenseKeyInstanceId && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Body &&
+                licenseKey == other.licenseKey &&
+                licenseKeyInstanceId == other.licenseKeyInstanceId &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(licenseKey, licenseKeyInstanceId, additionalProperties) }
-        /* spotless:on */
+        private val hashCode: Int by lazy {
+            Objects.hash(licenseKey, licenseKeyInstanceId, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
@@ -471,10 +474,13 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is LicenseValidateParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is LicenseValidateParams &&
+            body == other.body &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = Objects.hash(body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "LicenseValidateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

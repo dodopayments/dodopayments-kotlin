@@ -232,10 +232,22 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is CustomerPortalCreateParams && customerId == other.customerId && sendEmail == other.sendEmail && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return other is CustomerPortalCreateParams &&
+            customerId == other.customerId &&
+            sendEmail == other.sendEmail &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams &&
+            additionalBodyProperties == other.additionalBodyProperties
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(customerId, sendEmail, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(
+            customerId,
+            sendEmail,
+            additionalHeaders,
+            additionalQueryParams,
+            additionalBodyProperties,
+        )
 
     override fun toString() =
         "CustomerPortalCreateParams{customerId=$customerId, sendEmail=$sendEmail, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"

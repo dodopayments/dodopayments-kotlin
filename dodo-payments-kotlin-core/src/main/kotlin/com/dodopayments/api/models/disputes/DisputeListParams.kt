@@ -389,7 +389,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is DisputeStage && value == other.value /* spotless:on */
+            return other is DisputeStage && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -549,7 +549,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is DisputeStatus && value == other.value /* spotless:on */
+            return other is DisputeStatus && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -562,10 +562,30 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is DisputeListParams && createdAtGte == other.createdAtGte && createdAtLte == other.createdAtLte && customerId == other.customerId && disputeStage == other.disputeStage && disputeStatus == other.disputeStatus && pageNumber == other.pageNumber && pageSize == other.pageSize && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is DisputeListParams &&
+            createdAtGte == other.createdAtGte &&
+            createdAtLte == other.createdAtLte &&
+            customerId == other.customerId &&
+            disputeStage == other.disputeStage &&
+            disputeStatus == other.disputeStatus &&
+            pageNumber == other.pageNumber &&
+            pageSize == other.pageSize &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(createdAtGte, createdAtLte, customerId, disputeStage, disputeStatus, pageNumber, pageSize, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(
+            createdAtGte,
+            createdAtLte,
+            customerId,
+            disputeStage,
+            disputeStatus,
+            pageNumber,
+            pageSize,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
         "DisputeListParams{createdAtGte=$createdAtGte, createdAtLte=$createdAtLte, customerId=$customerId, disputeStage=$disputeStage, disputeStatus=$disputeStatus, pageNumber=$pageNumber, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

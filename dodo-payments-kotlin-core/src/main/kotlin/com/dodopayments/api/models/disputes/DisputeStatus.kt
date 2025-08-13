@@ -154,7 +154,7 @@ class DisputeStatus @JsonCreator private constructor(private val value: JsonFiel
             return true
         }
 
-        return /* spotless:off */ other is DisputeStatus && value == other.value /* spotless:on */
+        return other is DisputeStatus && value == other.value
     }
 
     override fun hashCode() = value.hashCode()

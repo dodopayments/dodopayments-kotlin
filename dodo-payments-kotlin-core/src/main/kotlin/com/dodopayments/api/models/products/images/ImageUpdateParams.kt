@@ -227,10 +227,22 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ImageUpdateParams && id == other.id && forceUpdate == other.forceUpdate && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return other is ImageUpdateParams &&
+            id == other.id &&
+            forceUpdate == other.forceUpdate &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams &&
+            additionalBodyProperties == other.additionalBodyProperties
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, forceUpdate, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(
+            id,
+            forceUpdate,
+            additionalHeaders,
+            additionalQueryParams,
+            additionalBodyProperties,
+        )
 
     override fun toString() =
         "ImageUpdateParams{id=$id, forceUpdate=$forceUpdate, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"

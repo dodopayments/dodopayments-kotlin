@@ -826,7 +826,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Status && value == other.value /* spotless:on */
+            return other is Status && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -839,12 +839,45 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is PayoutListResponse && amount == other.amount && businessId == other.businessId && chargebacks == other.chargebacks && createdAt == other.createdAt && currency == other.currency && fee == other.fee && paymentMethod == other.paymentMethod && payoutId == other.payoutId && refunds == other.refunds && status == other.status && tax == other.tax && updatedAt == other.updatedAt && name == other.name && payoutDocumentUrl == other.payoutDocumentUrl && remarks == other.remarks && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is PayoutListResponse &&
+            amount == other.amount &&
+            businessId == other.businessId &&
+            chargebacks == other.chargebacks &&
+            createdAt == other.createdAt &&
+            currency == other.currency &&
+            fee == other.fee &&
+            paymentMethod == other.paymentMethod &&
+            payoutId == other.payoutId &&
+            refunds == other.refunds &&
+            status == other.status &&
+            tax == other.tax &&
+            updatedAt == other.updatedAt &&
+            name == other.name &&
+            payoutDocumentUrl == other.payoutDocumentUrl &&
+            remarks == other.remarks &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(amount, businessId, chargebacks, createdAt, currency, fee, paymentMethod, payoutId, refunds, status, tax, updatedAt, name, payoutDocumentUrl, remarks, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            amount,
+            businessId,
+            chargebacks,
+            createdAt,
+            currency,
+            fee,
+            paymentMethod,
+            payoutId,
+            refunds,
+            status,
+            tax,
+            updatedAt,
+            name,
+            payoutDocumentUrl,
+            remarks,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

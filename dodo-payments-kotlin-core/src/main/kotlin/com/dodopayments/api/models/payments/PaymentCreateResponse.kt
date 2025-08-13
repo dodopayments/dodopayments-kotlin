@@ -580,12 +580,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Metadata && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -597,12 +595,33 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is PaymentCreateResponse && clientSecret == other.clientSecret && customer == other.customer && metadata == other.metadata && paymentId == other.paymentId && totalAmount == other.totalAmount && discountId == other.discountId && expiresOn == other.expiresOn && paymentLink == other.paymentLink && productCart == other.productCart && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is PaymentCreateResponse &&
+            clientSecret == other.clientSecret &&
+            customer == other.customer &&
+            metadata == other.metadata &&
+            paymentId == other.paymentId &&
+            totalAmount == other.totalAmount &&
+            discountId == other.discountId &&
+            expiresOn == other.expiresOn &&
+            paymentLink == other.paymentLink &&
+            productCart == other.productCart &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(clientSecret, customer, metadata, paymentId, totalAmount, discountId, expiresOn, paymentLink, productCart, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            clientSecret,
+            customer,
+            metadata,
+            paymentId,
+            totalAmount,
+            discountId,
+            expiresOn,
+            paymentLink,
+            productCart,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 

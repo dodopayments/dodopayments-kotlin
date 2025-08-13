@@ -300,12 +300,18 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is BillingAddress && city == other.city && country == other.country && state == other.state && street == other.street && zipcode == other.zipcode && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is BillingAddress &&
+            city == other.city &&
+            country == other.country &&
+            state == other.state &&
+            street == other.street &&
+            zipcode == other.zipcode &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(city, country, state, street, zipcode, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(city, country, state, street, zipcode, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 

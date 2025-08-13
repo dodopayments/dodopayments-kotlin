@@ -150,7 +150,7 @@ class SubscriptionStatus @JsonCreator private constructor(private val value: Jso
             return true
         }
 
-        return /* spotless:off */ other is SubscriptionStatus && value == other.value /* spotless:on */
+        return other is SubscriptionStatus && value == other.value
     }
 
     override fun hashCode() = value.hashCode()

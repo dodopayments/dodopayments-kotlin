@@ -396,12 +396,12 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && headers == other.headers && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Body &&
+                headers == other.headers &&
+                additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(headers, additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -497,12 +497,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Headers && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Headers && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -514,10 +512,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is HeaderUpdateParams && webhookId == other.webhookId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return other is HeaderUpdateParams &&
+            webhookId == other.webhookId &&
+            body == other.body &&
+            additionalHeaders == other.additionalHeaders &&
+            additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(webhookId, body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int =
+        Objects.hash(webhookId, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
         "HeaderUpdateParams{webhookId=$webhookId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"

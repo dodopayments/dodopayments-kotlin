@@ -779,12 +779,10 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+            return other is Metadata && additionalProperties == other.additionalProperties
         }
 
-        /* spotless:off */
         private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
@@ -796,12 +794,43 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ProductListResponse && businessId == other.businessId && createdAt == other.createdAt && isRecurring == other.isRecurring && metadata == other.metadata && productId == other.productId && taxCategory == other.taxCategory && updatedAt == other.updatedAt && currency == other.currency && description == other.description && image == other.image && name == other.name && price == other.price && priceDetail == other.priceDetail && taxInclusive == other.taxInclusive && additionalProperties == other.additionalProperties /* spotless:on */
+        return other is ProductListResponse &&
+            businessId == other.businessId &&
+            createdAt == other.createdAt &&
+            isRecurring == other.isRecurring &&
+            metadata == other.metadata &&
+            productId == other.productId &&
+            taxCategory == other.taxCategory &&
+            updatedAt == other.updatedAt &&
+            currency == other.currency &&
+            description == other.description &&
+            image == other.image &&
+            name == other.name &&
+            price == other.price &&
+            priceDetail == other.priceDetail &&
+            taxInclusive == other.taxInclusive &&
+            additionalProperties == other.additionalProperties
     }
 
-    /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(businessId, createdAt, isRecurring, metadata, productId, taxCategory, updatedAt, currency, description, image, name, price, priceDetail, taxInclusive, additionalProperties) }
-    /* spotless:on */
+    private val hashCode: Int by lazy {
+        Objects.hash(
+            businessId,
+            createdAt,
+            isRecurring,
+            metadata,
+            productId,
+            taxCategory,
+            updatedAt,
+            currency,
+            description,
+            image,
+            name,
+            price,
+            priceDetail,
+            taxInclusive,
+            additionalProperties,
+        )
+    }
 
     override fun hashCode(): Int = hashCode
 
