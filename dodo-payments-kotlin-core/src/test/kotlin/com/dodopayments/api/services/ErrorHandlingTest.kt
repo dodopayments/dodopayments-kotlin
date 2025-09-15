@@ -16,13 +16,14 @@ import com.dodopayments.api.errors.RateLimitException
 import com.dodopayments.api.errors.UnauthorizedException
 import com.dodopayments.api.errors.UnexpectedStatusCodeException
 import com.dodopayments.api.errors.UnprocessableEntityException
+import com.dodopayments.api.models.checkoutsessions.CheckoutSessionCreateParams
+import com.dodopayments.api.models.checkoutsessions.CheckoutSessionRequest
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.payments.AttachExistingCustomer
-import com.dodopayments.api.models.payments.BillingAddress
-import com.dodopayments.api.models.payments.OneTimeProductCartItem
-import com.dodopayments.api.models.payments.PaymentCreateParams
 import com.dodopayments.api.models.payments.PaymentMethodTypes
+import com.dodopayments.api.models.subscriptions.AttachAddon
+import com.dodopayments.api.models.subscriptions.OnDemandSubscription
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.status
@@ -65,8 +66,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun paymentsCreate400() {
-        val paymentService = client.payments()
+    fun checkoutSessionsCreate400() {
+        val checkoutSessionService = client.checkoutSessions()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -76,39 +77,80 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<BadRequestException> {
-                paymentService.create(
-                    PaymentCreateParams.builder()
-                        .billing(
-                            BillingAddress.builder()
-                                .city("city")
-                                .country(CountryCode.AF)
-                                .state("state")
-                                .street("street")
-                                .zipcode("zipcode")
+                checkoutSessionService.create(
+                    CheckoutSessionCreateParams.builder()
+                        .checkoutSessionRequest(
+                            CheckoutSessionRequest.builder()
+                                .addProductCart(
+                                    CheckoutSessionRequest.ProductCart.builder()
+                                        .productId("product_id")
+                                        .quantity(0)
+                                        .addAddon(
+                                            AttachAddon.builder()
+                                                .addonId("addon_id")
+                                                .quantity(0)
+                                                .build()
+                                        )
+                                        .amount(0)
+                                        .build()
+                                )
+                                .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                                .billingAddress(
+                                    CheckoutSessionRequest.BillingAddress.builder()
+                                        .country(CountryCode.AF)
+                                        .city("city")
+                                        .state("state")
+                                        .street("street")
+                                        .zipcode("zipcode")
+                                        .build()
+                                )
+                                .billingCurrency(Currency.AED)
+                                .confirm(true)
+                                .customer(
+                                    AttachExistingCustomer.builder()
+                                        .customerId("customer_id")
+                                        .build()
+                                )
+                                .customization(
+                                    CheckoutSessionRequest.Customization.builder()
+                                        .showOnDemandTag(true)
+                                        .showOrderDetails(true)
+                                        .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                        .build()
+                                )
+                                .discountCode("discount_code")
+                                .featureFlags(
+                                    CheckoutSessionRequest.FeatureFlags.builder()
+                                        .allowCurrencySelection(true)
+                                        .allowDiscountCode(true)
+                                        .allowPhoneNumberCollection(true)
+                                        .allowTaxId(true)
+                                        .alwaysCreateNewCustomer(true)
+                                        .build()
+                                )
+                                .metadata(
+                                    CheckoutSessionRequest.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .returnUrl("return_url")
+                                .showSavedPaymentMethods(true)
+                                .subscriptionData(
+                                    CheckoutSessionRequest.SubscriptionData.builder()
+                                        .onDemand(
+                                            OnDemandSubscription.builder()
+                                                .mandateOnly(true)
+                                                .adaptiveCurrencyFeesInclusive(true)
+                                                .productCurrency(Currency.AED)
+                                                .productDescription("product_description")
+                                                .productPrice(0)
+                                                .build()
+                                        )
+                                        .trialPeriodDays(0)
+                                        .build()
+                                )
                                 .build()
                         )
-                        .customer(
-                            AttachExistingCustomer.builder().customerId("customer_id").build()
-                        )
-                        .addProductCart(
-                            OneTimeProductCartItem.builder()
-                                .productId("product_id")
-                                .quantity(0)
-                                .amount(0)
-                                .build()
-                        )
-                        .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
-                        .billingCurrency(Currency.AED)
-                        .discountCode("discount_code")
-                        .metadata(
-                            PaymentCreateParams.Metadata.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("string"))
-                                .build()
-                        )
-                        .paymentLink(true)
-                        .returnUrl("return_url")
-                        .showSavedPaymentMethods(true)
-                        .taxId("tax_id")
                         .build()
                 )
             }
@@ -119,8 +161,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun paymentsCreate400WithRawResponse() {
-        val paymentService = client.payments().withRawResponse()
+    fun checkoutSessionsCreate400WithRawResponse() {
+        val checkoutSessionService = client.checkoutSessions().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -130,39 +172,80 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<BadRequestException> {
-                paymentService.create(
-                    PaymentCreateParams.builder()
-                        .billing(
-                            BillingAddress.builder()
-                                .city("city")
-                                .country(CountryCode.AF)
-                                .state("state")
-                                .street("street")
-                                .zipcode("zipcode")
+                checkoutSessionService.create(
+                    CheckoutSessionCreateParams.builder()
+                        .checkoutSessionRequest(
+                            CheckoutSessionRequest.builder()
+                                .addProductCart(
+                                    CheckoutSessionRequest.ProductCart.builder()
+                                        .productId("product_id")
+                                        .quantity(0)
+                                        .addAddon(
+                                            AttachAddon.builder()
+                                                .addonId("addon_id")
+                                                .quantity(0)
+                                                .build()
+                                        )
+                                        .amount(0)
+                                        .build()
+                                )
+                                .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                                .billingAddress(
+                                    CheckoutSessionRequest.BillingAddress.builder()
+                                        .country(CountryCode.AF)
+                                        .city("city")
+                                        .state("state")
+                                        .street("street")
+                                        .zipcode("zipcode")
+                                        .build()
+                                )
+                                .billingCurrency(Currency.AED)
+                                .confirm(true)
+                                .customer(
+                                    AttachExistingCustomer.builder()
+                                        .customerId("customer_id")
+                                        .build()
+                                )
+                                .customization(
+                                    CheckoutSessionRequest.Customization.builder()
+                                        .showOnDemandTag(true)
+                                        .showOrderDetails(true)
+                                        .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                        .build()
+                                )
+                                .discountCode("discount_code")
+                                .featureFlags(
+                                    CheckoutSessionRequest.FeatureFlags.builder()
+                                        .allowCurrencySelection(true)
+                                        .allowDiscountCode(true)
+                                        .allowPhoneNumberCollection(true)
+                                        .allowTaxId(true)
+                                        .alwaysCreateNewCustomer(true)
+                                        .build()
+                                )
+                                .metadata(
+                                    CheckoutSessionRequest.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .returnUrl("return_url")
+                                .showSavedPaymentMethods(true)
+                                .subscriptionData(
+                                    CheckoutSessionRequest.SubscriptionData.builder()
+                                        .onDemand(
+                                            OnDemandSubscription.builder()
+                                                .mandateOnly(true)
+                                                .adaptiveCurrencyFeesInclusive(true)
+                                                .productCurrency(Currency.AED)
+                                                .productDescription("product_description")
+                                                .productPrice(0)
+                                                .build()
+                                        )
+                                        .trialPeriodDays(0)
+                                        .build()
+                                )
                                 .build()
                         )
-                        .customer(
-                            AttachExistingCustomer.builder().customerId("customer_id").build()
-                        )
-                        .addProductCart(
-                            OneTimeProductCartItem.builder()
-                                .productId("product_id")
-                                .quantity(0)
-                                .amount(0)
-                                .build()
-                        )
-                        .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
-                        .billingCurrency(Currency.AED)
-                        .discountCode("discount_code")
-                        .metadata(
-                            PaymentCreateParams.Metadata.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("string"))
-                                .build()
-                        )
-                        .paymentLink(true)
-                        .returnUrl("return_url")
-                        .showSavedPaymentMethods(true)
-                        .taxId("tax_id")
                         .build()
                 )
             }
@@ -173,8 +256,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun paymentsCreate401() {
-        val paymentService = client.payments()
+    fun checkoutSessionsCreate401() {
+        val checkoutSessionService = client.checkoutSessions()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -184,39 +267,80 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnauthorizedException> {
-                paymentService.create(
-                    PaymentCreateParams.builder()
-                        .billing(
-                            BillingAddress.builder()
-                                .city("city")
-                                .country(CountryCode.AF)
-                                .state("state")
-                                .street("street")
-                                .zipcode("zipcode")
+                checkoutSessionService.create(
+                    CheckoutSessionCreateParams.builder()
+                        .checkoutSessionRequest(
+                            CheckoutSessionRequest.builder()
+                                .addProductCart(
+                                    CheckoutSessionRequest.ProductCart.builder()
+                                        .productId("product_id")
+                                        .quantity(0)
+                                        .addAddon(
+                                            AttachAddon.builder()
+                                                .addonId("addon_id")
+                                                .quantity(0)
+                                                .build()
+                                        )
+                                        .amount(0)
+                                        .build()
+                                )
+                                .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                                .billingAddress(
+                                    CheckoutSessionRequest.BillingAddress.builder()
+                                        .country(CountryCode.AF)
+                                        .city("city")
+                                        .state("state")
+                                        .street("street")
+                                        .zipcode("zipcode")
+                                        .build()
+                                )
+                                .billingCurrency(Currency.AED)
+                                .confirm(true)
+                                .customer(
+                                    AttachExistingCustomer.builder()
+                                        .customerId("customer_id")
+                                        .build()
+                                )
+                                .customization(
+                                    CheckoutSessionRequest.Customization.builder()
+                                        .showOnDemandTag(true)
+                                        .showOrderDetails(true)
+                                        .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                        .build()
+                                )
+                                .discountCode("discount_code")
+                                .featureFlags(
+                                    CheckoutSessionRequest.FeatureFlags.builder()
+                                        .allowCurrencySelection(true)
+                                        .allowDiscountCode(true)
+                                        .allowPhoneNumberCollection(true)
+                                        .allowTaxId(true)
+                                        .alwaysCreateNewCustomer(true)
+                                        .build()
+                                )
+                                .metadata(
+                                    CheckoutSessionRequest.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .returnUrl("return_url")
+                                .showSavedPaymentMethods(true)
+                                .subscriptionData(
+                                    CheckoutSessionRequest.SubscriptionData.builder()
+                                        .onDemand(
+                                            OnDemandSubscription.builder()
+                                                .mandateOnly(true)
+                                                .adaptiveCurrencyFeesInclusive(true)
+                                                .productCurrency(Currency.AED)
+                                                .productDescription("product_description")
+                                                .productPrice(0)
+                                                .build()
+                                        )
+                                        .trialPeriodDays(0)
+                                        .build()
+                                )
                                 .build()
                         )
-                        .customer(
-                            AttachExistingCustomer.builder().customerId("customer_id").build()
-                        )
-                        .addProductCart(
-                            OneTimeProductCartItem.builder()
-                                .productId("product_id")
-                                .quantity(0)
-                                .amount(0)
-                                .build()
-                        )
-                        .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
-                        .billingCurrency(Currency.AED)
-                        .discountCode("discount_code")
-                        .metadata(
-                            PaymentCreateParams.Metadata.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("string"))
-                                .build()
-                        )
-                        .paymentLink(true)
-                        .returnUrl("return_url")
-                        .showSavedPaymentMethods(true)
-                        .taxId("tax_id")
                         .build()
                 )
             }
@@ -227,8 +351,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun paymentsCreate401WithRawResponse() {
-        val paymentService = client.payments().withRawResponse()
+    fun checkoutSessionsCreate401WithRawResponse() {
+        val checkoutSessionService = client.checkoutSessions().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -238,39 +362,80 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnauthorizedException> {
-                paymentService.create(
-                    PaymentCreateParams.builder()
-                        .billing(
-                            BillingAddress.builder()
-                                .city("city")
-                                .country(CountryCode.AF)
-                                .state("state")
-                                .street("street")
-                                .zipcode("zipcode")
+                checkoutSessionService.create(
+                    CheckoutSessionCreateParams.builder()
+                        .checkoutSessionRequest(
+                            CheckoutSessionRequest.builder()
+                                .addProductCart(
+                                    CheckoutSessionRequest.ProductCart.builder()
+                                        .productId("product_id")
+                                        .quantity(0)
+                                        .addAddon(
+                                            AttachAddon.builder()
+                                                .addonId("addon_id")
+                                                .quantity(0)
+                                                .build()
+                                        )
+                                        .amount(0)
+                                        .build()
+                                )
+                                .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                                .billingAddress(
+                                    CheckoutSessionRequest.BillingAddress.builder()
+                                        .country(CountryCode.AF)
+                                        .city("city")
+                                        .state("state")
+                                        .street("street")
+                                        .zipcode("zipcode")
+                                        .build()
+                                )
+                                .billingCurrency(Currency.AED)
+                                .confirm(true)
+                                .customer(
+                                    AttachExistingCustomer.builder()
+                                        .customerId("customer_id")
+                                        .build()
+                                )
+                                .customization(
+                                    CheckoutSessionRequest.Customization.builder()
+                                        .showOnDemandTag(true)
+                                        .showOrderDetails(true)
+                                        .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                        .build()
+                                )
+                                .discountCode("discount_code")
+                                .featureFlags(
+                                    CheckoutSessionRequest.FeatureFlags.builder()
+                                        .allowCurrencySelection(true)
+                                        .allowDiscountCode(true)
+                                        .allowPhoneNumberCollection(true)
+                                        .allowTaxId(true)
+                                        .alwaysCreateNewCustomer(true)
+                                        .build()
+                                )
+                                .metadata(
+                                    CheckoutSessionRequest.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .returnUrl("return_url")
+                                .showSavedPaymentMethods(true)
+                                .subscriptionData(
+                                    CheckoutSessionRequest.SubscriptionData.builder()
+                                        .onDemand(
+                                            OnDemandSubscription.builder()
+                                                .mandateOnly(true)
+                                                .adaptiveCurrencyFeesInclusive(true)
+                                                .productCurrency(Currency.AED)
+                                                .productDescription("product_description")
+                                                .productPrice(0)
+                                                .build()
+                                        )
+                                        .trialPeriodDays(0)
+                                        .build()
+                                )
                                 .build()
                         )
-                        .customer(
-                            AttachExistingCustomer.builder().customerId("customer_id").build()
-                        )
-                        .addProductCart(
-                            OneTimeProductCartItem.builder()
-                                .productId("product_id")
-                                .quantity(0)
-                                .amount(0)
-                                .build()
-                        )
-                        .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
-                        .billingCurrency(Currency.AED)
-                        .discountCode("discount_code")
-                        .metadata(
-                            PaymentCreateParams.Metadata.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("string"))
-                                .build()
-                        )
-                        .paymentLink(true)
-                        .returnUrl("return_url")
-                        .showSavedPaymentMethods(true)
-                        .taxId("tax_id")
                         .build()
                 )
             }
@@ -281,8 +446,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun paymentsCreate403() {
-        val paymentService = client.payments()
+    fun checkoutSessionsCreate403() {
+        val checkoutSessionService = client.checkoutSessions()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -292,39 +457,80 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<PermissionDeniedException> {
-                paymentService.create(
-                    PaymentCreateParams.builder()
-                        .billing(
-                            BillingAddress.builder()
-                                .city("city")
-                                .country(CountryCode.AF)
-                                .state("state")
-                                .street("street")
-                                .zipcode("zipcode")
+                checkoutSessionService.create(
+                    CheckoutSessionCreateParams.builder()
+                        .checkoutSessionRequest(
+                            CheckoutSessionRequest.builder()
+                                .addProductCart(
+                                    CheckoutSessionRequest.ProductCart.builder()
+                                        .productId("product_id")
+                                        .quantity(0)
+                                        .addAddon(
+                                            AttachAddon.builder()
+                                                .addonId("addon_id")
+                                                .quantity(0)
+                                                .build()
+                                        )
+                                        .amount(0)
+                                        .build()
+                                )
+                                .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                                .billingAddress(
+                                    CheckoutSessionRequest.BillingAddress.builder()
+                                        .country(CountryCode.AF)
+                                        .city("city")
+                                        .state("state")
+                                        .street("street")
+                                        .zipcode("zipcode")
+                                        .build()
+                                )
+                                .billingCurrency(Currency.AED)
+                                .confirm(true)
+                                .customer(
+                                    AttachExistingCustomer.builder()
+                                        .customerId("customer_id")
+                                        .build()
+                                )
+                                .customization(
+                                    CheckoutSessionRequest.Customization.builder()
+                                        .showOnDemandTag(true)
+                                        .showOrderDetails(true)
+                                        .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                        .build()
+                                )
+                                .discountCode("discount_code")
+                                .featureFlags(
+                                    CheckoutSessionRequest.FeatureFlags.builder()
+                                        .allowCurrencySelection(true)
+                                        .allowDiscountCode(true)
+                                        .allowPhoneNumberCollection(true)
+                                        .allowTaxId(true)
+                                        .alwaysCreateNewCustomer(true)
+                                        .build()
+                                )
+                                .metadata(
+                                    CheckoutSessionRequest.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .returnUrl("return_url")
+                                .showSavedPaymentMethods(true)
+                                .subscriptionData(
+                                    CheckoutSessionRequest.SubscriptionData.builder()
+                                        .onDemand(
+                                            OnDemandSubscription.builder()
+                                                .mandateOnly(true)
+                                                .adaptiveCurrencyFeesInclusive(true)
+                                                .productCurrency(Currency.AED)
+                                                .productDescription("product_description")
+                                                .productPrice(0)
+                                                .build()
+                                        )
+                                        .trialPeriodDays(0)
+                                        .build()
+                                )
                                 .build()
                         )
-                        .customer(
-                            AttachExistingCustomer.builder().customerId("customer_id").build()
-                        )
-                        .addProductCart(
-                            OneTimeProductCartItem.builder()
-                                .productId("product_id")
-                                .quantity(0)
-                                .amount(0)
-                                .build()
-                        )
-                        .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
-                        .billingCurrency(Currency.AED)
-                        .discountCode("discount_code")
-                        .metadata(
-                            PaymentCreateParams.Metadata.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("string"))
-                                .build()
-                        )
-                        .paymentLink(true)
-                        .returnUrl("return_url")
-                        .showSavedPaymentMethods(true)
-                        .taxId("tax_id")
                         .build()
                 )
             }
@@ -335,8 +541,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun paymentsCreate403WithRawResponse() {
-        val paymentService = client.payments().withRawResponse()
+    fun checkoutSessionsCreate403WithRawResponse() {
+        val checkoutSessionService = client.checkoutSessions().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -346,39 +552,80 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<PermissionDeniedException> {
-                paymentService.create(
-                    PaymentCreateParams.builder()
-                        .billing(
-                            BillingAddress.builder()
-                                .city("city")
-                                .country(CountryCode.AF)
-                                .state("state")
-                                .street("street")
-                                .zipcode("zipcode")
+                checkoutSessionService.create(
+                    CheckoutSessionCreateParams.builder()
+                        .checkoutSessionRequest(
+                            CheckoutSessionRequest.builder()
+                                .addProductCart(
+                                    CheckoutSessionRequest.ProductCart.builder()
+                                        .productId("product_id")
+                                        .quantity(0)
+                                        .addAddon(
+                                            AttachAddon.builder()
+                                                .addonId("addon_id")
+                                                .quantity(0)
+                                                .build()
+                                        )
+                                        .amount(0)
+                                        .build()
+                                )
+                                .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                                .billingAddress(
+                                    CheckoutSessionRequest.BillingAddress.builder()
+                                        .country(CountryCode.AF)
+                                        .city("city")
+                                        .state("state")
+                                        .street("street")
+                                        .zipcode("zipcode")
+                                        .build()
+                                )
+                                .billingCurrency(Currency.AED)
+                                .confirm(true)
+                                .customer(
+                                    AttachExistingCustomer.builder()
+                                        .customerId("customer_id")
+                                        .build()
+                                )
+                                .customization(
+                                    CheckoutSessionRequest.Customization.builder()
+                                        .showOnDemandTag(true)
+                                        .showOrderDetails(true)
+                                        .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                        .build()
+                                )
+                                .discountCode("discount_code")
+                                .featureFlags(
+                                    CheckoutSessionRequest.FeatureFlags.builder()
+                                        .allowCurrencySelection(true)
+                                        .allowDiscountCode(true)
+                                        .allowPhoneNumberCollection(true)
+                                        .allowTaxId(true)
+                                        .alwaysCreateNewCustomer(true)
+                                        .build()
+                                )
+                                .metadata(
+                                    CheckoutSessionRequest.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .returnUrl("return_url")
+                                .showSavedPaymentMethods(true)
+                                .subscriptionData(
+                                    CheckoutSessionRequest.SubscriptionData.builder()
+                                        .onDemand(
+                                            OnDemandSubscription.builder()
+                                                .mandateOnly(true)
+                                                .adaptiveCurrencyFeesInclusive(true)
+                                                .productCurrency(Currency.AED)
+                                                .productDescription("product_description")
+                                                .productPrice(0)
+                                                .build()
+                                        )
+                                        .trialPeriodDays(0)
+                                        .build()
+                                )
                                 .build()
                         )
-                        .customer(
-                            AttachExistingCustomer.builder().customerId("customer_id").build()
-                        )
-                        .addProductCart(
-                            OneTimeProductCartItem.builder()
-                                .productId("product_id")
-                                .quantity(0)
-                                .amount(0)
-                                .build()
-                        )
-                        .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
-                        .billingCurrency(Currency.AED)
-                        .discountCode("discount_code")
-                        .metadata(
-                            PaymentCreateParams.Metadata.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("string"))
-                                .build()
-                        )
-                        .paymentLink(true)
-                        .returnUrl("return_url")
-                        .showSavedPaymentMethods(true)
-                        .taxId("tax_id")
                         .build()
                 )
             }
@@ -389,8 +636,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun paymentsCreate404() {
-        val paymentService = client.payments()
+    fun checkoutSessionsCreate404() {
+        val checkoutSessionService = client.checkoutSessions()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -400,39 +647,80 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<NotFoundException> {
-                paymentService.create(
-                    PaymentCreateParams.builder()
-                        .billing(
-                            BillingAddress.builder()
-                                .city("city")
-                                .country(CountryCode.AF)
-                                .state("state")
-                                .street("street")
-                                .zipcode("zipcode")
+                checkoutSessionService.create(
+                    CheckoutSessionCreateParams.builder()
+                        .checkoutSessionRequest(
+                            CheckoutSessionRequest.builder()
+                                .addProductCart(
+                                    CheckoutSessionRequest.ProductCart.builder()
+                                        .productId("product_id")
+                                        .quantity(0)
+                                        .addAddon(
+                                            AttachAddon.builder()
+                                                .addonId("addon_id")
+                                                .quantity(0)
+                                                .build()
+                                        )
+                                        .amount(0)
+                                        .build()
+                                )
+                                .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                                .billingAddress(
+                                    CheckoutSessionRequest.BillingAddress.builder()
+                                        .country(CountryCode.AF)
+                                        .city("city")
+                                        .state("state")
+                                        .street("street")
+                                        .zipcode("zipcode")
+                                        .build()
+                                )
+                                .billingCurrency(Currency.AED)
+                                .confirm(true)
+                                .customer(
+                                    AttachExistingCustomer.builder()
+                                        .customerId("customer_id")
+                                        .build()
+                                )
+                                .customization(
+                                    CheckoutSessionRequest.Customization.builder()
+                                        .showOnDemandTag(true)
+                                        .showOrderDetails(true)
+                                        .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                        .build()
+                                )
+                                .discountCode("discount_code")
+                                .featureFlags(
+                                    CheckoutSessionRequest.FeatureFlags.builder()
+                                        .allowCurrencySelection(true)
+                                        .allowDiscountCode(true)
+                                        .allowPhoneNumberCollection(true)
+                                        .allowTaxId(true)
+                                        .alwaysCreateNewCustomer(true)
+                                        .build()
+                                )
+                                .metadata(
+                                    CheckoutSessionRequest.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .returnUrl("return_url")
+                                .showSavedPaymentMethods(true)
+                                .subscriptionData(
+                                    CheckoutSessionRequest.SubscriptionData.builder()
+                                        .onDemand(
+                                            OnDemandSubscription.builder()
+                                                .mandateOnly(true)
+                                                .adaptiveCurrencyFeesInclusive(true)
+                                                .productCurrency(Currency.AED)
+                                                .productDescription("product_description")
+                                                .productPrice(0)
+                                                .build()
+                                        )
+                                        .trialPeriodDays(0)
+                                        .build()
+                                )
                                 .build()
                         )
-                        .customer(
-                            AttachExistingCustomer.builder().customerId("customer_id").build()
-                        )
-                        .addProductCart(
-                            OneTimeProductCartItem.builder()
-                                .productId("product_id")
-                                .quantity(0)
-                                .amount(0)
-                                .build()
-                        )
-                        .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
-                        .billingCurrency(Currency.AED)
-                        .discountCode("discount_code")
-                        .metadata(
-                            PaymentCreateParams.Metadata.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("string"))
-                                .build()
-                        )
-                        .paymentLink(true)
-                        .returnUrl("return_url")
-                        .showSavedPaymentMethods(true)
-                        .taxId("tax_id")
                         .build()
                 )
             }
@@ -443,8 +731,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun paymentsCreate404WithRawResponse() {
-        val paymentService = client.payments().withRawResponse()
+    fun checkoutSessionsCreate404WithRawResponse() {
+        val checkoutSessionService = client.checkoutSessions().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -454,39 +742,80 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<NotFoundException> {
-                paymentService.create(
-                    PaymentCreateParams.builder()
-                        .billing(
-                            BillingAddress.builder()
-                                .city("city")
-                                .country(CountryCode.AF)
-                                .state("state")
-                                .street("street")
-                                .zipcode("zipcode")
+                checkoutSessionService.create(
+                    CheckoutSessionCreateParams.builder()
+                        .checkoutSessionRequest(
+                            CheckoutSessionRequest.builder()
+                                .addProductCart(
+                                    CheckoutSessionRequest.ProductCart.builder()
+                                        .productId("product_id")
+                                        .quantity(0)
+                                        .addAddon(
+                                            AttachAddon.builder()
+                                                .addonId("addon_id")
+                                                .quantity(0)
+                                                .build()
+                                        )
+                                        .amount(0)
+                                        .build()
+                                )
+                                .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                                .billingAddress(
+                                    CheckoutSessionRequest.BillingAddress.builder()
+                                        .country(CountryCode.AF)
+                                        .city("city")
+                                        .state("state")
+                                        .street("street")
+                                        .zipcode("zipcode")
+                                        .build()
+                                )
+                                .billingCurrency(Currency.AED)
+                                .confirm(true)
+                                .customer(
+                                    AttachExistingCustomer.builder()
+                                        .customerId("customer_id")
+                                        .build()
+                                )
+                                .customization(
+                                    CheckoutSessionRequest.Customization.builder()
+                                        .showOnDemandTag(true)
+                                        .showOrderDetails(true)
+                                        .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                        .build()
+                                )
+                                .discountCode("discount_code")
+                                .featureFlags(
+                                    CheckoutSessionRequest.FeatureFlags.builder()
+                                        .allowCurrencySelection(true)
+                                        .allowDiscountCode(true)
+                                        .allowPhoneNumberCollection(true)
+                                        .allowTaxId(true)
+                                        .alwaysCreateNewCustomer(true)
+                                        .build()
+                                )
+                                .metadata(
+                                    CheckoutSessionRequest.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .returnUrl("return_url")
+                                .showSavedPaymentMethods(true)
+                                .subscriptionData(
+                                    CheckoutSessionRequest.SubscriptionData.builder()
+                                        .onDemand(
+                                            OnDemandSubscription.builder()
+                                                .mandateOnly(true)
+                                                .adaptiveCurrencyFeesInclusive(true)
+                                                .productCurrency(Currency.AED)
+                                                .productDescription("product_description")
+                                                .productPrice(0)
+                                                .build()
+                                        )
+                                        .trialPeriodDays(0)
+                                        .build()
+                                )
                                 .build()
                         )
-                        .customer(
-                            AttachExistingCustomer.builder().customerId("customer_id").build()
-                        )
-                        .addProductCart(
-                            OneTimeProductCartItem.builder()
-                                .productId("product_id")
-                                .quantity(0)
-                                .amount(0)
-                                .build()
-                        )
-                        .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
-                        .billingCurrency(Currency.AED)
-                        .discountCode("discount_code")
-                        .metadata(
-                            PaymentCreateParams.Metadata.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("string"))
-                                .build()
-                        )
-                        .paymentLink(true)
-                        .returnUrl("return_url")
-                        .showSavedPaymentMethods(true)
-                        .taxId("tax_id")
                         .build()
                 )
             }
@@ -497,8 +826,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun paymentsCreate422() {
-        val paymentService = client.payments()
+    fun checkoutSessionsCreate422() {
+        val checkoutSessionService = client.checkoutSessions()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -508,39 +837,80 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnprocessableEntityException> {
-                paymentService.create(
-                    PaymentCreateParams.builder()
-                        .billing(
-                            BillingAddress.builder()
-                                .city("city")
-                                .country(CountryCode.AF)
-                                .state("state")
-                                .street("street")
-                                .zipcode("zipcode")
+                checkoutSessionService.create(
+                    CheckoutSessionCreateParams.builder()
+                        .checkoutSessionRequest(
+                            CheckoutSessionRequest.builder()
+                                .addProductCart(
+                                    CheckoutSessionRequest.ProductCart.builder()
+                                        .productId("product_id")
+                                        .quantity(0)
+                                        .addAddon(
+                                            AttachAddon.builder()
+                                                .addonId("addon_id")
+                                                .quantity(0)
+                                                .build()
+                                        )
+                                        .amount(0)
+                                        .build()
+                                )
+                                .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                                .billingAddress(
+                                    CheckoutSessionRequest.BillingAddress.builder()
+                                        .country(CountryCode.AF)
+                                        .city("city")
+                                        .state("state")
+                                        .street("street")
+                                        .zipcode("zipcode")
+                                        .build()
+                                )
+                                .billingCurrency(Currency.AED)
+                                .confirm(true)
+                                .customer(
+                                    AttachExistingCustomer.builder()
+                                        .customerId("customer_id")
+                                        .build()
+                                )
+                                .customization(
+                                    CheckoutSessionRequest.Customization.builder()
+                                        .showOnDemandTag(true)
+                                        .showOrderDetails(true)
+                                        .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                        .build()
+                                )
+                                .discountCode("discount_code")
+                                .featureFlags(
+                                    CheckoutSessionRequest.FeatureFlags.builder()
+                                        .allowCurrencySelection(true)
+                                        .allowDiscountCode(true)
+                                        .allowPhoneNumberCollection(true)
+                                        .allowTaxId(true)
+                                        .alwaysCreateNewCustomer(true)
+                                        .build()
+                                )
+                                .metadata(
+                                    CheckoutSessionRequest.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .returnUrl("return_url")
+                                .showSavedPaymentMethods(true)
+                                .subscriptionData(
+                                    CheckoutSessionRequest.SubscriptionData.builder()
+                                        .onDemand(
+                                            OnDemandSubscription.builder()
+                                                .mandateOnly(true)
+                                                .adaptiveCurrencyFeesInclusive(true)
+                                                .productCurrency(Currency.AED)
+                                                .productDescription("product_description")
+                                                .productPrice(0)
+                                                .build()
+                                        )
+                                        .trialPeriodDays(0)
+                                        .build()
+                                )
                                 .build()
                         )
-                        .customer(
-                            AttachExistingCustomer.builder().customerId("customer_id").build()
-                        )
-                        .addProductCart(
-                            OneTimeProductCartItem.builder()
-                                .productId("product_id")
-                                .quantity(0)
-                                .amount(0)
-                                .build()
-                        )
-                        .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
-                        .billingCurrency(Currency.AED)
-                        .discountCode("discount_code")
-                        .metadata(
-                            PaymentCreateParams.Metadata.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("string"))
-                                .build()
-                        )
-                        .paymentLink(true)
-                        .returnUrl("return_url")
-                        .showSavedPaymentMethods(true)
-                        .taxId("tax_id")
                         .build()
                 )
             }
@@ -551,8 +921,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun paymentsCreate422WithRawResponse() {
-        val paymentService = client.payments().withRawResponse()
+    fun checkoutSessionsCreate422WithRawResponse() {
+        val checkoutSessionService = client.checkoutSessions().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -562,39 +932,80 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnprocessableEntityException> {
-                paymentService.create(
-                    PaymentCreateParams.builder()
-                        .billing(
-                            BillingAddress.builder()
-                                .city("city")
-                                .country(CountryCode.AF)
-                                .state("state")
-                                .street("street")
-                                .zipcode("zipcode")
+                checkoutSessionService.create(
+                    CheckoutSessionCreateParams.builder()
+                        .checkoutSessionRequest(
+                            CheckoutSessionRequest.builder()
+                                .addProductCart(
+                                    CheckoutSessionRequest.ProductCart.builder()
+                                        .productId("product_id")
+                                        .quantity(0)
+                                        .addAddon(
+                                            AttachAddon.builder()
+                                                .addonId("addon_id")
+                                                .quantity(0)
+                                                .build()
+                                        )
+                                        .amount(0)
+                                        .build()
+                                )
+                                .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                                .billingAddress(
+                                    CheckoutSessionRequest.BillingAddress.builder()
+                                        .country(CountryCode.AF)
+                                        .city("city")
+                                        .state("state")
+                                        .street("street")
+                                        .zipcode("zipcode")
+                                        .build()
+                                )
+                                .billingCurrency(Currency.AED)
+                                .confirm(true)
+                                .customer(
+                                    AttachExistingCustomer.builder()
+                                        .customerId("customer_id")
+                                        .build()
+                                )
+                                .customization(
+                                    CheckoutSessionRequest.Customization.builder()
+                                        .showOnDemandTag(true)
+                                        .showOrderDetails(true)
+                                        .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                        .build()
+                                )
+                                .discountCode("discount_code")
+                                .featureFlags(
+                                    CheckoutSessionRequest.FeatureFlags.builder()
+                                        .allowCurrencySelection(true)
+                                        .allowDiscountCode(true)
+                                        .allowPhoneNumberCollection(true)
+                                        .allowTaxId(true)
+                                        .alwaysCreateNewCustomer(true)
+                                        .build()
+                                )
+                                .metadata(
+                                    CheckoutSessionRequest.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .returnUrl("return_url")
+                                .showSavedPaymentMethods(true)
+                                .subscriptionData(
+                                    CheckoutSessionRequest.SubscriptionData.builder()
+                                        .onDemand(
+                                            OnDemandSubscription.builder()
+                                                .mandateOnly(true)
+                                                .adaptiveCurrencyFeesInclusive(true)
+                                                .productCurrency(Currency.AED)
+                                                .productDescription("product_description")
+                                                .productPrice(0)
+                                                .build()
+                                        )
+                                        .trialPeriodDays(0)
+                                        .build()
+                                )
                                 .build()
                         )
-                        .customer(
-                            AttachExistingCustomer.builder().customerId("customer_id").build()
-                        )
-                        .addProductCart(
-                            OneTimeProductCartItem.builder()
-                                .productId("product_id")
-                                .quantity(0)
-                                .amount(0)
-                                .build()
-                        )
-                        .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
-                        .billingCurrency(Currency.AED)
-                        .discountCode("discount_code")
-                        .metadata(
-                            PaymentCreateParams.Metadata.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("string"))
-                                .build()
-                        )
-                        .paymentLink(true)
-                        .returnUrl("return_url")
-                        .showSavedPaymentMethods(true)
-                        .taxId("tax_id")
                         .build()
                 )
             }
@@ -605,8 +1016,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun paymentsCreate429() {
-        val paymentService = client.payments()
+    fun checkoutSessionsCreate429() {
+        val checkoutSessionService = client.checkoutSessions()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -616,39 +1027,80 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<RateLimitException> {
-                paymentService.create(
-                    PaymentCreateParams.builder()
-                        .billing(
-                            BillingAddress.builder()
-                                .city("city")
-                                .country(CountryCode.AF)
-                                .state("state")
-                                .street("street")
-                                .zipcode("zipcode")
+                checkoutSessionService.create(
+                    CheckoutSessionCreateParams.builder()
+                        .checkoutSessionRequest(
+                            CheckoutSessionRequest.builder()
+                                .addProductCart(
+                                    CheckoutSessionRequest.ProductCart.builder()
+                                        .productId("product_id")
+                                        .quantity(0)
+                                        .addAddon(
+                                            AttachAddon.builder()
+                                                .addonId("addon_id")
+                                                .quantity(0)
+                                                .build()
+                                        )
+                                        .amount(0)
+                                        .build()
+                                )
+                                .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                                .billingAddress(
+                                    CheckoutSessionRequest.BillingAddress.builder()
+                                        .country(CountryCode.AF)
+                                        .city("city")
+                                        .state("state")
+                                        .street("street")
+                                        .zipcode("zipcode")
+                                        .build()
+                                )
+                                .billingCurrency(Currency.AED)
+                                .confirm(true)
+                                .customer(
+                                    AttachExistingCustomer.builder()
+                                        .customerId("customer_id")
+                                        .build()
+                                )
+                                .customization(
+                                    CheckoutSessionRequest.Customization.builder()
+                                        .showOnDemandTag(true)
+                                        .showOrderDetails(true)
+                                        .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                        .build()
+                                )
+                                .discountCode("discount_code")
+                                .featureFlags(
+                                    CheckoutSessionRequest.FeatureFlags.builder()
+                                        .allowCurrencySelection(true)
+                                        .allowDiscountCode(true)
+                                        .allowPhoneNumberCollection(true)
+                                        .allowTaxId(true)
+                                        .alwaysCreateNewCustomer(true)
+                                        .build()
+                                )
+                                .metadata(
+                                    CheckoutSessionRequest.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .returnUrl("return_url")
+                                .showSavedPaymentMethods(true)
+                                .subscriptionData(
+                                    CheckoutSessionRequest.SubscriptionData.builder()
+                                        .onDemand(
+                                            OnDemandSubscription.builder()
+                                                .mandateOnly(true)
+                                                .adaptiveCurrencyFeesInclusive(true)
+                                                .productCurrency(Currency.AED)
+                                                .productDescription("product_description")
+                                                .productPrice(0)
+                                                .build()
+                                        )
+                                        .trialPeriodDays(0)
+                                        .build()
+                                )
                                 .build()
                         )
-                        .customer(
-                            AttachExistingCustomer.builder().customerId("customer_id").build()
-                        )
-                        .addProductCart(
-                            OneTimeProductCartItem.builder()
-                                .productId("product_id")
-                                .quantity(0)
-                                .amount(0)
-                                .build()
-                        )
-                        .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
-                        .billingCurrency(Currency.AED)
-                        .discountCode("discount_code")
-                        .metadata(
-                            PaymentCreateParams.Metadata.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("string"))
-                                .build()
-                        )
-                        .paymentLink(true)
-                        .returnUrl("return_url")
-                        .showSavedPaymentMethods(true)
-                        .taxId("tax_id")
                         .build()
                 )
             }
@@ -659,8 +1111,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun paymentsCreate429WithRawResponse() {
-        val paymentService = client.payments().withRawResponse()
+    fun checkoutSessionsCreate429WithRawResponse() {
+        val checkoutSessionService = client.checkoutSessions().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -670,39 +1122,80 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<RateLimitException> {
-                paymentService.create(
-                    PaymentCreateParams.builder()
-                        .billing(
-                            BillingAddress.builder()
-                                .city("city")
-                                .country(CountryCode.AF)
-                                .state("state")
-                                .street("street")
-                                .zipcode("zipcode")
+                checkoutSessionService.create(
+                    CheckoutSessionCreateParams.builder()
+                        .checkoutSessionRequest(
+                            CheckoutSessionRequest.builder()
+                                .addProductCart(
+                                    CheckoutSessionRequest.ProductCart.builder()
+                                        .productId("product_id")
+                                        .quantity(0)
+                                        .addAddon(
+                                            AttachAddon.builder()
+                                                .addonId("addon_id")
+                                                .quantity(0)
+                                                .build()
+                                        )
+                                        .amount(0)
+                                        .build()
+                                )
+                                .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                                .billingAddress(
+                                    CheckoutSessionRequest.BillingAddress.builder()
+                                        .country(CountryCode.AF)
+                                        .city("city")
+                                        .state("state")
+                                        .street("street")
+                                        .zipcode("zipcode")
+                                        .build()
+                                )
+                                .billingCurrency(Currency.AED)
+                                .confirm(true)
+                                .customer(
+                                    AttachExistingCustomer.builder()
+                                        .customerId("customer_id")
+                                        .build()
+                                )
+                                .customization(
+                                    CheckoutSessionRequest.Customization.builder()
+                                        .showOnDemandTag(true)
+                                        .showOrderDetails(true)
+                                        .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                        .build()
+                                )
+                                .discountCode("discount_code")
+                                .featureFlags(
+                                    CheckoutSessionRequest.FeatureFlags.builder()
+                                        .allowCurrencySelection(true)
+                                        .allowDiscountCode(true)
+                                        .allowPhoneNumberCollection(true)
+                                        .allowTaxId(true)
+                                        .alwaysCreateNewCustomer(true)
+                                        .build()
+                                )
+                                .metadata(
+                                    CheckoutSessionRequest.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .returnUrl("return_url")
+                                .showSavedPaymentMethods(true)
+                                .subscriptionData(
+                                    CheckoutSessionRequest.SubscriptionData.builder()
+                                        .onDemand(
+                                            OnDemandSubscription.builder()
+                                                .mandateOnly(true)
+                                                .adaptiveCurrencyFeesInclusive(true)
+                                                .productCurrency(Currency.AED)
+                                                .productDescription("product_description")
+                                                .productPrice(0)
+                                                .build()
+                                        )
+                                        .trialPeriodDays(0)
+                                        .build()
+                                )
                                 .build()
                         )
-                        .customer(
-                            AttachExistingCustomer.builder().customerId("customer_id").build()
-                        )
-                        .addProductCart(
-                            OneTimeProductCartItem.builder()
-                                .productId("product_id")
-                                .quantity(0)
-                                .amount(0)
-                                .build()
-                        )
-                        .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
-                        .billingCurrency(Currency.AED)
-                        .discountCode("discount_code")
-                        .metadata(
-                            PaymentCreateParams.Metadata.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("string"))
-                                .build()
-                        )
-                        .paymentLink(true)
-                        .returnUrl("return_url")
-                        .showSavedPaymentMethods(true)
-                        .taxId("tax_id")
                         .build()
                 )
             }
@@ -713,8 +1206,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun paymentsCreate500() {
-        val paymentService = client.payments()
+    fun checkoutSessionsCreate500() {
+        val checkoutSessionService = client.checkoutSessions()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -724,39 +1217,80 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<InternalServerException> {
-                paymentService.create(
-                    PaymentCreateParams.builder()
-                        .billing(
-                            BillingAddress.builder()
-                                .city("city")
-                                .country(CountryCode.AF)
-                                .state("state")
-                                .street("street")
-                                .zipcode("zipcode")
+                checkoutSessionService.create(
+                    CheckoutSessionCreateParams.builder()
+                        .checkoutSessionRequest(
+                            CheckoutSessionRequest.builder()
+                                .addProductCart(
+                                    CheckoutSessionRequest.ProductCart.builder()
+                                        .productId("product_id")
+                                        .quantity(0)
+                                        .addAddon(
+                                            AttachAddon.builder()
+                                                .addonId("addon_id")
+                                                .quantity(0)
+                                                .build()
+                                        )
+                                        .amount(0)
+                                        .build()
+                                )
+                                .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                                .billingAddress(
+                                    CheckoutSessionRequest.BillingAddress.builder()
+                                        .country(CountryCode.AF)
+                                        .city("city")
+                                        .state("state")
+                                        .street("street")
+                                        .zipcode("zipcode")
+                                        .build()
+                                )
+                                .billingCurrency(Currency.AED)
+                                .confirm(true)
+                                .customer(
+                                    AttachExistingCustomer.builder()
+                                        .customerId("customer_id")
+                                        .build()
+                                )
+                                .customization(
+                                    CheckoutSessionRequest.Customization.builder()
+                                        .showOnDemandTag(true)
+                                        .showOrderDetails(true)
+                                        .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                        .build()
+                                )
+                                .discountCode("discount_code")
+                                .featureFlags(
+                                    CheckoutSessionRequest.FeatureFlags.builder()
+                                        .allowCurrencySelection(true)
+                                        .allowDiscountCode(true)
+                                        .allowPhoneNumberCollection(true)
+                                        .allowTaxId(true)
+                                        .alwaysCreateNewCustomer(true)
+                                        .build()
+                                )
+                                .metadata(
+                                    CheckoutSessionRequest.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .returnUrl("return_url")
+                                .showSavedPaymentMethods(true)
+                                .subscriptionData(
+                                    CheckoutSessionRequest.SubscriptionData.builder()
+                                        .onDemand(
+                                            OnDemandSubscription.builder()
+                                                .mandateOnly(true)
+                                                .adaptiveCurrencyFeesInclusive(true)
+                                                .productCurrency(Currency.AED)
+                                                .productDescription("product_description")
+                                                .productPrice(0)
+                                                .build()
+                                        )
+                                        .trialPeriodDays(0)
+                                        .build()
+                                )
                                 .build()
                         )
-                        .customer(
-                            AttachExistingCustomer.builder().customerId("customer_id").build()
-                        )
-                        .addProductCart(
-                            OneTimeProductCartItem.builder()
-                                .productId("product_id")
-                                .quantity(0)
-                                .amount(0)
-                                .build()
-                        )
-                        .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
-                        .billingCurrency(Currency.AED)
-                        .discountCode("discount_code")
-                        .metadata(
-                            PaymentCreateParams.Metadata.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("string"))
-                                .build()
-                        )
-                        .paymentLink(true)
-                        .returnUrl("return_url")
-                        .showSavedPaymentMethods(true)
-                        .taxId("tax_id")
                         .build()
                 )
             }
@@ -767,8 +1301,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun paymentsCreate500WithRawResponse() {
-        val paymentService = client.payments().withRawResponse()
+    fun checkoutSessionsCreate500WithRawResponse() {
+        val checkoutSessionService = client.checkoutSessions().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -778,39 +1312,80 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<InternalServerException> {
-                paymentService.create(
-                    PaymentCreateParams.builder()
-                        .billing(
-                            BillingAddress.builder()
-                                .city("city")
-                                .country(CountryCode.AF)
-                                .state("state")
-                                .street("street")
-                                .zipcode("zipcode")
+                checkoutSessionService.create(
+                    CheckoutSessionCreateParams.builder()
+                        .checkoutSessionRequest(
+                            CheckoutSessionRequest.builder()
+                                .addProductCart(
+                                    CheckoutSessionRequest.ProductCart.builder()
+                                        .productId("product_id")
+                                        .quantity(0)
+                                        .addAddon(
+                                            AttachAddon.builder()
+                                                .addonId("addon_id")
+                                                .quantity(0)
+                                                .build()
+                                        )
+                                        .amount(0)
+                                        .build()
+                                )
+                                .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                                .billingAddress(
+                                    CheckoutSessionRequest.BillingAddress.builder()
+                                        .country(CountryCode.AF)
+                                        .city("city")
+                                        .state("state")
+                                        .street("street")
+                                        .zipcode("zipcode")
+                                        .build()
+                                )
+                                .billingCurrency(Currency.AED)
+                                .confirm(true)
+                                .customer(
+                                    AttachExistingCustomer.builder()
+                                        .customerId("customer_id")
+                                        .build()
+                                )
+                                .customization(
+                                    CheckoutSessionRequest.Customization.builder()
+                                        .showOnDemandTag(true)
+                                        .showOrderDetails(true)
+                                        .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                        .build()
+                                )
+                                .discountCode("discount_code")
+                                .featureFlags(
+                                    CheckoutSessionRequest.FeatureFlags.builder()
+                                        .allowCurrencySelection(true)
+                                        .allowDiscountCode(true)
+                                        .allowPhoneNumberCollection(true)
+                                        .allowTaxId(true)
+                                        .alwaysCreateNewCustomer(true)
+                                        .build()
+                                )
+                                .metadata(
+                                    CheckoutSessionRequest.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .returnUrl("return_url")
+                                .showSavedPaymentMethods(true)
+                                .subscriptionData(
+                                    CheckoutSessionRequest.SubscriptionData.builder()
+                                        .onDemand(
+                                            OnDemandSubscription.builder()
+                                                .mandateOnly(true)
+                                                .adaptiveCurrencyFeesInclusive(true)
+                                                .productCurrency(Currency.AED)
+                                                .productDescription("product_description")
+                                                .productPrice(0)
+                                                .build()
+                                        )
+                                        .trialPeriodDays(0)
+                                        .build()
+                                )
                                 .build()
                         )
-                        .customer(
-                            AttachExistingCustomer.builder().customerId("customer_id").build()
-                        )
-                        .addProductCart(
-                            OneTimeProductCartItem.builder()
-                                .productId("product_id")
-                                .quantity(0)
-                                .amount(0)
-                                .build()
-                        )
-                        .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
-                        .billingCurrency(Currency.AED)
-                        .discountCode("discount_code")
-                        .metadata(
-                            PaymentCreateParams.Metadata.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("string"))
-                                .build()
-                        )
-                        .paymentLink(true)
-                        .returnUrl("return_url")
-                        .showSavedPaymentMethods(true)
-                        .taxId("tax_id")
                         .build()
                 )
             }
@@ -821,8 +1396,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun paymentsCreate999() {
-        val paymentService = client.payments()
+    fun checkoutSessionsCreate999() {
+        val checkoutSessionService = client.checkoutSessions()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -832,39 +1407,80 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnexpectedStatusCodeException> {
-                paymentService.create(
-                    PaymentCreateParams.builder()
-                        .billing(
-                            BillingAddress.builder()
-                                .city("city")
-                                .country(CountryCode.AF)
-                                .state("state")
-                                .street("street")
-                                .zipcode("zipcode")
+                checkoutSessionService.create(
+                    CheckoutSessionCreateParams.builder()
+                        .checkoutSessionRequest(
+                            CheckoutSessionRequest.builder()
+                                .addProductCart(
+                                    CheckoutSessionRequest.ProductCart.builder()
+                                        .productId("product_id")
+                                        .quantity(0)
+                                        .addAddon(
+                                            AttachAddon.builder()
+                                                .addonId("addon_id")
+                                                .quantity(0)
+                                                .build()
+                                        )
+                                        .amount(0)
+                                        .build()
+                                )
+                                .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                                .billingAddress(
+                                    CheckoutSessionRequest.BillingAddress.builder()
+                                        .country(CountryCode.AF)
+                                        .city("city")
+                                        .state("state")
+                                        .street("street")
+                                        .zipcode("zipcode")
+                                        .build()
+                                )
+                                .billingCurrency(Currency.AED)
+                                .confirm(true)
+                                .customer(
+                                    AttachExistingCustomer.builder()
+                                        .customerId("customer_id")
+                                        .build()
+                                )
+                                .customization(
+                                    CheckoutSessionRequest.Customization.builder()
+                                        .showOnDemandTag(true)
+                                        .showOrderDetails(true)
+                                        .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                        .build()
+                                )
+                                .discountCode("discount_code")
+                                .featureFlags(
+                                    CheckoutSessionRequest.FeatureFlags.builder()
+                                        .allowCurrencySelection(true)
+                                        .allowDiscountCode(true)
+                                        .allowPhoneNumberCollection(true)
+                                        .allowTaxId(true)
+                                        .alwaysCreateNewCustomer(true)
+                                        .build()
+                                )
+                                .metadata(
+                                    CheckoutSessionRequest.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .returnUrl("return_url")
+                                .showSavedPaymentMethods(true)
+                                .subscriptionData(
+                                    CheckoutSessionRequest.SubscriptionData.builder()
+                                        .onDemand(
+                                            OnDemandSubscription.builder()
+                                                .mandateOnly(true)
+                                                .adaptiveCurrencyFeesInclusive(true)
+                                                .productCurrency(Currency.AED)
+                                                .productDescription("product_description")
+                                                .productPrice(0)
+                                                .build()
+                                        )
+                                        .trialPeriodDays(0)
+                                        .build()
+                                )
                                 .build()
                         )
-                        .customer(
-                            AttachExistingCustomer.builder().customerId("customer_id").build()
-                        )
-                        .addProductCart(
-                            OneTimeProductCartItem.builder()
-                                .productId("product_id")
-                                .quantity(0)
-                                .amount(0)
-                                .build()
-                        )
-                        .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
-                        .billingCurrency(Currency.AED)
-                        .discountCode("discount_code")
-                        .metadata(
-                            PaymentCreateParams.Metadata.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("string"))
-                                .build()
-                        )
-                        .paymentLink(true)
-                        .returnUrl("return_url")
-                        .showSavedPaymentMethods(true)
-                        .taxId("tax_id")
                         .build()
                 )
             }
@@ -875,8 +1491,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun paymentsCreate999WithRawResponse() {
-        val paymentService = client.payments().withRawResponse()
+    fun checkoutSessionsCreate999WithRawResponse() {
+        val checkoutSessionService = client.checkoutSessions().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -886,39 +1502,80 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnexpectedStatusCodeException> {
-                paymentService.create(
-                    PaymentCreateParams.builder()
-                        .billing(
-                            BillingAddress.builder()
-                                .city("city")
-                                .country(CountryCode.AF)
-                                .state("state")
-                                .street("street")
-                                .zipcode("zipcode")
+                checkoutSessionService.create(
+                    CheckoutSessionCreateParams.builder()
+                        .checkoutSessionRequest(
+                            CheckoutSessionRequest.builder()
+                                .addProductCart(
+                                    CheckoutSessionRequest.ProductCart.builder()
+                                        .productId("product_id")
+                                        .quantity(0)
+                                        .addAddon(
+                                            AttachAddon.builder()
+                                                .addonId("addon_id")
+                                                .quantity(0)
+                                                .build()
+                                        )
+                                        .amount(0)
+                                        .build()
+                                )
+                                .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                                .billingAddress(
+                                    CheckoutSessionRequest.BillingAddress.builder()
+                                        .country(CountryCode.AF)
+                                        .city("city")
+                                        .state("state")
+                                        .street("street")
+                                        .zipcode("zipcode")
+                                        .build()
+                                )
+                                .billingCurrency(Currency.AED)
+                                .confirm(true)
+                                .customer(
+                                    AttachExistingCustomer.builder()
+                                        .customerId("customer_id")
+                                        .build()
+                                )
+                                .customization(
+                                    CheckoutSessionRequest.Customization.builder()
+                                        .showOnDemandTag(true)
+                                        .showOrderDetails(true)
+                                        .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                        .build()
+                                )
+                                .discountCode("discount_code")
+                                .featureFlags(
+                                    CheckoutSessionRequest.FeatureFlags.builder()
+                                        .allowCurrencySelection(true)
+                                        .allowDiscountCode(true)
+                                        .allowPhoneNumberCollection(true)
+                                        .allowTaxId(true)
+                                        .alwaysCreateNewCustomer(true)
+                                        .build()
+                                )
+                                .metadata(
+                                    CheckoutSessionRequest.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .returnUrl("return_url")
+                                .showSavedPaymentMethods(true)
+                                .subscriptionData(
+                                    CheckoutSessionRequest.SubscriptionData.builder()
+                                        .onDemand(
+                                            OnDemandSubscription.builder()
+                                                .mandateOnly(true)
+                                                .adaptiveCurrencyFeesInclusive(true)
+                                                .productCurrency(Currency.AED)
+                                                .productDescription("product_description")
+                                                .productPrice(0)
+                                                .build()
+                                        )
+                                        .trialPeriodDays(0)
+                                        .build()
+                                )
                                 .build()
                         )
-                        .customer(
-                            AttachExistingCustomer.builder().customerId("customer_id").build()
-                        )
-                        .addProductCart(
-                            OneTimeProductCartItem.builder()
-                                .productId("product_id")
-                                .quantity(0)
-                                .amount(0)
-                                .build()
-                        )
-                        .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
-                        .billingCurrency(Currency.AED)
-                        .discountCode("discount_code")
-                        .metadata(
-                            PaymentCreateParams.Metadata.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("string"))
-                                .build()
-                        )
-                        .paymentLink(true)
-                        .returnUrl("return_url")
-                        .showSavedPaymentMethods(true)
-                        .taxId("tax_id")
                         .build()
                 )
             }
@@ -929,8 +1586,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun paymentsCreateInvalidJsonBody() {
-        val paymentService = client.payments()
+    fun checkoutSessionsCreateInvalidJsonBody() {
+        val checkoutSessionService = client.checkoutSessions()
         stubFor(
             post(anyUrl())
                 .willReturn(status(200).withHeader(HEADER_NAME, HEADER_VALUE).withBody(NOT_JSON))
@@ -938,39 +1595,80 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<DodoPaymentsException> {
-                paymentService.create(
-                    PaymentCreateParams.builder()
-                        .billing(
-                            BillingAddress.builder()
-                                .city("city")
-                                .country(CountryCode.AF)
-                                .state("state")
-                                .street("street")
-                                .zipcode("zipcode")
+                checkoutSessionService.create(
+                    CheckoutSessionCreateParams.builder()
+                        .checkoutSessionRequest(
+                            CheckoutSessionRequest.builder()
+                                .addProductCart(
+                                    CheckoutSessionRequest.ProductCart.builder()
+                                        .productId("product_id")
+                                        .quantity(0)
+                                        .addAddon(
+                                            AttachAddon.builder()
+                                                .addonId("addon_id")
+                                                .quantity(0)
+                                                .build()
+                                        )
+                                        .amount(0)
+                                        .build()
+                                )
+                                .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                                .billingAddress(
+                                    CheckoutSessionRequest.BillingAddress.builder()
+                                        .country(CountryCode.AF)
+                                        .city("city")
+                                        .state("state")
+                                        .street("street")
+                                        .zipcode("zipcode")
+                                        .build()
+                                )
+                                .billingCurrency(Currency.AED)
+                                .confirm(true)
+                                .customer(
+                                    AttachExistingCustomer.builder()
+                                        .customerId("customer_id")
+                                        .build()
+                                )
+                                .customization(
+                                    CheckoutSessionRequest.Customization.builder()
+                                        .showOnDemandTag(true)
+                                        .showOrderDetails(true)
+                                        .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                        .build()
+                                )
+                                .discountCode("discount_code")
+                                .featureFlags(
+                                    CheckoutSessionRequest.FeatureFlags.builder()
+                                        .allowCurrencySelection(true)
+                                        .allowDiscountCode(true)
+                                        .allowPhoneNumberCollection(true)
+                                        .allowTaxId(true)
+                                        .alwaysCreateNewCustomer(true)
+                                        .build()
+                                )
+                                .metadata(
+                                    CheckoutSessionRequest.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .returnUrl("return_url")
+                                .showSavedPaymentMethods(true)
+                                .subscriptionData(
+                                    CheckoutSessionRequest.SubscriptionData.builder()
+                                        .onDemand(
+                                            OnDemandSubscription.builder()
+                                                .mandateOnly(true)
+                                                .adaptiveCurrencyFeesInclusive(true)
+                                                .productCurrency(Currency.AED)
+                                                .productDescription("product_description")
+                                                .productPrice(0)
+                                                .build()
+                                        )
+                                        .trialPeriodDays(0)
+                                        .build()
+                                )
                                 .build()
                         )
-                        .customer(
-                            AttachExistingCustomer.builder().customerId("customer_id").build()
-                        )
-                        .addProductCart(
-                            OneTimeProductCartItem.builder()
-                                .productId("product_id")
-                                .quantity(0)
-                                .amount(0)
-                                .build()
-                        )
-                        .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
-                        .billingCurrency(Currency.AED)
-                        .discountCode("discount_code")
-                        .metadata(
-                            PaymentCreateParams.Metadata.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("string"))
-                                .build()
-                        )
-                        .paymentLink(true)
-                        .returnUrl("return_url")
-                        .showSavedPaymentMethods(true)
-                        .taxId("tax_id")
                         .build()
                 )
             }

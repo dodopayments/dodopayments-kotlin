@@ -16,7 +16,7 @@ internal class RefundListPageResponseTest {
         val refundListPageResponse =
             RefundListPageResponse.builder()
                 .addItem(
-                    Refund.builder()
+                    RefundListResponse.builder()
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .isPartial(true)
@@ -32,7 +32,7 @@ internal class RefundListPageResponseTest {
 
         assertThat(refundListPageResponse.items())
             .containsExactly(
-                Refund.builder()
+                RefundListResponse.builder()
                     .businessId("business_id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .isPartial(true)
@@ -52,7 +52,7 @@ internal class RefundListPageResponseTest {
         val refundListPageResponse =
             RefundListPageResponse.builder()
                 .addItem(
-                    Refund.builder()
+                    RefundListResponse.builder()
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .isPartial(true)

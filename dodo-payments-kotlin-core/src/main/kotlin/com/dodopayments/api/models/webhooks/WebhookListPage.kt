@@ -14,14 +14,14 @@ private constructor(
     private val service: WebhookService,
     private val params: WebhookListParams,
     private val response: WebhookListPageResponse,
-) : Page<WebhookListResponse> {
+) : Page<WebhookDetails> {
 
     /**
      * Delegates to [WebhookListPageResponse], but gracefully handles missing data.
      *
      * @see WebhookListPageResponse.data
      */
-    fun data(): List<WebhookListResponse> = response._data().getNullable("data") ?: emptyList()
+    fun data(): List<WebhookDetails> = response._data().getNullable("data") ?: emptyList()
 
     /**
      * Delegates to [WebhookListPageResponse], but gracefully handles missing data.
@@ -37,7 +37,7 @@ private constructor(
      */
     fun done(): Boolean? = response._done().getNullable("done")
 
-    override fun items(): List<WebhookListResponse> = data()
+    override fun items(): List<WebhookDetails> = data()
 
     override fun hasNextPage(): Boolean = items().isNotEmpty() && iterator() != null
 
@@ -49,7 +49,7 @@ private constructor(
 
     override fun nextPage(): WebhookListPage = service.list(nextPageParams())
 
-    fun autoPager(): AutoPager<WebhookListResponse> = AutoPager.from(this)
+    fun autoPager(): AutoPager<WebhookDetails> = AutoPager.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): WebhookListParams = params

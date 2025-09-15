@@ -22,12 +22,12 @@ internal class LicenseServiceAsyncTest {
                 .build()
         val licenseServiceAsync = client.licenses()
 
-        val licenseKeyInstance =
+        val response =
             licenseServiceAsync.activate(
                 LicenseActivateParams.builder().licenseKey("license_key").name("name").build()
             )
 
-        licenseKeyInstance.validate()
+        response.validate()
     }
 
     @Test

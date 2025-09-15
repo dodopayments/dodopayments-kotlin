@@ -7,8 +7,8 @@ import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponse
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.models.products.Product
+import com.dodopayments.api.models.products.ProductArchiveParams
 import com.dodopayments.api.models.products.ProductCreateParams
-import com.dodopayments.api.models.products.ProductDeleteParams
 import com.dodopayments.api.models.products.ProductListPageAsync
 import com.dodopayments.api.models.products.ProductListParams
 import com.dodopayments.api.models.products.ProductRetrieveParams
@@ -81,21 +81,21 @@ interface ProductServiceAsync {
     suspend fun list(requestOptions: RequestOptions): ProductListPageAsync =
         list(ProductListParams.none(), requestOptions)
 
-    suspend fun delete(
+    suspend fun archive(
         id: String,
-        params: ProductDeleteParams = ProductDeleteParams.none(),
+        params: ProductArchiveParams = ProductArchiveParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ) = delete(params.toBuilder().id(id).build(), requestOptions)
+    ) = archive(params.toBuilder().id(id).build(), requestOptions)
 
-    /** @see delete */
-    suspend fun delete(
-        params: ProductDeleteParams,
+    /** @see archive */
+    suspend fun archive(
+        params: ProductArchiveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     )
 
-    /** @see delete */
-    suspend fun delete(id: String, requestOptions: RequestOptions) =
-        delete(id, ProductDeleteParams.none(), requestOptions)
+    /** @see archive */
+    suspend fun archive(id: String, requestOptions: RequestOptions) =
+        archive(id, ProductArchiveParams.none(), requestOptions)
 
     suspend fun unarchive(
         id: String,
@@ -214,26 +214,26 @@ interface ProductServiceAsync {
 
         /**
          * Returns a raw HTTP response for `delete /products/{id}`, but is otherwise the same as
-         * [ProductServiceAsync.delete].
+         * [ProductServiceAsync.archive].
          */
         @MustBeClosed
-        suspend fun delete(
+        suspend fun archive(
             id: String,
-            params: ProductDeleteParams = ProductDeleteParams.none(),
+            params: ProductArchiveParams = ProductArchiveParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse = delete(params.toBuilder().id(id).build(), requestOptions)
+        ): HttpResponse = archive(params.toBuilder().id(id).build(), requestOptions)
 
-        /** @see delete */
+        /** @see archive */
         @MustBeClosed
-        suspend fun delete(
-            params: ProductDeleteParams,
+        suspend fun archive(
+            params: ProductArchiveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponse
 
-        /** @see delete */
+        /** @see archive */
         @MustBeClosed
-        suspend fun delete(id: String, requestOptions: RequestOptions): HttpResponse =
-            delete(id, ProductDeleteParams.none(), requestOptions)
+        suspend fun archive(id: String, requestOptions: RequestOptions): HttpResponse =
+            archive(id, ProductArchiveParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /products/{id}/unarchive`, but is otherwise the

@@ -27,6 +27,9 @@ import com.dodopayments.api.models.subscriptions.SubscriptionListPageAsync
 import com.dodopayments.api.models.subscriptions.SubscriptionListPageResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionListParams
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveParams
+import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryPageAsync
+import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryPageResponse
+import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryParams
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdateParams
 
 class SubscriptionServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -83,6 +86,13 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
     ): SubscriptionChargeResponse =
         // post /subscriptions/{subscription_id}/charge
         withRawResponse().charge(params, requestOptions).parse()
+
+    override suspend fun retrieveUsageHistory(
+        params: SubscriptionRetrieveUsageHistoryParams,
+        requestOptions: RequestOptions,
+    ): SubscriptionRetrieveUsageHistoryPageAsync =
+        // get /subscriptions/{subscription_id}/usage-history
+        withRawResponse().retrieveUsageHistory(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         SubscriptionServiceAsync.WithRawResponse {
@@ -271,6 +281,44 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
                         if (requestOptions.responseValidation!!) {
                             it.validate()
                         }
+                    }
+            }
+        }
+
+        private val retrieveUsageHistoryHandler:
+            Handler<SubscriptionRetrieveUsageHistoryPageResponse> =
+            jsonHandler<SubscriptionRetrieveUsageHistoryPageResponse>(clientOptions.jsonMapper)
+
+        override suspend fun retrieveUsageHistory(
+            params: SubscriptionRetrieveUsageHistoryParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<SubscriptionRetrieveUsageHistoryPageAsync> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("subscriptionId", params.subscriptionId())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("subscriptions", params._pathParam(0), "usage-history")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { retrieveUsageHistoryHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+                    .let {
+                        SubscriptionRetrieveUsageHistoryPageAsync.builder()
+                            .service(SubscriptionServiceAsyncImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
                     }
             }
         }

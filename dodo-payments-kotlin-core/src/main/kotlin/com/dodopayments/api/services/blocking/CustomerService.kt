@@ -12,6 +12,7 @@ import com.dodopayments.api.models.customers.CustomerListParams
 import com.dodopayments.api.models.customers.CustomerRetrieveParams
 import com.dodopayments.api.models.customers.CustomerUpdateParams
 import com.dodopayments.api.services.blocking.customers.CustomerPortalService
+import com.dodopayments.api.services.blocking.customers.WalletService
 import com.google.errorprone.annotations.MustBeClosed
 
 interface CustomerService {
@@ -29,6 +30,8 @@ interface CustomerService {
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): CustomerService
 
     fun customerPortal(): CustomerPortalService
+
+    fun wallets(): WalletService
 
     fun create(
         params: CustomerCreateParams,
@@ -87,6 +90,8 @@ interface CustomerService {
         fun withOptions(modifier: (ClientOptions.Builder) -> Unit): CustomerService.WithRawResponse
 
         fun customerPortal(): CustomerPortalService.WithRawResponse
+
+        fun wallets(): WalletService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /customers`, but is otherwise the same as

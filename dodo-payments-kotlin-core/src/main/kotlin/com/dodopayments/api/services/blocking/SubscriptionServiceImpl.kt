@@ -27,6 +27,9 @@ import com.dodopayments.api.models.subscriptions.SubscriptionListPage
 import com.dodopayments.api.models.subscriptions.SubscriptionListPageResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionListParams
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveParams
+import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryPage
+import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryPageResponse
+import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryParams
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdateParams
 
 class SubscriptionServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -80,6 +83,13 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
     ): SubscriptionChargeResponse =
         // post /subscriptions/{subscription_id}/charge
         withRawResponse().charge(params, requestOptions).parse()
+
+    override fun retrieveUsageHistory(
+        params: SubscriptionRetrieveUsageHistoryParams,
+        requestOptions: RequestOptions,
+    ): SubscriptionRetrieveUsageHistoryPage =
+        // get /subscriptions/{subscription_id}/usage-history
+        withRawResponse().retrieveUsageHistory(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         SubscriptionService.WithRawResponse {
@@ -268,6 +278,44 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                         if (requestOptions.responseValidation!!) {
                             it.validate()
                         }
+                    }
+            }
+        }
+
+        private val retrieveUsageHistoryHandler:
+            Handler<SubscriptionRetrieveUsageHistoryPageResponse> =
+            jsonHandler<SubscriptionRetrieveUsageHistoryPageResponse>(clientOptions.jsonMapper)
+
+        override fun retrieveUsageHistory(
+            params: SubscriptionRetrieveUsageHistoryParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<SubscriptionRetrieveUsageHistoryPage> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("subscriptionId", params.subscriptionId())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("subscriptions", params._pathParam(0), "usage-history")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { retrieveUsageHistoryHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+                    .let {
+                        SubscriptionRetrieveUsageHistoryPage.builder()
+                            .service(SubscriptionServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
                     }
             }
         }

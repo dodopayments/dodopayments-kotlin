@@ -14,14 +14,15 @@ private constructor(
     private val service: RefundServiceAsync,
     private val params: RefundListParams,
     private val response: RefundListPageResponse,
-) : PageAsync<Refund> {
+) : PageAsync<RefundListResponse> {
 
     /**
      * Delegates to [RefundListPageResponse], but gracefully handles missing data.
      *
      * @see RefundListPageResponse.items
      */
-    override fun items(): List<Refund> = response._items().getNullable("items") ?: emptyList()
+    override fun items(): List<RefundListResponse> =
+        response._items().getNullable("items") ?: emptyList()
 
     override fun hasNextPage(): Boolean = items().isNotEmpty()
 
@@ -32,7 +33,7 @@ private constructor(
 
     override suspend fun nextPage(): RefundListPageAsync = service.list(nextPageParams())
 
-    fun autoPager(): AutoPagerAsync<Refund> = AutoPagerAsync.from(this)
+    fun autoPager(): AutoPagerAsync<RefundListResponse> = AutoPagerAsync.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): RefundListParams = params

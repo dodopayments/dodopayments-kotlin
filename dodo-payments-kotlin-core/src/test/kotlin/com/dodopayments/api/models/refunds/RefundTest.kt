@@ -4,6 +4,7 @@ package com.dodopayments.api.models.refunds
 
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.payments.CustomerLimitedDetails
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -17,6 +18,13 @@ internal class RefundTest {
             Refund.builder()
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .customer(
+                    CustomerLimitedDetails.builder()
+                        .customerId("customer_id")
+                        .email("email")
+                        .name("name")
+                        .build()
+                )
                 .isPartial(true)
                 .paymentId("payment_id")
                 .refundId("refund_id")
@@ -28,6 +36,14 @@ internal class RefundTest {
 
         assertThat(refund.businessId()).isEqualTo("business_id")
         assertThat(refund.createdAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(refund.customer())
+            .isEqualTo(
+                CustomerLimitedDetails.builder()
+                    .customerId("customer_id")
+                    .email("email")
+                    .name("name")
+                    .build()
+            )
         assertThat(refund.isPartial()).isEqualTo(true)
         assertThat(refund.paymentId()).isEqualTo("payment_id")
         assertThat(refund.refundId()).isEqualTo("refund_id")
@@ -44,6 +60,13 @@ internal class RefundTest {
             Refund.builder()
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .customer(
+                    CustomerLimitedDetails.builder()
+                        .customerId("customer_id")
+                        .email("email")
+                        .name("name")
+                        .build()
+                )
                 .isPartial(true)
                 .paymentId("payment_id")
                 .refundId("refund_id")

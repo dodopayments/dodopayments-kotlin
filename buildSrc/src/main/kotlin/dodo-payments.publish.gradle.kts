@@ -31,7 +31,7 @@ configure<MavenPublishBaseExtension> {
     pom {
         name.set("public")
         description.set("An SDK library for Dodo Payments")
-        url.set("https://docs.dodopayments.com")
+        url.set("https://docs.dodopayments.com/api-reference/introduction")
 
         licenses {
             license {
@@ -42,7 +42,7 @@ configure<MavenPublishBaseExtension> {
         developers {
             developer {
                 name.set("Dodo Payments")
-                email.set("founders@dodopayments.com")
+                email.set("support@dodopayments.com")
             }
         }
 

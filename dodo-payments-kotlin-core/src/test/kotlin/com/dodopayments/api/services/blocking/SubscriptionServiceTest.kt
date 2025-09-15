@@ -11,6 +11,7 @@ import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.PaymentMethodTypes
 import com.dodopayments.api.models.subscriptions.AttachAddon
+import com.dodopayments.api.models.subscriptions.OnDemandSubscription
 import com.dodopayments.api.models.subscriptions.SubscriptionChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeParams
 import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
@@ -57,7 +58,7 @@ internal class SubscriptionServiceTest {
                             .build()
                     )
                     .onDemand(
-                        SubscriptionCreateParams.OnDemand.builder()
+                        OnDemandSubscription.builder()
                             .mandateOnly(true)
                             .adaptiveCurrencyFeesInclusive(true)
                             .productCurrency(Currency.AED)
@@ -123,6 +124,7 @@ internal class SubscriptionServiceTest {
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
+                    .nextBillingDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .status(SubscriptionStatus.PENDING)
                     .taxId("tax_id")
                     .build()
@@ -182,6 +184,12 @@ internal class SubscriptionServiceTest {
                     .subscriptionId("subscription_id")
                     .productPrice(0)
                     .adaptiveCurrencyFeesInclusive(true)
+                    .customerBalanceConfig(
+                        SubscriptionChargeParams.CustomerBalanceConfig.builder()
+                            .allowCustomerCreditsPurchase(true)
+                            .allowCustomerCreditsUsage(true)
+                            .build()
+                    )
                     .metadata(
                         SubscriptionChargeParams.Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -193,5 +201,19 @@ internal class SubscriptionServiceTest {
             )
 
         response.validate()
+    }
+
+    @Test
+    fun retrieveUsageHistory() {
+        val client =
+            DodoPaymentsOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val subscriptionService = client.subscriptions()
+
+        val page = subscriptionService.retrieveUsageHistory("subscription_id")
+
+        page.response().validate()
     }
 }

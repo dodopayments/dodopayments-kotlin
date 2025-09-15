@@ -15,6 +15,12 @@ internal class SubscriptionChargeParamsTest {
             .subscriptionId("subscription_id")
             .productPrice(0)
             .adaptiveCurrencyFeesInclusive(true)
+            .customerBalanceConfig(
+                SubscriptionChargeParams.CustomerBalanceConfig.builder()
+                    .allowCustomerCreditsPurchase(true)
+                    .allowCustomerCreditsUsage(true)
+                    .build()
+            )
             .metadata(
                 SubscriptionChargeParams.Metadata.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -45,6 +51,12 @@ internal class SubscriptionChargeParamsTest {
                 .subscriptionId("subscription_id")
                 .productPrice(0)
                 .adaptiveCurrencyFeesInclusive(true)
+                .customerBalanceConfig(
+                    SubscriptionChargeParams.CustomerBalanceConfig.builder()
+                        .allowCustomerCreditsPurchase(true)
+                        .allowCustomerCreditsUsage(true)
+                        .build()
+                )
                 .metadata(
                     SubscriptionChargeParams.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -58,6 +70,13 @@ internal class SubscriptionChargeParamsTest {
 
         assertThat(body.productPrice()).isEqualTo(0)
         assertThat(body.adaptiveCurrencyFeesInclusive()).isEqualTo(true)
+        assertThat(body.customerBalanceConfig())
+            .isEqualTo(
+                SubscriptionChargeParams.CustomerBalanceConfig.builder()
+                    .allowCustomerCreditsPurchase(true)
+                    .allowCustomerCreditsUsage(true)
+                    .build()
+            )
         assertThat(body.metadata())
             .isEqualTo(
                 SubscriptionChargeParams.Metadata.builder()

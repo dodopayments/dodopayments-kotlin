@@ -22,12 +22,12 @@ internal class LicenseServiceTest {
                 .build()
         val licenseService = client.licenses()
 
-        val licenseKeyInstance =
+        val response =
             licenseService.activate(
                 LicenseActivateParams.builder().licenseKey("license_key").name("name").build()
             )
 
-        licenseKeyInstance.validate()
+        response.validate()
     }
 
     @Test

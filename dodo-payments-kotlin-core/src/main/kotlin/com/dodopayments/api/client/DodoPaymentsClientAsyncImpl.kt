@@ -8,6 +8,8 @@ import com.dodopayments.api.services.async.AddonServiceAsync
 import com.dodopayments.api.services.async.AddonServiceAsyncImpl
 import com.dodopayments.api.services.async.BrandServiceAsync
 import com.dodopayments.api.services.async.BrandServiceAsyncImpl
+import com.dodopayments.api.services.async.CheckoutSessionServiceAsync
+import com.dodopayments.api.services.async.CheckoutSessionServiceAsyncImpl
 import com.dodopayments.api.services.async.CustomerServiceAsync
 import com.dodopayments.api.services.async.CustomerServiceAsyncImpl
 import com.dodopayments.api.services.async.DiscountServiceAsync
@@ -22,6 +24,8 @@ import com.dodopayments.api.services.async.LicenseKeyServiceAsync
 import com.dodopayments.api.services.async.LicenseKeyServiceAsyncImpl
 import com.dodopayments.api.services.async.LicenseServiceAsync
 import com.dodopayments.api.services.async.LicenseServiceAsyncImpl
+import com.dodopayments.api.services.async.MeterServiceAsync
+import com.dodopayments.api.services.async.MeterServiceAsyncImpl
 import com.dodopayments.api.services.async.MiscServiceAsync
 import com.dodopayments.api.services.async.MiscServiceAsyncImpl
 import com.dodopayments.api.services.async.PaymentServiceAsync
@@ -34,12 +38,12 @@ import com.dodopayments.api.services.async.RefundServiceAsync
 import com.dodopayments.api.services.async.RefundServiceAsyncImpl
 import com.dodopayments.api.services.async.SubscriptionServiceAsync
 import com.dodopayments.api.services.async.SubscriptionServiceAsyncImpl
+import com.dodopayments.api.services.async.UsageEventServiceAsync
+import com.dodopayments.api.services.async.UsageEventServiceAsyncImpl
 import com.dodopayments.api.services.async.WebhookEventServiceAsync
 import com.dodopayments.api.services.async.WebhookEventServiceAsyncImpl
 import com.dodopayments.api.services.async.WebhookServiceAsync
 import com.dodopayments.api.services.async.WebhookServiceAsyncImpl
-import com.dodopayments.api.services.async.YourWebhookUrlServiceAsync
-import com.dodopayments.api.services.async.YourWebhookUrlServiceAsyncImpl
 
 class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
     DodoPaymentsClientAsync {
@@ -57,6 +61,10 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
 
     private val withRawResponse: DodoPaymentsClientAsync.WithRawResponse by lazy {
         WithRawResponseImpl(clientOptions)
+    }
+
+    private val checkoutSessions: CheckoutSessionServiceAsync by lazy {
+        CheckoutSessionServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
     private val payments: PaymentServiceAsync by lazy {
@@ -125,8 +133,12 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
         WebhookServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
-    private val yourWebhookUrl: YourWebhookUrlServiceAsync by lazy {
-        YourWebhookUrlServiceAsyncImpl(clientOptionsWithUserAgent)
+    private val usageEvents: UsageEventServiceAsync by lazy {
+        UsageEventServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
+
+    private val meters: MeterServiceAsync by lazy {
+        MeterServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
     override fun sync(): DodoPaymentsClient = sync
@@ -135,6 +147,8 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
 
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): DodoPaymentsClientAsync =
         DodoPaymentsClientAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
+    override fun checkoutSessions(): CheckoutSessionServiceAsync = checkoutSessions
 
     override fun payments(): PaymentServiceAsync = payments
 
@@ -170,12 +184,18 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
 
     override fun webhooks(): WebhookServiceAsync = webhooks
 
-    override fun yourWebhookUrl(): YourWebhookUrlServiceAsync = yourWebhookUrl
+    override fun usageEvents(): UsageEventServiceAsync = usageEvents
+
+    override fun meters(): MeterServiceAsync = meters
 
     override fun close() = clientOptions.httpClient.close()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         DodoPaymentsClientAsync.WithRawResponse {
+
+        private val checkoutSessions: CheckoutSessionServiceAsync.WithRawResponse by lazy {
+            CheckoutSessionServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
 
         private val payments: PaymentServiceAsync.WithRawResponse by lazy {
             PaymentServiceAsyncImpl.WithRawResponseImpl(clientOptions)
@@ -245,8 +265,12 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
             WebhookServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
-        private val yourWebhookUrl: YourWebhookUrlServiceAsync.WithRawResponse by lazy {
-            YourWebhookUrlServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        private val usageEvents: UsageEventServiceAsync.WithRawResponse by lazy {
+            UsageEventServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val meters: MeterServiceAsync.WithRawResponse by lazy {
+            MeterServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
         override fun withOptions(
@@ -255,6 +279,9 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
             DodoPaymentsClientAsyncImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier).build()
             )
+
+        override fun checkoutSessions(): CheckoutSessionServiceAsync.WithRawResponse =
+            checkoutSessions
 
         override fun payments(): PaymentServiceAsync.WithRawResponse = payments
 
@@ -291,6 +318,8 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
 
         override fun webhooks(): WebhookServiceAsync.WithRawResponse = webhooks
 
-        override fun yourWebhookUrl(): YourWebhookUrlServiceAsync.WithRawResponse = yourWebhookUrl
+        override fun usageEvents(): UsageEventServiceAsync.WithRawResponse = usageEvents
+
+        override fun meters(): MeterServiceAsync.WithRawResponse = meters
     }
 }

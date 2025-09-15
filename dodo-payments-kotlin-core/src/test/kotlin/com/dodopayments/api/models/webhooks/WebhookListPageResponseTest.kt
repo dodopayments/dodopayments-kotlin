@@ -15,12 +15,12 @@ internal class WebhookListPageResponseTest {
         val webhookListPageResponse =
             WebhookListPageResponse.builder()
                 .addData(
-                    WebhookListResponse.builder()
+                    WebhookDetails.builder()
                         .id("id")
                         .createdAt("created_at")
                         .description("description")
                         .metadata(
-                            WebhookListResponse.Metadata.builder()
+                            WebhookDetails.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -38,12 +38,12 @@ internal class WebhookListPageResponseTest {
 
         assertThat(webhookListPageResponse.data())
             .containsExactly(
-                WebhookListResponse.builder()
+                WebhookDetails.builder()
                     .id("id")
                     .createdAt("created_at")
                     .description("description")
                     .metadata(
-                        WebhookListResponse.Metadata.builder()
+                        WebhookDetails.Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -65,12 +65,12 @@ internal class WebhookListPageResponseTest {
         val webhookListPageResponse =
             WebhookListPageResponse.builder()
                 .addData(
-                    WebhookListResponse.builder()
+                    WebhookDetails.builder()
                         .id("id")
                         .createdAt("created_at")
                         .description("description")
                         .metadata(
-                            WebhookListResponse.Metadata.builder()
+                            WebhookDetails.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )

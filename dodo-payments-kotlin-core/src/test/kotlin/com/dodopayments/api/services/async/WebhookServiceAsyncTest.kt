@@ -23,7 +23,7 @@ internal class WebhookServiceAsyncTest {
                 .build()
         val webhookServiceAsync = client.webhooks()
 
-        val webhook =
+        val webhookDetails =
             webhookServiceAsync.create(
                 WebhookCreateParams.builder()
                     .url("url")
@@ -45,7 +45,7 @@ internal class WebhookServiceAsyncTest {
                     .build()
             )
 
-        webhook.validate()
+        webhookDetails.validate()
     }
 
     @Test
@@ -57,9 +57,9 @@ internal class WebhookServiceAsyncTest {
                 .build()
         val webhookServiceAsync = client.webhooks()
 
-        val webhook = webhookServiceAsync.retrieve("webhook_id")
+        val webhookDetails = webhookServiceAsync.retrieve("webhook_id")
 
-        webhook.validate()
+        webhookDetails.validate()
     }
 
     @Test
@@ -71,7 +71,7 @@ internal class WebhookServiceAsyncTest {
                 .build()
         val webhookServiceAsync = client.webhooks()
 
-        val webhook =
+        val webhookDetails =
             webhookServiceAsync.update(
                 WebhookUpdateParams.builder()
                     .webhookId("webhook_id")
@@ -88,7 +88,7 @@ internal class WebhookServiceAsyncTest {
                     .build()
             )
 
-        webhook.validate()
+        webhookDetails.validate()
     }
 
     @Test
@@ -115,5 +115,19 @@ internal class WebhookServiceAsyncTest {
         val webhookServiceAsync = client.webhooks()
 
         webhookServiceAsync.delete("webhook_id")
+    }
+
+    @Test
+    suspend fun retrieveSecret() {
+        val client =
+            DodoPaymentsOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val webhookServiceAsync = client.webhooks()
+
+        val response = webhookServiceAsync.retrieveSecret("webhook_id")
+
+        response.validate()
     }
 }

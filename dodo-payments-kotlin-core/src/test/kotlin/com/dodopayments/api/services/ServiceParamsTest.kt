@@ -5,16 +5,16 @@ package com.dodopayments.api.services
 import com.dodopayments.api.client.DodoPaymentsClient
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
 import com.dodopayments.api.core.JsonValue
+import com.dodopayments.api.models.checkoutsessions.CheckoutSessionCreateParams
+import com.dodopayments.api.models.checkoutsessions.CheckoutSessionRequest
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.payments.AttachExistingCustomer
-import com.dodopayments.api.models.payments.BillingAddress
-import com.dodopayments.api.models.payments.OneTimeProductCartItem
-import com.dodopayments.api.models.payments.PaymentCreateParams
 import com.dodopayments.api.models.payments.PaymentMethodTypes
+import com.dodopayments.api.models.subscriptions.AttachAddon
+import com.dodopayments.api.models.subscriptions.OnDemandSubscription
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
-import com.github.tomakehurst.wiremock.client.WireMock.matchingJsonPath
 import com.github.tomakehurst.wiremock.client.WireMock.ok
 import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor
@@ -43,43 +43,80 @@ internal class ServiceParamsTest {
 
     @Test
     fun create() {
-        val paymentService = client.payments()
+        val checkoutSessionService = client.checkoutSessions()
         stubFor(post(anyUrl()).willReturn(ok("{}")))
 
-        paymentService.create(
-            PaymentCreateParams.builder()
-                .billing(
-                    BillingAddress.builder()
-                        .city("city")
-                        .country(CountryCode.AF)
-                        .state("state")
-                        .street("street")
-                        .zipcode("zipcode")
+        checkoutSessionService.create(
+            CheckoutSessionCreateParams.builder()
+                .checkoutSessionRequest(
+                    CheckoutSessionRequest.builder()
+                        .addProductCart(
+                            CheckoutSessionRequest.ProductCart.builder()
+                                .productId("product_id")
+                                .quantity(0)
+                                .addAddon(
+                                    AttachAddon.builder().addonId("addon_id").quantity(0).build()
+                                )
+                                .amount(0)
+                                .build()
+                        )
+                        .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                        .billingAddress(
+                            CheckoutSessionRequest.BillingAddress.builder()
+                                .country(CountryCode.AF)
+                                .city("city")
+                                .state("state")
+                                .street("street")
+                                .zipcode("zipcode")
+                                .build()
+                        )
+                        .billingCurrency(Currency.AED)
+                        .confirm(true)
+                        .customer(
+                            AttachExistingCustomer.builder().customerId("customer_id").build()
+                        )
+                        .customization(
+                            CheckoutSessionRequest.Customization.builder()
+                                .showOnDemandTag(true)
+                                .showOrderDetails(true)
+                                .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                .build()
+                        )
+                        .discountCode("discount_code")
+                        .featureFlags(
+                            CheckoutSessionRequest.FeatureFlags.builder()
+                                .allowCurrencySelection(true)
+                                .allowDiscountCode(true)
+                                .allowPhoneNumberCollection(true)
+                                .allowTaxId(true)
+                                .alwaysCreateNewCustomer(true)
+                                .build()
+                        )
+                        .metadata(
+                            CheckoutSessionRequest.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .returnUrl("return_url")
+                        .showSavedPaymentMethods(true)
+                        .subscriptionData(
+                            CheckoutSessionRequest.SubscriptionData.builder()
+                                .onDemand(
+                                    OnDemandSubscription.builder()
+                                        .mandateOnly(true)
+                                        .adaptiveCurrencyFeesInclusive(true)
+                                        .productCurrency(Currency.AED)
+                                        .productDescription("product_description")
+                                        .productPrice(0)
+                                        .build()
+                                )
+                                .trialPeriodDays(0)
+                                .build()
+                        )
                         .build()
                 )
-                .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
-                .addProductCart(
-                    OneTimeProductCartItem.builder()
-                        .productId("product_id")
-                        .quantity(0)
-                        .amount(0)
-                        .build()
-                )
-                .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
-                .billingCurrency(Currency.AED)
-                .discountCode("discount_code")
-                .metadata(
-                    PaymentCreateParams.Metadata.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("string"))
-                        .build()
-                )
-                .paymentLink(true)
-                .returnUrl("return_url")
-                .showSavedPaymentMethods(true)
-                .taxId("tax_id")
                 .putAdditionalHeader("Secret-Header", "42")
                 .putAdditionalQueryParam("secret_query_param", "42")
-                .putAdditionalBodyProperty("secretProperty", JsonValue.from("42"))
                 .build()
         )
 
@@ -87,7 +124,6 @@ internal class ServiceParamsTest {
             postRequestedFor(anyUrl())
                 .withHeader("Secret-Header", equalTo("42"))
                 .withQueryParam("secret_query_param", equalTo("42"))
-                .withRequestBody(matchingJsonPath("$.secretProperty", equalTo("42")))
         )
     }
 }

@@ -18,8 +18,8 @@ import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepare
 import com.dodopayments.api.models.products.Product
+import com.dodopayments.api.models.products.ProductArchiveParams
 import com.dodopayments.api.models.products.ProductCreateParams
-import com.dodopayments.api.models.products.ProductDeleteParams
 import com.dodopayments.api.models.products.ProductListPage
 import com.dodopayments.api.models.products.ProductListPageResponse
 import com.dodopayments.api.models.products.ProductListParams
@@ -64,9 +64,9 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
         // get /products
         withRawResponse().list(params, requestOptions).parse()
 
-    override fun delete(params: ProductDeleteParams, requestOptions: RequestOptions) {
+    override fun archive(params: ProductArchiveParams, requestOptions: RequestOptions) {
         // delete /products/{id}
-        withRawResponse().delete(params, requestOptions)
+        withRawResponse().archive(params, requestOptions)
     }
 
     override fun unarchive(params: ProductUnarchiveParams, requestOptions: RequestOptions) {
@@ -215,10 +215,10 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
             }
         }
 
-        private val deleteHandler: Handler<Void?> = emptyHandler()
+        private val archiveHandler: Handler<Void?> = emptyHandler()
 
-        override fun delete(
-            params: ProductDeleteParams,
+        override fun archive(
+            params: ProductArchiveParams,
             requestOptions: RequestOptions,
         ): HttpResponse {
             // We check here instead of in the params builder because this can be specified
@@ -235,7 +235,7 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
-                response.use { deleteHandler.handle(it) }
+                response.use { archiveHandler.handle(it) }
             }
         }
 
