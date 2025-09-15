@@ -13,7 +13,6 @@ import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.CustomerLimitedDetails
 import com.dodopayments.api.models.payments.IntentStatus
 import com.dodopayments.api.models.payments.Payment
-import com.dodopayments.api.models.refunds.Refund
 import com.dodopayments.api.models.refunds.RefundStatus
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
@@ -70,7 +69,7 @@ internal class WebhookPayloadTest {
                         )
                         .paymentId("payment_id")
                         .addRefund(
-                            Refund.builder()
+                            Payment.Refund.builder()
                                 .businessId("business_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .isPartial(true)
@@ -89,6 +88,7 @@ internal class WebhookPayloadTest {
                         .cardLastFour("card_last_four")
                         .cardNetwork("card_network")
                         .cardType("card_type")
+                        .checkoutSessionId("checkout_session_id")
                         .discountId("discount_id")
                         .errorCode("error_code")
                         .errorMessage("error_message")
@@ -159,7 +159,7 @@ internal class WebhookPayloadTest {
                         )
                         .paymentId("payment_id")
                         .addRefund(
-                            Refund.builder()
+                            Payment.Refund.builder()
                                 .businessId("business_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .isPartial(true)
@@ -178,6 +178,7 @@ internal class WebhookPayloadTest {
                         .cardLastFour("card_last_four")
                         .cardNetwork("card_network")
                         .cardType("card_type")
+                        .checkoutSessionId("checkout_session_id")
                         .discountId("discount_id")
                         .errorCode("error_code")
                         .errorMessage("error_message")
@@ -253,7 +254,7 @@ internal class WebhookPayloadTest {
                         )
                         .paymentId("payment_id")
                         .addRefund(
-                            Refund.builder()
+                            Payment.Refund.builder()
                                 .businessId("business_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .isPartial(true)
@@ -272,6 +273,7 @@ internal class WebhookPayloadTest {
                         .cardLastFour("card_last_four")
                         .cardNetwork("card_network")
                         .cardType("card_type")
+                        .checkoutSessionId("checkout_session_id")
                         .discountId("discount_id")
                         .errorCode("error_code")
                         .errorMessage("error_message")

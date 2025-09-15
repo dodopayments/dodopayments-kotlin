@@ -18,8 +18,8 @@ import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepareAsync
 import com.dodopayments.api.models.products.Product
+import com.dodopayments.api.models.products.ProductArchiveParams
 import com.dodopayments.api.models.products.ProductCreateParams
-import com.dodopayments.api.models.products.ProductDeleteParams
 import com.dodopayments.api.models.products.ProductListPageAsync
 import com.dodopayments.api.models.products.ProductListPageResponse
 import com.dodopayments.api.models.products.ProductListParams
@@ -73,9 +73,9 @@ class ProductServiceAsyncImpl internal constructor(private val clientOptions: Cl
         // get /products
         withRawResponse().list(params, requestOptions).parse()
 
-    override suspend fun delete(params: ProductDeleteParams, requestOptions: RequestOptions) {
+    override suspend fun archive(params: ProductArchiveParams, requestOptions: RequestOptions) {
         // delete /products/{id}
-        withRawResponse().delete(params, requestOptions)
+        withRawResponse().archive(params, requestOptions)
     }
 
     override suspend fun unarchive(params: ProductUnarchiveParams, requestOptions: RequestOptions) {
@@ -224,10 +224,10 @@ class ProductServiceAsyncImpl internal constructor(private val clientOptions: Cl
             }
         }
 
-        private val deleteHandler: Handler<Void?> = emptyHandler()
+        private val archiveHandler: Handler<Void?> = emptyHandler()
 
-        override suspend fun delete(
-            params: ProductDeleteParams,
+        override suspend fun archive(
+            params: ProductArchiveParams,
             requestOptions: RequestOptions,
         ): HttpResponse {
             // We check here instead of in the params builder because this can be specified
@@ -244,7 +244,7 @@ class ProductServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
             return errorHandler.handle(response).parseable {
-                response.use { deleteHandler.handle(it) }
+                response.use { archiveHandler.handle(it) }
             }
         }
 

@@ -39,7 +39,7 @@ internal class SubscriptionCreateParamsTest {
                     .build()
             )
             .onDemand(
-                SubscriptionCreateParams.OnDemand.builder()
+                OnDemandSubscription.builder()
                     .mandateOnly(true)
                     .adaptiveCurrencyFeesInclusive(true)
                     .productCurrency(Currency.AED)
@@ -81,7 +81,7 @@ internal class SubscriptionCreateParamsTest {
                         .build()
                 )
                 .onDemand(
-                    SubscriptionCreateParams.OnDemand.builder()
+                    OnDemandSubscription.builder()
                         .mandateOnly(true)
                         .adaptiveCurrencyFeesInclusive(true)
                         .productCurrency(Currency.AED)
@@ -129,7 +129,7 @@ internal class SubscriptionCreateParamsTest {
             )
         assertThat(body.onDemand())
             .isEqualTo(
-                SubscriptionCreateParams.OnDemand.builder()
+                OnDemandSubscription.builder()
                     .mandateOnly(true)
                     .adaptiveCurrencyFeesInclusive(true)
                     .productCurrency(Currency.AED)

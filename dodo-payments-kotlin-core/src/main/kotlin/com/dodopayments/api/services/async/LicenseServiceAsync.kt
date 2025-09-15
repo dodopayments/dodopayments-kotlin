@@ -6,8 +6,8 @@ import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponse
 import com.dodopayments.api.core.http.HttpResponseFor
-import com.dodopayments.api.models.licensekeyinstances.LicenseKeyInstance
 import com.dodopayments.api.models.licenses.LicenseActivateParams
+import com.dodopayments.api.models.licenses.LicenseActivateResponse
 import com.dodopayments.api.models.licenses.LicenseDeactivateParams
 import com.dodopayments.api.models.licenses.LicenseValidateParams
 import com.dodopayments.api.models.licenses.LicenseValidateResponse
@@ -30,7 +30,7 @@ interface LicenseServiceAsync {
     suspend fun activate(
         params: LicenseActivateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): LicenseKeyInstance
+    ): LicenseActivateResponse
 
     suspend fun deactivate(
         params: LicenseDeactivateParams,
@@ -64,7 +64,7 @@ interface LicenseServiceAsync {
         suspend fun activate(
             params: LicenseActivateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<LicenseKeyInstance>
+        ): HttpResponseFor<LicenseActivateResponse>
 
         /**
          * Returns a raw HTTP response for `post /licenses/deactivate`, but is otherwise the same as

@@ -21,7 +21,7 @@ internal class PriceTest {
         val oneTime =
             Price.OneTimePrice.builder()
                 .currency(Currency.AED)
-                .discount(0.0f)
+                .discount(0L)
                 .price(0)
                 .purchasingPowerParity(true)
                 .type(Price.OneTimePrice.Type.ONE_TIME_PRICE)
@@ -34,6 +34,7 @@ internal class PriceTest {
 
         assertThat(price.oneTime()).isEqualTo(oneTime)
         assertThat(price.recurring()).isNull()
+        assertThat(price.usageBased()).isNull()
     }
 
     @Test
@@ -43,7 +44,7 @@ internal class PriceTest {
             Price.ofOneTime(
                 Price.OneTimePrice.builder()
                     .currency(Currency.AED)
-                    .discount(0.0f)
+                    .discount(0L)
                     .price(0)
                     .purchasingPowerParity(true)
                     .type(Price.OneTimePrice.Type.ONE_TIME_PRICE)
@@ -64,7 +65,7 @@ internal class PriceTest {
         val recurring =
             Price.RecurringPrice.builder()
                 .currency(Currency.AED)
-                .discount(0.0f)
+                .discount(0L)
                 .paymentFrequencyCount(0)
                 .paymentFrequencyInterval(TimeInterval.DAY)
                 .price(0)
@@ -80,6 +81,7 @@ internal class PriceTest {
 
         assertThat(price.oneTime()).isNull()
         assertThat(price.recurring()).isEqualTo(recurring)
+        assertThat(price.usageBased()).isNull()
     }
 
     @Test
@@ -89,7 +91,7 @@ internal class PriceTest {
             Price.ofRecurring(
                 Price.RecurringPrice.builder()
                     .currency(Currency.AED)
-                    .discount(0.0f)
+                    .discount(0L)
                     .paymentFrequencyCount(0)
                     .paymentFrequencyInterval(TimeInterval.DAY)
                     .price(0)
@@ -99,6 +101,74 @@ internal class PriceTest {
                     .type(Price.RecurringPrice.Type.RECURRING_PRICE)
                     .taxInclusive(true)
                     .trialPeriodDays(0)
+                    .build()
+            )
+
+        val roundtrippedPrice =
+            jsonMapper.readValue(jsonMapper.writeValueAsString(price), jacksonTypeRef<Price>())
+
+        assertThat(roundtrippedPrice).isEqualTo(price)
+    }
+
+    @Test
+    fun ofUsageBased() {
+        val usageBased =
+            Price.UsageBasedPrice.builder()
+                .currency(Currency.AED)
+                .discount(0L)
+                .fixedPrice(0)
+                .paymentFrequencyCount(0)
+                .paymentFrequencyInterval(TimeInterval.DAY)
+                .purchasingPowerParity(true)
+                .subscriptionPeriodCount(0)
+                .subscriptionPeriodInterval(TimeInterval.DAY)
+                .type(Price.UsageBasedPrice.Type.USAGE_BASED_PRICE)
+                .addMeter(
+                    AddMeterToPrice.builder()
+                        .meterId("meter_id")
+                        .pricePerUnit("10.50")
+                        .description("description")
+                        .freeThreshold(0L)
+                        .measurementUnit("measurement_unit")
+                        .name("name")
+                        .build()
+                )
+                .taxInclusive(true)
+                .build()
+
+        val price = Price.ofUsageBased(usageBased)
+
+        assertThat(price.oneTime()).isNull()
+        assertThat(price.recurring()).isNull()
+        assertThat(price.usageBased()).isEqualTo(usageBased)
+    }
+
+    @Test
+    fun ofUsageBasedRoundtrip() {
+        val jsonMapper = jsonMapper()
+        val price =
+            Price.ofUsageBased(
+                Price.UsageBasedPrice.builder()
+                    .currency(Currency.AED)
+                    .discount(0L)
+                    .fixedPrice(0)
+                    .paymentFrequencyCount(0)
+                    .paymentFrequencyInterval(TimeInterval.DAY)
+                    .purchasingPowerParity(true)
+                    .subscriptionPeriodCount(0)
+                    .subscriptionPeriodInterval(TimeInterval.DAY)
+                    .type(Price.UsageBasedPrice.Type.USAGE_BASED_PRICE)
+                    .addMeter(
+                        AddMeterToPrice.builder()
+                            .meterId("meter_id")
+                            .pricePerUnit("10.50")
+                            .description("description")
+                            .freeThreshold(0L)
+                            .measurementUnit("measurement_unit")
+                            .name("name")
+                            .build()
+                    )
+                    .taxInclusive(true)
                     .build()
             )
 

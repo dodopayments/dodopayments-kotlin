@@ -34,4 +34,19 @@ internal class PaymentServiceAsyncTest {
 
         assertThat(payment.body()).hasContent("abc")
     }
+
+    @Test
+    suspend fun retrieveRefund(wmRuntimeInfo: WireMockRuntimeInfo) {
+        val client =
+            DodoPaymentsOkHttpClientAsync.builder()
+                .baseUrl(wmRuntimeInfo.httpBaseUrl)
+                .bearerToken("My Bearer Token")
+                .build()
+        val paymentServiceAsync = client.invoices().payments()
+        stubFor(get(anyUrl()).willReturn(ok().withBody("abc")))
+
+        val response = paymentServiceAsync.retrieveRefund("refund_id")
+
+        assertThat(response.body()).hasContent("abc")
+    }
 }

@@ -560,6 +560,10 @@ private constructor(
         /** Alias for calling [priceDetail] with `Price.ofRecurring(recurring)`. */
         fun priceDetail(recurring: Price.RecurringPrice) = priceDetail(Price.ofRecurring(recurring))
 
+        /** Alias for calling [priceDetail] with `Price.ofUsageBased(usageBased)`. */
+        fun priceDetail(usageBased: Price.UsageBasedPrice) =
+            priceDetail(Price.ofUsageBased(usageBased))
+
         /** Indicates if the price is tax inclusive */
         fun taxInclusive(taxInclusive: Boolean?) = taxInclusive(JsonField.ofNullable(taxInclusive))
 

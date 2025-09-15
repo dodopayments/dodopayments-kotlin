@@ -25,6 +25,8 @@ import com.dodopayments.api.models.customers.CustomerRetrieveParams
 import com.dodopayments.api.models.customers.CustomerUpdateParams
 import com.dodopayments.api.services.async.customers.CustomerPortalServiceAsync
 import com.dodopayments.api.services.async.customers.CustomerPortalServiceAsyncImpl
+import com.dodopayments.api.services.async.customers.WalletServiceAsync
+import com.dodopayments.api.services.async.customers.WalletServiceAsyncImpl
 
 class CustomerServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     CustomerServiceAsync {
@@ -37,12 +39,16 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
         CustomerPortalServiceAsyncImpl(clientOptions)
     }
 
+    private val wallets: WalletServiceAsync by lazy { WalletServiceAsyncImpl(clientOptions) }
+
     override fun withRawResponse(): CustomerServiceAsync.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): CustomerServiceAsync =
         CustomerServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
 
     override fun customerPortal(): CustomerPortalServiceAsync = customerPortal
+
+    override fun wallets(): WalletServiceAsync = wallets
 
     override suspend fun create(
         params: CustomerCreateParams,
@@ -82,6 +88,10 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
             CustomerPortalServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val wallets: WalletServiceAsync.WithRawResponse by lazy {
+            WalletServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): CustomerServiceAsync.WithRawResponse =
@@ -90,6 +100,8 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
             )
 
         override fun customerPortal(): CustomerPortalServiceAsync.WithRawResponse = customerPortal
+
+        override fun wallets(): WalletServiceAsync.WithRawResponse = wallets
 
         private val createHandler: Handler<Customer> =
             jsonHandler<Customer>(clientOptions.jsonMapper)

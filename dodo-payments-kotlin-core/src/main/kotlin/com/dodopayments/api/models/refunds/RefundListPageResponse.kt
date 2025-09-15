@@ -19,27 +19,29 @@ import java.util.Objects
 
 class RefundListPageResponse
 private constructor(
-    private val items: JsonField<List<Refund>>,
+    private val items: JsonField<List<RefundListResponse>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("items") @ExcludeMissing items: JsonField<List<Refund>> = JsonMissing.of()
+        @JsonProperty("items")
+        @ExcludeMissing
+        items: JsonField<List<RefundListResponse>> = JsonMissing.of()
     ) : this(items, mutableMapOf())
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun items(): List<Refund> = items.getRequired("items")
+    fun items(): List<RefundListResponse> = items.getRequired("items")
 
     /**
      * Returns the raw JSON value of [items].
      *
      * Unlike [items], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("items") @ExcludeMissing fun _items(): JsonField<List<Refund>> = items
+    @JsonProperty("items") @ExcludeMissing fun _items(): JsonField<List<RefundListResponse>> = items
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -69,7 +71,7 @@ private constructor(
     /** A builder for [RefundListPageResponse]. */
     class Builder internal constructor() {
 
-        private var items: JsonField<MutableList<Refund>>? = null
+        private var items: JsonField<MutableList<RefundListResponse>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(refundListPageResponse: RefundListPageResponse) = apply {
@@ -77,25 +79,25 @@ private constructor(
             additionalProperties = refundListPageResponse.additionalProperties.toMutableMap()
         }
 
-        fun items(items: List<Refund>) = items(JsonField.of(items))
+        fun items(items: List<RefundListResponse>) = items(JsonField.of(items))
 
         /**
          * Sets [Builder.items] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.items] with a well-typed `List<Refund>` value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
+         * You should usually call [Builder.items] with a well-typed `List<RefundListResponse>`
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
          */
-        fun items(items: JsonField<List<Refund>>) = apply {
+        fun items(items: JsonField<List<RefundListResponse>>) = apply {
             this.items = items.map { it.toMutableList() }
         }
 
         /**
-         * Adds a single [Refund] to [items].
+         * Adds a single [RefundListResponse] to [items].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addItem(item: Refund) = apply {
+        fun addItem(item: RefundListResponse) = apply {
             items =
                 (items ?: JsonField.of(mutableListOf())).also { checkKnown("items", it).add(item) }
         }

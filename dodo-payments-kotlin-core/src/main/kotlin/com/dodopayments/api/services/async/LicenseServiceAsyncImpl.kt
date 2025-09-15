@@ -16,8 +16,8 @@ import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepareAsync
-import com.dodopayments.api.models.licensekeyinstances.LicenseKeyInstance
 import com.dodopayments.api.models.licenses.LicenseActivateParams
+import com.dodopayments.api.models.licenses.LicenseActivateResponse
 import com.dodopayments.api.models.licenses.LicenseDeactivateParams
 import com.dodopayments.api.models.licenses.LicenseValidateParams
 import com.dodopayments.api.models.licenses.LicenseValidateResponse
@@ -37,7 +37,7 @@ class LicenseServiceAsyncImpl internal constructor(private val clientOptions: Cl
     override suspend fun activate(
         params: LicenseActivateParams,
         requestOptions: RequestOptions,
-    ): LicenseKeyInstance =
+    ): LicenseActivateResponse =
         // post /licenses/activate
         withRawResponse().activate(params, requestOptions).parse()
 
@@ -69,13 +69,13 @@ class LicenseServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 clientOptions.toBuilder().apply(modifier).build()
             )
 
-        private val activateHandler: Handler<LicenseKeyInstance> =
-            jsonHandler<LicenseKeyInstance>(clientOptions.jsonMapper)
+        private val activateHandler: Handler<LicenseActivateResponse> =
+            jsonHandler<LicenseActivateResponse>(clientOptions.jsonMapper)
 
         override suspend fun activate(
             params: LicenseActivateParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<LicenseKeyInstance> {
+        ): HttpResponseFor<LicenseActivateResponse> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)

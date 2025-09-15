@@ -3,10 +3,17 @@
 package com.dodopayments.api.proguard
 
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.checkoutsessions.CheckoutSessionRequest
+import com.dodopayments.api.models.misc.CountryCode
+import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.CustomerRequest
 import com.dodopayments.api.models.payments.IntentStatus
+import com.dodopayments.api.models.payments.PaymentMethodTypes
+import com.dodopayments.api.models.subscriptions.AttachAddon
+import com.dodopayments.api.models.subscriptions.OnDemandSubscription
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import kotlin.reflect.full.memberFunctions
 import kotlin.reflect.jvm.javaMethod
@@ -51,6 +58,7 @@ internal class ProGuardCompatibilityTest {
         val client = DodoPaymentsOkHttpClient.builder().bearerToken("My Bearer Token").build()
 
         assertThat(client).isNotNull()
+        assertThat(client.checkoutSessions()).isNotNull()
         assertThat(client.payments()).isNotNull()
         assertThat(client.subscriptions()).isNotNull()
         assertThat(client.invoices()).isNotNull()
@@ -68,22 +76,83 @@ internal class ProGuardCompatibilityTest {
         assertThat(client.addons()).isNotNull()
         assertThat(client.brands()).isNotNull()
         assertThat(client.webhooks()).isNotNull()
-        assertThat(client.yourWebhookUrl()).isNotNull()
+        assertThat(client.usageEvents()).isNotNull()
+        assertThat(client.meters()).isNotNull()
     }
 
     @Test
-    fun attachExistingCustomerRoundtrip() {
+    fun checkoutSessionRequestRoundtrip() {
         val jsonMapper = jsonMapper()
-        val attachExistingCustomer =
-            AttachExistingCustomer.builder().customerId("customer_id").build()
+        val checkoutSessionRequest =
+            CheckoutSessionRequest.builder()
+                .addProductCart(
+                    CheckoutSessionRequest.ProductCart.builder()
+                        .productId("product_id")
+                        .quantity(0)
+                        .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
+                        .amount(0)
+                        .build()
+                )
+                .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                .billingAddress(
+                    CheckoutSessionRequest.BillingAddress.builder()
+                        .country(CountryCode.AF)
+                        .city("city")
+                        .state("state")
+                        .street("street")
+                        .zipcode("zipcode")
+                        .build()
+                )
+                .billingCurrency(Currency.AED)
+                .confirm(true)
+                .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
+                .customization(
+                    CheckoutSessionRequest.Customization.builder()
+                        .showOnDemandTag(true)
+                        .showOrderDetails(true)
+                        .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                        .build()
+                )
+                .discountCode("discount_code")
+                .featureFlags(
+                    CheckoutSessionRequest.FeatureFlags.builder()
+                        .allowCurrencySelection(true)
+                        .allowDiscountCode(true)
+                        .allowPhoneNumberCollection(true)
+                        .allowTaxId(true)
+                        .alwaysCreateNewCustomer(true)
+                        .build()
+                )
+                .metadata(
+                    CheckoutSessionRequest.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
+                .returnUrl("return_url")
+                .showSavedPaymentMethods(true)
+                .subscriptionData(
+                    CheckoutSessionRequest.SubscriptionData.builder()
+                        .onDemand(
+                            OnDemandSubscription.builder()
+                                .mandateOnly(true)
+                                .adaptiveCurrencyFeesInclusive(true)
+                                .productCurrency(Currency.AED)
+                                .productDescription("product_description")
+                                .productPrice(0)
+                                .build()
+                        )
+                        .trialPeriodDays(0)
+                        .build()
+                )
+                .build()
 
-        val roundtrippedAttachExistingCustomer =
+        val roundtrippedCheckoutSessionRequest =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(attachExistingCustomer),
-                jacksonTypeRef<AttachExistingCustomer>(),
+                jsonMapper.writeValueAsString(checkoutSessionRequest),
+                jacksonTypeRef<CheckoutSessionRequest>(),
             )
 
-        assertThat(roundtrippedAttachExistingCustomer).isEqualTo(attachExistingCustomer)
+        assertThat(roundtrippedCheckoutSessionRequest).isEqualTo(checkoutSessionRequest)
     }
 
     @Test

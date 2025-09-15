@@ -283,6 +283,9 @@ private constructor(
         /** Alias for calling [price] with `Price.ofRecurring(recurring)`. */
         fun price(recurring: Price.RecurringPrice) = apply { body.price(recurring) }
 
+        /** Alias for calling [price] with `Price.ofUsageBased(usageBased)`. */
+        fun price(usageBased: Price.UsageBasedPrice) = apply { body.price(usageBased) }
+
         /** Tax category applied to this product */
         fun taxCategory(taxCategory: TaxCategory) = apply { body.taxCategory(taxCategory) }
 
@@ -953,6 +956,9 @@ private constructor(
 
             /** Alias for calling [price] with `Price.ofRecurring(recurring)`. */
             fun price(recurring: Price.RecurringPrice) = price(Price.ofRecurring(recurring))
+
+            /** Alias for calling [price] with `Price.ofUsageBased(usageBased)`. */
+            fun price(usageBased: Price.UsageBasedPrice) = price(Price.ofUsageBased(usageBased))
 
             /** Tax category applied to this product */
             fun taxCategory(taxCategory: TaxCategory) = taxCategory(JsonField.of(taxCategory))
