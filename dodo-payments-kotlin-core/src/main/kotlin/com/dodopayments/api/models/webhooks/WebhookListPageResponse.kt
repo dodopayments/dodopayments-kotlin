@@ -19,7 +19,7 @@ import java.util.Objects
 
 class WebhookListPageResponse
 private constructor(
-    private val data: JsonField<List<WebhookListResponse>>,
+    private val data: JsonField<List<WebhookDetails>>,
     private val done: JsonField<Boolean>,
     private val iterator: JsonField<String>,
     private val prevIterator: JsonField<String>,
@@ -30,7 +30,7 @@ private constructor(
     private constructor(
         @JsonProperty("data")
         @ExcludeMissing
-        data: JsonField<List<WebhookListResponse>> = JsonMissing.of(),
+        data: JsonField<List<WebhookDetails>> = JsonMissing.of(),
         @JsonProperty("done") @ExcludeMissing done: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("iterator") @ExcludeMissing iterator: JsonField<String> = JsonMissing.of(),
         @JsonProperty("prev_iterator")
@@ -44,7 +44,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun data(): List<WebhookListResponse> = data.getRequired("data")
+    fun data(): List<WebhookDetails> = data.getRequired("data")
 
     /**
      * true if no more values are to be fetched.
@@ -63,7 +63,7 @@ private constructor(
     fun iterator(): String? = iterator.getNullable("iterator")
 
     /**
-     * Cusror pointing to the previous previous object
+     * Cursor pointing to the previous paginated object
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
@@ -75,7 +75,7 @@ private constructor(
      *
      * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<WebhookListResponse>> = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<List<WebhookDetails>> = data
 
     /**
      * Returns the raw JSON value of [done].
@@ -129,7 +129,7 @@ private constructor(
     /** A builder for [WebhookListPageResponse]. */
     class Builder internal constructor() {
 
-        private var data: JsonField<MutableList<WebhookListResponse>>? = null
+        private var data: JsonField<MutableList<WebhookDetails>>? = null
         private var done: JsonField<Boolean>? = null
         private var iterator: JsonField<String> = JsonMissing.of()
         private var prevIterator: JsonField<String> = JsonMissing.of()
@@ -144,25 +144,25 @@ private constructor(
         }
 
         /** List of webhoooks */
-        fun data(data: List<WebhookListResponse>) = data(JsonField.of(data))
+        fun data(data: List<WebhookDetails>) = data(JsonField.of(data))
 
         /**
          * Sets [Builder.data] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.data] with a well-typed `List<WebhookListResponse>`
-         * value instead. This method is primarily for setting the field to an undocumented or not
-         * yet supported value.
+         * You should usually call [Builder.data] with a well-typed `List<WebhookDetails>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun data(data: JsonField<List<WebhookListResponse>>) = apply {
+        fun data(data: JsonField<List<WebhookDetails>>) = apply {
             this.data = data.map { it.toMutableList() }
         }
 
         /**
-         * Adds a single [WebhookListResponse] to [Builder.data].
+         * Adds a single [WebhookDetails] to [Builder.data].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addData(data: WebhookListResponse) = apply {
+        fun addData(data: WebhookDetails) = apply {
             this.data =
                 (this.data ?: JsonField.of(mutableListOf())).also {
                     checkKnown("data", it).add(data)
@@ -191,7 +191,7 @@ private constructor(
          */
         fun iterator(iterator: JsonField<String>) = apply { this.iterator = iterator }
 
-        /** Cusror pointing to the previous previous object */
+        /** Cursor pointing to the previous paginated object */
         fun prevIterator(prevIterator: String?) = prevIterator(JsonField.ofNullable(prevIterator))
 
         /**

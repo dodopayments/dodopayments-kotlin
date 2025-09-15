@@ -18,15 +18,15 @@ import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepareAsync
 import com.dodopayments.api.models.webhooks.WebhookCreateParams
-import com.dodopayments.api.models.webhooks.WebhookCreateResponse
 import com.dodopayments.api.models.webhooks.WebhookDeleteParams
+import com.dodopayments.api.models.webhooks.WebhookDetails
 import com.dodopayments.api.models.webhooks.WebhookListPageAsync
 import com.dodopayments.api.models.webhooks.WebhookListPageResponse
 import com.dodopayments.api.models.webhooks.WebhookListParams
 import com.dodopayments.api.models.webhooks.WebhookRetrieveParams
-import com.dodopayments.api.models.webhooks.WebhookRetrieveResponse
+import com.dodopayments.api.models.webhooks.WebhookRetrieveSecretParams
+import com.dodopayments.api.models.webhooks.WebhookRetrieveSecretResponse
 import com.dodopayments.api.models.webhooks.WebhookUpdateParams
-import com.dodopayments.api.models.webhooks.WebhookUpdateResponse
 import com.dodopayments.api.services.async.webhooks.HeaderServiceAsync
 import com.dodopayments.api.services.async.webhooks.HeaderServiceAsyncImpl
 
@@ -49,21 +49,21 @@ class WebhookServiceAsyncImpl internal constructor(private val clientOptions: Cl
     override suspend fun create(
         params: WebhookCreateParams,
         requestOptions: RequestOptions,
-    ): WebhookCreateResponse =
+    ): WebhookDetails =
         // post /webhooks
         withRawResponse().create(params, requestOptions).parse()
 
     override suspend fun retrieve(
         params: WebhookRetrieveParams,
         requestOptions: RequestOptions,
-    ): WebhookRetrieveResponse =
+    ): WebhookDetails =
         // get /webhooks/{webhook_id}
         withRawResponse().retrieve(params, requestOptions).parse()
 
     override suspend fun update(
         params: WebhookUpdateParams,
         requestOptions: RequestOptions,
-    ): WebhookUpdateResponse =
+    ): WebhookDetails =
         // patch /webhooks/{webhook_id}
         withRawResponse().update(params, requestOptions).parse()
 
@@ -78,6 +78,13 @@ class WebhookServiceAsyncImpl internal constructor(private val clientOptions: Cl
         // delete /webhooks/{webhook_id}
         withRawResponse().delete(params, requestOptions)
     }
+
+    override suspend fun retrieveSecret(
+        params: WebhookRetrieveSecretParams,
+        requestOptions: RequestOptions,
+    ): WebhookRetrieveSecretResponse =
+        // get /webhooks/{webhook_id}/secret
+        withRawResponse().retrieveSecret(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         WebhookServiceAsync.WithRawResponse {
@@ -98,13 +105,13 @@ class WebhookServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
         override fun headers(): HeaderServiceAsync.WithRawResponse = headers
 
-        private val createHandler: Handler<WebhookCreateResponse> =
-            jsonHandler<WebhookCreateResponse>(clientOptions.jsonMapper)
+        private val createHandler: Handler<WebhookDetails> =
+            jsonHandler<WebhookDetails>(clientOptions.jsonMapper)
 
         override suspend fun create(
             params: WebhookCreateParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<WebhookCreateResponse> {
+        ): HttpResponseFor<WebhookDetails> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -126,13 +133,13 @@ class WebhookServiceAsyncImpl internal constructor(private val clientOptions: Cl
             }
         }
 
-        private val retrieveHandler: Handler<WebhookRetrieveResponse> =
-            jsonHandler<WebhookRetrieveResponse>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<WebhookDetails> =
+            jsonHandler<WebhookDetails>(clientOptions.jsonMapper)
 
         override suspend fun retrieve(
             params: WebhookRetrieveParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<WebhookRetrieveResponse> {
+        ): HttpResponseFor<WebhookDetails> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("webhookId", params.webhookId())
@@ -156,13 +163,13 @@ class WebhookServiceAsyncImpl internal constructor(private val clientOptions: Cl
             }
         }
 
-        private val updateHandler: Handler<WebhookUpdateResponse> =
-            jsonHandler<WebhookUpdateResponse>(clientOptions.jsonMapper)
+        private val updateHandler: Handler<WebhookDetails> =
+            jsonHandler<WebhookDetails>(clientOptions.jsonMapper)
 
         override suspend fun update(
             params: WebhookUpdateParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<WebhookUpdateResponse> {
+        ): HttpResponseFor<WebhookDetails> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("webhookId", params.webhookId())
@@ -242,6 +249,36 @@ class WebhookServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val response = clientOptions.httpClient.executeAsync(request, requestOptions)
             return errorHandler.handle(response).parseable {
                 response.use { deleteHandler.handle(it) }
+            }
+        }
+
+        private val retrieveSecretHandler: Handler<WebhookRetrieveSecretResponse> =
+            jsonHandler<WebhookRetrieveSecretResponse>(clientOptions.jsonMapper)
+
+        override suspend fun retrieveSecret(
+            params: WebhookRetrieveSecretParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<WebhookRetrieveSecretResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("webhookId", params.webhookId())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("webhooks", params._pathParam(0), "secret")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { retrieveSecretHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
             }
         }
     }

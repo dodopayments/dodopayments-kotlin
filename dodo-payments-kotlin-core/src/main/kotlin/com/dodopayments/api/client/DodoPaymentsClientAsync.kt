@@ -5,6 +5,7 @@ package com.dodopayments.api.client
 import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.services.async.AddonServiceAsync
 import com.dodopayments.api.services.async.BrandServiceAsync
+import com.dodopayments.api.services.async.CheckoutSessionServiceAsync
 import com.dodopayments.api.services.async.CustomerServiceAsync
 import com.dodopayments.api.services.async.DiscountServiceAsync
 import com.dodopayments.api.services.async.DisputeServiceAsync
@@ -12,15 +13,16 @@ import com.dodopayments.api.services.async.InvoiceServiceAsync
 import com.dodopayments.api.services.async.LicenseKeyInstanceServiceAsync
 import com.dodopayments.api.services.async.LicenseKeyServiceAsync
 import com.dodopayments.api.services.async.LicenseServiceAsync
+import com.dodopayments.api.services.async.MeterServiceAsync
 import com.dodopayments.api.services.async.MiscServiceAsync
 import com.dodopayments.api.services.async.PaymentServiceAsync
 import com.dodopayments.api.services.async.PayoutServiceAsync
 import com.dodopayments.api.services.async.ProductServiceAsync
 import com.dodopayments.api.services.async.RefundServiceAsync
 import com.dodopayments.api.services.async.SubscriptionServiceAsync
+import com.dodopayments.api.services.async.UsageEventServiceAsync
 import com.dodopayments.api.services.async.WebhookEventServiceAsync
 import com.dodopayments.api.services.async.WebhookServiceAsync
-import com.dodopayments.api.services.async.YourWebhookUrlServiceAsync
 
 /**
  * A client for interacting with the Dodo Payments REST API asynchronously. You can also switch to
@@ -58,6 +60,8 @@ interface DodoPaymentsClientAsync {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): DodoPaymentsClientAsync
 
+    fun checkoutSessions(): CheckoutSessionServiceAsync
+
     fun payments(): PaymentServiceAsync
 
     fun subscriptions(): SubscriptionServiceAsync
@@ -92,7 +96,9 @@ interface DodoPaymentsClientAsync {
 
     fun webhooks(): WebhookServiceAsync
 
-    fun yourWebhookUrl(): YourWebhookUrlServiceAsync
+    fun usageEvents(): UsageEventServiceAsync
+
+    fun meters(): MeterServiceAsync
 
     /**
      * Closes this client, relinquishing any underlying resources.
@@ -121,6 +127,8 @@ interface DodoPaymentsClientAsync {
         fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): DodoPaymentsClientAsync.WithRawResponse
+
+        fun checkoutSessions(): CheckoutSessionServiceAsync.WithRawResponse
 
         fun payments(): PaymentServiceAsync.WithRawResponse
 
@@ -156,6 +164,8 @@ interface DodoPaymentsClientAsync {
 
         fun webhooks(): WebhookServiceAsync.WithRawResponse
 
-        fun yourWebhookUrl(): YourWebhookUrlServiceAsync.WithRawResponse
+        fun usageEvents(): UsageEventServiceAsync.WithRawResponse
+
+        fun meters(): MeterServiceAsync.WithRawResponse
     }
 }

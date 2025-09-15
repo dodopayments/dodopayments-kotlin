@@ -7,14 +7,14 @@ import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponse
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.models.webhooks.WebhookCreateParams
-import com.dodopayments.api.models.webhooks.WebhookCreateResponse
 import com.dodopayments.api.models.webhooks.WebhookDeleteParams
+import com.dodopayments.api.models.webhooks.WebhookDetails
 import com.dodopayments.api.models.webhooks.WebhookListPageAsync
 import com.dodopayments.api.models.webhooks.WebhookListParams
 import com.dodopayments.api.models.webhooks.WebhookRetrieveParams
-import com.dodopayments.api.models.webhooks.WebhookRetrieveResponse
+import com.dodopayments.api.models.webhooks.WebhookRetrieveSecretParams
+import com.dodopayments.api.models.webhooks.WebhookRetrieveSecretResponse
 import com.dodopayments.api.models.webhooks.WebhookUpdateParams
-import com.dodopayments.api.models.webhooks.WebhookUpdateResponse
 import com.dodopayments.api.services.async.webhooks.HeaderServiceAsync
 import com.google.errorprone.annotations.MustBeClosed
 
@@ -38,44 +38,40 @@ interface WebhookServiceAsync {
     suspend fun create(
         params: WebhookCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): WebhookCreateResponse
+    ): WebhookDetails
 
     /** Get a webhook by id */
     suspend fun retrieve(
         webhookId: String,
         params: WebhookRetrieveParams = WebhookRetrieveParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): WebhookRetrieveResponse =
-        retrieve(params.toBuilder().webhookId(webhookId).build(), requestOptions)
+    ): WebhookDetails = retrieve(params.toBuilder().webhookId(webhookId).build(), requestOptions)
 
     /** @see retrieve */
     suspend fun retrieve(
         params: WebhookRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): WebhookRetrieveResponse
+    ): WebhookDetails
 
     /** @see retrieve */
-    suspend fun retrieve(
-        webhookId: String,
-        requestOptions: RequestOptions,
-    ): WebhookRetrieveResponse = retrieve(webhookId, WebhookRetrieveParams.none(), requestOptions)
+    suspend fun retrieve(webhookId: String, requestOptions: RequestOptions): WebhookDetails =
+        retrieve(webhookId, WebhookRetrieveParams.none(), requestOptions)
 
     /** Patch a webhook by id */
     suspend fun update(
         webhookId: String,
         params: WebhookUpdateParams = WebhookUpdateParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): WebhookUpdateResponse =
-        update(params.toBuilder().webhookId(webhookId).build(), requestOptions)
+    ): WebhookDetails = update(params.toBuilder().webhookId(webhookId).build(), requestOptions)
 
     /** @see update */
     suspend fun update(
         params: WebhookUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): WebhookUpdateResponse
+    ): WebhookDetails
 
     /** @see update */
-    suspend fun update(webhookId: String, requestOptions: RequestOptions): WebhookUpdateResponse =
+    suspend fun update(webhookId: String, requestOptions: RequestOptions): WebhookDetails =
         update(webhookId, WebhookUpdateParams.none(), requestOptions)
 
     /** List all webhooks */
@@ -105,6 +101,27 @@ interface WebhookServiceAsync {
     suspend fun delete(webhookId: String, requestOptions: RequestOptions) =
         delete(webhookId, WebhookDeleteParams.none(), requestOptions)
 
+    /** Get webhook secret by id */
+    suspend fun retrieveSecret(
+        webhookId: String,
+        params: WebhookRetrieveSecretParams = WebhookRetrieveSecretParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): WebhookRetrieveSecretResponse =
+        retrieveSecret(params.toBuilder().webhookId(webhookId).build(), requestOptions)
+
+    /** @see retrieveSecret */
+    suspend fun retrieveSecret(
+        params: WebhookRetrieveSecretParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): WebhookRetrieveSecretResponse
+
+    /** @see retrieveSecret */
+    suspend fun retrieveSecret(
+        webhookId: String,
+        requestOptions: RequestOptions,
+    ): WebhookRetrieveSecretResponse =
+        retrieveSecret(webhookId, WebhookRetrieveSecretParams.none(), requestOptions)
+
     /**
      * A view of [WebhookServiceAsync] that provides access to raw HTTP responses for each method.
      */
@@ -129,7 +146,7 @@ interface WebhookServiceAsync {
         suspend fun create(
             params: WebhookCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<WebhookCreateResponse>
+        ): HttpResponseFor<WebhookDetails>
 
         /**
          * Returns a raw HTTP response for `get /webhooks/{webhook_id}`, but is otherwise the same
@@ -140,7 +157,7 @@ interface WebhookServiceAsync {
             webhookId: String,
             params: WebhookRetrieveParams = WebhookRetrieveParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<WebhookRetrieveResponse> =
+        ): HttpResponseFor<WebhookDetails> =
             retrieve(params.toBuilder().webhookId(webhookId).build(), requestOptions)
 
         /** @see retrieve */
@@ -148,14 +165,14 @@ interface WebhookServiceAsync {
         suspend fun retrieve(
             params: WebhookRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<WebhookRetrieveResponse>
+        ): HttpResponseFor<WebhookDetails>
 
         /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(
             webhookId: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<WebhookRetrieveResponse> =
+        ): HttpResponseFor<WebhookDetails> =
             retrieve(webhookId, WebhookRetrieveParams.none(), requestOptions)
 
         /**
@@ -167,7 +184,7 @@ interface WebhookServiceAsync {
             webhookId: String,
             params: WebhookUpdateParams = WebhookUpdateParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<WebhookUpdateResponse> =
+        ): HttpResponseFor<WebhookDetails> =
             update(params.toBuilder().webhookId(webhookId).build(), requestOptions)
 
         /** @see update */
@@ -175,14 +192,14 @@ interface WebhookServiceAsync {
         suspend fun update(
             params: WebhookUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<WebhookUpdateResponse>
+        ): HttpResponseFor<WebhookDetails>
 
         /** @see update */
         @MustBeClosed
         suspend fun update(
             webhookId: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<WebhookUpdateResponse> =
+        ): HttpResponseFor<WebhookDetails> =
             update(webhookId, WebhookUpdateParams.none(), requestOptions)
 
         /**
@@ -222,5 +239,32 @@ interface WebhookServiceAsync {
         @MustBeClosed
         suspend fun delete(webhookId: String, requestOptions: RequestOptions): HttpResponse =
             delete(webhookId, WebhookDeleteParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /webhooks/{webhook_id}/secret`, but is otherwise the
+         * same as [WebhookServiceAsync.retrieveSecret].
+         */
+        @MustBeClosed
+        suspend fun retrieveSecret(
+            webhookId: String,
+            params: WebhookRetrieveSecretParams = WebhookRetrieveSecretParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<WebhookRetrieveSecretResponse> =
+            retrieveSecret(params.toBuilder().webhookId(webhookId).build(), requestOptions)
+
+        /** @see retrieveSecret */
+        @MustBeClosed
+        suspend fun retrieveSecret(
+            params: WebhookRetrieveSecretParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<WebhookRetrieveSecretResponse>
+
+        /** @see retrieveSecret */
+        @MustBeClosed
+        suspend fun retrieveSecret(
+            webhookId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<WebhookRetrieveSecretResponse> =
+            retrieveSecret(webhookId, WebhookRetrieveSecretParams.none(), requestOptions)
     }
 }

@@ -6,6 +6,7 @@ import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponse
 import com.dodopayments.api.models.invoices.payments.PaymentRetrieveParams
+import com.dodopayments.api.models.invoices.payments.PaymentRetrieveRefundParams
 import com.google.errorprone.annotations.MustBeClosed
 
 interface PaymentServiceAsync {
@@ -40,6 +41,25 @@ interface PaymentServiceAsync {
     @MustBeClosed
     suspend fun retrieve(paymentId: String, requestOptions: RequestOptions): HttpResponse =
         retrieve(paymentId, PaymentRetrieveParams.none(), requestOptions)
+
+    @MustBeClosed
+    suspend fun retrieveRefund(
+        refundId: String,
+        params: PaymentRetrieveRefundParams = PaymentRetrieveRefundParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): HttpResponse = retrieveRefund(params.toBuilder().refundId(refundId).build(), requestOptions)
+
+    /** @see retrieveRefund */
+    @MustBeClosed
+    suspend fun retrieveRefund(
+        params: PaymentRetrieveRefundParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): HttpResponse
+
+    /** @see retrieveRefund */
+    @MustBeClosed
+    suspend fun retrieveRefund(refundId: String, requestOptions: RequestOptions): HttpResponse =
+        retrieveRefund(refundId, PaymentRetrieveRefundParams.none(), requestOptions)
 
     /**
      * A view of [PaymentServiceAsync] that provides access to raw HTTP responses for each method.
@@ -77,5 +97,29 @@ interface PaymentServiceAsync {
         @MustBeClosed
         suspend fun retrieve(paymentId: String, requestOptions: RequestOptions): HttpResponse =
             retrieve(paymentId, PaymentRetrieveParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /invoices/refunds/{refund_id}`, but is otherwise the
+         * same as [PaymentServiceAsync.retrieveRefund].
+         */
+        @MustBeClosed
+        suspend fun retrieveRefund(
+            refundId: String,
+            params: PaymentRetrieveRefundParams = PaymentRetrieveRefundParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse =
+            retrieveRefund(params.toBuilder().refundId(refundId).build(), requestOptions)
+
+        /** @see retrieveRefund */
+        @MustBeClosed
+        suspend fun retrieveRefund(
+            params: PaymentRetrieveRefundParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
+
+        /** @see retrieveRefund */
+        @MustBeClosed
+        suspend fun retrieveRefund(refundId: String, requestOptions: RequestOptions): HttpResponse =
+            retrieveRefund(refundId, PaymentRetrieveRefundParams.none(), requestOptions)
     }
 }

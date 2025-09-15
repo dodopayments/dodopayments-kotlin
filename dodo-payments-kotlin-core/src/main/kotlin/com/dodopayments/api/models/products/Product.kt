@@ -568,6 +568,9 @@ private constructor(
         /** Alias for calling [price] with `Price.ofRecurring(recurring)`. */
         fun price(recurring: Price.RecurringPrice) = price(Price.ofRecurring(recurring))
 
+        /** Alias for calling [price] with `Price.ofUsageBased(usageBased)`. */
+        fun price(usageBased: Price.UsageBasedPrice) = price(Price.ofUsageBased(usageBased))
+
         /** Unique identifier for the product. */
         fun productId(productId: String) = productId(JsonField.of(productId))
 
