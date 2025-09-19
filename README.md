@@ -58,12 +58,10 @@ import com.dodopayments.api.models.checkoutsessions.CheckoutSessionResponse
 // Or configures using the `DODO_PAYMENTS_API_KEY` and `DODO_PAYMENTS_BASE_URL` environment variables
 val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.fromEnv()
 
-val params: CheckoutSessionCreateParams = CheckoutSessionCreateParams.builder()
-    .checkoutSessionRequest(CheckoutSessionRequest.builder()
-        .addProductCart(CheckoutSessionRequest.ProductCart.builder()
-            .productId("product_id")
-            .quantity(0)
-            .build())
+val params: CheckoutSessionRequest = CheckoutSessionRequest.builder()
+    .addProductCart(CheckoutSessionRequest.ProductCart.builder()
+        .productId("product_id")
+        .quantity(0)
         .build())
     .build()
 val checkoutSessionResponse: CheckoutSessionResponse = client.checkoutSessions().create(params)
@@ -164,12 +162,10 @@ import com.dodopayments.api.models.checkoutsessions.CheckoutSessionResponse
 // Or configures using the `DODO_PAYMENTS_API_KEY` and `DODO_PAYMENTS_BASE_URL` environment variables
 val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.fromEnv()
 
-val params: CheckoutSessionCreateParams = CheckoutSessionCreateParams.builder()
-    .checkoutSessionRequest(CheckoutSessionRequest.builder()
-        .addProductCart(CheckoutSessionRequest.ProductCart.builder()
-            .productId("product_id")
-            .quantity(0)
-            .build())
+val params: CheckoutSessionRequest = CheckoutSessionRequest.builder()
+    .addProductCart(CheckoutSessionRequest.ProductCart.builder()
+        .productId("product_id")
+        .quantity(0)
         .build())
     .build()
 val checkoutSessionResponse: CheckoutSessionResponse = client.async().checkoutSessions().create(params)
@@ -188,12 +184,10 @@ import com.dodopayments.api.models.checkoutsessions.CheckoutSessionResponse
 // Or configures using the `DODO_PAYMENTS_API_KEY` and `DODO_PAYMENTS_BASE_URL` environment variables
 val client: DodoPaymentsClientAsync = DodoPaymentsOkHttpClientAsync.fromEnv()
 
-val params: CheckoutSessionCreateParams = CheckoutSessionCreateParams.builder()
-    .checkoutSessionRequest(CheckoutSessionRequest.builder()
-        .addProductCart(CheckoutSessionRequest.ProductCart.builder()
-            .productId("product_id")
-            .quantity(0)
-            .build())
+val params: CheckoutSessionRequest = CheckoutSessionRequest.builder()
+    .addProductCart(CheckoutSessionRequest.ProductCart.builder()
+        .productId("product_id")
+        .quantity(0)
         .build())
     .build()
 val checkoutSessionResponse: CheckoutSessionResponse = client.checkoutSessions().create(params)
@@ -254,12 +248,10 @@ import com.dodopayments.api.models.checkoutsessions.CheckoutSessionCreateParams
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionRequest
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionResponse
 
-val params: CheckoutSessionCreateParams = CheckoutSessionCreateParams.builder()
-    .checkoutSessionRequest(CheckoutSessionRequest.builder()
-        .addProductCart(CheckoutSessionRequest.ProductCart.builder()
-            .productId("product_id")
-            .quantity(0)
-            .build())
+val params: CheckoutSessionRequest = CheckoutSessionRequest.builder()
+    .addProductCart(CheckoutSessionRequest.ProductCart.builder()
+        .productId("product_id")
+        .quantity(0)
         .build())
     .build()
 val checkoutSessionResponse: HttpResponseFor<CheckoutSessionResponse> = client.checkoutSessions().withRawResponse().create(params)
