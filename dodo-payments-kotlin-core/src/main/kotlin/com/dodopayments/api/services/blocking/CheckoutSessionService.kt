@@ -6,6 +6,7 @@ import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionCreateParams
+import com.dodopayments.api.models.checkoutsessions.CheckoutSessionRequest
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionResponse
 import com.google.errorprone.annotations.MustBeClosed
 
@@ -27,6 +28,18 @@ interface CheckoutSessionService {
         params: CheckoutSessionCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CheckoutSessionResponse
+
+    /** @see create */
+    fun create(
+        checkoutSessionRequest: CheckoutSessionRequest,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CheckoutSessionResponse =
+        create(
+            CheckoutSessionCreateParams.builder()
+                .checkoutSessionRequest(checkoutSessionRequest)
+                .build(),
+            requestOptions,
+        )
 
     /**
      * A view of [CheckoutSessionService] that provides access to raw HTTP responses for each
@@ -52,5 +65,18 @@ interface CheckoutSessionService {
             params: CheckoutSessionCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<CheckoutSessionResponse>
+
+        /** @see create */
+        @MustBeClosed
+        fun create(
+            checkoutSessionRequest: CheckoutSessionRequest,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CheckoutSessionResponse> =
+            create(
+                CheckoutSessionCreateParams.builder()
+                    .checkoutSessionRequest(checkoutSessionRequest)
+                    .build(),
+                requestOptions,
+            )
     }
 }
