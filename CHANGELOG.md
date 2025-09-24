@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.53.2 (2025-09-24)
+
+Full Changelog: [v1.47.1...v1.53.2](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.47.1...v1.53.2)
+
+### Features
+
+* **api:** manual updates ([29872c8](https://github.com/dodopayments/dodopayments-kotlin/commit/29872c8a42ec6e0fd37758a4046266735dd31ef9))
+* **api:** manual updates ([d500ffd](https://github.com/dodopayments/dodopayments-kotlin/commit/d500ffd61fc189a51a93146ee1d91a184f5c7d69))
+* **client:** add convenience overloads for some methods ([a824510](https://github.com/dodopayments/dodopayments-kotlin/commit/a824510e2315f20bf47e0d0b989964ad097ad348))
+
+
+### Bug Fixes
+
+* **client:** incorrect `getPackageVersion` impl ([81f97cf](https://github.com/dodopayments/dodopayments-kotlin/commit/81f97cf531fd3d8f3f0abfc2cce0c3d69f741087))
+
+
+### Chores
+
+* **internal:** codegen related update ([e8d333e](https://github.com/dodopayments/dodopayments-kotlin/commit/e8d333e0a278fa80c68c3226d722835a2524b93a))
+* **internal:** codegen related update ([bf55fe8](https://github.com/dodopayments/dodopayments-kotlin/commit/bf55fe8a5aad75a32bceb7a7deabc87bdc8bd1c3))
+
 ## 1.47.1 (2025-08-13)
 
 Full Changelog: [v1.47.0...v1.47.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.47.0...v1.47.1)
