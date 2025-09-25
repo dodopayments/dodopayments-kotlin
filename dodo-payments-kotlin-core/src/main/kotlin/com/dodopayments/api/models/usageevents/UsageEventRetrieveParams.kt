@@ -16,12 +16,10 @@ import java.util.Objects
  * - Getting the complete metadata for an event
  *
  * ## Event ID Format:
- *
  * The event ID should be the same value that was provided during event ingestion via the
  * `/events/ingest` endpoint. Event IDs are case-sensitive and must match exactly.
  *
  * ## Response Details:
- *
  * The response includes all event data including:
  * - Complete metadata key-value pairs
  * - Original timestamp (preserved from ingestion)
