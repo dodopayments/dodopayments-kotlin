@@ -36,12 +36,10 @@ interface UsageEventService {
      * - Getting the complete metadata for an event
      *
      * ## Event ID Format:
-     *
      * The event ID should be the same value that was provided during event ingestion via the
      * `/events/ingest` endpoint. Event IDs are case-sensitive and must match exactly.
      *
      * ## Response Details:
-     *
      * The response includes all event data including:
      * - Complete metadata key-value pairs
      * - Original timestamp (preserved from ingestion)
@@ -86,7 +84,6 @@ interface UsageEventService {
      * - **Pagination**: Navigate through large result sets
      *
      * ## Meter Integration:
-     *
      * When using `meter_id`, the endpoint automatically applies:
      * - The meter's configured `event_name` filter
      * - The meter's custom filter criteria (if any)
