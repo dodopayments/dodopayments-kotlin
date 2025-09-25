@@ -9,7 +9,7 @@ repositories {
 
 allprojects {
     group = "com.dodopayments.api"
-    version = "1.53.2" // x-release-please-version
+    version = "1.53.3" // x-release-please-version
 }
 
 subprojects {
