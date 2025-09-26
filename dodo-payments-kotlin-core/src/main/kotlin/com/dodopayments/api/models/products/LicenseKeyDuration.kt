@@ -17,6 +17,7 @@ import java.util.Collections
 import java.util.Objects
 
 class LicenseKeyDuration
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val count: JsonField<Int>,
     private val interval: JsonField<TimeInterval>,

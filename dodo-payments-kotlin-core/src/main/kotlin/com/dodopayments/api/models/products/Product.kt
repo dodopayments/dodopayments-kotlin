@@ -20,6 +20,7 @@ import java.util.Collections
 import java.util.Objects
 
 class Product
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val brandId: JsonField<String>,
     private val businessId: JsonField<String>,
@@ -961,6 +962,7 @@ private constructor(
     }
 
     class DigitalProductDelivery
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val externalUrl: JsonField<String>,
         private val files: JsonField<List<File>>,
@@ -1185,6 +1187,7 @@ private constructor(
                 (if (instructions.asKnown() == null) 0 else 1)
 
         class File
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val fileId: JsonField<String>,
             private val fileName: JsonField<String>,

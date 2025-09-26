@@ -23,6 +23,7 @@ import java.util.Objects
 
 /** Response struct representing subscription details */
 class Subscription
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val addons: JsonField<List<AddonCartResponseItem>>,
     private val billing: JsonField<BillingAddress>,
@@ -1346,6 +1347,7 @@ private constructor(
 
     /** Response struct representing usage-based meter cart details for a subscription */
     class Meter
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val currency: JsonField<Currency>,
         private val freeThreshold: JsonField<Long>,

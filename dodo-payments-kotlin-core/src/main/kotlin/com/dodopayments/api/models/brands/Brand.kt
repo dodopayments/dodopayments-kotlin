@@ -17,6 +17,7 @@ import java.util.Collections
 import java.util.Objects
 
 class Brand
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val brandId: JsonField<String>,
     private val businessId: JsonField<String>,

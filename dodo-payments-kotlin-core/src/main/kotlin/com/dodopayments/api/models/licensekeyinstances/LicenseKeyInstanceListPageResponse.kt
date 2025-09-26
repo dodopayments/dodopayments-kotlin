@@ -18,6 +18,7 @@ import java.util.Collections
 import java.util.Objects
 
 class LicenseKeyInstanceListPageResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val items: JsonField<List<LicenseKeyInstance>>,
     private val additionalProperties: MutableMap<String, JsonValue>,

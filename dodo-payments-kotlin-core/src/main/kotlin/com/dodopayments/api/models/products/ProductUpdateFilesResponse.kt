@@ -16,6 +16,7 @@ import java.util.Collections
 import java.util.Objects
 
 class ProductUpdateFilesResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val fileId: JsonField<String>,
     private val url: JsonField<String>,

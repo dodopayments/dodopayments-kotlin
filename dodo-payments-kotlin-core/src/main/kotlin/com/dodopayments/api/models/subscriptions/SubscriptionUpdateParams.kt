@@ -415,6 +415,7 @@ private constructor(
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     class Body
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val billing: JsonField<BillingAddress>,
         private val cancelAtNextBillingDate: JsonField<Boolean>,
@@ -812,6 +813,7 @@ private constructor(
     }
 
     class DisableOnDemand
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val nextBillingDate: JsonField<OffsetDateTime>,
         private val additionalProperties: MutableMap<String, JsonValue>,
