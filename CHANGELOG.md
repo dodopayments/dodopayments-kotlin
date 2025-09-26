@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.53.4 (2025-09-26)
+
+Full Changelog: [v1.53.3...v1.53.4](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.53.3...v1.53.4)
+
+### Bug Fixes
+
+* **client:** deserialization of empty objects ([e7df95d](https://github.com/dodopayments/dodopayments-kotlin/commit/e7df95da6686e928b6e6288fa31edef47ae75d41))
+
 ## 1.53.3 (2025-09-25)
 
 Full Changelog: [v1.53.2...v1.53.3](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.53.2...v1.53.3)
