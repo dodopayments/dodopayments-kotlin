@@ -18,6 +18,7 @@ import java.util.Collections
 import java.util.Objects
 
 class GetDispute
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val amount: JsonField<String>,
     private val businessId: JsonField<String>,

@@ -16,6 +16,7 @@ import java.util.Collections
 import java.util.Objects
 
 class UsageEventIngestResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val ingestedCount: JsonField<Long>,
     private val additionalProperties: MutableMap<String, JsonValue>,

@@ -17,6 +17,7 @@ import java.util.Objects
 
 /** Response struct representing subscription details */
 class AddonCartResponseItem
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val addonId: JsonField<String>,
     private val quantity: JsonField<Int>,

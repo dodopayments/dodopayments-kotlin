@@ -721,6 +721,7 @@ private constructor(
      * includes details about the product, quantity, customer information, and billing details.
      */
     class Body
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val billing: JsonField<BillingAddress>,
         private val customer: JsonField<CustomerRequest>,

@@ -16,6 +16,7 @@ import java.util.Collections
 import java.util.Objects
 
 class AttachAddon
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val addonId: JsonField<String>,
     private val quantity: JsonField<Int>,

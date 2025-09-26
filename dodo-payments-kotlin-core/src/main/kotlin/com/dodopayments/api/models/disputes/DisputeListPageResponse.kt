@@ -18,6 +18,7 @@ import java.util.Collections
 import java.util.Objects
 
 class DisputeListPageResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val items: JsonField<List<DisputeListResponse>>,
     private val additionalProperties: MutableMap<String, JsonValue>,

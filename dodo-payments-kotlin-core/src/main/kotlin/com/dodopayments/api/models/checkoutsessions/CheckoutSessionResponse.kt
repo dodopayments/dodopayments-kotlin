@@ -16,6 +16,7 @@ import java.util.Collections
 import java.util.Objects
 
 class CheckoutSessionResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val checkoutUrl: JsonField<String>,
     private val sessionId: JsonField<String>,

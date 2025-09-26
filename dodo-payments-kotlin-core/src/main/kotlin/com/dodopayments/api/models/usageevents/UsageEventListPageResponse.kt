@@ -18,6 +18,7 @@ import java.util.Collections
 import java.util.Objects
 
 class UsageEventListPageResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val items: JsonField<List<Event>>,
     private val additionalProperties: MutableMap<String, JsonValue>,

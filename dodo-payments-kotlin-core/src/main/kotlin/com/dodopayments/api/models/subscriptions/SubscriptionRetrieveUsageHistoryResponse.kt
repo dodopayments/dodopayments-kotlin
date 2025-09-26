@@ -20,6 +20,7 @@ import java.util.Collections
 import java.util.Objects
 
 class SubscriptionRetrieveUsageHistoryResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val endDate: JsonField<OffsetDateTime>,
     private val meters: JsonField<List<Meter>>,
@@ -255,6 +256,7 @@ private constructor(
             (if (startDate.asKnown() == null) 0 else 1)
 
     class Meter
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val id: JsonField<String>,
         private val chargeableUnits: JsonField<String>,

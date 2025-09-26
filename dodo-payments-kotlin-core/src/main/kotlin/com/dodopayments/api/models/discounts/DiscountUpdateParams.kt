@@ -489,6 +489,7 @@ private constructor(
      * All fields are optional and only update if provided.
      */
     class Body
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val amount: JsonField<Int>,
         private val code: JsonField<String>,
