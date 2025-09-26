@@ -18,6 +18,7 @@ import java.util.Collections
 import java.util.Objects
 
 class RefundListResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val businessId: JsonField<String>,
     private val createdAt: JsonField<OffsetDateTime>,

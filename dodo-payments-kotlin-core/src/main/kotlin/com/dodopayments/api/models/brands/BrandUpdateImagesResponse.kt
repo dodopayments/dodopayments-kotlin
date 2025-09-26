@@ -16,6 +16,7 @@ import java.util.Collections
 import java.util.Objects
 
 class BrandUpdateImagesResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val imageId: JsonField<String>,
     private val url: JsonField<String>,

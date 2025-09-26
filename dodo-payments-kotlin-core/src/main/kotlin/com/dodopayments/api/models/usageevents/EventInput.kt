@@ -18,6 +18,7 @@ import java.util.Collections
 import java.util.Objects
 
 class EventInput
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val customerId: JsonField<String>,
     private val eventId: JsonField<String>,

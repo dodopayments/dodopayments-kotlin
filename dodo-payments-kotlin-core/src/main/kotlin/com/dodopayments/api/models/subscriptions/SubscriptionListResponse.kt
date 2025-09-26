@@ -22,6 +22,7 @@ import java.util.Objects
 
 /** Response struct representing subscription details */
 class SubscriptionListResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val billing: JsonField<BillingAddress>,
     private val cancelAtNextBillingDate: JsonField<Boolean>,

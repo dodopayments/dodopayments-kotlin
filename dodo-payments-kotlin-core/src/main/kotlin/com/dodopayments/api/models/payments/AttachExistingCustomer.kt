@@ -16,6 +16,7 @@ import java.util.Collections
 import java.util.Objects
 
 class AttachExistingCustomer
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val customerId: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,

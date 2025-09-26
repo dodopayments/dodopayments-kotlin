@@ -16,6 +16,7 @@ import java.util.Collections
 import java.util.Objects
 
 class WebhookRetrieveSecretResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val secret: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,

@@ -16,6 +16,7 @@ import java.util.Collections
 import java.util.Objects
 
 class NewCustomer
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val email: JsonField<String>,
     private val name: JsonField<String>,

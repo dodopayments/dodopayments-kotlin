@@ -18,6 +18,7 @@ import java.util.Collections
 import java.util.Objects
 
 class CustomerListPageResponse
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val items: JsonField<List<Customer>>,
     private val additionalProperties: MutableMap<String, JsonValue>,

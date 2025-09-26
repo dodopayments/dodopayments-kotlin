@@ -49,6 +49,7 @@ import java.util.Collections
 import java.util.Objects
 
 class WebhookPayload
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val businessId: JsonField<String>,
     private val data: JsonField<Data>,
@@ -565,6 +566,7 @@ private constructor(
         }
 
         class Payment
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val billing: JsonField<BillingAddress>,
             private val brandId: JsonField<String>,
@@ -2369,6 +2371,7 @@ private constructor(
 
         /** Response struct representing subscription details */
         class Subscription
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val addons: JsonField<List<AddonCartResponseItem>>,
             private val billing: JsonField<BillingAddress>,
@@ -3952,6 +3955,7 @@ private constructor(
         }
 
         class Refund
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val businessId: JsonField<String>,
             private val createdAt: JsonField<OffsetDateTime>,
@@ -4707,6 +4711,7 @@ private constructor(
         }
 
         class Dispute
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val amount: JsonField<String>,
             private val businessId: JsonField<String>,
@@ -5517,6 +5522,7 @@ private constructor(
         }
 
         class LicenseKey
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val id: JsonField<String>,
             private val businessId: JsonField<String>,

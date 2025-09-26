@@ -493,6 +493,7 @@ private constructor(
      * `code` is optional; if not provided, we generate a random 16-char code.
      */
     class Body
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val amount: JsonField<Int>,
         private val type: JsonField<DiscountType>,

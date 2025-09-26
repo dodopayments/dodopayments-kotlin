@@ -611,6 +611,7 @@ private constructor(
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     class Body
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val price: JsonField<Price>,
         private val taxCategory: JsonField<TaxCategory>,
@@ -1294,6 +1295,7 @@ private constructor(
 
     /** Choose how you would like you digital product delivered */
     class DigitalProductDelivery
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val externalUrl: JsonField<String>,
         private val instructions: JsonField<String>,

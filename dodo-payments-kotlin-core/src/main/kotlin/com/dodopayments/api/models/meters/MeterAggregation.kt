@@ -17,6 +17,7 @@ import java.util.Collections
 import java.util.Objects
 
 class MeterAggregation
+@JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val type: JsonField<Type>,
     private val key: JsonField<String>,
