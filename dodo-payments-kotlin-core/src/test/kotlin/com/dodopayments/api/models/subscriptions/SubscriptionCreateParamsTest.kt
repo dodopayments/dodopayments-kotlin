@@ -33,6 +33,7 @@ internal class SubscriptionCreateParamsTest {
             .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
             .billingCurrency(Currency.AED)
             .discountCode("discount_code")
+            .force3ds(true)
             .metadata(
                 SubscriptionCreateParams.Metadata.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -75,6 +76,7 @@ internal class SubscriptionCreateParamsTest {
                 .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
                 .billingCurrency(Currency.AED)
                 .discountCode("discount_code")
+                .force3ds(true)
                 .metadata(
                     SubscriptionCreateParams.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -121,6 +123,7 @@ internal class SubscriptionCreateParamsTest {
         assertThat(body.allowedPaymentMethodTypes()).containsExactly(PaymentMethodTypes.CREDIT)
         assertThat(body.billingCurrency()).isEqualTo(Currency.AED)
         assertThat(body.discountCode()).isEqualTo("discount_code")
+        assertThat(body.force3ds()).isEqualTo(true)
         assertThat(body.metadata())
             .isEqualTo(
                 SubscriptionCreateParams.Metadata.builder()

@@ -36,6 +36,7 @@ internal class SubscriptionListResponseTest {
                         .customerId("customer_id")
                         .email("email")
                         .name("name")
+                        .phoneNumber("phone_number")
                         .build()
                 )
                 .metadata(
@@ -60,6 +61,7 @@ internal class SubscriptionListResponseTest {
                 .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .discountCyclesRemaining(0)
                 .discountId("discount_id")
+                .taxId("tax_id")
                 .build()
 
         assertThat(subscriptionListResponse.billing())
@@ -82,6 +84,7 @@ internal class SubscriptionListResponseTest {
                     .customerId("customer_id")
                     .email("email")
                     .name("name")
+                    .phoneNumber("phone_number")
                     .build()
             )
         assertThat(subscriptionListResponse.metadata())
@@ -111,6 +114,7 @@ internal class SubscriptionListResponseTest {
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(subscriptionListResponse.discountCyclesRemaining()).isEqualTo(0)
         assertThat(subscriptionListResponse.discountId()).isEqualTo("discount_id")
+        assertThat(subscriptionListResponse.taxId()).isEqualTo("tax_id")
     }
 
     @Test
@@ -135,6 +139,7 @@ internal class SubscriptionListResponseTest {
                         .customerId("customer_id")
                         .email("email")
                         .name("name")
+                        .phoneNumber("phone_number")
                         .build()
                 )
                 .metadata(
@@ -159,6 +164,7 @@ internal class SubscriptionListResponseTest {
                 .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .discountCyclesRemaining(0)
                 .discountId("discount_id")
+                .taxId("tax_id")
                 .build()
 
         val roundtrippedSubscriptionListResponse =

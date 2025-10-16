@@ -2399,6 +2399,7 @@ private constructor(
             private val discountCyclesRemaining: JsonField<Int>,
             private val discountId: JsonField<String>,
             private val expiresAt: JsonField<OffsetDateTime>,
+            private val taxId: JsonField<String>,
             private val payloadType: JsonField<PayloadType>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
@@ -2483,6 +2484,7 @@ private constructor(
                 @JsonProperty("expires_at")
                 @ExcludeMissing
                 expiresAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("tax_id") @ExcludeMissing taxId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("payload_type")
                 @ExcludeMissing
                 payloadType: JsonField<PayloadType> = JsonMissing.of(),
@@ -2513,6 +2515,7 @@ private constructor(
                 discountCyclesRemaining,
                 discountId,
                 expiresAt,
+                taxId,
                 payloadType,
                 mutableMapOf(),
             )
@@ -2545,6 +2548,7 @@ private constructor(
                     .discountCyclesRemaining(discountCyclesRemaining)
                     .discountId(discountId)
                     .expiresAt(expiresAt)
+                    .taxId(taxId)
                     .build()
 
             /**
@@ -2785,6 +2789,14 @@ private constructor(
              *   (e.g. if the server responded with an unexpected value).
              */
             fun expiresAt(): OffsetDateTime? = expiresAt.getNullable("expires_at")
+
+            /**
+             * Tax identifier provided for this subscription (if applicable)
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun taxId(): String? = taxId.getNullable("tax_id")
 
             /**
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
@@ -3048,6 +3060,13 @@ private constructor(
             fun _expiresAt(): JsonField<OffsetDateTime> = expiresAt
 
             /**
+             * Returns the raw JSON value of [taxId].
+             *
+             * Unlike [taxId], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("tax_id") @ExcludeMissing fun _taxId(): JsonField<String> = taxId
+
+            /**
              * Returns the raw JSON value of [payloadType].
              *
              * Unlike [payloadType], this method doesn't throw if the JSON field has an unexpected
@@ -3133,6 +3152,7 @@ private constructor(
                 private var discountCyclesRemaining: JsonField<Int> = JsonMissing.of()
                 private var discountId: JsonField<String> = JsonMissing.of()
                 private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
+                private var taxId: JsonField<String> = JsonMissing.of()
                 private var payloadType: JsonField<PayloadType>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -3163,6 +3183,7 @@ private constructor(
                     discountCyclesRemaining = subscription.discountCyclesRemaining
                     discountId = subscription.discountId
                     expiresAt = subscription.expiresAt
+                    taxId = subscription.taxId
                     payloadType = subscription.payloadType
                     additionalProperties = subscription.additionalProperties.toMutableMap()
                 }
@@ -3571,6 +3592,18 @@ private constructor(
                     this.expiresAt = expiresAt
                 }
 
+                /** Tax identifier provided for this subscription (if applicable) */
+                fun taxId(taxId: String?) = taxId(JsonField.ofNullable(taxId))
+
+                /**
+                 * Sets [Builder.taxId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.taxId] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
+                fun taxId(taxId: JsonField<String>) = apply { this.taxId = taxId }
+
                 fun payloadType(payloadType: PayloadType) = payloadType(JsonField.of(payloadType))
 
                 /**
@@ -3668,6 +3701,7 @@ private constructor(
                         discountCyclesRemaining,
                         discountId,
                         expiresAt,
+                        taxId,
                         checkRequired("payloadType", payloadType),
                         additionalProperties.toMutableMap(),
                     )
@@ -3706,6 +3740,7 @@ private constructor(
                 discountCyclesRemaining()
                 discountId()
                 expiresAt()
+                taxId()
                 payloadType().validate()
                 validated = true
             }
@@ -3751,6 +3786,7 @@ private constructor(
                     (if (discountCyclesRemaining.asKnown() == null) 0 else 1) +
                     (if (discountId.asKnown() == null) 0 else 1) +
                     (if (expiresAt.asKnown() == null) 0 else 1) +
+                    (if (taxId.asKnown() == null) 0 else 1) +
                     (payloadType.asKnown()?.validity() ?: 0)
 
             class PayloadType
@@ -3911,6 +3947,7 @@ private constructor(
                     discountCyclesRemaining == other.discountCyclesRemaining &&
                     discountId == other.discountId &&
                     expiresAt == other.expiresAt &&
+                    taxId == other.taxId &&
                     payloadType == other.payloadType &&
                     additionalProperties == other.additionalProperties
             }
@@ -3943,6 +3980,7 @@ private constructor(
                     discountCyclesRemaining,
                     discountId,
                     expiresAt,
+                    taxId,
                     payloadType,
                     additionalProperties,
                 )
@@ -3951,7 +3989,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Subscription{addons=$addons, billing=$billing, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, currency=$currency, customer=$customer, metadata=$metadata, meters=$meters, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancelledAt=$cancelledAt, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, expiresAt=$expiresAt, payloadType=$payloadType, additionalProperties=$additionalProperties}"
+                "Subscription{addons=$addons, billing=$billing, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, currency=$currency, customer=$customer, metadata=$metadata, meters=$meters, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancelledAt=$cancelledAt, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, expiresAt=$expiresAt, taxId=$taxId, payloadType=$payloadType, additionalProperties=$additionalProperties}"
         }
 
         class Refund
