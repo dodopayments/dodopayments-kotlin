@@ -38,6 +38,7 @@ private constructor(
     private val customization: JsonField<Customization>,
     private val discountCode: JsonField<String>,
     private val featureFlags: JsonField<FeatureFlags>,
+    private val force3ds: JsonField<Boolean>,
     private val metadata: JsonField<Metadata>,
     private val returnUrl: JsonField<String>,
     private val showSavedPaymentMethods: JsonField<Boolean>,
@@ -72,6 +73,7 @@ private constructor(
         @JsonProperty("feature_flags")
         @ExcludeMissing
         featureFlags: JsonField<FeatureFlags> = JsonMissing.of(),
+        @JsonProperty("force_3ds") @ExcludeMissing force3ds: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("metadata") @ExcludeMissing metadata: JsonField<Metadata> = JsonMissing.of(),
         @JsonProperty("return_url") @ExcludeMissing returnUrl: JsonField<String> = JsonMissing.of(),
         @JsonProperty("show_saved_payment_methods")
@@ -90,6 +92,7 @@ private constructor(
         customization,
         discountCode,
         featureFlags,
+        force3ds,
         metadata,
         returnUrl,
         showSavedPaymentMethods,
@@ -169,6 +172,14 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun featureFlags(): FeatureFlags? = featureFlags.getNullable("feature_flags")
+
+    /**
+     * Override merchant default 3DS behaviour for this session
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun force3ds(): Boolean? = force3ds.getNullable("force_3ds")
 
     /**
      * Additional metadata associated with the payment. Defaults to empty if not provided.
@@ -281,6 +292,13 @@ private constructor(
     fun _featureFlags(): JsonField<FeatureFlags> = featureFlags
 
     /**
+     * Returns the raw JSON value of [force3ds].
+     *
+     * Unlike [force3ds], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("force_3ds") @ExcludeMissing fun _force3ds(): JsonField<Boolean> = force3ds
+
+    /**
      * Returns the raw JSON value of [metadata].
      *
      * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
@@ -351,6 +369,7 @@ private constructor(
         private var customization: JsonField<Customization> = JsonMissing.of()
         private var discountCode: JsonField<String> = JsonMissing.of()
         private var featureFlags: JsonField<FeatureFlags> = JsonMissing.of()
+        private var force3ds: JsonField<Boolean> = JsonMissing.of()
         private var metadata: JsonField<Metadata> = JsonMissing.of()
         private var returnUrl: JsonField<String> = JsonMissing.of()
         private var showSavedPaymentMethods: JsonField<Boolean> = JsonMissing.of()
@@ -368,6 +387,7 @@ private constructor(
             customization = checkoutSessionRequest.customization
             discountCode = checkoutSessionRequest.discountCode
             featureFlags = checkoutSessionRequest.featureFlags
+            force3ds = checkoutSessionRequest.force3ds
             metadata = checkoutSessionRequest.metadata
             returnUrl = checkoutSessionRequest.returnUrl
             showSavedPaymentMethods = checkoutSessionRequest.showSavedPaymentMethods
@@ -543,6 +563,25 @@ private constructor(
             this.featureFlags = featureFlags
         }
 
+        /** Override merchant default 3DS behaviour for this session */
+        fun force3ds(force3ds: Boolean?) = force3ds(JsonField.ofNullable(force3ds))
+
+        /**
+         * Alias for [Builder.force3ds].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun force3ds(force3ds: Boolean) = force3ds(force3ds as Boolean?)
+
+        /**
+         * Sets [Builder.force3ds] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.force3ds] with a well-typed [Boolean] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun force3ds(force3ds: JsonField<Boolean>) = apply { this.force3ds = force3ds }
+
         /** Additional metadata associated with the payment. Defaults to empty if not provided. */
         fun metadata(metadata: Metadata?) = metadata(JsonField.ofNullable(metadata))
 
@@ -638,6 +677,7 @@ private constructor(
                 customization,
                 discountCode,
                 featureFlags,
+                force3ds,
                 metadata,
                 returnUrl,
                 showSavedPaymentMethods,
@@ -662,6 +702,7 @@ private constructor(
         customization()?.validate()
         discountCode()
         featureFlags()?.validate()
+        force3ds()
         metadata()?.validate()
         returnUrl()
         showSavedPaymentMethods()
@@ -692,6 +733,7 @@ private constructor(
             (customization.asKnown()?.validity() ?: 0) +
             (if (discountCode.asKnown() == null) 0 else 1) +
             (featureFlags.asKnown()?.validity() ?: 0) +
+            (if (force3ds.asKnown() == null) 0 else 1) +
             (metadata.asKnown()?.validity() ?: 0) +
             (if (returnUrl.asKnown() == null) 0 else 1) +
             (if (showSavedPaymentMethods.asKnown() == null) 0 else 1) +
@@ -1308,6 +1350,7 @@ private constructor(
     class Customization
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
+        private val forceLanguage: JsonField<String>,
         private val showOnDemandTag: JsonField<Boolean>,
         private val showOrderDetails: JsonField<Boolean>,
         private val theme: JsonField<Theme>,
@@ -1316,6 +1359,9 @@ private constructor(
 
         @JsonCreator
         private constructor(
+            @JsonProperty("force_language")
+            @ExcludeMissing
+            forceLanguage: JsonField<String> = JsonMissing.of(),
             @JsonProperty("show_on_demand_tag")
             @ExcludeMissing
             showOnDemandTag: JsonField<Boolean> = JsonMissing.of(),
@@ -1323,7 +1369,15 @@ private constructor(
             @ExcludeMissing
             showOrderDetails: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("theme") @ExcludeMissing theme: JsonField<Theme> = JsonMissing.of(),
-        ) : this(showOnDemandTag, showOrderDetails, theme, mutableMapOf())
+        ) : this(forceLanguage, showOnDemandTag, showOrderDetails, theme, mutableMapOf())
+
+        /**
+         * Force the checkout interface to render in a specific language (e.g. `en`, `es`)
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun forceLanguage(): String? = forceLanguage.getNullable("force_language")
 
         /**
          * Show on demand tag
@@ -1354,6 +1408,16 @@ private constructor(
          *   if the server responded with an unexpected value).
          */
         fun theme(): Theme? = theme.getNullable("theme")
+
+        /**
+         * Returns the raw JSON value of [forceLanguage].
+         *
+         * Unlike [forceLanguage], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("force_language")
+        @ExcludeMissing
+        fun _forceLanguage(): JsonField<String> = forceLanguage
 
         /**
          * Returns the raw JSON value of [showOnDemandTag].
@@ -1403,16 +1467,33 @@ private constructor(
         /** A builder for [Customization]. */
         class Builder internal constructor() {
 
+            private var forceLanguage: JsonField<String> = JsonMissing.of()
             private var showOnDemandTag: JsonField<Boolean> = JsonMissing.of()
             private var showOrderDetails: JsonField<Boolean> = JsonMissing.of()
             private var theme: JsonField<Theme> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(customization: Customization) = apply {
+                forceLanguage = customization.forceLanguage
                 showOnDemandTag = customization.showOnDemandTag
                 showOrderDetails = customization.showOrderDetails
                 theme = customization.theme
                 additionalProperties = customization.additionalProperties.toMutableMap()
+            }
+
+            /** Force the checkout interface to render in a specific language (e.g. `en`, `es`) */
+            fun forceLanguage(forceLanguage: String?) =
+                forceLanguage(JsonField.ofNullable(forceLanguage))
+
+            /**
+             * Sets [Builder.forceLanguage] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.forceLanguage] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun forceLanguage(forceLanguage: JsonField<String>) = apply {
+                this.forceLanguage = forceLanguage
             }
 
             /**
@@ -1495,6 +1576,7 @@ private constructor(
              */
             fun build(): Customization =
                 Customization(
+                    forceLanguage,
                     showOnDemandTag,
                     showOrderDetails,
                     theme,
@@ -1509,6 +1591,7 @@ private constructor(
                 return@apply
             }
 
+            forceLanguage()
             showOnDemandTag()
             showOrderDetails()
             theme()?.validate()
@@ -1530,7 +1613,8 @@ private constructor(
          * Used for best match union deserialization.
          */
         internal fun validity(): Int =
-            (if (showOnDemandTag.asKnown() == null) 0 else 1) +
+            (if (forceLanguage.asKnown() == null) 0 else 1) +
+                (if (showOnDemandTag.asKnown() == null) 0 else 1) +
                 (if (showOrderDetails.asKnown() == null) 0 else 1) +
                 (theme.asKnown()?.validity() ?: 0)
 
@@ -1679,6 +1763,7 @@ private constructor(
             }
 
             return other is Customization &&
+                forceLanguage == other.forceLanguage &&
                 showOnDemandTag == other.showOnDemandTag &&
                 showOrderDetails == other.showOrderDetails &&
                 theme == other.theme &&
@@ -1686,13 +1771,19 @@ private constructor(
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(showOnDemandTag, showOrderDetails, theme, additionalProperties)
+            Objects.hash(
+                forceLanguage,
+                showOnDemandTag,
+                showOrderDetails,
+                theme,
+                additionalProperties,
+            )
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Customization{showOnDemandTag=$showOnDemandTag, showOrderDetails=$showOrderDetails, theme=$theme, additionalProperties=$additionalProperties}"
+            "Customization{forceLanguage=$forceLanguage, showOnDemandTag=$showOnDemandTag, showOrderDetails=$showOrderDetails, theme=$theme, additionalProperties=$additionalProperties}"
     }
 
     class FeatureFlags
@@ -2380,6 +2471,7 @@ private constructor(
             customization == other.customization &&
             discountCode == other.discountCode &&
             featureFlags == other.featureFlags &&
+            force3ds == other.force3ds &&
             metadata == other.metadata &&
             returnUrl == other.returnUrl &&
             showSavedPaymentMethods == other.showSavedPaymentMethods &&
@@ -2398,6 +2490,7 @@ private constructor(
             customization,
             discountCode,
             featureFlags,
+            force3ds,
             metadata,
             returnUrl,
             showSavedPaymentMethods,
@@ -2409,5 +2502,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CheckoutSessionRequest{productCart=$productCart, allowedPaymentMethodTypes=$allowedPaymentMethodTypes, billingAddress=$billingAddress, billingCurrency=$billingCurrency, confirm=$confirm, customer=$customer, customization=$customization, discountCode=$discountCode, featureFlags=$featureFlags, metadata=$metadata, returnUrl=$returnUrl, showSavedPaymentMethods=$showSavedPaymentMethods, subscriptionData=$subscriptionData, additionalProperties=$additionalProperties}"
+        "CheckoutSessionRequest{productCart=$productCart, allowedPaymentMethodTypes=$allowedPaymentMethodTypes, billingAddress=$billingAddress, billingCurrency=$billingCurrency, confirm=$confirm, customer=$customer, customization=$customization, discountCode=$discountCode, featureFlags=$featureFlags, force3ds=$force3ds, metadata=$metadata, returnUrl=$returnUrl, showSavedPaymentMethods=$showSavedPaymentMethods, subscriptionData=$subscriptionData, additionalProperties=$additionalProperties}"
 }

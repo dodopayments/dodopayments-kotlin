@@ -16,11 +16,13 @@ internal class CustomerLimitedDetailsTest {
                 .customerId("customer_id")
                 .email("email")
                 .name("name")
+                .phoneNumber("phone_number")
                 .build()
 
         assertThat(customerLimitedDetails.customerId()).isEqualTo("customer_id")
         assertThat(customerLimitedDetails.email()).isEqualTo("email")
         assertThat(customerLimitedDetails.name()).isEqualTo("name")
+        assertThat(customerLimitedDetails.phoneNumber()).isEqualTo("phone_number")
     }
 
     @Test
@@ -31,6 +33,7 @@ internal class CustomerLimitedDetailsTest {
                 .customerId("customer_id")
                 .email("email")
                 .name("name")
+                .phoneNumber("phone_number")
                 .build()
 
         val roundtrippedCustomerLimitedDetails =

@@ -105,6 +105,7 @@ internal class ErrorHandlingTest {
                         )
                         .customization(
                             CheckoutSessionRequest.Customization.builder()
+                                .forceLanguage("force_language")
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
@@ -120,6 +121,7 @@ internal class ErrorHandlingTest {
                                 .alwaysCreateNewCustomer(true)
                                 .build()
                         )
+                        .force3ds(true)
                         .metadata(
                             CheckoutSessionRequest.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -191,6 +193,7 @@ internal class ErrorHandlingTest {
                         )
                         .customization(
                             CheckoutSessionRequest.Customization.builder()
+                                .forceLanguage("force_language")
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
@@ -206,6 +209,7 @@ internal class ErrorHandlingTest {
                                 .alwaysCreateNewCustomer(true)
                                 .build()
                         )
+                        .force3ds(true)
                         .metadata(
                             CheckoutSessionRequest.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -277,6 +281,7 @@ internal class ErrorHandlingTest {
                         )
                         .customization(
                             CheckoutSessionRequest.Customization.builder()
+                                .forceLanguage("force_language")
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
@@ -292,6 +297,7 @@ internal class ErrorHandlingTest {
                                 .alwaysCreateNewCustomer(true)
                                 .build()
                         )
+                        .force3ds(true)
                         .metadata(
                             CheckoutSessionRequest.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -363,6 +369,7 @@ internal class ErrorHandlingTest {
                         )
                         .customization(
                             CheckoutSessionRequest.Customization.builder()
+                                .forceLanguage("force_language")
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
@@ -378,6 +385,7 @@ internal class ErrorHandlingTest {
                                 .alwaysCreateNewCustomer(true)
                                 .build()
                         )
+                        .force3ds(true)
                         .metadata(
                             CheckoutSessionRequest.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -449,6 +457,7 @@ internal class ErrorHandlingTest {
                         )
                         .customization(
                             CheckoutSessionRequest.Customization.builder()
+                                .forceLanguage("force_language")
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
@@ -464,6 +473,7 @@ internal class ErrorHandlingTest {
                                 .alwaysCreateNewCustomer(true)
                                 .build()
                         )
+                        .force3ds(true)
                         .metadata(
                             CheckoutSessionRequest.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -535,6 +545,7 @@ internal class ErrorHandlingTest {
                         )
                         .customization(
                             CheckoutSessionRequest.Customization.builder()
+                                .forceLanguage("force_language")
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
@@ -550,6 +561,7 @@ internal class ErrorHandlingTest {
                                 .alwaysCreateNewCustomer(true)
                                 .build()
                         )
+                        .force3ds(true)
                         .metadata(
                             CheckoutSessionRequest.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -621,6 +633,7 @@ internal class ErrorHandlingTest {
                         )
                         .customization(
                             CheckoutSessionRequest.Customization.builder()
+                                .forceLanguage("force_language")
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
@@ -636,6 +649,7 @@ internal class ErrorHandlingTest {
                                 .alwaysCreateNewCustomer(true)
                                 .build()
                         )
+                        .force3ds(true)
                         .metadata(
                             CheckoutSessionRequest.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -707,6 +721,7 @@ internal class ErrorHandlingTest {
                         )
                         .customization(
                             CheckoutSessionRequest.Customization.builder()
+                                .forceLanguage("force_language")
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
@@ -722,6 +737,7 @@ internal class ErrorHandlingTest {
                                 .alwaysCreateNewCustomer(true)
                                 .build()
                         )
+                        .force3ds(true)
                         .metadata(
                             CheckoutSessionRequest.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -793,6 +809,7 @@ internal class ErrorHandlingTest {
                         )
                         .customization(
                             CheckoutSessionRequest.Customization.builder()
+                                .forceLanguage("force_language")
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
@@ -808,6 +825,7 @@ internal class ErrorHandlingTest {
                                 .alwaysCreateNewCustomer(true)
                                 .build()
                         )
+                        .force3ds(true)
                         .metadata(
                             CheckoutSessionRequest.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -879,6 +897,7 @@ internal class ErrorHandlingTest {
                         )
                         .customization(
                             CheckoutSessionRequest.Customization.builder()
+                                .forceLanguage("force_language")
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
@@ -894,6 +913,7 @@ internal class ErrorHandlingTest {
                                 .alwaysCreateNewCustomer(true)
                                 .build()
                         )
+                        .force3ds(true)
                         .metadata(
                             CheckoutSessionRequest.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -965,6 +985,7 @@ internal class ErrorHandlingTest {
                         )
                         .customization(
                             CheckoutSessionRequest.Customization.builder()
+                                .forceLanguage("force_language")
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
@@ -980,6 +1001,7 @@ internal class ErrorHandlingTest {
                                 .alwaysCreateNewCustomer(true)
                                 .build()
                         )
+                        .force3ds(true)
                         .metadata(
                             CheckoutSessionRequest.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -1051,6 +1073,7 @@ internal class ErrorHandlingTest {
                         )
                         .customization(
                             CheckoutSessionRequest.Customization.builder()
+                                .forceLanguage("force_language")
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
@@ -1066,6 +1089,7 @@ internal class ErrorHandlingTest {
                                 .alwaysCreateNewCustomer(true)
                                 .build()
                         )
+                        .force3ds(true)
                         .metadata(
                             CheckoutSessionRequest.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -1137,6 +1161,7 @@ internal class ErrorHandlingTest {
                         )
                         .customization(
                             CheckoutSessionRequest.Customization.builder()
+                                .forceLanguage("force_language")
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
@@ -1152,6 +1177,7 @@ internal class ErrorHandlingTest {
                                 .alwaysCreateNewCustomer(true)
                                 .build()
                         )
+                        .force3ds(true)
                         .metadata(
                             CheckoutSessionRequest.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -1223,6 +1249,7 @@ internal class ErrorHandlingTest {
                         )
                         .customization(
                             CheckoutSessionRequest.Customization.builder()
+                                .forceLanguage("force_language")
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
@@ -1238,6 +1265,7 @@ internal class ErrorHandlingTest {
                                 .alwaysCreateNewCustomer(true)
                                 .build()
                         )
+                        .force3ds(true)
                         .metadata(
                             CheckoutSessionRequest.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -1309,6 +1337,7 @@ internal class ErrorHandlingTest {
                         )
                         .customization(
                             CheckoutSessionRequest.Customization.builder()
+                                .forceLanguage("force_language")
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
@@ -1324,6 +1353,7 @@ internal class ErrorHandlingTest {
                                 .alwaysCreateNewCustomer(true)
                                 .build()
                         )
+                        .force3ds(true)
                         .metadata(
                             CheckoutSessionRequest.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -1395,6 +1425,7 @@ internal class ErrorHandlingTest {
                         )
                         .customization(
                             CheckoutSessionRequest.Customization.builder()
+                                .forceLanguage("force_language")
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
@@ -1410,6 +1441,7 @@ internal class ErrorHandlingTest {
                                 .alwaysCreateNewCustomer(true)
                                 .build()
                         )
+                        .force3ds(true)
                         .metadata(
                             CheckoutSessionRequest.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -1479,6 +1511,7 @@ internal class ErrorHandlingTest {
                         )
                         .customization(
                             CheckoutSessionRequest.Customization.builder()
+                                .forceLanguage("force_language")
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
@@ -1494,6 +1527,7 @@ internal class ErrorHandlingTest {
                                 .alwaysCreateNewCustomer(true)
                                 .build()
                         )
+                        .force3ds(true)
                         .metadata(
                             CheckoutSessionRequest.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))

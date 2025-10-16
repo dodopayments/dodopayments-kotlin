@@ -50,6 +50,7 @@ internal class PaymentServiceTest {
                     .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
                     .billingCurrency(Currency.AED)
                     .discountCode("discount_code")
+                    .force3ds(true)
                     .metadata(
                         PaymentCreateParams.Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
