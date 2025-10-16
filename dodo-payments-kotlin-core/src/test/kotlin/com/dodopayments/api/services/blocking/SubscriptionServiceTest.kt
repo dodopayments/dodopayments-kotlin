@@ -52,6 +52,7 @@ internal class SubscriptionServiceTest {
                     .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
                     .billingCurrency(Currency.AED)
                     .discountCode("discount_code")
+                    .force3ds(true)
                     .metadata(
                         SubscriptionCreateParams.Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))

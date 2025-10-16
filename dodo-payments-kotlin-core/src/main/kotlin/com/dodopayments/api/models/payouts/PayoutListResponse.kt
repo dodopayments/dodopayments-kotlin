@@ -109,7 +109,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun chargebacks(): Long = chargebacks.getRequired("chargebacks")
+    @Deprecated("deprecated") fun chargebacks(): Long = chargebacks.getRequired("chargebacks")
 
     /**
      * The timestamp when the payout was created, in UTC.
@@ -157,7 +157,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun refunds(): Long = refunds.getRequired("refunds")
+    @Deprecated("deprecated") fun refunds(): Long = refunds.getRequired("refunds")
 
     /**
      * The current status of the payout.
@@ -173,7 +173,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun tax(): Long = tax.getRequired("tax")
+    @Deprecated("deprecated") fun tax(): Long = tax.getRequired("tax")
 
     /**
      * The timestamp when the payout was last updated, in UTC.
@@ -226,7 +226,10 @@ private constructor(
      *
      * Unlike [chargebacks], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("chargebacks") @ExcludeMissing fun _chargebacks(): JsonField<Long> = chargebacks
+    @Deprecated("deprecated")
+    @JsonProperty("chargebacks")
+    @ExcludeMissing
+    fun _chargebacks(): JsonField<Long> = chargebacks
 
     /**
      * Returns the raw JSON value of [createdAt].
@@ -272,7 +275,10 @@ private constructor(
      *
      * Unlike [refunds], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("refunds") @ExcludeMissing fun _refunds(): JsonField<Long> = refunds
+    @Deprecated("deprecated")
+    @JsonProperty("refunds")
+    @ExcludeMissing
+    fun _refunds(): JsonField<Long> = refunds
 
     /**
      * Returns the raw JSON value of [status].
@@ -286,7 +292,7 @@ private constructor(
      *
      * Unlike [tax], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("tax") @ExcludeMissing fun _tax(): JsonField<Long> = tax
+    @Deprecated("deprecated") @JsonProperty("tax") @ExcludeMissing fun _tax(): JsonField<Long> = tax
 
     /**
      * Returns the raw JSON value of [updatedAt].
@@ -420,6 +426,7 @@ private constructor(
         fun businessId(businessId: JsonField<String>) = apply { this.businessId = businessId }
 
         /** The total value of chargebacks associated with the payout. */
+        @Deprecated("deprecated")
         fun chargebacks(chargebacks: Long) = chargebacks(JsonField.of(chargebacks))
 
         /**
@@ -429,6 +436,7 @@ private constructor(
          * This method is primarily for setting the field to an undocumented or not yet supported
          * value.
          */
+        @Deprecated("deprecated")
         fun chargebacks(chargebacks: JsonField<Long>) = apply { this.chargebacks = chargebacks }
 
         /** The timestamp when the payout was created, in UTC. */
@@ -492,7 +500,7 @@ private constructor(
         fun payoutId(payoutId: JsonField<String>) = apply { this.payoutId = payoutId }
 
         /** The total value of refunds associated with the payout. */
-        fun refunds(refunds: Long) = refunds(JsonField.of(refunds))
+        @Deprecated("deprecated") fun refunds(refunds: Long) = refunds(JsonField.of(refunds))
 
         /**
          * Sets [Builder.refunds] to an arbitrary JSON value.
@@ -500,6 +508,7 @@ private constructor(
          * You should usually call [Builder.refunds] with a well-typed [Long] value instead. This
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
+        @Deprecated("deprecated")
         fun refunds(refunds: JsonField<Long>) = apply { this.refunds = refunds }
 
         /** The current status of the payout. */
@@ -514,7 +523,7 @@ private constructor(
         fun status(status: JsonField<Status>) = apply { this.status = status }
 
         /** The tax applied to the payout. */
-        fun tax(tax: Long) = tax(JsonField.of(tax))
+        @Deprecated("deprecated") fun tax(tax: Long) = tax(JsonField.of(tax))
 
         /**
          * Sets [Builder.tax] to an arbitrary JSON value.
@@ -522,7 +531,7 @@ private constructor(
          * You should usually call [Builder.tax] with a well-typed [Long] value instead. This method
          * is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun tax(tax: JsonField<Long>) = apply { this.tax = tax }
+        @Deprecated("deprecated") fun tax(tax: JsonField<Long>) = apply { this.tax = tax }
 
         /** The timestamp when the payout was last updated, in UTC. */
         fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))

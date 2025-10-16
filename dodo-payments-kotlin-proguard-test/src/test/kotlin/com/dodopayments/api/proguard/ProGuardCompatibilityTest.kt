@@ -108,6 +108,7 @@ internal class ProGuardCompatibilityTest {
                 .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
                 .customization(
                     CheckoutSessionRequest.Customization.builder()
+                        .forceLanguage("force_language")
                         .showOnDemandTag(true)
                         .showOrderDetails(true)
                         .theme(CheckoutSessionRequest.Customization.Theme.DARK)
@@ -123,6 +124,7 @@ internal class ProGuardCompatibilityTest {
                         .alwaysCreateNewCustomer(true)
                         .build()
                 )
+                .force3ds(true)
                 .metadata(
                     CheckoutSessionRequest.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))

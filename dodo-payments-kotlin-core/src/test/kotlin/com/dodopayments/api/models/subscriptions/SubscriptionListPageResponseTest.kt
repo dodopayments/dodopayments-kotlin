@@ -38,6 +38,7 @@ internal class SubscriptionListPageResponseTest {
                                 .customerId("customer_id")
                                 .email("email")
                                 .name("name")
+                                .phoneNumber("phone_number")
                                 .build()
                         )
                         .metadata(
@@ -62,6 +63,7 @@ internal class SubscriptionListPageResponseTest {
                         .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .discountCyclesRemaining(0)
                         .discountId("discount_id")
+                        .taxId("tax_id")
                         .build()
                 )
                 .build()
@@ -86,6 +88,7 @@ internal class SubscriptionListPageResponseTest {
                             .customerId("customer_id")
                             .email("email")
                             .name("name")
+                            .phoneNumber("phone_number")
                             .build()
                     )
                     .metadata(
@@ -110,6 +113,7 @@ internal class SubscriptionListPageResponseTest {
                     .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .discountCyclesRemaining(0)
                     .discountId("discount_id")
+                    .taxId("tax_id")
                     .build()
             )
     }
@@ -138,6 +142,7 @@ internal class SubscriptionListPageResponseTest {
                                 .customerId("customer_id")
                                 .email("email")
                                 .name("name")
+                                .phoneNumber("phone_number")
                                 .build()
                         )
                         .metadata(
@@ -162,6 +167,7 @@ internal class SubscriptionListPageResponseTest {
                         .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .discountCyclesRemaining(0)
                         .discountId("discount_id")
+                        .taxId("tax_id")
                         .build()
                 )
                 .build()

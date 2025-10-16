@@ -22,6 +22,7 @@ internal class SubscriptionCreateResponseTest {
                         .customerId("customer_id")
                         .email("email")
                         .name("name")
+                        .phoneNumber("phone_number")
                         .build()
                 )
                 .metadata(
@@ -48,6 +49,7 @@ internal class SubscriptionCreateResponseTest {
                     .customerId("customer_id")
                     .email("email")
                     .name("name")
+                    .phoneNumber("phone_number")
                     .build()
             )
         assertThat(subscriptionCreateResponse.metadata())
@@ -77,6 +79,7 @@ internal class SubscriptionCreateResponseTest {
                         .customerId("customer_id")
                         .email("email")
                         .name("name")
+                        .phoneNumber("phone_number")
                         .build()
                 )
                 .metadata(
