@@ -54,8 +54,8 @@ import com.dodopayments.api.models.checkoutsessions.CheckoutSessionCreateParams
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionRequest
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionResponse
 
-// Configures using the `dodopayments.apiKey` and `dodopayments.baseUrl` system properties
-// Or configures using the `DODO_PAYMENTS_API_KEY` and `DODO_PAYMENTS_BASE_URL` environment variables
+// Configures using the `dodopayments.apiKey`, `dodopayments.webhookKey` and `dodopayments.baseUrl` system properties
+// Or configures using the `DODO_PAYMENTS_API_KEY`, `DODO_PAYMENTS_WEBHOOK_KEY` and `DODO_PAYMENTS_BASE_URL` environment variables
 val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.fromEnv()
 
 val params: CheckoutSessionRequest = CheckoutSessionRequest.builder()
@@ -75,8 +75,8 @@ Configure the client using system properties or environment variables:
 import com.dodopayments.api.client.DodoPaymentsClient
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
 
-// Configures using the `dodopayments.apiKey` and `dodopayments.baseUrl` system properties
-// Or configures using the `DODO_PAYMENTS_API_KEY` and `DODO_PAYMENTS_BASE_URL` environment variables
+// Configures using the `dodopayments.apiKey`, `dodopayments.webhookKey` and `dodopayments.baseUrl` system properties
+// Or configures using the `DODO_PAYMENTS_API_KEY`, `DODO_PAYMENTS_WEBHOOK_KEY` and `DODO_PAYMENTS_BASE_URL` environment variables
 val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.fromEnv()
 ```
 
@@ -98,8 +98,8 @@ import com.dodopayments.api.client.DodoPaymentsClient
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
 
 val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.builder()
-    // Configures using the `dodopayments.apiKey` and `dodopayments.baseUrl` system properties
-    // Or configures using the `DODO_PAYMENTS_API_KEY` and `DODO_PAYMENTS_BASE_URL` environment variables
+    // Configures using the `dodopayments.apiKey`, `dodopayments.webhookKey` and `dodopayments.baseUrl` system properties
+    // Or configures using the `DODO_PAYMENTS_API_KEY`, `DODO_PAYMENTS_WEBHOOK_KEY` and `DODO_PAYMENTS_BASE_URL` environment variables
     .fromEnv()
     .bearerToken("My Bearer Token")
     .build()
@@ -107,10 +107,11 @@ val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.builder()
 
 See this table for the available options:
 
-| Setter        | System property        | Environment variable     | Required | Default value                     |
-| ------------- | ---------------------- | ------------------------ | -------- | --------------------------------- |
-| `bearerToken` | `dodopayments.apiKey`  | `DODO_PAYMENTS_API_KEY`  | true     | -                                 |
-| `baseUrl`     | `dodopayments.baseUrl` | `DODO_PAYMENTS_BASE_URL` | true     | `"https://live.dodopayments.com"` |
+| Setter        | System property           | Environment variable        | Required | Default value                     |
+| ------------- | ------------------------- | --------------------------- | -------- | --------------------------------- |
+| `bearerToken` | `dodopayments.apiKey`     | `DODO_PAYMENTS_API_KEY`     | true     | -                                 |
+| `webhookKey`  | `dodopayments.webhookKey` | `DODO_PAYMENTS_WEBHOOK_KEY` | false    | -                                 |
+| `baseUrl`     | `dodopayments.baseUrl`    | `DODO_PAYMENTS_BASE_URL`    | true     | `"https://live.dodopayments.com"` |
 
 System properties take precedence over environment variables.
 
@@ -158,8 +159,8 @@ import com.dodopayments.api.models.checkoutsessions.CheckoutSessionCreateParams
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionRequest
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionResponse
 
-// Configures using the `dodopayments.apiKey` and `dodopayments.baseUrl` system properties
-// Or configures using the `DODO_PAYMENTS_API_KEY` and `DODO_PAYMENTS_BASE_URL` environment variables
+// Configures using the `dodopayments.apiKey`, `dodopayments.webhookKey` and `dodopayments.baseUrl` system properties
+// Or configures using the `DODO_PAYMENTS_API_KEY`, `DODO_PAYMENTS_WEBHOOK_KEY` and `DODO_PAYMENTS_BASE_URL` environment variables
 val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.fromEnv()
 
 val params: CheckoutSessionRequest = CheckoutSessionRequest.builder()
@@ -180,8 +181,8 @@ import com.dodopayments.api.models.checkoutsessions.CheckoutSessionCreateParams
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionRequest
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionResponse
 
-// Configures using the `dodopayments.apiKey` and `dodopayments.baseUrl` system properties
-// Or configures using the `DODO_PAYMENTS_API_KEY` and `DODO_PAYMENTS_BASE_URL` environment variables
+// Configures using the `dodopayments.apiKey`, `dodopayments.webhookKey` and `dodopayments.baseUrl` system properties
+// Or configures using the `DODO_PAYMENTS_API_KEY`, `DODO_PAYMENTS_WEBHOOK_KEY` and `DODO_PAYMENTS_BASE_URL` environment variables
 val client: DodoPaymentsClientAsync = DodoPaymentsOkHttpClientAsync.fromEnv()
 
 val params: CheckoutSessionRequest = CheckoutSessionRequest.builder()
