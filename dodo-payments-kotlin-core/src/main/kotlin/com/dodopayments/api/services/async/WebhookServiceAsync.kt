@@ -6,6 +6,9 @@ import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponse
 import com.dodopayments.api.core.http.HttpResponseFor
+import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
+import com.dodopayments.api.models.webhooks.UnsafeUnwrapWebhookEvent
+import com.dodopayments.api.models.webhooks.UnwrapWebhookEvent
 import com.dodopayments.api.models.webhooks.WebhookCreateParams
 import com.dodopayments.api.models.webhooks.WebhookDeleteParams
 import com.dodopayments.api.models.webhooks.WebhookDetails
@@ -121,6 +124,20 @@ interface WebhookServiceAsync {
         requestOptions: RequestOptions,
     ): WebhookRetrieveSecretResponse =
         retrieveSecret(webhookId, WebhookRetrieveSecretParams.none(), requestOptions)
+
+    /**
+     * Unwraps a webhook event from its JSON representation.
+     *
+     * @throws DodoPaymentsInvalidDataException if the body could not be parsed.
+     */
+    fun unsafeUnwrap(body: String): UnsafeUnwrapWebhookEvent
+
+    /**
+     * Unwraps a webhook event from its JSON representation.
+     *
+     * @throws DodoPaymentsInvalidDataException if the body could not be parsed.
+     */
+    fun unwrap(body: String): UnwrapWebhookEvent
 
     /**
      * A view of [WebhookServiceAsync] that provides access to raw HTTP responses for each method.

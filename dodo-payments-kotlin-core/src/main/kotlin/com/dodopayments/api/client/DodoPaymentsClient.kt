@@ -82,8 +82,6 @@ interface DodoPaymentsClient {
 
     fun payouts(): PayoutService
 
-    fun webhookEvents(): WebhookEventService
-
     fun products(): ProductService
 
     fun misc(): MiscService
@@ -95,6 +93,8 @@ interface DodoPaymentsClient {
     fun brands(): BrandService
 
     fun webhooks(): WebhookService
+
+    fun webhookEvents(): WebhookEventService
 
     fun usageEvents(): UsageEventService
 
@@ -149,8 +149,6 @@ interface DodoPaymentsClient {
 
         fun payouts(): PayoutService.WithRawResponse
 
-        fun webhookEvents(): WebhookEventService.WithRawResponse
-
         fun products(): ProductService.WithRawResponse
 
         fun misc(): MiscService.WithRawResponse
@@ -162,6 +160,8 @@ interface DodoPaymentsClient {
         fun brands(): BrandService.WithRawResponse
 
         fun webhooks(): WebhookService.WithRawResponse
+
+        fun webhookEvents(): WebhookEventService.WithRawResponse
 
         fun usageEvents(): UsageEventService.WithRawResponse
 
