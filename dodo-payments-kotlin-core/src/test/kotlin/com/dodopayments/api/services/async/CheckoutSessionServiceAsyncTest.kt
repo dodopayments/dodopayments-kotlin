@@ -96,4 +96,18 @@ internal class CheckoutSessionServiceAsyncTest {
 
         checkoutSessionResponse.validate()
     }
+
+    @Test
+    suspend fun retrieve() {
+        val client =
+            DodoPaymentsOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val checkoutSessionServiceAsync = client.checkoutSessions()
+
+        val checkoutSessionStatus = checkoutSessionServiceAsync.retrieve("id")
+
+        checkoutSessionStatus.validate()
+    }
 }
