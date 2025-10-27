@@ -8,6 +8,8 @@ import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionCreateParams
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionRequest
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionResponse
+import com.dodopayments.api.models.checkoutsessions.CheckoutSessionRetrieveParams
+import com.dodopayments.api.models.checkoutsessions.CheckoutSessionStatus
 import com.google.errorprone.annotations.MustBeClosed
 
 interface CheckoutSessionServiceAsync {
@@ -40,6 +42,22 @@ interface CheckoutSessionServiceAsync {
                 .build(),
             requestOptions,
         )
+
+    suspend fun retrieve(
+        id: String,
+        params: CheckoutSessionRetrieveParams = CheckoutSessionRetrieveParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CheckoutSessionStatus = retrieve(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see retrieve */
+    suspend fun retrieve(
+        params: CheckoutSessionRetrieveParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CheckoutSessionStatus
+
+    /** @see retrieve */
+    suspend fun retrieve(id: String, requestOptions: RequestOptions): CheckoutSessionStatus =
+        retrieve(id, CheckoutSessionRetrieveParams.none(), requestOptions)
 
     /**
      * A view of [CheckoutSessionServiceAsync] that provides access to raw HTTP responses for each
@@ -78,5 +96,32 @@ interface CheckoutSessionServiceAsync {
                     .build(),
                 requestOptions,
             )
+
+        /**
+         * Returns a raw HTTP response for `get /checkouts/{id}`, but is otherwise the same as
+         * [CheckoutSessionServiceAsync.retrieve].
+         */
+        @MustBeClosed
+        suspend fun retrieve(
+            id: String,
+            params: CheckoutSessionRetrieveParams = CheckoutSessionRetrieveParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CheckoutSessionStatus> =
+            retrieve(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see retrieve */
+        @MustBeClosed
+        suspend fun retrieve(
+            params: CheckoutSessionRetrieveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CheckoutSessionStatus>
+
+        /** @see retrieve */
+        @MustBeClosed
+        suspend fun retrieve(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<CheckoutSessionStatus> =
+            retrieve(id, CheckoutSessionRetrieveParams.none(), requestOptions)
     }
 }
