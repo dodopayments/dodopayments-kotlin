@@ -15,6 +15,7 @@ import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.CustomerLimitedDetails
 import com.dodopayments.api.models.payments.IntentStatus
 import com.dodopayments.api.models.payments.Payment
+import com.dodopayments.api.models.refunds.Refund
 import com.dodopayments.api.models.refunds.RefundStatus
 import com.dodopayments.api.models.subscriptions.AddonCartResponseItem
 import com.dodopayments.api.models.subscriptions.Subscription
@@ -1610,6 +1611,11 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .isPartial(true)
+                        .metadata(
+                            Refund.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .paymentId("payment_id")
                         .refundId("refund_id")
                         .status(RefundStatus.SUCCEEDED)
@@ -1668,6 +1674,11 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .isPartial(true)
+                            .metadata(
+                                Refund.Metadata.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
                             .paymentId("payment_id")
                             .refundId("refund_id")
                             .status(RefundStatus.SUCCEEDED)
@@ -1709,6 +1720,11 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .isPartial(true)
+                        .metadata(
+                            Refund.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .paymentId("payment_id")
                         .refundId("refund_id")
                         .status(RefundStatus.SUCCEEDED)
@@ -1767,6 +1783,11 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .isPartial(true)
+                            .metadata(
+                                Refund.Metadata.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
                             .paymentId("payment_id")
                             .refundId("refund_id")
                             .status(RefundStatus.SUCCEEDED)

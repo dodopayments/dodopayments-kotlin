@@ -7,6 +7,7 @@ import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.checkRequired
+import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.payments.CustomerLimitedDetails
@@ -25,6 +26,7 @@ private constructor(
     private val createdAt: JsonField<OffsetDateTime>,
     private val customer: JsonField<CustomerLimitedDetails>,
     private val isPartial: JsonField<Boolean>,
+    private val metadata: JsonField<Metadata>,
     private val paymentId: JsonField<String>,
     private val refundId: JsonField<String>,
     private val status: JsonField<RefundStatus>,
@@ -48,6 +50,7 @@ private constructor(
         @JsonProperty("is_partial")
         @ExcludeMissing
         isPartial: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("metadata") @ExcludeMissing metadata: JsonField<Metadata> = JsonMissing.of(),
         @JsonProperty("payment_id") @ExcludeMissing paymentId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("refund_id") @ExcludeMissing refundId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("status") @ExcludeMissing status: JsonField<RefundStatus> = JsonMissing.of(),
@@ -59,6 +62,7 @@ private constructor(
         createdAt,
         customer,
         isPartial,
+        metadata,
         paymentId,
         refundId,
         status,
@@ -99,6 +103,14 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun isPartial(): Boolean = isPartial.getRequired("is_partial")
+
+    /**
+     * Additional metadata stored with the refund.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun metadata(): Metadata = metadata.getRequired("metadata")
 
     /**
      * The unique identifier of the payment associated with the refund.
@@ -181,6 +193,13 @@ private constructor(
     @JsonProperty("is_partial") @ExcludeMissing fun _isPartial(): JsonField<Boolean> = isPartial
 
     /**
+     * Returns the raw JSON value of [metadata].
+     *
+     * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
+
+    /**
      * Returns the raw JSON value of [paymentId].
      *
      * Unlike [paymentId], this method doesn't throw if the JSON field has an unexpected type.
@@ -245,6 +264,7 @@ private constructor(
          * .createdAt()
          * .customer()
          * .isPartial()
+         * .metadata()
          * .paymentId()
          * .refundId()
          * .status()
@@ -260,6 +280,7 @@ private constructor(
         private var createdAt: JsonField<OffsetDateTime>? = null
         private var customer: JsonField<CustomerLimitedDetails>? = null
         private var isPartial: JsonField<Boolean>? = null
+        private var metadata: JsonField<Metadata>? = null
         private var paymentId: JsonField<String>? = null
         private var refundId: JsonField<String>? = null
         private var status: JsonField<RefundStatus>? = null
@@ -273,6 +294,7 @@ private constructor(
             createdAt = refund.createdAt
             customer = refund.customer
             isPartial = refund.isPartial
+            metadata = refund.metadata
             paymentId = refund.paymentId
             refundId = refund.refundId
             status = refund.status
@@ -331,6 +353,18 @@ private constructor(
          * value.
          */
         fun isPartial(isPartial: JsonField<Boolean>) = apply { this.isPartial = isPartial }
+
+        /** Additional metadata stored with the refund. */
+        fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
+
+        /**
+         * Sets [Builder.metadata] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.metadata] with a well-typed [Metadata] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
         /** The unique identifier of the payment associated with the refund. */
         fun paymentId(paymentId: String) = paymentId(JsonField.of(paymentId))
@@ -438,6 +472,7 @@ private constructor(
          * .createdAt()
          * .customer()
          * .isPartial()
+         * .metadata()
          * .paymentId()
          * .refundId()
          * .status()
@@ -451,6 +486,7 @@ private constructor(
                 checkRequired("createdAt", createdAt),
                 checkRequired("customer", customer),
                 checkRequired("isPartial", isPartial),
+                checkRequired("metadata", metadata),
                 checkRequired("paymentId", paymentId),
                 checkRequired("refundId", refundId),
                 checkRequired("status", status),
@@ -472,6 +508,7 @@ private constructor(
         createdAt()
         customer().validate()
         isPartial()
+        metadata().validate()
         paymentId()
         refundId()
         status().validate()
@@ -499,12 +536,111 @@ private constructor(
             (if (createdAt.asKnown() == null) 0 else 1) +
             (customer.asKnown()?.validity() ?: 0) +
             (if (isPartial.asKnown() == null) 0 else 1) +
+            (metadata.asKnown()?.validity() ?: 0) +
             (if (paymentId.asKnown() == null) 0 else 1) +
             (if (refundId.asKnown() == null) 0 else 1) +
             (status.asKnown()?.validity() ?: 0) +
             (if (amount.asKnown() == null) 0 else 1) +
             (currency.asKnown()?.validity() ?: 0) +
             (if (reason.asKnown() == null) 0 else 1)
+
+    /** Additional metadata stored with the refund. */
+    class Metadata
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Metadata]. */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [Metadata]. */
+        class Builder internal constructor() {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(metadata: Metadata) = apply {
+                additionalProperties = metadata.additionalProperties.toMutableMap()
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Metadata].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Metadata = Metadata(additionalProperties.toImmutable())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Metadata = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Metadata && additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -516,6 +652,7 @@ private constructor(
             createdAt == other.createdAt &&
             customer == other.customer &&
             isPartial == other.isPartial &&
+            metadata == other.metadata &&
             paymentId == other.paymentId &&
             refundId == other.refundId &&
             status == other.status &&
@@ -531,6 +668,7 @@ private constructor(
             createdAt,
             customer,
             isPartial,
+            metadata,
             paymentId,
             refundId,
             status,
@@ -544,5 +682,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Refund{businessId=$businessId, createdAt=$createdAt, customer=$customer, isPartial=$isPartial, paymentId=$paymentId, refundId=$refundId, status=$status, amount=$amount, currency=$currency, reason=$reason, additionalProperties=$additionalProperties}"
+        "Refund{businessId=$businessId, createdAt=$createdAt, customer=$customer, isPartial=$isPartial, metadata=$metadata, paymentId=$paymentId, refundId=$refundId, status=$status, amount=$amount, currency=$currency, reason=$reason, additionalProperties=$additionalProperties}"
 }

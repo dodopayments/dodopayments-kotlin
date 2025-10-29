@@ -45,6 +45,8 @@ class PaymentMethodTypes @JsonCreator private constructor(private val value: Jso
 
         val PRZELEWY24 = of("przelewy24")
 
+        val PAYPAL = of("paypal")
+
         val AFFIRM = of("affirm")
 
         val KLARNA = of("klarna")
@@ -74,6 +76,7 @@ class PaymentMethodTypes @JsonCreator private constructor(private val value: Jso
         EPS,
         IDEAL,
         PRZELEWY24,
+        PAYPAL,
         AFFIRM,
         KLARNA,
         SEPA,
@@ -104,6 +107,7 @@ class PaymentMethodTypes @JsonCreator private constructor(private val value: Jso
         EPS,
         IDEAL,
         PRZELEWY24,
+        PAYPAL,
         AFFIRM,
         KLARNA,
         SEPA,
@@ -138,6 +142,7 @@ class PaymentMethodTypes @JsonCreator private constructor(private val value: Jso
             EPS -> Value.EPS
             IDEAL -> Value.IDEAL
             PRZELEWY24 -> Value.PRZELEWY24
+            PAYPAL -> Value.PAYPAL
             AFFIRM -> Value.AFFIRM
             KLARNA -> Value.KLARNA
             SEPA -> Value.SEPA
@@ -170,6 +175,7 @@ class PaymentMethodTypes @JsonCreator private constructor(private val value: Jso
             EPS -> Known.EPS
             IDEAL -> Known.IDEAL
             PRZELEWY24 -> Known.PRZELEWY24
+            PAYPAL -> Known.PAYPAL
             AFFIRM -> Known.AFFIRM
             KLARNA -> Known.KLARNA
             SEPA -> Known.SEPA
