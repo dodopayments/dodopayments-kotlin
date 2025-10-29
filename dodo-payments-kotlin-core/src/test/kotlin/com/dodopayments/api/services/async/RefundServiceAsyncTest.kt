@@ -4,6 +4,7 @@ package com.dodopayments.api.services.async
 
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClientAsync
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.refunds.RefundCreateParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -29,6 +30,11 @@ internal class RefundServiceAsyncTest {
                             .itemId("item_id")
                             .amount(0)
                             .taxInclusive(true)
+                            .build()
+                    )
+                    .metadata(
+                        RefundCreateParams.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
                     .reason("reason")

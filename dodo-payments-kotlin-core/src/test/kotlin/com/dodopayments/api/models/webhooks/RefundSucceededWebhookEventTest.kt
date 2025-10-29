@@ -2,9 +2,11 @@
 
 package com.dodopayments.api.models.webhooks
 
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.payments.CustomerLimitedDetails
+import com.dodopayments.api.models.refunds.Refund
 import com.dodopayments.api.models.refunds.RefundStatus
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
@@ -31,6 +33,11 @@ internal class RefundSucceededWebhookEventTest {
                                 .build()
                         )
                         .isPartial(true)
+                        .metadata(
+                            Refund.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .paymentId("payment_id")
                         .refundId("refund_id")
                         .status(RefundStatus.SUCCEEDED)
@@ -59,6 +66,11 @@ internal class RefundSucceededWebhookEventTest {
                             .build()
                     )
                     .isPartial(true)
+                    .metadata(
+                        Refund.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .paymentId("payment_id")
                     .refundId("refund_id")
                     .status(RefundStatus.SUCCEEDED)
@@ -93,6 +105,11 @@ internal class RefundSucceededWebhookEventTest {
                                 .build()
                         )
                         .isPartial(true)
+                        .metadata(
+                            Refund.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .paymentId("payment_id")
                         .refundId("refund_id")
                         .status(RefundStatus.SUCCEEDED)

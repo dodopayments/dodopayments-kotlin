@@ -2,6 +2,7 @@
 
 package com.dodopayments.api.models.refunds
 
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.payments.CustomerLimitedDetails
@@ -27,6 +28,11 @@ internal class RefundTest {
                         .build()
                 )
                 .isPartial(true)
+                .metadata(
+                    Refund.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .paymentId("payment_id")
                 .refundId("refund_id")
                 .status(RefundStatus.SUCCEEDED)
@@ -47,6 +53,12 @@ internal class RefundTest {
                     .build()
             )
         assertThat(refund.isPartial()).isEqualTo(true)
+        assertThat(refund.metadata())
+            .isEqualTo(
+                Refund.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(refund.paymentId()).isEqualTo("payment_id")
         assertThat(refund.refundId()).isEqualTo("refund_id")
         assertThat(refund.status()).isEqualTo(RefundStatus.SUCCEEDED)
@@ -71,6 +83,11 @@ internal class RefundTest {
                         .build()
                 )
                 .isPartial(true)
+                .metadata(
+                    Refund.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .paymentId("payment_id")
                 .refundId("refund_id")
                 .status(RefundStatus.SUCCEEDED)
