@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.60.0 (2025-11-14)
+
+Full Changelog: [v1.56.5...v1.60.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.56.5...v1.60.0)
+
+### Features
+
+* **api:** added update payment method and updated openapi spec to v1.60.0 ([c31dc1f](https://github.com/dodopayments/dodopayments-kotlin/commit/c31dc1fda88884a4d1e55a983d2091e16f488879))
+
+
+### Bug Fixes
+
+* **client:** multi-value header serialization ([4b28ce9](https://github.com/dodopayments/dodopayments-kotlin/commit/4b28ce9dc0ace282bf67f8d88741dd90091fecba))
+
 ## 1.56.5 (2025-11-07)
 
 Full Changelog: [v1.56.4...v1.56.5](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.56.4...v1.56.5)
