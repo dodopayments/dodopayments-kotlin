@@ -4,6 +4,7 @@ package com.dodopayments.api.services.async
 
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClientAsync
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.customers.CustomerCreateParams
 import com.dodopayments.api.models.customers.CustomerUpdateParams
 import org.junit.jupiter.api.Test
@@ -26,6 +27,11 @@ internal class CustomerServiceAsyncTest {
                 CustomerCreateParams.builder()
                     .email("email")
                     .name("name")
+                    .metadata(
+                        CustomerCreateParams.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .phoneNumber("phone_number")
                     .build()
             )
@@ -60,6 +66,11 @@ internal class CustomerServiceAsyncTest {
             customerServiceAsync.update(
                 CustomerUpdateParams.builder()
                     .customerId("customer_id")
+                    .metadata(
+                        CustomerUpdateParams.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .name("name")
                     .phoneNumber("phone_number")
                     .build()
@@ -80,5 +91,19 @@ internal class CustomerServiceAsyncTest {
         val page = customerServiceAsync.list()
 
         page.response().validate()
+    }
+
+    @Test
+    suspend fun retrievePaymentMethods() {
+        val client =
+            DodoPaymentsOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val customerServiceAsync = client.customers()
+
+        val response = customerServiceAsync.retrievePaymentMethods("customer_id")
+
+        response.validate()
     }
 }

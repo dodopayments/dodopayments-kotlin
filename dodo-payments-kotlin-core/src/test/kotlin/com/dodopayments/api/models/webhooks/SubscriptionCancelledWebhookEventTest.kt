@@ -46,6 +46,11 @@ internal class SubscriptionCancelledWebhookEventTest {
                                 .customerId("customer_id")
                                 .email("email")
                                 .name("name")
+                                .metadata(
+                                    CustomerLimitedDetails.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
                                 .phoneNumber("phone_number")
                                 .build()
                         )
@@ -83,6 +88,7 @@ internal class SubscriptionCancelledWebhookEventTest {
                         .discountCyclesRemaining(0)
                         .discountId("discount_id")
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentMethodId("payment_method_id")
                         .taxId("tax_id")
                         .payloadType(
                             SubscriptionCancelledWebhookEvent.Data.PayloadType.SUBSCRIPTION
@@ -117,6 +123,11 @@ internal class SubscriptionCancelledWebhookEventTest {
                             .customerId("customer_id")
                             .email("email")
                             .name("name")
+                            .metadata(
+                                CustomerLimitedDetails.Metadata.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
                             .phoneNumber("phone_number")
                             .build()
                     )
@@ -154,6 +165,7 @@ internal class SubscriptionCancelledWebhookEventTest {
                     .discountCyclesRemaining(0)
                     .discountId("discount_id")
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .paymentMethodId("payment_method_id")
                     .taxId("tax_id")
                     .payloadType(SubscriptionCancelledWebhookEvent.Data.PayloadType.SUBSCRIPTION)
                     .build()
@@ -192,6 +204,11 @@ internal class SubscriptionCancelledWebhookEventTest {
                                 .customerId("customer_id")
                                 .email("email")
                                 .name("name")
+                                .metadata(
+                                    CustomerLimitedDetails.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
                                 .phoneNumber("phone_number")
                                 .build()
                         )
@@ -229,6 +246,7 @@ internal class SubscriptionCancelledWebhookEventTest {
                         .discountCyclesRemaining(0)
                         .discountId("discount_id")
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentMethodId("payment_method_id")
                         .taxId("tax_id")
                         .payloadType(
                             SubscriptionCancelledWebhookEvent.Data.PayloadType.SUBSCRIPTION

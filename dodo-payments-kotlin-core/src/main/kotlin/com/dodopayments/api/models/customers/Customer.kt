@@ -7,6 +7,7 @@ import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.checkRequired
+import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -24,6 +25,7 @@ private constructor(
     private val customerId: JsonField<String>,
     private val email: JsonField<String>,
     private val name: JsonField<String>,
+    private val metadata: JsonField<Metadata>,
     private val phoneNumber: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -41,10 +43,11 @@ private constructor(
         customerId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("email") @ExcludeMissing email: JsonField<String> = JsonMissing.of(),
         @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("metadata") @ExcludeMissing metadata: JsonField<Metadata> = JsonMissing.of(),
         @JsonProperty("phone_number")
         @ExcludeMissing
         phoneNumber: JsonField<String> = JsonMissing.of(),
-    ) : this(businessId, createdAt, customerId, email, name, phoneNumber, mutableMapOf())
+    ) : this(businessId, createdAt, customerId, email, name, metadata, phoneNumber, mutableMapOf())
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
@@ -75,6 +78,14 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun name(): String = name.getRequired("name")
+
+    /**
+     * Additional metadata for the customer
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun metadata(): Metadata? = metadata.getNullable("metadata")
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -118,6 +129,13 @@ private constructor(
      * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+    /**
+     * Returns the raw JSON value of [metadata].
+     *
+     * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
 
     /**
      * Returns the raw JSON value of [phoneNumber].
@@ -165,6 +183,7 @@ private constructor(
         private var customerId: JsonField<String>? = null
         private var email: JsonField<String>? = null
         private var name: JsonField<String>? = null
+        private var metadata: JsonField<Metadata> = JsonMissing.of()
         private var phoneNumber: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -174,6 +193,7 @@ private constructor(
             customerId = customer.customerId
             email = customer.email
             name = customer.name
+            metadata = customer.metadata
             phoneNumber = customer.phoneNumber
             additionalProperties = customer.additionalProperties.toMutableMap()
         }
@@ -231,6 +251,18 @@ private constructor(
          */
         fun name(name: JsonField<String>) = apply { this.name = name }
 
+        /** Additional metadata for the customer */
+        fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
+
+        /**
+         * Sets [Builder.metadata] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.metadata] with a well-typed [Metadata] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
+
         fun phoneNumber(phoneNumber: String?) = phoneNumber(JsonField.ofNullable(phoneNumber))
 
         /**
@@ -284,6 +316,7 @@ private constructor(
                 checkRequired("customerId", customerId),
                 checkRequired("email", email),
                 checkRequired("name", name),
+                metadata,
                 phoneNumber,
                 additionalProperties.toMutableMap(),
             )
@@ -301,6 +334,7 @@ private constructor(
         customerId()
         email()
         name()
+        metadata()?.validate()
         phoneNumber()
         validated = true
     }
@@ -324,7 +358,106 @@ private constructor(
             (if (customerId.asKnown() == null) 0 else 1) +
             (if (email.asKnown() == null) 0 else 1) +
             (if (name.asKnown() == null) 0 else 1) +
+            (metadata.asKnown()?.validity() ?: 0) +
             (if (phoneNumber.asKnown() == null) 0 else 1)
+
+    /** Additional metadata for the customer */
+    class Metadata
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Metadata]. */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [Metadata]. */
+        class Builder internal constructor() {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(metadata: Metadata) = apply {
+                additionalProperties = metadata.additionalProperties.toMutableMap()
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Metadata].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Metadata = Metadata(additionalProperties.toImmutable())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Metadata = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Metadata && additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -337,6 +470,7 @@ private constructor(
             customerId == other.customerId &&
             email == other.email &&
             name == other.name &&
+            metadata == other.metadata &&
             phoneNumber == other.phoneNumber &&
             additionalProperties == other.additionalProperties
     }
@@ -348,6 +482,7 @@ private constructor(
             customerId,
             email,
             name,
+            metadata,
             phoneNumber,
             additionalProperties,
         )
@@ -356,5 +491,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Customer{businessId=$businessId, createdAt=$createdAt, customerId=$customerId, email=$email, name=$name, phoneNumber=$phoneNumber, additionalProperties=$additionalProperties}"
+        "Customer{businessId=$businessId, createdAt=$createdAt, customerId=$customerId, email=$email, name=$name, metadata=$metadata, phoneNumber=$phoneNumber, additionalProperties=$additionalProperties}"
 }
