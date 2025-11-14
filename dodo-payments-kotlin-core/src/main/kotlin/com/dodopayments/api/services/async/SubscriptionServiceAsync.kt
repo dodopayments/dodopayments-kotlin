@@ -18,6 +18,8 @@ import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveParams
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryPageAsync
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryParams
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdateParams
+import com.dodopayments.api.models.subscriptions.SubscriptionUpdatePaymentMethodParams
+import com.dodopayments.api.models.subscriptions.SubscriptionUpdatePaymentMethodResponse
 import com.google.errorprone.annotations.MustBeClosed
 
 interface SubscriptionServiceAsync {
@@ -168,6 +170,22 @@ interface SubscriptionServiceAsync {
             SubscriptionRetrieveUsageHistoryParams.none(),
             requestOptions,
         )
+
+    suspend fun updatePaymentMethod(
+        subscriptionId: String,
+        params: SubscriptionUpdatePaymentMethodParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): SubscriptionUpdatePaymentMethodResponse =
+        updatePaymentMethod(
+            params.toBuilder().subscriptionId(subscriptionId).build(),
+            requestOptions,
+        )
+
+    /** @see updatePaymentMethod */
+    suspend fun updatePaymentMethod(
+        params: SubscriptionUpdatePaymentMethodParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): SubscriptionUpdatePaymentMethodResponse
 
     /**
      * A view of [SubscriptionServiceAsync] that provides access to raw HTTP responses for each
@@ -337,5 +355,28 @@ interface SubscriptionServiceAsync {
                 SubscriptionRetrieveUsageHistoryParams.none(),
                 requestOptions,
             )
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /subscriptions/{subscription_id}/update-payment-method`, but is otherwise the same as
+         * [SubscriptionServiceAsync.updatePaymentMethod].
+         */
+        @MustBeClosed
+        suspend fun updatePaymentMethod(
+            subscriptionId: String,
+            params: SubscriptionUpdatePaymentMethodParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionUpdatePaymentMethodResponse> =
+            updatePaymentMethod(
+                params.toBuilder().subscriptionId(subscriptionId).build(),
+                requestOptions,
+            )
+
+        /** @see updatePaymentMethod */
+        @MustBeClosed
+        suspend fun updatePaymentMethod(
+            params: SubscriptionUpdatePaymentMethodParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionUpdatePaymentMethodResponse>
     }
 }

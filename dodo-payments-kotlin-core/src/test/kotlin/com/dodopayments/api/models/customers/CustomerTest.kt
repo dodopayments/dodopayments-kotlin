@@ -2,6 +2,7 @@
 
 package com.dodopayments.api.models.customers
 
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
@@ -19,6 +20,11 @@ internal class CustomerTest {
                 .customerId("customer_id")
                 .email("email")
                 .name("name")
+                .metadata(
+                    Customer.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .phoneNumber("phone_number")
                 .build()
 
@@ -27,6 +33,12 @@ internal class CustomerTest {
         assertThat(customer.customerId()).isEqualTo("customer_id")
         assertThat(customer.email()).isEqualTo("email")
         assertThat(customer.name()).isEqualTo("name")
+        assertThat(customer.metadata())
+            .isEqualTo(
+                Customer.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(customer.phoneNumber()).isEqualTo("phone_number")
     }
 
@@ -40,6 +52,11 @@ internal class CustomerTest {
                 .customerId("customer_id")
                 .email("email")
                 .name("name")
+                .metadata(
+                    Customer.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .phoneNumber("phone_number")
                 .build()
 

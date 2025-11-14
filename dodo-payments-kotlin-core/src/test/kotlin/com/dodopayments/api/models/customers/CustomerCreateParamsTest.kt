@@ -2,6 +2,7 @@
 
 package com.dodopayments.api.models.customers
 
+import com.dodopayments.api.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -12,6 +13,11 @@ internal class CustomerCreateParamsTest {
         CustomerCreateParams.builder()
             .email("email")
             .name("name")
+            .metadata(
+                CustomerCreateParams.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
             .phoneNumber("phone_number")
             .build()
     }
@@ -22,6 +28,11 @@ internal class CustomerCreateParamsTest {
             CustomerCreateParams.builder()
                 .email("email")
                 .name("name")
+                .metadata(
+                    CustomerCreateParams.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .phoneNumber("phone_number")
                 .build()
 
@@ -29,6 +40,12 @@ internal class CustomerCreateParamsTest {
 
         assertThat(body.email()).isEqualTo("email")
         assertThat(body.name()).isEqualTo("name")
+        assertThat(body.metadata())
+            .isEqualTo(
+                CustomerCreateParams.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(body.phoneNumber()).isEqualTo("phone_number")
     }
 

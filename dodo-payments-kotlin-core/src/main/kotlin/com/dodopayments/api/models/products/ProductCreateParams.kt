@@ -29,6 +29,14 @@ private constructor(
 ) : Params {
 
     /**
+     * Name of the product
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun name(): String = body.name()
+
+    /**
      * Price configuration for the product
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
@@ -118,12 +126,11 @@ private constructor(
     fun metadata(): Metadata? = body.metadata()
 
     /**
-     * Optional name of the product
+     * Returns the raw JSON value of [name].
      *
-     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
+     * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun name(): String? = body.name()
+    fun _name(): JsonField<String> = body._name()
 
     /**
      * Returns the raw JSON value of [price].
@@ -208,13 +215,6 @@ private constructor(
      */
     fun _metadata(): JsonField<Metadata> = body._metadata()
 
-    /**
-     * Returns the raw JSON value of [name].
-     *
-     * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _name(): JsonField<String> = body._name()
-
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     /** Additional headers to send with the request. */
@@ -232,6 +232,7 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
+         * .name()
          * .price()
          * .taxCategory()
          * ```
@@ -257,14 +258,25 @@ private constructor(
          *
          * This is generally only useful if you are already constructing the body separately.
          * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [name]
          * - [price]
          * - [taxCategory]
          * - [addons]
          * - [brandId]
-         * - [description]
          * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        /** Name of the product */
+        fun name(name: String) = apply { body.name(name) }
+
+        /**
+         * Sets [Builder.name] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.name] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun name(name: JsonField<String>) = apply { body.name(name) }
 
         /** Price configuration for the product */
         fun price(price: Price) = apply { body.price(price) }
@@ -455,17 +467,6 @@ private constructor(
          */
         fun metadata(metadata: JsonField<Metadata>) = apply { body.metadata(metadata) }
 
-        /** Optional name of the product */
-        fun name(name: String?) = apply { body.name(name) }
-
-        /**
-         * Sets [Builder.name] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.name] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun name(name: JsonField<String>) = apply { body.name(name) }
-
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
         }
@@ -590,6 +591,7 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
+         * .name()
          * .price()
          * .taxCategory()
          * ```
@@ -613,6 +615,7 @@ private constructor(
     class Body
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
+        private val name: JsonField<String>,
         private val price: JsonField<Price>,
         private val taxCategory: JsonField<TaxCategory>,
         private val addons: JsonField<List<String>>,
@@ -624,12 +627,12 @@ private constructor(
         private val licenseKeyDuration: JsonField<LicenseKeyDuration>,
         private val licenseKeyEnabled: JsonField<Boolean>,
         private val metadata: JsonField<Metadata>,
-        private val name: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
         @JsonCreator
         private constructor(
+            @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
             @JsonProperty("price") @ExcludeMissing price: JsonField<Price> = JsonMissing.of(),
             @JsonProperty("tax_category")
             @ExcludeMissing
@@ -659,8 +662,8 @@ private constructor(
             @JsonProperty("metadata")
             @ExcludeMissing
             metadata: JsonField<Metadata> = JsonMissing.of(),
-            @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
         ) : this(
+            name,
             price,
             taxCategory,
             addons,
@@ -672,9 +675,16 @@ private constructor(
             licenseKeyDuration,
             licenseKeyEnabled,
             metadata,
-            name,
             mutableMapOf(),
         )
+
+        /**
+         * Name of the product
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun name(): String = name.getRequired("name")
 
         /**
          * Price configuration for the product
@@ -771,12 +781,11 @@ private constructor(
         fun metadata(): Metadata? = metadata.getNullable("metadata")
 
         /**
-         * Optional name of the product
+         * Returns the raw JSON value of [name].
          *
-         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
-         *   if the server responded with an unexpected value).
+         * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
          */
-        fun name(): String? = name.getNullable("name")
+        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         /**
          * Returns the raw JSON value of [price].
@@ -874,13 +883,6 @@ private constructor(
          */
         @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
 
-        /**
-         * Returns the raw JSON value of [name].
-         *
-         * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
-
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -900,6 +902,7 @@ private constructor(
              *
              * The following fields are required:
              * ```kotlin
+             * .name()
              * .price()
              * .taxCategory()
              * ```
@@ -910,6 +913,7 @@ private constructor(
         /** A builder for [Body]. */
         class Builder internal constructor() {
 
+            private var name: JsonField<String>? = null
             private var price: JsonField<Price>? = null
             private var taxCategory: JsonField<TaxCategory>? = null
             private var addons: JsonField<MutableList<String>>? = null
@@ -921,10 +925,10 @@ private constructor(
             private var licenseKeyDuration: JsonField<LicenseKeyDuration> = JsonMissing.of()
             private var licenseKeyEnabled: JsonField<Boolean> = JsonMissing.of()
             private var metadata: JsonField<Metadata> = JsonMissing.of()
-            private var name: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(body: Body) = apply {
+                name = body.name
                 price = body.price
                 taxCategory = body.taxCategory
                 addons = body.addons.map { it.toMutableList() }
@@ -936,9 +940,20 @@ private constructor(
                 licenseKeyDuration = body.licenseKeyDuration
                 licenseKeyEnabled = body.licenseKeyEnabled
                 metadata = body.metadata
-                name = body.name
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
+
+            /** Name of the product */
+            fun name(name: String) = name(JsonField.of(name))
+
+            /**
+             * Sets [Builder.name] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.name] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun name(name: JsonField<String>) = apply { this.name = name }
 
             /** Price configuration for the product */
             fun price(price: Price) = price(JsonField.of(price))
@@ -1136,18 +1151,6 @@ private constructor(
              */
             fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
-            /** Optional name of the product */
-            fun name(name: String?) = name(JsonField.ofNullable(name))
-
-            /**
-             * Sets [Builder.name] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.name] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
-            fun name(name: JsonField<String>) = apply { this.name = name }
-
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -1174,6 +1177,7 @@ private constructor(
              *
              * The following fields are required:
              * ```kotlin
+             * .name()
              * .price()
              * .taxCategory()
              * ```
@@ -1182,6 +1186,7 @@ private constructor(
              */
             fun build(): Body =
                 Body(
+                    checkRequired("name", name),
                     checkRequired("price", price),
                     checkRequired("taxCategory", taxCategory),
                     (addons ?: JsonMissing.of()).map { it.toImmutable() },
@@ -1193,7 +1198,6 @@ private constructor(
                     licenseKeyDuration,
                     licenseKeyEnabled,
                     metadata,
-                    name,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -1205,6 +1209,7 @@ private constructor(
                 return@apply
             }
 
+            name()
             price().validate()
             taxCategory().validate()
             addons()
@@ -1216,7 +1221,6 @@ private constructor(
             licenseKeyDuration()?.validate()
             licenseKeyEnabled()
             metadata()?.validate()
-            name()
             validated = true
         }
 
@@ -1235,7 +1239,8 @@ private constructor(
          * Used for best match union deserialization.
          */
         internal fun validity(): Int =
-            (price.asKnown()?.validity() ?: 0) +
+            (if (name.asKnown() == null) 0 else 1) +
+                (price.asKnown()?.validity() ?: 0) +
                 (taxCategory.asKnown()?.validity() ?: 0) +
                 (addons.asKnown()?.size ?: 0) +
                 (if (brandId.asKnown() == null) 0 else 1) +
@@ -1245,8 +1250,7 @@ private constructor(
                 (if (licenseKeyActivationsLimit.asKnown() == null) 0 else 1) +
                 (licenseKeyDuration.asKnown()?.validity() ?: 0) +
                 (if (licenseKeyEnabled.asKnown() == null) 0 else 1) +
-                (metadata.asKnown()?.validity() ?: 0) +
-                (if (name.asKnown() == null) 0 else 1)
+                (metadata.asKnown()?.validity() ?: 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -1254,6 +1258,7 @@ private constructor(
             }
 
             return other is Body &&
+                name == other.name &&
                 price == other.price &&
                 taxCategory == other.taxCategory &&
                 addons == other.addons &&
@@ -1265,12 +1270,12 @@ private constructor(
                 licenseKeyDuration == other.licenseKeyDuration &&
                 licenseKeyEnabled == other.licenseKeyEnabled &&
                 metadata == other.metadata &&
-                name == other.name &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
             Objects.hash(
+                name,
                 price,
                 taxCategory,
                 addons,
@@ -1282,7 +1287,6 @@ private constructor(
                 licenseKeyDuration,
                 licenseKeyEnabled,
                 metadata,
-                name,
                 additionalProperties,
             )
         }
@@ -1290,7 +1294,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{price=$price, taxCategory=$taxCategory, addons=$addons, brandId=$brandId, description=$description, digitalProductDelivery=$digitalProductDelivery, licenseKeyActivationMessage=$licenseKeyActivationMessage, licenseKeyActivationsLimit=$licenseKeyActivationsLimit, licenseKeyDuration=$licenseKeyDuration, licenseKeyEnabled=$licenseKeyEnabled, metadata=$metadata, name=$name, additionalProperties=$additionalProperties}"
+            "Body{name=$name, price=$price, taxCategory=$taxCategory, addons=$addons, brandId=$brandId, description=$description, digitalProductDelivery=$digitalProductDelivery, licenseKeyActivationMessage=$licenseKeyActivationMessage, licenseKeyActivationsLimit=$licenseKeyActivationsLimit, licenseKeyDuration=$licenseKeyDuration, licenseKeyEnabled=$licenseKeyEnabled, metadata=$metadata, additionalProperties=$additionalProperties}"
     }
 
     /** Choose how you would like you digital product delivered */

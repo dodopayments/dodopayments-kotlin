@@ -31,6 +31,7 @@ internal class ProductServiceTest {
         val product =
             productService.create(
                 ProductCreateParams.builder()
+                    .name("name")
                     .price(
                         Price.OneTimePrice.builder()
                             .currency(Currency.AED)
@@ -64,7 +65,6 @@ internal class ProductServiceTest {
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
-                    .name("name")
                     .build()
             )
 

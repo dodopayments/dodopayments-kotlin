@@ -37,6 +37,11 @@ internal class SubscriptionTest {
                         .customerId("customer_id")
                         .email("email")
                         .name("name")
+                        .metadata(
+                            CustomerLimitedDetails.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .phoneNumber("phone_number")
                         .build()
                 )
@@ -74,6 +79,7 @@ internal class SubscriptionTest {
                 .discountCyclesRemaining(0)
                 .discountId("discount_id")
                 .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .paymentMethodId("payment_method_id")
                 .taxId("tax_id")
                 .build()
 
@@ -101,6 +107,11 @@ internal class SubscriptionTest {
                     .customerId("customer_id")
                     .email("email")
                     .name("name")
+                    .metadata(
+                        CustomerLimitedDetails.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .phoneNumber("phone_number")
                     .build()
             )
@@ -144,6 +155,7 @@ internal class SubscriptionTest {
         assertThat(subscription.discountId()).isEqualTo("discount_id")
         assertThat(subscription.expiresAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(subscription.paymentMethodId()).isEqualTo("payment_method_id")
         assertThat(subscription.taxId()).isEqualTo("tax_id")
     }
 
@@ -170,6 +182,11 @@ internal class SubscriptionTest {
                         .customerId("customer_id")
                         .email("email")
                         .name("name")
+                        .metadata(
+                            CustomerLimitedDetails.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .phoneNumber("phone_number")
                         .build()
                 )
@@ -207,6 +224,7 @@ internal class SubscriptionTest {
                 .discountCyclesRemaining(0)
                 .discountId("discount_id")
                 .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .paymentMethodId("payment_method_id")
                 .taxId("tax_id")
                 .build()
 

@@ -10,6 +10,8 @@ import com.dodopayments.api.models.customers.CustomerCreateParams
 import com.dodopayments.api.models.customers.CustomerListPageAsync
 import com.dodopayments.api.models.customers.CustomerListParams
 import com.dodopayments.api.models.customers.CustomerRetrieveParams
+import com.dodopayments.api.models.customers.CustomerRetrievePaymentMethodsParams
+import com.dodopayments.api.models.customers.CustomerRetrievePaymentMethodsResponse
 import com.dodopayments.api.models.customers.CustomerUpdateParams
 import com.dodopayments.api.services.async.customers.CustomerPortalServiceAsync
 import com.dodopayments.api.services.async.customers.WalletServiceAsync
@@ -78,6 +80,30 @@ interface CustomerServiceAsync {
     /** @see list */
     suspend fun list(requestOptions: RequestOptions): CustomerListPageAsync =
         list(CustomerListParams.none(), requestOptions)
+
+    suspend fun retrievePaymentMethods(
+        customerId: String,
+        params: CustomerRetrievePaymentMethodsParams = CustomerRetrievePaymentMethodsParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CustomerRetrievePaymentMethodsResponse =
+        retrievePaymentMethods(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+    /** @see retrievePaymentMethods */
+    suspend fun retrievePaymentMethods(
+        params: CustomerRetrievePaymentMethodsParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CustomerRetrievePaymentMethodsResponse
+
+    /** @see retrievePaymentMethods */
+    suspend fun retrievePaymentMethods(
+        customerId: String,
+        requestOptions: RequestOptions,
+    ): CustomerRetrievePaymentMethodsResponse =
+        retrievePaymentMethods(
+            customerId,
+            CustomerRetrievePaymentMethodsParams.none(),
+            requestOptions,
+        )
 
     /**
      * A view of [CustomerServiceAsync] that provides access to raw HTTP responses for each method.
@@ -175,5 +201,40 @@ interface CustomerServiceAsync {
         @MustBeClosed
         suspend fun list(requestOptions: RequestOptions): HttpResponseFor<CustomerListPageAsync> =
             list(CustomerListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /customers/{customer_id}/payment-methods`, but is
+         * otherwise the same as [CustomerServiceAsync.retrievePaymentMethods].
+         */
+        @MustBeClosed
+        suspend fun retrievePaymentMethods(
+            customerId: String,
+            params: CustomerRetrievePaymentMethodsParams =
+                CustomerRetrievePaymentMethodsParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CustomerRetrievePaymentMethodsResponse> =
+            retrievePaymentMethods(
+                params.toBuilder().customerId(customerId).build(),
+                requestOptions,
+            )
+
+        /** @see retrievePaymentMethods */
+        @MustBeClosed
+        suspend fun retrievePaymentMethods(
+            params: CustomerRetrievePaymentMethodsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CustomerRetrievePaymentMethodsResponse>
+
+        /** @see retrievePaymentMethods */
+        @MustBeClosed
+        suspend fun retrievePaymentMethods(
+            customerId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<CustomerRetrievePaymentMethodsResponse> =
+            retrievePaymentMethods(
+                customerId,
+                CustomerRetrievePaymentMethodsParams.none(),
+                requestOptions,
+            )
     }
 }

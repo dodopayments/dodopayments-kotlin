@@ -2,6 +2,7 @@
 
 package com.dodopayments.api.models.customers
 
+import com.dodopayments.api.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -11,6 +12,11 @@ internal class CustomerUpdateParamsTest {
     fun create() {
         CustomerUpdateParams.builder()
             .customerId("customer_id")
+            .metadata(
+                CustomerUpdateParams.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
             .name("name")
             .phoneNumber("phone_number")
             .build()
@@ -30,12 +36,23 @@ internal class CustomerUpdateParamsTest {
         val params =
             CustomerUpdateParams.builder()
                 .customerId("customer_id")
+                .metadata(
+                    CustomerUpdateParams.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .name("name")
                 .phoneNumber("phone_number")
                 .build()
 
         val body = params._body()
 
+        assertThat(body.metadata())
+            .isEqualTo(
+                CustomerUpdateParams.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(body.name()).isEqualTo("name")
         assertThat(body.phoneNumber()).isEqualTo("phone_number")
     }

@@ -22,6 +22,8 @@ import com.dodopayments.api.models.customers.CustomerListPageAsync
 import com.dodopayments.api.models.customers.CustomerListPageResponse
 import com.dodopayments.api.models.customers.CustomerListParams
 import com.dodopayments.api.models.customers.CustomerRetrieveParams
+import com.dodopayments.api.models.customers.CustomerRetrievePaymentMethodsParams
+import com.dodopayments.api.models.customers.CustomerRetrievePaymentMethodsResponse
 import com.dodopayments.api.models.customers.CustomerUpdateParams
 import com.dodopayments.api.services.async.customers.CustomerPortalServiceAsync
 import com.dodopayments.api.services.async.customers.CustomerPortalServiceAsyncImpl
@@ -77,6 +79,13 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
     ): CustomerListPageAsync =
         // get /customers
         withRawResponse().list(params, requestOptions).parse()
+
+    override suspend fun retrievePaymentMethods(
+        params: CustomerRetrievePaymentMethodsParams,
+        requestOptions: RequestOptions,
+    ): CustomerRetrievePaymentMethodsResponse =
+        // get /customers/{customer_id}/payment-methods
+        withRawResponse().retrievePaymentMethods(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         CustomerServiceAsync.WithRawResponse {
@@ -222,6 +231,36 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
                             .params(params)
                             .response(it)
                             .build()
+                    }
+            }
+        }
+
+        private val retrievePaymentMethodsHandler: Handler<CustomerRetrievePaymentMethodsResponse> =
+            jsonHandler<CustomerRetrievePaymentMethodsResponse>(clientOptions.jsonMapper)
+
+        override suspend fun retrievePaymentMethods(
+            params: CustomerRetrievePaymentMethodsParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<CustomerRetrievePaymentMethodsResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("customerId", params.customerId())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("customers", params._pathParam(0), "payment-methods")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { retrievePaymentMethodsHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
                     }
             }
         }
