@@ -31,6 +31,7 @@ internal class ProductServiceAsyncTest {
         val product =
             productServiceAsync.create(
                 ProductCreateParams.builder()
+                    .name("name")
                     .price(
                         Price.OneTimePrice.builder()
                             .currency(Currency.AED)
@@ -64,7 +65,6 @@ internal class ProductServiceAsyncTest {
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
-                    .name("name")
                     .build()
             )
 

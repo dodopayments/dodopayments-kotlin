@@ -80,6 +80,13 @@ internal class ServiceParamsTest {
                 .featureFlags(
                     CheckoutSessionRequest.FeatureFlags.builder()
                         .allowCurrencySelection(true)
+                        .allowCustomerEditingCity(true)
+                        .allowCustomerEditingCountry(true)
+                        .allowCustomerEditingEmail(true)
+                        .allowCustomerEditingName(true)
+                        .allowCustomerEditingState(true)
+                        .allowCustomerEditingStreet(true)
+                        .allowCustomerEditingZipcode(true)
                         .allowDiscountCode(true)
                         .allowPhoneNumberCollection(true)
                         .allowTaxId(true)

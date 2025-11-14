@@ -728,6 +728,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .customerId("customer_id")
                                 .email("email")
                                 .name("name")
+                                .metadata(
+                                    CustomerLimitedDetails.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
                                 .phoneNumber("phone_number")
                                 .build()
                         )
@@ -848,6 +853,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .customerId("customer_id")
                                     .email("email")
                                     .name("name")
+                                    .metadata(
+                                        CustomerLimitedDetails.Metadata.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                                            .build()
+                                    )
                                     .phoneNumber("phone_number")
                                     .build()
                             )
@@ -951,6 +961,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .customerId("customer_id")
                                 .email("email")
                                 .name("name")
+                                .metadata(
+                                    CustomerLimitedDetails.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
                                 .phoneNumber("phone_number")
                                 .build()
                         )
@@ -1071,6 +1086,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .customerId("customer_id")
                                     .email("email")
                                     .name("name")
+                                    .metadata(
+                                        CustomerLimitedDetails.Metadata.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                                            .build()
+                                    )
                                     .phoneNumber("phone_number")
                                     .build()
                             )
@@ -1174,6 +1194,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .customerId("customer_id")
                                 .email("email")
                                 .name("name")
+                                .metadata(
+                                    CustomerLimitedDetails.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
                                 .phoneNumber("phone_number")
                                 .build()
                         )
@@ -1295,6 +1320,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .customerId("customer_id")
                                     .email("email")
                                     .name("name")
+                                    .metadata(
+                                        CustomerLimitedDetails.Metadata.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                                            .build()
+                                    )
                                     .phoneNumber("phone_number")
                                     .build()
                             )
@@ -1398,6 +1428,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .customerId("customer_id")
                                 .email("email")
                                 .name("name")
+                                .metadata(
+                                    CustomerLimitedDetails.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
                                 .phoneNumber("phone_number")
                                 .build()
                         )
@@ -1518,6 +1553,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .customerId("customer_id")
                                     .email("email")
                                     .name("name")
+                                    .metadata(
+                                        CustomerLimitedDetails.Metadata.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                                            .build()
+                                    )
                                     .phoneNumber("phone_number")
                                     .build()
                             )
@@ -1610,6 +1650,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .customerId("customer_id")
                                 .email("email")
                                 .name("name")
+                                .metadata(
+                                    CustomerLimitedDetails.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
                                 .phoneNumber("phone_number")
                                 .build()
                         )
@@ -1673,6 +1718,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .customerId("customer_id")
                                     .email("email")
                                     .name("name")
+                                    .metadata(
+                                        CustomerLimitedDetails.Metadata.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                                            .build()
+                                    )
                                     .phoneNumber("phone_number")
                                     .build()
                             )
@@ -1719,6 +1769,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .customerId("customer_id")
                                 .email("email")
                                 .name("name")
+                                .metadata(
+                                    CustomerLimitedDetails.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
                                 .phoneNumber("phone_number")
                                 .build()
                         )
@@ -1782,6 +1837,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .customerId("customer_id")
                                     .email("email")
                                     .name("name")
+                                    .metadata(
+                                        CustomerLimitedDetails.Metadata.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                                            .build()
+                                    )
                                     .phoneNumber("phone_number")
                                     .build()
                             )
@@ -1841,6 +1901,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .customerId("customer_id")
                                 .email("email")
                                 .name("name")
+                                .metadata(
+                                    CustomerLimitedDetails.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
                                 .phoneNumber("phone_number")
                                 .build()
                         )
@@ -1878,6 +1943,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .discountCyclesRemaining(0)
                         .discountId("discount_id")
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentMethodId("payment_method_id")
                         .taxId("tax_id")
                         .payloadType(SubscriptionActiveWebhookEvent.Data.PayloadType.SUBSCRIPTION)
                         .build()
@@ -1944,6 +2010,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .customerId("customer_id")
                                     .email("email")
                                     .name("name")
+                                    .metadata(
+                                        CustomerLimitedDetails.Metadata.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                                            .build()
+                                    )
                                     .phoneNumber("phone_number")
                                     .build()
                             )
@@ -1981,6 +2052,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .discountCyclesRemaining(0)
                             .discountId("discount_id")
                             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .paymentMethodId("payment_method_id")
                             .taxId("tax_id")
                             .payloadType(
                                 SubscriptionActiveWebhookEvent.Data.PayloadType.SUBSCRIPTION
@@ -2028,6 +2100,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .customerId("customer_id")
                                 .email("email")
                                 .name("name")
+                                .metadata(
+                                    CustomerLimitedDetails.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
                                 .phoneNumber("phone_number")
                                 .build()
                         )
@@ -2065,6 +2142,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .discountCyclesRemaining(0)
                         .discountId("discount_id")
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentMethodId("payment_method_id")
                         .taxId("tax_id")
                         .payloadType(
                             SubscriptionCancelledWebhookEvent.Data.PayloadType.SUBSCRIPTION
@@ -2134,6 +2212,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .customerId("customer_id")
                                     .email("email")
                                     .name("name")
+                                    .metadata(
+                                        CustomerLimitedDetails.Metadata.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                                            .build()
+                                    )
                                     .phoneNumber("phone_number")
                                     .build()
                             )
@@ -2171,6 +2254,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .discountCyclesRemaining(0)
                             .discountId("discount_id")
                             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .paymentMethodId("payment_method_id")
                             .taxId("tax_id")
                             .payloadType(
                                 SubscriptionCancelledWebhookEvent.Data.PayloadType.SUBSCRIPTION
@@ -2218,6 +2302,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .customerId("customer_id")
                                 .email("email")
                                 .name("name")
+                                .metadata(
+                                    CustomerLimitedDetails.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
                                 .phoneNumber("phone_number")
                                 .build()
                         )
@@ -2255,6 +2344,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .discountCyclesRemaining(0)
                         .discountId("discount_id")
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentMethodId("payment_method_id")
                         .taxId("tax_id")
                         .payloadType(SubscriptionExpiredWebhookEvent.Data.PayloadType.SUBSCRIPTION)
                         .build()
@@ -2321,6 +2411,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .customerId("customer_id")
                                     .email("email")
                                     .name("name")
+                                    .metadata(
+                                        CustomerLimitedDetails.Metadata.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                                            .build()
+                                    )
                                     .phoneNumber("phone_number")
                                     .build()
                             )
@@ -2358,6 +2453,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .discountCyclesRemaining(0)
                             .discountId("discount_id")
                             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .paymentMethodId("payment_method_id")
                             .taxId("tax_id")
                             .payloadType(
                                 SubscriptionExpiredWebhookEvent.Data.PayloadType.SUBSCRIPTION
@@ -2405,6 +2501,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .customerId("customer_id")
                                 .email("email")
                                 .name("name")
+                                .metadata(
+                                    CustomerLimitedDetails.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
                                 .phoneNumber("phone_number")
                                 .build()
                         )
@@ -2442,6 +2543,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .discountCyclesRemaining(0)
                         .discountId("discount_id")
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentMethodId("payment_method_id")
                         .taxId("tax_id")
                         .payloadType(SubscriptionFailedWebhookEvent.Data.PayloadType.SUBSCRIPTION)
                         .build()
@@ -2508,6 +2610,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .customerId("customer_id")
                                     .email("email")
                                     .name("name")
+                                    .metadata(
+                                        CustomerLimitedDetails.Metadata.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                                            .build()
+                                    )
                                     .phoneNumber("phone_number")
                                     .build()
                             )
@@ -2545,6 +2652,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .discountCyclesRemaining(0)
                             .discountId("discount_id")
                             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .paymentMethodId("payment_method_id")
                             .taxId("tax_id")
                             .payloadType(
                                 SubscriptionFailedWebhookEvent.Data.PayloadType.SUBSCRIPTION
@@ -2592,6 +2700,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .customerId("customer_id")
                                 .email("email")
                                 .name("name")
+                                .metadata(
+                                    CustomerLimitedDetails.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
                                 .phoneNumber("phone_number")
                                 .build()
                         )
@@ -2629,6 +2742,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .discountCyclesRemaining(0)
                         .discountId("discount_id")
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentMethodId("payment_method_id")
                         .taxId("tax_id")
                         .payloadType(SubscriptionOnHoldWebhookEvent.Data.PayloadType.SUBSCRIPTION)
                         .build()
@@ -2695,6 +2809,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .customerId("customer_id")
                                     .email("email")
                                     .name("name")
+                                    .metadata(
+                                        CustomerLimitedDetails.Metadata.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                                            .build()
+                                    )
                                     .phoneNumber("phone_number")
                                     .build()
                             )
@@ -2732,6 +2851,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .discountCyclesRemaining(0)
                             .discountId("discount_id")
                             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .paymentMethodId("payment_method_id")
                             .taxId("tax_id")
                             .payloadType(
                                 SubscriptionOnHoldWebhookEvent.Data.PayloadType.SUBSCRIPTION
@@ -2779,6 +2899,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .customerId("customer_id")
                                 .email("email")
                                 .name("name")
+                                .metadata(
+                                    CustomerLimitedDetails.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
                                 .phoneNumber("phone_number")
                                 .build()
                         )
@@ -2816,6 +2941,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .discountCyclesRemaining(0)
                         .discountId("discount_id")
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentMethodId("payment_method_id")
                         .taxId("tax_id")
                         .payloadType(
                             SubscriptionPlanChangedWebhookEvent.Data.PayloadType.SUBSCRIPTION
@@ -2885,6 +3011,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .customerId("customer_id")
                                     .email("email")
                                     .name("name")
+                                    .metadata(
+                                        CustomerLimitedDetails.Metadata.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                                            .build()
+                                    )
                                     .phoneNumber("phone_number")
                                     .build()
                             )
@@ -2922,6 +3053,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .discountCyclesRemaining(0)
                             .discountId("discount_id")
                             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .paymentMethodId("payment_method_id")
                             .taxId("tax_id")
                             .payloadType(
                                 SubscriptionPlanChangedWebhookEvent.Data.PayloadType.SUBSCRIPTION
@@ -2969,6 +3101,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .customerId("customer_id")
                                 .email("email")
                                 .name("name")
+                                .metadata(
+                                    CustomerLimitedDetails.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
                                 .phoneNumber("phone_number")
                                 .build()
                         )
@@ -3006,6 +3143,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .discountCyclesRemaining(0)
                         .discountId("discount_id")
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentMethodId("payment_method_id")
                         .taxId("tax_id")
                         .payloadType(SubscriptionRenewedWebhookEvent.Data.PayloadType.SUBSCRIPTION)
                         .build()
@@ -3072,6 +3210,11 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .customerId("customer_id")
                                     .email("email")
                                     .name("name")
+                                    .metadata(
+                                        CustomerLimitedDetails.Metadata.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                                            .build()
+                                    )
                                     .phoneNumber("phone_number")
                                     .build()
                             )
@@ -3109,6 +3252,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .discountCyclesRemaining(0)
                             .discountId("discount_id")
                             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .paymentMethodId("payment_method_id")
                             .taxId("tax_id")
                             .payloadType(
                                 SubscriptionRenewedWebhookEvent.Data.PayloadType.SUBSCRIPTION

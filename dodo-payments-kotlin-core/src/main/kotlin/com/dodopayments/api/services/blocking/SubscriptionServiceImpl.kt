@@ -31,6 +31,8 @@ import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistor
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryPageResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryParams
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdateParams
+import com.dodopayments.api.models.subscriptions.SubscriptionUpdatePaymentMethodParams
+import com.dodopayments.api.models.subscriptions.SubscriptionUpdatePaymentMethodResponse
 
 class SubscriptionServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     SubscriptionService {
@@ -90,6 +92,13 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
     ): SubscriptionRetrieveUsageHistoryPage =
         // get /subscriptions/{subscription_id}/usage-history
         withRawResponse().retrieveUsageHistory(params, requestOptions).parse()
+
+    override fun updatePaymentMethod(
+        params: SubscriptionUpdatePaymentMethodParams,
+        requestOptions: RequestOptions,
+    ): SubscriptionUpdatePaymentMethodResponse =
+        // post /subscriptions/{subscription_id}/update-payment-method
+        withRawResponse().updatePaymentMethod(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         SubscriptionService.WithRawResponse {
@@ -316,6 +325,37 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                             .params(params)
                             .response(it)
                             .build()
+                    }
+            }
+        }
+
+        private val updatePaymentMethodHandler: Handler<SubscriptionUpdatePaymentMethodResponse> =
+            jsonHandler<SubscriptionUpdatePaymentMethodResponse>(clientOptions.jsonMapper)
+
+        override fun updatePaymentMethod(
+            params: SubscriptionUpdatePaymentMethodParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<SubscriptionUpdatePaymentMethodResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("subscriptionId", params.subscriptionId())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("subscriptions", params._pathParam(0), "update-payment-method")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { updatePaymentMethodHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
                     }
             }
         }
