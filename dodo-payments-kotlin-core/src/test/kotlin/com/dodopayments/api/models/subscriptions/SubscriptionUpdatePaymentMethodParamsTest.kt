@@ -12,8 +12,8 @@ internal class SubscriptionUpdatePaymentMethodParamsTest {
         SubscriptionUpdatePaymentMethodParams.builder()
             .subscriptionId("subscription_id")
             .body(
-                SubscriptionUpdatePaymentMethodParams.Body.UnionMember0.builder()
-                    .type(SubscriptionUpdatePaymentMethodParams.Body.UnionMember0.Type.NEW)
+                SubscriptionUpdatePaymentMethodParams.Body.New.builder()
+                    .type(SubscriptionUpdatePaymentMethodParams.Body.New.Type.NEW)
                     .returnUrl("return_url")
                     .build()
             )
@@ -26,8 +26,8 @@ internal class SubscriptionUpdatePaymentMethodParamsTest {
             SubscriptionUpdatePaymentMethodParams.builder()
                 .subscriptionId("subscription_id")
                 .body(
-                    SubscriptionUpdatePaymentMethodParams.Body.UnionMember0.builder()
-                        .type(SubscriptionUpdatePaymentMethodParams.Body.UnionMember0.Type.NEW)
+                    SubscriptionUpdatePaymentMethodParams.Body.New.builder()
+                        .type(SubscriptionUpdatePaymentMethodParams.Body.New.Type.NEW)
                         .build()
                 )
                 .build()
@@ -43,8 +43,8 @@ internal class SubscriptionUpdatePaymentMethodParamsTest {
             SubscriptionUpdatePaymentMethodParams.builder()
                 .subscriptionId("subscription_id")
                 .body(
-                    SubscriptionUpdatePaymentMethodParams.Body.UnionMember0.builder()
-                        .type(SubscriptionUpdatePaymentMethodParams.Body.UnionMember0.Type.NEW)
+                    SubscriptionUpdatePaymentMethodParams.Body.New.builder()
+                        .type(SubscriptionUpdatePaymentMethodParams.Body.New.Type.NEW)
                         .returnUrl("return_url")
                         .build()
                 )
@@ -54,9 +54,9 @@ internal class SubscriptionUpdatePaymentMethodParamsTest {
 
         assertThat(body)
             .isEqualTo(
-                SubscriptionUpdatePaymentMethodParams.Body.ofUnionMember0(
-                    SubscriptionUpdatePaymentMethodParams.Body.UnionMember0.builder()
-                        .type(SubscriptionUpdatePaymentMethodParams.Body.UnionMember0.Type.NEW)
+                SubscriptionUpdatePaymentMethodParams.Body.ofNew(
+                    SubscriptionUpdatePaymentMethodParams.Body.New.builder()
+                        .type(SubscriptionUpdatePaymentMethodParams.Body.New.Type.NEW)
                         .returnUrl("return_url")
                         .build()
                 )
@@ -69,8 +69,8 @@ internal class SubscriptionUpdatePaymentMethodParamsTest {
             SubscriptionUpdatePaymentMethodParams.builder()
                 .subscriptionId("subscription_id")
                 .body(
-                    SubscriptionUpdatePaymentMethodParams.Body.UnionMember0.builder()
-                        .type(SubscriptionUpdatePaymentMethodParams.Body.UnionMember0.Type.NEW)
+                    SubscriptionUpdatePaymentMethodParams.Body.New.builder()
+                        .type(SubscriptionUpdatePaymentMethodParams.Body.New.Type.NEW)
                         .build()
                 )
                 .build()
@@ -79,9 +79,9 @@ internal class SubscriptionUpdatePaymentMethodParamsTest {
 
         assertThat(body)
             .isEqualTo(
-                SubscriptionUpdatePaymentMethodParams.Body.ofUnionMember0(
-                    SubscriptionUpdatePaymentMethodParams.Body.UnionMember0.builder()
-                        .type(SubscriptionUpdatePaymentMethodParams.Body.UnionMember0.Type.NEW)
+                SubscriptionUpdatePaymentMethodParams.Body.ofNew(
+                    SubscriptionUpdatePaymentMethodParams.Body.New.builder()
+                        .type(SubscriptionUpdatePaymentMethodParams.Body.New.Type.NEW)
                         .build()
                 )
             )

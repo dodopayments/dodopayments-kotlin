@@ -2,9 +2,9 @@
 
 package com.dodopayments.api.models.customers
 
-import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.misc.CountryCode
+import com.dodopayments.api.models.payments.PaymentMethodTypes
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -18,31 +18,10 @@ internal class CustomerRetrievePaymentMethodsResponseTest {
             CustomerRetrievePaymentMethodsResponse.builder()
                 .addItem(
                     CustomerRetrievePaymentMethodsResponse.Item.builder()
-                        .connectorPaymentMethods(
-                            CustomerRetrievePaymentMethodsResponse.Item.ConnectorPaymentMethods
-                                .builder()
-                                .putAdditionalProperty(
-                                    "foo",
-                                    JsonValue.from(
-                                        mapOf(
-                                            "connector_mandate_id" to "connector_mandate_id",
-                                            "original_payment_authorized_amount" to 0,
-                                            "original_payment_authorized_currency" to "AED",
-                                            "payment_method_type" to "credit",
-                                        )
-                                    ),
-                                )
-                                .build()
-                        )
                         .paymentMethod(
                             CustomerRetrievePaymentMethodsResponse.Item.PaymentMethod.CARD
                         )
                         .paymentMethodId("payment_method_id")
-                        .profileMap(
-                            CustomerRetrievePaymentMethodsResponse.Item.ProfileMap.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("string"))
-                                .build()
-                        )
                         .card(
                             CustomerRetrievePaymentMethodsResponse.Item.Card.builder()
                                 .cardIssuingCountry(CountryCode.AF)
@@ -54,6 +33,7 @@ internal class CustomerRetrievePaymentMethodsResponseTest {
                                 .build()
                         )
                         .lastUsedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentMethodType(PaymentMethodTypes.CREDIT)
                         .recurringEnabled(true)
                         .build()
                 )
@@ -62,29 +42,8 @@ internal class CustomerRetrievePaymentMethodsResponseTest {
         assertThat(customerRetrievePaymentMethodsResponse.items())
             .containsExactly(
                 CustomerRetrievePaymentMethodsResponse.Item.builder()
-                    .connectorPaymentMethods(
-                        CustomerRetrievePaymentMethodsResponse.Item.ConnectorPaymentMethods
-                            .builder()
-                            .putAdditionalProperty(
-                                "foo",
-                                JsonValue.from(
-                                    mapOf(
-                                        "connector_mandate_id" to "connector_mandate_id",
-                                        "original_payment_authorized_amount" to 0,
-                                        "original_payment_authorized_currency" to "AED",
-                                        "payment_method_type" to "credit",
-                                    )
-                                ),
-                            )
-                            .build()
-                    )
                     .paymentMethod(CustomerRetrievePaymentMethodsResponse.Item.PaymentMethod.CARD)
                     .paymentMethodId("payment_method_id")
-                    .profileMap(
-                        CustomerRetrievePaymentMethodsResponse.Item.ProfileMap.builder()
-                            .putAdditionalProperty("foo", JsonValue.from("string"))
-                            .build()
-                    )
                     .card(
                         CustomerRetrievePaymentMethodsResponse.Item.Card.builder()
                             .cardIssuingCountry(CountryCode.AF)
@@ -96,6 +55,7 @@ internal class CustomerRetrievePaymentMethodsResponseTest {
                             .build()
                     )
                     .lastUsedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .paymentMethodType(PaymentMethodTypes.CREDIT)
                     .recurringEnabled(true)
                     .build()
             )
@@ -108,31 +68,10 @@ internal class CustomerRetrievePaymentMethodsResponseTest {
             CustomerRetrievePaymentMethodsResponse.builder()
                 .addItem(
                     CustomerRetrievePaymentMethodsResponse.Item.builder()
-                        .connectorPaymentMethods(
-                            CustomerRetrievePaymentMethodsResponse.Item.ConnectorPaymentMethods
-                                .builder()
-                                .putAdditionalProperty(
-                                    "foo",
-                                    JsonValue.from(
-                                        mapOf(
-                                            "connector_mandate_id" to "connector_mandate_id",
-                                            "original_payment_authorized_amount" to 0,
-                                            "original_payment_authorized_currency" to "AED",
-                                            "payment_method_type" to "credit",
-                                        )
-                                    ),
-                                )
-                                .build()
-                        )
                         .paymentMethod(
                             CustomerRetrievePaymentMethodsResponse.Item.PaymentMethod.CARD
                         )
                         .paymentMethodId("payment_method_id")
-                        .profileMap(
-                            CustomerRetrievePaymentMethodsResponse.Item.ProfileMap.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("string"))
-                                .build()
-                        )
                         .card(
                             CustomerRetrievePaymentMethodsResponse.Item.Card.builder()
                                 .cardIssuingCountry(CountryCode.AF)
@@ -144,6 +83,7 @@ internal class CustomerRetrievePaymentMethodsResponseTest {
                                 .build()
                         )
                         .lastUsedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentMethodType(PaymentMethodTypes.CREDIT)
                         .recurringEnabled(true)
                         .build()
                 )
