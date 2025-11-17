@@ -234,8 +234,8 @@ internal class SubscriptionServiceTest {
                 SubscriptionUpdatePaymentMethodParams.builder()
                     .subscriptionId("subscription_id")
                     .body(
-                        SubscriptionUpdatePaymentMethodParams.Body.UnionMember0.builder()
-                            .type(SubscriptionUpdatePaymentMethodParams.Body.UnionMember0.Type.NEW)
+                        SubscriptionUpdatePaymentMethodParams.Body.New.builder()
+                            .type(SubscriptionUpdatePaymentMethodParams.Body.New.Type.NEW)
                             .returnUrl("return_url")
                             .build()
                     )
