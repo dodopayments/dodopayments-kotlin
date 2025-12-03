@@ -354,13 +354,13 @@ The SDK uses the standard [OkHttp logging interceptor](https://github.com/square
 Enable logging by setting the `DODO_PAYMENTS_LOG` environment variable to `info`:
 
 ```sh
-$ export DODO_PAYMENTS_LOG=info
+export DODO_PAYMENTS_LOG=info
 ```
 
 Or to `debug` for more verbose logging:
 
 ```sh
-$ export DODO_PAYMENTS_LOG=debug
+export DODO_PAYMENTS_LOG=debug
 ```
 
 ## ProGuard and R8
