@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.61.6 (2025-12-03)
+
+Full Changelog: [v1.61.5...v1.61.6](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.61.5...v1.61.6)
+
+### Documentation
+
+* remove `$` for better copy-pasteabality ([3c96758](https://github.com/dodopayments/dodopayments-kotlin/commit/3c967586497b7b9dbf2075d3ef1043dd32fa8775))
+
 ## 1.61.5 (2025-11-17)
 
 Full Changelog: [v1.60.0...v1.61.5](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.60.0...v1.61.5)
