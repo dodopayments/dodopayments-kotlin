@@ -137,6 +137,7 @@ internal class ProGuardCompatibilityTest {
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
+                .minimalAddress(true)
                 .returnUrl("return_url")
                 .showSavedPaymentMethods(true)
                 .subscriptionData(

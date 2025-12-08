@@ -23,8 +23,8 @@ internal class PaymentTest {
             Payment.builder()
                 .billing(
                     BillingAddress.builder()
-                        .city("city")
                         .country(CountryCode.AF)
+                        .city("city")
                         .state("state")
                         .street("street")
                         .zipcode("zipcode")
@@ -107,8 +107,8 @@ internal class PaymentTest {
         assertThat(payment.billing())
             .isEqualTo(
                 BillingAddress.builder()
-                    .city("city")
                     .country(CountryCode.AF)
+                    .city("city")
                     .state("state")
                     .street("street")
                     .zipcode("zipcode")
@@ -200,8 +200,8 @@ internal class PaymentTest {
             Payment.builder()
                 .billing(
                     BillingAddress.builder()
-                        .city("city")
                         .country(CountryCode.AF)
+                        .city("city")
                         .state("state")
                         .street("street")
                         .zipcode("zipcode")

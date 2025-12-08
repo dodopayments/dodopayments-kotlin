@@ -19,8 +19,8 @@ internal class SubscriptionCreateParamsTest {
         SubscriptionCreateParams.builder()
             .billing(
                 BillingAddress.builder()
-                    .city("city")
                     .country(CountryCode.AF)
+                    .city("city")
                     .state("state")
                     .street("street")
                     .zipcode("zipcode")
@@ -62,8 +62,8 @@ internal class SubscriptionCreateParamsTest {
             SubscriptionCreateParams.builder()
                 .billing(
                     BillingAddress.builder()
-                        .city("city")
                         .country(CountryCode.AF)
+                        .city("city")
                         .state("state")
                         .street("street")
                         .zipcode("zipcode")
@@ -103,8 +103,8 @@ internal class SubscriptionCreateParamsTest {
         assertThat(body.billing())
             .isEqualTo(
                 BillingAddress.builder()
-                    .city("city")
                     .country(CountryCode.AF)
+                    .city("city")
                     .state("state")
                     .street("street")
                     .zipcode("zipcode")
@@ -151,15 +151,7 @@ internal class SubscriptionCreateParamsTest {
     fun bodyWithoutOptionalFields() {
         val params =
             SubscriptionCreateParams.builder()
-                .billing(
-                    BillingAddress.builder()
-                        .city("city")
-                        .country(CountryCode.AF)
-                        .state("state")
-                        .street("street")
-                        .zipcode("zipcode")
-                        .build()
-                )
+                .billing(BillingAddress.builder().country(CountryCode.AF).build())
                 .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
                 .productId("product_id")
                 .quantity(0)
@@ -168,15 +160,7 @@ internal class SubscriptionCreateParamsTest {
         val body = params._body()
 
         assertThat(body.billing())
-            .isEqualTo(
-                BillingAddress.builder()
-                    .city("city")
-                    .country(CountryCode.AF)
-                    .state("state")
-                    .street("street")
-                    .zipcode("zipcode")
-                    .build()
-            )
+            .isEqualTo(BillingAddress.builder().country(CountryCode.AF).build())
         assertThat(body.customer())
             .isEqualTo(
                 CustomerRequest.ofAttachExistingCustomer(

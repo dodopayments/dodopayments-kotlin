@@ -134,6 +134,7 @@ internal class ErrorHandlingTest {
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
+                        .minimalAddress(true)
                         .returnUrl("return_url")
                         .showSavedPaymentMethods(true)
                         .subscriptionData(
@@ -229,6 +230,7 @@ internal class ErrorHandlingTest {
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
+                        .minimalAddress(true)
                         .returnUrl("return_url")
                         .showSavedPaymentMethods(true)
                         .subscriptionData(
@@ -324,6 +326,7 @@ internal class ErrorHandlingTest {
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
+                        .minimalAddress(true)
                         .returnUrl("return_url")
                         .showSavedPaymentMethods(true)
                         .subscriptionData(
@@ -419,6 +422,7 @@ internal class ErrorHandlingTest {
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
+                        .minimalAddress(true)
                         .returnUrl("return_url")
                         .showSavedPaymentMethods(true)
                         .subscriptionData(
@@ -514,6 +518,7 @@ internal class ErrorHandlingTest {
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
+                        .minimalAddress(true)
                         .returnUrl("return_url")
                         .showSavedPaymentMethods(true)
                         .subscriptionData(
@@ -609,6 +614,7 @@ internal class ErrorHandlingTest {
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
+                        .minimalAddress(true)
                         .returnUrl("return_url")
                         .showSavedPaymentMethods(true)
                         .subscriptionData(
@@ -704,6 +710,7 @@ internal class ErrorHandlingTest {
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
+                        .minimalAddress(true)
                         .returnUrl("return_url")
                         .showSavedPaymentMethods(true)
                         .subscriptionData(
@@ -799,6 +806,7 @@ internal class ErrorHandlingTest {
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
+                        .minimalAddress(true)
                         .returnUrl("return_url")
                         .showSavedPaymentMethods(true)
                         .subscriptionData(
@@ -894,6 +902,7 @@ internal class ErrorHandlingTest {
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
+                        .minimalAddress(true)
                         .returnUrl("return_url")
                         .showSavedPaymentMethods(true)
                         .subscriptionData(
@@ -989,6 +998,7 @@ internal class ErrorHandlingTest {
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
+                        .minimalAddress(true)
                         .returnUrl("return_url")
                         .showSavedPaymentMethods(true)
                         .subscriptionData(
@@ -1084,6 +1094,7 @@ internal class ErrorHandlingTest {
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
+                        .minimalAddress(true)
                         .returnUrl("return_url")
                         .showSavedPaymentMethods(true)
                         .subscriptionData(
@@ -1179,6 +1190,7 @@ internal class ErrorHandlingTest {
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
+                        .minimalAddress(true)
                         .returnUrl("return_url")
                         .showSavedPaymentMethods(true)
                         .subscriptionData(
@@ -1274,6 +1286,7 @@ internal class ErrorHandlingTest {
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
+                        .minimalAddress(true)
                         .returnUrl("return_url")
                         .showSavedPaymentMethods(true)
                         .subscriptionData(
@@ -1369,6 +1382,7 @@ internal class ErrorHandlingTest {
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
+                        .minimalAddress(true)
                         .returnUrl("return_url")
                         .showSavedPaymentMethods(true)
                         .subscriptionData(
@@ -1464,6 +1478,7 @@ internal class ErrorHandlingTest {
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
+                        .minimalAddress(true)
                         .returnUrl("return_url")
                         .showSavedPaymentMethods(true)
                         .subscriptionData(
@@ -1559,6 +1574,7 @@ internal class ErrorHandlingTest {
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
+                        .minimalAddress(true)
                         .returnUrl("return_url")
                         .showSavedPaymentMethods(true)
                         .subscriptionData(
@@ -1652,6 +1668,7 @@ internal class ErrorHandlingTest {
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
+                        .minimalAddress(true)
                         .returnUrl("return_url")
                         .showSavedPaymentMethods(true)
                         .subscriptionData(

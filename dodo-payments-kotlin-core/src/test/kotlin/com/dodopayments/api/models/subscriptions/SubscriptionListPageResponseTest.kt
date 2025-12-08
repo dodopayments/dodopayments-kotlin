@@ -23,8 +23,8 @@ internal class SubscriptionListPageResponseTest {
                     SubscriptionListResponse.builder()
                         .billing(
                             BillingAddress.builder()
-                                .city("city")
                                 .country(CountryCode.AF)
+                                .city("city")
                                 .state("state")
                                 .street("street")
                                 .zipcode("zipcode")
@@ -79,8 +79,8 @@ internal class SubscriptionListPageResponseTest {
                 SubscriptionListResponse.builder()
                     .billing(
                         BillingAddress.builder()
-                            .city("city")
                             .country(CountryCode.AF)
+                            .city("city")
                             .state("state")
                             .street("street")
                             .zipcode("zipcode")
@@ -139,8 +139,8 @@ internal class SubscriptionListPageResponseTest {
                     SubscriptionListResponse.builder()
                         .billing(
                             BillingAddress.builder()
-                                .city("city")
                                 .country(CountryCode.AF)
+                                .city("city")
                                 .state("state")
                                 .street("street")
                                 .zipcode("zipcode")

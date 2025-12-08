@@ -15,8 +15,8 @@ internal class PaymentCreateParamsTest {
         PaymentCreateParams.builder()
             .billing(
                 BillingAddress.builder()
-                    .city("city")
                     .country(CountryCode.AF)
+                    .city("city")
                     .state("state")
                     .street("street")
                     .zipcode("zipcode")
@@ -52,8 +52,8 @@ internal class PaymentCreateParamsTest {
             PaymentCreateParams.builder()
                 .billing(
                     BillingAddress.builder()
-                        .city("city")
                         .country(CountryCode.AF)
+                        .city("city")
                         .state("state")
                         .street("street")
                         .zipcode("zipcode")
@@ -87,8 +87,8 @@ internal class PaymentCreateParamsTest {
         assertThat(body.billing())
             .isEqualTo(
                 BillingAddress.builder()
-                    .city("city")
                     .country(CountryCode.AF)
+                    .city("city")
                     .state("state")
                     .street("street")
                     .zipcode("zipcode")
@@ -128,15 +128,7 @@ internal class PaymentCreateParamsTest {
     fun bodyWithoutOptionalFields() {
         val params =
             PaymentCreateParams.builder()
-                .billing(
-                    BillingAddress.builder()
-                        .city("city")
-                        .country(CountryCode.AF)
-                        .state("state")
-                        .street("street")
-                        .zipcode("zipcode")
-                        .build()
-                )
+                .billing(BillingAddress.builder().country(CountryCode.AF).build())
                 .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
                 .addProductCart(
                     OneTimeProductCartItem.builder().productId("product_id").quantity(0).build()
@@ -146,15 +138,7 @@ internal class PaymentCreateParamsTest {
         val body = params._body()
 
         assertThat(body.billing())
-            .isEqualTo(
-                BillingAddress.builder()
-                    .city("city")
-                    .country(CountryCode.AF)
-                    .state("state")
-                    .street("street")
-                    .zipcode("zipcode")
-                    .build()
-            )
+            .isEqualTo(BillingAddress.builder().country(CountryCode.AF).build())
         assertThat(body.customer())
             .isEqualTo(
                 CustomerRequest.ofAttachExistingCustomer(

@@ -22,8 +22,8 @@ internal class SubscriptionTest {
                 .addAddon(AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build())
                 .billing(
                     BillingAddress.builder()
-                        .city("city")
                         .country(CountryCode.AF)
+                        .city("city")
                         .state("state")
                         .street("street")
                         .zipcode("zipcode")
@@ -90,8 +90,8 @@ internal class SubscriptionTest {
         assertThat(subscription.billing())
             .isEqualTo(
                 BillingAddress.builder()
-                    .city("city")
                     .country(CountryCode.AF)
+                    .city("city")
                     .state("state")
                     .street("street")
                     .zipcode("zipcode")
@@ -167,8 +167,8 @@ internal class SubscriptionTest {
                 .addAddon(AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build())
                 .billing(
                     BillingAddress.builder()
-                        .city("city")
                         .country(CountryCode.AF)
+                        .city("city")
                         .state("state")
                         .street("street")
                         .zipcode("zipcode")
