@@ -21,8 +21,8 @@ internal class SubscriptionListResponseTest {
             SubscriptionListResponse.builder()
                 .billing(
                     BillingAddress.builder()
-                        .city("city")
                         .country(CountryCode.AF)
+                        .city("city")
                         .state("state")
                         .street("street")
                         .zipcode("zipcode")
@@ -73,8 +73,8 @@ internal class SubscriptionListResponseTest {
         assertThat(subscriptionListResponse.billing())
             .isEqualTo(
                 BillingAddress.builder()
-                    .city("city")
                     .country(CountryCode.AF)
+                    .city("city")
                     .state("state")
                     .street("street")
                     .zipcode("zipcode")
@@ -136,8 +136,8 @@ internal class SubscriptionListResponseTest {
             SubscriptionListResponse.builder()
                 .billing(
                     BillingAddress.builder()
-                        .city("city")
                         .country(CountryCode.AF)
+                        .city("city")
                         .state("state")
                         .street("street")
                         .zipcode("zipcode")

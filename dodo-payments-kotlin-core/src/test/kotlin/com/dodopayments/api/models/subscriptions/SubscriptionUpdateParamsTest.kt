@@ -17,8 +17,8 @@ internal class SubscriptionUpdateParamsTest {
             .subscriptionId("subscription_id")
             .billing(
                 BillingAddress.builder()
-                    .city("city")
                     .country(CountryCode.AF)
+                    .city("city")
                     .state("state")
                     .street("street")
                     .zipcode("zipcode")
@@ -58,8 +58,8 @@ internal class SubscriptionUpdateParamsTest {
                 .subscriptionId("subscription_id")
                 .billing(
                     BillingAddress.builder()
-                        .city("city")
                         .country(CountryCode.AF)
+                        .city("city")
                         .state("state")
                         .street("street")
                         .zipcode("zipcode")
@@ -87,8 +87,8 @@ internal class SubscriptionUpdateParamsTest {
         assertThat(body.billing())
             .isEqualTo(
                 BillingAddress.builder()
-                    .city("city")
                     .country(CountryCode.AF)
+                    .city("city")
                     .state("state")
                     .street("street")
                     .zipcode("zipcode")

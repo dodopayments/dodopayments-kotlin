@@ -15,6 +15,7 @@ import com.dodopayments.api.models.subscriptions.OnDemandSubscription
 import com.dodopayments.api.models.subscriptions.SubscriptionChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeParams
 import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
+import com.dodopayments.api.models.subscriptions.SubscriptionPreviewChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionStatus
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdateParams
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdatePaymentMethodParams
@@ -39,8 +40,8 @@ internal class SubscriptionServiceTest {
                 SubscriptionCreateParams.builder()
                     .billing(
                         BillingAddress.builder()
-                            .city("city")
                             .country(CountryCode.AF)
+                            .city("city")
                             .state("state")
                             .street("street")
                             .zipcode("zipcode")
@@ -108,8 +109,8 @@ internal class SubscriptionServiceTest {
                     .subscriptionId("subscription_id")
                     .billing(
                         BillingAddress.builder()
-                            .city("city")
                             .country(CountryCode.AF)
+                            .city("city")
                             .state("state")
                             .street("street")
                             .zipcode("zipcode")
@@ -200,6 +201,32 @@ internal class SubscriptionServiceTest {
                     )
                     .productCurrency(Currency.AED)
                     .productDescription("product_description")
+                    .build()
+            )
+
+        response.validate()
+    }
+
+    @Test
+    fun previewChangePlan() {
+        val client =
+            DodoPaymentsOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val subscriptionService = client.subscriptions()
+
+        val response =
+            subscriptionService.previewChangePlan(
+                SubscriptionPreviewChangePlanParams.builder()
+                    .subscriptionId("subscription_id")
+                    .productId("product_id")
+                    .prorationBillingMode(
+                        SubscriptionPreviewChangePlanParams.ProrationBillingMode
+                            .PRORATED_IMMEDIATELY
+                    )
+                    .quantity(0)
+                    .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
                     .build()
             )
 

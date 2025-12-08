@@ -62,6 +62,8 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
 
         val SUBSCRIPTION_PLAN_CHANGED = of("subscription.plan_changed")
 
+        val SUBSCRIPTION_UPDATED = of("subscription.updated")
+
         val LICENSE_KEY_CREATED = of("license_key.created")
 
         fun of(value: String) = WebhookEventType(JsonField.of(value))
@@ -89,6 +91,7 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         SUBSCRIPTION_FAILED,
         SUBSCRIPTION_EXPIRED,
         SUBSCRIPTION_PLAN_CHANGED,
+        SUBSCRIPTION_UPDATED,
         LICENSE_KEY_CREATED,
     }
 
@@ -122,6 +125,7 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         SUBSCRIPTION_FAILED,
         SUBSCRIPTION_EXPIRED,
         SUBSCRIPTION_PLAN_CHANGED,
+        SUBSCRIPTION_UPDATED,
         LICENSE_KEY_CREATED,
         /**
          * An enum member indicating that [WebhookEventType] was instantiated with an unknown value.
@@ -158,6 +162,7 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             SUBSCRIPTION_FAILED -> Value.SUBSCRIPTION_FAILED
             SUBSCRIPTION_EXPIRED -> Value.SUBSCRIPTION_EXPIRED
             SUBSCRIPTION_PLAN_CHANGED -> Value.SUBSCRIPTION_PLAN_CHANGED
+            SUBSCRIPTION_UPDATED -> Value.SUBSCRIPTION_UPDATED
             LICENSE_KEY_CREATED -> Value.LICENSE_KEY_CREATED
             else -> Value._UNKNOWN
         }
@@ -193,6 +198,7 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             SUBSCRIPTION_FAILED -> Known.SUBSCRIPTION_FAILED
             SUBSCRIPTION_EXPIRED -> Known.SUBSCRIPTION_EXPIRED
             SUBSCRIPTION_PLAN_CHANGED -> Known.SUBSCRIPTION_PLAN_CHANGED
+            SUBSCRIPTION_UPDATED -> Known.SUBSCRIPTION_UPDATED
             LICENSE_KEY_CREATED -> Known.LICENSE_KEY_CREATED
             else -> throw DodoPaymentsInvalidDataException("Unknown WebhookEventType: $value")
         }
