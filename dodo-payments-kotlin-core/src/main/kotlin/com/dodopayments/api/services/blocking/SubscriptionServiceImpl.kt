@@ -26,6 +26,8 @@ import com.dodopayments.api.models.subscriptions.SubscriptionCreateResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionListPage
 import com.dodopayments.api.models.subscriptions.SubscriptionListPageResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionListParams
+import com.dodopayments.api.models.subscriptions.SubscriptionPreviewChangePlanParams
+import com.dodopayments.api.models.subscriptions.SubscriptionPreviewChangePlanResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveParams
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryPage
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryPageResponse
@@ -85,6 +87,13 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
     ): SubscriptionChargeResponse =
         // post /subscriptions/{subscription_id}/charge
         withRawResponse().charge(params, requestOptions).parse()
+
+    override fun previewChangePlan(
+        params: SubscriptionPreviewChangePlanParams,
+        requestOptions: RequestOptions,
+    ): SubscriptionPreviewChangePlanResponse =
+        // post /subscriptions/{subscription_id}/change-plan/preview
+        withRawResponse().previewChangePlan(params, requestOptions).parse()
 
     override fun retrieveUsageHistory(
         params: SubscriptionRetrieveUsageHistoryParams,
@@ -283,6 +292,42 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
             return errorHandler.handle(response).parseable {
                 response
                     .use { chargeHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val previewChangePlanHandler: Handler<SubscriptionPreviewChangePlanResponse> =
+            jsonHandler<SubscriptionPreviewChangePlanResponse>(clientOptions.jsonMapper)
+
+        override fun previewChangePlan(
+            params: SubscriptionPreviewChangePlanParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<SubscriptionPreviewChangePlanResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("subscriptionId", params.subscriptionId())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments(
+                        "subscriptions",
+                        params._pathParam(0),
+                        "change-plan",
+                        "preview",
+                    )
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { previewChangePlanHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()

@@ -14,15 +14,15 @@ internal class BillingAddressTest {
     fun create() {
         val billingAddress =
             BillingAddress.builder()
-                .city("city")
                 .country(CountryCode.AF)
+                .city("city")
                 .state("state")
                 .street("street")
                 .zipcode("zipcode")
                 .build()
 
-        assertThat(billingAddress.city()).isEqualTo("city")
         assertThat(billingAddress.country()).isEqualTo(CountryCode.AF)
+        assertThat(billingAddress.city()).isEqualTo("city")
         assertThat(billingAddress.state()).isEqualTo("state")
         assertThat(billingAddress.street()).isEqualTo("street")
         assertThat(billingAddress.zipcode()).isEqualTo("zipcode")
@@ -33,8 +33,8 @@ internal class BillingAddressTest {
         val jsonMapper = jsonMapper()
         val billingAddress =
             BillingAddress.builder()
-                .city("city")
                 .country(CountryCode.AF)
+                .city("city")
                 .state("state")
                 .street("street")
                 .zipcode("zipcode")

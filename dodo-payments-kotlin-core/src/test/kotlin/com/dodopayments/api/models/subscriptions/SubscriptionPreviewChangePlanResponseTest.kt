@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.dodopayments.api.models.webhooks
+package com.dodopayments.api.models.subscriptions
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
@@ -8,24 +8,57 @@ import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.CustomerLimitedDetails
-import com.dodopayments.api.models.subscriptions.AddonCartResponseItem
-import com.dodopayments.api.models.subscriptions.Subscription
-import com.dodopayments.api.models.subscriptions.SubscriptionStatus
-import com.dodopayments.api.models.subscriptions.TimeInterval
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class SubscriptionRenewedWebhookEventTest {
+internal class SubscriptionPreviewChangePlanResponseTest {
 
     @Test
     fun create() {
-        val subscriptionRenewedWebhookEvent =
-            SubscriptionRenewedWebhookEvent.builder()
-                .businessId("business_id")
-                .data(
-                    SubscriptionRenewedWebhookEvent.Data.builder()
+        val subscriptionPreviewChangePlanResponse =
+            SubscriptionPreviewChangePlanResponse.builder()
+                .immediateCharge(
+                    SubscriptionPreviewChangePlanResponse.ImmediateCharge.builder()
+                        .addLineItem(
+                            SubscriptionPreviewChangePlanResponse.ImmediateCharge.LineItem
+                                .UnionMember0
+                                .builder()
+                                .id("id")
+                                .currency(Currency.AED)
+                                .productId("product_id")
+                                .prorationFactor(0.0)
+                                .quantity(0)
+                                .taxInclusive(true)
+                                .type(
+                                    SubscriptionPreviewChangePlanResponse.ImmediateCharge.LineItem
+                                        .UnionMember0
+                                        .Type
+                                        .SUBSCRIPTION
+                                )
+                                .unitPrice(0)
+                                .description("description")
+                                .name("name")
+                                .tax(0)
+                                .taxRate(0.0f)
+                                .build()
+                        )
+                        .summary(
+                            SubscriptionPreviewChangePlanResponse.ImmediateCharge.Summary.builder()
+                                .currency(Currency.AED)
+                                .customerCredits(0L)
+                                .settlementAmount(0)
+                                .settlementCurrency(Currency.AED)
+                                .totalAmount(0)
+                                .settlementTax(0)
+                                .tax(0)
+                                .build()
+                        )
+                        .build()
+                )
+                .newPlan(
+                    Subscription.builder()
                         .addAddon(
                             AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build()
                         )
@@ -90,17 +123,51 @@ internal class SubscriptionRenewedWebhookEventTest {
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
                         .taxId("tax_id")
-                        .payloadType(SubscriptionRenewedWebhookEvent.Data.PayloadType.SUBSCRIPTION)
                         .build()
                 )
-                .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(SubscriptionRenewedWebhookEvent.Type.SUBSCRIPTION_RENEWED)
                 .build()
 
-        assertThat(subscriptionRenewedWebhookEvent.businessId()).isEqualTo("business_id")
-        assertThat(subscriptionRenewedWebhookEvent.data())
+        assertThat(subscriptionPreviewChangePlanResponse.immediateCharge())
             .isEqualTo(
-                SubscriptionRenewedWebhookEvent.Data.builder()
+                SubscriptionPreviewChangePlanResponse.ImmediateCharge.builder()
+                    .addLineItem(
+                        SubscriptionPreviewChangePlanResponse.ImmediateCharge.LineItem.UnionMember0
+                            .builder()
+                            .id("id")
+                            .currency(Currency.AED)
+                            .productId("product_id")
+                            .prorationFactor(0.0)
+                            .quantity(0)
+                            .taxInclusive(true)
+                            .type(
+                                SubscriptionPreviewChangePlanResponse.ImmediateCharge.LineItem
+                                    .UnionMember0
+                                    .Type
+                                    .SUBSCRIPTION
+                            )
+                            .unitPrice(0)
+                            .description("description")
+                            .name("name")
+                            .tax(0)
+                            .taxRate(0.0f)
+                            .build()
+                    )
+                    .summary(
+                        SubscriptionPreviewChangePlanResponse.ImmediateCharge.Summary.builder()
+                            .currency(Currency.AED)
+                            .customerCredits(0L)
+                            .settlementAmount(0)
+                            .settlementCurrency(Currency.AED)
+                            .totalAmount(0)
+                            .settlementTax(0)
+                            .tax(0)
+                            .build()
+                    )
+                    .build()
+            )
+        assertThat(subscriptionPreviewChangePlanResponse.newPlan())
+            .isEqualTo(
+                Subscription.builder()
                     .addAddon(
                         AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build()
                     )
@@ -165,23 +232,55 @@ internal class SubscriptionRenewedWebhookEventTest {
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .paymentMethodId("payment_method_id")
                     .taxId("tax_id")
-                    .payloadType(SubscriptionRenewedWebhookEvent.Data.PayloadType.SUBSCRIPTION)
                     .build()
             )
-        assertThat(subscriptionRenewedWebhookEvent.timestamp())
-            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(subscriptionRenewedWebhookEvent.type())
-            .isEqualTo(SubscriptionRenewedWebhookEvent.Type.SUBSCRIPTION_RENEWED)
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val subscriptionRenewedWebhookEvent =
-            SubscriptionRenewedWebhookEvent.builder()
-                .businessId("business_id")
-                .data(
-                    SubscriptionRenewedWebhookEvent.Data.builder()
+        val subscriptionPreviewChangePlanResponse =
+            SubscriptionPreviewChangePlanResponse.builder()
+                .immediateCharge(
+                    SubscriptionPreviewChangePlanResponse.ImmediateCharge.builder()
+                        .addLineItem(
+                            SubscriptionPreviewChangePlanResponse.ImmediateCharge.LineItem
+                                .UnionMember0
+                                .builder()
+                                .id("id")
+                                .currency(Currency.AED)
+                                .productId("product_id")
+                                .prorationFactor(0.0)
+                                .quantity(0)
+                                .taxInclusive(true)
+                                .type(
+                                    SubscriptionPreviewChangePlanResponse.ImmediateCharge.LineItem
+                                        .UnionMember0
+                                        .Type
+                                        .SUBSCRIPTION
+                                )
+                                .unitPrice(0)
+                                .description("description")
+                                .name("name")
+                                .tax(0)
+                                .taxRate(0.0f)
+                                .build()
+                        )
+                        .summary(
+                            SubscriptionPreviewChangePlanResponse.ImmediateCharge.Summary.builder()
+                                .currency(Currency.AED)
+                                .customerCredits(0L)
+                                .settlementAmount(0)
+                                .settlementCurrency(Currency.AED)
+                                .totalAmount(0)
+                                .settlementTax(0)
+                                .tax(0)
+                                .build()
+                        )
+                        .build()
+                )
+                .newPlan(
+                    Subscription.builder()
                         .addAddon(
                             AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build()
                         )
@@ -246,20 +345,17 @@ internal class SubscriptionRenewedWebhookEventTest {
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
                         .taxId("tax_id")
-                        .payloadType(SubscriptionRenewedWebhookEvent.Data.PayloadType.SUBSCRIPTION)
                         .build()
                 )
-                .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(SubscriptionRenewedWebhookEvent.Type.SUBSCRIPTION_RENEWED)
                 .build()
 
-        val roundtrippedSubscriptionRenewedWebhookEvent =
+        val roundtrippedSubscriptionPreviewChangePlanResponse =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(subscriptionRenewedWebhookEvent),
-                jacksonTypeRef<SubscriptionRenewedWebhookEvent>(),
+                jsonMapper.writeValueAsString(subscriptionPreviewChangePlanResponse),
+                jacksonTypeRef<SubscriptionPreviewChangePlanResponse>(),
             )
 
-        assertThat(roundtrippedSubscriptionRenewedWebhookEvent)
-            .isEqualTo(subscriptionRenewedWebhookEvent)
+        assertThat(roundtrippedSubscriptionPreviewChangePlanResponse)
+            .isEqualTo(subscriptionPreviewChangePlanResponse)
     }
 }

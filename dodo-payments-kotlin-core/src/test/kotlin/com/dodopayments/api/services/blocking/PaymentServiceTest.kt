@@ -32,8 +32,8 @@ internal class PaymentServiceTest {
                 PaymentCreateParams.builder()
                     .billing(
                         BillingAddress.builder()
-                            .city("city")
                             .country(CountryCode.AF)
+                            .city("city")
                             .state("state")
                             .street("street")
                             .zipcode("zipcode")

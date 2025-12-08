@@ -82,6 +82,7 @@ internal class CheckoutSessionServiceTest {
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
+                    .minimalAddress(true)
                     .returnUrl("return_url")
                     .showSavedPaymentMethods(true)
                     .subscriptionData(

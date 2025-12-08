@@ -14,6 +14,8 @@ import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
 import com.dodopayments.api.models.subscriptions.SubscriptionCreateResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionListPageAsync
 import com.dodopayments.api.models.subscriptions.SubscriptionListParams
+import com.dodopayments.api.models.subscriptions.SubscriptionPreviewChangePlanParams
+import com.dodopayments.api.models.subscriptions.SubscriptionPreviewChangePlanResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveParams
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryPageAsync
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryParams
@@ -108,6 +110,19 @@ interface SubscriptionServiceAsync {
         params: SubscriptionChargeParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionChargeResponse
+
+    suspend fun previewChangePlan(
+        subscriptionId: String,
+        params: SubscriptionPreviewChangePlanParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): SubscriptionPreviewChangePlanResponse =
+        previewChangePlan(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
+
+    /** @see previewChangePlan */
+    suspend fun previewChangePlan(
+        params: SubscriptionPreviewChangePlanParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): SubscriptionPreviewChangePlanResponse
 
     /**
      * Get detailed usage history for a subscription that includes usage-based billing (metered
@@ -320,6 +335,29 @@ interface SubscriptionServiceAsync {
             params: SubscriptionChargeParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<SubscriptionChargeResponse>
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /subscriptions/{subscription_id}/change-plan/preview`, but is otherwise the same as
+         * [SubscriptionServiceAsync.previewChangePlan].
+         */
+        @MustBeClosed
+        suspend fun previewChangePlan(
+            subscriptionId: String,
+            params: SubscriptionPreviewChangePlanParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionPreviewChangePlanResponse> =
+            previewChangePlan(
+                params.toBuilder().subscriptionId(subscriptionId).build(),
+                requestOptions,
+            )
+
+        /** @see previewChangePlan */
+        @MustBeClosed
+        suspend fun previewChangePlan(
+            params: SubscriptionPreviewChangePlanParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionPreviewChangePlanResponse>
 
         /**
          * Returns a raw HTTP response for `get /subscriptions/{subscription_id}/usage-history`, but

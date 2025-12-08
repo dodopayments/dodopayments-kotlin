@@ -30,8 +30,8 @@ internal class WebhookPayloadTest {
                     WebhookPayload.Data.Payment.builder()
                         .billing(
                             BillingAddress.builder()
-                                .city("city")
                                 .country(CountryCode.AF)
+                                .city("city")
                                 .state("state")
                                 .street("street")
                                 .zipcode("zipcode")
@@ -126,8 +126,8 @@ internal class WebhookPayloadTest {
                     WebhookPayload.Data.Payment.builder()
                         .billing(
                             BillingAddress.builder()
-                                .city("city")
                                 .country(CountryCode.AF)
+                                .city("city")
                                 .state("state")
                                 .street("street")
                                 .zipcode("zipcode")
@@ -227,8 +227,8 @@ internal class WebhookPayloadTest {
                     WebhookPayload.Data.Payment.builder()
                         .billing(
                             BillingAddress.builder()
-                                .city("city")
                                 .country(CountryCode.AF)
+                                .city("city")
                                 .state("state")
                                 .street("street")
                                 .zipcode("zipcode")

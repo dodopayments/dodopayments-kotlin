@@ -31,8 +31,8 @@ internal class SubscriptionOnHoldWebhookEventTest {
                         )
                         .billing(
                             BillingAddress.builder()
-                                .city("city")
                                 .country(CountryCode.AF)
+                                .city("city")
                                 .state("state")
                                 .street("street")
                                 .zipcode("zipcode")
@@ -106,8 +106,8 @@ internal class SubscriptionOnHoldWebhookEventTest {
                     )
                     .billing(
                         BillingAddress.builder()
-                            .city("city")
                             .country(CountryCode.AF)
+                            .city("city")
                             .state("state")
                             .street("street")
                             .zipcode("zipcode")
@@ -187,8 +187,8 @@ internal class SubscriptionOnHoldWebhookEventTest {
                         )
                         .billing(
                             BillingAddress.builder()
-                                .city("city")
                                 .country(CountryCode.AF)
+                                .city("city")
                                 .state("state")
                                 .street("street")
                                 .zipcode("zipcode")

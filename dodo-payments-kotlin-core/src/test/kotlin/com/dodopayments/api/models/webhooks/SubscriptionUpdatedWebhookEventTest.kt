@@ -17,15 +17,15 @@ import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class SubscriptionRenewedWebhookEventTest {
+internal class SubscriptionUpdatedWebhookEventTest {
 
     @Test
     fun create() {
-        val subscriptionRenewedWebhookEvent =
-            SubscriptionRenewedWebhookEvent.builder()
+        val subscriptionUpdatedWebhookEvent =
+            SubscriptionUpdatedWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    SubscriptionRenewedWebhookEvent.Data.builder()
+                    SubscriptionUpdatedWebhookEvent.Data.builder()
                         .addAddon(
                             AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build()
                         )
@@ -90,17 +90,17 @@ internal class SubscriptionRenewedWebhookEventTest {
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
                         .taxId("tax_id")
-                        .payloadType(SubscriptionRenewedWebhookEvent.Data.PayloadType.SUBSCRIPTION)
+                        .payloadType(SubscriptionUpdatedWebhookEvent.Data.PayloadType.SUBSCRIPTION)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(SubscriptionRenewedWebhookEvent.Type.SUBSCRIPTION_RENEWED)
+                .type(SubscriptionUpdatedWebhookEvent.Type.SUBSCRIPTION_UPDATED)
                 .build()
 
-        assertThat(subscriptionRenewedWebhookEvent.businessId()).isEqualTo("business_id")
-        assertThat(subscriptionRenewedWebhookEvent.data())
+        assertThat(subscriptionUpdatedWebhookEvent.businessId()).isEqualTo("business_id")
+        assertThat(subscriptionUpdatedWebhookEvent.data())
             .isEqualTo(
-                SubscriptionRenewedWebhookEvent.Data.builder()
+                SubscriptionUpdatedWebhookEvent.Data.builder()
                     .addAddon(
                         AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build()
                     )
@@ -165,23 +165,23 @@ internal class SubscriptionRenewedWebhookEventTest {
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .paymentMethodId("payment_method_id")
                     .taxId("tax_id")
-                    .payloadType(SubscriptionRenewedWebhookEvent.Data.PayloadType.SUBSCRIPTION)
+                    .payloadType(SubscriptionUpdatedWebhookEvent.Data.PayloadType.SUBSCRIPTION)
                     .build()
             )
-        assertThat(subscriptionRenewedWebhookEvent.timestamp())
+        assertThat(subscriptionUpdatedWebhookEvent.timestamp())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(subscriptionRenewedWebhookEvent.type())
-            .isEqualTo(SubscriptionRenewedWebhookEvent.Type.SUBSCRIPTION_RENEWED)
+        assertThat(subscriptionUpdatedWebhookEvent.type())
+            .isEqualTo(SubscriptionUpdatedWebhookEvent.Type.SUBSCRIPTION_UPDATED)
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val subscriptionRenewedWebhookEvent =
-            SubscriptionRenewedWebhookEvent.builder()
+        val subscriptionUpdatedWebhookEvent =
+            SubscriptionUpdatedWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    SubscriptionRenewedWebhookEvent.Data.builder()
+                    SubscriptionUpdatedWebhookEvent.Data.builder()
                         .addAddon(
                             AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build()
                         )
@@ -246,20 +246,20 @@ internal class SubscriptionRenewedWebhookEventTest {
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
                         .taxId("tax_id")
-                        .payloadType(SubscriptionRenewedWebhookEvent.Data.PayloadType.SUBSCRIPTION)
+                        .payloadType(SubscriptionUpdatedWebhookEvent.Data.PayloadType.SUBSCRIPTION)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(SubscriptionRenewedWebhookEvent.Type.SUBSCRIPTION_RENEWED)
+                .type(SubscriptionUpdatedWebhookEvent.Type.SUBSCRIPTION_UPDATED)
                 .build()
 
-        val roundtrippedSubscriptionRenewedWebhookEvent =
+        val roundtrippedSubscriptionUpdatedWebhookEvent =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(subscriptionRenewedWebhookEvent),
-                jacksonTypeRef<SubscriptionRenewedWebhookEvent>(),
+                jsonMapper.writeValueAsString(subscriptionUpdatedWebhookEvent),
+                jacksonTypeRef<SubscriptionUpdatedWebhookEvent>(),
             )
 
-        assertThat(roundtrippedSubscriptionRenewedWebhookEvent)
-            .isEqualTo(subscriptionRenewedWebhookEvent)
+        assertThat(roundtrippedSubscriptionUpdatedWebhookEvent)
+            .isEqualTo(subscriptionUpdatedWebhookEvent)
     }
 }

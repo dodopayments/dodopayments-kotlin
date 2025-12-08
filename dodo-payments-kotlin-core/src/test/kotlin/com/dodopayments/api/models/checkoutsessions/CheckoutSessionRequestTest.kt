@@ -73,6 +73,7 @@ internal class CheckoutSessionRequestTest {
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
+                .minimalAddress(true)
                 .returnUrl("return_url")
                 .showSavedPaymentMethods(true)
                 .subscriptionData(
@@ -154,6 +155,7 @@ internal class CheckoutSessionRequestTest {
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
+        assertThat(checkoutSessionRequest.minimalAddress()).isEqualTo(true)
         assertThat(checkoutSessionRequest.returnUrl()).isEqualTo("return_url")
         assertThat(checkoutSessionRequest.showSavedPaymentMethods()).isEqualTo(true)
         assertThat(checkoutSessionRequest.subscriptionData())
@@ -230,6 +232,7 @@ internal class CheckoutSessionRequestTest {
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
+                .minimalAddress(true)
                 .returnUrl("return_url")
                 .showSavedPaymentMethods(true)
                 .subscriptionData(

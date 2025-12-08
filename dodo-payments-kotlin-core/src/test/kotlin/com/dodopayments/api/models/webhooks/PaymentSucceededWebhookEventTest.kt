@@ -30,8 +30,8 @@ internal class PaymentSucceededWebhookEventTest {
                     PaymentSucceededWebhookEvent.Data.builder()
                         .billing(
                             BillingAddress.builder()
-                                .city("city")
                                 .country(CountryCode.AF)
+                                .city("city")
                                 .state("state")
                                 .street("street")
                                 .zipcode("zipcode")
@@ -125,8 +125,8 @@ internal class PaymentSucceededWebhookEventTest {
                 PaymentSucceededWebhookEvent.Data.builder()
                     .billing(
                         BillingAddress.builder()
-                            .city("city")
                             .country(CountryCode.AF)
+                            .city("city")
                             .state("state")
                             .street("street")
                             .zipcode("zipcode")
@@ -223,8 +223,8 @@ internal class PaymentSucceededWebhookEventTest {
                     PaymentSucceededWebhookEvent.Data.builder()
                         .billing(
                             BillingAddress.builder()
-                                .city("city")
                                 .country(CountryCode.AF)
+                                .city("city")
                                 .state("state")
                                 .street("street")
                                 .zipcode("zipcode")

@@ -77,6 +77,7 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
     @Test
@@ -160,6 +161,7 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
     @Test
@@ -244,6 +246,7 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
     @Test
@@ -327,6 +330,7 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
     @Test
@@ -410,6 +414,7 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
     @Test
@@ -493,6 +498,7 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
     @Test
@@ -576,6 +582,7 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
     @Test
@@ -663,6 +670,7 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
     @Test
@@ -712,8 +720,8 @@ internal class UnsafeUnwrapWebhookEventTest {
                     PaymentCancelledWebhookEvent.Data.builder()
                         .billing(
                             BillingAddress.builder()
-                                .city("city")
                                 .country(CountryCode.AF)
+                                .city("city")
                                 .state("state")
                                 .street("street")
                                 .zipcode("zipcode")
@@ -824,6 +832,7 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
     @Test
@@ -837,8 +846,8 @@ internal class UnsafeUnwrapWebhookEventTest {
                         PaymentCancelledWebhookEvent.Data.builder()
                             .billing(
                                 BillingAddress.builder()
-                                    .city("city")
                                     .country(CountryCode.AF)
+                                    .city("city")
                                     .state("state")
                                     .street("street")
                                     .zipcode("zipcode")
@@ -945,8 +954,8 @@ internal class UnsafeUnwrapWebhookEventTest {
                     PaymentFailedWebhookEvent.Data.builder()
                         .billing(
                             BillingAddress.builder()
-                                .city("city")
                                 .country(CountryCode.AF)
+                                .city("city")
                                 .state("state")
                                 .street("street")
                                 .zipcode("zipcode")
@@ -1057,6 +1066,7 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
     @Test
@@ -1070,8 +1080,8 @@ internal class UnsafeUnwrapWebhookEventTest {
                         PaymentFailedWebhookEvent.Data.builder()
                             .billing(
                                 BillingAddress.builder()
-                                    .city("city")
                                     .country(CountryCode.AF)
+                                    .city("city")
                                     .state("state")
                                     .street("street")
                                     .zipcode("zipcode")
@@ -1178,8 +1188,8 @@ internal class UnsafeUnwrapWebhookEventTest {
                     PaymentProcessingWebhookEvent.Data.builder()
                         .billing(
                             BillingAddress.builder()
-                                .city("city")
                                 .country(CountryCode.AF)
+                                .city("city")
                                 .state("state")
                                 .street("street")
                                 .zipcode("zipcode")
@@ -1291,6 +1301,7 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
     @Test
@@ -1304,8 +1315,8 @@ internal class UnsafeUnwrapWebhookEventTest {
                         PaymentProcessingWebhookEvent.Data.builder()
                             .billing(
                                 BillingAddress.builder()
-                                    .city("city")
                                     .country(CountryCode.AF)
+                                    .city("city")
                                     .state("state")
                                     .street("street")
                                     .zipcode("zipcode")
@@ -1412,8 +1423,8 @@ internal class UnsafeUnwrapWebhookEventTest {
                     PaymentSucceededWebhookEvent.Data.builder()
                         .billing(
                             BillingAddress.builder()
-                                .city("city")
                                 .country(CountryCode.AF)
+                                .city("city")
                                 .state("state")
                                 .street("street")
                                 .zipcode("zipcode")
@@ -1524,6 +1535,7 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
     @Test
@@ -1537,8 +1549,8 @@ internal class UnsafeUnwrapWebhookEventTest {
                         PaymentSucceededWebhookEvent.Data.builder()
                             .billing(
                                 BillingAddress.builder()
-                                    .city("city")
                                     .country(CountryCode.AF)
+                                    .city("city")
                                     .state("state")
                                     .street("street")
                                     .zipcode("zipcode")
@@ -1700,6 +1712,7 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
     @Test
@@ -1819,6 +1832,7 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
     @Test
@@ -1886,8 +1900,8 @@ internal class UnsafeUnwrapWebhookEventTest {
                         )
                         .billing(
                             BillingAddress.builder()
-                                .city("city")
                                 .country(CountryCode.AF)
+                                .city("city")
                                 .state("state")
                                 .street("street")
                                 .zipcode("zipcode")
@@ -1976,6 +1990,7 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
     @Test
@@ -1995,8 +2010,8 @@ internal class UnsafeUnwrapWebhookEventTest {
                             )
                             .billing(
                                 BillingAddress.builder()
-                                    .city("city")
                                     .country(CountryCode.AF)
+                                    .city("city")
                                     .state("state")
                                     .street("street")
                                     .zipcode("zipcode")
@@ -2085,8 +2100,8 @@ internal class UnsafeUnwrapWebhookEventTest {
                         )
                         .billing(
                             BillingAddress.builder()
-                                .city("city")
                                 .country(CountryCode.AF)
+                                .city("city")
                                 .state("state")
                                 .street("street")
                                 .zipcode("zipcode")
@@ -2178,6 +2193,7 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
     @Test
@@ -2197,8 +2213,8 @@ internal class UnsafeUnwrapWebhookEventTest {
                             )
                             .billing(
                                 BillingAddress.builder()
-                                    .city("city")
                                     .country(CountryCode.AF)
+                                    .city("city")
                                     .state("state")
                                     .street("street")
                                     .zipcode("zipcode")
@@ -2287,8 +2303,8 @@ internal class UnsafeUnwrapWebhookEventTest {
                         )
                         .billing(
                             BillingAddress.builder()
-                                .city("city")
                                 .country(CountryCode.AF)
+                                .city("city")
                                 .state("state")
                                 .street("street")
                                 .zipcode("zipcode")
@@ -2377,6 +2393,7 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
     @Test
@@ -2396,8 +2413,8 @@ internal class UnsafeUnwrapWebhookEventTest {
                             )
                             .billing(
                                 BillingAddress.builder()
-                                    .city("city")
                                     .country(CountryCode.AF)
+                                    .city("city")
                                     .state("state")
                                     .street("street")
                                     .zipcode("zipcode")
@@ -2486,8 +2503,8 @@ internal class UnsafeUnwrapWebhookEventTest {
                         )
                         .billing(
                             BillingAddress.builder()
-                                .city("city")
                                 .country(CountryCode.AF)
+                                .city("city")
                                 .state("state")
                                 .street("street")
                                 .zipcode("zipcode")
@@ -2576,6 +2593,7 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
     @Test
@@ -2595,8 +2613,8 @@ internal class UnsafeUnwrapWebhookEventTest {
                             )
                             .billing(
                                 BillingAddress.builder()
-                                    .city("city")
                                     .country(CountryCode.AF)
+                                    .city("city")
                                     .state("state")
                                     .street("street")
                                     .zipcode("zipcode")
@@ -2685,8 +2703,8 @@ internal class UnsafeUnwrapWebhookEventTest {
                         )
                         .billing(
                             BillingAddress.builder()
-                                .city("city")
                                 .country(CountryCode.AF)
+                                .city("city")
                                 .state("state")
                                 .street("street")
                                 .zipcode("zipcode")
@@ -2775,6 +2793,7 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isEqualTo(subscriptionOnHold)
         assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
     @Test
@@ -2794,8 +2813,8 @@ internal class UnsafeUnwrapWebhookEventTest {
                             )
                             .billing(
                                 BillingAddress.builder()
-                                    .city("city")
                                     .country(CountryCode.AF)
+                                    .city("city")
                                     .state("state")
                                     .street("street")
                                     .zipcode("zipcode")
@@ -2884,8 +2903,8 @@ internal class UnsafeUnwrapWebhookEventTest {
                         )
                         .billing(
                             BillingAddress.builder()
-                                .city("city")
                                 .country(CountryCode.AF)
+                                .city("city")
                                 .state("state")
                                 .street("street")
                                 .zipcode("zipcode")
@@ -2977,6 +2996,7 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged())
             .isEqualTo(subscriptionPlanChanged)
         assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
     @Test
@@ -2996,8 +3016,8 @@ internal class UnsafeUnwrapWebhookEventTest {
                             )
                             .billing(
                                 BillingAddress.builder()
-                                    .city("city")
                                     .country(CountryCode.AF)
+                                    .city("city")
                                     .state("state")
                                     .street("street")
                                     .zipcode("zipcode")
@@ -3086,8 +3106,8 @@ internal class UnsafeUnwrapWebhookEventTest {
                         )
                         .billing(
                             BillingAddress.builder()
-                                .city("city")
                                 .country(CountryCode.AF)
+                                .city("city")
                                 .state("state")
                                 .street("street")
                                 .zipcode("zipcode")
@@ -3176,6 +3196,7 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isEqualTo(subscriptionRenewed)
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
     @Test
@@ -3195,8 +3216,8 @@ internal class UnsafeUnwrapWebhookEventTest {
                             )
                             .billing(
                                 BillingAddress.builder()
-                                    .city("city")
                                     .country(CountryCode.AF)
+                                    .city("city")
                                     .state("state")
                                     .street("street")
                                     .zipcode("zipcode")
@@ -3261,6 +3282,206 @@ internal class UnsafeUnwrapWebhookEventTest {
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .type(SubscriptionRenewedWebhookEvent.Type.SUBSCRIPTION_RENEWED)
+                    .build()
+            )
+
+        val roundtrippedUnsafeUnwrapWebhookEvent =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(unsafeUnwrapWebhookEvent),
+                jacksonTypeRef<UnsafeUnwrapWebhookEvent>(),
+            )
+
+        assertThat(roundtrippedUnsafeUnwrapWebhookEvent).isEqualTo(unsafeUnwrapWebhookEvent)
+    }
+
+    @Test
+    fun ofSubscriptionUpdated() {
+        val subscriptionUpdated =
+            SubscriptionUpdatedWebhookEvent.builder()
+                .businessId("business_id")
+                .data(
+                    SubscriptionUpdatedWebhookEvent.Data.builder()
+                        .addAddon(
+                            AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build()
+                        )
+                        .billing(
+                            BillingAddress.builder()
+                                .country(CountryCode.AF)
+                                .city("city")
+                                .state("state")
+                                .street("street")
+                                .zipcode("zipcode")
+                                .build()
+                        )
+                        .cancelAtNextBillingDate(true)
+                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .currency(Currency.AED)
+                        .customer(
+                            CustomerLimitedDetails.builder()
+                                .customerId("customer_id")
+                                .email("email")
+                                .name("name")
+                                .metadata(
+                                    CustomerLimitedDetails.Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .phoneNumber("phone_number")
+                                .build()
+                        )
+                        .metadata(
+                            Subscription.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .addMeter(
+                            Subscription.Meter.builder()
+                                .currency(Currency.AED)
+                                .freeThreshold(0L)
+                                .measurementUnit("measurement_unit")
+                                .meterId("meter_id")
+                                .name("name")
+                                .pricePerUnit("10.50")
+                                .description("description")
+                                .build()
+                        )
+                        .nextBillingDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .onDemand(true)
+                        .paymentFrequencyCount(0)
+                        .paymentFrequencyInterval(TimeInterval.DAY)
+                        .previousBillingDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .productId("product_id")
+                        .quantity(0)
+                        .recurringPreTaxAmount(0)
+                        .status(SubscriptionStatus.PENDING)
+                        .subscriptionId("subscription_id")
+                        .subscriptionPeriodCount(0)
+                        .subscriptionPeriodInterval(TimeInterval.DAY)
+                        .taxInclusive(true)
+                        .trialPeriodDays(0)
+                        .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .discountCyclesRemaining(0)
+                        .discountId("discount_id")
+                        .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentMethodId("payment_method_id")
+                        .taxId("tax_id")
+                        .payloadType(SubscriptionUpdatedWebhookEvent.Data.PayloadType.SUBSCRIPTION)
+                        .build()
+                )
+                .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .type(SubscriptionUpdatedWebhookEvent.Type.SUBSCRIPTION_UPDATED)
+                .build()
+
+        val unsafeUnwrapWebhookEvent =
+            UnsafeUnwrapWebhookEvent.ofSubscriptionUpdated(subscriptionUpdated)
+
+        assertThat(unsafeUnwrapWebhookEvent.disputeAccepted()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeCancelled()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeChallenged()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeExpired()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.paymentProcessing()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.paymentSucceeded()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.refundFailed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.refundSucceeded()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionActive()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionCancelled()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionExpired()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionFailed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isEqualTo(subscriptionUpdated)
+    }
+
+    @Test
+    fun ofSubscriptionUpdatedRoundtrip() {
+        val jsonMapper = jsonMapper()
+        val unsafeUnwrapWebhookEvent =
+            UnsafeUnwrapWebhookEvent.ofSubscriptionUpdated(
+                SubscriptionUpdatedWebhookEvent.builder()
+                    .businessId("business_id")
+                    .data(
+                        SubscriptionUpdatedWebhookEvent.Data.builder()
+                            .addAddon(
+                                AddonCartResponseItem.builder()
+                                    .addonId("addon_id")
+                                    .quantity(0)
+                                    .build()
+                            )
+                            .billing(
+                                BillingAddress.builder()
+                                    .country(CountryCode.AF)
+                                    .city("city")
+                                    .state("state")
+                                    .street("street")
+                                    .zipcode("zipcode")
+                                    .build()
+                            )
+                            .cancelAtNextBillingDate(true)
+                            .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .currency(Currency.AED)
+                            .customer(
+                                CustomerLimitedDetails.builder()
+                                    .customerId("customer_id")
+                                    .email("email")
+                                    .name("name")
+                                    .metadata(
+                                        CustomerLimitedDetails.Metadata.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                                            .build()
+                                    )
+                                    .phoneNumber("phone_number")
+                                    .build()
+                            )
+                            .metadata(
+                                Subscription.Metadata.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
+                            .addMeter(
+                                Subscription.Meter.builder()
+                                    .currency(Currency.AED)
+                                    .freeThreshold(0L)
+                                    .measurementUnit("measurement_unit")
+                                    .meterId("meter_id")
+                                    .name("name")
+                                    .pricePerUnit("10.50")
+                                    .description("description")
+                                    .build()
+                            )
+                            .nextBillingDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .onDemand(true)
+                            .paymentFrequencyCount(0)
+                            .paymentFrequencyInterval(TimeInterval.DAY)
+                            .previousBillingDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .productId("product_id")
+                            .quantity(0)
+                            .recurringPreTaxAmount(0)
+                            .status(SubscriptionStatus.PENDING)
+                            .subscriptionId("subscription_id")
+                            .subscriptionPeriodCount(0)
+                            .subscriptionPeriodInterval(TimeInterval.DAY)
+                            .taxInclusive(true)
+                            .trialPeriodDays(0)
+                            .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .discountCyclesRemaining(0)
+                            .discountId("discount_id")
+                            .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .paymentMethodId("payment_method_id")
+                            .taxId("tax_id")
+                            .payloadType(
+                                SubscriptionUpdatedWebhookEvent.Data.PayloadType.SUBSCRIPTION
+                            )
+                            .build()
+                    )
+                    .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .type(SubscriptionUpdatedWebhookEvent.Type.SUBSCRIPTION_UPDATED)
                     .build()
             )
 

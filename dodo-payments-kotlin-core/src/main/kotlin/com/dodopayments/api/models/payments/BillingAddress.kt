@@ -19,8 +19,8 @@ import java.util.Objects
 class BillingAddress
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val city: JsonField<String>,
     private val country: JsonField<CountryCode>,
+    private val city: JsonField<String>,
     private val state: JsonField<String>,
     private val street: JsonField<String>,
     private val zipcode: JsonField<String>,
@@ -29,20 +29,12 @@ private constructor(
 
     @JsonCreator
     private constructor(
-        @JsonProperty("city") @ExcludeMissing city: JsonField<String> = JsonMissing.of(),
         @JsonProperty("country") @ExcludeMissing country: JsonField<CountryCode> = JsonMissing.of(),
+        @JsonProperty("city") @ExcludeMissing city: JsonField<String> = JsonMissing.of(),
         @JsonProperty("state") @ExcludeMissing state: JsonField<String> = JsonMissing.of(),
         @JsonProperty("street") @ExcludeMissing street: JsonField<String> = JsonMissing.of(),
         @JsonProperty("zipcode") @ExcludeMissing zipcode: JsonField<String> = JsonMissing.of(),
-    ) : this(city, country, state, street, zipcode, mutableMapOf())
-
-    /**
-     * City name
-     *
-     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun city(): String = city.getRequired("city")
+    ) : this(country, city, state, street, zipcode, mutableMapOf())
 
     /**
      * Two-letter ISO country code (ISO 3166-1 alpha-2)
@@ -53,35 +45,36 @@ private constructor(
     fun country(): CountryCode = country.getRequired("country")
 
     /**
+     * City name
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun city(): String? = city.getNullable("city")
+
+    /**
      * State or province name
      *
-     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
      */
-    fun state(): String = state.getRequired("state")
+    fun state(): String? = state.getNullable("state")
 
     /**
      * Street address including house number and unit/apartment if applicable
      *
-     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
      */
-    fun street(): String = street.getRequired("street")
+    fun street(): String? = street.getNullable("street")
 
     /**
      * Postal code or ZIP code
      *
-     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
      */
-    fun zipcode(): String = zipcode.getRequired("zipcode")
-
-    /**
-     * Returns the raw JSON value of [city].
-     *
-     * Unlike [city], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("city") @ExcludeMissing fun _city(): JsonField<String> = city
+    fun zipcode(): String? = zipcode.getNullable("zipcode")
 
     /**
      * Returns the raw JSON value of [country].
@@ -89,6 +82,13 @@ private constructor(
      * Unlike [country], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("country") @ExcludeMissing fun _country(): JsonField<CountryCode> = country
+
+    /**
+     * Returns the raw JSON value of [city].
+     *
+     * Unlike [city], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("city") @ExcludeMissing fun _city(): JsonField<String> = city
 
     /**
      * Returns the raw JSON value of [state].
@@ -130,11 +130,7 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
-         * .city()
          * .country()
-         * .state()
-         * .street()
-         * .zipcode()
          * ```
          */
         fun builder() = Builder()
@@ -143,32 +139,21 @@ private constructor(
     /** A builder for [BillingAddress]. */
     class Builder internal constructor() {
 
-        private var city: JsonField<String>? = null
         private var country: JsonField<CountryCode>? = null
-        private var state: JsonField<String>? = null
-        private var street: JsonField<String>? = null
-        private var zipcode: JsonField<String>? = null
+        private var city: JsonField<String> = JsonMissing.of()
+        private var state: JsonField<String> = JsonMissing.of()
+        private var street: JsonField<String> = JsonMissing.of()
+        private var zipcode: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(billingAddress: BillingAddress) = apply {
-            city = billingAddress.city
             country = billingAddress.country
+            city = billingAddress.city
             state = billingAddress.state
             street = billingAddress.street
             zipcode = billingAddress.zipcode
             additionalProperties = billingAddress.additionalProperties.toMutableMap()
         }
-
-        /** City name */
-        fun city(city: String) = city(JsonField.of(city))
-
-        /**
-         * Sets [Builder.city] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.city] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun city(city: JsonField<String>) = apply { this.city = city }
 
         /** Two-letter ISO country code (ISO 3166-1 alpha-2) */
         fun country(country: CountryCode) = country(JsonField.of(country))
@@ -182,8 +167,19 @@ private constructor(
          */
         fun country(country: JsonField<CountryCode>) = apply { this.country = country }
 
+        /** City name */
+        fun city(city: String?) = city(JsonField.ofNullable(city))
+
+        /**
+         * Sets [Builder.city] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.city] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun city(city: JsonField<String>) = apply { this.city = city }
+
         /** State or province name */
-        fun state(state: String) = state(JsonField.of(state))
+        fun state(state: String?) = state(JsonField.ofNullable(state))
 
         /**
          * Sets [Builder.state] to an arbitrary JSON value.
@@ -194,7 +190,7 @@ private constructor(
         fun state(state: JsonField<String>) = apply { this.state = state }
 
         /** Street address including house number and unit/apartment if applicable */
-        fun street(street: String) = street(JsonField.of(street))
+        fun street(street: String?) = street(JsonField.ofNullable(street))
 
         /**
          * Sets [Builder.street] to an arbitrary JSON value.
@@ -205,7 +201,7 @@ private constructor(
         fun street(street: JsonField<String>) = apply { this.street = street }
 
         /** Postal code or ZIP code */
-        fun zipcode(zipcode: String) = zipcode(JsonField.of(zipcode))
+        fun zipcode(zipcode: String?) = zipcode(JsonField.ofNullable(zipcode))
 
         /**
          * Sets [Builder.zipcode] to an arbitrary JSON value.
@@ -241,22 +237,18 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
-         * .city()
          * .country()
-         * .state()
-         * .street()
-         * .zipcode()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
         fun build(): BillingAddress =
             BillingAddress(
-                checkRequired("city", city),
                 checkRequired("country", country),
-                checkRequired("state", state),
-                checkRequired("street", street),
-                checkRequired("zipcode", zipcode),
+                city,
+                state,
+                street,
+                zipcode,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -268,8 +260,8 @@ private constructor(
             return@apply
         }
 
-        city()
         country().validate()
+        city()
         state()
         street()
         zipcode()
@@ -290,8 +282,8 @@ private constructor(
      * Used for best match union deserialization.
      */
     internal fun validity(): Int =
-        (if (city.asKnown() == null) 0 else 1) +
-            (country.asKnown()?.validity() ?: 0) +
+        (country.asKnown()?.validity() ?: 0) +
+            (if (city.asKnown() == null) 0 else 1) +
             (if (state.asKnown() == null) 0 else 1) +
             (if (street.asKnown() == null) 0 else 1) +
             (if (zipcode.asKnown() == null) 0 else 1)
@@ -302,8 +294,8 @@ private constructor(
         }
 
         return other is BillingAddress &&
-            city == other.city &&
             country == other.country &&
+            city == other.city &&
             state == other.state &&
             street == other.street &&
             zipcode == other.zipcode &&
@@ -311,11 +303,11 @@ private constructor(
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(city, country, state, street, zipcode, additionalProperties)
+        Objects.hash(country, city, state, street, zipcode, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "BillingAddress{city=$city, country=$country, state=$state, street=$street, zipcode=$zipcode, additionalProperties=$additionalProperties}"
+        "BillingAddress{country=$country, city=$city, state=$state, street=$street, zipcode=$zipcode, additionalProperties=$additionalProperties}"
 }
