@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.66.1 (2025-12-12)
+
+Full Changelog: [v1.66.0...v1.66.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.66.0...v1.66.1)
+
+### Features
+
+* **api:** manual updates ([9aa52b0](https://github.com/dodopayments/dodopayments-kotlin/commit/9aa52b0f3630a41c0e4c6f4c63c639638ab90087))
+
 ## 1.66.0 (2025-12-08)
 
 Full Changelog: [v1.61.6...v1.66.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.61.6...v1.66.0)
