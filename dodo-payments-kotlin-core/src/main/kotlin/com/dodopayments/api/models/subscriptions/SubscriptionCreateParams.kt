@@ -18,6 +18,7 @@ import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.CustomerRequest
 import com.dodopayments.api.models.payments.NewCustomer
+import com.dodopayments.api.models.payments.OneTimeProductCartItem
 import com.dodopayments.api.models.payments.PaymentMethodTypes
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -26,6 +27,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
 
+@Deprecated("deprecated")
 class SubscriptionCreateParams
 private constructor(
     private val body: Body,
@@ -123,6 +125,14 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun onDemand(): OnDemandSubscription? = body.onDemand()
+
+    /**
+     * List of one time products that will be bundled with the first payment for this subscription
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun oneTimeProductCart(): List<OneTimeProductCartItem>? = body.oneTimeProductCart()
 
     /**
      * If true, generates a payment link. Defaults to false if not specified.
@@ -243,6 +253,14 @@ private constructor(
      * Unlike [onDemand], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _onDemand(): JsonField<OnDemandSubscription> = body._onDemand()
+
+    /**
+     * Returns the raw JSON value of [oneTimeProductCart].
+     *
+     * Unlike [oneTimeProductCart], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    fun _oneTimeProductCart(): JsonField<List<OneTimeProductCartItem>> = body._oneTimeProductCart()
 
     /**
      * Returns the raw JSON value of [paymentLink].
@@ -517,6 +535,35 @@ private constructor(
          */
         fun onDemand(onDemand: JsonField<OnDemandSubscription>) = apply { body.onDemand(onDemand) }
 
+        /**
+         * List of one time products that will be bundled with the first payment for this
+         * subscription
+         */
+        fun oneTimeProductCart(oneTimeProductCart: List<OneTimeProductCartItem>?) = apply {
+            body.oneTimeProductCart(oneTimeProductCart)
+        }
+
+        /**
+         * Sets [Builder.oneTimeProductCart] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.oneTimeProductCart] with a well-typed
+         * `List<OneTimeProductCartItem>` value instead. This method is primarily for setting the
+         * field to an undocumented or not yet supported value.
+         */
+        fun oneTimeProductCart(oneTimeProductCart: JsonField<List<OneTimeProductCartItem>>) =
+            apply {
+                body.oneTimeProductCart(oneTimeProductCart)
+            }
+
+        /**
+         * Adds a single [OneTimeProductCartItem] to [Builder.oneTimeProductCart].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addOneTimeProductCart(oneTimeProductCart: OneTimeProductCartItem) = apply {
+            body.addOneTimeProductCart(oneTimeProductCart)
+        }
+
         /** If true, generates a payment link. Defaults to false if not specified. */
         fun paymentLink(paymentLink: Boolean?) = apply { body.paymentLink(paymentLink) }
 
@@ -768,6 +815,7 @@ private constructor(
         private val force3ds: JsonField<Boolean>,
         private val metadata: JsonField<Metadata>,
         private val onDemand: JsonField<OnDemandSubscription>,
+        private val oneTimeProductCart: JsonField<List<OneTimeProductCartItem>>,
         private val paymentLink: JsonField<Boolean>,
         private val returnUrl: JsonField<String>,
         private val showSavedPaymentMethods: JsonField<Boolean>,
@@ -809,6 +857,9 @@ private constructor(
             @JsonProperty("on_demand")
             @ExcludeMissing
             onDemand: JsonField<OnDemandSubscription> = JsonMissing.of(),
+            @JsonProperty("one_time_product_cart")
+            @ExcludeMissing
+            oneTimeProductCart: JsonField<List<OneTimeProductCartItem>> = JsonMissing.of(),
             @JsonProperty("payment_link")
             @ExcludeMissing
             paymentLink: JsonField<Boolean> = JsonMissing.of(),
@@ -834,6 +885,7 @@ private constructor(
             force3ds,
             metadata,
             onDemand,
+            oneTimeProductCart,
             paymentLink,
             returnUrl,
             showSavedPaymentMethods,
@@ -933,6 +985,16 @@ private constructor(
          *   if the server responded with an unexpected value).
          */
         fun onDemand(): OnDemandSubscription? = onDemand.getNullable("on_demand")
+
+        /**
+         * List of one time products that will be bundled with the first payment for this
+         * subscription
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun oneTimeProductCart(): List<OneTimeProductCartItem>? =
+            oneTimeProductCart.getNullable("one_time_product_cart")
 
         /**
          * If true, generates a payment link. Defaults to false if not specified.
@@ -1069,6 +1131,16 @@ private constructor(
         fun _onDemand(): JsonField<OnDemandSubscription> = onDemand
 
         /**
+         * Returns the raw JSON value of [oneTimeProductCart].
+         *
+         * Unlike [oneTimeProductCart], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("one_time_product_cart")
+        @ExcludeMissing
+        fun _oneTimeProductCart(): JsonField<List<OneTimeProductCartItem>> = oneTimeProductCart
+
+        /**
          * Returns the raw JSON value of [paymentLink].
          *
          * Unlike [paymentLink], this method doesn't throw if the JSON field has an unexpected type.
@@ -1154,6 +1226,7 @@ private constructor(
             private var force3ds: JsonField<Boolean> = JsonMissing.of()
             private var metadata: JsonField<Metadata> = JsonMissing.of()
             private var onDemand: JsonField<OnDemandSubscription> = JsonMissing.of()
+            private var oneTimeProductCart: JsonField<MutableList<OneTimeProductCartItem>>? = null
             private var paymentLink: JsonField<Boolean> = JsonMissing.of()
             private var returnUrl: JsonField<String> = JsonMissing.of()
             private var showSavedPaymentMethods: JsonField<Boolean> = JsonMissing.of()
@@ -1174,6 +1247,7 @@ private constructor(
                 force3ds = body.force3ds
                 metadata = body.metadata
                 onDemand = body.onDemand
+                oneTimeProductCart = body.oneTimeProductCart.map { it.toMutableList() }
                 paymentLink = body.paymentLink
                 returnUrl = body.returnUrl
                 showSavedPaymentMethods = body.showSavedPaymentMethods
@@ -1380,6 +1454,37 @@ private constructor(
                 this.onDemand = onDemand
             }
 
+            /**
+             * List of one time products that will be bundled with the first payment for this
+             * subscription
+             */
+            fun oneTimeProductCart(oneTimeProductCart: List<OneTimeProductCartItem>?) =
+                oneTimeProductCart(JsonField.ofNullable(oneTimeProductCart))
+
+            /**
+             * Sets [Builder.oneTimeProductCart] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.oneTimeProductCart] with a well-typed
+             * `List<OneTimeProductCartItem>` value instead. This method is primarily for setting
+             * the field to an undocumented or not yet supported value.
+             */
+            fun oneTimeProductCart(oneTimeProductCart: JsonField<List<OneTimeProductCartItem>>) =
+                apply {
+                    this.oneTimeProductCart = oneTimeProductCart.map { it.toMutableList() }
+                }
+
+            /**
+             * Adds a single [OneTimeProductCartItem] to [Builder.oneTimeProductCart].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addOneTimeProductCart(oneTimeProductCart: OneTimeProductCartItem) = apply {
+                this.oneTimeProductCart =
+                    (this.oneTimeProductCart ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("oneTimeProductCart", it).add(oneTimeProductCart)
+                    }
+            }
+
             /** If true, generates a payment link. Defaults to false if not specified. */
             fun paymentLink(paymentLink: Boolean?) = paymentLink(JsonField.ofNullable(paymentLink))
 
@@ -1515,6 +1620,7 @@ private constructor(
                     force3ds,
                     metadata,
                     onDemand,
+                    (oneTimeProductCart ?: JsonMissing.of()).map { it.toImmutable() },
                     paymentLink,
                     returnUrl,
                     showSavedPaymentMethods,
@@ -1542,6 +1648,7 @@ private constructor(
             force3ds()
             metadata()?.validate()
             onDemand()?.validate()
+            oneTimeProductCart()?.forEach { it.validate() }
             paymentLink()
             returnUrl()
             showSavedPaymentMethods()
@@ -1576,6 +1683,7 @@ private constructor(
                 (if (force3ds.asKnown() == null) 0 else 1) +
                 (metadata.asKnown()?.validity() ?: 0) +
                 (onDemand.asKnown()?.validity() ?: 0) +
+                (oneTimeProductCart.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
                 (if (paymentLink.asKnown() == null) 0 else 1) +
                 (if (returnUrl.asKnown() == null) 0 else 1) +
                 (if (showSavedPaymentMethods.asKnown() == null) 0 else 1) +
@@ -1599,6 +1707,7 @@ private constructor(
                 force3ds == other.force3ds &&
                 metadata == other.metadata &&
                 onDemand == other.onDemand &&
+                oneTimeProductCart == other.oneTimeProductCart &&
                 paymentLink == other.paymentLink &&
                 returnUrl == other.returnUrl &&
                 showSavedPaymentMethods == other.showSavedPaymentMethods &&
@@ -1620,6 +1729,7 @@ private constructor(
                 force3ds,
                 metadata,
                 onDemand,
+                oneTimeProductCart,
                 paymentLink,
                 returnUrl,
                 showSavedPaymentMethods,
@@ -1632,7 +1742,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{billing=$billing, customer=$customer, productId=$productId, quantity=$quantity, addons=$addons, allowedPaymentMethodTypes=$allowedPaymentMethodTypes, billingCurrency=$billingCurrency, discountCode=$discountCode, force3ds=$force3ds, metadata=$metadata, onDemand=$onDemand, paymentLink=$paymentLink, returnUrl=$returnUrl, showSavedPaymentMethods=$showSavedPaymentMethods, taxId=$taxId, trialPeriodDays=$trialPeriodDays, additionalProperties=$additionalProperties}"
+            "Body{billing=$billing, customer=$customer, productId=$productId, quantity=$quantity, addons=$addons, allowedPaymentMethodTypes=$allowedPaymentMethodTypes, billingCurrency=$billingCurrency, discountCode=$discountCode, force3ds=$force3ds, metadata=$metadata, onDemand=$onDemand, oneTimeProductCart=$oneTimeProductCart, paymentLink=$paymentLink, returnUrl=$returnUrl, showSavedPaymentMethods=$showSavedPaymentMethods, taxId=$taxId, trialPeriodDays=$trialPeriodDays, additionalProperties=$additionalProperties}"
     }
 
     /** Additional metadata for the subscription Defaults to empty if not specified */

@@ -38,6 +38,7 @@ interface SubscriptionServiceAsync {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): SubscriptionServiceAsync
 
+    @Deprecated("deprecated")
     suspend fun create(
         params: SubscriptionCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -221,6 +222,7 @@ interface SubscriptionServiceAsync {
          * Returns a raw HTTP response for `post /subscriptions`, but is otherwise the same as
          * [SubscriptionServiceAsync.create].
          */
+        @Deprecated("deprecated")
         @MustBeClosed
         suspend fun create(
             params: SubscriptionCreateParams,
