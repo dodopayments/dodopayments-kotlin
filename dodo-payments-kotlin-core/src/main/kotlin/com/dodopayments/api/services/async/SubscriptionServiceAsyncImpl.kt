@@ -48,6 +48,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): SubscriptionServiceAsync =
         SubscriptionServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
 
+    @Deprecated("deprecated")
     override suspend fun create(
         params: SubscriptionCreateParams,
         requestOptions: RequestOptions,
@@ -128,6 +129,7 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
         private val createHandler: Handler<SubscriptionCreateResponse> =
             jsonHandler<SubscriptionCreateResponse>(clientOptions.jsonMapper)
 
+        @Deprecated("deprecated")
         override suspend fun create(
             params: SubscriptionCreateParams,
             requestOptions: RequestOptions,

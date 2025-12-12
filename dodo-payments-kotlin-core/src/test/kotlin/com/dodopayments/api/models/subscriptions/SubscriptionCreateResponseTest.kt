@@ -41,6 +41,12 @@ internal class SubscriptionCreateResponseTest {
                 .clientSecret("client_secret")
                 .discountId("discount_id")
                 .expiresOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .addOneTimeProductCart(
+                    SubscriptionCreateResponse.OneTimeProductCart.builder()
+                        .productId("product_id")
+                        .quantity(0)
+                        .build()
+                )
                 .paymentLink("payment_link")
                 .build()
 
@@ -75,6 +81,13 @@ internal class SubscriptionCreateResponseTest {
         assertThat(subscriptionCreateResponse.discountId()).isEqualTo("discount_id")
         assertThat(subscriptionCreateResponse.expiresOn())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(subscriptionCreateResponse.oneTimeProductCart())
+            .containsExactly(
+                SubscriptionCreateResponse.OneTimeProductCart.builder()
+                    .productId("product_id")
+                    .quantity(0)
+                    .build()
+            )
         assertThat(subscriptionCreateResponse.paymentLink()).isEqualTo("payment_link")
     }
 
@@ -108,6 +121,12 @@ internal class SubscriptionCreateResponseTest {
                 .clientSecret("client_secret")
                 .discountId("discount_id")
                 .expiresOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .addOneTimeProductCart(
+                    SubscriptionCreateResponse.OneTimeProductCart.builder()
+                        .productId("product_id")
+                        .quantity(0)
+                        .build()
+                )
                 .paymentLink("payment_link")
                 .build()
 

@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
 
+@Deprecated("deprecated")
 class PaymentCreateParams
 private constructor(
     private val body: Body,
