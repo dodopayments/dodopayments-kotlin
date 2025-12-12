@@ -29,6 +29,7 @@ interface PaymentServiceAsync {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): PaymentServiceAsync
 
+    @Deprecated("deprecated")
     suspend fun create(
         params: PaymentCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -97,6 +98,7 @@ interface PaymentServiceAsync {
          * Returns a raw HTTP response for `post /payments`, but is otherwise the same as
          * [PaymentServiceAsync.create].
          */
+        @Deprecated("deprecated")
         @MustBeClosed
         suspend fun create(
             params: PaymentCreateParams,

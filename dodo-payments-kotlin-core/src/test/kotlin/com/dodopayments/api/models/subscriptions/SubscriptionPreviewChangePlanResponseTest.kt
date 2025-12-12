@@ -23,7 +23,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                     SubscriptionPreviewChangePlanResponse.ImmediateCharge.builder()
                         .addLineItem(
                             SubscriptionPreviewChangePlanResponse.ImmediateCharge.LineItem
-                                .UnionMember0
+                                .Subscription
                                 .builder()
                                 .id("id")
                                 .currency(Currency.AED)
@@ -33,7 +33,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                                 .taxInclusive(true)
                                 .type(
                                     SubscriptionPreviewChangePlanResponse.ImmediateCharge.LineItem
-                                        .UnionMember0
+                                        .Subscription
                                         .Type
                                         .SUBSCRIPTION
                                 )
@@ -131,7 +131,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
             .isEqualTo(
                 SubscriptionPreviewChangePlanResponse.ImmediateCharge.builder()
                     .addLineItem(
-                        SubscriptionPreviewChangePlanResponse.ImmediateCharge.LineItem.UnionMember0
+                        SubscriptionPreviewChangePlanResponse.ImmediateCharge.LineItem.Subscription
                             .builder()
                             .id("id")
                             .currency(Currency.AED)
@@ -141,7 +141,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                             .taxInclusive(true)
                             .type(
                                 SubscriptionPreviewChangePlanResponse.ImmediateCharge.LineItem
-                                    .UnionMember0
+                                    .Subscription
                                     .Type
                                     .SUBSCRIPTION
                             )
@@ -245,7 +245,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                     SubscriptionPreviewChangePlanResponse.ImmediateCharge.builder()
                         .addLineItem(
                             SubscriptionPreviewChangePlanResponse.ImmediateCharge.LineItem
-                                .UnionMember0
+                                .Subscription
                                 .builder()
                                 .id("id")
                                 .currency(Currency.AED)
@@ -255,7 +255,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                                 .taxInclusive(true)
                                 .type(
                                     SubscriptionPreviewChangePlanResponse.ImmediateCharge.LineItem
-                                        .UnionMember0
+                                        .Subscription
                                         .Type
                                         .SUBSCRIPTION
                                 )

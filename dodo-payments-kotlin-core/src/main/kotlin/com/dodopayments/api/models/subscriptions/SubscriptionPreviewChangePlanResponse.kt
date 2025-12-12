@@ -324,17 +324,15 @@ private constructor(
                     }
             }
 
-            /** Alias for calling [addLineItem] with `LineItem.ofUnionMember0(unionMember0)`. */
-            fun addLineItem(unionMember0: LineItem.UnionMember0) =
-                addLineItem(LineItem.ofUnionMember0(unionMember0))
+            /** Alias for calling [addLineItem] with `LineItem.ofSubscription(subscription)`. */
+            fun addLineItem(subscription: LineItem.Subscription) =
+                addLineItem(LineItem.ofSubscription(subscription))
 
-            /** Alias for calling [addLineItem] with `LineItem.ofUnionMember1(unionMember1)`. */
-            fun addLineItem(unionMember1: LineItem.UnionMember1) =
-                addLineItem(LineItem.ofUnionMember1(unionMember1))
+            /** Alias for calling [addLineItem] with `LineItem.ofAddon(addon)`. */
+            fun addLineItem(addon: LineItem.Addon) = addLineItem(LineItem.ofAddon(addon))
 
-            /** Alias for calling [addLineItem] with `LineItem.ofUnionMember2(unionMember2)`. */
-            fun addLineItem(unionMember2: LineItem.UnionMember2) =
-                addLineItem(LineItem.ofUnionMember2(unionMember2))
+            /** Alias for calling [addLineItem] with `LineItem.ofMeter(meter)`. */
+            fun addLineItem(meter: LineItem.Meter) = addLineItem(LineItem.ofMeter(meter))
 
             fun summary(summary: Summary) = summary(JsonField.of(summary))
 
@@ -421,37 +419,37 @@ private constructor(
         @JsonSerialize(using = LineItem.Serializer::class)
         class LineItem
         private constructor(
-            private val unionMember0: UnionMember0? = null,
-            private val unionMember1: UnionMember1? = null,
-            private val unionMember2: UnionMember2? = null,
+            private val subscription: Subscription? = null,
+            private val addon: Addon? = null,
+            private val meter: Meter? = null,
             private val _json: JsonValue? = null,
         ) {
 
-            fun unionMember0(): UnionMember0? = unionMember0
+            fun subscription(): Subscription? = subscription
 
-            fun unionMember1(): UnionMember1? = unionMember1
+            fun addon(): Addon? = addon
 
-            fun unionMember2(): UnionMember2? = unionMember2
+            fun meter(): Meter? = meter
 
-            fun isUnionMember0(): Boolean = unionMember0 != null
+            fun isSubscription(): Boolean = subscription != null
 
-            fun isUnionMember1(): Boolean = unionMember1 != null
+            fun isAddon(): Boolean = addon != null
 
-            fun isUnionMember2(): Boolean = unionMember2 != null
+            fun isMeter(): Boolean = meter != null
 
-            fun asUnionMember0(): UnionMember0 = unionMember0.getOrThrow("unionMember0")
+            fun asSubscription(): Subscription = subscription.getOrThrow("subscription")
 
-            fun asUnionMember1(): UnionMember1 = unionMember1.getOrThrow("unionMember1")
+            fun asAddon(): Addon = addon.getOrThrow("addon")
 
-            fun asUnionMember2(): UnionMember2 = unionMember2.getOrThrow("unionMember2")
+            fun asMeter(): Meter = meter.getOrThrow("meter")
 
             fun _json(): JsonValue? = _json
 
             fun <T> accept(visitor: Visitor<T>): T =
                 when {
-                    unionMember0 != null -> visitor.visitUnionMember0(unionMember0)
-                    unionMember1 != null -> visitor.visitUnionMember1(unionMember1)
-                    unionMember2 != null -> visitor.visitUnionMember2(unionMember2)
+                    subscription != null -> visitor.visitSubscription(subscription)
+                    addon != null -> visitor.visitAddon(addon)
+                    meter != null -> visitor.visitMeter(meter)
                     else -> visitor.unknown(_json)
                 }
 
@@ -464,16 +462,16 @@ private constructor(
 
                 accept(
                     object : Visitor<Unit> {
-                        override fun visitUnionMember0(unionMember0: UnionMember0) {
-                            unionMember0.validate()
+                        override fun visitSubscription(subscription: Subscription) {
+                            subscription.validate()
                         }
 
-                        override fun visitUnionMember1(unionMember1: UnionMember1) {
-                            unionMember1.validate()
+                        override fun visitAddon(addon: Addon) {
+                            addon.validate()
                         }
 
-                        override fun visitUnionMember2(unionMember2: UnionMember2) {
-                            unionMember2.validate()
+                        override fun visitMeter(meter: Meter) {
+                            meter.validate()
                         }
                     }
                 )
@@ -497,14 +495,12 @@ private constructor(
             internal fun validity(): Int =
                 accept(
                     object : Visitor<Int> {
-                        override fun visitUnionMember0(unionMember0: UnionMember0) =
-                            unionMember0.validity()
+                        override fun visitSubscription(subscription: Subscription) =
+                            subscription.validity()
 
-                        override fun visitUnionMember1(unionMember1: UnionMember1) =
-                            unionMember1.validity()
+                        override fun visitAddon(addon: Addon) = addon.validity()
 
-                        override fun visitUnionMember2(unionMember2: UnionMember2) =
-                            unionMember2.validity()
+                        override fun visitMeter(meter: Meter) = meter.validity()
 
                         override fun unknown(json: JsonValue?) = 0
                     }
@@ -516,32 +512,30 @@ private constructor(
                 }
 
                 return other is LineItem &&
-                    unionMember0 == other.unionMember0 &&
-                    unionMember1 == other.unionMember1 &&
-                    unionMember2 == other.unionMember2
+                    subscription == other.subscription &&
+                    addon == other.addon &&
+                    meter == other.meter
             }
 
-            override fun hashCode(): Int = Objects.hash(unionMember0, unionMember1, unionMember2)
+            override fun hashCode(): Int = Objects.hash(subscription, addon, meter)
 
             override fun toString(): String =
                 when {
-                    unionMember0 != null -> "LineItem{unionMember0=$unionMember0}"
-                    unionMember1 != null -> "LineItem{unionMember1=$unionMember1}"
-                    unionMember2 != null -> "LineItem{unionMember2=$unionMember2}"
+                    subscription != null -> "LineItem{subscription=$subscription}"
+                    addon != null -> "LineItem{addon=$addon}"
+                    meter != null -> "LineItem{meter=$meter}"
                     _json != null -> "LineItem{_unknown=$_json}"
                     else -> throw IllegalStateException("Invalid LineItem")
                 }
 
             companion object {
 
-                fun ofUnionMember0(unionMember0: UnionMember0) =
-                    LineItem(unionMember0 = unionMember0)
+                fun ofSubscription(subscription: Subscription) =
+                    LineItem(subscription = subscription)
 
-                fun ofUnionMember1(unionMember1: UnionMember1) =
-                    LineItem(unionMember1 = unionMember1)
+                fun ofAddon(addon: Addon) = LineItem(addon = addon)
 
-                fun ofUnionMember2(unionMember2: UnionMember2) =
-                    LineItem(unionMember2 = unionMember2)
+                fun ofMeter(meter: Meter) = LineItem(meter = meter)
             }
 
             /**
@@ -550,11 +544,11 @@ private constructor(
              */
             interface Visitor<out T> {
 
-                fun visitUnionMember0(unionMember0: UnionMember0): T
+                fun visitSubscription(subscription: Subscription): T
 
-                fun visitUnionMember1(unionMember1: UnionMember1): T
+                fun visitAddon(addon: Addon): T
 
-                fun visitUnionMember2(unionMember2: UnionMember2): T
+                fun visitMeter(meter: Meter): T
 
                 /**
                  * Maps an unknown variant of [LineItem] to a value of type [T].
@@ -578,14 +572,14 @@ private constructor(
 
                     val bestMatches =
                         sequenceOf(
-                                tryDeserialize(node, jacksonTypeRef<UnionMember0>())?.let {
-                                    LineItem(unionMember0 = it, _json = json)
+                                tryDeserialize(node, jacksonTypeRef<Subscription>())?.let {
+                                    LineItem(subscription = it, _json = json)
                                 },
-                                tryDeserialize(node, jacksonTypeRef<UnionMember1>())?.let {
-                                    LineItem(unionMember1 = it, _json = json)
+                                tryDeserialize(node, jacksonTypeRef<Addon>())?.let {
+                                    LineItem(addon = it, _json = json)
                                 },
-                                tryDeserialize(node, jacksonTypeRef<UnionMember2>())?.let {
-                                    LineItem(unionMember2 = it, _json = json)
+                                tryDeserialize(node, jacksonTypeRef<Meter>())?.let {
+                                    LineItem(meter = it, _json = json)
                                 },
                             )
                             .filterNotNull()
@@ -612,16 +606,16 @@ private constructor(
                     provider: SerializerProvider,
                 ) {
                     when {
-                        value.unionMember0 != null -> generator.writeObject(value.unionMember0)
-                        value.unionMember1 != null -> generator.writeObject(value.unionMember1)
-                        value.unionMember2 != null -> generator.writeObject(value.unionMember2)
+                        value.subscription != null -> generator.writeObject(value.subscription)
+                        value.addon != null -> generator.writeObject(value.addon)
+                        value.meter != null -> generator.writeObject(value.meter)
                         value._json != null -> generator.writeObject(value._json)
                         else -> throw IllegalStateException("Invalid LineItem")
                     }
                 }
             }
 
-            class UnionMember0
+            class Subscription
             @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val id: JsonField<String>,
@@ -888,7 +882,7 @@ private constructor(
                 companion object {
 
                     /**
-                     * Returns a mutable builder for constructing an instance of [UnionMember0].
+                     * Returns a mutable builder for constructing an instance of [Subscription].
                      *
                      * The following fields are required:
                      * ```kotlin
@@ -905,7 +899,7 @@ private constructor(
                     fun builder() = Builder()
                 }
 
-                /** A builder for [UnionMember0]. */
+                /** A builder for [Subscription]. */
                 class Builder internal constructor() {
 
                     private var id: JsonField<String>? = null
@@ -922,20 +916,20 @@ private constructor(
                     private var taxRate: JsonField<Float> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-                    internal fun from(unionMember0: UnionMember0) = apply {
-                        id = unionMember0.id
-                        currency = unionMember0.currency
-                        productId = unionMember0.productId
-                        prorationFactor = unionMember0.prorationFactor
-                        quantity = unionMember0.quantity
-                        taxInclusive = unionMember0.taxInclusive
-                        type = unionMember0.type
-                        unitPrice = unionMember0.unitPrice
-                        description = unionMember0.description
-                        name = unionMember0.name
-                        tax = unionMember0.tax
-                        taxRate = unionMember0.taxRate
-                        additionalProperties = unionMember0.additionalProperties.toMutableMap()
+                    internal fun from(subscription: Subscription) = apply {
+                        id = subscription.id
+                        currency = subscription.currency
+                        productId = subscription.productId
+                        prorationFactor = subscription.prorationFactor
+                        quantity = subscription.quantity
+                        taxInclusive = subscription.taxInclusive
+                        type = subscription.type
+                        unitPrice = subscription.unitPrice
+                        description = subscription.description
+                        name = subscription.name
+                        tax = subscription.tax
+                        taxRate = subscription.taxRate
+                        additionalProperties = subscription.additionalProperties.toMutableMap()
                     }
 
                     fun id(id: String) = id(JsonField.of(id))
@@ -1118,7 +1112,7 @@ private constructor(
                     }
 
                     /**
-                     * Returns an immutable instance of [UnionMember0].
+                     * Returns an immutable instance of [Subscription].
                      *
                      * Further updates to this [Builder] will not mutate the returned instance.
                      *
@@ -1136,8 +1130,8 @@ private constructor(
                      *
                      * @throws IllegalStateException if any required field is unset.
                      */
-                    fun build(): UnionMember0 =
-                        UnionMember0(
+                    fun build(): Subscription =
+                        Subscription(
                             checkRequired("id", id),
                             checkRequired("currency", currency),
                             checkRequired("productId", productId),
@@ -1156,7 +1150,7 @@ private constructor(
 
                 private var validated: Boolean = false
 
-                fun validate(): UnionMember0 = apply {
+                fun validate(): Subscription = apply {
                     if (validated) {
                         return@apply
                     }
@@ -1334,7 +1328,7 @@ private constructor(
                         return true
                     }
 
-                    return other is UnionMember0 &&
+                    return other is Subscription &&
                         id == other.id &&
                         currency == other.currency &&
                         productId == other.productId &&
@@ -1371,10 +1365,10 @@ private constructor(
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "UnionMember0{id=$id, currency=$currency, productId=$productId, prorationFactor=$prorationFactor, quantity=$quantity, taxInclusive=$taxInclusive, type=$type, unitPrice=$unitPrice, description=$description, name=$name, tax=$tax, taxRate=$taxRate, additionalProperties=$additionalProperties}"
+                    "Subscription{id=$id, currency=$currency, productId=$productId, prorationFactor=$prorationFactor, quantity=$quantity, taxInclusive=$taxInclusive, type=$type, unitPrice=$unitPrice, description=$description, name=$name, tax=$tax, taxRate=$taxRate, additionalProperties=$additionalProperties}"
             }
 
-            class UnionMember1
+            class Addon
             @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val id: JsonField<String>,
@@ -1646,7 +1640,7 @@ private constructor(
                 companion object {
 
                     /**
-                     * Returns a mutable builder for constructing an instance of [UnionMember1].
+                     * Returns a mutable builder for constructing an instance of [Addon].
                      *
                      * The following fields are required:
                      * ```kotlin
@@ -1665,7 +1659,7 @@ private constructor(
                     fun builder() = Builder()
                 }
 
-                /** A builder for [UnionMember1]. */
+                /** A builder for [Addon]. */
                 class Builder internal constructor() {
 
                     private var id: JsonField<String>? = null
@@ -1682,20 +1676,20 @@ private constructor(
                     private var tax: JsonField<Int> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-                    internal fun from(unionMember1: UnionMember1) = apply {
-                        id = unionMember1.id
-                        currency = unionMember1.currency
-                        name = unionMember1.name
-                        prorationFactor = unionMember1.prorationFactor
-                        quantity = unionMember1.quantity
-                        taxCategory = unionMember1.taxCategory
-                        taxInclusive = unionMember1.taxInclusive
-                        taxRate = unionMember1.taxRate
-                        type = unionMember1.type
-                        unitPrice = unionMember1.unitPrice
-                        description = unionMember1.description
-                        tax = unionMember1.tax
-                        additionalProperties = unionMember1.additionalProperties.toMutableMap()
+                    internal fun from(addon: Addon) = apply {
+                        id = addon.id
+                        currency = addon.currency
+                        name = addon.name
+                        prorationFactor = addon.prorationFactor
+                        quantity = addon.quantity
+                        taxCategory = addon.taxCategory
+                        taxInclusive = addon.taxInclusive
+                        taxRate = addon.taxRate
+                        type = addon.type
+                        unitPrice = addon.unitPrice
+                        description = addon.description
+                        tax = addon.tax
+                        additionalProperties = addon.additionalProperties.toMutableMap()
                     }
 
                     fun id(id: String) = id(JsonField.of(id))
@@ -1876,7 +1870,7 @@ private constructor(
                     }
 
                     /**
-                     * Returns an immutable instance of [UnionMember1].
+                     * Returns an immutable instance of [Addon].
                      *
                      * Further updates to this [Builder] will not mutate the returned instance.
                      *
@@ -1896,8 +1890,8 @@ private constructor(
                      *
                      * @throws IllegalStateException if any required field is unset.
                      */
-                    fun build(): UnionMember1 =
-                        UnionMember1(
+                    fun build(): Addon =
+                        Addon(
                             checkRequired("id", id),
                             checkRequired("currency", currency),
                             checkRequired("name", name),
@@ -1916,7 +1910,7 @@ private constructor(
 
                 private var validated: Boolean = false
 
-                fun validate(): UnionMember1 = apply {
+                fun validate(): Addon = apply {
                     if (validated) {
                         return@apply
                     }
@@ -2094,7 +2088,7 @@ private constructor(
                         return true
                     }
 
-                    return other is UnionMember1 &&
+                    return other is Addon &&
                         id == other.id &&
                         currency == other.currency &&
                         name == other.name &&
@@ -2131,10 +2125,10 @@ private constructor(
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "UnionMember1{id=$id, currency=$currency, name=$name, prorationFactor=$prorationFactor, quantity=$quantity, taxCategory=$taxCategory, taxInclusive=$taxInclusive, taxRate=$taxRate, type=$type, unitPrice=$unitPrice, description=$description, tax=$tax, additionalProperties=$additionalProperties}"
+                    "Addon{id=$id, currency=$currency, name=$name, prorationFactor=$prorationFactor, quantity=$quantity, taxCategory=$taxCategory, taxInclusive=$taxInclusive, taxRate=$taxRate, type=$type, unitPrice=$unitPrice, description=$description, tax=$tax, additionalProperties=$additionalProperties}"
             }
 
-            class UnionMember2
+            class Meter
             @JsonCreator(mode = JsonCreator.Mode.DISABLED)
             private constructor(
                 private val id: JsonField<String>,
@@ -2425,7 +2419,7 @@ private constructor(
                 companion object {
 
                     /**
-                     * Returns a mutable builder for constructing an instance of [UnionMember2].
+                     * Returns a mutable builder for constructing an instance of [Meter].
                      *
                      * The following fields are required:
                      * ```kotlin
@@ -2445,7 +2439,7 @@ private constructor(
                     fun builder() = Builder()
                 }
 
-                /** A builder for [UnionMember2]. */
+                /** A builder for [Meter]. */
                 class Builder internal constructor() {
 
                     private var id: JsonField<String>? = null
@@ -2463,21 +2457,21 @@ private constructor(
                     private var tax: JsonField<Int> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-                    internal fun from(unionMember2: UnionMember2) = apply {
-                        id = unionMember2.id
-                        chargeableUnits = unionMember2.chargeableUnits
-                        currency = unionMember2.currency
-                        freeThreshold = unionMember2.freeThreshold
-                        name = unionMember2.name
-                        pricePerUnit = unionMember2.pricePerUnit
-                        subtotal = unionMember2.subtotal
-                        taxInclusive = unionMember2.taxInclusive
-                        taxRate = unionMember2.taxRate
-                        type = unionMember2.type
-                        unitsConsumed = unionMember2.unitsConsumed
-                        description = unionMember2.description
-                        tax = unionMember2.tax
-                        additionalProperties = unionMember2.additionalProperties.toMutableMap()
+                    internal fun from(meter: Meter) = apply {
+                        id = meter.id
+                        chargeableUnits = meter.chargeableUnits
+                        currency = meter.currency
+                        freeThreshold = meter.freeThreshold
+                        name = meter.name
+                        pricePerUnit = meter.pricePerUnit
+                        subtotal = meter.subtotal
+                        taxInclusive = meter.taxInclusive
+                        taxRate = meter.taxRate
+                        type = meter.type
+                        unitsConsumed = meter.unitsConsumed
+                        description = meter.description
+                        tax = meter.tax
+                        additionalProperties = meter.additionalProperties.toMutableMap()
                     }
 
                     fun id(id: String) = id(JsonField.of(id))
@@ -2671,7 +2665,7 @@ private constructor(
                     }
 
                     /**
-                     * Returns an immutable instance of [UnionMember2].
+                     * Returns an immutable instance of [Meter].
                      *
                      * Further updates to this [Builder] will not mutate the returned instance.
                      *
@@ -2692,8 +2686,8 @@ private constructor(
                      *
                      * @throws IllegalStateException if any required field is unset.
                      */
-                    fun build(): UnionMember2 =
-                        UnionMember2(
+                    fun build(): Meter =
+                        Meter(
                             checkRequired("id", id),
                             checkRequired("chargeableUnits", chargeableUnits),
                             checkRequired("currency", currency),
@@ -2713,7 +2707,7 @@ private constructor(
 
                 private var validated: Boolean = false
 
-                fun validate(): UnionMember2 = apply {
+                fun validate(): Meter = apply {
                     if (validated) {
                         return@apply
                     }
@@ -2893,7 +2887,7 @@ private constructor(
                         return true
                     }
 
-                    return other is UnionMember2 &&
+                    return other is Meter &&
                         id == other.id &&
                         chargeableUnits == other.chargeableUnits &&
                         currency == other.currency &&
@@ -2932,7 +2926,7 @@ private constructor(
                 override fun hashCode(): Int = hashCode
 
                 override fun toString() =
-                    "UnionMember2{id=$id, chargeableUnits=$chargeableUnits, currency=$currency, freeThreshold=$freeThreshold, name=$name, pricePerUnit=$pricePerUnit, subtotal=$subtotal, taxInclusive=$taxInclusive, taxRate=$taxRate, type=$type, unitsConsumed=$unitsConsumed, description=$description, tax=$tax, additionalProperties=$additionalProperties}"
+                    "Meter{id=$id, chargeableUnits=$chargeableUnits, currency=$currency, freeThreshold=$freeThreshold, name=$name, pricePerUnit=$pricePerUnit, subtotal=$subtotal, taxInclusive=$taxInclusive, taxRate=$taxRate, type=$type, unitsConsumed=$unitsConsumed, description=$description, tax=$tax, additionalProperties=$additionalProperties}"
             }
         }
 
