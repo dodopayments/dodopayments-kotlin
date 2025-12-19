@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.67.2 (2025-12-19)
+
+Full Changelog: [v1.67.1...v1.67.2](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.67.1...v1.67.2)
+
+### Chores
+
+* **internal:** codegen related update ([4efaf24](https://github.com/dodopayments/dodopayments-kotlin/commit/4efaf24373cb30dbeaf1cba450552936be7a59b1))
+* **internal:** codegen related update ([c12bfaf](https://github.com/dodopayments/dodopayments-kotlin/commit/c12bfaf90d88471218e6908c92231ac8fe5b9141))
+
 ## 1.67.1 (2025-12-18)
 
 Full Changelog: [v1.67.0...v1.67.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.67.0...v1.67.1)
