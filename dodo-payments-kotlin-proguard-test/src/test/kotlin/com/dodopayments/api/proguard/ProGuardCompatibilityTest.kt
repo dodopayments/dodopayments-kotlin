@@ -129,6 +129,7 @@ internal class ProGuardCompatibilityTest {
                         .allowPhoneNumberCollection(true)
                         .allowTaxId(true)
                         .alwaysCreateNewCustomer(true)
+                        .redirectImmediately(true)
                         .build()
                 )
                 .force3ds(true)
@@ -139,6 +140,7 @@ internal class ProGuardCompatibilityTest {
                 )
                 .minimalAddress(true)
                 .returnUrl("return_url")
+                .shortLink(true)
                 .showSavedPaymentMethods(true)
                 .subscriptionData(
                     CheckoutSessionRequest.SubscriptionData.builder()

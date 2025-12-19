@@ -107,12 +107,28 @@ private constructor(
     fun paymentLink(): Boolean? = body.paymentLink()
 
     /**
+     * If true, redirects the customer immediately after payment completion False by default
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun redirectImmediately(): Boolean? = body.redirectImmediately()
+
+    /**
      * Optional URL to redirect the customer after payment. Must be a valid URL if provided.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
     fun returnUrl(): String? = body.returnUrl()
+
+    /**
+     * If true, returns a shortened payment link. Defaults to false if not specified.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun shortLink(): Boolean? = body.shortLink()
 
     /**
      * Display saved payment methods of a returning customer False by default
@@ -196,11 +212,26 @@ private constructor(
     fun _paymentLink(): JsonField<Boolean> = body._paymentLink()
 
     /**
+     * Returns the raw JSON value of [redirectImmediately].
+     *
+     * Unlike [redirectImmediately], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    fun _redirectImmediately(): JsonField<Boolean> = body._redirectImmediately()
+
+    /**
      * Returns the raw JSON value of [returnUrl].
      *
      * Unlike [returnUrl], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _returnUrl(): JsonField<String> = body._returnUrl()
+
+    /**
+     * Returns the raw JSON value of [shortLink].
+     *
+     * Unlike [shortLink], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _shortLink(): JsonField<Boolean> = body._shortLink()
 
     /**
      * Returns the raw JSON value of [showSavedPaymentMethods].
@@ -444,6 +475,22 @@ private constructor(
          */
         fun paymentLink(paymentLink: JsonField<Boolean>) = apply { body.paymentLink(paymentLink) }
 
+        /** If true, redirects the customer immediately after payment completion False by default */
+        fun redirectImmediately(redirectImmediately: Boolean) = apply {
+            body.redirectImmediately(redirectImmediately)
+        }
+
+        /**
+         * Sets [Builder.redirectImmediately] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.redirectImmediately] with a well-typed [Boolean] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun redirectImmediately(redirectImmediately: JsonField<Boolean>) = apply {
+            body.redirectImmediately(redirectImmediately)
+        }
+
         /** Optional URL to redirect the customer after payment. Must be a valid URL if provided. */
         fun returnUrl(returnUrl: String?) = apply { body.returnUrl(returnUrl) }
 
@@ -455,6 +502,25 @@ private constructor(
          * value.
          */
         fun returnUrl(returnUrl: JsonField<String>) = apply { body.returnUrl(returnUrl) }
+
+        /** If true, returns a shortened payment link. Defaults to false if not specified. */
+        fun shortLink(shortLink: Boolean?) = apply { body.shortLink(shortLink) }
+
+        /**
+         * Alias for [Builder.shortLink].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun shortLink(shortLink: Boolean) = shortLink(shortLink as Boolean?)
+
+        /**
+         * Sets [Builder.shortLink] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.shortLink] with a well-typed [Boolean] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun shortLink(shortLink: JsonField<Boolean>) = apply { body.shortLink(shortLink) }
 
         /** Display saved payment methods of a returning customer False by default */
         fun showSavedPaymentMethods(showSavedPaymentMethods: Boolean) = apply {
@@ -643,7 +709,9 @@ private constructor(
         private val force3ds: JsonField<Boolean>,
         private val metadata: JsonField<Metadata>,
         private val paymentLink: JsonField<Boolean>,
+        private val redirectImmediately: JsonField<Boolean>,
         private val returnUrl: JsonField<String>,
+        private val shortLink: JsonField<Boolean>,
         private val showSavedPaymentMethods: JsonField<Boolean>,
         private val taxId: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -678,9 +746,15 @@ private constructor(
             @JsonProperty("payment_link")
             @ExcludeMissing
             paymentLink: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("redirect_immediately")
+            @ExcludeMissing
+            redirectImmediately: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("return_url")
             @ExcludeMissing
             returnUrl: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("short_link")
+            @ExcludeMissing
+            shortLink: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("show_saved_payment_methods")
             @ExcludeMissing
             showSavedPaymentMethods: JsonField<Boolean> = JsonMissing.of(),
@@ -695,7 +769,9 @@ private constructor(
             force3ds,
             metadata,
             paymentLink,
+            redirectImmediately,
             returnUrl,
+            shortLink,
             showSavedPaymentMethods,
             taxId,
             mutableMapOf(),
@@ -780,12 +856,29 @@ private constructor(
         fun paymentLink(): Boolean? = paymentLink.getNullable("payment_link")
 
         /**
+         * If true, redirects the customer immediately after payment completion False by default
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun redirectImmediately(): Boolean? =
+            redirectImmediately.getNullable("redirect_immediately")
+
+        /**
          * Optional URL to redirect the customer after payment. Must be a valid URL if provided.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
         fun returnUrl(): String? = returnUrl.getNullable("return_url")
+
+        /**
+         * If true, returns a shortened payment link. Defaults to false if not specified.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun shortLink(): Boolean? = shortLink.getNullable("short_link")
 
         /**
          * Display saved payment methods of a returning customer False by default
@@ -885,11 +978,28 @@ private constructor(
         fun _paymentLink(): JsonField<Boolean> = paymentLink
 
         /**
+         * Returns the raw JSON value of [redirectImmediately].
+         *
+         * Unlike [redirectImmediately], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("redirect_immediately")
+        @ExcludeMissing
+        fun _redirectImmediately(): JsonField<Boolean> = redirectImmediately
+
+        /**
          * Returns the raw JSON value of [returnUrl].
          *
          * Unlike [returnUrl], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("return_url") @ExcludeMissing fun _returnUrl(): JsonField<String> = returnUrl
+
+        /**
+         * Returns the raw JSON value of [shortLink].
+         *
+         * Unlike [shortLink], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("short_link") @ExcludeMissing fun _shortLink(): JsonField<Boolean> = shortLink
 
         /**
          * Returns the raw JSON value of [showSavedPaymentMethods].
@@ -948,7 +1058,9 @@ private constructor(
             private var force3ds: JsonField<Boolean> = JsonMissing.of()
             private var metadata: JsonField<Metadata> = JsonMissing.of()
             private var paymentLink: JsonField<Boolean> = JsonMissing.of()
+            private var redirectImmediately: JsonField<Boolean> = JsonMissing.of()
             private var returnUrl: JsonField<String> = JsonMissing.of()
+            private var shortLink: JsonField<Boolean> = JsonMissing.of()
             private var showSavedPaymentMethods: JsonField<Boolean> = JsonMissing.of()
             private var taxId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -964,7 +1076,9 @@ private constructor(
                 force3ds = body.force3ds
                 metadata = body.metadata
                 paymentLink = body.paymentLink
+                redirectImmediately = body.redirectImmediately
                 returnUrl = body.returnUrl
+                shortLink = body.shortLink
                 showSavedPaymentMethods = body.showSavedPaymentMethods
                 taxId = body.taxId
                 additionalProperties = body.additionalProperties.toMutableMap()
@@ -1156,6 +1270,23 @@ private constructor(
             }
 
             /**
+             * If true, redirects the customer immediately after payment completion False by default
+             */
+            fun redirectImmediately(redirectImmediately: Boolean) =
+                redirectImmediately(JsonField.of(redirectImmediately))
+
+            /**
+             * Sets [Builder.redirectImmediately] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.redirectImmediately] with a well-typed [Boolean]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun redirectImmediately(redirectImmediately: JsonField<Boolean>) = apply {
+                this.redirectImmediately = redirectImmediately
+            }
+
+            /**
              * Optional URL to redirect the customer after payment. Must be a valid URL if provided.
              */
             fun returnUrl(returnUrl: String?) = returnUrl(JsonField.ofNullable(returnUrl))
@@ -1168,6 +1299,25 @@ private constructor(
              * supported value.
              */
             fun returnUrl(returnUrl: JsonField<String>) = apply { this.returnUrl = returnUrl }
+
+            /** If true, returns a shortened payment link. Defaults to false if not specified. */
+            fun shortLink(shortLink: Boolean?) = shortLink(JsonField.ofNullable(shortLink))
+
+            /**
+             * Alias for [Builder.shortLink].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun shortLink(shortLink: Boolean) = shortLink(shortLink as Boolean?)
+
+            /**
+             * Sets [Builder.shortLink] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.shortLink] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun shortLink(shortLink: JsonField<Boolean>) = apply { this.shortLink = shortLink }
 
             /** Display saved payment methods of a returning customer False by default */
             fun showSavedPaymentMethods(showSavedPaymentMethods: Boolean) =
@@ -1243,7 +1393,9 @@ private constructor(
                     force3ds,
                     metadata,
                     paymentLink,
+                    redirectImmediately,
                     returnUrl,
+                    shortLink,
                     showSavedPaymentMethods,
                     taxId,
                     additionalProperties.toMutableMap(),
@@ -1266,7 +1418,9 @@ private constructor(
             force3ds()
             metadata()?.validate()
             paymentLink()
+            redirectImmediately()
             returnUrl()
+            shortLink()
             showSavedPaymentMethods()
             taxId()
             validated = true
@@ -1296,7 +1450,9 @@ private constructor(
                 (if (force3ds.asKnown() == null) 0 else 1) +
                 (metadata.asKnown()?.validity() ?: 0) +
                 (if (paymentLink.asKnown() == null) 0 else 1) +
+                (if (redirectImmediately.asKnown() == null) 0 else 1) +
                 (if (returnUrl.asKnown() == null) 0 else 1) +
+                (if (shortLink.asKnown() == null) 0 else 1) +
                 (if (showSavedPaymentMethods.asKnown() == null) 0 else 1) +
                 (if (taxId.asKnown() == null) 0 else 1)
 
@@ -1315,7 +1471,9 @@ private constructor(
                 force3ds == other.force3ds &&
                 metadata == other.metadata &&
                 paymentLink == other.paymentLink &&
+                redirectImmediately == other.redirectImmediately &&
                 returnUrl == other.returnUrl &&
+                shortLink == other.shortLink &&
                 showSavedPaymentMethods == other.showSavedPaymentMethods &&
                 taxId == other.taxId &&
                 additionalProperties == other.additionalProperties
@@ -1332,7 +1490,9 @@ private constructor(
                 force3ds,
                 metadata,
                 paymentLink,
+                redirectImmediately,
                 returnUrl,
+                shortLink,
                 showSavedPaymentMethods,
                 taxId,
                 additionalProperties,
@@ -1342,7 +1502,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{billing=$billing, customer=$customer, productCart=$productCart, allowedPaymentMethodTypes=$allowedPaymentMethodTypes, billingCurrency=$billingCurrency, discountCode=$discountCode, force3ds=$force3ds, metadata=$metadata, paymentLink=$paymentLink, returnUrl=$returnUrl, showSavedPaymentMethods=$showSavedPaymentMethods, taxId=$taxId, additionalProperties=$additionalProperties}"
+            "Body{billing=$billing, customer=$customer, productCart=$productCart, allowedPaymentMethodTypes=$allowedPaymentMethodTypes, billingCurrency=$billingCurrency, discountCode=$discountCode, force3ds=$force3ds, metadata=$metadata, paymentLink=$paymentLink, redirectImmediately=$redirectImmediately, returnUrl=$returnUrl, shortLink=$shortLink, showSavedPaymentMethods=$showSavedPaymentMethods, taxId=$taxId, additionalProperties=$additionalProperties}"
     }
 
     /** Additional metadata associated with the payment. Defaults to empty if not provided. */
