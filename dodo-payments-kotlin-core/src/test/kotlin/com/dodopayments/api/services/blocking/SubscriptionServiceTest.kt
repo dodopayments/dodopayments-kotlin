@@ -78,6 +78,7 @@ internal class SubscriptionServiceTest {
                             .build()
                     )
                     .paymentLink(true)
+                    .paymentMethodId("payment_method_id")
                     .redirectImmediately(true)
                     .returnUrl("return_url")
                     .shortLink(true)
