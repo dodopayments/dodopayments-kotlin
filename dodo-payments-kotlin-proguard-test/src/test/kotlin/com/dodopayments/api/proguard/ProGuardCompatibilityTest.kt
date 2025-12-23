@@ -139,6 +139,7 @@ internal class ProGuardCompatibilityTest {
                         .build()
                 )
                 .minimalAddress(true)
+                .paymentMethodId("payment_method_id")
                 .returnUrl("return_url")
                 .shortLink(true)
                 .showSavedPaymentMethods(true)

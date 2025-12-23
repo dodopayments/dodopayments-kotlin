@@ -13,12 +13,12 @@ internal class CheckoutSessionResponseTest {
     fun create() {
         val checkoutSessionResponse =
             CheckoutSessionResponse.builder()
-                .checkoutUrl("checkout_url")
                 .sessionId("session_id")
+                .checkoutUrl("checkout_url")
                 .build()
 
-        assertThat(checkoutSessionResponse.checkoutUrl()).isEqualTo("checkout_url")
         assertThat(checkoutSessionResponse.sessionId()).isEqualTo("session_id")
+        assertThat(checkoutSessionResponse.checkoutUrl()).isEqualTo("checkout_url")
     }
 
     @Test
@@ -26,8 +26,8 @@ internal class CheckoutSessionResponseTest {
         val jsonMapper = jsonMapper()
         val checkoutSessionResponse =
             CheckoutSessionResponse.builder()
-                .checkoutUrl("checkout_url")
                 .sessionId("session_id")
+                .checkoutUrl("checkout_url")
                 .build()
 
         val roundtrippedCheckoutSessionResponse =
