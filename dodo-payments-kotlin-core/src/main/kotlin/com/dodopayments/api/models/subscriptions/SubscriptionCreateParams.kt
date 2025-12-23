@@ -143,6 +143,16 @@ private constructor(
     fun paymentLink(): Boolean? = body.paymentLink()
 
     /**
+     * Optional payment method ID to use for this subscription. If provided, customer_id must also
+     * be provided (via AttachExistingCustomer). The payment method will be validated for
+     * eligibility with the subscription's currency.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun paymentMethodId(): String? = body.paymentMethodId()
+
+    /**
      * If true, redirects the customer immediately after payment completion False by default
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -284,6 +294,13 @@ private constructor(
      * Unlike [paymentLink], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _paymentLink(): JsonField<Boolean> = body._paymentLink()
+
+    /**
+     * Returns the raw JSON value of [paymentMethodId].
+     *
+     * Unlike [paymentMethodId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _paymentMethodId(): JsonField<String> = body._paymentMethodId()
 
     /**
      * Returns the raw JSON value of [redirectImmediately].
@@ -614,6 +631,26 @@ private constructor(
          */
         fun paymentLink(paymentLink: JsonField<Boolean>) = apply { body.paymentLink(paymentLink) }
 
+        /**
+         * Optional payment method ID to use for this subscription. If provided, customer_id must
+         * also be provided (via AttachExistingCustomer). The payment method will be validated for
+         * eligibility with the subscription's currency.
+         */
+        fun paymentMethodId(paymentMethodId: String?) = apply {
+            body.paymentMethodId(paymentMethodId)
+        }
+
+        /**
+         * Sets [Builder.paymentMethodId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.paymentMethodId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun paymentMethodId(paymentMethodId: JsonField<String>) = apply {
+            body.paymentMethodId(paymentMethodId)
+        }
+
         /** If true, redirects the customer immediately after payment completion False by default */
         fun redirectImmediately(redirectImmediately: Boolean) = apply {
             body.redirectImmediately(redirectImmediately)
@@ -883,6 +920,7 @@ private constructor(
         private val onDemand: JsonField<OnDemandSubscription>,
         private val oneTimeProductCart: JsonField<List<OneTimeProductCartItem>>,
         private val paymentLink: JsonField<Boolean>,
+        private val paymentMethodId: JsonField<String>,
         private val redirectImmediately: JsonField<Boolean>,
         private val returnUrl: JsonField<String>,
         private val shortLink: JsonField<Boolean>,
@@ -931,6 +969,9 @@ private constructor(
             @JsonProperty("payment_link")
             @ExcludeMissing
             paymentLink: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("payment_method_id")
+            @ExcludeMissing
+            paymentMethodId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("redirect_immediately")
             @ExcludeMissing
             redirectImmediately: JsonField<Boolean> = JsonMissing.of(),
@@ -961,6 +1002,7 @@ private constructor(
             onDemand,
             oneTimeProductCart,
             paymentLink,
+            paymentMethodId,
             redirectImmediately,
             returnUrl,
             shortLink,
@@ -1079,6 +1121,16 @@ private constructor(
          *   if the server responded with an unexpected value).
          */
         fun paymentLink(): Boolean? = paymentLink.getNullable("payment_link")
+
+        /**
+         * Optional payment method ID to use for this subscription. If provided, customer_id must
+         * also be provided (via AttachExistingCustomer). The payment method will be validated for
+         * eligibility with the subscription's currency.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun paymentMethodId(): String? = paymentMethodId.getNullable("payment_method_id")
 
         /**
          * If true, redirects the customer immediately after payment completion False by default
@@ -1243,6 +1295,16 @@ private constructor(
         fun _paymentLink(): JsonField<Boolean> = paymentLink
 
         /**
+         * Returns the raw JSON value of [paymentMethodId].
+         *
+         * Unlike [paymentMethodId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("payment_method_id")
+        @ExcludeMissing
+        fun _paymentMethodId(): JsonField<String> = paymentMethodId
+
+        /**
          * Returns the raw JSON value of [redirectImmediately].
          *
          * Unlike [redirectImmediately], this method doesn't throw if the JSON field has an
@@ -1338,6 +1400,7 @@ private constructor(
             private var onDemand: JsonField<OnDemandSubscription> = JsonMissing.of()
             private var oneTimeProductCart: JsonField<MutableList<OneTimeProductCartItem>>? = null
             private var paymentLink: JsonField<Boolean> = JsonMissing.of()
+            private var paymentMethodId: JsonField<String> = JsonMissing.of()
             private var redirectImmediately: JsonField<Boolean> = JsonMissing.of()
             private var returnUrl: JsonField<String> = JsonMissing.of()
             private var shortLink: JsonField<Boolean> = JsonMissing.of()
@@ -1361,6 +1424,7 @@ private constructor(
                 onDemand = body.onDemand
                 oneTimeProductCart = body.oneTimeProductCart.map { it.toMutableList() }
                 paymentLink = body.paymentLink
+                paymentMethodId = body.paymentMethodId
                 redirectImmediately = body.redirectImmediately
                 returnUrl = body.returnUrl
                 shortLink = body.shortLink
@@ -1621,6 +1685,25 @@ private constructor(
             }
 
             /**
+             * Optional payment method ID to use for this subscription. If provided, customer_id
+             * must also be provided (via AttachExistingCustomer). The payment method will be
+             * validated for eligibility with the subscription's currency.
+             */
+            fun paymentMethodId(paymentMethodId: String?) =
+                paymentMethodId(JsonField.ofNullable(paymentMethodId))
+
+            /**
+             * Sets [Builder.paymentMethodId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.paymentMethodId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun paymentMethodId(paymentMethodId: JsonField<String>) = apply {
+                this.paymentMethodId = paymentMethodId
+            }
+
+            /**
              * If true, redirects the customer immediately after payment completion False by default
              */
             fun redirectImmediately(redirectImmediately: Boolean) =
@@ -1772,6 +1855,7 @@ private constructor(
                     onDemand,
                     (oneTimeProductCart ?: JsonMissing.of()).map { it.toImmutable() },
                     paymentLink,
+                    paymentMethodId,
                     redirectImmediately,
                     returnUrl,
                     shortLink,
@@ -1802,6 +1886,7 @@ private constructor(
             onDemand()?.validate()
             oneTimeProductCart()?.forEach { it.validate() }
             paymentLink()
+            paymentMethodId()
             redirectImmediately()
             returnUrl()
             shortLink()
@@ -1839,6 +1924,7 @@ private constructor(
                 (onDemand.asKnown()?.validity() ?: 0) +
                 (oneTimeProductCart.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
                 (if (paymentLink.asKnown() == null) 0 else 1) +
+                (if (paymentMethodId.asKnown() == null) 0 else 1) +
                 (if (redirectImmediately.asKnown() == null) 0 else 1) +
                 (if (returnUrl.asKnown() == null) 0 else 1) +
                 (if (shortLink.asKnown() == null) 0 else 1) +
@@ -1865,6 +1951,7 @@ private constructor(
                 onDemand == other.onDemand &&
                 oneTimeProductCart == other.oneTimeProductCart &&
                 paymentLink == other.paymentLink &&
+                paymentMethodId == other.paymentMethodId &&
                 redirectImmediately == other.redirectImmediately &&
                 returnUrl == other.returnUrl &&
                 shortLink == other.shortLink &&
@@ -1889,6 +1976,7 @@ private constructor(
                 onDemand,
                 oneTimeProductCart,
                 paymentLink,
+                paymentMethodId,
                 redirectImmediately,
                 returnUrl,
                 shortLink,
@@ -1902,7 +1990,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{billing=$billing, customer=$customer, productId=$productId, quantity=$quantity, addons=$addons, allowedPaymentMethodTypes=$allowedPaymentMethodTypes, billingCurrency=$billingCurrency, discountCode=$discountCode, force3ds=$force3ds, metadata=$metadata, onDemand=$onDemand, oneTimeProductCart=$oneTimeProductCart, paymentLink=$paymentLink, redirectImmediately=$redirectImmediately, returnUrl=$returnUrl, shortLink=$shortLink, showSavedPaymentMethods=$showSavedPaymentMethods, taxId=$taxId, trialPeriodDays=$trialPeriodDays, additionalProperties=$additionalProperties}"
+            "Body{billing=$billing, customer=$customer, productId=$productId, quantity=$quantity, addons=$addons, allowedPaymentMethodTypes=$allowedPaymentMethodTypes, billingCurrency=$billingCurrency, discountCode=$discountCode, force3ds=$force3ds, metadata=$metadata, onDemand=$onDemand, oneTimeProductCart=$oneTimeProductCart, paymentLink=$paymentLink, paymentMethodId=$paymentMethodId, redirectImmediately=$redirectImmediately, returnUrl=$returnUrl, shortLink=$shortLink, showSavedPaymentMethods=$showSavedPaymentMethods, taxId=$taxId, trialPeriodDays=$trialPeriodDays, additionalProperties=$additionalProperties}"
     }
 
     /** Additional metadata for the subscription Defaults to empty if not specified */
