@@ -3,6 +3,7 @@
 package com.dodopayments.api.models.webhooks
 
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.disputes.Dispute
 import com.dodopayments.api.models.disputes.DisputeStage
 import com.dodopayments.api.models.disputes.DisputeStatus
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
@@ -18,7 +19,7 @@ internal class DisputeLostWebhookEventTest {
             DisputeLostWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    DisputeLostWebhookEvent.Data.builder()
+                    Dispute.builder()
                         .amount("amount")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -28,7 +29,6 @@ internal class DisputeLostWebhookEventTest {
                         .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                         .paymentId("payment_id")
                         .remarks("remarks")
-                        .payloadType(DisputeLostWebhookEvent.Data.PayloadType.DISPUTE)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -38,7 +38,7 @@ internal class DisputeLostWebhookEventTest {
         assertThat(disputeLostWebhookEvent.businessId()).isEqualTo("business_id")
         assertThat(disputeLostWebhookEvent.data())
             .isEqualTo(
-                DisputeLostWebhookEvent.Data.builder()
+                Dispute.builder()
                     .amount("amount")
                     .businessId("business_id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -48,7 +48,6 @@ internal class DisputeLostWebhookEventTest {
                     .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                     .paymentId("payment_id")
                     .remarks("remarks")
-                    .payloadType(DisputeLostWebhookEvent.Data.PayloadType.DISPUTE)
                     .build()
             )
         assertThat(disputeLostWebhookEvent.timestamp())
@@ -64,7 +63,7 @@ internal class DisputeLostWebhookEventTest {
             DisputeLostWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    DisputeLostWebhookEvent.Data.builder()
+                    Dispute.builder()
                         .amount("amount")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -74,7 +73,6 @@ internal class DisputeLostWebhookEventTest {
                         .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                         .paymentId("payment_id")
                         .remarks("remarks")
-                        .payloadType(DisputeLostWebhookEvent.Data.PayloadType.DISPUTE)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
