@@ -27,7 +27,7 @@ internal class PaymentProcessingWebhookEventTest {
             PaymentProcessingWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    PaymentProcessingWebhookEvent.Data.builder()
+                    Payment.builder()
                         .billing(
                             BillingAddress.builder()
                                 .country(CountryCode.AF)
@@ -90,6 +90,7 @@ internal class PaymentProcessingWebhookEventTest {
                         .settlementAmount(0)
                         .settlementCurrency(Currency.AED)
                         .totalAmount(0)
+                        .cardHolderName("card_holder_name")
                         .cardIssuingCountry(CountryCode.AF)
                         .cardLastFour("card_last_four")
                         .cardNetwork("card_network")
@@ -113,7 +114,6 @@ internal class PaymentProcessingWebhookEventTest {
                         .subscriptionId("subscription_id")
                         .tax(0)
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .payloadType(PaymentProcessingWebhookEvent.Data.PayloadType.PAYMENT)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -123,7 +123,7 @@ internal class PaymentProcessingWebhookEventTest {
         assertThat(paymentProcessingWebhookEvent.businessId()).isEqualTo("business_id")
         assertThat(paymentProcessingWebhookEvent.data())
             .isEqualTo(
-                PaymentProcessingWebhookEvent.Data.builder()
+                Payment.builder()
                     .billing(
                         BillingAddress.builder()
                             .country(CountryCode.AF)
@@ -186,6 +186,7 @@ internal class PaymentProcessingWebhookEventTest {
                     .settlementAmount(0)
                     .settlementCurrency(Currency.AED)
                     .totalAmount(0)
+                    .cardHolderName("card_holder_name")
                     .cardIssuingCountry(CountryCode.AF)
                     .cardLastFour("card_last_four")
                     .cardNetwork("card_network")
@@ -206,7 +207,6 @@ internal class PaymentProcessingWebhookEventTest {
                     .subscriptionId("subscription_id")
                     .tax(0)
                     .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .payloadType(PaymentProcessingWebhookEvent.Data.PayloadType.PAYMENT)
                     .build()
             )
         assertThat(paymentProcessingWebhookEvent.timestamp())
@@ -222,7 +222,7 @@ internal class PaymentProcessingWebhookEventTest {
             PaymentProcessingWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    PaymentProcessingWebhookEvent.Data.builder()
+                    Payment.builder()
                         .billing(
                             BillingAddress.builder()
                                 .country(CountryCode.AF)
@@ -285,6 +285,7 @@ internal class PaymentProcessingWebhookEventTest {
                         .settlementAmount(0)
                         .settlementCurrency(Currency.AED)
                         .totalAmount(0)
+                        .cardHolderName("card_holder_name")
                         .cardIssuingCountry(CountryCode.AF)
                         .cardLastFour("card_last_four")
                         .cardNetwork("card_network")
@@ -308,7 +309,6 @@ internal class PaymentProcessingWebhookEventTest {
                         .subscriptionId("subscription_id")
                         .tax(0)
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .payloadType(PaymentProcessingWebhookEvent.Data.PayloadType.PAYMENT)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

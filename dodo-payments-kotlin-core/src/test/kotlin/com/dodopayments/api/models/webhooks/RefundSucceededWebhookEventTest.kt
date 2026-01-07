@@ -21,7 +21,7 @@ internal class RefundSucceededWebhookEventTest {
             RefundSucceededWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    RefundSucceededWebhookEvent.Data.builder()
+                    Refund.builder()
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .customer(
@@ -49,7 +49,6 @@ internal class RefundSucceededWebhookEventTest {
                         .amount(0)
                         .currency(Currency.AED)
                         .reason("reason")
-                        .payloadType(RefundSucceededWebhookEvent.Data.PayloadType.REFUND)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -59,7 +58,7 @@ internal class RefundSucceededWebhookEventTest {
         assertThat(refundSucceededWebhookEvent.businessId()).isEqualTo("business_id")
         assertThat(refundSucceededWebhookEvent.data())
             .isEqualTo(
-                RefundSucceededWebhookEvent.Data.builder()
+                Refund.builder()
                     .businessId("business_id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .customer(
@@ -87,7 +86,6 @@ internal class RefundSucceededWebhookEventTest {
                     .amount(0)
                     .currency(Currency.AED)
                     .reason("reason")
-                    .payloadType(RefundSucceededWebhookEvent.Data.PayloadType.REFUND)
                     .build()
             )
         assertThat(refundSucceededWebhookEvent.timestamp())
@@ -103,7 +101,7 @@ internal class RefundSucceededWebhookEventTest {
             RefundSucceededWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    RefundSucceededWebhookEvent.Data.builder()
+                    Refund.builder()
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .customer(
@@ -131,7 +129,6 @@ internal class RefundSucceededWebhookEventTest {
                         .amount(0)
                         .currency(Currency.AED)
                         .reason("reason")
-                        .payloadType(RefundSucceededWebhookEvent.Data.PayloadType.REFUND)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

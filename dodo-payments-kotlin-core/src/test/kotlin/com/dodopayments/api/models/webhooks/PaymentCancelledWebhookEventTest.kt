@@ -27,7 +27,7 @@ internal class PaymentCancelledWebhookEventTest {
             PaymentCancelledWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    PaymentCancelledWebhookEvent.Data.builder()
+                    Payment.builder()
                         .billing(
                             BillingAddress.builder()
                                 .country(CountryCode.AF)
@@ -90,6 +90,7 @@ internal class PaymentCancelledWebhookEventTest {
                         .settlementAmount(0)
                         .settlementCurrency(Currency.AED)
                         .totalAmount(0)
+                        .cardHolderName("card_holder_name")
                         .cardIssuingCountry(CountryCode.AF)
                         .cardLastFour("card_last_four")
                         .cardNetwork("card_network")
@@ -113,7 +114,6 @@ internal class PaymentCancelledWebhookEventTest {
                         .subscriptionId("subscription_id")
                         .tax(0)
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .payloadType(PaymentCancelledWebhookEvent.Data.PayloadType.PAYMENT)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -123,7 +123,7 @@ internal class PaymentCancelledWebhookEventTest {
         assertThat(paymentCancelledWebhookEvent.businessId()).isEqualTo("business_id")
         assertThat(paymentCancelledWebhookEvent.data())
             .isEqualTo(
-                PaymentCancelledWebhookEvent.Data.builder()
+                Payment.builder()
                     .billing(
                         BillingAddress.builder()
                             .country(CountryCode.AF)
@@ -186,6 +186,7 @@ internal class PaymentCancelledWebhookEventTest {
                     .settlementAmount(0)
                     .settlementCurrency(Currency.AED)
                     .totalAmount(0)
+                    .cardHolderName("card_holder_name")
                     .cardIssuingCountry(CountryCode.AF)
                     .cardLastFour("card_last_four")
                     .cardNetwork("card_network")
@@ -206,7 +207,6 @@ internal class PaymentCancelledWebhookEventTest {
                     .subscriptionId("subscription_id")
                     .tax(0)
                     .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .payloadType(PaymentCancelledWebhookEvent.Data.PayloadType.PAYMENT)
                     .build()
             )
         assertThat(paymentCancelledWebhookEvent.timestamp())
@@ -222,7 +222,7 @@ internal class PaymentCancelledWebhookEventTest {
             PaymentCancelledWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    PaymentCancelledWebhookEvent.Data.builder()
+                    Payment.builder()
                         .billing(
                             BillingAddress.builder()
                                 .country(CountryCode.AF)
@@ -285,6 +285,7 @@ internal class PaymentCancelledWebhookEventTest {
                         .settlementAmount(0)
                         .settlementCurrency(Currency.AED)
                         .totalAmount(0)
+                        .cardHolderName("card_holder_name")
                         .cardIssuingCountry(CountryCode.AF)
                         .cardLastFour("card_last_four")
                         .cardNetwork("card_network")
@@ -308,7 +309,6 @@ internal class PaymentCancelledWebhookEventTest {
                         .subscriptionId("subscription_id")
                         .tax(0)
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .payloadType(PaymentCancelledWebhookEvent.Data.PayloadType.PAYMENT)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

@@ -8,6 +8,7 @@ import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.dodopayments.api.models.disputes.Dispute
 import com.dodopayments.api.models.disputes.DisputeStage
 import com.dodopayments.api.models.disputes.DisputeStatus
+import com.dodopayments.api.models.licensekeys.LicenseKey
 import com.dodopayments.api.models.licensekeys.LicenseKeyStatus
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
@@ -37,7 +38,7 @@ internal class UnsafeUnwrapWebhookEventTest {
             DisputeAcceptedWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    DisputeAcceptedWebhookEvent.Data.builder()
+                    Dispute.builder()
                         .amount("amount")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -47,7 +48,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                         .paymentId("payment_id")
                         .remarks("remarks")
-                        .payloadType(DisputeAcceptedWebhookEvent.Data.PayloadType.DISPUTE)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -88,7 +88,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                 DisputeAcceptedWebhookEvent.builder()
                     .businessId("business_id")
                     .data(
-                        DisputeAcceptedWebhookEvent.Data.builder()
+                        Dispute.builder()
                             .amount("amount")
                             .businessId("business_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -98,7 +98,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                             .paymentId("payment_id")
                             .remarks("remarks")
-                            .payloadType(DisputeAcceptedWebhookEvent.Data.PayloadType.DISPUTE)
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -121,7 +120,7 @@ internal class UnsafeUnwrapWebhookEventTest {
             DisputeCancelledWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    DisputeCancelledWebhookEvent.Data.builder()
+                    Dispute.builder()
                         .amount("amount")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -131,7 +130,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                         .paymentId("payment_id")
                         .remarks("remarks")
-                        .payloadType(DisputeCancelledWebhookEvent.Data.PayloadType.DISPUTE)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -172,7 +170,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                 DisputeCancelledWebhookEvent.builder()
                     .businessId("business_id")
                     .data(
-                        DisputeCancelledWebhookEvent.Data.builder()
+                        Dispute.builder()
                             .amount("amount")
                             .businessId("business_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -182,7 +180,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                             .paymentId("payment_id")
                             .remarks("remarks")
-                            .payloadType(DisputeCancelledWebhookEvent.Data.PayloadType.DISPUTE)
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -205,7 +202,7 @@ internal class UnsafeUnwrapWebhookEventTest {
             DisputeChallengedWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    DisputeChallengedWebhookEvent.Data.builder()
+                    Dispute.builder()
                         .amount("amount")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -215,7 +212,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                         .paymentId("payment_id")
                         .remarks("remarks")
-                        .payloadType(DisputeChallengedWebhookEvent.Data.PayloadType.DISPUTE)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -257,7 +253,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                 DisputeChallengedWebhookEvent.builder()
                     .businessId("business_id")
                     .data(
-                        DisputeChallengedWebhookEvent.Data.builder()
+                        Dispute.builder()
                             .amount("amount")
                             .businessId("business_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -267,7 +263,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                             .paymentId("payment_id")
                             .remarks("remarks")
-                            .payloadType(DisputeChallengedWebhookEvent.Data.PayloadType.DISPUTE)
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -290,7 +285,7 @@ internal class UnsafeUnwrapWebhookEventTest {
             DisputeExpiredWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    DisputeExpiredWebhookEvent.Data.builder()
+                    Dispute.builder()
                         .amount("amount")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -300,7 +295,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                         .paymentId("payment_id")
                         .remarks("remarks")
-                        .payloadType(DisputeExpiredWebhookEvent.Data.PayloadType.DISPUTE)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -341,7 +335,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                 DisputeExpiredWebhookEvent.builder()
                     .businessId("business_id")
                     .data(
-                        DisputeExpiredWebhookEvent.Data.builder()
+                        Dispute.builder()
                             .amount("amount")
                             .businessId("business_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -351,7 +345,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                             .paymentId("payment_id")
                             .remarks("remarks")
-                            .payloadType(DisputeExpiredWebhookEvent.Data.PayloadType.DISPUTE)
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -374,7 +367,7 @@ internal class UnsafeUnwrapWebhookEventTest {
             DisputeLostWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    DisputeLostWebhookEvent.Data.builder()
+                    Dispute.builder()
                         .amount("amount")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -384,7 +377,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                         .paymentId("payment_id")
                         .remarks("remarks")
-                        .payloadType(DisputeLostWebhookEvent.Data.PayloadType.DISPUTE)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -425,7 +417,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                 DisputeLostWebhookEvent.builder()
                     .businessId("business_id")
                     .data(
-                        DisputeLostWebhookEvent.Data.builder()
+                        Dispute.builder()
                             .amount("amount")
                             .businessId("business_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -435,7 +427,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                             .paymentId("payment_id")
                             .remarks("remarks")
-                            .payloadType(DisputeLostWebhookEvent.Data.PayloadType.DISPUTE)
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -458,7 +449,7 @@ internal class UnsafeUnwrapWebhookEventTest {
             DisputeOpenedWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    DisputeOpenedWebhookEvent.Data.builder()
+                    Dispute.builder()
                         .amount("amount")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -468,7 +459,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                         .paymentId("payment_id")
                         .remarks("remarks")
-                        .payloadType(DisputeOpenedWebhookEvent.Data.PayloadType.DISPUTE)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -509,7 +499,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                 DisputeOpenedWebhookEvent.builder()
                     .businessId("business_id")
                     .data(
-                        DisputeOpenedWebhookEvent.Data.builder()
+                        Dispute.builder()
                             .amount("amount")
                             .businessId("business_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -519,7 +509,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                             .paymentId("payment_id")
                             .remarks("remarks")
-                            .payloadType(DisputeOpenedWebhookEvent.Data.PayloadType.DISPUTE)
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -542,7 +531,7 @@ internal class UnsafeUnwrapWebhookEventTest {
             DisputeWonWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    DisputeWonWebhookEvent.Data.builder()
+                    Dispute.builder()
                         .amount("amount")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -552,7 +541,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                         .paymentId("payment_id")
                         .remarks("remarks")
-                        .payloadType(DisputeWonWebhookEvent.Data.PayloadType.DISPUTE)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -593,7 +581,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                 DisputeWonWebhookEvent.builder()
                     .businessId("business_id")
                     .data(
-                        DisputeWonWebhookEvent.Data.builder()
+                        Dispute.builder()
                             .amount("amount")
                             .businessId("business_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -603,7 +591,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                             .paymentId("payment_id")
                             .remarks("remarks")
-                            .payloadType(DisputeWonWebhookEvent.Data.PayloadType.DISPUTE)
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -626,7 +613,7 @@ internal class UnsafeUnwrapWebhookEventTest {
             LicenseKeyCreatedWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    LicenseKeyCreatedWebhookEvent.Data.builder()
+                    LicenseKey.builder()
                         .id("lic_123")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
@@ -639,7 +626,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .activationsLimit(5)
                         .expiresAt(OffsetDateTime.parse("2024-12-31T23:59:59Z"))
                         .subscriptionId("subscription_id")
-                        .payloadType(LicenseKeyCreatedWebhookEvent.Data.PayloadType.LICENSE_KEY)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -681,7 +667,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                 LicenseKeyCreatedWebhookEvent.builder()
                     .businessId("business_id")
                     .data(
-                        LicenseKeyCreatedWebhookEvent.Data.builder()
+                        LicenseKey.builder()
                             .id("lic_123")
                             .businessId("business_id")
                             .createdAt(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
@@ -694,7 +680,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .activationsLimit(5)
                             .expiresAt(OffsetDateTime.parse("2024-12-31T23:59:59Z"))
                             .subscriptionId("subscription_id")
-                            .payloadType(LicenseKeyCreatedWebhookEvent.Data.PayloadType.LICENSE_KEY)
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -717,7 +702,7 @@ internal class UnsafeUnwrapWebhookEventTest {
             PaymentCancelledWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    PaymentCancelledWebhookEvent.Data.builder()
+                    Payment.builder()
                         .billing(
                             BillingAddress.builder()
                                 .country(CountryCode.AF)
@@ -780,6 +765,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .settlementAmount(0)
                         .settlementCurrency(Currency.AED)
                         .totalAmount(0)
+                        .cardHolderName("card_holder_name")
                         .cardIssuingCountry(CountryCode.AF)
                         .cardLastFour("card_last_four")
                         .cardNetwork("card_network")
@@ -803,7 +789,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .subscriptionId("subscription_id")
                         .tax(0)
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .payloadType(PaymentCancelledWebhookEvent.Data.PayloadType.PAYMENT)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -844,7 +829,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                 PaymentCancelledWebhookEvent.builder()
                     .businessId("business_id")
                     .data(
-                        PaymentCancelledWebhookEvent.Data.builder()
+                        Payment.builder()
                             .billing(
                                 BillingAddress.builder()
                                     .country(CountryCode.AF)
@@ -907,6 +892,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .settlementAmount(0)
                             .settlementCurrency(Currency.AED)
                             .totalAmount(0)
+                            .cardHolderName("card_holder_name")
                             .cardIssuingCountry(CountryCode.AF)
                             .cardLastFour("card_last_four")
                             .cardNetwork("card_network")
@@ -930,7 +916,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .subscriptionId("subscription_id")
                             .tax(0)
                             .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .payloadType(PaymentCancelledWebhookEvent.Data.PayloadType.PAYMENT)
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -953,7 +938,7 @@ internal class UnsafeUnwrapWebhookEventTest {
             PaymentFailedWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    PaymentFailedWebhookEvent.Data.builder()
+                    Payment.builder()
                         .billing(
                             BillingAddress.builder()
                                 .country(CountryCode.AF)
@@ -1016,6 +1001,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .settlementAmount(0)
                         .settlementCurrency(Currency.AED)
                         .totalAmount(0)
+                        .cardHolderName("card_holder_name")
                         .cardIssuingCountry(CountryCode.AF)
                         .cardLastFour("card_last_four")
                         .cardNetwork("card_network")
@@ -1039,7 +1025,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .subscriptionId("subscription_id")
                         .tax(0)
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .payloadType(PaymentFailedWebhookEvent.Data.PayloadType.PAYMENT)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -1080,7 +1065,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                 PaymentFailedWebhookEvent.builder()
                     .businessId("business_id")
                     .data(
-                        PaymentFailedWebhookEvent.Data.builder()
+                        Payment.builder()
                             .billing(
                                 BillingAddress.builder()
                                     .country(CountryCode.AF)
@@ -1143,6 +1128,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .settlementAmount(0)
                             .settlementCurrency(Currency.AED)
                             .totalAmount(0)
+                            .cardHolderName("card_holder_name")
                             .cardIssuingCountry(CountryCode.AF)
                             .cardLastFour("card_last_four")
                             .cardNetwork("card_network")
@@ -1166,7 +1152,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .subscriptionId("subscription_id")
                             .tax(0)
                             .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .payloadType(PaymentFailedWebhookEvent.Data.PayloadType.PAYMENT)
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -1189,7 +1174,7 @@ internal class UnsafeUnwrapWebhookEventTest {
             PaymentProcessingWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    PaymentProcessingWebhookEvent.Data.builder()
+                    Payment.builder()
                         .billing(
                             BillingAddress.builder()
                                 .country(CountryCode.AF)
@@ -1252,6 +1237,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .settlementAmount(0)
                         .settlementCurrency(Currency.AED)
                         .totalAmount(0)
+                        .cardHolderName("card_holder_name")
                         .cardIssuingCountry(CountryCode.AF)
                         .cardLastFour("card_last_four")
                         .cardNetwork("card_network")
@@ -1275,7 +1261,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .subscriptionId("subscription_id")
                         .tax(0)
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .payloadType(PaymentProcessingWebhookEvent.Data.PayloadType.PAYMENT)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -1317,7 +1302,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                 PaymentProcessingWebhookEvent.builder()
                     .businessId("business_id")
                     .data(
-                        PaymentProcessingWebhookEvent.Data.builder()
+                        Payment.builder()
                             .billing(
                                 BillingAddress.builder()
                                     .country(CountryCode.AF)
@@ -1380,6 +1365,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .settlementAmount(0)
                             .settlementCurrency(Currency.AED)
                             .totalAmount(0)
+                            .cardHolderName("card_holder_name")
                             .cardIssuingCountry(CountryCode.AF)
                             .cardLastFour("card_last_four")
                             .cardNetwork("card_network")
@@ -1403,7 +1389,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .subscriptionId("subscription_id")
                             .tax(0)
                             .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .payloadType(PaymentProcessingWebhookEvent.Data.PayloadType.PAYMENT)
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -1426,7 +1411,7 @@ internal class UnsafeUnwrapWebhookEventTest {
             PaymentSucceededWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    PaymentSucceededWebhookEvent.Data.builder()
+                    Payment.builder()
                         .billing(
                             BillingAddress.builder()
                                 .country(CountryCode.AF)
@@ -1489,6 +1474,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .settlementAmount(0)
                         .settlementCurrency(Currency.AED)
                         .totalAmount(0)
+                        .cardHolderName("card_holder_name")
                         .cardIssuingCountry(CountryCode.AF)
                         .cardLastFour("card_last_four")
                         .cardNetwork("card_network")
@@ -1512,7 +1498,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .subscriptionId("subscription_id")
                         .tax(0)
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .payloadType(PaymentSucceededWebhookEvent.Data.PayloadType.PAYMENT)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -1553,7 +1538,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                 PaymentSucceededWebhookEvent.builder()
                     .businessId("business_id")
                     .data(
-                        PaymentSucceededWebhookEvent.Data.builder()
+                        Payment.builder()
                             .billing(
                                 BillingAddress.builder()
                                     .country(CountryCode.AF)
@@ -1616,6 +1601,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .settlementAmount(0)
                             .settlementCurrency(Currency.AED)
                             .totalAmount(0)
+                            .cardHolderName("card_holder_name")
                             .cardIssuingCountry(CountryCode.AF)
                             .cardLastFour("card_last_four")
                             .cardNetwork("card_network")
@@ -1639,7 +1625,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .subscriptionId("subscription_id")
                             .tax(0)
                             .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .payloadType(PaymentSucceededWebhookEvent.Data.PayloadType.PAYMENT)
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -1662,7 +1647,7 @@ internal class UnsafeUnwrapWebhookEventTest {
             RefundFailedWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    RefundFailedWebhookEvent.Data.builder()
+                    Refund.builder()
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .customer(
@@ -1690,7 +1675,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .amount(0)
                         .currency(Currency.AED)
                         .reason("reason")
-                        .payloadType(RefundFailedWebhookEvent.Data.PayloadType.REFUND)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -1731,7 +1715,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                 RefundFailedWebhookEvent.builder()
                     .businessId("business_id")
                     .data(
-                        RefundFailedWebhookEvent.Data.builder()
+                        Refund.builder()
                             .businessId("business_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .customer(
@@ -1759,7 +1743,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .amount(0)
                             .currency(Currency.AED)
                             .reason("reason")
-                            .payloadType(RefundFailedWebhookEvent.Data.PayloadType.REFUND)
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -1782,7 +1765,7 @@ internal class UnsafeUnwrapWebhookEventTest {
             RefundSucceededWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    RefundSucceededWebhookEvent.Data.builder()
+                    Refund.builder()
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .customer(
@@ -1810,7 +1793,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .amount(0)
                         .currency(Currency.AED)
                         .reason("reason")
-                        .payloadType(RefundSucceededWebhookEvent.Data.PayloadType.REFUND)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -1851,7 +1833,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                 RefundSucceededWebhookEvent.builder()
                     .businessId("business_id")
                     .data(
-                        RefundSucceededWebhookEvent.Data.builder()
+                        Refund.builder()
                             .businessId("business_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .customer(
@@ -1879,7 +1861,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .amount(0)
                             .currency(Currency.AED)
                             .reason("reason")
-                            .payloadType(RefundSucceededWebhookEvent.Data.PayloadType.REFUND)
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -1902,7 +1883,7 @@ internal class UnsafeUnwrapWebhookEventTest {
             SubscriptionActiveWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    SubscriptionActiveWebhookEvent.Data.builder()
+                    Subscription.builder()
                         .addAddon(
                             AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build()
                         )
@@ -1967,7 +1948,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
                         .taxId("tax_id")
-                        .payloadType(SubscriptionActiveWebhookEvent.Data.PayloadType.SUBSCRIPTION)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -2009,7 +1989,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                 SubscriptionActiveWebhookEvent.builder()
                     .businessId("business_id")
                     .data(
-                        SubscriptionActiveWebhookEvent.Data.builder()
+                        Subscription.builder()
                             .addAddon(
                                 AddonCartResponseItem.builder()
                                     .addonId("addon_id")
@@ -2077,9 +2057,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .paymentMethodId("payment_method_id")
                             .taxId("tax_id")
-                            .payloadType(
-                                SubscriptionActiveWebhookEvent.Data.PayloadType.SUBSCRIPTION
-                            )
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -2102,7 +2079,7 @@ internal class UnsafeUnwrapWebhookEventTest {
             SubscriptionCancelledWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    SubscriptionCancelledWebhookEvent.Data.builder()
+                    Subscription.builder()
                         .addAddon(
                             AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build()
                         )
@@ -2167,9 +2144,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
                         .taxId("tax_id")
-                        .payloadType(
-                            SubscriptionCancelledWebhookEvent.Data.PayloadType.SUBSCRIPTION
-                        )
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -2212,7 +2186,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                 SubscriptionCancelledWebhookEvent.builder()
                     .businessId("business_id")
                     .data(
-                        SubscriptionCancelledWebhookEvent.Data.builder()
+                        Subscription.builder()
                             .addAddon(
                                 AddonCartResponseItem.builder()
                                     .addonId("addon_id")
@@ -2280,9 +2254,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .paymentMethodId("payment_method_id")
                             .taxId("tax_id")
-                            .payloadType(
-                                SubscriptionCancelledWebhookEvent.Data.PayloadType.SUBSCRIPTION
-                            )
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -2305,7 +2276,7 @@ internal class UnsafeUnwrapWebhookEventTest {
             SubscriptionExpiredWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    SubscriptionExpiredWebhookEvent.Data.builder()
+                    Subscription.builder()
                         .addAddon(
                             AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build()
                         )
@@ -2370,7 +2341,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
                         .taxId("tax_id")
-                        .payloadType(SubscriptionExpiredWebhookEvent.Data.PayloadType.SUBSCRIPTION)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -2412,7 +2382,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                 SubscriptionExpiredWebhookEvent.builder()
                     .businessId("business_id")
                     .data(
-                        SubscriptionExpiredWebhookEvent.Data.builder()
+                        Subscription.builder()
                             .addAddon(
                                 AddonCartResponseItem.builder()
                                     .addonId("addon_id")
@@ -2480,9 +2450,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .paymentMethodId("payment_method_id")
                             .taxId("tax_id")
-                            .payloadType(
-                                SubscriptionExpiredWebhookEvent.Data.PayloadType.SUBSCRIPTION
-                            )
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -2505,7 +2472,7 @@ internal class UnsafeUnwrapWebhookEventTest {
             SubscriptionFailedWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    SubscriptionFailedWebhookEvent.Data.builder()
+                    Subscription.builder()
                         .addAddon(
                             AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build()
                         )
@@ -2570,7 +2537,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
                         .taxId("tax_id")
-                        .payloadType(SubscriptionFailedWebhookEvent.Data.PayloadType.SUBSCRIPTION)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -2612,7 +2578,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                 SubscriptionFailedWebhookEvent.builder()
                     .businessId("business_id")
                     .data(
-                        SubscriptionFailedWebhookEvent.Data.builder()
+                        Subscription.builder()
                             .addAddon(
                                 AddonCartResponseItem.builder()
                                     .addonId("addon_id")
@@ -2680,9 +2646,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .paymentMethodId("payment_method_id")
                             .taxId("tax_id")
-                            .payloadType(
-                                SubscriptionFailedWebhookEvent.Data.PayloadType.SUBSCRIPTION
-                            )
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -2705,7 +2668,7 @@ internal class UnsafeUnwrapWebhookEventTest {
             SubscriptionOnHoldWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    SubscriptionOnHoldWebhookEvent.Data.builder()
+                    Subscription.builder()
                         .addAddon(
                             AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build()
                         )
@@ -2770,7 +2733,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
                         .taxId("tax_id")
-                        .payloadType(SubscriptionOnHoldWebhookEvent.Data.PayloadType.SUBSCRIPTION)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -2812,7 +2774,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                 SubscriptionOnHoldWebhookEvent.builder()
                     .businessId("business_id")
                     .data(
-                        SubscriptionOnHoldWebhookEvent.Data.builder()
+                        Subscription.builder()
                             .addAddon(
                                 AddonCartResponseItem.builder()
                                     .addonId("addon_id")
@@ -2880,9 +2842,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .paymentMethodId("payment_method_id")
                             .taxId("tax_id")
-                            .payloadType(
-                                SubscriptionOnHoldWebhookEvent.Data.PayloadType.SUBSCRIPTION
-                            )
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -2905,7 +2864,7 @@ internal class UnsafeUnwrapWebhookEventTest {
             SubscriptionPlanChangedWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    SubscriptionPlanChangedWebhookEvent.Data.builder()
+                    Subscription.builder()
                         .addAddon(
                             AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build()
                         )
@@ -2970,9 +2929,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
                         .taxId("tax_id")
-                        .payloadType(
-                            SubscriptionPlanChangedWebhookEvent.Data.PayloadType.SUBSCRIPTION
-                        )
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -3015,7 +2971,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                 SubscriptionPlanChangedWebhookEvent.builder()
                     .businessId("business_id")
                     .data(
-                        SubscriptionPlanChangedWebhookEvent.Data.builder()
+                        Subscription.builder()
                             .addAddon(
                                 AddonCartResponseItem.builder()
                                     .addonId("addon_id")
@@ -3083,9 +3039,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .paymentMethodId("payment_method_id")
                             .taxId("tax_id")
-                            .payloadType(
-                                SubscriptionPlanChangedWebhookEvent.Data.PayloadType.SUBSCRIPTION
-                            )
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -3108,7 +3061,7 @@ internal class UnsafeUnwrapWebhookEventTest {
             SubscriptionRenewedWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    SubscriptionRenewedWebhookEvent.Data.builder()
+                    Subscription.builder()
                         .addAddon(
                             AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build()
                         )
@@ -3173,7 +3126,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
                         .taxId("tax_id")
-                        .payloadType(SubscriptionRenewedWebhookEvent.Data.PayloadType.SUBSCRIPTION)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -3215,7 +3167,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                 SubscriptionRenewedWebhookEvent.builder()
                     .businessId("business_id")
                     .data(
-                        SubscriptionRenewedWebhookEvent.Data.builder()
+                        Subscription.builder()
                             .addAddon(
                                 AddonCartResponseItem.builder()
                                     .addonId("addon_id")
@@ -3283,9 +3235,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .paymentMethodId("payment_method_id")
                             .taxId("tax_id")
-                            .payloadType(
-                                SubscriptionRenewedWebhookEvent.Data.PayloadType.SUBSCRIPTION
-                            )
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -3308,7 +3257,7 @@ internal class UnsafeUnwrapWebhookEventTest {
             SubscriptionUpdatedWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    SubscriptionUpdatedWebhookEvent.Data.builder()
+                    Subscription.builder()
                         .addAddon(
                             AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build()
                         )
@@ -3373,7 +3322,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
                         .taxId("tax_id")
-                        .payloadType(SubscriptionUpdatedWebhookEvent.Data.PayloadType.SUBSCRIPTION)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -3415,7 +3363,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                 SubscriptionUpdatedWebhookEvent.builder()
                     .businessId("business_id")
                     .data(
-                        SubscriptionUpdatedWebhookEvent.Data.builder()
+                        Subscription.builder()
                             .addAddon(
                                 AddonCartResponseItem.builder()
                                     .addonId("addon_id")
@@ -3483,9 +3431,6 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .paymentMethodId("payment_method_id")
                             .taxId("tax_id")
-                            .payloadType(
-                                SubscriptionUpdatedWebhookEvent.Data.PayloadType.SUBSCRIPTION
-                            )
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

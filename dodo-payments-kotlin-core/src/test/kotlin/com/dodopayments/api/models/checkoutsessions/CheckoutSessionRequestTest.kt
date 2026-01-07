@@ -29,7 +29,7 @@ internal class CheckoutSessionRequestTest {
                         .amount(0)
                         .build()
                 )
-                .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
                 .billingAddress(
                     CheckoutSessionRequest.BillingAddress.builder()
                         .country(CountryCode.AF)
@@ -105,7 +105,7 @@ internal class CheckoutSessionRequestTest {
                     .build()
             )
         assertThat(checkoutSessionRequest.allowedPaymentMethodTypes())
-            .containsExactly(PaymentMethodTypes.CREDIT)
+            .containsExactly(PaymentMethodTypes.ACH)
         assertThat(checkoutSessionRequest.billingAddress())
             .isEqualTo(
                 CheckoutSessionRequest.BillingAddress.builder()
@@ -194,7 +194,7 @@ internal class CheckoutSessionRequestTest {
                         .amount(0)
                         .build()
                 )
-                .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
                 .billingAddress(
                     CheckoutSessionRequest.BillingAddress.builder()
                         .country(CountryCode.AF)
