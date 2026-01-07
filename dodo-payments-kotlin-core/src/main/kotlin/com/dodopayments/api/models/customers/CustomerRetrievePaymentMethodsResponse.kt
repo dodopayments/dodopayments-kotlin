@@ -214,10 +214,6 @@ private constructor(
         )
 
         /**
-         * PaymentMethod enum from hyperswitch
-         *
-         * https://github.com/juspay/hyperswitch/blob/ecd05d53c99ae701ac94893ec632a3988afe3238/crates/common_enums/src/enums.rs#L2097
-         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
@@ -357,11 +353,6 @@ private constructor(
                 additionalProperties = item.additionalProperties.toMutableMap()
             }
 
-            /**
-             * PaymentMethod enum from hyperswitch
-             *
-             * https://github.com/juspay/hyperswitch/blob/ecd05d53c99ae701ac94893ec632a3988afe3238/crates/common_enums/src/enums.rs#L2097
-             */
             fun paymentMethod(paymentMethod: PaymentMethod) =
                 paymentMethod(JsonField.of(paymentMethod))
 
@@ -533,11 +524,6 @@ private constructor(
                 (paymentMethodType.asKnown()?.validity() ?: 0) +
                 (if (recurringEnabled.asKnown() == null) 0 else 1)
 
-        /**
-         * PaymentMethod enum from hyperswitch
-         *
-         * https://github.com/juspay/hyperswitch/blob/ecd05d53c99ae701ac94893ec632a3988afe3238/crates/common_enums/src/enums.rs#L2097
-         */
         class PaymentMethod @JsonCreator private constructor(private val value: JsonField<String>) :
             Enum {
 
@@ -749,6 +735,7 @@ private constructor(
         class Card
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
+            private val cardHolderName: JsonField<String>,
             private val cardIssuingCountry: JsonField<CountryCode>,
             private val cardNetwork: JsonField<String>,
             private val cardType: JsonField<String>,
@@ -760,6 +747,9 @@ private constructor(
 
             @JsonCreator
             private constructor(
+                @JsonProperty("card_holder_name")
+                @ExcludeMissing
+                cardHolderName: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("card_issuing_country")
                 @ExcludeMissing
                 cardIssuingCountry: JsonField<CountryCode> = JsonMissing.of(),
@@ -779,6 +769,7 @@ private constructor(
                 @ExcludeMissing
                 last4Digits: JsonField<String> = JsonMissing.of(),
             ) : this(
+                cardHolderName,
                 cardIssuingCountry,
                 cardNetwork,
                 cardType,
@@ -787,6 +778,12 @@ private constructor(
                 last4Digits,
                 mutableMapOf(),
             )
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun cardHolderName(): String? = cardHolderName.getNullable("card_holder_name")
 
             /**
              * ISO country code alpha2 variant
@@ -826,6 +823,16 @@ private constructor(
              *   (e.g. if the server responded with an unexpected value).
              */
             fun last4Digits(): String? = last4Digits.getNullable("last4_digits")
+
+            /**
+             * Returns the raw JSON value of [cardHolderName].
+             *
+             * Unlike [cardHolderName], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("card_holder_name")
+            @ExcludeMissing
+            fun _cardHolderName(): JsonField<String> = cardHolderName
 
             /**
              * Returns the raw JSON value of [cardIssuingCountry].
@@ -906,6 +913,7 @@ private constructor(
             /** A builder for [Card]. */
             class Builder internal constructor() {
 
+                private var cardHolderName: JsonField<String> = JsonMissing.of()
                 private var cardIssuingCountry: JsonField<CountryCode> = JsonMissing.of()
                 private var cardNetwork: JsonField<String> = JsonMissing.of()
                 private var cardType: JsonField<String> = JsonMissing.of()
@@ -915,6 +923,7 @@ private constructor(
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 internal fun from(card: Card) = apply {
+                    cardHolderName = card.cardHolderName
                     cardIssuingCountry = card.cardIssuingCountry
                     cardNetwork = card.cardNetwork
                     cardType = card.cardType
@@ -922,6 +931,20 @@ private constructor(
                     expiryYear = card.expiryYear
                     last4Digits = card.last4Digits
                     additionalProperties = card.additionalProperties.toMutableMap()
+                }
+
+                fun cardHolderName(cardHolderName: String?) =
+                    cardHolderName(JsonField.ofNullable(cardHolderName))
+
+                /**
+                 * Sets [Builder.cardHolderName] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.cardHolderName] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun cardHolderName(cardHolderName: JsonField<String>) = apply {
+                    this.cardHolderName = cardHolderName
                 }
 
                 /** ISO country code alpha2 variant */
@@ -1034,6 +1057,7 @@ private constructor(
                  */
                 fun build(): Card =
                     Card(
+                        cardHolderName,
                         cardIssuingCountry,
                         cardNetwork,
                         cardType,
@@ -1051,6 +1075,7 @@ private constructor(
                     return@apply
                 }
 
+                cardHolderName()
                 cardIssuingCountry()?.validate()
                 cardNetwork()
                 cardType()
@@ -1075,7 +1100,8 @@ private constructor(
              * Used for best match union deserialization.
              */
             internal fun validity(): Int =
-                (cardIssuingCountry.asKnown()?.validity() ?: 0) +
+                (if (cardHolderName.asKnown() == null) 0 else 1) +
+                    (cardIssuingCountry.asKnown()?.validity() ?: 0) +
                     (if (cardNetwork.asKnown() == null) 0 else 1) +
                     (if (cardType.asKnown() == null) 0 else 1) +
                     (if (expiryMonth.asKnown() == null) 0 else 1) +
@@ -1088,6 +1114,7 @@ private constructor(
                 }
 
                 return other is Card &&
+                    cardHolderName == other.cardHolderName &&
                     cardIssuingCountry == other.cardIssuingCountry &&
                     cardNetwork == other.cardNetwork &&
                     cardType == other.cardType &&
@@ -1099,6 +1126,7 @@ private constructor(
 
             private val hashCode: Int by lazy {
                 Objects.hash(
+                    cardHolderName,
                     cardIssuingCountry,
                     cardNetwork,
                     cardType,
@@ -1112,7 +1140,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Card{cardIssuingCountry=$cardIssuingCountry, cardNetwork=$cardNetwork, cardType=$cardType, expiryMonth=$expiryMonth, expiryYear=$expiryYear, last4Digits=$last4Digits, additionalProperties=$additionalProperties}"
+                "Card{cardHolderName=$cardHolderName, cardIssuingCountry=$cardIssuingCountry, cardNetwork=$cardNetwork, cardType=$cardType, expiryMonth=$expiryMonth, expiryYear=$expiryYear, last4Digits=$last4Digits, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {

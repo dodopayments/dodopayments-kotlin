@@ -3,6 +3,7 @@
 package com.dodopayments.api.models.webhooks
 
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.licensekeys.LicenseKey
 import com.dodopayments.api.models.licensekeys.LicenseKeyStatus
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
@@ -17,7 +18,7 @@ internal class LicenseKeyCreatedWebhookEventTest {
             LicenseKeyCreatedWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    LicenseKeyCreatedWebhookEvent.Data.builder()
+                    LicenseKey.builder()
                         .id("lic_123")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
@@ -30,7 +31,6 @@ internal class LicenseKeyCreatedWebhookEventTest {
                         .activationsLimit(5)
                         .expiresAt(OffsetDateTime.parse("2024-12-31T23:59:59Z"))
                         .subscriptionId("subscription_id")
-                        .payloadType(LicenseKeyCreatedWebhookEvent.Data.PayloadType.LICENSE_KEY)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -40,7 +40,7 @@ internal class LicenseKeyCreatedWebhookEventTest {
         assertThat(licenseKeyCreatedWebhookEvent.businessId()).isEqualTo("business_id")
         assertThat(licenseKeyCreatedWebhookEvent.data())
             .isEqualTo(
-                LicenseKeyCreatedWebhookEvent.Data.builder()
+                LicenseKey.builder()
                     .id("lic_123")
                     .businessId("business_id")
                     .createdAt(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
@@ -53,7 +53,6 @@ internal class LicenseKeyCreatedWebhookEventTest {
                     .activationsLimit(5)
                     .expiresAt(OffsetDateTime.parse("2024-12-31T23:59:59Z"))
                     .subscriptionId("subscription_id")
-                    .payloadType(LicenseKeyCreatedWebhookEvent.Data.PayloadType.LICENSE_KEY)
                     .build()
             )
         assertThat(licenseKeyCreatedWebhookEvent.timestamp())
@@ -69,7 +68,7 @@ internal class LicenseKeyCreatedWebhookEventTest {
             LicenseKeyCreatedWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    LicenseKeyCreatedWebhookEvent.Data.builder()
+                    LicenseKey.builder()
                         .id("lic_123")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
@@ -82,7 +81,6 @@ internal class LicenseKeyCreatedWebhookEventTest {
                         .activationsLimit(5)
                         .expiresAt(OffsetDateTime.parse("2024-12-31T23:59:59Z"))
                         .subscriptionId("subscription_id")
-                        .payloadType(LicenseKeyCreatedWebhookEvent.Data.PayloadType.LICENSE_KEY)
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

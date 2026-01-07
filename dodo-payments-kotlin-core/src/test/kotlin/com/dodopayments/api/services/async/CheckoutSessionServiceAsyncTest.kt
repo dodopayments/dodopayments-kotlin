@@ -38,7 +38,7 @@ internal class CheckoutSessionServiceAsyncTest {
                             .amount(0)
                             .build()
                     )
-                    .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                    .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
                     .billingAddress(
                         CheckoutSessionRequest.BillingAddress.builder()
                             .country(CountryCode.AF)

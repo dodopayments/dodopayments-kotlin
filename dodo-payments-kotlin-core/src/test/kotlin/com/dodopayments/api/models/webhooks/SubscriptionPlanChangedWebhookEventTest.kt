@@ -25,7 +25,7 @@ internal class SubscriptionPlanChangedWebhookEventTest {
             SubscriptionPlanChangedWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    SubscriptionPlanChangedWebhookEvent.Data.builder()
+                    Subscription.builder()
                         .addAddon(
                             AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build()
                         )
@@ -90,9 +90,6 @@ internal class SubscriptionPlanChangedWebhookEventTest {
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
                         .taxId("tax_id")
-                        .payloadType(
-                            SubscriptionPlanChangedWebhookEvent.Data.PayloadType.SUBSCRIPTION
-                        )
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -102,7 +99,7 @@ internal class SubscriptionPlanChangedWebhookEventTest {
         assertThat(subscriptionPlanChangedWebhookEvent.businessId()).isEqualTo("business_id")
         assertThat(subscriptionPlanChangedWebhookEvent.data())
             .isEqualTo(
-                SubscriptionPlanChangedWebhookEvent.Data.builder()
+                Subscription.builder()
                     .addAddon(
                         AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build()
                     )
@@ -167,7 +164,6 @@ internal class SubscriptionPlanChangedWebhookEventTest {
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .paymentMethodId("payment_method_id")
                     .taxId("tax_id")
-                    .payloadType(SubscriptionPlanChangedWebhookEvent.Data.PayloadType.SUBSCRIPTION)
                     .build()
             )
         assertThat(subscriptionPlanChangedWebhookEvent.timestamp())
@@ -183,7 +179,7 @@ internal class SubscriptionPlanChangedWebhookEventTest {
             SubscriptionPlanChangedWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    SubscriptionPlanChangedWebhookEvent.Data.builder()
+                    Subscription.builder()
                         .addAddon(
                             AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build()
                         )
@@ -248,9 +244,6 @@ internal class SubscriptionPlanChangedWebhookEventTest {
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
                         .taxId("tax_id")
-                        .payloadType(
-                            SubscriptionPlanChangedWebhookEvent.Data.PayloadType.SUBSCRIPTION
-                        )
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
