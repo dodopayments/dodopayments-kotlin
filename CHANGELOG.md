@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.71.0 (2026-01-07)
+
+Full Changelog: [v1.70.0...v1.71.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.70.0...v1.71.0)
+
+### Features
+
+* **api:** updated openapi spec to v1.70.0 ([6ec99cc](https://github.com/dodopayments/dodopayments-kotlin/commit/6ec99cc7f2cfe87bffa2737dde5aee368295ae5a))
+* **client:** add `HttpRequest#url()` method ([72dc01a](https://github.com/dodopayments/dodopayments-kotlin/commit/72dc01a431301753c4784d6c004abf582fbeb71a))
+
+
+### Documentation
+
+* prominently feature MCP server setup in root SDK readmes ([e09debb](https://github.com/dodopayments/dodopayments-kotlin/commit/e09debb55bcbaf57737769f888f58a31a18a1161))
+
 ## 1.70.0 (2025-12-23)
 
 Full Changelog: [v1.69.0...v1.70.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.69.0...v1.70.0)
