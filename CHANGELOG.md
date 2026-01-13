@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.71.1 (2026-01-13)
+
+Full Changelog: [v1.71.0...v1.71.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.71.0...v1.71.1)
+
+### Features
+
+* **client:** allow configuring dispatcher executor service ([355b789](https://github.com/dodopayments/dodopayments-kotlin/commit/355b789ae42dd9d312a37429e7e5cb6810a48286))
+
+
+### Chores
+
+* **internal:** codegen related update ([8e017d2](https://github.com/dodopayments/dodopayments-kotlin/commit/8e017d2dd7216daf95699b2d235fe1a181b1ca35))
+* **internal:** codegen related update ([1303511](https://github.com/dodopayments/dodopayments-kotlin/commit/1303511fdc195bf812ac444ce7dfcd5078957153))
+* **internal:** refactor build files to support future stainless package uploads ([3b5f8ed](https://github.com/dodopayments/dodopayments-kotlin/commit/3b5f8ed8fce85e655afac0a82858b9640eadc5ed))
+
 ## 1.71.0 (2026-01-07)
 
 Full Changelog: [v1.70.0...v1.71.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.70.0...v1.71.0)
