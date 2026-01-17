@@ -4,7 +4,8 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":dodo-payments-kotlin"))
+    implementation(project(":dodo-payments-kotlin-core"))
+    implementation(project(":dodo-payments-kotlin-client-okhttp"))
 }
 
 application {
