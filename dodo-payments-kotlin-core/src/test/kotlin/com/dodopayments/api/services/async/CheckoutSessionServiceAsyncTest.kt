@@ -38,7 +38,7 @@ internal class CheckoutSessionServiceAsyncTest {
                             .amount(0)
                             .build()
                     )
-                    .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
+                    .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
                     .billingAddress(
                         CheckoutSessionRequest.BillingAddress.builder()
                             .country(CountryCode.AF)
@@ -85,6 +85,7 @@ internal class CheckoutSessionServiceAsyncTest {
                     )
                     .minimalAddress(true)
                     .paymentMethodId("payment_method_id")
+                    .productCollectionId("product_collection_id")
                     .returnUrl("return_url")
                     .shortLink(true)
                     .showSavedPaymentMethods(true)
@@ -120,5 +121,96 @@ internal class CheckoutSessionServiceAsyncTest {
         val checkoutSessionStatus = checkoutSessionServiceAsync.retrieve("id")
 
         checkoutSessionStatus.validate()
+    }
+
+    @Test
+    suspend fun preview() {
+        val client =
+            DodoPaymentsOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val checkoutSessionServiceAsync = client.checkoutSessions()
+
+        val response =
+            checkoutSessionServiceAsync.preview(
+                CheckoutSessionRequest.builder()
+                    .addProductCart(
+                        CheckoutSessionRequest.ProductCart.builder()
+                            .productId("product_id")
+                            .quantity(0)
+                            .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
+                            .amount(0)
+                            .build()
+                    )
+                    .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                    .billingAddress(
+                        CheckoutSessionRequest.BillingAddress.builder()
+                            .country(CountryCode.AF)
+                            .city("city")
+                            .state("state")
+                            .street("street")
+                            .zipcode("zipcode")
+                            .build()
+                    )
+                    .billingCurrency(Currency.AED)
+                    .confirm(true)
+                    .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
+                    .customization(
+                        CheckoutSessionRequest.Customization.builder()
+                            .forceLanguage("force_language")
+                            .showOnDemandTag(true)
+                            .showOrderDetails(true)
+                            .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                            .build()
+                    )
+                    .discountCode("discount_code")
+                    .featureFlags(
+                        CheckoutSessionRequest.FeatureFlags.builder()
+                            .allowCurrencySelection(true)
+                            .allowCustomerEditingCity(true)
+                            .allowCustomerEditingCountry(true)
+                            .allowCustomerEditingEmail(true)
+                            .allowCustomerEditingName(true)
+                            .allowCustomerEditingState(true)
+                            .allowCustomerEditingStreet(true)
+                            .allowCustomerEditingZipcode(true)
+                            .allowDiscountCode(true)
+                            .allowPhoneNumberCollection(true)
+                            .allowTaxId(true)
+                            .alwaysCreateNewCustomer(true)
+                            .redirectImmediately(true)
+                            .build()
+                    )
+                    .force3ds(true)
+                    .metadata(
+                        CheckoutSessionRequest.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .minimalAddress(true)
+                    .paymentMethodId("payment_method_id")
+                    .productCollectionId("product_collection_id")
+                    .returnUrl("return_url")
+                    .shortLink(true)
+                    .showSavedPaymentMethods(true)
+                    .subscriptionData(
+                        CheckoutSessionRequest.SubscriptionData.builder()
+                            .onDemand(
+                                OnDemandSubscription.builder()
+                                    .mandateOnly(true)
+                                    .adaptiveCurrencyFeesInclusive(true)
+                                    .productCurrency(Currency.AED)
+                                    .productDescription("product_description")
+                                    .productPrice(0)
+                                    .build()
+                            )
+                            .trialPeriodDays(0)
+                            .build()
+                    )
+                    .build()
+            )
+
+        response.validate()
     }
 }

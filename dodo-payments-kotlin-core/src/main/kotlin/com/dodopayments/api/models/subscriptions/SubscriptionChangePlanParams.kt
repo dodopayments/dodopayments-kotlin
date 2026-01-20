@@ -64,6 +64,14 @@ private constructor(
     fun addons(): List<AttachAddon>? = body.addons()
 
     /**
+     * Metadata for the payment. If not passed, the metadata of the subscription will be taken
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun metadata(): Metadata? = body.metadata()
+
+    /**
      * Returns the raw JSON value of [productId].
      *
      * Unlike [productId], this method doesn't throw if the JSON field has an unexpected type.
@@ -91,6 +99,13 @@ private constructor(
      * Unlike [addons], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _addons(): JsonField<List<AttachAddon>> = body._addons()
+
+    /**
+     * Returns the raw JSON value of [metadata].
+     *
+     * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _metadata(): JsonField<Metadata> = body._metadata()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -143,6 +158,8 @@ private constructor(
          * - [prorationBillingMode]
          * - [quantity]
          * - [addons]
+         * - [metadata]
+         * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
@@ -203,6 +220,20 @@ private constructor(
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
         fun addAddon(addon: AttachAddon) = apply { body.addAddon(addon) }
+
+        /**
+         * Metadata for the payment. If not passed, the metadata of the subscription will be taken
+         */
+        fun metadata(metadata: Metadata?) = apply { body.metadata(metadata) }
+
+        /**
+         * Sets [Builder.metadata] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.metadata] with a well-typed [Metadata] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun metadata(metadata: JsonField<Metadata>) = apply { body.metadata(metadata) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -363,6 +394,7 @@ private constructor(
         private val prorationBillingMode: JsonField<ProrationBillingMode>,
         private val quantity: JsonField<Int>,
         private val addons: JsonField<List<AttachAddon>>,
+        private val metadata: JsonField<Metadata>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -378,7 +410,10 @@ private constructor(
             @JsonProperty("addons")
             @ExcludeMissing
             addons: JsonField<List<AttachAddon>> = JsonMissing.of(),
-        ) : this(productId, prorationBillingMode, quantity, addons, mutableMapOf())
+            @JsonProperty("metadata")
+            @ExcludeMissing
+            metadata: JsonField<Metadata> = JsonMissing.of(),
+        ) : this(productId, prorationBillingMode, quantity, addons, metadata, mutableMapOf())
 
         /**
          * Unique identifier of the product to subscribe to
@@ -414,6 +449,14 @@ private constructor(
         fun addons(): List<AttachAddon>? = addons.getNullable("addons")
 
         /**
+         * Metadata for the payment. If not passed, the metadata of the subscription will be taken
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun metadata(): Metadata? = metadata.getNullable("metadata")
+
+        /**
          * Returns the raw JSON value of [productId].
          *
          * Unlike [productId], this method doesn't throw if the JSON field has an unexpected type.
@@ -443,6 +486,13 @@ private constructor(
          * Unlike [addons], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("addons") @ExcludeMissing fun _addons(): JsonField<List<AttachAddon>> = addons
+
+        /**
+         * Returns the raw JSON value of [metadata].
+         *
+         * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -478,6 +528,7 @@ private constructor(
             private var prorationBillingMode: JsonField<ProrationBillingMode>? = null
             private var quantity: JsonField<Int>? = null
             private var addons: JsonField<MutableList<AttachAddon>>? = null
+            private var metadata: JsonField<Metadata> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(body: Body) = apply {
@@ -485,6 +536,7 @@ private constructor(
                 prorationBillingMode = body.prorationBillingMode
                 quantity = body.quantity
                 addons = body.addons.map { it.toMutableList() }
+                metadata = body.metadata
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
@@ -556,6 +608,21 @@ private constructor(
                     }
             }
 
+            /**
+             * Metadata for the payment. If not passed, the metadata of the subscription will be
+             * taken
+             */
+            fun metadata(metadata: Metadata?) = metadata(JsonField.ofNullable(metadata))
+
+            /**
+             * Sets [Builder.metadata] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -595,6 +662,7 @@ private constructor(
                     checkRequired("prorationBillingMode", prorationBillingMode),
                     checkRequired("quantity", quantity),
                     (addons ?: JsonMissing.of()).map { it.toImmutable() },
+                    metadata,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -610,6 +678,7 @@ private constructor(
             prorationBillingMode().validate()
             quantity()
             addons()?.forEach { it.validate() }
+            metadata()?.validate()
             validated = true
         }
 
@@ -631,7 +700,8 @@ private constructor(
             (if (productId.asKnown() == null) 0 else 1) +
                 (prorationBillingMode.asKnown()?.validity() ?: 0) +
                 (if (quantity.asKnown() == null) 0 else 1) +
-                (addons.asKnown()?.sumOf { it.validity().toInt() } ?: 0)
+                (addons.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                (metadata.asKnown()?.validity() ?: 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -643,17 +713,25 @@ private constructor(
                 prorationBillingMode == other.prorationBillingMode &&
                 quantity == other.quantity &&
                 addons == other.addons &&
+                metadata == other.metadata &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(productId, prorationBillingMode, quantity, addons, additionalProperties)
+            Objects.hash(
+                productId,
+                prorationBillingMode,
+                quantity,
+                addons,
+                metadata,
+                additionalProperties,
+            )
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{productId=$productId, prorationBillingMode=$prorationBillingMode, quantity=$quantity, addons=$addons, additionalProperties=$additionalProperties}"
+            "Body{productId=$productId, prorationBillingMode=$prorationBillingMode, quantity=$quantity, addons=$addons, metadata=$metadata, additionalProperties=$additionalProperties}"
     }
 
     /** Proration Billing Mode */
@@ -793,6 +871,104 @@ private constructor(
         override fun hashCode() = value.hashCode()
 
         override fun toString() = value.toString()
+    }
+
+    /** Metadata for the payment. If not passed, the metadata of the subscription will be taken */
+    class Metadata
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Metadata]. */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [Metadata]. */
+        class Builder internal constructor() {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(metadata: Metadata) = apply {
+                additionalProperties = metadata.additionalProperties.toMutableMap()
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Metadata].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Metadata = Metadata(additionalProperties.toImmutable())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Metadata = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Metadata && additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

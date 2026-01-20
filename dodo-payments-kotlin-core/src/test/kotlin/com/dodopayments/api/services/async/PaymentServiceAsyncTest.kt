@@ -47,7 +47,7 @@ internal class PaymentServiceAsyncTest {
                             .amount(0)
                             .build()
                     )
-                    .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
+                    .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
                     .billingCurrency(Currency.AED)
                     .discountCode("discount_code")
                     .force3ds(true)

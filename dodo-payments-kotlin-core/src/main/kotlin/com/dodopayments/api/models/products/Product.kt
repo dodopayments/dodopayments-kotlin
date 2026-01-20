@@ -40,6 +40,7 @@ private constructor(
     private val licenseKeyActivationsLimit: JsonField<Int>,
     private val licenseKeyDuration: JsonField<LicenseKeyDuration>,
     private val name: JsonField<String>,
+    private val productCollectionId: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -85,6 +86,9 @@ private constructor(
         @ExcludeMissing
         licenseKeyDuration: JsonField<LicenseKeyDuration> = JsonMissing.of(),
         @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("product_collection_id")
+        @ExcludeMissing
+        productCollectionId: JsonField<String> = JsonMissing.of(),
     ) : this(
         brandId,
         businessId,
@@ -104,6 +108,7 @@ private constructor(
         licenseKeyActivationsLimit,
         licenseKeyDuration,
         name,
+        productCollectionId,
         mutableMapOf(),
     )
 
@@ -250,6 +255,14 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun name(): String? = name.getNullable("name")
+
+    /**
+     * The product collection ID this product belongs to, if any
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun productCollectionId(): String? = productCollectionId.getNullable("product_collection_id")
 
     /**
      * Returns the raw JSON value of [brandId].
@@ -400,6 +413,16 @@ private constructor(
      */
     @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
+    /**
+     * Returns the raw JSON value of [productCollectionId].
+     *
+     * Unlike [productCollectionId], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("product_collection_id")
+    @ExcludeMissing
+    fun _productCollectionId(): JsonField<String> = productCollectionId
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -455,6 +478,7 @@ private constructor(
         private var licenseKeyActivationsLimit: JsonField<Int> = JsonMissing.of()
         private var licenseKeyDuration: JsonField<LicenseKeyDuration> = JsonMissing.of()
         private var name: JsonField<String> = JsonMissing.of()
+        private var productCollectionId: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(product: Product) = apply {
@@ -476,6 +500,7 @@ private constructor(
             licenseKeyActivationsLimit = product.licenseKeyActivationsLimit
             licenseKeyDuration = product.licenseKeyDuration
             name = product.name
+            productCollectionId = product.productCollectionId
             additionalProperties = product.additionalProperties.toMutableMap()
         }
 
@@ -738,6 +763,21 @@ private constructor(
          */
         fun name(name: JsonField<String>) = apply { this.name = name }
 
+        /** The product collection ID this product belongs to, if any */
+        fun productCollectionId(productCollectionId: String?) =
+            productCollectionId(JsonField.ofNullable(productCollectionId))
+
+        /**
+         * Sets [Builder.productCollectionId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.productCollectionId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun productCollectionId(productCollectionId: JsonField<String>) = apply {
+            this.productCollectionId = productCollectionId
+        }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -798,6 +838,7 @@ private constructor(
                 licenseKeyActivationsLimit,
                 licenseKeyDuration,
                 name,
+                productCollectionId,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -827,6 +868,7 @@ private constructor(
         licenseKeyActivationsLimit()
         licenseKeyDuration()?.validate()
         name()
+        productCollectionId()
         validated = true
     }
 
@@ -861,7 +903,8 @@ private constructor(
             (if (licenseKeyActivationMessage.asKnown() == null) 0 else 1) +
             (if (licenseKeyActivationsLimit.asKnown() == null) 0 else 1) +
             (licenseKeyDuration.asKnown()?.validity() ?: 0) +
-            (if (name.asKnown() == null) 0 else 1)
+            (if (name.asKnown() == null) 0 else 1) +
+            (if (productCollectionId.asKnown() == null) 0 else 1)
 
     /** Additional custom data associated with the product */
     class Metadata
@@ -1469,6 +1512,7 @@ private constructor(
             licenseKeyActivationsLimit == other.licenseKeyActivationsLimit &&
             licenseKeyDuration == other.licenseKeyDuration &&
             name == other.name &&
+            productCollectionId == other.productCollectionId &&
             additionalProperties == other.additionalProperties
     }
 
@@ -1492,6 +1536,7 @@ private constructor(
             licenseKeyActivationsLimit,
             licenseKeyDuration,
             name,
+            productCollectionId,
             additionalProperties,
         )
     }
@@ -1499,5 +1544,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Product{brandId=$brandId, businessId=$businessId, createdAt=$createdAt, isRecurring=$isRecurring, licenseKeyEnabled=$licenseKeyEnabled, metadata=$metadata, price=$price, productId=$productId, taxCategory=$taxCategory, updatedAt=$updatedAt, addons=$addons, description=$description, digitalProductDelivery=$digitalProductDelivery, image=$image, licenseKeyActivationMessage=$licenseKeyActivationMessage, licenseKeyActivationsLimit=$licenseKeyActivationsLimit, licenseKeyDuration=$licenseKeyDuration, name=$name, additionalProperties=$additionalProperties}"
+        "Product{brandId=$brandId, businessId=$businessId, createdAt=$createdAt, isRecurring=$isRecurring, licenseKeyEnabled=$licenseKeyEnabled, metadata=$metadata, price=$price, productId=$productId, taxCategory=$taxCategory, updatedAt=$updatedAt, addons=$addons, description=$description, digitalProductDelivery=$digitalProductDelivery, image=$image, licenseKeyActivationMessage=$licenseKeyActivationMessage, licenseKeyActivationsLimit=$licenseKeyActivationsLimit, licenseKeyDuration=$licenseKeyDuration, name=$name, productCollectionId=$productCollectionId, additionalProperties=$additionalProperties}"
 }

@@ -6,6 +6,8 @@ import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionCreateParams
+import com.dodopayments.api.models.checkoutsessions.CheckoutSessionPreviewParams
+import com.dodopayments.api.models.checkoutsessions.CheckoutSessionPreviewResponse
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionRequest
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionResponse
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionRetrieveParams
@@ -58,6 +60,23 @@ interface CheckoutSessionServiceAsync {
     /** @see retrieve */
     suspend fun retrieve(id: String, requestOptions: RequestOptions): CheckoutSessionStatus =
         retrieve(id, CheckoutSessionRetrieveParams.none(), requestOptions)
+
+    suspend fun preview(
+        params: CheckoutSessionPreviewParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CheckoutSessionPreviewResponse
+
+    /** @see preview */
+    suspend fun preview(
+        checkoutSessionRequest: CheckoutSessionRequest,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CheckoutSessionPreviewResponse =
+        preview(
+            CheckoutSessionPreviewParams.builder()
+                .checkoutSessionRequest(checkoutSessionRequest)
+                .build(),
+            requestOptions,
+        )
 
     /**
      * A view of [CheckoutSessionServiceAsync] that provides access to raw HTTP responses for each
@@ -123,5 +142,28 @@ interface CheckoutSessionServiceAsync {
             requestOptions: RequestOptions,
         ): HttpResponseFor<CheckoutSessionStatus> =
             retrieve(id, CheckoutSessionRetrieveParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /checkouts/preview`, but is otherwise the same as
+         * [CheckoutSessionServiceAsync.preview].
+         */
+        @MustBeClosed
+        suspend fun preview(
+            params: CheckoutSessionPreviewParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CheckoutSessionPreviewResponse>
+
+        /** @see preview */
+        @MustBeClosed
+        suspend fun preview(
+            checkoutSessionRequest: CheckoutSessionRequest,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CheckoutSessionPreviewResponse> =
+            preview(
+                CheckoutSessionPreviewParams.builder()
+                    .checkoutSessionRequest(checkoutSessionRequest)
+                    .build(),
+                requestOptions,
+            )
     }
 }

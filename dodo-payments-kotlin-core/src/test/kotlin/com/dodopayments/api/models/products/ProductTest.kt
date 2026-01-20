@@ -65,6 +65,7 @@ internal class ProductTest {
                     LicenseKeyDuration.builder().count(0).interval(TimeInterval.DAY).build()
                 )
                 .name("name")
+                .productCollectionId("product_collection_id")
                 .build()
 
         assertThat(product.brandId()).isEqualTo("brand_id")
@@ -119,6 +120,7 @@ internal class ProductTest {
         assertThat(product.licenseKeyDuration())
             .isEqualTo(LicenseKeyDuration.builder().count(0).interval(TimeInterval.DAY).build())
         assertThat(product.name()).isEqualTo("name")
+        assertThat(product.productCollectionId()).isEqualTo("product_collection_id")
     }
 
     @Test
@@ -173,6 +175,7 @@ internal class ProductTest {
                     LicenseKeyDuration.builder().count(0).interval(TimeInterval.DAY).build()
                 )
                 .name("name")
+                .productCollectionId("product_collection_id")
                 .build()
 
         val roundtrippedProduct =
