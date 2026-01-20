@@ -93,7 +93,7 @@ internal class ProGuardCompatibilityTest {
                         .amount(0)
                         .build()
                 )
-                .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
+                .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
                 .billingAddress(
                     CheckoutSessionRequest.BillingAddress.builder()
                         .country(CountryCode.AF)
@@ -140,6 +140,7 @@ internal class ProGuardCompatibilityTest {
                 )
                 .minimalAddress(true)
                 .paymentMethodId("payment_method_id")
+                .productCollectionId("product_collection_id")
                 .returnUrl("return_url")
                 .shortLink(true)
                 .showSavedPaymentMethods(true)

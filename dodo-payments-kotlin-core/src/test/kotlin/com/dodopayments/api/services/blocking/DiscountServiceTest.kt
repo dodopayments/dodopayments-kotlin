@@ -106,4 +106,18 @@ internal class DiscountServiceTest {
 
         discountService.delete("discount_id")
     }
+
+    @Test
+    fun retrieveByCode() {
+        val client =
+            DodoPaymentsOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val discountService = client.discounts()
+
+        val discount = discountService.retrieveByCode("code")
+
+        discount.validate()
+    }
 }

@@ -11,6 +11,7 @@ import com.dodopayments.api.models.discounts.DiscountCreateParams
 import com.dodopayments.api.models.discounts.DiscountDeleteParams
 import com.dodopayments.api.models.discounts.DiscountListPage
 import com.dodopayments.api.models.discounts.DiscountListParams
+import com.dodopayments.api.models.discounts.DiscountRetrieveByCodeParams
 import com.dodopayments.api.models.discounts.DiscountRetrieveParams
 import com.dodopayments.api.models.discounts.DiscountUpdateParams
 import com.google.errorprone.annotations.MustBeClosed
@@ -94,6 +95,27 @@ interface DiscountService {
     /** @see delete */
     fun delete(discountId: String, requestOptions: RequestOptions) =
         delete(discountId, DiscountDeleteParams.none(), requestOptions)
+
+    /**
+     * Validate and fetch a discount by its code name (e.g., "SAVE20"). This allows real-time
+     * validation directly against the API using the human-readable discount code instead of
+     * requiring the internal discount_id.
+     */
+    fun retrieveByCode(
+        code: String,
+        params: DiscountRetrieveByCodeParams = DiscountRetrieveByCodeParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Discount = retrieveByCode(params.toBuilder().code(code).build(), requestOptions)
+
+    /** @see retrieveByCode */
+    fun retrieveByCode(
+        params: DiscountRetrieveByCodeParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Discount
+
+    /** @see retrieveByCode */
+    fun retrieveByCode(code: String, requestOptions: RequestOptions): Discount =
+        retrieveByCode(code, DiscountRetrieveByCodeParams.none(), requestOptions)
 
     /** A view of [DiscountService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -203,5 +225,32 @@ interface DiscountService {
         @MustBeClosed
         fun delete(discountId: String, requestOptions: RequestOptions): HttpResponse =
             delete(discountId, DiscountDeleteParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /discounts/code/{code}`, but is otherwise the same
+         * as [DiscountService.retrieveByCode].
+         */
+        @MustBeClosed
+        fun retrieveByCode(
+            code: String,
+            params: DiscountRetrieveByCodeParams = DiscountRetrieveByCodeParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Discount> =
+            retrieveByCode(params.toBuilder().code(code).build(), requestOptions)
+
+        /** @see retrieveByCode */
+        @MustBeClosed
+        fun retrieveByCode(
+            params: DiscountRetrieveByCodeParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Discount>
+
+        /** @see retrieveByCode */
+        @MustBeClosed
+        fun retrieveByCode(
+            code: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<Discount> =
+            retrieveByCode(code, DiscountRetrieveByCodeParams.none(), requestOptions)
     }
 }

@@ -12,11 +12,11 @@ import com.dodopayments.api.models.subscriptions.OnDemandSubscription
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class CheckoutSessionCreateParamsTest {
+internal class CheckoutSessionPreviewParamsTest {
 
     @Test
     fun create() {
-        CheckoutSessionCreateParams.builder()
+        CheckoutSessionPreviewParams.builder()
             .checkoutSessionRequest(
                 CheckoutSessionRequest.builder()
                     .addProductCart(
@@ -100,7 +100,7 @@ internal class CheckoutSessionCreateParamsTest {
     @Test
     fun body() {
         val params =
-            CheckoutSessionCreateParams.builder()
+            CheckoutSessionPreviewParams.builder()
                 .checkoutSessionRequest(
                     CheckoutSessionRequest.builder()
                         .addProductCart(
@@ -269,7 +269,7 @@ internal class CheckoutSessionCreateParamsTest {
     @Test
     fun bodyWithoutOptionalFields() {
         val params =
-            CheckoutSessionCreateParams.builder()
+            CheckoutSessionPreviewParams.builder()
                 .checkoutSessionRequest(
                     CheckoutSessionRequest.builder()
                         .addProductCart(

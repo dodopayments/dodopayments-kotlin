@@ -52,7 +52,7 @@ internal class SubscriptionServiceTest {
                     .productId("product_id")
                     .quantity(0)
                     .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
-                    .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
+                    .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
                     .billingCurrency(Currency.AED)
                     .discountCode("discount_code")
                     .force3ds(true)
@@ -180,6 +180,11 @@ internal class SubscriptionServiceTest {
                 )
                 .quantity(0)
                 .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
+                .metadata(
+                    SubscriptionChangePlanParams.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .build()
         )
     }
@@ -238,6 +243,11 @@ internal class SubscriptionServiceTest {
                     )
                     .quantity(0)
                     .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
+                    .metadata(
+                        SubscriptionPreviewChangePlanParams.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .build()
             )
 

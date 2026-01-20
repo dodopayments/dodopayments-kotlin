@@ -592,6 +592,7 @@ private constructor(
             private val errorCode: JsonField<String>,
             private val errorMessage: JsonField<String>,
             private val invoiceId: JsonField<String>,
+            private val invoiceUrl: JsonField<String>,
             private val paymentLink: JsonField<String>,
             private val paymentMethod: JsonField<String>,
             private val paymentMethodType: JsonField<String>,
@@ -679,6 +680,9 @@ private constructor(
                 @JsonProperty("invoice_id")
                 @ExcludeMissing
                 invoiceId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("invoice_url")
+                @ExcludeMissing
+                invoiceUrl: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("payment_link")
                 @ExcludeMissing
                 paymentLink: JsonField<String> = JsonMissing.of(),
@@ -732,6 +736,7 @@ private constructor(
                 errorCode,
                 errorMessage,
                 invoiceId,
+                invoiceUrl,
                 paymentLink,
                 paymentMethod,
                 paymentMethodType,
@@ -771,6 +776,7 @@ private constructor(
                     .errorCode(errorCode)
                     .errorMessage(errorMessage)
                     .invoiceId(invoiceId)
+                    .invoiceUrl(invoiceUrl)
                     .paymentLink(paymentLink)
                     .paymentMethod(paymentMethod)
                     .paymentMethodType(paymentMethodType)
@@ -995,6 +1001,14 @@ private constructor(
              *   (e.g. if the server responded with an unexpected value).
              */
             fun invoiceId(): String? = invoiceId.getNullable("invoice_id")
+
+            /**
+             * URL to download the invoice PDF for this payment.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun invoiceUrl(): String? = invoiceUrl.getNullable("invoice_url")
 
             /**
              * Checkout URL
@@ -1311,6 +1325,16 @@ private constructor(
             fun _invoiceId(): JsonField<String> = invoiceId
 
             /**
+             * Returns the raw JSON value of [invoiceUrl].
+             *
+             * Unlike [invoiceUrl], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("invoice_url")
+            @ExcludeMissing
+            fun _invoiceUrl(): JsonField<String> = invoiceUrl
+
+            /**
              * Returns the raw JSON value of [paymentLink].
              *
              * Unlike [paymentLink], this method doesn't throw if the JSON field has an unexpected
@@ -1470,6 +1494,7 @@ private constructor(
                 private var errorCode: JsonField<String> = JsonMissing.of()
                 private var errorMessage: JsonField<String> = JsonMissing.of()
                 private var invoiceId: JsonField<String> = JsonMissing.of()
+                private var invoiceUrl: JsonField<String> = JsonMissing.of()
                 private var paymentLink: JsonField<String> = JsonMissing.of()
                 private var paymentMethod: JsonField<String> = JsonMissing.of()
                 private var paymentMethodType: JsonField<String> = JsonMissing.of()
@@ -1507,6 +1532,7 @@ private constructor(
                     errorCode = payment.errorCode
                     errorMessage = payment.errorMessage
                     invoiceId = payment.invoiceId
+                    invoiceUrl = payment.invoiceUrl
                     paymentLink = payment.paymentLink
                     paymentMethod = payment.paymentMethod
                     paymentMethodType = payment.paymentMethodType
@@ -1889,6 +1915,20 @@ private constructor(
                  */
                 fun invoiceId(invoiceId: JsonField<String>) = apply { this.invoiceId = invoiceId }
 
+                /** URL to download the invoice PDF for this payment. */
+                fun invoiceUrl(invoiceUrl: String?) = invoiceUrl(JsonField.ofNullable(invoiceUrl))
+
+                /**
+                 * Sets [Builder.invoiceUrl] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.invoiceUrl] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun invoiceUrl(invoiceUrl: JsonField<String>) = apply {
+                    this.invoiceUrl = invoiceUrl
+                }
+
                 /** Checkout URL */
                 fun paymentLink(paymentLink: String?) =
                     paymentLink(JsonField.ofNullable(paymentLink))
@@ -2135,6 +2175,7 @@ private constructor(
                         errorCode,
                         errorMessage,
                         invoiceId,
+                        invoiceUrl,
                         paymentLink,
                         paymentMethod,
                         paymentMethodType,
@@ -2180,6 +2221,7 @@ private constructor(
                 errorCode()
                 errorMessage()
                 invoiceId()
+                invoiceUrl()
                 paymentLink()
                 paymentMethod()
                 paymentMethodType()
@@ -2232,6 +2274,7 @@ private constructor(
                     (if (errorCode.asKnown() == null) 0 else 1) +
                     (if (errorMessage.asKnown() == null) 0 else 1) +
                     (if (invoiceId.asKnown() == null) 0 else 1) +
+                    (if (invoiceUrl.asKnown() == null) 0 else 1) +
                     (if (paymentLink.asKnown() == null) 0 else 1) +
                     (if (paymentMethod.asKnown() == null) 0 else 1) +
                     (if (paymentMethodType.asKnown() == null) 0 else 1) +
@@ -2399,6 +2442,7 @@ private constructor(
                     errorCode == other.errorCode &&
                     errorMessage == other.errorMessage &&
                     invoiceId == other.invoiceId &&
+                    invoiceUrl == other.invoiceUrl &&
                     paymentLink == other.paymentLink &&
                     paymentMethod == other.paymentMethod &&
                     paymentMethodType == other.paymentMethodType &&
@@ -2438,6 +2482,7 @@ private constructor(
                     errorCode,
                     errorMessage,
                     invoiceId,
+                    invoiceUrl,
                     paymentLink,
                     paymentMethod,
                     paymentMethodType,
@@ -2455,7 +2500,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Payment{billing=$billing, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, digitalProductsDelivered=$digitalProductsDelivered, disputes=$disputes, metadata=$metadata, paymentId=$paymentId, refunds=$refunds, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, totalAmount=$totalAmount, cardHolderName=$cardHolderName, cardIssuingCountry=$cardIssuingCountry, cardLastFour=$cardLastFour, cardNetwork=$cardNetwork, cardType=$cardType, checkoutSessionId=$checkoutSessionId, discountId=$discountId, errorCode=$errorCode, errorMessage=$errorMessage, invoiceId=$invoiceId, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, productCart=$productCart, settlementTax=$settlementTax, status=$status, subscriptionId=$subscriptionId, tax=$tax, updatedAt=$updatedAt, payloadType=$payloadType, additionalProperties=$additionalProperties}"
+                "Payment{billing=$billing, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, digitalProductsDelivered=$digitalProductsDelivered, disputes=$disputes, metadata=$metadata, paymentId=$paymentId, refunds=$refunds, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, totalAmount=$totalAmount, cardHolderName=$cardHolderName, cardIssuingCountry=$cardIssuingCountry, cardLastFour=$cardLastFour, cardNetwork=$cardNetwork, cardType=$cardType, checkoutSessionId=$checkoutSessionId, discountId=$discountId, errorCode=$errorCode, errorMessage=$errorMessage, invoiceId=$invoiceId, invoiceUrl=$invoiceUrl, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, productCart=$productCart, settlementTax=$settlementTax, status=$status, subscriptionId=$subscriptionId, tax=$tax, updatedAt=$updatedAt, payloadType=$payloadType, additionalProperties=$additionalProperties}"
         }
 
         /** Response struct representing subscription details */
