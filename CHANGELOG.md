@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.73.0 (2026-01-20)
+
+Full Changelog: [v1.71.1...v1.73.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.71.1...v1.73.0)
+
+### Features
+
+* **api:** update openapi spec to v1.73.0 ([dfbbfe2](https://github.com/dodopayments/dodopayments-kotlin/commit/dfbbfe270b5383ba05cd87d7e509952077e61eba))
+
+
+### Bug Fixes
+
+* **client:** disallow coercion from float to int ([dd79b45](https://github.com/dodopayments/dodopayments-kotlin/commit/dd79b45096a83c39e383f234049ee88e5fc71c25))
+* **client:** fully respect max retries ([6c453ec](https://github.com/dodopayments/dodopayments-kotlin/commit/6c453ec9cdc292d4be46a05bf536dbce515c0eb5))
+* **client:** send retry count header for max retries 0 ([6c453ec](https://github.com/dodopayments/dodopayments-kotlin/commit/6c453ec9cdc292d4be46a05bf536dbce515c0eb5))
+* date time deserialization leniency ([a990917](https://github.com/dodopayments/dodopayments-kotlin/commit/a99091702e183a2b06b3b41f8ea7ec40d2589fbf))
+
+
+### Chores
+
+* **ci:** upgrade `actions/setup-java` ([1a05a4a](https://github.com/dodopayments/dodopayments-kotlin/commit/1a05a4ae3fbf1778ea90e1571b74b376de8a7688))
+* **internal:** depend on packages directly in example ([6c453ec](https://github.com/dodopayments/dodopayments-kotlin/commit/6c453ec9cdc292d4be46a05bf536dbce515c0eb5))
+* **internal:** update `actions/checkout` version ([fc47562](https://github.com/dodopayments/dodopayments-kotlin/commit/fc47562ecec5d431386251faaaad9530a2d79565))
+* test on Jackson 2.14.0 to avoid encountering FasterXML/jackson-databind[#3240](https://github.com/dodopayments/dodopayments-kotlin/issues/3240) in tests ([a990917](https://github.com/dodopayments/dodopayments-kotlin/commit/a99091702e183a2b06b3b41f8ea7ec40d2589fbf))
+
 ## 1.71.1 (2026-01-13)
 
 Full Changelog: [v1.71.0...v1.71.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.71.0...v1.71.1)
