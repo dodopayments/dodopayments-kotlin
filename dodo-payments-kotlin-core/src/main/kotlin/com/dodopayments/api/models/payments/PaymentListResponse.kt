@@ -29,6 +29,8 @@ private constructor(
     private val metadata: JsonField<Metadata>,
     private val paymentId: JsonField<String>,
     private val totalAmount: JsonField<Int>,
+    private val invoiceId: JsonField<String>,
+    private val invoiceUrl: JsonField<String>,
     private val paymentMethod: JsonField<String>,
     private val paymentMethodType: JsonField<String>,
     private val status: JsonField<IntentStatus>,
@@ -54,6 +56,10 @@ private constructor(
         @JsonProperty("total_amount")
         @ExcludeMissing
         totalAmount: JsonField<Int> = JsonMissing.of(),
+        @JsonProperty("invoice_id") @ExcludeMissing invoiceId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("invoice_url")
+        @ExcludeMissing
+        invoiceUrl: JsonField<String> = JsonMissing.of(),
         @JsonProperty("payment_method")
         @ExcludeMissing
         paymentMethod: JsonField<String> = JsonMissing.of(),
@@ -73,6 +79,8 @@ private constructor(
         metadata,
         paymentId,
         totalAmount,
+        invoiceId,
+        invoiceUrl,
         paymentMethod,
         paymentMethodType,
         status,
@@ -128,6 +136,22 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun totalAmount(): Int = totalAmount.getRequired("total_amount")
+
+    /**
+     * Invoice ID for this payment. Uses India-specific invoice ID if available.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun invoiceId(): String? = invoiceId.getNullable("invoice_id")
+
+    /**
+     * URL to download the invoice PDF for this payment.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun invoiceUrl(): String? = invoiceUrl.getNullable("invoice_url")
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -217,6 +241,20 @@ private constructor(
     @JsonProperty("total_amount") @ExcludeMissing fun _totalAmount(): JsonField<Int> = totalAmount
 
     /**
+     * Returns the raw JSON value of [invoiceId].
+     *
+     * Unlike [invoiceId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("invoice_id") @ExcludeMissing fun _invoiceId(): JsonField<String> = invoiceId
+
+    /**
+     * Returns the raw JSON value of [invoiceUrl].
+     *
+     * Unlike [invoiceUrl], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("invoice_url") @ExcludeMissing fun _invoiceUrl(): JsonField<String> = invoiceUrl
+
+    /**
      * Returns the raw JSON value of [paymentMethod].
      *
      * Unlike [paymentMethod], this method doesn't throw if the JSON field has an unexpected type.
@@ -294,6 +332,8 @@ private constructor(
         private var metadata: JsonField<Metadata>? = null
         private var paymentId: JsonField<String>? = null
         private var totalAmount: JsonField<Int>? = null
+        private var invoiceId: JsonField<String> = JsonMissing.of()
+        private var invoiceUrl: JsonField<String> = JsonMissing.of()
         private var paymentMethod: JsonField<String> = JsonMissing.of()
         private var paymentMethodType: JsonField<String> = JsonMissing.of()
         private var status: JsonField<IntentStatus> = JsonMissing.of()
@@ -309,6 +349,8 @@ private constructor(
             metadata = paymentListResponse.metadata
             paymentId = paymentListResponse.paymentId
             totalAmount = paymentListResponse.totalAmount
+            invoiceId = paymentListResponse.invoiceId
+            invoiceUrl = paymentListResponse.invoiceUrl
             paymentMethod = paymentListResponse.paymentMethod
             paymentMethodType = paymentListResponse.paymentMethodType
             status = paymentListResponse.status
@@ -406,6 +448,30 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun totalAmount(totalAmount: JsonField<Int>) = apply { this.totalAmount = totalAmount }
+
+        /** Invoice ID for this payment. Uses India-specific invoice ID if available. */
+        fun invoiceId(invoiceId: String?) = invoiceId(JsonField.ofNullable(invoiceId))
+
+        /**
+         * Sets [Builder.invoiceId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.invoiceId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun invoiceId(invoiceId: JsonField<String>) = apply { this.invoiceId = invoiceId }
+
+        /** URL to download the invoice PDF for this payment. */
+        fun invoiceUrl(invoiceUrl: String?) = invoiceUrl(JsonField.ofNullable(invoiceUrl))
+
+        /**
+         * Sets [Builder.invoiceUrl] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.invoiceUrl] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun invoiceUrl(invoiceUrl: JsonField<String>) = apply { this.invoiceUrl = invoiceUrl }
 
         fun paymentMethod(paymentMethod: String?) =
             paymentMethod(JsonField.ofNullable(paymentMethod))
@@ -508,6 +574,8 @@ private constructor(
                 checkRequired("metadata", metadata),
                 checkRequired("paymentId", paymentId),
                 checkRequired("totalAmount", totalAmount),
+                invoiceId,
+                invoiceUrl,
                 paymentMethod,
                 paymentMethodType,
                 status,
@@ -531,6 +599,8 @@ private constructor(
         metadata().validate()
         paymentId()
         totalAmount()
+        invoiceId()
+        invoiceUrl()
         paymentMethod()
         paymentMethodType()
         status()?.validate()
@@ -560,6 +630,8 @@ private constructor(
             (metadata.asKnown()?.validity() ?: 0) +
             (if (paymentId.asKnown() == null) 0 else 1) +
             (if (totalAmount.asKnown() == null) 0 else 1) +
+            (if (invoiceId.asKnown() == null) 0 else 1) +
+            (if (invoiceUrl.asKnown() == null) 0 else 1) +
             (if (paymentMethod.asKnown() == null) 0 else 1) +
             (if (paymentMethodType.asKnown() == null) 0 else 1) +
             (status.asKnown()?.validity() ?: 0) +
@@ -676,6 +748,8 @@ private constructor(
             metadata == other.metadata &&
             paymentId == other.paymentId &&
             totalAmount == other.totalAmount &&
+            invoiceId == other.invoiceId &&
+            invoiceUrl == other.invoiceUrl &&
             paymentMethod == other.paymentMethod &&
             paymentMethodType == other.paymentMethodType &&
             status == other.status &&
@@ -693,6 +767,8 @@ private constructor(
             metadata,
             paymentId,
             totalAmount,
+            invoiceId,
+            invoiceUrl,
             paymentMethod,
             paymentMethodType,
             status,
@@ -704,5 +780,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "PaymentListResponse{brandId=$brandId, createdAt=$createdAt, currency=$currency, customer=$customer, digitalProductsDelivered=$digitalProductsDelivered, metadata=$metadata, paymentId=$paymentId, totalAmount=$totalAmount, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, status=$status, subscriptionId=$subscriptionId, additionalProperties=$additionalProperties}"
+        "PaymentListResponse{brandId=$brandId, createdAt=$createdAt, currency=$currency, customer=$customer, digitalProductsDelivered=$digitalProductsDelivered, metadata=$metadata, paymentId=$paymentId, totalAmount=$totalAmount, invoiceId=$invoiceId, invoiceUrl=$invoiceUrl, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, status=$status, subscriptionId=$subscriptionId, additionalProperties=$additionalProperties}"
 }

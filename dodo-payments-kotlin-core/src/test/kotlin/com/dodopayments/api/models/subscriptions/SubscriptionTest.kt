@@ -76,6 +76,9 @@ internal class SubscriptionTest {
                 .taxInclusive(true)
                 .trialPeriodDays(0)
                 .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .addCustomFieldResponse(
+                    Subscription.CustomFieldResponse.builder().key("key").value("value").build()
+                )
                 .discountCyclesRemaining(0)
                 .discountId("discount_id")
                 .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -151,6 +154,10 @@ internal class SubscriptionTest {
         assertThat(subscription.trialPeriodDays()).isEqualTo(0)
         assertThat(subscription.cancelledAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(subscription.customFieldResponses())
+            .containsExactly(
+                Subscription.CustomFieldResponse.builder().key("key").value("value").build()
+            )
         assertThat(subscription.discountCyclesRemaining()).isEqualTo(0)
         assertThat(subscription.discountId()).isEqualTo("discount_id")
         assertThat(subscription.expiresAt())
@@ -221,6 +228,9 @@ internal class SubscriptionTest {
                 .taxInclusive(true)
                 .trialPeriodDays(0)
                 .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .addCustomFieldResponse(
+                    Subscription.CustomFieldResponse.builder().key("key").value("value").build()
+                )
                 .discountCyclesRemaining(0)
                 .discountId("discount_id")
                 .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

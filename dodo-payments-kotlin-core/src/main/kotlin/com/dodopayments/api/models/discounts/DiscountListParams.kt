@@ -10,17 +10,33 @@ import java.util.Objects
 /** GET /discounts */
 class DiscountListParams
 private constructor(
+    private val active: Boolean?,
+    private val code: String?,
+    private val discountType: DiscountType?,
     private val pageNumber: Int?,
     private val pageSize: Int?,
+    private val productId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
+
+    /** Filter by active status (true = not expired, false = expired) */
+    fun active(): Boolean? = active
+
+    /** Filter by discount code (partial match, case-insensitive) */
+    fun code(): String? = code
+
+    /** Filter by discount type (percentage) */
+    fun discountType(): DiscountType? = discountType
 
     /** Page number (default = 0). */
     fun pageNumber(): Int? = pageNumber
 
     /** Page size (default = 10, max = 100). */
     fun pageSize(): Int? = pageSize
+
+    /** Filter by product restriction (only discounts that apply to this product) */
+    fun productId(): String? = productId
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -41,17 +57,41 @@ private constructor(
     /** A builder for [DiscountListParams]. */
     class Builder internal constructor() {
 
+        private var active: Boolean? = null
+        private var code: String? = null
+        private var discountType: DiscountType? = null
         private var pageNumber: Int? = null
         private var pageSize: Int? = null
+        private var productId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(discountListParams: DiscountListParams) = apply {
+            active = discountListParams.active
+            code = discountListParams.code
+            discountType = discountListParams.discountType
             pageNumber = discountListParams.pageNumber
             pageSize = discountListParams.pageSize
+            productId = discountListParams.productId
             additionalHeaders = discountListParams.additionalHeaders.toBuilder()
             additionalQueryParams = discountListParams.additionalQueryParams.toBuilder()
         }
+
+        /** Filter by active status (true = not expired, false = expired) */
+        fun active(active: Boolean?) = apply { this.active = active }
+
+        /**
+         * Alias for [Builder.active].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun active(active: Boolean) = active(active as Boolean?)
+
+        /** Filter by discount code (partial match, case-insensitive) */
+        fun code(code: String?) = apply { this.code = code }
+
+        /** Filter by discount type (percentage) */
+        fun discountType(discountType: DiscountType?) = apply { this.discountType = discountType }
 
         /** Page number (default = 0). */
         fun pageNumber(pageNumber: Int?) = apply { this.pageNumber = pageNumber }
@@ -72,6 +112,9 @@ private constructor(
          * This unboxed primitive overload exists for backwards compatibility.
          */
         fun pageSize(pageSize: Int) = pageSize(pageSize as Int?)
+
+        /** Filter by product restriction (only discounts that apply to this product) */
+        fun productId(productId: String?) = apply { this.productId = productId }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -178,8 +221,12 @@ private constructor(
          */
         fun build(): DiscountListParams =
             DiscountListParams(
+                active,
+                code,
+                discountType,
                 pageNumber,
                 pageSize,
+                productId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -190,8 +237,12 @@ private constructor(
     override fun _queryParams(): QueryParams =
         QueryParams.builder()
             .apply {
+                active?.let { put("active", it.toString()) }
+                code?.let { put("code", it) }
+                discountType?.let { put("discount_type", it.toString()) }
                 pageNumber?.let { put("page_number", it.toString()) }
                 pageSize?.let { put("page_size", it.toString()) }
+                productId?.let { put("product_id", it) }
                 putAll(additionalQueryParams)
             }
             .build()
@@ -202,15 +253,28 @@ private constructor(
         }
 
         return other is DiscountListParams &&
+            active == other.active &&
+            code == other.code &&
+            discountType == other.discountType &&
             pageNumber == other.pageNumber &&
             pageSize == other.pageSize &&
+            productId == other.productId &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(pageNumber, pageSize, additionalHeaders, additionalQueryParams)
+        Objects.hash(
+            active,
+            code,
+            discountType,
+            pageNumber,
+            pageSize,
+            productId,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
-        "DiscountListParams{pageNumber=$pageNumber, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "DiscountListParams{active=$active, code=$code, discountType=$discountType, pageNumber=$pageNumber, pageSize=$pageSize, productId=$productId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
