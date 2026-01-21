@@ -48,6 +48,7 @@ private constructor(
     private val taxInclusive: JsonField<Boolean>,
     private val trialPeriodDays: JsonField<Int>,
     private val cancelledAt: JsonField<OffsetDateTime>,
+    private val customFieldResponses: JsonField<List<CustomFieldResponse>>,
     private val discountCyclesRemaining: JsonField<Int>,
     private val discountId: JsonField<String>,
     private val expiresAt: JsonField<OffsetDateTime>,
@@ -115,6 +116,9 @@ private constructor(
         @JsonProperty("cancelled_at")
         @ExcludeMissing
         cancelledAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("custom_field_responses")
+        @ExcludeMissing
+        customFieldResponses: JsonField<List<CustomFieldResponse>> = JsonMissing.of(),
         @JsonProperty("discount_cycles_remaining")
         @ExcludeMissing
         discountCyclesRemaining: JsonField<Int> = JsonMissing.of(),
@@ -152,6 +156,7 @@ private constructor(
         taxInclusive,
         trialPeriodDays,
         cancelledAt,
+        customFieldResponses,
         discountCyclesRemaining,
         discountId,
         expiresAt,
@@ -348,6 +353,15 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun cancelledAt(): OffsetDateTime? = cancelledAt.getNullable("cancelled_at")
+
+    /**
+     * Customer's responses to custom fields collected during checkout
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun customFieldResponses(): List<CustomFieldResponse>? =
+        customFieldResponses.getNullable("custom_field_responses")
 
     /**
      * Number of remaining discount cycles if discount is applied
@@ -589,6 +603,16 @@ private constructor(
     fun _cancelledAt(): JsonField<OffsetDateTime> = cancelledAt
 
     /**
+     * Returns the raw JSON value of [customFieldResponses].
+     *
+     * Unlike [customFieldResponses], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("custom_field_responses")
+    @ExcludeMissing
+    fun _customFieldResponses(): JsonField<List<CustomFieldResponse>> = customFieldResponses
+
+    /**
      * Returns the raw JSON value of [discountCyclesRemaining].
      *
      * Unlike [discountCyclesRemaining], this method doesn't throw if the JSON field has an
@@ -702,6 +726,7 @@ private constructor(
         private var taxInclusive: JsonField<Boolean>? = null
         private var trialPeriodDays: JsonField<Int>? = null
         private var cancelledAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var customFieldResponses: JsonField<MutableList<CustomFieldResponse>>? = null
         private var discountCyclesRemaining: JsonField<Int> = JsonMissing.of()
         private var discountId: JsonField<String> = JsonMissing.of()
         private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
@@ -733,6 +758,7 @@ private constructor(
             taxInclusive = subscription.taxInclusive
             trialPeriodDays = subscription.trialPeriodDays
             cancelledAt = subscription.cancelledAt
+            customFieldResponses = subscription.customFieldResponses.map { it.toMutableList() }
             discountCyclesRemaining = subscription.discountCyclesRemaining
             discountId = subscription.discountId
             expiresAt = subscription.expiresAt
@@ -1083,6 +1109,34 @@ private constructor(
             this.cancelledAt = cancelledAt
         }
 
+        /** Customer's responses to custom fields collected during checkout */
+        fun customFieldResponses(customFieldResponses: List<CustomFieldResponse>?) =
+            customFieldResponses(JsonField.ofNullable(customFieldResponses))
+
+        /**
+         * Sets [Builder.customFieldResponses] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.customFieldResponses] with a well-typed
+         * `List<CustomFieldResponse>` value instead. This method is primarily for setting the field
+         * to an undocumented or not yet supported value.
+         */
+        fun customFieldResponses(customFieldResponses: JsonField<List<CustomFieldResponse>>) =
+            apply {
+                this.customFieldResponses = customFieldResponses.map { it.toMutableList() }
+            }
+
+        /**
+         * Adds a single [CustomFieldResponse] to [customFieldResponses].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addCustomFieldResponse(customFieldResponse: CustomFieldResponse) = apply {
+            customFieldResponses =
+                (customFieldResponses ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("customFieldResponses", it).add(customFieldResponse)
+                }
+        }
+
         /** Number of remaining discount cycles if discount is applied */
         fun discountCyclesRemaining(discountCyclesRemaining: Int?) =
             discountCyclesRemaining(JsonField.ofNullable(discountCyclesRemaining))
@@ -1233,6 +1287,7 @@ private constructor(
                 checkRequired("taxInclusive", taxInclusive),
                 checkRequired("trialPeriodDays", trialPeriodDays),
                 cancelledAt,
+                (customFieldResponses ?: JsonMissing.of()).map { it.toImmutable() },
                 discountCyclesRemaining,
                 discountId,
                 expiresAt,
@@ -1272,6 +1327,7 @@ private constructor(
         taxInclusive()
         trialPeriodDays()
         cancelledAt()
+        customFieldResponses()?.forEach { it.validate() }
         discountCyclesRemaining()
         discountId()
         expiresAt()
@@ -1317,6 +1373,7 @@ private constructor(
             (if (taxInclusive.asKnown() == null) 0 else 1) +
             (if (trialPeriodDays.asKnown() == null) 0 else 1) +
             (if (cancelledAt.asKnown() == null) 0 else 1) +
+            (customFieldResponses.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
             (if (discountCyclesRemaining.asKnown() == null) 0 else 1) +
             (if (discountId.asKnown() == null) 0 else 1) +
             (if (expiresAt.asKnown() == null) 0 else 1) +
@@ -1830,6 +1887,202 @@ private constructor(
             "Meter{currency=$currency, freeThreshold=$freeThreshold, measurementUnit=$measurementUnit, meterId=$meterId, name=$name, pricePerUnit=$pricePerUnit, description=$description, additionalProperties=$additionalProperties}"
     }
 
+    /** Customer's response to a custom field */
+    class CustomFieldResponse
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
+        private val key: JsonField<String>,
+        private val value: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("key") @ExcludeMissing key: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("value") @ExcludeMissing value: JsonField<String> = JsonMissing.of(),
+        ) : this(key, value, mutableMapOf())
+
+        /**
+         * Key matching the custom field definition
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun key(): String = key.getRequired("key")
+
+        /**
+         * Value provided by customer
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun value(): String = value.getRequired("value")
+
+        /**
+         * Returns the raw JSON value of [key].
+         *
+         * Unlike [key], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<String> = key
+
+        /**
+         * Returns the raw JSON value of [value].
+         *
+         * Unlike [value], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<String> = value
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [CustomFieldResponse].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .key()
+             * .value()
+             * ```
+             */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [CustomFieldResponse]. */
+        class Builder internal constructor() {
+
+            private var key: JsonField<String>? = null
+            private var value: JsonField<String>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(customFieldResponse: CustomFieldResponse) = apply {
+                key = customFieldResponse.key
+                value = customFieldResponse.value
+                additionalProperties = customFieldResponse.additionalProperties.toMutableMap()
+            }
+
+            /** Key matching the custom field definition */
+            fun key(key: String) = key(JsonField.of(key))
+
+            /**
+             * Sets [Builder.key] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.key] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun key(key: JsonField<String>) = apply { this.key = key }
+
+            /** Value provided by customer */
+            fun value(value: String) = value(JsonField.of(value))
+
+            /**
+             * Sets [Builder.value] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.value] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun value(value: JsonField<String>) = apply { this.value = value }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [CustomFieldResponse].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .key()
+             * .value()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): CustomFieldResponse =
+                CustomFieldResponse(
+                    checkRequired("key", key),
+                    checkRequired("value", value),
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): CustomFieldResponse = apply {
+            if (validated) {
+                return@apply
+            }
+
+            key()
+            value()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            (if (key.asKnown() == null) 0 else 1) + (if (value.asKnown() == null) 0 else 1)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is CustomFieldResponse &&
+                key == other.key &&
+                value == other.value &&
+                additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy { Objects.hash(key, value, additionalProperties) }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "CustomFieldResponse{key=$key, value=$value, additionalProperties=$additionalProperties}"
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
@@ -1859,6 +2112,7 @@ private constructor(
             taxInclusive == other.taxInclusive &&
             trialPeriodDays == other.trialPeriodDays &&
             cancelledAt == other.cancelledAt &&
+            customFieldResponses == other.customFieldResponses &&
             discountCyclesRemaining == other.discountCyclesRemaining &&
             discountId == other.discountId &&
             expiresAt == other.expiresAt &&
@@ -1892,6 +2146,7 @@ private constructor(
             taxInclusive,
             trialPeriodDays,
             cancelledAt,
+            customFieldResponses,
             discountCyclesRemaining,
             discountId,
             expiresAt,
@@ -1904,5 +2159,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Subscription{addons=$addons, billing=$billing, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, currency=$currency, customer=$customer, metadata=$metadata, meters=$meters, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancelledAt=$cancelledAt, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, expiresAt=$expiresAt, paymentMethodId=$paymentMethodId, taxId=$taxId, additionalProperties=$additionalProperties}"
+        "Subscription{addons=$addons, billing=$billing, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, currency=$currency, customer=$customer, metadata=$metadata, meters=$meters, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancelledAt=$cancelledAt, customFieldResponses=$customFieldResponses, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, expiresAt=$expiresAt, paymentMethodId=$paymentMethodId, taxId=$taxId, additionalProperties=$additionalProperties}"
 }

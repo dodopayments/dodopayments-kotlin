@@ -96,6 +96,9 @@ internal class WebhookPayloadTest {
                         .cardNetwork("card_network")
                         .cardType("card_type")
                         .checkoutSessionId("checkout_session_id")
+                        .addCustomFieldResponse(
+                            Payment.CustomFieldResponse.builder().key("key").value("value").build()
+                        )
                         .discountId("discount_id")
                         .errorCode("error_code")
                         .errorMessage("error_message")
@@ -195,6 +198,9 @@ internal class WebhookPayloadTest {
                         .cardNetwork("card_network")
                         .cardType("card_type")
                         .checkoutSessionId("checkout_session_id")
+                        .addCustomFieldResponse(
+                            Payment.CustomFieldResponse.builder().key("key").value("value").build()
+                        )
                         .discountId("discount_id")
                         .errorCode("error_code")
                         .errorMessage("error_message")
@@ -299,6 +305,9 @@ internal class WebhookPayloadTest {
                         .cardNetwork("card_network")
                         .cardType("card_type")
                         .checkoutSessionId("checkout_session_id")
+                        .addCustomFieldResponse(
+                            Payment.CustomFieldResponse.builder().key("key").value("value").build()
+                        )
                         .discountId("discount_id")
                         .errorCode("error_code")
                         .errorMessage("error_message")

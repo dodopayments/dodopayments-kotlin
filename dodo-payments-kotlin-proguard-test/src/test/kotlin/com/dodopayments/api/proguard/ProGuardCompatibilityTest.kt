@@ -105,6 +105,16 @@ internal class ProGuardCompatibilityTest {
                 )
                 .billingCurrency(Currency.AED)
                 .confirm(true)
+                .addCustomField(
+                    CheckoutSessionRequest.CustomField.builder()
+                        .fieldType(CheckoutSessionRequest.CustomField.FieldType.TEXT)
+                        .key("key")
+                        .label("label")
+                        .addOption("string")
+                        .placeholder("placeholder")
+                        .required(true)
+                        .build()
+                )
                 .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
                 .customization(
                     CheckoutSessionRequest.Customization.builder()

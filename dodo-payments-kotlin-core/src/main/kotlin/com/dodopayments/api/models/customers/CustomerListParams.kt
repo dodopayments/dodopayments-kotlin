@@ -5,19 +5,33 @@ package com.dodopayments.api.models.customers
 import com.dodopayments.api.core.Params
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Objects
 
 class CustomerListParams
 private constructor(
+    private val createdAtGte: OffsetDateTime?,
+    private val createdAtLte: OffsetDateTime?,
     private val email: String?,
+    private val name: String?,
     private val pageNumber: Int?,
     private val pageSize: Int?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
+    /** Filter customers created on or after this timestamp */
+    fun createdAtGte(): OffsetDateTime? = createdAtGte
+
+    /** Filter customers created on or before this timestamp */
+    fun createdAtLte(): OffsetDateTime? = createdAtLte
+
     /** Filter by customer email */
     fun email(): String? = email
+
+    /** Filter by customer name (partial match, case-insensitive) */
+    fun name(): String? = name
 
     /** Page number default is 0 */
     fun pageNumber(): Int? = pageNumber
@@ -44,22 +58,37 @@ private constructor(
     /** A builder for [CustomerListParams]. */
     class Builder internal constructor() {
 
+        private var createdAtGte: OffsetDateTime? = null
+        private var createdAtLte: OffsetDateTime? = null
         private var email: String? = null
+        private var name: String? = null
         private var pageNumber: Int? = null
         private var pageSize: Int? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(customerListParams: CustomerListParams) = apply {
+            createdAtGte = customerListParams.createdAtGte
+            createdAtLte = customerListParams.createdAtLte
             email = customerListParams.email
+            name = customerListParams.name
             pageNumber = customerListParams.pageNumber
             pageSize = customerListParams.pageSize
             additionalHeaders = customerListParams.additionalHeaders.toBuilder()
             additionalQueryParams = customerListParams.additionalQueryParams.toBuilder()
         }
 
+        /** Filter customers created on or after this timestamp */
+        fun createdAtGte(createdAtGte: OffsetDateTime?) = apply { this.createdAtGte = createdAtGte }
+
+        /** Filter customers created on or before this timestamp */
+        fun createdAtLte(createdAtLte: OffsetDateTime?) = apply { this.createdAtLte = createdAtLte }
+
         /** Filter by customer email */
         fun email(email: String?) = apply { this.email = email }
+
+        /** Filter by customer name (partial match, case-insensitive) */
+        fun name(name: String?) = apply { this.name = name }
 
         /** Page number default is 0 */
         fun pageNumber(pageNumber: Int?) = apply { this.pageNumber = pageNumber }
@@ -186,7 +215,10 @@ private constructor(
          */
         fun build(): CustomerListParams =
             CustomerListParams(
+                createdAtGte,
+                createdAtLte,
                 email,
+                name,
                 pageNumber,
                 pageSize,
                 additionalHeaders.build(),
@@ -199,7 +231,14 @@ private constructor(
     override fun _queryParams(): QueryParams =
         QueryParams.builder()
             .apply {
+                createdAtGte?.let {
+                    put("created_at_gte", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
+                createdAtLte?.let {
+                    put("created_at_lte", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
+                }
                 email?.let { put("email", it) }
+                name?.let { put("name", it) }
                 pageNumber?.let { put("page_number", it.toString()) }
                 pageSize?.let { put("page_size", it.toString()) }
                 putAll(additionalQueryParams)
@@ -212,7 +251,10 @@ private constructor(
         }
 
         return other is CustomerListParams &&
+            createdAtGte == other.createdAtGte &&
+            createdAtLte == other.createdAtLte &&
             email == other.email &&
+            name == other.name &&
             pageNumber == other.pageNumber &&
             pageSize == other.pageSize &&
             additionalHeaders == other.additionalHeaders &&
@@ -220,8 +262,17 @@ private constructor(
     }
 
     override fun hashCode(): Int =
-        Objects.hash(email, pageNumber, pageSize, additionalHeaders, additionalQueryParams)
+        Objects.hash(
+            createdAtGte,
+            createdAtLte,
+            email,
+            name,
+            pageNumber,
+            pageSize,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
-        "CustomerListParams{email=$email, pageNumber=$pageNumber, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "CustomerListParams{createdAtGte=$createdAtGte, createdAtLte=$createdAtLte, email=$email, name=$name, pageNumber=$pageNumber, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
