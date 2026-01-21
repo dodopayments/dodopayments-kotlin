@@ -10,17 +10,41 @@ internal class DiscountListParamsTest {
 
     @Test
     fun create() {
-        DiscountListParams.builder().pageNumber(0).pageSize(0).build()
+        DiscountListParams.builder()
+            .active(true)
+            .code("code")
+            .discountType(DiscountType.PERCENTAGE)
+            .pageNumber(0)
+            .pageSize(0)
+            .productId("product_id")
+            .build()
     }
 
     @Test
     fun queryParams() {
-        val params = DiscountListParams.builder().pageNumber(0).pageSize(0).build()
+        val params =
+            DiscountListParams.builder()
+                .active(true)
+                .code("code")
+                .discountType(DiscountType.PERCENTAGE)
+                .pageNumber(0)
+                .pageSize(0)
+                .productId("product_id")
+                .build()
 
         val queryParams = params._queryParams()
 
         assertThat(queryParams)
-            .isEqualTo(QueryParams.builder().put("page_number", "0").put("page_size", "0").build())
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("active", "true")
+                    .put("code", "code")
+                    .put("discount_type", "percentage")
+                    .put("page_number", "0")
+                    .put("page_size", "0")
+                    .put("product_id", "product_id")
+                    .build()
+            )
     }
 
     @Test

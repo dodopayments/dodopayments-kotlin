@@ -89,6 +89,9 @@ internal class PaymentTest {
                 .cardNetwork("card_network")
                 .cardType("card_type")
                 .checkoutSessionId("checkout_session_id")
+                .addCustomFieldResponse(
+                    Payment.CustomFieldResponse.builder().key("key").value("value").build()
+                )
                 .discountId("discount_id")
                 .errorCode("error_code")
                 .errorMessage("error_message")
@@ -180,6 +183,10 @@ internal class PaymentTest {
         assertThat(payment.cardNetwork()).isEqualTo("card_network")
         assertThat(payment.cardType()).isEqualTo("card_type")
         assertThat(payment.checkoutSessionId()).isEqualTo("checkout_session_id")
+        assertThat(payment.customFieldResponses())
+            .containsExactly(
+                Payment.CustomFieldResponse.builder().key("key").value("value").build()
+            )
         assertThat(payment.discountId()).isEqualTo("discount_id")
         assertThat(payment.errorCode()).isEqualTo("error_code")
         assertThat(payment.errorMessage()).isEqualTo("error_message")
@@ -272,6 +279,9 @@ internal class PaymentTest {
                 .cardNetwork("card_network")
                 .cardType("card_type")
                 .checkoutSessionId("checkout_session_id")
+                .addCustomFieldResponse(
+                    Payment.CustomFieldResponse.builder().key("key").value("value").build()
+                )
                 .discountId("discount_id")
                 .errorCode("error_code")
                 .errorMessage("error_message")
