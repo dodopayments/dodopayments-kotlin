@@ -27,7 +27,7 @@ internal class CheckoutSessionPreviewParamsTest {
                             .amount(0)
                             .build()
                     )
-                    .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                    .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
                     .billingAddress(
                         CheckoutSessionRequest.BillingAddress.builder()
                             .country(CountryCode.AF)
@@ -123,7 +123,7 @@ internal class CheckoutSessionPreviewParamsTest {
                                 .amount(0)
                                 .build()
                         )
-                        .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                        .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
                         .billingAddress(
                             CheckoutSessionRequest.BillingAddress.builder()
                                 .country(CountryCode.AF)
@@ -217,7 +217,7 @@ internal class CheckoutSessionPreviewParamsTest {
                             .amount(0)
                             .build()
                     )
-                    .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                    .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
                     .billingAddress(
                         CheckoutSessionRequest.BillingAddress.builder()
                             .country(CountryCode.AF)
