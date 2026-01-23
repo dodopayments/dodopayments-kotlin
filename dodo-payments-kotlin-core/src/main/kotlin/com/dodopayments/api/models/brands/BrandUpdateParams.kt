@@ -28,6 +28,12 @@ private constructor(
     fun id(): String? = id
 
     /**
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun description(): String? = body.description()
+
+    /**
      * The UUID you got back from the presigned‐upload call
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -52,6 +58,19 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun supportEmail(): String? = body.supportEmail()
+
+    /**
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun url(): String? = body.url()
+
+    /**
+     * Returns the raw JSON value of [description].
+     *
+     * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _description(): JsonField<String> = body._description()
 
     /**
      * Returns the raw JSON value of [imageId].
@@ -81,6 +100,13 @@ private constructor(
      * Unlike [supportEmail], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _supportEmail(): JsonField<String> = body._supportEmail()
+
+    /**
+     * Returns the raw JSON value of [url].
+     *
+     * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _url(): JsonField<String> = body._url()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -122,12 +148,25 @@ private constructor(
          *
          * This is generally only useful if you are already constructing the body separately.
          * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [description]
          * - [imageId]
          * - [name]
          * - [statementDescriptor]
          * - [supportEmail]
+         * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        fun description(description: String?) = apply { body.description(description) }
+
+        /**
+         * Sets [Builder.description] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.description] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun description(description: JsonField<String>) = apply { body.description(description) }
 
         /** The UUID you got back from the presigned‐upload call */
         fun imageId(imageId: String?) = apply { body.imageId(imageId) }
@@ -177,6 +216,16 @@ private constructor(
         fun supportEmail(supportEmail: JsonField<String>) = apply {
             body.supportEmail(supportEmail)
         }
+
+        fun url(url: String?) = apply { body.url(url) }
+
+        /**
+         * Sets [Builder.url] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.url] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun url(url: JsonField<String>) = apply { body.url(url) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -324,15 +373,20 @@ private constructor(
     class Body
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
+        private val description: JsonField<String>,
         private val imageId: JsonField<String>,
         private val name: JsonField<String>,
         private val statementDescriptor: JsonField<String>,
         private val supportEmail: JsonField<String>,
+        private val url: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
         @JsonCreator
         private constructor(
+            @JsonProperty("description")
+            @ExcludeMissing
+            description: JsonField<String> = JsonMissing.of(),
             @JsonProperty("image_id") @ExcludeMissing imageId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
             @JsonProperty("statement_descriptor")
@@ -341,7 +395,14 @@ private constructor(
             @JsonProperty("support_email")
             @ExcludeMissing
             supportEmail: JsonField<String> = JsonMissing.of(),
-        ) : this(imageId, name, statementDescriptor, supportEmail, mutableMapOf())
+            @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
+        ) : this(description, imageId, name, statementDescriptor, supportEmail, url, mutableMapOf())
+
+        /**
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun description(): String? = description.getNullable("description")
 
         /**
          * The UUID you got back from the presigned‐upload call
@@ -368,6 +429,21 @@ private constructor(
          *   if the server responded with an unexpected value).
          */
         fun supportEmail(): String? = supportEmail.getNullable("support_email")
+
+        /**
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun url(): String? = url.getNullable("url")
+
+        /**
+         * Returns the raw JSON value of [description].
+         *
+         * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("description")
+        @ExcludeMissing
+        fun _description(): JsonField<String> = description
 
         /**
          * Returns the raw JSON value of [imageId].
@@ -403,6 +479,13 @@ private constructor(
         @ExcludeMissing
         fun _supportEmail(): JsonField<String> = supportEmail
 
+        /**
+         * Returns the raw JSON value of [url].
+         *
+         * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
+
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -424,18 +507,35 @@ private constructor(
         /** A builder for [Body]. */
         class Builder internal constructor() {
 
+            private var description: JsonField<String> = JsonMissing.of()
             private var imageId: JsonField<String> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
             private var statementDescriptor: JsonField<String> = JsonMissing.of()
             private var supportEmail: JsonField<String> = JsonMissing.of()
+            private var url: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(body: Body) = apply {
+                description = body.description
                 imageId = body.imageId
                 name = body.name
                 statementDescriptor = body.statementDescriptor
                 supportEmail = body.supportEmail
+                url = body.url
                 additionalProperties = body.additionalProperties.toMutableMap()
+            }
+
+            fun description(description: String?) = description(JsonField.ofNullable(description))
+
+            /**
+             * Sets [Builder.description] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.description] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun description(description: JsonField<String>) = apply {
+                this.description = description
             }
 
             /** The UUID you got back from the presigned‐upload call */
@@ -489,6 +589,17 @@ private constructor(
                 this.supportEmail = supportEmail
             }
 
+            fun url(url: String?) = url(JsonField.ofNullable(url))
+
+            /**
+             * Sets [Builder.url] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.url] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun url(url: JsonField<String>) = apply { this.url = url }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -515,10 +626,12 @@ private constructor(
              */
             fun build(): Body =
                 Body(
+                    description,
                     imageId,
                     name,
                     statementDescriptor,
                     supportEmail,
+                    url,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -530,10 +643,12 @@ private constructor(
                 return@apply
             }
 
+            description()
             imageId()
             name()
             statementDescriptor()
             supportEmail()
+            url()
             validated = true
         }
 
@@ -552,10 +667,12 @@ private constructor(
          * Used for best match union deserialization.
          */
         internal fun validity(): Int =
-            (if (imageId.asKnown() == null) 0 else 1) +
+            (if (description.asKnown() == null) 0 else 1) +
+                (if (imageId.asKnown() == null) 0 else 1) +
                 (if (name.asKnown() == null) 0 else 1) +
                 (if (statementDescriptor.asKnown() == null) 0 else 1) +
-                (if (supportEmail.asKnown() == null) 0 else 1)
+                (if (supportEmail.asKnown() == null) 0 else 1) +
+                (if (url.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -563,21 +680,31 @@ private constructor(
             }
 
             return other is Body &&
+                description == other.description &&
                 imageId == other.imageId &&
                 name == other.name &&
                 statementDescriptor == other.statementDescriptor &&
                 supportEmail == other.supportEmail &&
+                url == other.url &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(imageId, name, statementDescriptor, supportEmail, additionalProperties)
+            Objects.hash(
+                description,
+                imageId,
+                name,
+                statementDescriptor,
+                supportEmail,
+                url,
+                additionalProperties,
+            )
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{imageId=$imageId, name=$name, statementDescriptor=$statementDescriptor, supportEmail=$supportEmail, additionalProperties=$additionalProperties}"
+            "Body{description=$description, imageId=$imageId, name=$name, statementDescriptor=$statementDescriptor, supportEmail=$supportEmail, url=$url, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

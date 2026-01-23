@@ -52,7 +52,7 @@ internal class SubscriptionServiceAsyncTest {
                     .productId("product_id")
                     .quantity(0)
                     .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
-                    .addAllowedPaymentMethodType(PaymentMethodTypes.CREDIT)
+                    .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
                     .billingCurrency(Currency.AED)
                     .discountCode("discount_code")
                     .force3ds(true)
