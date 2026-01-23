@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.75.0 (2026-01-23)
+
+Full Changelog: [v1.74.0...v1.75.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.74.0...v1.75.0)
+
+### Features
+
+* **api:** updated openapi spec to v1.75.0 ([fa80976](https://github.com/dodopayments/dodopayments-kotlin/commit/fa809761bb02ffb4878a6117dd372a5fb7ffbaab))
+* **client:** send `X-Stainless-Kotlin-Version` header ([991c2d3](https://github.com/dodopayments/dodopayments-kotlin/commit/991c2d3f2a0b403d271ada02792c973bdcf76147))
+
+
+### Bug Fixes
+
+* **client:** preserve time zone in lenient date-time parsing ([104c489](https://github.com/dodopayments/dodopayments-kotlin/commit/104c489afe95ba7732b1bfc2403da0ac92cc024a))
+* **tests:** add missing query/header params ([2c72723](https://github.com/dodopayments/dodopayments-kotlin/commit/2c72723aa919c5405feb47529401eedf294f30e3))
+
+
+### Chores
+
+* **internal:** correct cache invalidation for `SKIP_MOCK_TESTS` ([ce04cfc](https://github.com/dodopayments/dodopayments-kotlin/commit/ce04cfcdb75989495331b9c8a7e3172d6636368c))
+
 ## 1.74.0 (2026-01-21)
 
 Full Changelog: [v1.73.0...v1.74.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.73.0...v1.74.0)
