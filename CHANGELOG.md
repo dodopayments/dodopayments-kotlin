@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.75.1 (2026-01-29)
+
+Full Changelog: [v1.75.0...v1.75.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.75.0...v1.75.1)
+
+### Bug Fixes
+
+* **docs:** fix mcp installation instructions for remote servers ([317da1b](https://github.com/dodopayments/dodopayments-kotlin/commit/317da1b85963182f617d9783083c806dfc34c525))
+
 ## 1.75.0 (2026-01-23)
 
 Full Changelog: [v1.74.0...v1.75.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.74.0...v1.75.0)
