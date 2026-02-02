@@ -119,6 +119,64 @@ internal class ErrorHandlingTest {
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                .themeConfig(
+                                    CheckoutSessionRequest.Customization.ThemeConfig.builder()
+                                        .dark(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Dark
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .fontSize(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontSize
+                                                .XS
+                                        )
+                                        .fontWeight(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontWeight
+                                                .NORMAL
+                                        )
+                                        .light(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Light
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .payButtonText("pay_button_text")
+                                        .radius("radius")
+                                        .build()
+                                )
                                 .build()
                         )
                         .discountCode("discount_code")
@@ -229,6 +287,64 @@ internal class ErrorHandlingTest {
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                .themeConfig(
+                                    CheckoutSessionRequest.Customization.ThemeConfig.builder()
+                                        .dark(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Dark
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .fontSize(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontSize
+                                                .XS
+                                        )
+                                        .fontWeight(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontWeight
+                                                .NORMAL
+                                        )
+                                        .light(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Light
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .payButtonText("pay_button_text")
+                                        .radius("radius")
+                                        .build()
+                                )
                                 .build()
                         )
                         .discountCode("discount_code")
@@ -339,6 +455,64 @@ internal class ErrorHandlingTest {
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                .themeConfig(
+                                    CheckoutSessionRequest.Customization.ThemeConfig.builder()
+                                        .dark(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Dark
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .fontSize(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontSize
+                                                .XS
+                                        )
+                                        .fontWeight(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontWeight
+                                                .NORMAL
+                                        )
+                                        .light(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Light
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .payButtonText("pay_button_text")
+                                        .radius("radius")
+                                        .build()
+                                )
                                 .build()
                         )
                         .discountCode("discount_code")
@@ -449,6 +623,64 @@ internal class ErrorHandlingTest {
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                .themeConfig(
+                                    CheckoutSessionRequest.Customization.ThemeConfig.builder()
+                                        .dark(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Dark
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .fontSize(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontSize
+                                                .XS
+                                        )
+                                        .fontWeight(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontWeight
+                                                .NORMAL
+                                        )
+                                        .light(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Light
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .payButtonText("pay_button_text")
+                                        .radius("radius")
+                                        .build()
+                                )
                                 .build()
                         )
                         .discountCode("discount_code")
@@ -559,6 +791,64 @@ internal class ErrorHandlingTest {
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                .themeConfig(
+                                    CheckoutSessionRequest.Customization.ThemeConfig.builder()
+                                        .dark(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Dark
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .fontSize(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontSize
+                                                .XS
+                                        )
+                                        .fontWeight(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontWeight
+                                                .NORMAL
+                                        )
+                                        .light(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Light
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .payButtonText("pay_button_text")
+                                        .radius("radius")
+                                        .build()
+                                )
                                 .build()
                         )
                         .discountCode("discount_code")
@@ -669,6 +959,64 @@ internal class ErrorHandlingTest {
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                .themeConfig(
+                                    CheckoutSessionRequest.Customization.ThemeConfig.builder()
+                                        .dark(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Dark
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .fontSize(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontSize
+                                                .XS
+                                        )
+                                        .fontWeight(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontWeight
+                                                .NORMAL
+                                        )
+                                        .light(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Light
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .payButtonText("pay_button_text")
+                                        .radius("radius")
+                                        .build()
+                                )
                                 .build()
                         )
                         .discountCode("discount_code")
@@ -779,6 +1127,64 @@ internal class ErrorHandlingTest {
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                .themeConfig(
+                                    CheckoutSessionRequest.Customization.ThemeConfig.builder()
+                                        .dark(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Dark
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .fontSize(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontSize
+                                                .XS
+                                        )
+                                        .fontWeight(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontWeight
+                                                .NORMAL
+                                        )
+                                        .light(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Light
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .payButtonText("pay_button_text")
+                                        .radius("radius")
+                                        .build()
+                                )
                                 .build()
                         )
                         .discountCode("discount_code")
@@ -889,6 +1295,64 @@ internal class ErrorHandlingTest {
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                .themeConfig(
+                                    CheckoutSessionRequest.Customization.ThemeConfig.builder()
+                                        .dark(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Dark
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .fontSize(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontSize
+                                                .XS
+                                        )
+                                        .fontWeight(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontWeight
+                                                .NORMAL
+                                        )
+                                        .light(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Light
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .payButtonText("pay_button_text")
+                                        .radius("radius")
+                                        .build()
+                                )
                                 .build()
                         )
                         .discountCode("discount_code")
@@ -999,6 +1463,64 @@ internal class ErrorHandlingTest {
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                .themeConfig(
+                                    CheckoutSessionRequest.Customization.ThemeConfig.builder()
+                                        .dark(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Dark
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .fontSize(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontSize
+                                                .XS
+                                        )
+                                        .fontWeight(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontWeight
+                                                .NORMAL
+                                        )
+                                        .light(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Light
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .payButtonText("pay_button_text")
+                                        .radius("radius")
+                                        .build()
+                                )
                                 .build()
                         )
                         .discountCode("discount_code")
@@ -1109,6 +1631,64 @@ internal class ErrorHandlingTest {
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                .themeConfig(
+                                    CheckoutSessionRequest.Customization.ThemeConfig.builder()
+                                        .dark(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Dark
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .fontSize(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontSize
+                                                .XS
+                                        )
+                                        .fontWeight(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontWeight
+                                                .NORMAL
+                                        )
+                                        .light(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Light
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .payButtonText("pay_button_text")
+                                        .radius("radius")
+                                        .build()
+                                )
                                 .build()
                         )
                         .discountCode("discount_code")
@@ -1219,6 +1799,64 @@ internal class ErrorHandlingTest {
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                .themeConfig(
+                                    CheckoutSessionRequest.Customization.ThemeConfig.builder()
+                                        .dark(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Dark
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .fontSize(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontSize
+                                                .XS
+                                        )
+                                        .fontWeight(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontWeight
+                                                .NORMAL
+                                        )
+                                        .light(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Light
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .payButtonText("pay_button_text")
+                                        .radius("radius")
+                                        .build()
+                                )
                                 .build()
                         )
                         .discountCode("discount_code")
@@ -1329,6 +1967,64 @@ internal class ErrorHandlingTest {
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                .themeConfig(
+                                    CheckoutSessionRequest.Customization.ThemeConfig.builder()
+                                        .dark(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Dark
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .fontSize(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontSize
+                                                .XS
+                                        )
+                                        .fontWeight(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontWeight
+                                                .NORMAL
+                                        )
+                                        .light(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Light
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .payButtonText("pay_button_text")
+                                        .radius("radius")
+                                        .build()
+                                )
                                 .build()
                         )
                         .discountCode("discount_code")
@@ -1439,6 +2135,64 @@ internal class ErrorHandlingTest {
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                .themeConfig(
+                                    CheckoutSessionRequest.Customization.ThemeConfig.builder()
+                                        .dark(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Dark
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .fontSize(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontSize
+                                                .XS
+                                        )
+                                        .fontWeight(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontWeight
+                                                .NORMAL
+                                        )
+                                        .light(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Light
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .payButtonText("pay_button_text")
+                                        .radius("radius")
+                                        .build()
+                                )
                                 .build()
                         )
                         .discountCode("discount_code")
@@ -1549,6 +2303,64 @@ internal class ErrorHandlingTest {
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                .themeConfig(
+                                    CheckoutSessionRequest.Customization.ThemeConfig.builder()
+                                        .dark(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Dark
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .fontSize(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontSize
+                                                .XS
+                                        )
+                                        .fontWeight(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontWeight
+                                                .NORMAL
+                                        )
+                                        .light(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Light
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .payButtonText("pay_button_text")
+                                        .radius("radius")
+                                        .build()
+                                )
                                 .build()
                         )
                         .discountCode("discount_code")
@@ -1659,6 +2471,64 @@ internal class ErrorHandlingTest {
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                .themeConfig(
+                                    CheckoutSessionRequest.Customization.ThemeConfig.builder()
+                                        .dark(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Dark
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .fontSize(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontSize
+                                                .XS
+                                        )
+                                        .fontWeight(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontWeight
+                                                .NORMAL
+                                        )
+                                        .light(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Light
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .payButtonText("pay_button_text")
+                                        .radius("radius")
+                                        .build()
+                                )
                                 .build()
                         )
                         .discountCode("discount_code")
@@ -1769,6 +2639,64 @@ internal class ErrorHandlingTest {
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                .themeConfig(
+                                    CheckoutSessionRequest.Customization.ThemeConfig.builder()
+                                        .dark(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Dark
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .fontSize(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontSize
+                                                .XS
+                                        )
+                                        .fontWeight(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontWeight
+                                                .NORMAL
+                                        )
+                                        .light(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Light
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .payButtonText("pay_button_text")
+                                        .radius("radius")
+                                        .build()
+                                )
                                 .build()
                         )
                         .discountCode("discount_code")
@@ -1877,6 +2805,64 @@ internal class ErrorHandlingTest {
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                                .themeConfig(
+                                    CheckoutSessionRequest.Customization.ThemeConfig.builder()
+                                        .dark(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Dark
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .fontSize(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontSize
+                                                .XS
+                                        )
+                                        .fontWeight(
+                                            CheckoutSessionRequest.Customization.ThemeConfig
+                                                .FontWeight
+                                                .NORMAL
+                                        )
+                                        .light(
+                                            CheckoutSessionRequest.Customization.ThemeConfig.Light
+                                                .builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .payButtonText("pay_button_text")
+                                        .radius("radius")
+                                        .build()
+                                )
                                 .build()
                         )
                         .discountCode("discount_code")

@@ -1938,11 +1938,7 @@ private constructor(
 
                 val URL = of("url")
 
-                val PHONE = of("phone")
-
                 val DATE = of("date")
-
-                val DATETIME = of("datetime")
 
                 val DROPDOWN = of("dropdown")
 
@@ -1957,9 +1953,7 @@ private constructor(
                 NUMBER,
                 EMAIL,
                 URL,
-                PHONE,
                 DATE,
-                DATETIME,
                 DROPDOWN,
                 BOOLEAN,
             }
@@ -1978,9 +1972,7 @@ private constructor(
                 NUMBER,
                 EMAIL,
                 URL,
-                PHONE,
                 DATE,
-                DATETIME,
                 DROPDOWN,
                 BOOLEAN,
                 /**
@@ -2003,9 +1995,7 @@ private constructor(
                     NUMBER -> Value.NUMBER
                     EMAIL -> Value.EMAIL
                     URL -> Value.URL
-                    PHONE -> Value.PHONE
                     DATE -> Value.DATE
-                    DATETIME -> Value.DATETIME
                     DROPDOWN -> Value.DROPDOWN
                     BOOLEAN -> Value.BOOLEAN
                     else -> Value._UNKNOWN
@@ -2026,9 +2016,7 @@ private constructor(
                     NUMBER -> Known.NUMBER
                     EMAIL -> Known.EMAIL
                     URL -> Known.URL
-                    PHONE -> Known.PHONE
                     DATE -> Known.DATE
-                    DATETIME -> Known.DATETIME
                     DROPDOWN -> Known.DROPDOWN
                     BOOLEAN -> Known.BOOLEAN
                     else -> throw DodoPaymentsInvalidDataException("Unknown FieldType: $value")
@@ -2128,6 +2116,7 @@ private constructor(
         private val showOnDemandTag: JsonField<Boolean>,
         private val showOrderDetails: JsonField<Boolean>,
         private val theme: JsonField<Theme>,
+        private val themeConfig: JsonField<ThemeConfig>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -2143,7 +2132,17 @@ private constructor(
             @ExcludeMissing
             showOrderDetails: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("theme") @ExcludeMissing theme: JsonField<Theme> = JsonMissing.of(),
-        ) : this(forceLanguage, showOnDemandTag, showOrderDetails, theme, mutableMapOf())
+            @JsonProperty("theme_config")
+            @ExcludeMissing
+            themeConfig: JsonField<ThemeConfig> = JsonMissing.of(),
+        ) : this(
+            forceLanguage,
+            showOnDemandTag,
+            showOrderDetails,
+            theme,
+            themeConfig,
+            mutableMapOf(),
+        )
 
         /**
          * Force the checkout interface to render in a specific language (e.g. `en`, `es`)
@@ -2174,7 +2173,7 @@ private constructor(
         fun showOrderDetails(): Boolean? = showOrderDetails.getNullable("show_order_details")
 
         /**
-         * Theme of the page
+         * Theme of the page (determines which mode - light/dark/system - to use)
          *
          * Default is `System`.
          *
@@ -2182,6 +2181,14 @@ private constructor(
          *   if the server responded with an unexpected value).
          */
         fun theme(): Theme? = theme.getNullable("theme")
+
+        /**
+         * Optional custom theme configuration with colors for light and dark modes
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun themeConfig(): ThemeConfig? = themeConfig.getNullable("theme_config")
 
         /**
          * Returns the raw JSON value of [forceLanguage].
@@ -2220,6 +2227,15 @@ private constructor(
          */
         @JsonProperty("theme") @ExcludeMissing fun _theme(): JsonField<Theme> = theme
 
+        /**
+         * Returns the raw JSON value of [themeConfig].
+         *
+         * Unlike [themeConfig], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("theme_config")
+        @ExcludeMissing
+        fun _themeConfig(): JsonField<ThemeConfig> = themeConfig
+
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -2245,6 +2261,7 @@ private constructor(
             private var showOnDemandTag: JsonField<Boolean> = JsonMissing.of()
             private var showOrderDetails: JsonField<Boolean> = JsonMissing.of()
             private var theme: JsonField<Theme> = JsonMissing.of()
+            private var themeConfig: JsonField<ThemeConfig> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(customization: Customization) = apply {
@@ -2252,6 +2269,7 @@ private constructor(
                 showOnDemandTag = customization.showOnDemandTag
                 showOrderDetails = customization.showOrderDetails
                 theme = customization.theme
+                themeConfig = customization.themeConfig
                 additionalProperties = customization.additionalProperties.toMutableMap()
             }
 
@@ -2309,7 +2327,7 @@ private constructor(
             }
 
             /**
-             * Theme of the page
+             * Theme of the page (determines which mode - light/dark/system - to use)
              *
              * Default is `System`.
              */
@@ -2323,6 +2341,21 @@ private constructor(
              * value.
              */
             fun theme(theme: JsonField<Theme>) = apply { this.theme = theme }
+
+            /** Optional custom theme configuration with colors for light and dark modes */
+            fun themeConfig(themeConfig: ThemeConfig?) =
+                themeConfig(JsonField.ofNullable(themeConfig))
+
+            /**
+             * Sets [Builder.themeConfig] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.themeConfig] with a well-typed [ThemeConfig] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun themeConfig(themeConfig: JsonField<ThemeConfig>) = apply {
+                this.themeConfig = themeConfig
+            }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -2354,6 +2387,7 @@ private constructor(
                     showOnDemandTag,
                     showOrderDetails,
                     theme,
+                    themeConfig,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -2369,6 +2403,7 @@ private constructor(
             showOnDemandTag()
             showOrderDetails()
             theme()?.validate()
+            themeConfig()?.validate()
             validated = true
         }
 
@@ -2390,10 +2425,11 @@ private constructor(
             (if (forceLanguage.asKnown() == null) 0 else 1) +
                 (if (showOnDemandTag.asKnown() == null) 0 else 1) +
                 (if (showOrderDetails.asKnown() == null) 0 else 1) +
-                (theme.asKnown()?.validity() ?: 0)
+                (theme.asKnown()?.validity() ?: 0) +
+                (themeConfig.asKnown()?.validity() ?: 0)
 
         /**
-         * Theme of the page
+         * Theme of the page (determines which mode - light/dark/system - to use)
          *
          * Default is `System`.
          */
@@ -2531,6 +2567,2356 @@ private constructor(
             override fun toString() = value.toString()
         }
 
+        /** Optional custom theme configuration with colors for light and dark modes */
+        class ThemeConfig
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val dark: JsonField<Dark>,
+            private val fontSize: JsonField<FontSize>,
+            private val fontWeight: JsonField<FontWeight>,
+            private val light: JsonField<Light>,
+            private val payButtonText: JsonField<String>,
+            private val radius: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("dark") @ExcludeMissing dark: JsonField<Dark> = JsonMissing.of(),
+                @JsonProperty("font_size")
+                @ExcludeMissing
+                fontSize: JsonField<FontSize> = JsonMissing.of(),
+                @JsonProperty("font_weight")
+                @ExcludeMissing
+                fontWeight: JsonField<FontWeight> = JsonMissing.of(),
+                @JsonProperty("light") @ExcludeMissing light: JsonField<Light> = JsonMissing.of(),
+                @JsonProperty("pay_button_text")
+                @ExcludeMissing
+                payButtonText: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("radius") @ExcludeMissing radius: JsonField<String> = JsonMissing.of(),
+            ) : this(dark, fontSize, fontWeight, light, payButtonText, radius, mutableMapOf())
+
+            /**
+             * Dark mode color configuration
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun dark(): Dark? = dark.getNullable("dark")
+
+            /**
+             * Font size for the checkout UI
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun fontSize(): FontSize? = fontSize.getNullable("font_size")
+
+            /**
+             * Font weight for the checkout UI
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun fontWeight(): FontWeight? = fontWeight.getNullable("font_weight")
+
+            /**
+             * Light mode color configuration
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun light(): Light? = light.getNullable("light")
+
+            /**
+             * Custom text for the pay button (e.g., "Complete Purchase", "Subscribe Now")
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun payButtonText(): String? = payButtonText.getNullable("pay_button_text")
+
+            /**
+             * Border radius for UI elements (e.g., "4px", "0.5rem", "8px")
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun radius(): String? = radius.getNullable("radius")
+
+            /**
+             * Returns the raw JSON value of [dark].
+             *
+             * Unlike [dark], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("dark") @ExcludeMissing fun _dark(): JsonField<Dark> = dark
+
+            /**
+             * Returns the raw JSON value of [fontSize].
+             *
+             * Unlike [fontSize], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("font_size")
+            @ExcludeMissing
+            fun _fontSize(): JsonField<FontSize> = fontSize
+
+            /**
+             * Returns the raw JSON value of [fontWeight].
+             *
+             * Unlike [fontWeight], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("font_weight")
+            @ExcludeMissing
+            fun _fontWeight(): JsonField<FontWeight> = fontWeight
+
+            /**
+             * Returns the raw JSON value of [light].
+             *
+             * Unlike [light], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("light") @ExcludeMissing fun _light(): JsonField<Light> = light
+
+            /**
+             * Returns the raw JSON value of [payButtonText].
+             *
+             * Unlike [payButtonText], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("pay_button_text")
+            @ExcludeMissing
+            fun _payButtonText(): JsonField<String> = payButtonText
+
+            /**
+             * Returns the raw JSON value of [radius].
+             *
+             * Unlike [radius], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("radius") @ExcludeMissing fun _radius(): JsonField<String> = radius
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /** Returns a mutable builder for constructing an instance of [ThemeConfig]. */
+                fun builder() = Builder()
+            }
+
+            /** A builder for [ThemeConfig]. */
+            class Builder internal constructor() {
+
+                private var dark: JsonField<Dark> = JsonMissing.of()
+                private var fontSize: JsonField<FontSize> = JsonMissing.of()
+                private var fontWeight: JsonField<FontWeight> = JsonMissing.of()
+                private var light: JsonField<Light> = JsonMissing.of()
+                private var payButtonText: JsonField<String> = JsonMissing.of()
+                private var radius: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                internal fun from(themeConfig: ThemeConfig) = apply {
+                    dark = themeConfig.dark
+                    fontSize = themeConfig.fontSize
+                    fontWeight = themeConfig.fontWeight
+                    light = themeConfig.light
+                    payButtonText = themeConfig.payButtonText
+                    radius = themeConfig.radius
+                    additionalProperties = themeConfig.additionalProperties.toMutableMap()
+                }
+
+                /** Dark mode color configuration */
+                fun dark(dark: Dark?) = dark(JsonField.ofNullable(dark))
+
+                /**
+                 * Sets [Builder.dark] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.dark] with a well-typed [Dark] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
+                fun dark(dark: JsonField<Dark>) = apply { this.dark = dark }
+
+                /** Font size for the checkout UI */
+                fun fontSize(fontSize: FontSize?) = fontSize(JsonField.ofNullable(fontSize))
+
+                /**
+                 * Sets [Builder.fontSize] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.fontSize] with a well-typed [FontSize] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun fontSize(fontSize: JsonField<FontSize>) = apply { this.fontSize = fontSize }
+
+                /** Font weight for the checkout UI */
+                fun fontWeight(fontWeight: FontWeight?) =
+                    fontWeight(JsonField.ofNullable(fontWeight))
+
+                /**
+                 * Sets [Builder.fontWeight] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.fontWeight] with a well-typed [FontWeight] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun fontWeight(fontWeight: JsonField<FontWeight>) = apply {
+                    this.fontWeight = fontWeight
+                }
+
+                /** Light mode color configuration */
+                fun light(light: Light?) = light(JsonField.ofNullable(light))
+
+                /**
+                 * Sets [Builder.light] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.light] with a well-typed [Light] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
+                fun light(light: JsonField<Light>) = apply { this.light = light }
+
+                /** Custom text for the pay button (e.g., "Complete Purchase", "Subscribe Now") */
+                fun payButtonText(payButtonText: String?) =
+                    payButtonText(JsonField.ofNullable(payButtonText))
+
+                /**
+                 * Sets [Builder.payButtonText] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.payButtonText] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun payButtonText(payButtonText: JsonField<String>) = apply {
+                    this.payButtonText = payButtonText
+                }
+
+                /** Border radius for UI elements (e.g., "4px", "0.5rem", "8px") */
+                fun radius(radius: String?) = radius(JsonField.ofNullable(radius))
+
+                /**
+                 * Sets [Builder.radius] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.radius] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun radius(radius: JsonField<String>) = apply { this.radius = radius }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [ThemeConfig].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
+                fun build(): ThemeConfig =
+                    ThemeConfig(
+                        dark,
+                        fontSize,
+                        fontWeight,
+                        light,
+                        payButtonText,
+                        radius,
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): ThemeConfig = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                dark()?.validate()
+                fontSize()?.validate()
+                fontWeight()?.validate()
+                light()?.validate()
+                payButtonText()
+                radius()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: DodoPaymentsInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            internal fun validity(): Int =
+                (dark.asKnown()?.validity() ?: 0) +
+                    (fontSize.asKnown()?.validity() ?: 0) +
+                    (fontWeight.asKnown()?.validity() ?: 0) +
+                    (light.asKnown()?.validity() ?: 0) +
+                    (if (payButtonText.asKnown() == null) 0 else 1) +
+                    (if (radius.asKnown() == null) 0 else 1)
+
+            /** Dark mode color configuration */
+            class Dark
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+            private constructor(
+                private val bgPrimary: JsonField<String>,
+                private val bgSecondary: JsonField<String>,
+                private val borderPrimary: JsonField<String>,
+                private val borderSecondary: JsonField<String>,
+                private val buttonPrimary: JsonField<String>,
+                private val buttonPrimaryHover: JsonField<String>,
+                private val buttonSecondary: JsonField<String>,
+                private val buttonSecondaryHover: JsonField<String>,
+                private val buttonTextPrimary: JsonField<String>,
+                private val buttonTextSecondary: JsonField<String>,
+                private val inputFocusBorder: JsonField<String>,
+                private val textError: JsonField<String>,
+                private val textPlaceholder: JsonField<String>,
+                private val textPrimary: JsonField<String>,
+                private val textSecondary: JsonField<String>,
+                private val textSuccess: JsonField<String>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("bg_primary")
+                    @ExcludeMissing
+                    bgPrimary: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("bg_secondary")
+                    @ExcludeMissing
+                    bgSecondary: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("border_primary")
+                    @ExcludeMissing
+                    borderPrimary: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("border_secondary")
+                    @ExcludeMissing
+                    borderSecondary: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("button_primary")
+                    @ExcludeMissing
+                    buttonPrimary: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("button_primary_hover")
+                    @ExcludeMissing
+                    buttonPrimaryHover: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("button_secondary")
+                    @ExcludeMissing
+                    buttonSecondary: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("button_secondary_hover")
+                    @ExcludeMissing
+                    buttonSecondaryHover: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("button_text_primary")
+                    @ExcludeMissing
+                    buttonTextPrimary: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("button_text_secondary")
+                    @ExcludeMissing
+                    buttonTextSecondary: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("input_focus_border")
+                    @ExcludeMissing
+                    inputFocusBorder: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("text_error")
+                    @ExcludeMissing
+                    textError: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("text_placeholder")
+                    @ExcludeMissing
+                    textPlaceholder: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("text_primary")
+                    @ExcludeMissing
+                    textPrimary: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("text_secondary")
+                    @ExcludeMissing
+                    textSecondary: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("text_success")
+                    @ExcludeMissing
+                    textSuccess: JsonField<String> = JsonMissing.of(),
+                ) : this(
+                    bgPrimary,
+                    bgSecondary,
+                    borderPrimary,
+                    borderSecondary,
+                    buttonPrimary,
+                    buttonPrimaryHover,
+                    buttonSecondary,
+                    buttonSecondaryHover,
+                    buttonTextPrimary,
+                    buttonTextSecondary,
+                    inputFocusBorder,
+                    textError,
+                    textPlaceholder,
+                    textPrimary,
+                    textSecondary,
+                    textSuccess,
+                    mutableMapOf(),
+                )
+
+                /**
+                 * Background primary color
+                 *
+                 * Examples: `"#ffffff"`, `"rgb(255, 255, 255)"`, `"white"`
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun bgPrimary(): String? = bgPrimary.getNullable("bg_primary")
+
+                /**
+                 * Background secondary color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun bgSecondary(): String? = bgSecondary.getNullable("bg_secondary")
+
+                /**
+                 * Border primary color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun borderPrimary(): String? = borderPrimary.getNullable("border_primary")
+
+                /**
+                 * Border secondary color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun borderSecondary(): String? = borderSecondary.getNullable("border_secondary")
+
+                /**
+                 * Primary button background color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun buttonPrimary(): String? = buttonPrimary.getNullable("button_primary")
+
+                /**
+                 * Primary button hover color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun buttonPrimaryHover(): String? =
+                    buttonPrimaryHover.getNullable("button_primary_hover")
+
+                /**
+                 * Secondary button background color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun buttonSecondary(): String? = buttonSecondary.getNullable("button_secondary")
+
+                /**
+                 * Secondary button hover color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun buttonSecondaryHover(): String? =
+                    buttonSecondaryHover.getNullable("button_secondary_hover")
+
+                /**
+                 * Primary button text color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun buttonTextPrimary(): String? =
+                    buttonTextPrimary.getNullable("button_text_primary")
+
+                /**
+                 * Secondary button text color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun buttonTextSecondary(): String? =
+                    buttonTextSecondary.getNullable("button_text_secondary")
+
+                /**
+                 * Input focus border color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun inputFocusBorder(): String? = inputFocusBorder.getNullable("input_focus_border")
+
+                /**
+                 * Text error color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun textError(): String? = textError.getNullable("text_error")
+
+                /**
+                 * Text placeholder color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun textPlaceholder(): String? = textPlaceholder.getNullable("text_placeholder")
+
+                /**
+                 * Text primary color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun textPrimary(): String? = textPrimary.getNullable("text_primary")
+
+                /**
+                 * Text secondary color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun textSecondary(): String? = textSecondary.getNullable("text_secondary")
+
+                /**
+                 * Text success color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun textSuccess(): String? = textSuccess.getNullable("text_success")
+
+                /**
+                 * Returns the raw JSON value of [bgPrimary].
+                 *
+                 * Unlike [bgPrimary], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("bg_primary")
+                @ExcludeMissing
+                fun _bgPrimary(): JsonField<String> = bgPrimary
+
+                /**
+                 * Returns the raw JSON value of [bgSecondary].
+                 *
+                 * Unlike [bgSecondary], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("bg_secondary")
+                @ExcludeMissing
+                fun _bgSecondary(): JsonField<String> = bgSecondary
+
+                /**
+                 * Returns the raw JSON value of [borderPrimary].
+                 *
+                 * Unlike [borderPrimary], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("border_primary")
+                @ExcludeMissing
+                fun _borderPrimary(): JsonField<String> = borderPrimary
+
+                /**
+                 * Returns the raw JSON value of [borderSecondary].
+                 *
+                 * Unlike [borderSecondary], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("border_secondary")
+                @ExcludeMissing
+                fun _borderSecondary(): JsonField<String> = borderSecondary
+
+                /**
+                 * Returns the raw JSON value of [buttonPrimary].
+                 *
+                 * Unlike [buttonPrimary], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("button_primary")
+                @ExcludeMissing
+                fun _buttonPrimary(): JsonField<String> = buttonPrimary
+
+                /**
+                 * Returns the raw JSON value of [buttonPrimaryHover].
+                 *
+                 * Unlike [buttonPrimaryHover], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("button_primary_hover")
+                @ExcludeMissing
+                fun _buttonPrimaryHover(): JsonField<String> = buttonPrimaryHover
+
+                /**
+                 * Returns the raw JSON value of [buttonSecondary].
+                 *
+                 * Unlike [buttonSecondary], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("button_secondary")
+                @ExcludeMissing
+                fun _buttonSecondary(): JsonField<String> = buttonSecondary
+
+                /**
+                 * Returns the raw JSON value of [buttonSecondaryHover].
+                 *
+                 * Unlike [buttonSecondaryHover], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("button_secondary_hover")
+                @ExcludeMissing
+                fun _buttonSecondaryHover(): JsonField<String> = buttonSecondaryHover
+
+                /**
+                 * Returns the raw JSON value of [buttonTextPrimary].
+                 *
+                 * Unlike [buttonTextPrimary], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("button_text_primary")
+                @ExcludeMissing
+                fun _buttonTextPrimary(): JsonField<String> = buttonTextPrimary
+
+                /**
+                 * Returns the raw JSON value of [buttonTextSecondary].
+                 *
+                 * Unlike [buttonTextSecondary], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("button_text_secondary")
+                @ExcludeMissing
+                fun _buttonTextSecondary(): JsonField<String> = buttonTextSecondary
+
+                /**
+                 * Returns the raw JSON value of [inputFocusBorder].
+                 *
+                 * Unlike [inputFocusBorder], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("input_focus_border")
+                @ExcludeMissing
+                fun _inputFocusBorder(): JsonField<String> = inputFocusBorder
+
+                /**
+                 * Returns the raw JSON value of [textError].
+                 *
+                 * Unlike [textError], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("text_error")
+                @ExcludeMissing
+                fun _textError(): JsonField<String> = textError
+
+                /**
+                 * Returns the raw JSON value of [textPlaceholder].
+                 *
+                 * Unlike [textPlaceholder], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("text_placeholder")
+                @ExcludeMissing
+                fun _textPlaceholder(): JsonField<String> = textPlaceholder
+
+                /**
+                 * Returns the raw JSON value of [textPrimary].
+                 *
+                 * Unlike [textPrimary], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("text_primary")
+                @ExcludeMissing
+                fun _textPrimary(): JsonField<String> = textPrimary
+
+                /**
+                 * Returns the raw JSON value of [textSecondary].
+                 *
+                 * Unlike [textSecondary], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("text_secondary")
+                @ExcludeMissing
+                fun _textSecondary(): JsonField<String> = textSecondary
+
+                /**
+                 * Returns the raw JSON value of [textSuccess].
+                 *
+                 * Unlike [textSuccess], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("text_success")
+                @ExcludeMissing
+                fun _textSuccess(): JsonField<String> = textSuccess
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /** Returns a mutable builder for constructing an instance of [Dark]. */
+                    fun builder() = Builder()
+                }
+
+                /** A builder for [Dark]. */
+                class Builder internal constructor() {
+
+                    private var bgPrimary: JsonField<String> = JsonMissing.of()
+                    private var bgSecondary: JsonField<String> = JsonMissing.of()
+                    private var borderPrimary: JsonField<String> = JsonMissing.of()
+                    private var borderSecondary: JsonField<String> = JsonMissing.of()
+                    private var buttonPrimary: JsonField<String> = JsonMissing.of()
+                    private var buttonPrimaryHover: JsonField<String> = JsonMissing.of()
+                    private var buttonSecondary: JsonField<String> = JsonMissing.of()
+                    private var buttonSecondaryHover: JsonField<String> = JsonMissing.of()
+                    private var buttonTextPrimary: JsonField<String> = JsonMissing.of()
+                    private var buttonTextSecondary: JsonField<String> = JsonMissing.of()
+                    private var inputFocusBorder: JsonField<String> = JsonMissing.of()
+                    private var textError: JsonField<String> = JsonMissing.of()
+                    private var textPlaceholder: JsonField<String> = JsonMissing.of()
+                    private var textPrimary: JsonField<String> = JsonMissing.of()
+                    private var textSecondary: JsonField<String> = JsonMissing.of()
+                    private var textSuccess: JsonField<String> = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    internal fun from(dark: Dark) = apply {
+                        bgPrimary = dark.bgPrimary
+                        bgSecondary = dark.bgSecondary
+                        borderPrimary = dark.borderPrimary
+                        borderSecondary = dark.borderSecondary
+                        buttonPrimary = dark.buttonPrimary
+                        buttonPrimaryHover = dark.buttonPrimaryHover
+                        buttonSecondary = dark.buttonSecondary
+                        buttonSecondaryHover = dark.buttonSecondaryHover
+                        buttonTextPrimary = dark.buttonTextPrimary
+                        buttonTextSecondary = dark.buttonTextSecondary
+                        inputFocusBorder = dark.inputFocusBorder
+                        textError = dark.textError
+                        textPlaceholder = dark.textPlaceholder
+                        textPrimary = dark.textPrimary
+                        textSecondary = dark.textSecondary
+                        textSuccess = dark.textSuccess
+                        additionalProperties = dark.additionalProperties.toMutableMap()
+                    }
+
+                    /**
+                     * Background primary color
+                     *
+                     * Examples: `"#ffffff"`, `"rgb(255, 255, 255)"`, `"white"`
+                     */
+                    fun bgPrimary(bgPrimary: String?) = bgPrimary(JsonField.ofNullable(bgPrimary))
+
+                    /**
+                     * Sets [Builder.bgPrimary] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.bgPrimary] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
+                    fun bgPrimary(bgPrimary: JsonField<String>) = apply {
+                        this.bgPrimary = bgPrimary
+                    }
+
+                    /** Background secondary color */
+                    fun bgSecondary(bgSecondary: String?) =
+                        bgSecondary(JsonField.ofNullable(bgSecondary))
+
+                    /**
+                     * Sets [Builder.bgSecondary] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.bgSecondary] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun bgSecondary(bgSecondary: JsonField<String>) = apply {
+                        this.bgSecondary = bgSecondary
+                    }
+
+                    /** Border primary color */
+                    fun borderPrimary(borderPrimary: String?) =
+                        borderPrimary(JsonField.ofNullable(borderPrimary))
+
+                    /**
+                     * Sets [Builder.borderPrimary] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.borderPrimary] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun borderPrimary(borderPrimary: JsonField<String>) = apply {
+                        this.borderPrimary = borderPrimary
+                    }
+
+                    /** Border secondary color */
+                    fun borderSecondary(borderSecondary: String?) =
+                        borderSecondary(JsonField.ofNullable(borderSecondary))
+
+                    /**
+                     * Sets [Builder.borderSecondary] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.borderSecondary] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun borderSecondary(borderSecondary: JsonField<String>) = apply {
+                        this.borderSecondary = borderSecondary
+                    }
+
+                    /** Primary button background color */
+                    fun buttonPrimary(buttonPrimary: String?) =
+                        buttonPrimary(JsonField.ofNullable(buttonPrimary))
+
+                    /**
+                     * Sets [Builder.buttonPrimary] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.buttonPrimary] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun buttonPrimary(buttonPrimary: JsonField<String>) = apply {
+                        this.buttonPrimary = buttonPrimary
+                    }
+
+                    /** Primary button hover color */
+                    fun buttonPrimaryHover(buttonPrimaryHover: String?) =
+                        buttonPrimaryHover(JsonField.ofNullable(buttonPrimaryHover))
+
+                    /**
+                     * Sets [Builder.buttonPrimaryHover] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.buttonPrimaryHover] with a well-typed
+                     * [String] value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun buttonPrimaryHover(buttonPrimaryHover: JsonField<String>) = apply {
+                        this.buttonPrimaryHover = buttonPrimaryHover
+                    }
+
+                    /** Secondary button background color */
+                    fun buttonSecondary(buttonSecondary: String?) =
+                        buttonSecondary(JsonField.ofNullable(buttonSecondary))
+
+                    /**
+                     * Sets [Builder.buttonSecondary] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.buttonSecondary] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun buttonSecondary(buttonSecondary: JsonField<String>) = apply {
+                        this.buttonSecondary = buttonSecondary
+                    }
+
+                    /** Secondary button hover color */
+                    fun buttonSecondaryHover(buttonSecondaryHover: String?) =
+                        buttonSecondaryHover(JsonField.ofNullable(buttonSecondaryHover))
+
+                    /**
+                     * Sets [Builder.buttonSecondaryHover] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.buttonSecondaryHover] with a well-typed
+                     * [String] value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun buttonSecondaryHover(buttonSecondaryHover: JsonField<String>) = apply {
+                        this.buttonSecondaryHover = buttonSecondaryHover
+                    }
+
+                    /** Primary button text color */
+                    fun buttonTextPrimary(buttonTextPrimary: String?) =
+                        buttonTextPrimary(JsonField.ofNullable(buttonTextPrimary))
+
+                    /**
+                     * Sets [Builder.buttonTextPrimary] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.buttonTextPrimary] with a well-typed
+                     * [String] value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun buttonTextPrimary(buttonTextPrimary: JsonField<String>) = apply {
+                        this.buttonTextPrimary = buttonTextPrimary
+                    }
+
+                    /** Secondary button text color */
+                    fun buttonTextSecondary(buttonTextSecondary: String?) =
+                        buttonTextSecondary(JsonField.ofNullable(buttonTextSecondary))
+
+                    /**
+                     * Sets [Builder.buttonTextSecondary] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.buttonTextSecondary] with a well-typed
+                     * [String] value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun buttonTextSecondary(buttonTextSecondary: JsonField<String>) = apply {
+                        this.buttonTextSecondary = buttonTextSecondary
+                    }
+
+                    /** Input focus border color */
+                    fun inputFocusBorder(inputFocusBorder: String?) =
+                        inputFocusBorder(JsonField.ofNullable(inputFocusBorder))
+
+                    /**
+                     * Sets [Builder.inputFocusBorder] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.inputFocusBorder] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun inputFocusBorder(inputFocusBorder: JsonField<String>) = apply {
+                        this.inputFocusBorder = inputFocusBorder
+                    }
+
+                    /** Text error color */
+                    fun textError(textError: String?) = textError(JsonField.ofNullable(textError))
+
+                    /**
+                     * Sets [Builder.textError] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.textError] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
+                    fun textError(textError: JsonField<String>) = apply {
+                        this.textError = textError
+                    }
+
+                    /** Text placeholder color */
+                    fun textPlaceholder(textPlaceholder: String?) =
+                        textPlaceholder(JsonField.ofNullable(textPlaceholder))
+
+                    /**
+                     * Sets [Builder.textPlaceholder] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.textPlaceholder] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun textPlaceholder(textPlaceholder: JsonField<String>) = apply {
+                        this.textPlaceholder = textPlaceholder
+                    }
+
+                    /** Text primary color */
+                    fun textPrimary(textPrimary: String?) =
+                        textPrimary(JsonField.ofNullable(textPrimary))
+
+                    /**
+                     * Sets [Builder.textPrimary] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.textPrimary] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun textPrimary(textPrimary: JsonField<String>) = apply {
+                        this.textPrimary = textPrimary
+                    }
+
+                    /** Text secondary color */
+                    fun textSecondary(textSecondary: String?) =
+                        textSecondary(JsonField.ofNullable(textSecondary))
+
+                    /**
+                     * Sets [Builder.textSecondary] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.textSecondary] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun textSecondary(textSecondary: JsonField<String>) = apply {
+                        this.textSecondary = textSecondary
+                    }
+
+                    /** Text success color */
+                    fun textSuccess(textSuccess: String?) =
+                        textSuccess(JsonField.ofNullable(textSuccess))
+
+                    /**
+                     * Sets [Builder.textSuccess] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.textSuccess] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun textSuccess(textSuccess: JsonField<String>) = apply {
+                        this.textSuccess = textSuccess
+                    }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [Dark].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
+                    fun build(): Dark =
+                        Dark(
+                            bgPrimary,
+                            bgSecondary,
+                            borderPrimary,
+                            borderSecondary,
+                            buttonPrimary,
+                            buttonPrimaryHover,
+                            buttonSecondary,
+                            buttonSecondaryHover,
+                            buttonTextPrimary,
+                            buttonTextSecondary,
+                            inputFocusBorder,
+                            textError,
+                            textPlaceholder,
+                            textPrimary,
+                            textSecondary,
+                            textSuccess,
+                            additionalProperties.toMutableMap(),
+                        )
+                }
+
+                private var validated: Boolean = false
+
+                fun validate(): Dark = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    bgPrimary()
+                    bgSecondary()
+                    borderPrimary()
+                    borderSecondary()
+                    buttonPrimary()
+                    buttonPrimaryHover()
+                    buttonSecondary()
+                    buttonSecondaryHover()
+                    buttonTextPrimary()
+                    buttonTextSecondary()
+                    inputFocusBorder()
+                    textError()
+                    textPlaceholder()
+                    textPrimary()
+                    textSecondary()
+                    textSuccess()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: DodoPaymentsInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                internal fun validity(): Int =
+                    (if (bgPrimary.asKnown() == null) 0 else 1) +
+                        (if (bgSecondary.asKnown() == null) 0 else 1) +
+                        (if (borderPrimary.asKnown() == null) 0 else 1) +
+                        (if (borderSecondary.asKnown() == null) 0 else 1) +
+                        (if (buttonPrimary.asKnown() == null) 0 else 1) +
+                        (if (buttonPrimaryHover.asKnown() == null) 0 else 1) +
+                        (if (buttonSecondary.asKnown() == null) 0 else 1) +
+                        (if (buttonSecondaryHover.asKnown() == null) 0 else 1) +
+                        (if (buttonTextPrimary.asKnown() == null) 0 else 1) +
+                        (if (buttonTextSecondary.asKnown() == null) 0 else 1) +
+                        (if (inputFocusBorder.asKnown() == null) 0 else 1) +
+                        (if (textError.asKnown() == null) 0 else 1) +
+                        (if (textPlaceholder.asKnown() == null) 0 else 1) +
+                        (if (textPrimary.asKnown() == null) 0 else 1) +
+                        (if (textSecondary.asKnown() == null) 0 else 1) +
+                        (if (textSuccess.asKnown() == null) 0 else 1)
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Dark &&
+                        bgPrimary == other.bgPrimary &&
+                        bgSecondary == other.bgSecondary &&
+                        borderPrimary == other.borderPrimary &&
+                        borderSecondary == other.borderSecondary &&
+                        buttonPrimary == other.buttonPrimary &&
+                        buttonPrimaryHover == other.buttonPrimaryHover &&
+                        buttonSecondary == other.buttonSecondary &&
+                        buttonSecondaryHover == other.buttonSecondaryHover &&
+                        buttonTextPrimary == other.buttonTextPrimary &&
+                        buttonTextSecondary == other.buttonTextSecondary &&
+                        inputFocusBorder == other.inputFocusBorder &&
+                        textError == other.textError &&
+                        textPlaceholder == other.textPlaceholder &&
+                        textPrimary == other.textPrimary &&
+                        textSecondary == other.textSecondary &&
+                        textSuccess == other.textSuccess &&
+                        additionalProperties == other.additionalProperties
+                }
+
+                private val hashCode: Int by lazy {
+                    Objects.hash(
+                        bgPrimary,
+                        bgSecondary,
+                        borderPrimary,
+                        borderSecondary,
+                        buttonPrimary,
+                        buttonPrimaryHover,
+                        buttonSecondary,
+                        buttonSecondaryHover,
+                        buttonTextPrimary,
+                        buttonTextSecondary,
+                        inputFocusBorder,
+                        textError,
+                        textPlaceholder,
+                        textPrimary,
+                        textSecondary,
+                        textSuccess,
+                        additionalProperties,
+                    )
+                }
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "Dark{bgPrimary=$bgPrimary, bgSecondary=$bgSecondary, borderPrimary=$borderPrimary, borderSecondary=$borderSecondary, buttonPrimary=$buttonPrimary, buttonPrimaryHover=$buttonPrimaryHover, buttonSecondary=$buttonSecondary, buttonSecondaryHover=$buttonSecondaryHover, buttonTextPrimary=$buttonTextPrimary, buttonTextSecondary=$buttonTextSecondary, inputFocusBorder=$inputFocusBorder, textError=$textError, textPlaceholder=$textPlaceholder, textPrimary=$textPrimary, textSecondary=$textSecondary, textSuccess=$textSuccess, additionalProperties=$additionalProperties}"
+            }
+
+            /** Font size for the checkout UI */
+            class FontSize @JsonCreator private constructor(private val value: JsonField<String>) :
+                Enum {
+
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    val XS = of("xs")
+
+                    val SM = of("sm")
+
+                    val MD = of("md")
+
+                    val LG = of("lg")
+
+                    val XL = of("xl")
+
+                    val _2XL = of("2xl")
+
+                    fun of(value: String) = FontSize(JsonField.of(value))
+                }
+
+                /** An enum containing [FontSize]'s known values. */
+                enum class Known {
+                    XS,
+                    SM,
+                    MD,
+                    LG,
+                    XL,
+                    _2XL,
+                }
+
+                /**
+                 * An enum containing [FontSize]'s known values, as well as an [_UNKNOWN] member.
+                 *
+                 * An instance of [FontSize] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    XS,
+                    SM,
+                    MD,
+                    LG,
+                    XL,
+                    _2XL,
+                    /**
+                     * An enum member indicating that [FontSize] was instantiated with an unknown
+                     * value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        XS -> Value.XS
+                        SM -> Value.SM
+                        MD -> Value.MD
+                        LG -> Value.LG
+                        XL -> Value.XL
+                        _2XL -> Value._2XL
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if this class instance's value is a not
+                 *   a known member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        XS -> Known.XS
+                        SM -> Known.SM
+                        MD -> Known.MD
+                        LG -> Known.LG
+                        XL -> Known.XL
+                        _2XL -> Known._2XL
+                        else -> throw DodoPaymentsInvalidDataException("Unknown FontSize: $value")
+                    }
+
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString()
+                        ?: throw DodoPaymentsInvalidDataException("Value is not a String")
+
+                private var validated: Boolean = false
+
+                fun validate(): FontSize = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: DodoPaymentsInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is FontSize && value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+            }
+
+            /** Font weight for the checkout UI */
+            class FontWeight
+            @JsonCreator
+            private constructor(private val value: JsonField<String>) : Enum {
+
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    val NORMAL = of("normal")
+
+                    val MEDIUM = of("medium")
+
+                    val BOLD = of("bold")
+
+                    val EXTRA_BOLD = of("extraBold")
+
+                    fun of(value: String) = FontWeight(JsonField.of(value))
+                }
+
+                /** An enum containing [FontWeight]'s known values. */
+                enum class Known {
+                    NORMAL,
+                    MEDIUM,
+                    BOLD,
+                    EXTRA_BOLD,
+                }
+
+                /**
+                 * An enum containing [FontWeight]'s known values, as well as an [_UNKNOWN] member.
+                 *
+                 * An instance of [FontWeight] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    NORMAL,
+                    MEDIUM,
+                    BOLD,
+                    EXTRA_BOLD,
+                    /**
+                     * An enum member indicating that [FontWeight] was instantiated with an unknown
+                     * value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        NORMAL -> Value.NORMAL
+                        MEDIUM -> Value.MEDIUM
+                        BOLD -> Value.BOLD
+                        EXTRA_BOLD -> Value.EXTRA_BOLD
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if this class instance's value is a not
+                 *   a known member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        NORMAL -> Known.NORMAL
+                        MEDIUM -> Known.MEDIUM
+                        BOLD -> Known.BOLD
+                        EXTRA_BOLD -> Known.EXTRA_BOLD
+                        else -> throw DodoPaymentsInvalidDataException("Unknown FontWeight: $value")
+                    }
+
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString()
+                        ?: throw DodoPaymentsInvalidDataException("Value is not a String")
+
+                private var validated: Boolean = false
+
+                fun validate(): FontWeight = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: DodoPaymentsInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is FontWeight && value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+            }
+
+            /** Light mode color configuration */
+            class Light
+            @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+            private constructor(
+                private val bgPrimary: JsonField<String>,
+                private val bgSecondary: JsonField<String>,
+                private val borderPrimary: JsonField<String>,
+                private val borderSecondary: JsonField<String>,
+                private val buttonPrimary: JsonField<String>,
+                private val buttonPrimaryHover: JsonField<String>,
+                private val buttonSecondary: JsonField<String>,
+                private val buttonSecondaryHover: JsonField<String>,
+                private val buttonTextPrimary: JsonField<String>,
+                private val buttonTextSecondary: JsonField<String>,
+                private val inputFocusBorder: JsonField<String>,
+                private val textError: JsonField<String>,
+                private val textPlaceholder: JsonField<String>,
+                private val textPrimary: JsonField<String>,
+                private val textSecondary: JsonField<String>,
+                private val textSuccess: JsonField<String>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("bg_primary")
+                    @ExcludeMissing
+                    bgPrimary: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("bg_secondary")
+                    @ExcludeMissing
+                    bgSecondary: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("border_primary")
+                    @ExcludeMissing
+                    borderPrimary: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("border_secondary")
+                    @ExcludeMissing
+                    borderSecondary: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("button_primary")
+                    @ExcludeMissing
+                    buttonPrimary: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("button_primary_hover")
+                    @ExcludeMissing
+                    buttonPrimaryHover: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("button_secondary")
+                    @ExcludeMissing
+                    buttonSecondary: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("button_secondary_hover")
+                    @ExcludeMissing
+                    buttonSecondaryHover: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("button_text_primary")
+                    @ExcludeMissing
+                    buttonTextPrimary: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("button_text_secondary")
+                    @ExcludeMissing
+                    buttonTextSecondary: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("input_focus_border")
+                    @ExcludeMissing
+                    inputFocusBorder: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("text_error")
+                    @ExcludeMissing
+                    textError: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("text_placeholder")
+                    @ExcludeMissing
+                    textPlaceholder: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("text_primary")
+                    @ExcludeMissing
+                    textPrimary: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("text_secondary")
+                    @ExcludeMissing
+                    textSecondary: JsonField<String> = JsonMissing.of(),
+                    @JsonProperty("text_success")
+                    @ExcludeMissing
+                    textSuccess: JsonField<String> = JsonMissing.of(),
+                ) : this(
+                    bgPrimary,
+                    bgSecondary,
+                    borderPrimary,
+                    borderSecondary,
+                    buttonPrimary,
+                    buttonPrimaryHover,
+                    buttonSecondary,
+                    buttonSecondaryHover,
+                    buttonTextPrimary,
+                    buttonTextSecondary,
+                    inputFocusBorder,
+                    textError,
+                    textPlaceholder,
+                    textPrimary,
+                    textSecondary,
+                    textSuccess,
+                    mutableMapOf(),
+                )
+
+                /**
+                 * Background primary color
+                 *
+                 * Examples: `"#ffffff"`, `"rgb(255, 255, 255)"`, `"white"`
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun bgPrimary(): String? = bgPrimary.getNullable("bg_primary")
+
+                /**
+                 * Background secondary color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun bgSecondary(): String? = bgSecondary.getNullable("bg_secondary")
+
+                /**
+                 * Border primary color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun borderPrimary(): String? = borderPrimary.getNullable("border_primary")
+
+                /**
+                 * Border secondary color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun borderSecondary(): String? = borderSecondary.getNullable("border_secondary")
+
+                /**
+                 * Primary button background color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun buttonPrimary(): String? = buttonPrimary.getNullable("button_primary")
+
+                /**
+                 * Primary button hover color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun buttonPrimaryHover(): String? =
+                    buttonPrimaryHover.getNullable("button_primary_hover")
+
+                /**
+                 * Secondary button background color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun buttonSecondary(): String? = buttonSecondary.getNullable("button_secondary")
+
+                /**
+                 * Secondary button hover color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun buttonSecondaryHover(): String? =
+                    buttonSecondaryHover.getNullable("button_secondary_hover")
+
+                /**
+                 * Primary button text color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun buttonTextPrimary(): String? =
+                    buttonTextPrimary.getNullable("button_text_primary")
+
+                /**
+                 * Secondary button text color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun buttonTextSecondary(): String? =
+                    buttonTextSecondary.getNullable("button_text_secondary")
+
+                /**
+                 * Input focus border color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun inputFocusBorder(): String? = inputFocusBorder.getNullable("input_focus_border")
+
+                /**
+                 * Text error color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun textError(): String? = textError.getNullable("text_error")
+
+                /**
+                 * Text placeholder color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun textPlaceholder(): String? = textPlaceholder.getNullable("text_placeholder")
+
+                /**
+                 * Text primary color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun textPrimary(): String? = textPrimary.getNullable("text_primary")
+
+                /**
+                 * Text secondary color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun textSecondary(): String? = textSecondary.getNullable("text_secondary")
+
+                /**
+                 * Text success color
+                 *
+                 * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+                 *   (e.g. if the server responded with an unexpected value).
+                 */
+                fun textSuccess(): String? = textSuccess.getNullable("text_success")
+
+                /**
+                 * Returns the raw JSON value of [bgPrimary].
+                 *
+                 * Unlike [bgPrimary], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("bg_primary")
+                @ExcludeMissing
+                fun _bgPrimary(): JsonField<String> = bgPrimary
+
+                /**
+                 * Returns the raw JSON value of [bgSecondary].
+                 *
+                 * Unlike [bgSecondary], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("bg_secondary")
+                @ExcludeMissing
+                fun _bgSecondary(): JsonField<String> = bgSecondary
+
+                /**
+                 * Returns the raw JSON value of [borderPrimary].
+                 *
+                 * Unlike [borderPrimary], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("border_primary")
+                @ExcludeMissing
+                fun _borderPrimary(): JsonField<String> = borderPrimary
+
+                /**
+                 * Returns the raw JSON value of [borderSecondary].
+                 *
+                 * Unlike [borderSecondary], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("border_secondary")
+                @ExcludeMissing
+                fun _borderSecondary(): JsonField<String> = borderSecondary
+
+                /**
+                 * Returns the raw JSON value of [buttonPrimary].
+                 *
+                 * Unlike [buttonPrimary], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("button_primary")
+                @ExcludeMissing
+                fun _buttonPrimary(): JsonField<String> = buttonPrimary
+
+                /**
+                 * Returns the raw JSON value of [buttonPrimaryHover].
+                 *
+                 * Unlike [buttonPrimaryHover], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("button_primary_hover")
+                @ExcludeMissing
+                fun _buttonPrimaryHover(): JsonField<String> = buttonPrimaryHover
+
+                /**
+                 * Returns the raw JSON value of [buttonSecondary].
+                 *
+                 * Unlike [buttonSecondary], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("button_secondary")
+                @ExcludeMissing
+                fun _buttonSecondary(): JsonField<String> = buttonSecondary
+
+                /**
+                 * Returns the raw JSON value of [buttonSecondaryHover].
+                 *
+                 * Unlike [buttonSecondaryHover], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("button_secondary_hover")
+                @ExcludeMissing
+                fun _buttonSecondaryHover(): JsonField<String> = buttonSecondaryHover
+
+                /**
+                 * Returns the raw JSON value of [buttonTextPrimary].
+                 *
+                 * Unlike [buttonTextPrimary], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("button_text_primary")
+                @ExcludeMissing
+                fun _buttonTextPrimary(): JsonField<String> = buttonTextPrimary
+
+                /**
+                 * Returns the raw JSON value of [buttonTextSecondary].
+                 *
+                 * Unlike [buttonTextSecondary], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("button_text_secondary")
+                @ExcludeMissing
+                fun _buttonTextSecondary(): JsonField<String> = buttonTextSecondary
+
+                /**
+                 * Returns the raw JSON value of [inputFocusBorder].
+                 *
+                 * Unlike [inputFocusBorder], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("input_focus_border")
+                @ExcludeMissing
+                fun _inputFocusBorder(): JsonField<String> = inputFocusBorder
+
+                /**
+                 * Returns the raw JSON value of [textError].
+                 *
+                 * Unlike [textError], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
+                @JsonProperty("text_error")
+                @ExcludeMissing
+                fun _textError(): JsonField<String> = textError
+
+                /**
+                 * Returns the raw JSON value of [textPlaceholder].
+                 *
+                 * Unlike [textPlaceholder], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("text_placeholder")
+                @ExcludeMissing
+                fun _textPlaceholder(): JsonField<String> = textPlaceholder
+
+                /**
+                 * Returns the raw JSON value of [textPrimary].
+                 *
+                 * Unlike [textPrimary], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("text_primary")
+                @ExcludeMissing
+                fun _textPrimary(): JsonField<String> = textPrimary
+
+                /**
+                 * Returns the raw JSON value of [textSecondary].
+                 *
+                 * Unlike [textSecondary], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("text_secondary")
+                @ExcludeMissing
+                fun _textSecondary(): JsonField<String> = textSecondary
+
+                /**
+                 * Returns the raw JSON value of [textSuccess].
+                 *
+                 * Unlike [textSuccess], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("text_success")
+                @ExcludeMissing
+                fun _textSuccess(): JsonField<String> = textSuccess
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /** Returns a mutable builder for constructing an instance of [Light]. */
+                    fun builder() = Builder()
+                }
+
+                /** A builder for [Light]. */
+                class Builder internal constructor() {
+
+                    private var bgPrimary: JsonField<String> = JsonMissing.of()
+                    private var bgSecondary: JsonField<String> = JsonMissing.of()
+                    private var borderPrimary: JsonField<String> = JsonMissing.of()
+                    private var borderSecondary: JsonField<String> = JsonMissing.of()
+                    private var buttonPrimary: JsonField<String> = JsonMissing.of()
+                    private var buttonPrimaryHover: JsonField<String> = JsonMissing.of()
+                    private var buttonSecondary: JsonField<String> = JsonMissing.of()
+                    private var buttonSecondaryHover: JsonField<String> = JsonMissing.of()
+                    private var buttonTextPrimary: JsonField<String> = JsonMissing.of()
+                    private var buttonTextSecondary: JsonField<String> = JsonMissing.of()
+                    private var inputFocusBorder: JsonField<String> = JsonMissing.of()
+                    private var textError: JsonField<String> = JsonMissing.of()
+                    private var textPlaceholder: JsonField<String> = JsonMissing.of()
+                    private var textPrimary: JsonField<String> = JsonMissing.of()
+                    private var textSecondary: JsonField<String> = JsonMissing.of()
+                    private var textSuccess: JsonField<String> = JsonMissing.of()
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    internal fun from(light: Light) = apply {
+                        bgPrimary = light.bgPrimary
+                        bgSecondary = light.bgSecondary
+                        borderPrimary = light.borderPrimary
+                        borderSecondary = light.borderSecondary
+                        buttonPrimary = light.buttonPrimary
+                        buttonPrimaryHover = light.buttonPrimaryHover
+                        buttonSecondary = light.buttonSecondary
+                        buttonSecondaryHover = light.buttonSecondaryHover
+                        buttonTextPrimary = light.buttonTextPrimary
+                        buttonTextSecondary = light.buttonTextSecondary
+                        inputFocusBorder = light.inputFocusBorder
+                        textError = light.textError
+                        textPlaceholder = light.textPlaceholder
+                        textPrimary = light.textPrimary
+                        textSecondary = light.textSecondary
+                        textSuccess = light.textSuccess
+                        additionalProperties = light.additionalProperties.toMutableMap()
+                    }
+
+                    /**
+                     * Background primary color
+                     *
+                     * Examples: `"#ffffff"`, `"rgb(255, 255, 255)"`, `"white"`
+                     */
+                    fun bgPrimary(bgPrimary: String?) = bgPrimary(JsonField.ofNullable(bgPrimary))
+
+                    /**
+                     * Sets [Builder.bgPrimary] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.bgPrimary] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
+                    fun bgPrimary(bgPrimary: JsonField<String>) = apply {
+                        this.bgPrimary = bgPrimary
+                    }
+
+                    /** Background secondary color */
+                    fun bgSecondary(bgSecondary: String?) =
+                        bgSecondary(JsonField.ofNullable(bgSecondary))
+
+                    /**
+                     * Sets [Builder.bgSecondary] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.bgSecondary] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun bgSecondary(bgSecondary: JsonField<String>) = apply {
+                        this.bgSecondary = bgSecondary
+                    }
+
+                    /** Border primary color */
+                    fun borderPrimary(borderPrimary: String?) =
+                        borderPrimary(JsonField.ofNullable(borderPrimary))
+
+                    /**
+                     * Sets [Builder.borderPrimary] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.borderPrimary] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun borderPrimary(borderPrimary: JsonField<String>) = apply {
+                        this.borderPrimary = borderPrimary
+                    }
+
+                    /** Border secondary color */
+                    fun borderSecondary(borderSecondary: String?) =
+                        borderSecondary(JsonField.ofNullable(borderSecondary))
+
+                    /**
+                     * Sets [Builder.borderSecondary] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.borderSecondary] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun borderSecondary(borderSecondary: JsonField<String>) = apply {
+                        this.borderSecondary = borderSecondary
+                    }
+
+                    /** Primary button background color */
+                    fun buttonPrimary(buttonPrimary: String?) =
+                        buttonPrimary(JsonField.ofNullable(buttonPrimary))
+
+                    /**
+                     * Sets [Builder.buttonPrimary] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.buttonPrimary] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun buttonPrimary(buttonPrimary: JsonField<String>) = apply {
+                        this.buttonPrimary = buttonPrimary
+                    }
+
+                    /** Primary button hover color */
+                    fun buttonPrimaryHover(buttonPrimaryHover: String?) =
+                        buttonPrimaryHover(JsonField.ofNullable(buttonPrimaryHover))
+
+                    /**
+                     * Sets [Builder.buttonPrimaryHover] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.buttonPrimaryHover] with a well-typed
+                     * [String] value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun buttonPrimaryHover(buttonPrimaryHover: JsonField<String>) = apply {
+                        this.buttonPrimaryHover = buttonPrimaryHover
+                    }
+
+                    /** Secondary button background color */
+                    fun buttonSecondary(buttonSecondary: String?) =
+                        buttonSecondary(JsonField.ofNullable(buttonSecondary))
+
+                    /**
+                     * Sets [Builder.buttonSecondary] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.buttonSecondary] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun buttonSecondary(buttonSecondary: JsonField<String>) = apply {
+                        this.buttonSecondary = buttonSecondary
+                    }
+
+                    /** Secondary button hover color */
+                    fun buttonSecondaryHover(buttonSecondaryHover: String?) =
+                        buttonSecondaryHover(JsonField.ofNullable(buttonSecondaryHover))
+
+                    /**
+                     * Sets [Builder.buttonSecondaryHover] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.buttonSecondaryHover] with a well-typed
+                     * [String] value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun buttonSecondaryHover(buttonSecondaryHover: JsonField<String>) = apply {
+                        this.buttonSecondaryHover = buttonSecondaryHover
+                    }
+
+                    /** Primary button text color */
+                    fun buttonTextPrimary(buttonTextPrimary: String?) =
+                        buttonTextPrimary(JsonField.ofNullable(buttonTextPrimary))
+
+                    /**
+                     * Sets [Builder.buttonTextPrimary] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.buttonTextPrimary] with a well-typed
+                     * [String] value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun buttonTextPrimary(buttonTextPrimary: JsonField<String>) = apply {
+                        this.buttonTextPrimary = buttonTextPrimary
+                    }
+
+                    /** Secondary button text color */
+                    fun buttonTextSecondary(buttonTextSecondary: String?) =
+                        buttonTextSecondary(JsonField.ofNullable(buttonTextSecondary))
+
+                    /**
+                     * Sets [Builder.buttonTextSecondary] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.buttonTextSecondary] with a well-typed
+                     * [String] value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun buttonTextSecondary(buttonTextSecondary: JsonField<String>) = apply {
+                        this.buttonTextSecondary = buttonTextSecondary
+                    }
+
+                    /** Input focus border color */
+                    fun inputFocusBorder(inputFocusBorder: String?) =
+                        inputFocusBorder(JsonField.ofNullable(inputFocusBorder))
+
+                    /**
+                     * Sets [Builder.inputFocusBorder] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.inputFocusBorder] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun inputFocusBorder(inputFocusBorder: JsonField<String>) = apply {
+                        this.inputFocusBorder = inputFocusBorder
+                    }
+
+                    /** Text error color */
+                    fun textError(textError: String?) = textError(JsonField.ofNullable(textError))
+
+                    /**
+                     * Sets [Builder.textError] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.textError] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
+                    fun textError(textError: JsonField<String>) = apply {
+                        this.textError = textError
+                    }
+
+                    /** Text placeholder color */
+                    fun textPlaceholder(textPlaceholder: String?) =
+                        textPlaceholder(JsonField.ofNullable(textPlaceholder))
+
+                    /**
+                     * Sets [Builder.textPlaceholder] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.textPlaceholder] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun textPlaceholder(textPlaceholder: JsonField<String>) = apply {
+                        this.textPlaceholder = textPlaceholder
+                    }
+
+                    /** Text primary color */
+                    fun textPrimary(textPrimary: String?) =
+                        textPrimary(JsonField.ofNullable(textPrimary))
+
+                    /**
+                     * Sets [Builder.textPrimary] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.textPrimary] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun textPrimary(textPrimary: JsonField<String>) = apply {
+                        this.textPrimary = textPrimary
+                    }
+
+                    /** Text secondary color */
+                    fun textSecondary(textSecondary: String?) =
+                        textSecondary(JsonField.ofNullable(textSecondary))
+
+                    /**
+                     * Sets [Builder.textSecondary] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.textSecondary] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun textSecondary(textSecondary: JsonField<String>) = apply {
+                        this.textSecondary = textSecondary
+                    }
+
+                    /** Text success color */
+                    fun textSuccess(textSuccess: String?) =
+                        textSuccess(JsonField.ofNullable(textSuccess))
+
+                    /**
+                     * Sets [Builder.textSuccess] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.textSuccess] with a well-typed [String]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun textSuccess(textSuccess: JsonField<String>) = apply {
+                        this.textSuccess = textSuccess
+                    }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [Light].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
+                    fun build(): Light =
+                        Light(
+                            bgPrimary,
+                            bgSecondary,
+                            borderPrimary,
+                            borderSecondary,
+                            buttonPrimary,
+                            buttonPrimaryHover,
+                            buttonSecondary,
+                            buttonSecondaryHover,
+                            buttonTextPrimary,
+                            buttonTextSecondary,
+                            inputFocusBorder,
+                            textError,
+                            textPlaceholder,
+                            textPrimary,
+                            textSecondary,
+                            textSuccess,
+                            additionalProperties.toMutableMap(),
+                        )
+                }
+
+                private var validated: Boolean = false
+
+                fun validate(): Light = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    bgPrimary()
+                    bgSecondary()
+                    borderPrimary()
+                    borderSecondary()
+                    buttonPrimary()
+                    buttonPrimaryHover()
+                    buttonSecondary()
+                    buttonSecondaryHover()
+                    buttonTextPrimary()
+                    buttonTextSecondary()
+                    inputFocusBorder()
+                    textError()
+                    textPlaceholder()
+                    textPrimary()
+                    textSecondary()
+                    textSuccess()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: DodoPaymentsInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                internal fun validity(): Int =
+                    (if (bgPrimary.asKnown() == null) 0 else 1) +
+                        (if (bgSecondary.asKnown() == null) 0 else 1) +
+                        (if (borderPrimary.asKnown() == null) 0 else 1) +
+                        (if (borderSecondary.asKnown() == null) 0 else 1) +
+                        (if (buttonPrimary.asKnown() == null) 0 else 1) +
+                        (if (buttonPrimaryHover.asKnown() == null) 0 else 1) +
+                        (if (buttonSecondary.asKnown() == null) 0 else 1) +
+                        (if (buttonSecondaryHover.asKnown() == null) 0 else 1) +
+                        (if (buttonTextPrimary.asKnown() == null) 0 else 1) +
+                        (if (buttonTextSecondary.asKnown() == null) 0 else 1) +
+                        (if (inputFocusBorder.asKnown() == null) 0 else 1) +
+                        (if (textError.asKnown() == null) 0 else 1) +
+                        (if (textPlaceholder.asKnown() == null) 0 else 1) +
+                        (if (textPrimary.asKnown() == null) 0 else 1) +
+                        (if (textSecondary.asKnown() == null) 0 else 1) +
+                        (if (textSuccess.asKnown() == null) 0 else 1)
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Light &&
+                        bgPrimary == other.bgPrimary &&
+                        bgSecondary == other.bgSecondary &&
+                        borderPrimary == other.borderPrimary &&
+                        borderSecondary == other.borderSecondary &&
+                        buttonPrimary == other.buttonPrimary &&
+                        buttonPrimaryHover == other.buttonPrimaryHover &&
+                        buttonSecondary == other.buttonSecondary &&
+                        buttonSecondaryHover == other.buttonSecondaryHover &&
+                        buttonTextPrimary == other.buttonTextPrimary &&
+                        buttonTextSecondary == other.buttonTextSecondary &&
+                        inputFocusBorder == other.inputFocusBorder &&
+                        textError == other.textError &&
+                        textPlaceholder == other.textPlaceholder &&
+                        textPrimary == other.textPrimary &&
+                        textSecondary == other.textSecondary &&
+                        textSuccess == other.textSuccess &&
+                        additionalProperties == other.additionalProperties
+                }
+
+                private val hashCode: Int by lazy {
+                    Objects.hash(
+                        bgPrimary,
+                        bgSecondary,
+                        borderPrimary,
+                        borderSecondary,
+                        buttonPrimary,
+                        buttonPrimaryHover,
+                        buttonSecondary,
+                        buttonSecondaryHover,
+                        buttonTextPrimary,
+                        buttonTextSecondary,
+                        inputFocusBorder,
+                        textError,
+                        textPlaceholder,
+                        textPrimary,
+                        textSecondary,
+                        textSuccess,
+                        additionalProperties,
+                    )
+                }
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "Light{bgPrimary=$bgPrimary, bgSecondary=$bgSecondary, borderPrimary=$borderPrimary, borderSecondary=$borderSecondary, buttonPrimary=$buttonPrimary, buttonPrimaryHover=$buttonPrimaryHover, buttonSecondary=$buttonSecondary, buttonSecondaryHover=$buttonSecondaryHover, buttonTextPrimary=$buttonTextPrimary, buttonTextSecondary=$buttonTextSecondary, inputFocusBorder=$inputFocusBorder, textError=$textError, textPlaceholder=$textPlaceholder, textPrimary=$textPrimary, textSecondary=$textSecondary, textSuccess=$textSuccess, additionalProperties=$additionalProperties}"
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is ThemeConfig &&
+                    dark == other.dark &&
+                    fontSize == other.fontSize &&
+                    fontWeight == other.fontWeight &&
+                    light == other.light &&
+                    payButtonText == other.payButtonText &&
+                    radius == other.radius &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(
+                    dark,
+                    fontSize,
+                    fontWeight,
+                    light,
+                    payButtonText,
+                    radius,
+                    additionalProperties,
+                )
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "ThemeConfig{dark=$dark, fontSize=$fontSize, fontWeight=$fontWeight, light=$light, payButtonText=$payButtonText, radius=$radius, additionalProperties=$additionalProperties}"
+        }
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
@@ -2541,6 +4927,7 @@ private constructor(
                 showOnDemandTag == other.showOnDemandTag &&
                 showOrderDetails == other.showOrderDetails &&
                 theme == other.theme &&
+                themeConfig == other.themeConfig &&
                 additionalProperties == other.additionalProperties
         }
 
@@ -2550,6 +4937,7 @@ private constructor(
                 showOnDemandTag,
                 showOrderDetails,
                 theme,
+                themeConfig,
                 additionalProperties,
             )
         }
@@ -2557,7 +4945,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Customization{forceLanguage=$forceLanguage, showOnDemandTag=$showOnDemandTag, showOrderDetails=$showOrderDetails, theme=$theme, additionalProperties=$additionalProperties}"
+            "Customization{forceLanguage=$forceLanguage, showOnDemandTag=$showOnDemandTag, showOrderDetails=$showOrderDetails, theme=$theme, themeConfig=$themeConfig, additionalProperties=$additionalProperties}"
     }
 
     class FeatureFlags
