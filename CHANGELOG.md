@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.78.0 (2026-02-02)
+
+Full Changelog: [v1.75.1...v1.78.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.75.1...v1.78.0)
+
+### Features
+
+* **api:** updated openapi spec for v1.78.1 ([4d1b846](https://github.com/dodopayments/dodopayments-kotlin/commit/4d1b8469e7590f4cc661811f70754e68b3afd0c3))
+
+
+### Chores
+
+* **internal:** allow passing args to `./scripts/test` ([976d229](https://github.com/dodopayments/dodopayments-kotlin/commit/976d229a3b5809ea5680861e5653c4ccaaebe457))
+
 ## 1.75.1 (2026-01-29)
 
 Full Changelog: [v1.75.0...v1.75.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.75.0...v1.75.1)
