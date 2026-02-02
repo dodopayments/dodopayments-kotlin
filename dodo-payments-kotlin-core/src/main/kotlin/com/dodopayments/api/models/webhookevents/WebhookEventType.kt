@@ -66,6 +66,16 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
 
         val LICENSE_KEY_CREATED = of("license_key.created")
 
+        val PAYOUT_NOT_INITIATED = of("payout.not_initiated")
+
+        val PAYOUT_ON_HOLD = of("payout.on_hold")
+
+        val PAYOUT_IN_PROGRESS = of("payout.in_progress")
+
+        val PAYOUT_FAILED = of("payout.failed")
+
+        val PAYOUT_SUCCESS = of("payout.success")
+
         fun of(value: String) = WebhookEventType(JsonField.of(value))
     }
 
@@ -93,6 +103,11 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         SUBSCRIPTION_PLAN_CHANGED,
         SUBSCRIPTION_UPDATED,
         LICENSE_KEY_CREATED,
+        PAYOUT_NOT_INITIATED,
+        PAYOUT_ON_HOLD,
+        PAYOUT_IN_PROGRESS,
+        PAYOUT_FAILED,
+        PAYOUT_SUCCESS,
     }
 
     /**
@@ -127,6 +142,11 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         SUBSCRIPTION_PLAN_CHANGED,
         SUBSCRIPTION_UPDATED,
         LICENSE_KEY_CREATED,
+        PAYOUT_NOT_INITIATED,
+        PAYOUT_ON_HOLD,
+        PAYOUT_IN_PROGRESS,
+        PAYOUT_FAILED,
+        PAYOUT_SUCCESS,
         /**
          * An enum member indicating that [WebhookEventType] was instantiated with an unknown value.
          */
@@ -164,6 +184,11 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             SUBSCRIPTION_PLAN_CHANGED -> Value.SUBSCRIPTION_PLAN_CHANGED
             SUBSCRIPTION_UPDATED -> Value.SUBSCRIPTION_UPDATED
             LICENSE_KEY_CREATED -> Value.LICENSE_KEY_CREATED
+            PAYOUT_NOT_INITIATED -> Value.PAYOUT_NOT_INITIATED
+            PAYOUT_ON_HOLD -> Value.PAYOUT_ON_HOLD
+            PAYOUT_IN_PROGRESS -> Value.PAYOUT_IN_PROGRESS
+            PAYOUT_FAILED -> Value.PAYOUT_FAILED
+            PAYOUT_SUCCESS -> Value.PAYOUT_SUCCESS
             else -> Value._UNKNOWN
         }
 
@@ -200,6 +225,11 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             SUBSCRIPTION_PLAN_CHANGED -> Known.SUBSCRIPTION_PLAN_CHANGED
             SUBSCRIPTION_UPDATED -> Known.SUBSCRIPTION_UPDATED
             LICENSE_KEY_CREATED -> Known.LICENSE_KEY_CREATED
+            PAYOUT_NOT_INITIATED -> Known.PAYOUT_NOT_INITIATED
+            PAYOUT_ON_HOLD -> Known.PAYOUT_ON_HOLD
+            PAYOUT_IN_PROGRESS -> Known.PAYOUT_IN_PROGRESS
+            PAYOUT_FAILED -> Known.PAYOUT_FAILED
+            PAYOUT_SUCCESS -> Known.PAYOUT_SUCCESS
             else -> throw DodoPaymentsInvalidDataException("Unknown WebhookEventType: $value")
         }
 
