@@ -1,0 +1,175 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package com.dodopayments.api.models.checkoutsessions
+
+import com.dodopayments.api.core.jsonMapper
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+
+internal class ThemeConfigTest {
+
+    @Test
+    fun create() {
+        val themeConfig =
+            ThemeConfig.builder()
+                .dark(
+                    ThemeModeConfig.builder()
+                        .bgPrimary("bg_primary")
+                        .bgSecondary("bg_secondary")
+                        .borderPrimary("border_primary")
+                        .borderSecondary("border_secondary")
+                        .buttonPrimary("button_primary")
+                        .buttonPrimaryHover("button_primary_hover")
+                        .buttonSecondary("button_secondary")
+                        .buttonSecondaryHover("button_secondary_hover")
+                        .buttonTextPrimary("button_text_primary")
+                        .buttonTextSecondary("button_text_secondary")
+                        .inputFocusBorder("input_focus_border")
+                        .textError("text_error")
+                        .textPlaceholder("text_placeholder")
+                        .textPrimary("text_primary")
+                        .textSecondary("text_secondary")
+                        .textSuccess("text_success")
+                        .build()
+                )
+                .fontPrimaryUrl("font_primary_url")
+                .fontSecondaryUrl("font_secondary_url")
+                .fontSize(ThemeConfig.FontSize.XS)
+                .fontWeight(ThemeConfig.FontWeight.NORMAL)
+                .light(
+                    ThemeModeConfig.builder()
+                        .bgPrimary("bg_primary")
+                        .bgSecondary("bg_secondary")
+                        .borderPrimary("border_primary")
+                        .borderSecondary("border_secondary")
+                        .buttonPrimary("button_primary")
+                        .buttonPrimaryHover("button_primary_hover")
+                        .buttonSecondary("button_secondary")
+                        .buttonSecondaryHover("button_secondary_hover")
+                        .buttonTextPrimary("button_text_primary")
+                        .buttonTextSecondary("button_text_secondary")
+                        .inputFocusBorder("input_focus_border")
+                        .textError("text_error")
+                        .textPlaceholder("text_placeholder")
+                        .textPrimary("text_primary")
+                        .textSecondary("text_secondary")
+                        .textSuccess("text_success")
+                        .build()
+                )
+                .payButtonText("pay_button_text")
+                .radius("radius")
+                .build()
+
+        assertThat(themeConfig.dark())
+            .isEqualTo(
+                ThemeModeConfig.builder()
+                    .bgPrimary("bg_primary")
+                    .bgSecondary("bg_secondary")
+                    .borderPrimary("border_primary")
+                    .borderSecondary("border_secondary")
+                    .buttonPrimary("button_primary")
+                    .buttonPrimaryHover("button_primary_hover")
+                    .buttonSecondary("button_secondary")
+                    .buttonSecondaryHover("button_secondary_hover")
+                    .buttonTextPrimary("button_text_primary")
+                    .buttonTextSecondary("button_text_secondary")
+                    .inputFocusBorder("input_focus_border")
+                    .textError("text_error")
+                    .textPlaceholder("text_placeholder")
+                    .textPrimary("text_primary")
+                    .textSecondary("text_secondary")
+                    .textSuccess("text_success")
+                    .build()
+            )
+        assertThat(themeConfig.fontPrimaryUrl()).isEqualTo("font_primary_url")
+        assertThat(themeConfig.fontSecondaryUrl()).isEqualTo("font_secondary_url")
+        assertThat(themeConfig.fontSize()).isEqualTo(ThemeConfig.FontSize.XS)
+        assertThat(themeConfig.fontWeight()).isEqualTo(ThemeConfig.FontWeight.NORMAL)
+        assertThat(themeConfig.light())
+            .isEqualTo(
+                ThemeModeConfig.builder()
+                    .bgPrimary("bg_primary")
+                    .bgSecondary("bg_secondary")
+                    .borderPrimary("border_primary")
+                    .borderSecondary("border_secondary")
+                    .buttonPrimary("button_primary")
+                    .buttonPrimaryHover("button_primary_hover")
+                    .buttonSecondary("button_secondary")
+                    .buttonSecondaryHover("button_secondary_hover")
+                    .buttonTextPrimary("button_text_primary")
+                    .buttonTextSecondary("button_text_secondary")
+                    .inputFocusBorder("input_focus_border")
+                    .textError("text_error")
+                    .textPlaceholder("text_placeholder")
+                    .textPrimary("text_primary")
+                    .textSecondary("text_secondary")
+                    .textSuccess("text_success")
+                    .build()
+            )
+        assertThat(themeConfig.payButtonText()).isEqualTo("pay_button_text")
+        assertThat(themeConfig.radius()).isEqualTo("radius")
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val themeConfig =
+            ThemeConfig.builder()
+                .dark(
+                    ThemeModeConfig.builder()
+                        .bgPrimary("bg_primary")
+                        .bgSecondary("bg_secondary")
+                        .borderPrimary("border_primary")
+                        .borderSecondary("border_secondary")
+                        .buttonPrimary("button_primary")
+                        .buttonPrimaryHover("button_primary_hover")
+                        .buttonSecondary("button_secondary")
+                        .buttonSecondaryHover("button_secondary_hover")
+                        .buttonTextPrimary("button_text_primary")
+                        .buttonTextSecondary("button_text_secondary")
+                        .inputFocusBorder("input_focus_border")
+                        .textError("text_error")
+                        .textPlaceholder("text_placeholder")
+                        .textPrimary("text_primary")
+                        .textSecondary("text_secondary")
+                        .textSuccess("text_success")
+                        .build()
+                )
+                .fontPrimaryUrl("font_primary_url")
+                .fontSecondaryUrl("font_secondary_url")
+                .fontSize(ThemeConfig.FontSize.XS)
+                .fontWeight(ThemeConfig.FontWeight.NORMAL)
+                .light(
+                    ThemeModeConfig.builder()
+                        .bgPrimary("bg_primary")
+                        .bgSecondary("bg_secondary")
+                        .borderPrimary("border_primary")
+                        .borderSecondary("border_secondary")
+                        .buttonPrimary("button_primary")
+                        .buttonPrimaryHover("button_primary_hover")
+                        .buttonSecondary("button_secondary")
+                        .buttonSecondaryHover("button_secondary_hover")
+                        .buttonTextPrimary("button_text_primary")
+                        .buttonTextSecondary("button_text_secondary")
+                        .inputFocusBorder("input_focus_border")
+                        .textError("text_error")
+                        .textPlaceholder("text_placeholder")
+                        .textPrimary("text_primary")
+                        .textSecondary("text_secondary")
+                        .textSuccess("text_success")
+                        .build()
+                )
+                .payButtonText("pay_button_text")
+                .radius("radius")
+                .build()
+
+        val roundtrippedThemeConfig =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(themeConfig),
+                jacksonTypeRef<ThemeConfig>(),
+            )
+
+        assertThat(roundtrippedThemeConfig).isEqualTo(themeConfig)
+    }
+}

@@ -6,6 +6,8 @@ import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.getPackageVersion
 import com.dodopayments.api.services.async.AddonServiceAsync
 import com.dodopayments.api.services.async.AddonServiceAsyncImpl
+import com.dodopayments.api.services.async.BalanceServiceAsync
+import com.dodopayments.api.services.async.BalanceServiceAsyncImpl
 import com.dodopayments.api.services.async.BrandServiceAsync
 import com.dodopayments.api.services.async.BrandServiceAsyncImpl
 import com.dodopayments.api.services.async.CheckoutSessionServiceAsync
@@ -141,6 +143,10 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
         MeterServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
+    private val balances: BalanceServiceAsync by lazy {
+        BalanceServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
+
     override fun sync(): DodoPaymentsClient = sync
 
     override fun withRawResponse(): DodoPaymentsClientAsync.WithRawResponse = withRawResponse
@@ -187,6 +193,8 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
     override fun usageEvents(): UsageEventServiceAsync = usageEvents
 
     override fun meters(): MeterServiceAsync = meters
+
+    override fun balances(): BalanceServiceAsync = balances
 
     override fun close() = clientOptions.close()
 
@@ -273,6 +281,10 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
             MeterServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val balances: BalanceServiceAsync.WithRawResponse by lazy {
+            BalanceServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): DodoPaymentsClientAsync.WithRawResponse =
@@ -321,5 +333,7 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
         override fun usageEvents(): UsageEventServiceAsync.WithRawResponse = usageEvents
 
         override fun meters(): MeterServiceAsync.WithRawResponse = meters
+
+        override fun balances(): BalanceServiceAsync.WithRawResponse = balances
     }
 }

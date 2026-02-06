@@ -113,6 +113,7 @@ internal class PaymentFailedWebhookEventTest {
                                 .quantity(0)
                                 .build()
                         )
+                        .refundStatus(Payment.RefundStatus.PARTIAL)
                         .settlementTax(0)
                         .status(IntentStatus.SUCCEEDED)
                         .subscriptionId("subscription_id")
@@ -210,6 +211,7 @@ internal class PaymentFailedWebhookEventTest {
                     .addProductCart(
                         Payment.ProductCart.builder().productId("product_id").quantity(0).build()
                     )
+                    .refundStatus(Payment.RefundStatus.PARTIAL)
                     .settlementTax(0)
                     .status(IntentStatus.SUCCEEDED)
                     .subscriptionId("subscription_id")
@@ -316,6 +318,7 @@ internal class PaymentFailedWebhookEventTest {
                                 .quantity(0)
                                 .build()
                         )
+                        .refundStatus(Payment.RefundStatus.PARTIAL)
                         .settlementTax(0)
                         .status(IntentStatus.SUCCEEDED)
                         .subscriptionId("subscription_id")
