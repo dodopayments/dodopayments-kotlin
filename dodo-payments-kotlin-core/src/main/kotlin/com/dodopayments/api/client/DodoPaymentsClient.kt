@@ -4,6 +4,7 @@ package com.dodopayments.api.client
 
 import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.services.blocking.AddonService
+import com.dodopayments.api.services.blocking.BalanceService
 import com.dodopayments.api.services.blocking.BrandService
 import com.dodopayments.api.services.blocking.CheckoutSessionService
 import com.dodopayments.api.services.blocking.CustomerService
@@ -100,6 +101,8 @@ interface DodoPaymentsClient {
 
     fun meters(): MeterService
 
+    fun balances(): BalanceService
+
     /**
      * Closes this client, relinquishing any underlying resources.
      *
@@ -166,5 +169,7 @@ interface DodoPaymentsClient {
         fun usageEvents(): UsageEventService.WithRawResponse
 
         fun meters(): MeterService.WithRawResponse
+
+        fun balances(): BalanceService.WithRawResponse
     }
 }

@@ -22,7 +22,7 @@ internal class CheckoutSessionRequestTest {
         val checkoutSessionRequest =
             CheckoutSessionRequest.builder()
                 .addProductCart(
-                    CheckoutSessionRequest.ProductCart.builder()
+                    ProductItemReq.builder()
                         .productId("product_id")
                         .quantity(0)
                         .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
@@ -31,7 +31,7 @@ internal class CheckoutSessionRequestTest {
                 )
                 .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
                 .billingAddress(
-                    CheckoutSessionRequest.BillingAddress.builder()
+                    CheckoutSessionBillingAddress.builder()
                         .country(CountryCode.AF)
                         .city("city")
                         .state("state")
@@ -42,8 +42,8 @@ internal class CheckoutSessionRequestTest {
                 .billingCurrency(Currency.AED)
                 .confirm(true)
                 .addCustomField(
-                    CheckoutSessionRequest.CustomField.builder()
-                        .fieldType(CheckoutSessionRequest.CustomField.FieldType.TEXT)
+                    CustomField.builder()
+                        .fieldType(CustomField.FieldType.TEXT)
                         .key("key")
                         .label("label")
                         .addOption("string")
@@ -53,15 +53,15 @@ internal class CheckoutSessionRequestTest {
                 )
                 .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
                 .customization(
-                    CheckoutSessionRequest.Customization.builder()
+                    CheckoutSessionCustomization.builder()
                         .forceLanguage("force_language")
                         .showOnDemandTag(true)
                         .showOrderDetails(true)
-                        .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                        .theme(CheckoutSessionCustomization.Theme.DARK)
                         .themeConfig(
-                            CheckoutSessionRequest.Customization.ThemeConfig.builder()
+                            ThemeConfig.builder()
                                 .dark(
-                                    CheckoutSessionRequest.Customization.ThemeConfig.Dark.builder()
+                                    ThemeModeConfig.builder()
                                         .bgPrimary("bg_primary")
                                         .bgSecondary("bg_secondary")
                                         .borderPrimary("border_primary")
@@ -80,15 +80,12 @@ internal class CheckoutSessionRequestTest {
                                         .textSuccess("text_success")
                                         .build()
                                 )
-                                .fontSize(
-                                    CheckoutSessionRequest.Customization.ThemeConfig.FontSize.XS
-                                )
-                                .fontWeight(
-                                    CheckoutSessionRequest.Customization.ThemeConfig.FontWeight
-                                        .NORMAL
-                                )
+                                .fontPrimaryUrl("font_primary_url")
+                                .fontSecondaryUrl("font_secondary_url")
+                                .fontSize(ThemeConfig.FontSize.XS)
+                                .fontWeight(ThemeConfig.FontWeight.NORMAL)
                                 .light(
-                                    CheckoutSessionRequest.Customization.ThemeConfig.Light.builder()
+                                    ThemeModeConfig.builder()
                                         .bgPrimary("bg_primary")
                                         .bgSecondary("bg_secondary")
                                         .borderPrimary("border_primary")
@@ -115,7 +112,7 @@ internal class CheckoutSessionRequestTest {
                 )
                 .discountCode("discount_code")
                 .featureFlags(
-                    CheckoutSessionRequest.FeatureFlags.builder()
+                    CheckoutSessionFlags.builder()
                         .allowCurrencySelection(true)
                         .allowCustomerEditingCity(true)
                         .allowCustomerEditingCountry(true)
@@ -144,7 +141,7 @@ internal class CheckoutSessionRequestTest {
                 .shortLink(true)
                 .showSavedPaymentMethods(true)
                 .subscriptionData(
-                    CheckoutSessionRequest.SubscriptionData.builder()
+                    SubscriptionData.builder()
                         .onDemand(
                             OnDemandSubscription.builder()
                                 .mandateOnly(true)
@@ -161,7 +158,7 @@ internal class CheckoutSessionRequestTest {
 
         assertThat(checkoutSessionRequest.productCart())
             .containsExactly(
-                CheckoutSessionRequest.ProductCart.builder()
+                ProductItemReq.builder()
                     .productId("product_id")
                     .quantity(0)
                     .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
@@ -172,7 +169,7 @@ internal class CheckoutSessionRequestTest {
             .containsExactly(PaymentMethodTypes.ACH)
         assertThat(checkoutSessionRequest.billingAddress())
             .isEqualTo(
-                CheckoutSessionRequest.BillingAddress.builder()
+                CheckoutSessionBillingAddress.builder()
                     .country(CountryCode.AF)
                     .city("city")
                     .state("state")
@@ -184,8 +181,8 @@ internal class CheckoutSessionRequestTest {
         assertThat(checkoutSessionRequest.confirm()).isEqualTo(true)
         assertThat(checkoutSessionRequest.customFields())
             .containsExactly(
-                CheckoutSessionRequest.CustomField.builder()
-                    .fieldType(CheckoutSessionRequest.CustomField.FieldType.TEXT)
+                CustomField.builder()
+                    .fieldType(CustomField.FieldType.TEXT)
                     .key("key")
                     .label("label")
                     .addOption("string")
@@ -201,15 +198,15 @@ internal class CheckoutSessionRequestTest {
             )
         assertThat(checkoutSessionRequest.customization())
             .isEqualTo(
-                CheckoutSessionRequest.Customization.builder()
+                CheckoutSessionCustomization.builder()
                     .forceLanguage("force_language")
                     .showOnDemandTag(true)
                     .showOrderDetails(true)
-                    .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                    .theme(CheckoutSessionCustomization.Theme.DARK)
                     .themeConfig(
-                        CheckoutSessionRequest.Customization.ThemeConfig.builder()
+                        ThemeConfig.builder()
                             .dark(
-                                CheckoutSessionRequest.Customization.ThemeConfig.Dark.builder()
+                                ThemeModeConfig.builder()
                                     .bgPrimary("bg_primary")
                                     .bgSecondary("bg_secondary")
                                     .borderPrimary("border_primary")
@@ -228,12 +225,12 @@ internal class CheckoutSessionRequestTest {
                                     .textSuccess("text_success")
                                     .build()
                             )
-                            .fontSize(CheckoutSessionRequest.Customization.ThemeConfig.FontSize.XS)
-                            .fontWeight(
-                                CheckoutSessionRequest.Customization.ThemeConfig.FontWeight.NORMAL
-                            )
+                            .fontPrimaryUrl("font_primary_url")
+                            .fontSecondaryUrl("font_secondary_url")
+                            .fontSize(ThemeConfig.FontSize.XS)
+                            .fontWeight(ThemeConfig.FontWeight.NORMAL)
                             .light(
-                                CheckoutSessionRequest.Customization.ThemeConfig.Light.builder()
+                                ThemeModeConfig.builder()
                                     .bgPrimary("bg_primary")
                                     .bgSecondary("bg_secondary")
                                     .borderPrimary("border_primary")
@@ -261,7 +258,7 @@ internal class CheckoutSessionRequestTest {
         assertThat(checkoutSessionRequest.discountCode()).isEqualTo("discount_code")
         assertThat(checkoutSessionRequest.featureFlags())
             .isEqualTo(
-                CheckoutSessionRequest.FeatureFlags.builder()
+                CheckoutSessionFlags.builder()
                     .allowCurrencySelection(true)
                     .allowCustomerEditingCity(true)
                     .allowCustomerEditingCountry(true)
@@ -292,7 +289,7 @@ internal class CheckoutSessionRequestTest {
         assertThat(checkoutSessionRequest.showSavedPaymentMethods()).isEqualTo(true)
         assertThat(checkoutSessionRequest.subscriptionData())
             .isEqualTo(
-                CheckoutSessionRequest.SubscriptionData.builder()
+                SubscriptionData.builder()
                     .onDemand(
                         OnDemandSubscription.builder()
                             .mandateOnly(true)
@@ -313,7 +310,7 @@ internal class CheckoutSessionRequestTest {
         val checkoutSessionRequest =
             CheckoutSessionRequest.builder()
                 .addProductCart(
-                    CheckoutSessionRequest.ProductCart.builder()
+                    ProductItemReq.builder()
                         .productId("product_id")
                         .quantity(0)
                         .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
@@ -322,7 +319,7 @@ internal class CheckoutSessionRequestTest {
                 )
                 .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
                 .billingAddress(
-                    CheckoutSessionRequest.BillingAddress.builder()
+                    CheckoutSessionBillingAddress.builder()
                         .country(CountryCode.AF)
                         .city("city")
                         .state("state")
@@ -333,8 +330,8 @@ internal class CheckoutSessionRequestTest {
                 .billingCurrency(Currency.AED)
                 .confirm(true)
                 .addCustomField(
-                    CheckoutSessionRequest.CustomField.builder()
-                        .fieldType(CheckoutSessionRequest.CustomField.FieldType.TEXT)
+                    CustomField.builder()
+                        .fieldType(CustomField.FieldType.TEXT)
                         .key("key")
                         .label("label")
                         .addOption("string")
@@ -344,15 +341,15 @@ internal class CheckoutSessionRequestTest {
                 )
                 .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
                 .customization(
-                    CheckoutSessionRequest.Customization.builder()
+                    CheckoutSessionCustomization.builder()
                         .forceLanguage("force_language")
                         .showOnDemandTag(true)
                         .showOrderDetails(true)
-                        .theme(CheckoutSessionRequest.Customization.Theme.DARK)
+                        .theme(CheckoutSessionCustomization.Theme.DARK)
                         .themeConfig(
-                            CheckoutSessionRequest.Customization.ThemeConfig.builder()
+                            ThemeConfig.builder()
                                 .dark(
-                                    CheckoutSessionRequest.Customization.ThemeConfig.Dark.builder()
+                                    ThemeModeConfig.builder()
                                         .bgPrimary("bg_primary")
                                         .bgSecondary("bg_secondary")
                                         .borderPrimary("border_primary")
@@ -371,15 +368,12 @@ internal class CheckoutSessionRequestTest {
                                         .textSuccess("text_success")
                                         .build()
                                 )
-                                .fontSize(
-                                    CheckoutSessionRequest.Customization.ThemeConfig.FontSize.XS
-                                )
-                                .fontWeight(
-                                    CheckoutSessionRequest.Customization.ThemeConfig.FontWeight
-                                        .NORMAL
-                                )
+                                .fontPrimaryUrl("font_primary_url")
+                                .fontSecondaryUrl("font_secondary_url")
+                                .fontSize(ThemeConfig.FontSize.XS)
+                                .fontWeight(ThemeConfig.FontWeight.NORMAL)
                                 .light(
-                                    CheckoutSessionRequest.Customization.ThemeConfig.Light.builder()
+                                    ThemeModeConfig.builder()
                                         .bgPrimary("bg_primary")
                                         .bgSecondary("bg_secondary")
                                         .borderPrimary("border_primary")
@@ -406,7 +400,7 @@ internal class CheckoutSessionRequestTest {
                 )
                 .discountCode("discount_code")
                 .featureFlags(
-                    CheckoutSessionRequest.FeatureFlags.builder()
+                    CheckoutSessionFlags.builder()
                         .allowCurrencySelection(true)
                         .allowCustomerEditingCity(true)
                         .allowCustomerEditingCountry(true)
@@ -435,7 +429,7 @@ internal class CheckoutSessionRequestTest {
                 .shortLink(true)
                 .showSavedPaymentMethods(true)
                 .subscriptionData(
-                    CheckoutSessionRequest.SubscriptionData.builder()
+                    SubscriptionData.builder()
                         .onDemand(
                             OnDemandSubscription.builder()
                                 .mandateOnly(true)
