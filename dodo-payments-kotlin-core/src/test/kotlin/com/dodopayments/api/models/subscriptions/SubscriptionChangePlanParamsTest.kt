@@ -23,6 +23,7 @@ internal class SubscriptionChangePlanParamsTest {
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
+            .onPaymentFailure(SubscriptionChangePlanParams.OnPaymentFailure.PREVENT_CHANGE)
             .build()
     }
 
@@ -59,6 +60,7 @@ internal class SubscriptionChangePlanParamsTest {
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
+                .onPaymentFailure(SubscriptionChangePlanParams.OnPaymentFailure.PREVENT_CHANGE)
                 .build()
 
         val body = params._body()
@@ -75,6 +77,8 @@ internal class SubscriptionChangePlanParamsTest {
                     .putAdditionalProperty("foo", JsonValue.from("string"))
                     .build()
             )
+        assertThat(body.onPaymentFailure())
+            .isEqualTo(SubscriptionChangePlanParams.OnPaymentFailure.PREVENT_CHANGE)
     }
 
     @Test

@@ -598,6 +598,7 @@ private constructor(
             private val paymentMethod: JsonField<String>,
             private val paymentMethodType: JsonField<String>,
             private val productCart: JsonField<List<Payment.ProductCart>>,
+            private val refundStatus: JsonField<Payment.RefundStatus>,
             private val settlementTax: JsonField<Int>,
             private val status: JsonField<IntentStatus>,
             private val subscriptionId: JsonField<String>,
@@ -700,6 +701,9 @@ private constructor(
                 @JsonProperty("product_cart")
                 @ExcludeMissing
                 productCart: JsonField<List<Payment.ProductCart>> = JsonMissing.of(),
+                @JsonProperty("refund_status")
+                @ExcludeMissing
+                refundStatus: JsonField<Payment.RefundStatus> = JsonMissing.of(),
                 @JsonProperty("settlement_tax")
                 @ExcludeMissing
                 settlementTax: JsonField<Int> = JsonMissing.of(),
@@ -747,6 +751,7 @@ private constructor(
                 paymentMethod,
                 paymentMethodType,
                 productCart,
+                refundStatus,
                 settlementTax,
                 status,
                 subscriptionId,
@@ -788,6 +793,7 @@ private constructor(
                     .paymentMethod(paymentMethod)
                     .paymentMethodType(paymentMethodType)
                     .productCart(productCart)
+                    .refundStatus(refundStatus)
                     .settlementTax(settlementTax)
                     .status(status)
                     .subscriptionId(subscriptionId)
@@ -1057,6 +1063,14 @@ private constructor(
              *   (e.g. if the server responded with an unexpected value).
              */
             fun productCart(): List<Payment.ProductCart>? = productCart.getNullable("product_cart")
+
+            /**
+             * Summary of the refund status for this payment. None if no succeeded refunds exist.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun refundStatus(): Payment.RefundStatus? = refundStatus.getNullable("refund_status")
 
             /**
              * This represents the portion of settlement_amount that corresponds to taxes collected.
@@ -1402,6 +1416,16 @@ private constructor(
             fun _productCart(): JsonField<List<Payment.ProductCart>> = productCart
 
             /**
+             * Returns the raw JSON value of [refundStatus].
+             *
+             * Unlike [refundStatus], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("refund_status")
+            @ExcludeMissing
+            fun _refundStatus(): JsonField<Payment.RefundStatus> = refundStatus
+
+            /**
              * Returns the raw JSON value of [settlementTax].
              *
              * Unlike [settlementTax], this method doesn't throw if the JSON field has an unexpected
@@ -1529,6 +1553,7 @@ private constructor(
                 private var paymentMethod: JsonField<String> = JsonMissing.of()
                 private var paymentMethodType: JsonField<String> = JsonMissing.of()
                 private var productCart: JsonField<MutableList<Payment.ProductCart>>? = null
+                private var refundStatus: JsonField<Payment.RefundStatus> = JsonMissing.of()
                 private var settlementTax: JsonField<Int> = JsonMissing.of()
                 private var status: JsonField<IntentStatus> = JsonMissing.of()
                 private var subscriptionId: JsonField<String> = JsonMissing.of()
@@ -1568,6 +1593,7 @@ private constructor(
                     paymentMethod = payment.paymentMethod
                     paymentMethodType = payment.paymentMethodType
                     productCart = payment.productCart.map { it.toMutableList() }
+                    refundStatus = payment.refundStatus
                     settlementTax = payment.settlementTax
                     status = payment.status
                     subscriptionId = payment.subscriptionId
@@ -2063,6 +2089,24 @@ private constructor(
                 }
 
                 /**
+                 * Summary of the refund status for this payment. None if no succeeded refunds
+                 * exist.
+                 */
+                fun refundStatus(refundStatus: Payment.RefundStatus?) =
+                    refundStatus(JsonField.ofNullable(refundStatus))
+
+                /**
+                 * Sets [Builder.refundStatus] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.refundStatus] with a well-typed
+                 * [Payment.RefundStatus] value instead. This method is primarily for setting the
+                 * field to an undocumented or not yet supported value.
+                 */
+                fun refundStatus(refundStatus: JsonField<Payment.RefundStatus>) = apply {
+                    this.refundStatus = refundStatus
+                }
+
+                /**
                  * This represents the portion of settlement_amount that corresponds to taxes
                  * collected. Especially relevant for adaptive pricing where the tax component must
                  * be tracked separately in your Dodo balance.
@@ -2242,6 +2286,7 @@ private constructor(
                         paymentMethod,
                         paymentMethodType,
                         (productCart ?: JsonMissing.of()).map { it.toImmutable() },
+                        refundStatus,
                         settlementTax,
                         status,
                         subscriptionId,
@@ -2289,6 +2334,7 @@ private constructor(
                 paymentMethod()
                 paymentMethodType()
                 productCart()?.forEach { it.validate() }
+                refundStatus()?.validate()
                 settlementTax()
                 status()?.validate()
                 subscriptionId()
@@ -2343,6 +2389,7 @@ private constructor(
                     (if (paymentMethod.asKnown() == null) 0 else 1) +
                     (if (paymentMethodType.asKnown() == null) 0 else 1) +
                     (productCart.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                    (refundStatus.asKnown()?.validity() ?: 0) +
                     (if (settlementTax.asKnown() == null) 0 else 1) +
                     (status.asKnown()?.validity() ?: 0) +
                     (if (subscriptionId.asKnown() == null) 0 else 1) +
@@ -2512,6 +2559,7 @@ private constructor(
                     paymentMethod == other.paymentMethod &&
                     paymentMethodType == other.paymentMethodType &&
                     productCart == other.productCart &&
+                    refundStatus == other.refundStatus &&
                     settlementTax == other.settlementTax &&
                     status == other.status &&
                     subscriptionId == other.subscriptionId &&
@@ -2553,6 +2601,7 @@ private constructor(
                     paymentMethod,
                     paymentMethodType,
                     productCart,
+                    refundStatus,
                     settlementTax,
                     status,
                     subscriptionId,
@@ -2566,7 +2615,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Payment{billing=$billing, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, digitalProductsDelivered=$digitalProductsDelivered, disputes=$disputes, metadata=$metadata, paymentId=$paymentId, refunds=$refunds, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, totalAmount=$totalAmount, cardHolderName=$cardHolderName, cardIssuingCountry=$cardIssuingCountry, cardLastFour=$cardLastFour, cardNetwork=$cardNetwork, cardType=$cardType, checkoutSessionId=$checkoutSessionId, customFieldResponses=$customFieldResponses, discountId=$discountId, errorCode=$errorCode, errorMessage=$errorMessage, invoiceId=$invoiceId, invoiceUrl=$invoiceUrl, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, productCart=$productCart, settlementTax=$settlementTax, status=$status, subscriptionId=$subscriptionId, tax=$tax, updatedAt=$updatedAt, payloadType=$payloadType, additionalProperties=$additionalProperties}"
+                "Payment{billing=$billing, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, digitalProductsDelivered=$digitalProductsDelivered, disputes=$disputes, metadata=$metadata, paymentId=$paymentId, refunds=$refunds, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, totalAmount=$totalAmount, cardHolderName=$cardHolderName, cardIssuingCountry=$cardIssuingCountry, cardLastFour=$cardLastFour, cardNetwork=$cardNetwork, cardType=$cardType, checkoutSessionId=$checkoutSessionId, customFieldResponses=$customFieldResponses, discountId=$discountId, errorCode=$errorCode, errorMessage=$errorMessage, invoiceId=$invoiceId, invoiceUrl=$invoiceUrl, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, productCart=$productCart, refundStatus=$refundStatus, settlementTax=$settlementTax, status=$status, subscriptionId=$subscriptionId, tax=$tax, updatedAt=$updatedAt, payloadType=$payloadType, additionalProperties=$additionalProperties}"
         }
 
         /** Response struct representing subscription details */
