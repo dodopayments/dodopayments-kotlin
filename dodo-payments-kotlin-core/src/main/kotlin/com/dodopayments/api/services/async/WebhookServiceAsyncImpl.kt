@@ -4,6 +4,7 @@ package com.dodopayments.api.services.async
 
 import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
+import com.dodopayments.api.core.UnwrapWebhookParams
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.handlers.emptyHandler
 import com.dodopayments.api.core.handlers.errorBodyHandler
@@ -17,7 +18,6 @@ import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepareAsync
-import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.dodopayments.api.models.webhooks.UnsafeUnwrapWebhookEvent
 import com.dodopayments.api.models.webhooks.UnwrapWebhookEvent
 import com.dodopayments.api.models.webhooks.WebhookCreateParams
@@ -90,21 +90,14 @@ class WebhookServiceAsyncImpl internal constructor(private val clientOptions: Cl
         // get /webhooks/{webhook_id}/secret
         withRawResponse().retrieveSecret(params, requestOptions).parse()
 
-    /**
-     * Unwraps a webhook event from its JSON representation.
-     *
-     * @throws DodoPaymentsInvalidDataException if the body could not be parsed.
-     */
     override fun unsafeUnwrap(body: String): UnsafeUnwrapWebhookEvent =
         WebhookServiceImpl(clientOptions).unsafeUnwrap(body)
 
-    /**
-     * Unwraps a webhook event from its JSON representation.
-     *
-     * @throws DodoPaymentsInvalidDataException if the body could not be parsed.
-     */
     override fun unwrap(body: String): UnwrapWebhookEvent =
         WebhookServiceImpl(clientOptions).unwrap(body)
+
+    override fun unwrap(unwrapParams: UnwrapWebhookParams): UnwrapWebhookEvent =
+        WebhookServiceImpl(clientOptions).unwrap(unwrapParams)
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         WebhookServiceAsync.WithRawResponse {
