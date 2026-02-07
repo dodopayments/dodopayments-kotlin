@@ -4,6 +4,7 @@ package com.dodopayments.api.services.blocking
 
 import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
+import com.dodopayments.api.core.UnwrapWebhookParams
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.handlers.emptyHandler
 import com.dodopayments.api.core.handlers.errorBodyHandler
@@ -18,6 +19,7 @@ import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepare
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
+import com.dodopayments.api.errors.DodoPaymentsWebhookException
 import com.dodopayments.api.models.webhooks.UnsafeUnwrapWebhookEvent
 import com.dodopayments.api.models.webhooks.UnwrapWebhookEvent
 import com.dodopayments.api.models.webhooks.WebhookCreateParams
@@ -33,6 +35,8 @@ import com.dodopayments.api.models.webhooks.WebhookUpdateParams
 import com.dodopayments.api.services.blocking.webhooks.HeaderService
 import com.dodopayments.api.services.blocking.webhooks.HeaderServiceImpl
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.standardwebhooks.Webhook
+import com.standardwebhooks.exceptions.WebhookVerificationException
 
 class WebhookServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     WebhookService {
@@ -87,11 +91,6 @@ class WebhookServiceImpl internal constructor(private val clientOptions: ClientO
         // get /webhooks/{webhook_id}/secret
         withRawResponse().retrieveSecret(params, requestOptions).parse()
 
-    /**
-     * Unwraps a webhook event from its JSON representation.
-     *
-     * @throws DodoPaymentsInvalidDataException if the body could not be parsed.
-     */
     override fun unsafeUnwrap(body: String): UnsafeUnwrapWebhookEvent =
         try {
             clientOptions.jsonMapper.readValue(body, jacksonTypeRef<UnsafeUnwrapWebhookEvent>())
@@ -99,17 +98,30 @@ class WebhookServiceImpl internal constructor(private val clientOptions: ClientO
             throw DodoPaymentsInvalidDataException("Error parsing body", e)
         }
 
-    /**
-     * Unwraps a webhook event from its JSON representation.
-     *
-     * @throws DodoPaymentsInvalidDataException if the body could not be parsed.
-     */
     override fun unwrap(body: String): UnwrapWebhookEvent =
         try {
             clientOptions.jsonMapper.readValue(body, jacksonTypeRef<UnwrapWebhookEvent>())
         } catch (e: Exception) {
             throw DodoPaymentsInvalidDataException("Error parsing body", e)
         }
+
+    override fun unwrap(unwrapParams: UnwrapWebhookParams): UnwrapWebhookEvent {
+        val headers = unwrapParams.headers()
+        if (headers != null) {
+            try {
+                val webhookSecret =
+                    checkRequired("webhookKey", unwrapParams.secret() ?: clientOptions.webhookKey)
+                val headersMap =
+                    headers.names().associateWith { name -> headers.values(name) }.toMap()
+
+                val webhook = Webhook(webhookSecret)
+                webhook.verify(unwrapParams.body(), headersMap)
+            } catch (e: WebhookVerificationException) {
+                throw DodoPaymentsWebhookException("Could not verify webhook event signature", e)
+            }
+        }
+        return unwrap(unwrapParams.body())
+    }
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         WebhookService.WithRawResponse {

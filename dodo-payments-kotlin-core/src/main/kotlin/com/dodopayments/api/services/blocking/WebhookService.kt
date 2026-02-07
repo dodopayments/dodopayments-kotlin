@@ -4,9 +4,11 @@ package com.dodopayments.api.services.blocking
 
 import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
+import com.dodopayments.api.core.UnwrapWebhookParams
 import com.dodopayments.api.core.http.HttpResponse
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
+import com.dodopayments.api.errors.DodoPaymentsWebhookException
 import com.dodopayments.api.models.webhooks.UnsafeUnwrapWebhookEvent
 import com.dodopayments.api.models.webhooks.UnwrapWebhookEvent
 import com.dodopayments.api.models.webhooks.WebhookCreateParams
@@ -135,6 +137,14 @@ interface WebhookService {
      * @throws DodoPaymentsInvalidDataException if the body could not be parsed.
      */
     fun unwrap(body: String): UnwrapWebhookEvent
+
+    /**
+     * Unwraps a webhook event from its JSON representation.
+     *
+     * @throws DodoPaymentsInvalidDataException if the body could not be parsed.
+     * @throws DodoPaymentsWebhookException if the webhook signature could not be verified
+     */
+    fun unwrap(unwrapParams: UnwrapWebhookParams): UnwrapWebhookEvent
 
     /** A view of [WebhookService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
