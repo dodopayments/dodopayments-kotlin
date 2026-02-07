@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.82.0 (2026-02-07)
+
+Full Changelog: [v1.81.0...v1.82.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.81.0...v1.82.0)
+
+### Features
+
+* **api:** add webhook signature verification ([b60d3a1](https://github.com/dodopayments/dodopayments-kotlin/commit/b60d3a142e05d362b47f74c02b0fbf48c167029f))
+
+
+### Chores
+
+* **internal:** upgrade AssertJ ([cc82853](https://github.com/dodopayments/dodopayments-kotlin/commit/cc828538f21da722f59e7f0f8442c3aea00b49b5))
+
 ## 1.81.0 (2026-02-06)
 
 Full Changelog: [v1.78.0...v1.81.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.78.0...v1.81.0)
