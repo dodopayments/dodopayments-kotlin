@@ -139,11 +139,7 @@ internal class WebhookServiceTest {
 
     @Test
     fun unsafeUnwrap() {
-        val client =
-            DodoPaymentsOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = DodoPaymentsOkHttpClient.builder().bearerToken("My Bearer Token").build()
         val webhookService = client.webhooks()
 
         val payload =
@@ -156,11 +152,7 @@ internal class WebhookServiceTest {
 
     @Test
     fun unwrap() {
-        val client =
-            DodoPaymentsOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
+        val client = DodoPaymentsOkHttpClient.builder().bearerToken("My Bearer Token").build()
         val webhookService = client.webhooks()
 
         val payload =
