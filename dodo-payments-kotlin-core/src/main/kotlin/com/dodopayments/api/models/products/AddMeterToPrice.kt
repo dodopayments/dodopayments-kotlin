@@ -20,9 +20,11 @@ class AddMeterToPrice
 private constructor(
     private val meterId: JsonField<String>,
     private val pricePerUnit: JsonField<String>,
+    private val creditEntitlementId: JsonField<String>,
     private val description: JsonField<String>,
     private val freeThreshold: JsonField<Long>,
     private val measurementUnit: JsonField<String>,
+    private val meterUnitsPerCredit: JsonField<String>,
     private val name: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -33,6 +35,9 @@ private constructor(
         @JsonProperty("price_per_unit")
         @ExcludeMissing
         pricePerUnit: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("credit_entitlement_id")
+        @ExcludeMissing
+        creditEntitlementId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("description")
         @ExcludeMissing
         description: JsonField<String> = JsonMissing.of(),
@@ -42,13 +47,18 @@ private constructor(
         @JsonProperty("measurement_unit")
         @ExcludeMissing
         measurementUnit: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("meter_units_per_credit")
+        @ExcludeMissing
+        meterUnitsPerCredit: JsonField<String> = JsonMissing.of(),
         @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
     ) : this(
         meterId,
         pricePerUnit,
+        creditEntitlementId,
         description,
         freeThreshold,
         measurementUnit,
+        meterUnitsPerCredit,
         name,
         mutableMapOf(),
     )
@@ -67,6 +77,14 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun pricePerUnit(): String = pricePerUnit.getRequired("price_per_unit")
+
+    /**
+     * Optional credit entitlement ID to link this meter to for credit-based billing
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun creditEntitlementId(): String? = creditEntitlementId.getNullable("credit_entitlement_id")
 
     /**
      * Meter description. Will ignored on Request, but will be shown in response
@@ -89,6 +107,14 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun measurementUnit(): String? = measurementUnit.getNullable("measurement_unit")
+
+    /**
+     * Number of meter units that equal one credit. Required when credit_entitlement_id is set.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun meterUnitsPerCredit(): String? = meterUnitsPerCredit.getNullable("meter_units_per_credit")
 
     /**
      * Meter name. Will ignored on Request, but will be shown in response
@@ -115,6 +141,16 @@ private constructor(
     fun _pricePerUnit(): JsonField<String> = pricePerUnit
 
     /**
+     * Returns the raw JSON value of [creditEntitlementId].
+     *
+     * Unlike [creditEntitlementId], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("credit_entitlement_id")
+    @ExcludeMissing
+    fun _creditEntitlementId(): JsonField<String> = creditEntitlementId
+
+    /**
      * Returns the raw JSON value of [description].
      *
      * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
@@ -138,6 +174,16 @@ private constructor(
     @JsonProperty("measurement_unit")
     @ExcludeMissing
     fun _measurementUnit(): JsonField<String> = measurementUnit
+
+    /**
+     * Returns the raw JSON value of [meterUnitsPerCredit].
+     *
+     * Unlike [meterUnitsPerCredit], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("meter_units_per_credit")
+    @ExcludeMissing
+    fun _meterUnitsPerCredit(): JsonField<String> = meterUnitsPerCredit
 
     /**
      * Returns the raw JSON value of [name].
@@ -177,18 +223,22 @@ private constructor(
 
         private var meterId: JsonField<String>? = null
         private var pricePerUnit: JsonField<String>? = null
+        private var creditEntitlementId: JsonField<String> = JsonMissing.of()
         private var description: JsonField<String> = JsonMissing.of()
         private var freeThreshold: JsonField<Long> = JsonMissing.of()
         private var measurementUnit: JsonField<String> = JsonMissing.of()
+        private var meterUnitsPerCredit: JsonField<String> = JsonMissing.of()
         private var name: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(addMeterToPrice: AddMeterToPrice) = apply {
             meterId = addMeterToPrice.meterId
             pricePerUnit = addMeterToPrice.pricePerUnit
+            creditEntitlementId = addMeterToPrice.creditEntitlementId
             description = addMeterToPrice.description
             freeThreshold = addMeterToPrice.freeThreshold
             measurementUnit = addMeterToPrice.measurementUnit
+            meterUnitsPerCredit = addMeterToPrice.meterUnitsPerCredit
             name = addMeterToPrice.name
             additionalProperties = addMeterToPrice.additionalProperties.toMutableMap()
         }
@@ -218,6 +268,21 @@ private constructor(
          */
         fun pricePerUnit(pricePerUnit: JsonField<String>) = apply {
             this.pricePerUnit = pricePerUnit
+        }
+
+        /** Optional credit entitlement ID to link this meter to for credit-based billing */
+        fun creditEntitlementId(creditEntitlementId: String?) =
+            creditEntitlementId(JsonField.ofNullable(creditEntitlementId))
+
+        /**
+         * Sets [Builder.creditEntitlementId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.creditEntitlementId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun creditEntitlementId(creditEntitlementId: JsonField<String>) = apply {
+            this.creditEntitlementId = creditEntitlementId
         }
 
         /** Meter description. Will ignored on Request, but will be shown in response */
@@ -267,6 +332,23 @@ private constructor(
             this.measurementUnit = measurementUnit
         }
 
+        /**
+         * Number of meter units that equal one credit. Required when credit_entitlement_id is set.
+         */
+        fun meterUnitsPerCredit(meterUnitsPerCredit: String?) =
+            meterUnitsPerCredit(JsonField.ofNullable(meterUnitsPerCredit))
+
+        /**
+         * Sets [Builder.meterUnitsPerCredit] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.meterUnitsPerCredit] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun meterUnitsPerCredit(meterUnitsPerCredit: JsonField<String>) = apply {
+            this.meterUnitsPerCredit = meterUnitsPerCredit
+        }
+
         /** Meter name. Will ignored on Request, but will be shown in response */
         fun name(name: String?) = name(JsonField.ofNullable(name))
 
@@ -314,9 +396,11 @@ private constructor(
             AddMeterToPrice(
                 checkRequired("meterId", meterId),
                 checkRequired("pricePerUnit", pricePerUnit),
+                creditEntitlementId,
                 description,
                 freeThreshold,
                 measurementUnit,
+                meterUnitsPerCredit,
                 name,
                 additionalProperties.toMutableMap(),
             )
@@ -331,9 +415,11 @@ private constructor(
 
         meterId()
         pricePerUnit()
+        creditEntitlementId()
         description()
         freeThreshold()
         measurementUnit()
+        meterUnitsPerCredit()
         name()
         validated = true
     }
@@ -354,9 +440,11 @@ private constructor(
     internal fun validity(): Int =
         (if (meterId.asKnown() == null) 0 else 1) +
             (if (pricePerUnit.asKnown() == null) 0 else 1) +
+            (if (creditEntitlementId.asKnown() == null) 0 else 1) +
             (if (description.asKnown() == null) 0 else 1) +
             (if (freeThreshold.asKnown() == null) 0 else 1) +
             (if (measurementUnit.asKnown() == null) 0 else 1) +
+            (if (meterUnitsPerCredit.asKnown() == null) 0 else 1) +
             (if (name.asKnown() == null) 0 else 1)
 
     override fun equals(other: Any?): Boolean {
@@ -367,9 +455,11 @@ private constructor(
         return other is AddMeterToPrice &&
             meterId == other.meterId &&
             pricePerUnit == other.pricePerUnit &&
+            creditEntitlementId == other.creditEntitlementId &&
             description == other.description &&
             freeThreshold == other.freeThreshold &&
             measurementUnit == other.measurementUnit &&
+            meterUnitsPerCredit == other.meterUnitsPerCredit &&
             name == other.name &&
             additionalProperties == other.additionalProperties
     }
@@ -378,9 +468,11 @@ private constructor(
         Objects.hash(
             meterId,
             pricePerUnit,
+            creditEntitlementId,
             description,
             freeThreshold,
             measurementUnit,
+            meterUnitsPerCredit,
             name,
             additionalProperties,
         )
@@ -389,5 +481,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "AddMeterToPrice{meterId=$meterId, pricePerUnit=$pricePerUnit, description=$description, freeThreshold=$freeThreshold, measurementUnit=$measurementUnit, name=$name, additionalProperties=$additionalProperties}"
+        "AddMeterToPrice{meterId=$meterId, pricePerUnit=$pricePerUnit, creditEntitlementId=$creditEntitlementId, description=$description, freeThreshold=$freeThreshold, measurementUnit=$measurementUnit, meterUnitsPerCredit=$meterUnitsPerCredit, name=$name, additionalProperties=$additionalProperties}"
 }

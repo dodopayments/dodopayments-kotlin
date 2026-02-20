@@ -76,6 +76,22 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
 
         val PAYOUT_SUCCESS = of("payout.success")
 
+        val CREDIT_ADDED = of("credit.added")
+
+        val CREDIT_DEDUCTED = of("credit.deducted")
+
+        val CREDIT_EXPIRED = of("credit.expired")
+
+        val CREDIT_ROLLED_OVER = of("credit.rolled_over")
+
+        val CREDIT_ROLLOVER_FORFEITED = of("credit.rollover_forfeited")
+
+        val CREDIT_OVERAGE_CHARGED = of("credit.overage_charged")
+
+        val CREDIT_MANUAL_ADJUSTMENT = of("credit.manual_adjustment")
+
+        val CREDIT_BALANCE_LOW = of("credit.balance_low")
+
         fun of(value: String) = WebhookEventType(JsonField.of(value))
     }
 
@@ -108,6 +124,14 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         PAYOUT_IN_PROGRESS,
         PAYOUT_FAILED,
         PAYOUT_SUCCESS,
+        CREDIT_ADDED,
+        CREDIT_DEDUCTED,
+        CREDIT_EXPIRED,
+        CREDIT_ROLLED_OVER,
+        CREDIT_ROLLOVER_FORFEITED,
+        CREDIT_OVERAGE_CHARGED,
+        CREDIT_MANUAL_ADJUSTMENT,
+        CREDIT_BALANCE_LOW,
     }
 
     /**
@@ -147,6 +171,14 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         PAYOUT_IN_PROGRESS,
         PAYOUT_FAILED,
         PAYOUT_SUCCESS,
+        CREDIT_ADDED,
+        CREDIT_DEDUCTED,
+        CREDIT_EXPIRED,
+        CREDIT_ROLLED_OVER,
+        CREDIT_ROLLOVER_FORFEITED,
+        CREDIT_OVERAGE_CHARGED,
+        CREDIT_MANUAL_ADJUSTMENT,
+        CREDIT_BALANCE_LOW,
         /**
          * An enum member indicating that [WebhookEventType] was instantiated with an unknown value.
          */
@@ -189,6 +221,14 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             PAYOUT_IN_PROGRESS -> Value.PAYOUT_IN_PROGRESS
             PAYOUT_FAILED -> Value.PAYOUT_FAILED
             PAYOUT_SUCCESS -> Value.PAYOUT_SUCCESS
+            CREDIT_ADDED -> Value.CREDIT_ADDED
+            CREDIT_DEDUCTED -> Value.CREDIT_DEDUCTED
+            CREDIT_EXPIRED -> Value.CREDIT_EXPIRED
+            CREDIT_ROLLED_OVER -> Value.CREDIT_ROLLED_OVER
+            CREDIT_ROLLOVER_FORFEITED -> Value.CREDIT_ROLLOVER_FORFEITED
+            CREDIT_OVERAGE_CHARGED -> Value.CREDIT_OVERAGE_CHARGED
+            CREDIT_MANUAL_ADJUSTMENT -> Value.CREDIT_MANUAL_ADJUSTMENT
+            CREDIT_BALANCE_LOW -> Value.CREDIT_BALANCE_LOW
             else -> Value._UNKNOWN
         }
 
@@ -230,6 +270,14 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             PAYOUT_IN_PROGRESS -> Known.PAYOUT_IN_PROGRESS
             PAYOUT_FAILED -> Known.PAYOUT_FAILED
             PAYOUT_SUCCESS -> Known.PAYOUT_SUCCESS
+            CREDIT_ADDED -> Known.CREDIT_ADDED
+            CREDIT_DEDUCTED -> Known.CREDIT_DEDUCTED
+            CREDIT_EXPIRED -> Known.CREDIT_EXPIRED
+            CREDIT_ROLLED_OVER -> Known.CREDIT_ROLLED_OVER
+            CREDIT_ROLLOVER_FORFEITED -> Known.CREDIT_ROLLOVER_FORFEITED
+            CREDIT_OVERAGE_CHARGED -> Known.CREDIT_OVERAGE_CHARGED
+            CREDIT_MANUAL_ADJUSTMENT -> Known.CREDIT_MANUAL_ADJUSTMENT
+            CREDIT_BALANCE_LOW -> Known.CREDIT_BALANCE_LOW
             else -> throw DodoPaymentsInvalidDataException("Unknown WebhookEventType: $value")
         }
 

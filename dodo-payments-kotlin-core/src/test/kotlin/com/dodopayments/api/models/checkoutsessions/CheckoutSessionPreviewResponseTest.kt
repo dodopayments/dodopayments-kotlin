@@ -28,6 +28,14 @@ internal class CheckoutSessionPreviewResponseTest {
                 )
                 .addProductCart(
                     CheckoutSessionPreviewResponse.ProductCart.builder()
+                        .addCreditEntitlement(
+                            CheckoutSessionPreviewResponse.ProductCart.CreditEntitlement.builder()
+                                .creditEntitlementId("credit_entitlement_id")
+                                .creditEntitlementName("credit_entitlement_name")
+                                .creditEntitlementUnit("credit_entitlement_unit")
+                                .creditsAmount("credits_amount")
+                                .build()
+                        )
                         .currency(Currency.AED)
                         .discountedPrice(0)
                         .isSubscription(true)
@@ -81,6 +89,7 @@ internal class CheckoutSessionPreviewResponseTest {
                         .tax(0)
                         .build()
                 )
+                .taxIdErrMsg("tax_id_err_msg")
                 .totalTax(0)
                 .build()
 
@@ -98,6 +107,14 @@ internal class CheckoutSessionPreviewResponseTest {
         assertThat(checkoutSessionPreviewResponse.productCart())
             .containsExactly(
                 CheckoutSessionPreviewResponse.ProductCart.builder()
+                    .addCreditEntitlement(
+                        CheckoutSessionPreviewResponse.ProductCart.CreditEntitlement.builder()
+                            .creditEntitlementId("credit_entitlement_id")
+                            .creditEntitlementName("credit_entitlement_name")
+                            .creditEntitlementUnit("credit_entitlement_unit")
+                            .creditsAmount("credits_amount")
+                            .build()
+                    )
                     .currency(Currency.AED)
                     .discountedPrice(0)
                     .isSubscription(true)
@@ -152,6 +169,7 @@ internal class CheckoutSessionPreviewResponseTest {
                     .tax(0)
                     .build()
             )
+        assertThat(checkoutSessionPreviewResponse.taxIdErrMsg()).isEqualTo("tax_id_err_msg")
         assertThat(checkoutSessionPreviewResponse.totalTax()).isEqualTo(0)
     }
 
@@ -172,6 +190,14 @@ internal class CheckoutSessionPreviewResponseTest {
                 )
                 .addProductCart(
                     CheckoutSessionPreviewResponse.ProductCart.builder()
+                        .addCreditEntitlement(
+                            CheckoutSessionPreviewResponse.ProductCart.CreditEntitlement.builder()
+                                .creditEntitlementId("credit_entitlement_id")
+                                .creditEntitlementName("credit_entitlement_name")
+                                .creditEntitlementUnit("credit_entitlement_unit")
+                                .creditsAmount("credits_amount")
+                                .build()
+                        )
                         .currency(Currency.AED)
                         .discountedPrice(0)
                         .isSubscription(true)
@@ -225,6 +251,7 @@ internal class CheckoutSessionPreviewResponseTest {
                         .tax(0)
                         .build()
                 )
+                .taxIdErrMsg("tax_id_err_msg")
                 .totalTax(0)
                 .build()
 
