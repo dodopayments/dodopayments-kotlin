@@ -20,6 +20,7 @@ import com.dodopayments.api.models.subscriptions.SubscriptionPreviewChangePlanPa
 import com.dodopayments.api.models.subscriptions.SubscriptionStatus
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdateParams
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdatePaymentMethodParams
+import com.dodopayments.api.models.subscriptions.TimeInterval
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -128,6 +129,22 @@ internal class SubscriptionServiceTest {
                             .build()
                     )
                     .cancelAtNextBillingDate(true)
+                    .addCreditEntitlementCart(
+                        SubscriptionUpdateParams.CreditEntitlementCart.builder()
+                            .creditEntitlementId("credit_entitlement_id")
+                            .creditsAmount("credits_amount")
+                            .expiresAfterDays(0)
+                            .lowBalanceThresholdPercent(0)
+                            .maxRolloverCount(0)
+                            .overageChargeAtBilling(true)
+                            .overageEnabled(true)
+                            .overageLimit("overage_limit")
+                            .rolloverEnabled(true)
+                            .rolloverPercentage(0)
+                            .rolloverTimeframeCount(0)
+                            .rolloverTimeframeInterval(TimeInterval.DAY)
+                            .build()
+                    )
                     .customerName("customer_name")
                     .disableOnDemand(
                         SubscriptionUpdateParams.DisableOnDemand.builder()

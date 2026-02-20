@@ -18,6 +18,7 @@ internal class SubscriptionListParamsTest {
             .customerId("customer_id")
             .pageNumber(0)
             .pageSize(0)
+            .productId("product_id")
             .status(SubscriptionListParams.Status.PENDING)
             .build()
     }
@@ -32,6 +33,7 @@ internal class SubscriptionListParamsTest {
                 .customerId("customer_id")
                 .pageNumber(0)
                 .pageSize(0)
+                .productId("product_id")
                 .status(SubscriptionListParams.Status.PENDING)
                 .build()
 
@@ -46,6 +48,7 @@ internal class SubscriptionListParamsTest {
                     .put("customer_id", "customer_id")
                     .put("page_number", "0")
                     .put("page_size", "0")
+                    .put("product_id", "product_id")
                     .put("status", "pending")
                     .build()
             )

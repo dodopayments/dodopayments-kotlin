@@ -12,6 +12,7 @@ internal class CustomerUpdateParamsTest {
     fun create() {
         CustomerUpdateParams.builder()
             .customerId("customer_id")
+            .email("email")
             .metadata(
                 CustomerUpdateParams.Metadata.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -36,6 +37,7 @@ internal class CustomerUpdateParamsTest {
         val params =
             CustomerUpdateParams.builder()
                 .customerId("customer_id")
+                .email("email")
                 .metadata(
                     CustomerUpdateParams.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -47,6 +49,7 @@ internal class CustomerUpdateParamsTest {
 
         val body = params._body()
 
+        assertThat(body.email()).isEqualTo("email")
         assertThat(body.metadata())
             .isEqualTo(
                 CustomerUpdateParams.Metadata.builder()

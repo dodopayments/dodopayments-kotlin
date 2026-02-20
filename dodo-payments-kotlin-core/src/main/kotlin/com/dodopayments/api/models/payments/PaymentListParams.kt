@@ -21,6 +21,7 @@ private constructor(
     private val customerId: String?,
     private val pageNumber: Int?,
     private val pageSize: Int?,
+    private val productId: String?,
     private val status: Status?,
     private val subscriptionId: String?,
     private val additionalHeaders: Headers,
@@ -44,6 +45,9 @@ private constructor(
 
     /** Page size default is 10 max is 100 */
     fun pageSize(): Int? = pageSize
+
+    /** Filter by product id */
+    fun productId(): String? = productId
 
     /** Filter by status */
     fun status(): Status? = status
@@ -76,6 +80,7 @@ private constructor(
         private var customerId: String? = null
         private var pageNumber: Int? = null
         private var pageSize: Int? = null
+        private var productId: String? = null
         private var status: Status? = null
         private var subscriptionId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -88,6 +93,7 @@ private constructor(
             customerId = paymentListParams.customerId
             pageNumber = paymentListParams.pageNumber
             pageSize = paymentListParams.pageSize
+            productId = paymentListParams.productId
             status = paymentListParams.status
             subscriptionId = paymentListParams.subscriptionId
             additionalHeaders = paymentListParams.additionalHeaders.toBuilder()
@@ -125,6 +131,9 @@ private constructor(
          * This unboxed primitive overload exists for backwards compatibility.
          */
         fun pageSize(pageSize: Int) = pageSize(pageSize as Int?)
+
+        /** Filter by product id */
+        fun productId(productId: String?) = apply { this.productId = productId }
 
         /** Filter by status */
         fun status(status: Status?) = apply { this.status = status }
@@ -243,6 +252,7 @@ private constructor(
                 customerId,
                 pageNumber,
                 pageSize,
+                productId,
                 status,
                 subscriptionId,
                 additionalHeaders.build(),
@@ -265,6 +275,7 @@ private constructor(
                 customerId?.let { put("customer_id", it) }
                 pageNumber?.let { put("page_number", it.toString()) }
                 pageSize?.let { put("page_size", it.toString()) }
+                productId?.let { put("product_id", it) }
                 status?.let { put("status", it.toString()) }
                 subscriptionId?.let { put("subscription_id", it) }
                 putAll(additionalQueryParams)
@@ -463,6 +474,7 @@ private constructor(
             customerId == other.customerId &&
             pageNumber == other.pageNumber &&
             pageSize == other.pageSize &&
+            productId == other.productId &&
             status == other.status &&
             subscriptionId == other.subscriptionId &&
             additionalHeaders == other.additionalHeaders &&
@@ -477,6 +489,7 @@ private constructor(
             customerId,
             pageNumber,
             pageSize,
+            productId,
             status,
             subscriptionId,
             additionalHeaders,
@@ -484,5 +497,5 @@ private constructor(
         )
 
     override fun toString() =
-        "PaymentListParams{brandId=$brandId, createdAtGte=$createdAtGte, createdAtLte=$createdAtLte, customerId=$customerId, pageNumber=$pageNumber, pageSize=$pageSize, status=$status, subscriptionId=$subscriptionId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "PaymentListParams{brandId=$brandId, createdAtGte=$createdAtGte, createdAtLte=$createdAtLte, customerId=$customerId, pageNumber=$pageNumber, pageSize=$pageSize, productId=$productId, status=$status, subscriptionId=$subscriptionId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

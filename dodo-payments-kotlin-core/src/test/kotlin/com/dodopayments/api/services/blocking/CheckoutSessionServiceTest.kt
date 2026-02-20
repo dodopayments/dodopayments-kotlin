@@ -137,6 +137,7 @@ internal class CheckoutSessionServiceTest {
                             .allowCustomerEditingName(true)
                             .allowCustomerEditingState(true)
                             .allowCustomerEditingStreet(true)
+                            .allowCustomerEditingTaxId(true)
                             .allowCustomerEditingZipcode(true)
                             .allowDiscountCode(true)
                             .allowPhoneNumberCollection(true)
@@ -171,6 +172,7 @@ internal class CheckoutSessionServiceTest {
                             .trialPeriodDays(0)
                             .build()
                     )
+                    .taxId("tax_id")
                     .build()
             )
 
@@ -302,6 +304,7 @@ internal class CheckoutSessionServiceTest {
                             .allowCustomerEditingName(true)
                             .allowCustomerEditingState(true)
                             .allowCustomerEditingStreet(true)
+                            .allowCustomerEditingTaxId(true)
                             .allowCustomerEditingZipcode(true)
                             .allowDiscountCode(true)
                             .allowPhoneNumberCollection(true)
@@ -336,6 +339,7 @@ internal class CheckoutSessionServiceTest {
                             .trialPeriodDays(0)
                             .build()
                     )
+                    .taxId("tax_id")
                     .build()
             )
 

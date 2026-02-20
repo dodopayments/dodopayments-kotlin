@@ -26,6 +26,7 @@ private constructor(
     private val currency: JsonField<Currency>,
     private val customer: JsonField<CustomerLimitedDetails>,
     private val digitalProductsDelivered: JsonField<Boolean>,
+    private val hasLicenseKey: JsonField<Boolean>,
     private val metadata: JsonField<Metadata>,
     private val paymentId: JsonField<String>,
     private val totalAmount: JsonField<Int>,
@@ -51,6 +52,9 @@ private constructor(
         @JsonProperty("digital_products_delivered")
         @ExcludeMissing
         digitalProductsDelivered: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("has_license_key")
+        @ExcludeMissing
+        hasLicenseKey: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("metadata") @ExcludeMissing metadata: JsonField<Metadata> = JsonMissing.of(),
         @JsonProperty("payment_id") @ExcludeMissing paymentId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("total_amount")
@@ -76,6 +80,7 @@ private constructor(
         currency,
         customer,
         digitalProductsDelivered,
+        hasLicenseKey,
         metadata,
         paymentId,
         totalAmount,
@@ -118,6 +123,12 @@ private constructor(
      */
     fun digitalProductsDelivered(): Boolean =
         digitalProductsDelivered.getRequired("digital_products_delivered")
+
+    /**
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun hasLicenseKey(): Boolean = hasLicenseKey.getRequired("has_license_key")
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
@@ -220,6 +231,15 @@ private constructor(
     fun _digitalProductsDelivered(): JsonField<Boolean> = digitalProductsDelivered
 
     /**
+     * Returns the raw JSON value of [hasLicenseKey].
+     *
+     * Unlike [hasLicenseKey], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("has_license_key")
+    @ExcludeMissing
+    fun _hasLicenseKey(): JsonField<Boolean> = hasLicenseKey
+
+    /**
      * Returns the raw JSON value of [metadata].
      *
      * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
@@ -313,6 +333,7 @@ private constructor(
          * .currency()
          * .customer()
          * .digitalProductsDelivered()
+         * .hasLicenseKey()
          * .metadata()
          * .paymentId()
          * .totalAmount()
@@ -329,6 +350,7 @@ private constructor(
         private var currency: JsonField<Currency>? = null
         private var customer: JsonField<CustomerLimitedDetails>? = null
         private var digitalProductsDelivered: JsonField<Boolean>? = null
+        private var hasLicenseKey: JsonField<Boolean>? = null
         private var metadata: JsonField<Metadata>? = null
         private var paymentId: JsonField<String>? = null
         private var totalAmount: JsonField<Int>? = null
@@ -346,6 +368,7 @@ private constructor(
             currency = paymentListResponse.currency
             customer = paymentListResponse.customer
             digitalProductsDelivered = paymentListResponse.digitalProductsDelivered
+            hasLicenseKey = paymentListResponse.hasLicenseKey
             metadata = paymentListResponse.metadata
             paymentId = paymentListResponse.paymentId
             totalAmount = paymentListResponse.totalAmount
@@ -415,6 +438,19 @@ private constructor(
          */
         fun digitalProductsDelivered(digitalProductsDelivered: JsonField<Boolean>) = apply {
             this.digitalProductsDelivered = digitalProductsDelivered
+        }
+
+        fun hasLicenseKey(hasLicenseKey: Boolean) = hasLicenseKey(JsonField.of(hasLicenseKey))
+
+        /**
+         * Sets [Builder.hasLicenseKey] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.hasLicenseKey] with a well-typed [Boolean] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun hasLicenseKey(hasLicenseKey: JsonField<Boolean>) = apply {
+            this.hasLicenseKey = hasLicenseKey
         }
 
         fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
@@ -557,6 +593,7 @@ private constructor(
          * .currency()
          * .customer()
          * .digitalProductsDelivered()
+         * .hasLicenseKey()
          * .metadata()
          * .paymentId()
          * .totalAmount()
@@ -571,6 +608,7 @@ private constructor(
                 checkRequired("currency", currency),
                 checkRequired("customer", customer),
                 checkRequired("digitalProductsDelivered", digitalProductsDelivered),
+                checkRequired("hasLicenseKey", hasLicenseKey),
                 checkRequired("metadata", metadata),
                 checkRequired("paymentId", paymentId),
                 checkRequired("totalAmount", totalAmount),
@@ -596,6 +634,7 @@ private constructor(
         currency().validate()
         customer().validate()
         digitalProductsDelivered()
+        hasLicenseKey()
         metadata().validate()
         paymentId()
         totalAmount()
@@ -627,6 +666,7 @@ private constructor(
             (currency.asKnown()?.validity() ?: 0) +
             (customer.asKnown()?.validity() ?: 0) +
             (if (digitalProductsDelivered.asKnown() == null) 0 else 1) +
+            (if (hasLicenseKey.asKnown() == null) 0 else 1) +
             (metadata.asKnown()?.validity() ?: 0) +
             (if (paymentId.asKnown() == null) 0 else 1) +
             (if (totalAmount.asKnown() == null) 0 else 1) +
@@ -745,6 +785,7 @@ private constructor(
             currency == other.currency &&
             customer == other.customer &&
             digitalProductsDelivered == other.digitalProductsDelivered &&
+            hasLicenseKey == other.hasLicenseKey &&
             metadata == other.metadata &&
             paymentId == other.paymentId &&
             totalAmount == other.totalAmount &&
@@ -764,6 +805,7 @@ private constructor(
             currency,
             customer,
             digitalProductsDelivered,
+            hasLicenseKey,
             metadata,
             paymentId,
             totalAmount,
@@ -780,5 +822,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "PaymentListResponse{brandId=$brandId, createdAt=$createdAt, currency=$currency, customer=$customer, digitalProductsDelivered=$digitalProductsDelivered, metadata=$metadata, paymentId=$paymentId, totalAmount=$totalAmount, invoiceId=$invoiceId, invoiceUrl=$invoiceUrl, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, status=$status, subscriptionId=$subscriptionId, additionalProperties=$additionalProperties}"
+        "PaymentListResponse{brandId=$brandId, createdAt=$createdAt, currency=$currency, customer=$customer, digitalProductsDelivered=$digitalProductsDelivered, hasLicenseKey=$hasLicenseKey, metadata=$metadata, paymentId=$paymentId, totalAmount=$totalAmount, invoiceId=$invoiceId, invoiceUrl=$invoiceUrl, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, status=$status, subscriptionId=$subscriptionId, additionalProperties=$additionalProperties}"
 }

@@ -33,6 +33,7 @@ internal class PaymentListResponseTest {
                         .build()
                 )
                 .digitalProductsDelivered(true)
+                .hasLicenseKey(true)
                 .metadata(
                     PaymentListResponse.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -67,6 +68,7 @@ internal class PaymentListResponseTest {
                     .build()
             )
         assertThat(paymentListResponse.digitalProductsDelivered()).isEqualTo(true)
+        assertThat(paymentListResponse.hasLicenseKey()).isEqualTo(true)
         assertThat(paymentListResponse.metadata())
             .isEqualTo(
                 PaymentListResponse.Metadata.builder()
@@ -105,6 +107,7 @@ internal class PaymentListResponseTest {
                         .build()
                 )
                 .digitalProductsDelivered(true)
+                .hasLicenseKey(true)
                 .metadata(
                     PaymentListResponse.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))

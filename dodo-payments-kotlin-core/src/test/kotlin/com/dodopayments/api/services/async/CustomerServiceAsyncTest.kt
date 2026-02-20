@@ -66,6 +66,7 @@ internal class CustomerServiceAsyncTest {
             customerServiceAsync.update(
                 CustomerUpdateParams.builder()
                     .customerId("customer_id")
+                    .email("email")
                     .metadata(
                         CustomerUpdateParams.Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
