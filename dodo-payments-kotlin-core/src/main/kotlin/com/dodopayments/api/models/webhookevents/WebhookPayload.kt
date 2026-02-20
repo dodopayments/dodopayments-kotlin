@@ -658,7 +658,7 @@ private constructor(
             private val cardNetwork: JsonField<String>,
             private val cardType: JsonField<String>,
             private val checkoutSessionId: JsonField<String>,
-            private val customFieldResponses: JsonField<List<Payment.CustomFieldResponse>>,
+            private val customFieldResponses: JsonField<List<com.dodopayments.api.models.payments.Payment.CustomFieldResponse>>,
             private val discountId: JsonField<String>,
             private val errorCode: JsonField<String>,
             private val errorMessage: JsonField<String>,
@@ -742,7 +742,7 @@ private constructor(
                 checkoutSessionId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("custom_field_responses")
                 @ExcludeMissing
-                customFieldResponses: JsonField<List<Payment.CustomFieldResponse>> =
+                customFieldResponses: JsonField<List<com.dodopayments.api.models.payments.Payment.CustomFieldResponse>> =
                     JsonMissing.of(),
                 @JsonProperty("discount_id")
                 @ExcludeMissing
@@ -1059,7 +1059,7 @@ private constructor(
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
              */
-            fun customFieldResponses(): List<Payment.CustomFieldResponse>? =
+            fun customFieldResponses(): List<com.dodopayments.api.models.payments.Payment.CustomFieldResponse>? =
                 customFieldResponses.getNullable("custom_field_responses")
 
             /**
@@ -1140,7 +1140,7 @@ private constructor(
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
              */
-            fun refundStatus(): Payment.RefundStatus? = refundStatus.getNullable("refund_status")
+            fun refundStatus(): com.dodopayments.api.models.payments.Payment.RefundStatus? = refundStatus.getNullable("refund_status")
 
             /**
              * This represents the portion of settlement_amount that corresponds to taxes collected.
@@ -1392,7 +1392,7 @@ private constructor(
              */
             @JsonProperty("custom_field_responses")
             @ExcludeMissing
-            fun _customFieldResponses(): JsonField<List<Payment.CustomFieldResponse>> =
+            fun _customFieldResponses(): JsonField<List<com.dodopayments.api.models.payments.Payment.CustomFieldResponse>> =
                 customFieldResponses
 
             /**
@@ -1493,7 +1493,7 @@ private constructor(
              */
             @JsonProperty("refund_status")
             @ExcludeMissing
-            fun _refundStatus(): JsonField<Payment.RefundStatus> = refundStatus
+            fun _refundStatus(): JsonField<com.dodopayments.api.models.payments.Payment.RefundStatus> = refundStatus
 
             /**
              * Returns the raw JSON value of [settlementTax].
@@ -1612,7 +1612,7 @@ private constructor(
                 private var cardType: JsonField<String> = JsonMissing.of()
                 private var checkoutSessionId: JsonField<String> = JsonMissing.of()
                 private var customFieldResponses:
-                    JsonField<MutableList<Payment.CustomFieldResponse>>? =
+                    JsonField<MutableList<com.dodopayments.api.models.payments.Payment.CustomFieldResponse>>? =
                     null
                 private var discountId: JsonField<String> = JsonMissing.of()
                 private var errorCode: JsonField<String> = JsonMissing.of()
@@ -1990,28 +1990,28 @@ private constructor(
                 }
 
                 /** Customer's responses to custom fields collected during checkout */
-                fun customFieldResponses(customFieldResponses: List<Payment.CustomFieldResponse>?) =
+                fun customFieldResponses(customFieldResponses: List<com.dodopayments.api.models.payments.Payment.CustomFieldResponse>?) =
                     customFieldResponses(JsonField.ofNullable(customFieldResponses))
 
                 /**
                  * Sets [Builder.customFieldResponses] to an arbitrary JSON value.
                  *
                  * You should usually call [Builder.customFieldResponses] with a well-typed
-                 * `List<Payment.CustomFieldResponse>` value instead. This method is primarily for
+                 * `List<com.dodopayments.api.models.payments.Payment.CustomFieldResponse>` value instead. This method is primarily for
                  * setting the field to an undocumented or not yet supported value.
                  */
                 fun customFieldResponses(
-                    customFieldResponses: JsonField<List<Payment.CustomFieldResponse>>
+                    customFieldResponses: JsonField<List<com.dodopayments.api.models.payments.Payment.CustomFieldResponse>>
                 ) = apply {
                     this.customFieldResponses = customFieldResponses.map { it.toMutableList() }
                 }
 
                 /**
-                 * Adds a single [Payment.CustomFieldResponse] to [customFieldResponses].
+                 * Adds a single [com.dodopayments.api.models.payments.Payment.CustomFieldResponse] to [customFieldResponses].
                  *
                  * @throws IllegalStateException if the field was previously set to a non-list.
                  */
-                fun addCustomFieldResponse(customFieldResponse: Payment.CustomFieldResponse) =
+                fun addCustomFieldResponse(customFieldResponse: com.dodopayments.api.models.payments.Payment.CustomFieldResponse) =
                     apply {
                         customFieldResponses =
                             (customFieldResponses ?: JsonField.of(mutableListOf())).also {
@@ -2162,17 +2162,17 @@ private constructor(
                  * Summary of the refund status for this payment. None if no succeeded refunds
                  * exist.
                  */
-                fun refundStatus(refundStatus: Payment.RefundStatus?) =
+                fun refundStatus(refundStatus: com.dodopayments.api.models.payments.Payment.RefundStatus?) =
                     refundStatus(JsonField.ofNullable(refundStatus))
 
                 /**
                  * Sets [Builder.refundStatus] to an arbitrary JSON value.
                  *
                  * You should usually call [Builder.refundStatus] with a well-typed
-                 * [Payment.RefundStatus] value instead. This method is primarily for setting the
+                 * [com.dodopayments.api.models.payments.Payment.RefundStatus] value instead. This method is primarily for setting the
                  * field to an undocumented or not yet supported value.
                  */
-                fun refundStatus(refundStatus: JsonField<Payment.RefundStatus>) = apply {
+                fun refundStatus(refundStatus: JsonField<com.dodopayments.api.models.payments.Payment.RefundStatus>) = apply {
                     this.refundStatus = refundStatus
                 }
 
@@ -2696,7 +2696,7 @@ private constructor(
             private val billing: JsonField<BillingAddress>,
             private val cancelAtNextBillingDate: JsonField<Boolean>,
             private val createdAt: JsonField<OffsetDateTime>,
-            private val creditEntitlementCart: JsonField<List<Subscription.CreditEntitlementCart>>,
+            private val creditEntitlementCart: JsonField<List<com.dodopayments.api.models.subscriptions.Subscription.CreditEntitlementCart>>,
             private val currency: JsonField<Currency>,
             private val customer: JsonField<CustomerLimitedDetails>,
             private val metadata: JsonField<com.dodopayments.api.models.subscriptions.Subscription.Metadata>,
@@ -2718,7 +2718,7 @@ private constructor(
             private val taxInclusive: JsonField<Boolean>,
             private val trialPeriodDays: JsonField<Int>,
             private val cancelledAt: JsonField<OffsetDateTime>,
-            private val customFieldResponses: JsonField<List<Subscription.CustomFieldResponse>>,
+            private val customFieldResponses: JsonField<List<com.dodopayments.api.models.subscriptions.Subscription.CustomFieldResponse>>,
             private val discountCyclesRemaining: JsonField<Int>,
             private val discountId: JsonField<String>,
             private val expiresAt: JsonField<OffsetDateTime>,
@@ -2744,7 +2744,7 @@ private constructor(
                 createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
                 @JsonProperty("credit_entitlement_cart")
                 @ExcludeMissing
-                creditEntitlementCart: JsonField<List<Subscription.CreditEntitlementCart>> =
+                creditEntitlementCart: JsonField<List<com.dodopayments.api.models.subscriptions.Subscription.CreditEntitlementCart>> =
                     JsonMissing.of(),
                 @JsonProperty("currency")
                 @ExcludeMissing
@@ -2810,7 +2810,7 @@ private constructor(
                 cancelledAt: JsonField<OffsetDateTime> = JsonMissing.of(),
                 @JsonProperty("custom_field_responses")
                 @ExcludeMissing
-                customFieldResponses: JsonField<List<Subscription.CustomFieldResponse>> =
+                customFieldResponses: JsonField<List<com.dodopayments.api.models.subscriptions.Subscription.CustomFieldResponse>> =
                     JsonMissing.of(),
                 @JsonProperty("discount_cycles_remaining")
                 @ExcludeMissing
@@ -2943,7 +2943,7 @@ private constructor(
              *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
-            fun creditEntitlementCart(): List<Subscription.CreditEntitlementCart> =
+            fun creditEntitlementCart(): List<com.dodopayments.api.models.subscriptions.Subscription.CreditEntitlementCart> =
                 creditEntitlementCart.getRequired("credit_entitlement_cart")
 
             /**
@@ -2980,7 +2980,7 @@ private constructor(
              *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
-            fun meterCreditEntitlementCart(): List<Subscription.MeterCreditEntitlementCart> =
+            fun meterCreditEntitlementCart(): List<com.dodopayments.api.models.subscriptions.Subscription.MeterCreditEntitlementCart> =
                 meterCreditEntitlementCart.getRequired("meter_credit_entitlement_cart")
 
             /**
@@ -3139,7 +3139,7 @@ private constructor(
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
              */
-            fun customFieldResponses(): List<Subscription.CustomFieldResponse>? =
+            fun customFieldResponses(): List<com.dodopayments.api.models.subscriptions.Subscription.CustomFieldResponse>? =
                 customFieldResponses.getNullable("custom_field_responses")
 
             /**
@@ -3236,7 +3236,7 @@ private constructor(
              */
             @JsonProperty("credit_entitlement_cart")
             @ExcludeMissing
-            fun _creditEntitlementCart(): JsonField<List<Subscription.CreditEntitlementCart>> =
+            fun _creditEntitlementCart(): JsonField<List<com.dodopayments.api.models.subscriptions.Subscription.CreditEntitlementCart>> =
                 creditEntitlementCart
 
             /**
@@ -3278,7 +3278,7 @@ private constructor(
             @JsonProperty("meter_credit_entitlement_cart")
             @ExcludeMissing
             fun _meterCreditEntitlementCart():
-                JsonField<List<Subscription.MeterCreditEntitlementCart>> =
+                JsonField<List<com.dodopayments.api.models.subscriptions.Subscription.MeterCreditEntitlementCart>> =
                 meterCreditEntitlementCart
 
             /**
@@ -3445,7 +3445,7 @@ private constructor(
              */
             @JsonProperty("custom_field_responses")
             @ExcludeMissing
-            fun _customFieldResponses(): JsonField<List<Subscription.CustomFieldResponse>> =
+            fun _customFieldResponses(): JsonField<List<com.dodopayments.api.models.subscriptions.Subscription.CustomFieldResponse>> =
                 customFieldResponses
 
             /**
@@ -3562,7 +3562,7 @@ private constructor(
                 private var cancelAtNextBillingDate: JsonField<Boolean>? = null
                 private var createdAt: JsonField<OffsetDateTime>? = null
                 private var creditEntitlementCart:
-                    JsonField<MutableList<Subscription.CreditEntitlementCart>>? =
+                    JsonField<MutableList<com.dodopayments.api.models.subscriptions.Subscription.CreditEntitlementCart>>? =
                     null
                 private var currency: JsonField<Currency>? = null
                 private var customer: JsonField<CustomerLimitedDetails>? = null
@@ -3587,7 +3587,7 @@ private constructor(
                 private var trialPeriodDays: JsonField<Int>? = null
                 private var cancelledAt: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var customFieldResponses:
-                    JsonField<MutableList<Subscription.CustomFieldResponse>>? =
+                    JsonField<MutableList<com.dodopayments.api.models.subscriptions.Subscription.CustomFieldResponse>>? =
                     null
                 private var discountCyclesRemaining: JsonField<Int> = JsonMissing.of()
                 private var discountId: JsonField<String> = JsonMissing.of()
@@ -3705,30 +3705,30 @@ private constructor(
 
                 /** Credit entitlement cart settings for this subscription */
                 fun creditEntitlementCart(
-                    creditEntitlementCart: List<Subscription.CreditEntitlementCart>
+                    creditEntitlementCart: List<com.dodopayments.api.models.subscriptions.Subscription.CreditEntitlementCart>
                 ) = creditEntitlementCart(JsonField.of(creditEntitlementCart))
 
                 /**
                  * Sets [Builder.creditEntitlementCart] to an arbitrary JSON value.
                  *
                  * You should usually call [Builder.creditEntitlementCart] with a well-typed
-                 * `List<Subscription.CreditEntitlementCart>` value instead. This method is
+                 * `List<com.dodopayments.api.models.subscriptions.Subscription.CreditEntitlementCart>` value instead. This method is
                  * primarily for setting the field to an undocumented or not yet supported value.
                  */
                 fun creditEntitlementCart(
-                    creditEntitlementCart: JsonField<List<Subscription.CreditEntitlementCart>>
+                    creditEntitlementCart: JsonField<List<com.dodopayments.api.models.subscriptions.Subscription.CreditEntitlementCart>>
                 ) = apply {
                     this.creditEntitlementCart = creditEntitlementCart.map { it.toMutableList() }
                 }
 
                 /**
-                 * Adds a single [Subscription.CreditEntitlementCart] to
+                 * Adds a single [com.dodopayments.api.models.subscriptions.Subscription.CreditEntitlementCart] to
                  * [Builder.creditEntitlementCart].
                  *
                  * @throws IllegalStateException if the field was previously set to a non-list.
                  */
                 fun addCreditEntitlementCart(
-                    creditEntitlementCart: Subscription.CreditEntitlementCart
+                    creditEntitlementCart: com.dodopayments.api.models.subscriptions.Subscription.CreditEntitlementCart
                 ) = apply {
                     this.creditEntitlementCart =
                         (this.creditEntitlementCart ?: JsonField.of(mutableListOf())).also {
@@ -3778,32 +3778,32 @@ private constructor(
 
                 /** Meter credit entitlement cart settings for this subscription */
                 fun meterCreditEntitlementCart(
-                    meterCreditEntitlementCart: List<Subscription.MeterCreditEntitlementCart>
+                    meterCreditEntitlementCart: List<com.dodopayments.api.models.subscriptions.Subscription.MeterCreditEntitlementCart>
                 ) = meterCreditEntitlementCart(JsonField.of(meterCreditEntitlementCart))
 
                 /**
                  * Sets [Builder.meterCreditEntitlementCart] to an arbitrary JSON value.
                  *
                  * You should usually call [Builder.meterCreditEntitlementCart] with a well-typed
-                 * `List<Subscription.MeterCreditEntitlementCart>` value instead. This method is
+                 * `List<com.dodopayments.api.models.subscriptions.Subscription.MeterCreditEntitlementCart>` value instead. This method is
                  * primarily for setting the field to an undocumented or not yet supported value.
                  */
                 fun meterCreditEntitlementCart(
                     meterCreditEntitlementCart:
-                        JsonField<List<Subscription.MeterCreditEntitlementCart>>
+                        JsonField<List<com.dodopayments.api.models.subscriptions.Subscription.MeterCreditEntitlementCart>>
                 ) = apply {
                     this.meterCreditEntitlementCart =
                         meterCreditEntitlementCart.map { it.toMutableList() }
                 }
 
                 /**
-                 * Adds a single [Subscription.MeterCreditEntitlementCart] to
+                 * Adds a single [com.dodopayments.api.models.subscriptions.Subscription.MeterCreditEntitlementCart] to
                  * [Builder.meterCreditEntitlementCart].
                  *
                  * @throws IllegalStateException if the field was previously set to a non-list.
                  */
                 fun addMeterCreditEntitlementCart(
-                    meterCreditEntitlementCart: Subscription.MeterCreditEntitlementCart
+                    meterCreditEntitlementCart: com.dodopayments.api.models.subscriptions.Subscription.MeterCreditEntitlementCart
                 ) = apply {
                     this.meterCreditEntitlementCart =
                         (this.meterCreditEntitlementCart ?: JsonField.of(mutableListOf())).also {
@@ -4059,28 +4059,28 @@ private constructor(
 
                 /** Customer's responses to custom fields collected during checkout */
                 fun customFieldResponses(
-                    customFieldResponses: List<Subscription.CustomFieldResponse>?
+                    customFieldResponses: List<com.dodopayments.api.models.subscriptions.Subscription.CustomFieldResponse>?
                 ) = customFieldResponses(JsonField.ofNullable(customFieldResponses))
 
                 /**
                  * Sets [Builder.customFieldResponses] to an arbitrary JSON value.
                  *
                  * You should usually call [Builder.customFieldResponses] with a well-typed
-                 * `List<Subscription.CustomFieldResponse>` value instead. This method is primarily
+                 * `List<com.dodopayments.api.models.subscriptions.Subscription.CustomFieldResponse>` value instead. This method is primarily
                  * for setting the field to an undocumented or not yet supported value.
                  */
                 fun customFieldResponses(
-                    customFieldResponses: JsonField<List<Subscription.CustomFieldResponse>>
+                    customFieldResponses: JsonField<List<com.dodopayments.api.models.subscriptions.Subscription.CustomFieldResponse>>
                 ) = apply {
                     this.customFieldResponses = customFieldResponses.map { it.toMutableList() }
                 }
 
                 /**
-                 * Adds a single [Subscription.CustomFieldResponse] to [customFieldResponses].
+                 * Adds a single [com.dodopayments.api.models.subscriptions.Subscription.CustomFieldResponse] to [customFieldResponses].
                  *
                  * @throws IllegalStateException if the field was previously set to a non-list.
                  */
-                fun addCustomFieldResponse(customFieldResponse: Subscription.CustomFieldResponse) =
+                fun addCustomFieldResponse(customFieldResponse: com.dodopayments.api.models.subscriptions.Subscription.CustomFieldResponse) =
                     apply {
                         customFieldResponses =
                             (customFieldResponses ?: JsonField.of(mutableListOf())).also {

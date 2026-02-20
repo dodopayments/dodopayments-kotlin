@@ -1754,7 +1754,7 @@ private constructor(
         private val isPartial: JsonField<Boolean>,
         private val paymentId: JsonField<String>,
         private val refundId: JsonField<String>,
-        private val status: JsonField<RefundStatus>,
+        private val status: JsonField<com.dodopayments.api.models.refunds.RefundStatus>,
         private val amount: JsonField<Int>,
         private val currency: JsonField<Currency>,
         private val reason: JsonField<String>,
@@ -1780,7 +1780,7 @@ private constructor(
             refundId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("status")
             @ExcludeMissing
-            status: JsonField<RefundStatus> = JsonMissing.of(),
+            status: JsonField<com.dodopayments.api.models.refunds.RefundStatus> = JsonMissing.of(),
             @JsonProperty("amount") @ExcludeMissing amount: JsonField<Int> = JsonMissing.of(),
             @JsonProperty("currency")
             @ExcludeMissing
@@ -1845,7 +1845,7 @@ private constructor(
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun status(): RefundStatus = status.getRequired("status")
+        fun status(): com.dodopayments.api.models.refunds.RefundStatus = status.getRequired("status")
 
         /**
          * The refunded amount.
@@ -1915,7 +1915,7 @@ private constructor(
          *
          * Unlike [status], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("status") @ExcludeMissing fun _status(): JsonField<RefundStatus> = status
+        @JsonProperty("status") @ExcludeMissing fun _status(): JsonField<com.dodopayments.api.models.refunds.RefundStatus> = status
 
         /**
          * Returns the raw JSON value of [amount].
@@ -1976,7 +1976,7 @@ private constructor(
             private var isPartial: JsonField<Boolean>? = null
             private var paymentId: JsonField<String>? = null
             private var refundId: JsonField<String>? = null
-            private var status: JsonField<RefundStatus>? = null
+            private var status: JsonField<com.dodopayments.api.models.refunds.RefundStatus>? = null
             private var amount: JsonField<Int> = JsonMissing.of()
             private var currency: JsonField<Currency> = JsonMissing.of()
             private var reason: JsonField<String> = JsonMissing.of()
@@ -2058,7 +2058,7 @@ private constructor(
             fun refundId(refundId: JsonField<String>) = apply { this.refundId = refundId }
 
             /** The current status of the refund. */
-            fun status(status: RefundStatus) = status(JsonField.of(status))
+            fun status(status: com.dodopayments.api.models.refunds.RefundStatus) = status(JsonField.of(status))
 
             /**
              * Sets [Builder.status] to an arbitrary JSON value.
@@ -2067,7 +2067,7 @@ private constructor(
              * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun status(status: JsonField<RefundStatus>) = apply { this.status = status }
+            fun status(status: JsonField<com.dodopayments.api.models.refunds.RefundStatus>) = apply { this.status = status }
 
             /** The refunded amount. */
             fun amount(amount: Int?) = amount(JsonField.ofNullable(amount))
