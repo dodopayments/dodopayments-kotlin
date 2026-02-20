@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.84.1 (2026-02-20)
+
+Full Changelog: [v1.84.0...v1.84.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.84.0...v1.84.1)
+
+### Bug Fixes
+
+* resolve type shadowing compile errors in Payment and WebhookPayload ([827a4b2](https://github.com/dodopayments/dodopayments-kotlin/commit/827a4b205519d8c32ee9293b6a5f54a3c3cb4cdc))
+
 ## 1.84.0 (2026-02-20)
 
 Full Changelog: [v1.82.0...v1.84.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.82.0...v1.84.0)
