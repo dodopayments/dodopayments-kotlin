@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.84.0 (2026-02-20)
+
+Full Changelog: [v1.82.0...v1.84.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.82.0...v1.84.0)
+
+### Features
+
+* **api:** updated openapi spec to v1.84.0 ([b6aef46](https://github.com/dodopayments/dodopayments-kotlin/commit/b6aef46412fadaaf6f6a52e8758791fceea73e81))
+* **client:** add connection pooling option ([a727a69](https://github.com/dodopayments/dodopayments-kotlin/commit/a727a69d62d054ac7cad0b1b9cce8576707d26bf))
+
+
+### Chores
+
+* **internal:** make `OkHttp` constructor internal ([7de8cbb](https://github.com/dodopayments/dodopayments-kotlin/commit/7de8cbb9590fbaf478f12cc3731be62fb92da361))
+* **internal:** remove unnecessary base URL ([273e40c](https://github.com/dodopayments/dodopayments-kotlin/commit/273e40c8ae80720d9a4dd08c8be208e68c312ded))
+* **internal:** update `TestServerExtension` comment ([ef268a9](https://github.com/dodopayments/dodopayments-kotlin/commit/ef268a954651f66b792df974595696e278b65fd5))
+
 ## 1.82.0 (2026-02-07)
 
 Full Changelog: [v1.81.0...v1.82.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.81.0...v1.82.0)
