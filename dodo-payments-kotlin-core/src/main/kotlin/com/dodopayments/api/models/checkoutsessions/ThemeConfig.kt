@@ -69,7 +69,7 @@ private constructor(
     fun dark(): ThemeModeConfig? = dark.getNullable("dark")
 
     /**
-     * URL for the primary font
+     * URL for the primary font. Must be a valid https:// URL.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
@@ -77,7 +77,7 @@ private constructor(
     fun fontPrimaryUrl(): String? = fontPrimaryUrl.getNullable("font_primary_url")
 
     /**
-     * URL for the secondary font
+     * URL for the secondary font. Must be a valid https:// URL.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
@@ -109,7 +109,8 @@ private constructor(
     fun light(): ThemeModeConfig? = light.getNullable("light")
 
     /**
-     * Custom text for the pay button (e.g., "Complete Purchase", "Subscribe Now")
+     * Custom text for the pay button (e.g., "Complete Purchase", "Subscribe Now"). Max 100
+     * characters.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
@@ -117,7 +118,8 @@ private constructor(
     fun payButtonText(): String? = payButtonText.getNullable("pay_button_text")
 
     /**
-     * Border radius for UI elements (e.g., "4px", "0.5rem", "8px")
+     * Border radius for UI elements. Must be a number followed by px, rem, or em (e.g., "4px",
+     * "0.5rem", "1em")
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
@@ -244,7 +246,7 @@ private constructor(
          */
         fun dark(dark: JsonField<ThemeModeConfig>) = apply { this.dark = dark }
 
-        /** URL for the primary font */
+        /** URL for the primary font. Must be a valid https:// URL. */
         fun fontPrimaryUrl(fontPrimaryUrl: String?) =
             fontPrimaryUrl(JsonField.ofNullable(fontPrimaryUrl))
 
@@ -259,7 +261,7 @@ private constructor(
             this.fontPrimaryUrl = fontPrimaryUrl
         }
 
-        /** URL for the secondary font */
+        /** URL for the secondary font. Must be a valid https:// URL. */
         fun fontSecondaryUrl(fontSecondaryUrl: String?) =
             fontSecondaryUrl(JsonField.ofNullable(fontSecondaryUrl))
 
@@ -310,7 +312,10 @@ private constructor(
          */
         fun light(light: JsonField<ThemeModeConfig>) = apply { this.light = light }
 
-        /** Custom text for the pay button (e.g., "Complete Purchase", "Subscribe Now") */
+        /**
+         * Custom text for the pay button (e.g., "Complete Purchase", "Subscribe Now"). Max 100
+         * characters.
+         */
         fun payButtonText(payButtonText: String?) =
             payButtonText(JsonField.ofNullable(payButtonText))
 
@@ -325,7 +330,10 @@ private constructor(
             this.payButtonText = payButtonText
         }
 
-        /** Border radius for UI elements (e.g., "4px", "0.5rem", "8px") */
+        /**
+         * Border radius for UI elements. Must be a number followed by px, rem, or em (e.g., "4px",
+         * "0.5rem", "1em")
+         */
         fun radius(radius: String?) = radius(JsonField.ofNullable(radius))
 
         /**

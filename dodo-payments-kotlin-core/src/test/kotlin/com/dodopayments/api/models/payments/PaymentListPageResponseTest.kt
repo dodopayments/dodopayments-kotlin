@@ -35,6 +35,7 @@ internal class PaymentListPageResponseTest {
                                 .build()
                         )
                         .digitalProductsDelivered(true)
+                        .hasLicenseKey(true)
                         .metadata(
                             PaymentListResponse.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -72,6 +73,7 @@ internal class PaymentListPageResponseTest {
                             .build()
                     )
                     .digitalProductsDelivered(true)
+                    .hasLicenseKey(true)
                     .metadata(
                         PaymentListResponse.Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -113,6 +115,7 @@ internal class PaymentListPageResponseTest {
                                 .build()
                         )
                         .digitalProductsDelivered(true)
+                        .hasLicenseKey(true)
                         .metadata(
                             PaymentListResponse.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
