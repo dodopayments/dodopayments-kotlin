@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.84.2 (2026-02-26)
+
+Full Changelog: [v1.84.1...v1.84.2](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.84.1...v1.84.2)
+
+### Bug Fixes
+
+* set Accept header in more places ([2a7efb4](https://github.com/dodopayments/dodopayments-kotlin/commit/2a7efb438a98d774b05f463a57e2daf3c115cb88))
+
+
+### Chores
+
+* drop apache dependency ([3b3ab0c](https://github.com/dodopayments/dodopayments-kotlin/commit/3b3ab0c1658dbd9ceb28cbf1d700958fe6f265dd))
+* **internal:** expand imports ([749709a](https://github.com/dodopayments/dodopayments-kotlin/commit/749709aeea26842635dd00cf32911060b416ceef))
+* make `Properties` more resilient to `null` ([b4a932e](https://github.com/dodopayments/dodopayments-kotlin/commit/b4a932e2f99f424d7c4c4e9e4ad61a9a2e0436c0))
+
 ## 1.84.1 (2026-02-20)
 
 Full Changelog: [v1.84.0...v1.84.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.84.0...v1.84.1)
