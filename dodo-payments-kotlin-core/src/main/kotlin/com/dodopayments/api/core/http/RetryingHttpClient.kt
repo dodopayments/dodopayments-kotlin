@@ -1,3 +1,5 @@
+// File generated from our OpenAPI spec by Stainless.
+
 package com.dodopayments.api.core.http
 
 import com.dodopayments.api.core.DefaultSleeper
