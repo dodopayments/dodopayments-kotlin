@@ -9,7 +9,6 @@ import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
-import com.dodopayments.api.models.payments.OneTimeProductCartItem
 import com.dodopayments.api.models.payments.PaymentMethodTypes
 import com.dodopayments.api.models.subscriptions.AttachAddon
 import com.dodopayments.api.models.subscriptions.OnDemandSubscription
@@ -21,6 +20,7 @@ import com.dodopayments.api.models.subscriptions.SubscriptionStatus
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdateParams
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdatePaymentMethodParams
 import com.dodopayments.api.models.subscriptions.TimeInterval
+import com.dodopayments.api.models.subscriptions.UpdateSubscriptionPlanReq
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -72,7 +72,7 @@ internal class SubscriptionServiceAsyncTest {
                             .build()
                     )
                     .addOneTimeProductCart(
-                        OneTimeProductCartItem.builder()
+                        SubscriptionCreateParams.OneTimeProductCart.builder()
                             .productId("product_id")
                             .quantity(0)
                             .amount(0)
@@ -136,7 +136,6 @@ internal class SubscriptionServiceAsyncTest {
                             .expiresAfterDays(0)
                             .lowBalanceThresholdPercent(0)
                             .maxRolloverCount(0)
-                            .overageChargeAtBilling(true)
                             .overageEnabled(true)
                             .overageLimit("overage_limit")
                             .rolloverEnabled(true)
@@ -191,18 +190,22 @@ internal class SubscriptionServiceAsyncTest {
         subscriptionServiceAsync.changePlan(
             SubscriptionChangePlanParams.builder()
                 .subscriptionId("subscription_id")
-                .productId("product_id")
-                .prorationBillingMode(
-                    SubscriptionChangePlanParams.ProrationBillingMode.PRORATED_IMMEDIATELY
-                )
-                .quantity(0)
-                .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
-                .metadata(
-                    SubscriptionChangePlanParams.Metadata.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                .updateSubscriptionPlanReq(
+                    UpdateSubscriptionPlanReq.builder()
+                        .productId("product_id")
+                        .prorationBillingMode(
+                            UpdateSubscriptionPlanReq.ProrationBillingMode.PRORATED_IMMEDIATELY
+                        )
+                        .quantity(0)
+                        .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
+                        .metadata(
+                            UpdateSubscriptionPlanReq.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .onPaymentFailure(UpdateSubscriptionPlanReq.OnPaymentFailure.PREVENT_CHANGE)
                         .build()
                 )
-                .onPaymentFailure(SubscriptionChangePlanParams.OnPaymentFailure.PREVENT_CHANGE)
                 .build()
         )
     }
@@ -254,23 +257,40 @@ internal class SubscriptionServiceAsyncTest {
             subscriptionServiceAsync.previewChangePlan(
                 SubscriptionPreviewChangePlanParams.builder()
                     .subscriptionId("subscription_id")
-                    .productId("product_id")
-                    .prorationBillingMode(
-                        SubscriptionPreviewChangePlanParams.ProrationBillingMode
-                            .PRORATED_IMMEDIATELY
-                    )
-                    .quantity(0)
-                    .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
-                    .metadata(
-                        SubscriptionPreviewChangePlanParams.Metadata.builder()
-                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .updateSubscriptionPlanReq(
+                        UpdateSubscriptionPlanReq.builder()
+                            .productId("product_id")
+                            .prorationBillingMode(
+                                UpdateSubscriptionPlanReq.ProrationBillingMode.PRORATED_IMMEDIATELY
+                            )
+                            .quantity(0)
+                            .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
+                            .metadata(
+                                UpdateSubscriptionPlanReq.Metadata.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
+                            .onPaymentFailure(
+                                UpdateSubscriptionPlanReq.OnPaymentFailure.PREVENT_CHANGE
+                            )
                             .build()
-                    )
-                    .onPaymentFailure(
-                        SubscriptionPreviewChangePlanParams.OnPaymentFailure.PREVENT_CHANGE
                     )
                     .build()
             )
+
+        response.validate()
+    }
+
+    @Test
+    suspend fun retrieveCreditUsage() {
+        val client =
+            DodoPaymentsOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val subscriptionServiceAsync = client.subscriptions()
+
+        val response = subscriptionServiceAsync.retrieveCreditUsage("subscription_id")
 
         response.validate()
     }

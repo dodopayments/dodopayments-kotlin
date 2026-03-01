@@ -4,6 +4,7 @@ package com.dodopayments.api.models.payments
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.disputes.DisputeStatus
 import com.dodopayments.api.models.misc.Currency
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
@@ -43,10 +44,12 @@ internal class PaymentListPageResponseTest {
                         )
                         .paymentId("payment_id")
                         .totalAmount(0)
+                        .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                         .invoiceId("invoice_id")
                         .invoiceUrl("invoice_url")
                         .paymentMethod("payment_method")
                         .paymentMethodType("payment_method_type")
+                        .refundStatus(PaymentRefundStatus.PARTIAL)
                         .status(IntentStatus.SUCCEEDED)
                         .subscriptionId("subscription_id")
                         .build()
@@ -81,10 +84,12 @@ internal class PaymentListPageResponseTest {
                     )
                     .paymentId("payment_id")
                     .totalAmount(0)
+                    .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                     .invoiceId("invoice_id")
                     .invoiceUrl("invoice_url")
                     .paymentMethod("payment_method")
                     .paymentMethodType("payment_method_type")
+                    .refundStatus(PaymentRefundStatus.PARTIAL)
                     .status(IntentStatus.SUCCEEDED)
                     .subscriptionId("subscription_id")
                     .build()
@@ -123,10 +128,12 @@ internal class PaymentListPageResponseTest {
                         )
                         .paymentId("payment_id")
                         .totalAmount(0)
+                        .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                         .invoiceId("invoice_id")
                         .invoiceUrl("invoice_url")
                         .paymentMethod("payment_method")
                         .paymentMethodType("payment_method_type")
+                        .refundStatus(PaymentRefundStatus.PARTIAL)
                         .status(IntentStatus.SUCCEEDED)
                         .subscriptionId("subscription_id")
                         .build()

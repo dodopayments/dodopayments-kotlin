@@ -31,22 +31,17 @@ internal class MeterTest {
                             listOf(
                                 MeterFilter.Clauses.MeterFilterCondition.builder()
                                     .key("user_id")
-                                    .operator(
-                                        MeterFilter.Clauses.MeterFilterCondition.Operator.EQUALS
-                                    )
+                                    .operator(FilterOperator.EQUALS)
                                     .value("user123")
                                     .build(),
                                 MeterFilter.Clauses.MeterFilterCondition.builder()
                                     .key("amount")
-                                    .operator(
-                                        MeterFilter.Clauses.MeterFilterCondition.Operator
-                                            .GREATER_THAN
-                                    )
+                                    .operator(FilterOperator.GREATER_THAN)
                                     .value(100.0)
                                     .build(),
                             )
                         )
-                        .conjunction(MeterFilter.Conjunction.AND)
+                        .conjunction(Conjunction.AND)
                         .build()
                 )
                 .build()
@@ -70,19 +65,17 @@ internal class MeterTest {
                         listOf(
                             MeterFilter.Clauses.MeterFilterCondition.builder()
                                 .key("user_id")
-                                .operator(MeterFilter.Clauses.MeterFilterCondition.Operator.EQUALS)
+                                .operator(FilterOperator.EQUALS)
                                 .value("user123")
                                 .build(),
                             MeterFilter.Clauses.MeterFilterCondition.builder()
                                 .key("amount")
-                                .operator(
-                                    MeterFilter.Clauses.MeterFilterCondition.Operator.GREATER_THAN
-                                )
+                                .operator(FilterOperator.GREATER_THAN)
                                 .value(100.0)
                                 .build(),
                         )
                     )
-                    .conjunction(MeterFilter.Conjunction.AND)
+                    .conjunction(Conjunction.AND)
                     .build()
             )
     }
@@ -109,22 +102,17 @@ internal class MeterTest {
                             listOf(
                                 MeterFilter.Clauses.MeterFilterCondition.builder()
                                     .key("user_id")
-                                    .operator(
-                                        MeterFilter.Clauses.MeterFilterCondition.Operator.EQUALS
-                                    )
+                                    .operator(FilterOperator.EQUALS)
                                     .value("user123")
                                     .build(),
                                 MeterFilter.Clauses.MeterFilterCondition.builder()
                                     .key("amount")
-                                    .operator(
-                                        MeterFilter.Clauses.MeterFilterCondition.Operator
-                                            .GREATER_THAN
-                                    )
+                                    .operator(FilterOperator.GREATER_THAN)
                                     .value(100.0)
                                     .build(),
                             )
                         )
-                        .conjunction(MeterFilter.Conjunction.AND)
+                        .conjunction(Conjunction.AND)
                         .build()
                 )
                 .build()

@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.dodopayments.api.models.refunds
+package com.dodopayments.api.models.payments
 
 import com.dodopayments.api.core.ExcludeMissing
 import com.dodopayments.api.core.JsonField
@@ -9,6 +9,7 @@ import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.refunds.RefundStatus
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -17,7 +18,7 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
-class RefundListResponse
+class RefundListItem
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val businessId: JsonField<String>,
@@ -214,7 +215,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [RefundListResponse].
+         * Returns a mutable builder for constructing an instance of [RefundListItem].
          *
          * The following fields are required:
          * ```kotlin
@@ -229,7 +230,7 @@ private constructor(
         fun builder() = Builder()
     }
 
-    /** A builder for [RefundListResponse]. */
+    /** A builder for [RefundListItem]. */
     class Builder internal constructor() {
 
         private var businessId: JsonField<String>? = null
@@ -243,17 +244,17 @@ private constructor(
         private var reason: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(refundListResponse: RefundListResponse) = apply {
-            businessId = refundListResponse.businessId
-            createdAt = refundListResponse.createdAt
-            isPartial = refundListResponse.isPartial
-            paymentId = refundListResponse.paymentId
-            refundId = refundListResponse.refundId
-            status = refundListResponse.status
-            amount = refundListResponse.amount
-            currency = refundListResponse.currency
-            reason = refundListResponse.reason
-            additionalProperties = refundListResponse.additionalProperties.toMutableMap()
+        internal fun from(refundListItem: RefundListItem) = apply {
+            businessId = refundListItem.businessId
+            createdAt = refundListItem.createdAt
+            isPartial = refundListItem.isPartial
+            paymentId = refundListItem.paymentId
+            refundId = refundListItem.refundId
+            status = refundListItem.status
+            amount = refundListItem.amount
+            currency = refundListItem.currency
+            reason = refundListItem.reason
+            additionalProperties = refundListItem.additionalProperties.toMutableMap()
         }
 
         /** The unique identifier of the business issuing the refund. */
@@ -388,7 +389,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [RefundListResponse].
+         * Returns an immutable instance of [RefundListItem].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -404,8 +405,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): RefundListResponse =
-            RefundListResponse(
+        fun build(): RefundListItem =
+            RefundListItem(
                 checkRequired("businessId", businessId),
                 checkRequired("createdAt", createdAt),
                 checkRequired("isPartial", isPartial),
@@ -421,7 +422,7 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): RefundListResponse = apply {
+    fun validate(): RefundListItem = apply {
         if (validated) {
             return@apply
         }
@@ -467,7 +468,7 @@ private constructor(
             return true
         }
 
-        return other is RefundListResponse &&
+        return other is RefundListItem &&
             businessId == other.businessId &&
             createdAt == other.createdAt &&
             isPartial == other.isPartial &&
@@ -498,5 +499,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "RefundListResponse{businessId=$businessId, createdAt=$createdAt, isPartial=$isPartial, paymentId=$paymentId, refundId=$refundId, status=$status, amount=$amount, currency=$currency, reason=$reason, additionalProperties=$additionalProperties}"
+        "RefundListItem{businessId=$businessId, createdAt=$createdAt, isPartial=$isPartial, paymentId=$paymentId, refundId=$refundId, status=$status, amount=$amount, currency=$currency, reason=$reason, additionalProperties=$additionalProperties}"
 }

@@ -4,6 +4,7 @@ package com.dodopayments.api.models.payments
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.disputes.DisputeStatus
 import com.dodopayments.api.models.misc.Currency
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
@@ -41,10 +42,12 @@ internal class PaymentListResponseTest {
                 )
                 .paymentId("payment_id")
                 .totalAmount(0)
+                .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                 .invoiceId("invoice_id")
                 .invoiceUrl("invoice_url")
                 .paymentMethod("payment_method")
                 .paymentMethodType("payment_method_type")
+                .refundStatus(PaymentRefundStatus.PARTIAL)
                 .status(IntentStatus.SUCCEEDED)
                 .subscriptionId("subscription_id")
                 .build()
@@ -77,10 +80,12 @@ internal class PaymentListResponseTest {
             )
         assertThat(paymentListResponse.paymentId()).isEqualTo("payment_id")
         assertThat(paymentListResponse.totalAmount()).isEqualTo(0)
+        assertThat(paymentListResponse.disputeStatus()).isEqualTo(DisputeStatus.DISPUTE_OPENED)
         assertThat(paymentListResponse.invoiceId()).isEqualTo("invoice_id")
         assertThat(paymentListResponse.invoiceUrl()).isEqualTo("invoice_url")
         assertThat(paymentListResponse.paymentMethod()).isEqualTo("payment_method")
         assertThat(paymentListResponse.paymentMethodType()).isEqualTo("payment_method_type")
+        assertThat(paymentListResponse.refundStatus()).isEqualTo(PaymentRefundStatus.PARTIAL)
         assertThat(paymentListResponse.status()).isEqualTo(IntentStatus.SUCCEEDED)
         assertThat(paymentListResponse.subscriptionId()).isEqualTo("subscription_id")
     }
@@ -115,10 +120,12 @@ internal class PaymentListResponseTest {
                 )
                 .paymentId("payment_id")
                 .totalAmount(0)
+                .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                 .invoiceId("invoice_id")
                 .invoiceUrl("invoice_url")
                 .paymentMethod("payment_method")
                 .paymentMethodType("payment_method_type")
+                .refundStatus(PaymentRefundStatus.PARTIAL)
                 .status(IntentStatus.SUCCEEDED)
                 .subscriptionId("subscription_id")
                 .build()

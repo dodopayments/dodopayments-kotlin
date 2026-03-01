@@ -5,6 +5,7 @@ package com.dodopayments.api.models.refunds
 import com.dodopayments.api.core.AutoPager
 import com.dodopayments.api.core.Page
 import com.dodopayments.api.core.checkRequired
+import com.dodopayments.api.models.payments.RefundListItem
 import com.dodopayments.api.services.blocking.RefundService
 import java.util.Objects
 
@@ -14,14 +15,14 @@ private constructor(
     private val service: RefundService,
     private val params: RefundListParams,
     private val response: RefundListPageResponse,
-) : Page<RefundListResponse> {
+) : Page<RefundListItem> {
 
     /**
      * Delegates to [RefundListPageResponse], but gracefully handles missing data.
      *
      * @see RefundListPageResponse.items
      */
-    override fun items(): List<RefundListResponse> =
+    override fun items(): List<RefundListItem> =
         response._items().getNullable("items") ?: emptyList()
 
     override fun hasNextPage(): Boolean = items().isNotEmpty()
@@ -33,7 +34,7 @@ private constructor(
 
     override fun nextPage(): RefundListPage = service.list(nextPageParams())
 
-    fun autoPager(): AutoPager<RefundListResponse> = AutoPager.from(this)
+    fun autoPager(): AutoPager<RefundListItem> = AutoPager.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): RefundListParams = params
