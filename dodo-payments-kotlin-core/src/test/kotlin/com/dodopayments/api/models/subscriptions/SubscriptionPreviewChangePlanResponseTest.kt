@@ -76,7 +76,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                         .cancelAtNextBillingDate(true)
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addCreditEntitlementCart(
-                            Subscription.CreditEntitlementCart.builder()
+                            CreditEntitlementCartResponse.builder()
                                 .creditEntitlementId("credit_entitlement_id")
                                 .creditEntitlementName("credit_entitlement_name")
                                 .creditsAmount("credits_amount")
@@ -116,7 +116,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                                 .build()
                         )
                         .addMeterCreditEntitlementCart(
-                            Subscription.MeterCreditEntitlementCart.builder()
+                            MeterCreditEntitlementCartResponse.builder()
                                 .creditEntitlementId("credit_entitlement_id")
                                 .meterId("meter_id")
                                 .meterName("meter_name")
@@ -125,7 +125,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                                 .build()
                         )
                         .addMeter(
-                            Subscription.Meter.builder()
+                            MeterCartResponseItem.builder()
                                 .currency(Currency.AED)
                                 .freeThreshold(0L)
                                 .measurementUnit("measurement_unit")
@@ -218,7 +218,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                     .cancelAtNextBillingDate(true)
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .addCreditEntitlementCart(
-                        Subscription.CreditEntitlementCart.builder()
+                        CreditEntitlementCartResponse.builder()
                             .creditEntitlementId("credit_entitlement_id")
                             .creditEntitlementName("credit_entitlement_name")
                             .creditsAmount("credits_amount")
@@ -258,7 +258,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                             .build()
                     )
                     .addMeterCreditEntitlementCart(
-                        Subscription.MeterCreditEntitlementCart.builder()
+                        MeterCreditEntitlementCartResponse.builder()
                             .creditEntitlementId("credit_entitlement_id")
                             .meterId("meter_id")
                             .meterName("meter_name")
@@ -267,7 +267,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                             .build()
                     )
                     .addMeter(
-                        Subscription.Meter.builder()
+                        MeterCartResponseItem.builder()
                             .currency(Currency.AED)
                             .freeThreshold(0L)
                             .measurementUnit("measurement_unit")
@@ -364,7 +364,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                         .cancelAtNextBillingDate(true)
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addCreditEntitlementCart(
-                            Subscription.CreditEntitlementCart.builder()
+                            CreditEntitlementCartResponse.builder()
                                 .creditEntitlementId("credit_entitlement_id")
                                 .creditEntitlementName("credit_entitlement_name")
                                 .creditsAmount("credits_amount")
@@ -404,7 +404,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                                 .build()
                         )
                         .addMeterCreditEntitlementCart(
-                            Subscription.MeterCreditEntitlementCart.builder()
+                            MeterCreditEntitlementCartResponse.builder()
                                 .creditEntitlementId("credit_entitlement_id")
                                 .meterId("meter_id")
                                 .meterName("meter_name")
@@ -413,7 +413,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                                 .build()
                         )
                         .addMeter(
-                            Subscription.Meter.builder()
+                            MeterCartResponseItem.builder()
                                 .currency(Currency.AED)
                                 .freeThreshold(0L)
                                 .measurementUnit("measurement_unit")

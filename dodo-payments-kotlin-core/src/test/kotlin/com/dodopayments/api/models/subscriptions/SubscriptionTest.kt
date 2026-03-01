@@ -34,7 +34,7 @@ internal class SubscriptionTest {
                 .cancelAtNextBillingDate(true)
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addCreditEntitlementCart(
-                    Subscription.CreditEntitlementCart.builder()
+                    CreditEntitlementCartResponse.builder()
                         .creditEntitlementId("credit_entitlement_id")
                         .creditEntitlementName("credit_entitlement_name")
                         .creditsAmount("credits_amount")
@@ -74,7 +74,7 @@ internal class SubscriptionTest {
                         .build()
                 )
                 .addMeterCreditEntitlementCart(
-                    Subscription.MeterCreditEntitlementCart.builder()
+                    MeterCreditEntitlementCartResponse.builder()
                         .creditEntitlementId("credit_entitlement_id")
                         .meterId("meter_id")
                         .meterName("meter_name")
@@ -83,7 +83,7 @@ internal class SubscriptionTest {
                         .build()
                 )
                 .addMeter(
-                    Subscription.Meter.builder()
+                    MeterCartResponseItem.builder()
                         .currency(Currency.AED)
                         .freeThreshold(0L)
                         .measurementUnit("measurement_unit")
@@ -137,7 +137,7 @@ internal class SubscriptionTest {
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(subscription.creditEntitlementCart())
             .containsExactly(
-                Subscription.CreditEntitlementCart.builder()
+                CreditEntitlementCartResponse.builder()
                     .creditEntitlementId("credit_entitlement_id")
                     .creditEntitlementName("credit_entitlement_name")
                     .creditsAmount("credits_amount")
@@ -180,7 +180,7 @@ internal class SubscriptionTest {
             )
         assertThat(subscription.meterCreditEntitlementCart())
             .containsExactly(
-                Subscription.MeterCreditEntitlementCart.builder()
+                MeterCreditEntitlementCartResponse.builder()
                     .creditEntitlementId("credit_entitlement_id")
                     .meterId("meter_id")
                     .meterName("meter_name")
@@ -190,7 +190,7 @@ internal class SubscriptionTest {
             )
         assertThat(subscription.meters())
             .containsExactly(
-                Subscription.Meter.builder()
+                MeterCartResponseItem.builder()
                     .currency(Currency.AED)
                     .freeThreshold(0L)
                     .measurementUnit("measurement_unit")
@@ -246,7 +246,7 @@ internal class SubscriptionTest {
                 .cancelAtNextBillingDate(true)
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addCreditEntitlementCart(
-                    Subscription.CreditEntitlementCart.builder()
+                    CreditEntitlementCartResponse.builder()
                         .creditEntitlementId("credit_entitlement_id")
                         .creditEntitlementName("credit_entitlement_name")
                         .creditsAmount("credits_amount")
@@ -286,7 +286,7 @@ internal class SubscriptionTest {
                         .build()
                 )
                 .addMeterCreditEntitlementCart(
-                    Subscription.MeterCreditEntitlementCart.builder()
+                    MeterCreditEntitlementCartResponse.builder()
                         .creditEntitlementId("credit_entitlement_id")
                         .meterId("meter_id")
                         .meterName("meter_name")
@@ -295,7 +295,7 @@ internal class SubscriptionTest {
                         .build()
                 )
                 .addMeter(
-                    Subscription.Meter.builder()
+                    MeterCartResponseItem.builder()
                         .currency(Currency.AED)
                         .freeThreshold(0L)
                         .measurementUnit("measurement_unit")
