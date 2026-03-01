@@ -718,7 +718,8 @@ private constructor(
                 disputes: JsonField<List<Dispute>> = JsonMissing.of(),
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                metadata: JsonField<com.dodopayments.api.models.payments.Payment.Metadata> = JsonMissing.of(),
+                metadata: JsonField<com.dodopayments.api.models.payments.Payment.Metadata> =
+                    JsonMissing.of(),
                 @JsonProperty("payment_id")
                 @ExcludeMissing
                 paymentId: JsonField<String> = JsonMissing.of(),
@@ -962,7 +963,8 @@ private constructor(
              *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
-            fun metadata(): com.dodopayments.api.models.payments.Payment.Metadata = metadata.getRequired("metadata")
+            fun metadata(): com.dodopayments.api.models.payments.Payment.Metadata =
+                metadata.getRequired("metadata")
 
             /**
              * Unique identifier for the payment
@@ -1287,7 +1289,8 @@ private constructor(
              */
             @JsonProperty("metadata")
             @ExcludeMissing
-            fun _metadata(): JsonField<com.dodopayments.api.models.payments.Payment.Metadata> = metadata
+            fun _metadata(): JsonField<com.dodopayments.api.models.payments.Payment.Metadata> =
+                metadata
 
             /**
              * Returns the raw JSON value of [paymentId].
@@ -1610,7 +1613,9 @@ private constructor(
                 private var customer: JsonField<CustomerLimitedDetails>? = null
                 private var digitalProductsDelivered: JsonField<Boolean>? = null
                 private var disputes: JsonField<MutableList<Dispute>>? = null
-                private var metadata: JsonField<com.dodopayments.api.models.payments.Payment.Metadata>? = null
+                private var metadata:
+                    JsonField<com.dodopayments.api.models.payments.Payment.Metadata>? =
+                    null
                 private var paymentId: JsonField<String>? = null
                 private var refunds: JsonField<MutableList<RefundListItem>>? = null
                 private var settlementAmount: JsonField<Int>? = null
@@ -1803,18 +1808,20 @@ private constructor(
                 }
 
                 /** Additional custom data associated with the payment */
-                fun metadata(metadata: com.dodopayments.api.models.payments.Payment.Metadata) = metadata(JsonField.of(metadata))
+                fun metadata(metadata: com.dodopayments.api.models.payments.Payment.Metadata) =
+                    metadata(JsonField.of(metadata))
 
                 /**
                  * Sets [Builder.metadata] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.metadata] with a well-typed [com.dodopayments.api.models.payments.Payment.Metadata]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * You should usually call [Builder.metadata] with a well-typed
+                 * [com.dodopayments.api.models.payments.Payment.Metadata] value instead. This
+                 * method is primarily for setting the field to an undocumented or not yet supported
+                 * value.
                  */
-                fun metadata(metadata: JsonField<com.dodopayments.api.models.payments.Payment.Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(
+                    metadata: JsonField<com.dodopayments.api.models.payments.Payment.Metadata>
+                ) = apply { this.metadata = metadata }
 
                 /** Unique identifier for the payment */
                 fun paymentId(paymentId: String) = paymentId(JsonField.of(paymentId))
@@ -2708,7 +2715,8 @@ private constructor(
             private val creditEntitlementCart: JsonField<List<CreditEntitlementCartResponse>>,
             private val currency: JsonField<Currency>,
             private val customer: JsonField<CustomerLimitedDetails>,
-            private val metadata: JsonField<com.dodopayments.api.models.subscriptions.Subscription.Metadata>,
+            private val metadata:
+                JsonField<com.dodopayments.api.models.subscriptions.Subscription.Metadata>,
             private val meterCreditEntitlementCart:
                 JsonField<List<MeterCreditEntitlementCartResponse>>,
             private val meters: JsonField<List<MeterCartResponseItem>>,
@@ -2763,7 +2771,9 @@ private constructor(
                 customer: JsonField<CustomerLimitedDetails> = JsonMissing.of(),
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                metadata: JsonField<com.dodopayments.api.models.subscriptions.Subscription.Metadata> = JsonMissing.of(),
+                metadata:
+                    JsonField<com.dodopayments.api.models.subscriptions.Subscription.Metadata> =
+                    JsonMissing.of(),
                 @JsonProperty("meter_credit_entitlement_cart")
                 @ExcludeMissing
                 meterCreditEntitlementCart: JsonField<List<MeterCreditEntitlementCartResponse>> =
@@ -2978,7 +2988,8 @@ private constructor(
              *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
-            fun metadata(): com.dodopayments.api.models.subscriptions.Subscription.Metadata = metadata.getRequired("metadata")
+            fun metadata(): com.dodopayments.api.models.subscriptions.Subscription.Metadata =
+                metadata.getRequired("metadata")
 
             /**
              * Meter credit entitlement cart settings for this subscription
@@ -3274,7 +3285,9 @@ private constructor(
              */
             @JsonProperty("metadata")
             @ExcludeMissing
-            fun _metadata(): JsonField<com.dodopayments.api.models.subscriptions.Subscription.Metadata> = metadata
+            fun _metadata():
+                JsonField<com.dodopayments.api.models.subscriptions.Subscription.Metadata> =
+                metadata
 
             /**
              * Returns the raw JSON value of [meterCreditEntitlementCart].
@@ -3571,7 +3584,9 @@ private constructor(
                     null
                 private var currency: JsonField<Currency>? = null
                 private var customer: JsonField<CustomerLimitedDetails>? = null
-                private var metadata: JsonField<com.dodopayments.api.models.subscriptions.Subscription.Metadata>? = null
+                private var metadata:
+                    JsonField<com.dodopayments.api.models.subscriptions.Subscription.Metadata>? =
+                    null
                 private var meterCreditEntitlementCart:
                     JsonField<MutableList<MeterCreditEntitlementCartResponse>>? =
                     null
@@ -3765,18 +3780,22 @@ private constructor(
                 }
 
                 /** Additional custom data associated with the subscription */
-                fun metadata(metadata: com.dodopayments.api.models.subscriptions.Subscription.Metadata) = metadata(JsonField.of(metadata))
+                fun metadata(
+                    metadata: com.dodopayments.api.models.subscriptions.Subscription.Metadata
+                ) = metadata(JsonField.of(metadata))
 
                 /**
                  * Sets [Builder.metadata] to an arbitrary JSON value.
                  *
                  * You should usually call [Builder.metadata] with a well-typed
-                 * [com.dodopayments.api.models.subscriptions.Subscription.Metadata] value instead. This method is primarily for setting the
-                 * field to an undocumented or not yet supported value.
+                 * [com.dodopayments.api.models.subscriptions.Subscription.Metadata] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun metadata(metadata: JsonField<com.dodopayments.api.models.subscriptions.Subscription.Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(
+                    metadata:
+                        JsonField<com.dodopayments.api.models.subscriptions.Subscription.Metadata>
+                ) = apply { this.metadata = metadata }
 
                 /** Meter credit entitlement cart settings for this subscription */
                 fun meterCreditEntitlementCart(
@@ -4613,7 +4632,8 @@ private constructor(
                 isPartial: JsonField<Boolean> = JsonMissing.of(),
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                metadata: JsonField<com.dodopayments.api.models.refunds.Refund.Metadata> = JsonMissing.of(),
+                metadata: JsonField<com.dodopayments.api.models.refunds.Refund.Metadata> =
+                    JsonMissing.of(),
                 @JsonProperty("payment_id")
                 @ExcludeMissing
                 paymentId: JsonField<String> = JsonMissing.of(),
@@ -4707,7 +4727,8 @@ private constructor(
              *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
-            fun metadata(): com.dodopayments.api.models.refunds.Refund.Metadata = metadata.getRequired("metadata")
+            fun metadata(): com.dodopayments.api.models.refunds.Refund.Metadata =
+                metadata.getRequired("metadata")
 
             /**
              * The unique identifier of the payment associated with the refund.
@@ -4815,7 +4836,8 @@ private constructor(
              */
             @JsonProperty("metadata")
             @ExcludeMissing
-            fun _metadata(): JsonField<com.dodopayments.api.models.refunds.Refund.Metadata> = metadata
+            fun _metadata(): JsonField<com.dodopayments.api.models.refunds.Refund.Metadata> =
+                metadata
 
             /**
              * Returns the raw JSON value of [paymentId].
@@ -4916,7 +4938,9 @@ private constructor(
                 private var createdAt: JsonField<OffsetDateTime>? = null
                 private var customer: JsonField<CustomerLimitedDetails>? = null
                 private var isPartial: JsonField<Boolean>? = null
-                private var metadata: JsonField<com.dodopayments.api.models.refunds.Refund.Metadata>? = null
+                private var metadata:
+                    JsonField<com.dodopayments.api.models.refunds.Refund.Metadata>? =
+                    null
                 private var paymentId: JsonField<String>? = null
                 private var refundId: JsonField<String>? = null
                 private var status: JsonField<RefundStatus>? = null
@@ -4997,18 +5021,19 @@ private constructor(
                 fun isPartial(isPartial: JsonField<Boolean>) = apply { this.isPartial = isPartial }
 
                 /** Additional metadata stored with the refund. */
-                fun metadata(metadata: com.dodopayments.api.models.refunds.Refund.Metadata) = metadata(JsonField.of(metadata))
+                fun metadata(metadata: com.dodopayments.api.models.refunds.Refund.Metadata) =
+                    metadata(JsonField.of(metadata))
 
                 /**
                  * Sets [Builder.metadata] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.metadata] with a well-typed [com.dodopayments.api.models.refunds.Refund.Metadata]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * You should usually call [Builder.metadata] with a well-typed
+                 * [com.dodopayments.api.models.refunds.Refund.Metadata] value instead. This method
+                 * is primarily for setting the field to an undocumented or not yet supported value.
                  */
-                fun metadata(metadata: JsonField<com.dodopayments.api.models.refunds.Refund.Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(
+                    metadata: JsonField<com.dodopayments.api.models.refunds.Refund.Metadata>
+                ) = apply { this.metadata = metadata }
 
                 /** The unique identifier of the payment associated with the refund. */
                 fun paymentId(paymentId: String) = paymentId(JsonField.of(paymentId))
@@ -7075,7 +7100,10 @@ private constructor(
             private val isCredit: JsonField<Boolean>,
             private val overageAfter: JsonField<String>,
             private val overageBefore: JsonField<String>,
-            private val transactionType: JsonField<com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry.TransactionType>,
+            private val transactionType:
+                JsonField<
+                    com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry.TransactionType
+                >,
             private val description: JsonField<String>,
             private val grantId: JsonField<String>,
             private val referenceId: JsonField<String>,
@@ -7119,7 +7147,11 @@ private constructor(
                 overageBefore: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("transaction_type")
                 @ExcludeMissing
-                transactionType: JsonField<com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry.TransactionType> = JsonMissing.of(),
+                transactionType:
+                    JsonField<
+                        com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry.TransactionType
+                    > =
+                    JsonMissing.of(),
                 @JsonProperty("description")
                 @ExcludeMissing
                 description: JsonField<String> = JsonMissing.of(),
@@ -7259,7 +7291,8 @@ private constructor(
              *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
-            fun transactionType(): com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry.TransactionType =
+            fun transactionType():
+                com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry.TransactionType =
                 transactionType.getRequired("transaction_type")
 
             /**
@@ -7405,7 +7438,10 @@ private constructor(
              */
             @JsonProperty("transaction_type")
             @ExcludeMissing
-            fun _transactionType(): JsonField<com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry.TransactionType> = transactionType
+            fun _transactionType():
+                JsonField<
+                    com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry.TransactionType
+                > = transactionType
 
             /**
              * Returns the raw JSON value of [description].
@@ -7505,7 +7541,11 @@ private constructor(
                 private var isCredit: JsonField<Boolean>? = null
                 private var overageAfter: JsonField<String>? = null
                 private var overageBefore: JsonField<String>? = null
-                private var transactionType: JsonField<com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry.TransactionType>? = null
+                private var transactionType:
+                    JsonField<
+                        com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry.TransactionType
+                    >? =
+                    null
                 private var description: JsonField<String> = JsonMissing.of()
                 private var grantId: JsonField<String> = JsonMissing.of()
                 private var referenceId: JsonField<String> = JsonMissing.of()
@@ -7674,20 +7714,25 @@ private constructor(
                     this.overageBefore = overageBefore
                 }
 
-                fun transactionType(transactionType: com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry.TransactionType) =
-                    transactionType(JsonField.of(transactionType))
+                fun transactionType(
+                    transactionType:
+                        com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry.TransactionType
+                ) = transactionType(JsonField.of(transactionType))
 
                 /**
                  * Sets [Builder.transactionType] to an arbitrary JSON value.
                  *
                  * You should usually call [Builder.transactionType] with a well-typed
-                 * [com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry.TransactionType] value instead. This method is primarily for
-                 * setting the field to an undocumented or not yet supported value.
+                 * [com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry.TransactionType]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
                  */
-                fun transactionType(transactionType: JsonField<com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry.TransactionType>) =
-                    apply {
-                        this.transactionType = transactionType
-                    }
+                fun transactionType(
+                    transactionType:
+                        JsonField<
+                            com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry.TransactionType
+                        >
+                ) = apply { this.transactionType = transactionType }
 
                 fun description(description: String?) =
                     description(JsonField.ofNullable(description))
