@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.86.2 (2026-03-01)
+
+Full Changelog: [v1.86.1...v1.86.2](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.86.1...v1.86.2)
+
+### Bug Fixes
+
+* resolve kotlin formatting lint violations ([9143974](https://github.com/dodopayments/dodopayments-kotlin/commit/91439740044721480e7dd75ebaae98eec9e6aa56))
+
 ## 1.86.1 (2026-03-01)
 
 Full Changelog: [v1.86.0...v1.86.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.86.0...v1.86.1)
