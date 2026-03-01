@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.86.1 (2026-03-01)
+
+Full Changelog: [v1.86.0...v1.86.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.86.0...v1.86.1)
+
+### Bug Fixes
+
+* fully qualify shadowed Metadata and TransactionType references in WebhookPayload ([2a0690f](https://github.com/dodopayments/dodopayments-kotlin/commit/2a0690fab93f2fc627bba8b81014ed930f8174ba))
+
 ## 1.86.0 (2026-03-01)
 
 Full Changelog: [v1.84.2...v1.86.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.84.2...v1.86.0)
