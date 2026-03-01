@@ -25,6 +25,9 @@ import com.dodopayments.api.models.payments.RefundListItem
 import com.dodopayments.api.models.refunds.Refund
 import com.dodopayments.api.models.refunds.RefundStatus
 import com.dodopayments.api.models.subscriptions.AddonCartResponseItem
+import com.dodopayments.api.models.subscriptions.CreditEntitlementCartResponse
+import com.dodopayments.api.models.subscriptions.MeterCartResponseItem
+import com.dodopayments.api.models.subscriptions.MeterCreditEntitlementCartResponse
 import com.dodopayments.api.models.subscriptions.Subscription
 import com.dodopayments.api.models.subscriptions.SubscriptionStatus
 import com.dodopayments.api.models.subscriptions.TimeInterval
@@ -2871,7 +2874,7 @@ internal class UnwrapWebhookEventTest {
                         .cancelAtNextBillingDate(true)
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addCreditEntitlementCart(
-                            Subscription.CreditEntitlementCart.builder()
+                            CreditEntitlementCartResponse.builder()
                                 .creditEntitlementId("credit_entitlement_id")
                                 .creditEntitlementName("credit_entitlement_name")
                                 .creditsAmount("credits_amount")
@@ -2911,7 +2914,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .addMeterCreditEntitlementCart(
-                            Subscription.MeterCreditEntitlementCart.builder()
+                            MeterCreditEntitlementCartResponse.builder()
                                 .creditEntitlementId("credit_entitlement_id")
                                 .meterId("meter_id")
                                 .meterName("meter_name")
@@ -2920,7 +2923,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .addMeter(
-                            Subscription.Meter.builder()
+                            MeterCartResponseItem.builder()
                                 .currency(Currency.AED)
                                 .freeThreshold(0L)
                                 .measurementUnit("measurement_unit")
@@ -3020,7 +3023,7 @@ internal class UnwrapWebhookEventTest {
                             .cancelAtNextBillingDate(true)
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .addCreditEntitlementCart(
-                                Subscription.CreditEntitlementCart.builder()
+                                CreditEntitlementCartResponse.builder()
                                     .creditEntitlementId("credit_entitlement_id")
                                     .creditEntitlementName("credit_entitlement_name")
                                     .creditsAmount("credits_amount")
@@ -3060,7 +3063,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .addMeterCreditEntitlementCart(
-                                Subscription.MeterCreditEntitlementCart.builder()
+                                MeterCreditEntitlementCartResponse.builder()
                                     .creditEntitlementId("credit_entitlement_id")
                                     .meterId("meter_id")
                                     .meterName("meter_name")
@@ -3069,7 +3072,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .addMeter(
-                                Subscription.Meter.builder()
+                                MeterCartResponseItem.builder()
                                     .currency(Currency.AED)
                                     .freeThreshold(0L)
                                     .measurementUnit("measurement_unit")
@@ -3140,7 +3143,7 @@ internal class UnwrapWebhookEventTest {
                         .cancelAtNextBillingDate(true)
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addCreditEntitlementCart(
-                            Subscription.CreditEntitlementCart.builder()
+                            CreditEntitlementCartResponse.builder()
                                 .creditEntitlementId("credit_entitlement_id")
                                 .creditEntitlementName("credit_entitlement_name")
                                 .creditsAmount("credits_amount")
@@ -3180,7 +3183,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .addMeterCreditEntitlementCart(
-                            Subscription.MeterCreditEntitlementCart.builder()
+                            MeterCreditEntitlementCartResponse.builder()
                                 .creditEntitlementId("credit_entitlement_id")
                                 .meterId("meter_id")
                                 .meterName("meter_name")
@@ -3189,7 +3192,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .addMeter(
-                            Subscription.Meter.builder()
+                            MeterCartResponseItem.builder()
                                 .currency(Currency.AED)
                                 .freeThreshold(0L)
                                 .measurementUnit("measurement_unit")
@@ -3289,7 +3292,7 @@ internal class UnwrapWebhookEventTest {
                             .cancelAtNextBillingDate(true)
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .addCreditEntitlementCart(
-                                Subscription.CreditEntitlementCart.builder()
+                                CreditEntitlementCartResponse.builder()
                                     .creditEntitlementId("credit_entitlement_id")
                                     .creditEntitlementName("credit_entitlement_name")
                                     .creditsAmount("credits_amount")
@@ -3329,7 +3332,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .addMeterCreditEntitlementCart(
-                                Subscription.MeterCreditEntitlementCart.builder()
+                                MeterCreditEntitlementCartResponse.builder()
                                     .creditEntitlementId("credit_entitlement_id")
                                     .meterId("meter_id")
                                     .meterName("meter_name")
@@ -3338,7 +3341,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .addMeter(
-                                Subscription.Meter.builder()
+                                MeterCartResponseItem.builder()
                                     .currency(Currency.AED)
                                     .freeThreshold(0L)
                                     .measurementUnit("measurement_unit")
@@ -3409,7 +3412,7 @@ internal class UnwrapWebhookEventTest {
                         .cancelAtNextBillingDate(true)
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addCreditEntitlementCart(
-                            Subscription.CreditEntitlementCart.builder()
+                            CreditEntitlementCartResponse.builder()
                                 .creditEntitlementId("credit_entitlement_id")
                                 .creditEntitlementName("credit_entitlement_name")
                                 .creditsAmount("credits_amount")
@@ -3449,7 +3452,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .addMeterCreditEntitlementCart(
-                            Subscription.MeterCreditEntitlementCart.builder()
+                            MeterCreditEntitlementCartResponse.builder()
                                 .creditEntitlementId("credit_entitlement_id")
                                 .meterId("meter_id")
                                 .meterName("meter_name")
@@ -3458,7 +3461,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .addMeter(
-                            Subscription.Meter.builder()
+                            MeterCartResponseItem.builder()
                                 .currency(Currency.AED)
                                 .freeThreshold(0L)
                                 .measurementUnit("measurement_unit")
@@ -3558,7 +3561,7 @@ internal class UnwrapWebhookEventTest {
                             .cancelAtNextBillingDate(true)
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .addCreditEntitlementCart(
-                                Subscription.CreditEntitlementCart.builder()
+                                CreditEntitlementCartResponse.builder()
                                     .creditEntitlementId("credit_entitlement_id")
                                     .creditEntitlementName("credit_entitlement_name")
                                     .creditsAmount("credits_amount")
@@ -3598,7 +3601,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .addMeterCreditEntitlementCart(
-                                Subscription.MeterCreditEntitlementCart.builder()
+                                MeterCreditEntitlementCartResponse.builder()
                                     .creditEntitlementId("credit_entitlement_id")
                                     .meterId("meter_id")
                                     .meterName("meter_name")
@@ -3607,7 +3610,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .addMeter(
-                                Subscription.Meter.builder()
+                                MeterCartResponseItem.builder()
                                     .currency(Currency.AED)
                                     .freeThreshold(0L)
                                     .measurementUnit("measurement_unit")
@@ -3678,7 +3681,7 @@ internal class UnwrapWebhookEventTest {
                         .cancelAtNextBillingDate(true)
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addCreditEntitlementCart(
-                            Subscription.CreditEntitlementCart.builder()
+                            CreditEntitlementCartResponse.builder()
                                 .creditEntitlementId("credit_entitlement_id")
                                 .creditEntitlementName("credit_entitlement_name")
                                 .creditsAmount("credits_amount")
@@ -3718,7 +3721,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .addMeterCreditEntitlementCart(
-                            Subscription.MeterCreditEntitlementCart.builder()
+                            MeterCreditEntitlementCartResponse.builder()
                                 .creditEntitlementId("credit_entitlement_id")
                                 .meterId("meter_id")
                                 .meterName("meter_name")
@@ -3727,7 +3730,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .addMeter(
-                            Subscription.Meter.builder()
+                            MeterCartResponseItem.builder()
                                 .currency(Currency.AED)
                                 .freeThreshold(0L)
                                 .measurementUnit("measurement_unit")
@@ -3827,7 +3830,7 @@ internal class UnwrapWebhookEventTest {
                             .cancelAtNextBillingDate(true)
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .addCreditEntitlementCart(
-                                Subscription.CreditEntitlementCart.builder()
+                                CreditEntitlementCartResponse.builder()
                                     .creditEntitlementId("credit_entitlement_id")
                                     .creditEntitlementName("credit_entitlement_name")
                                     .creditsAmount("credits_amount")
@@ -3867,7 +3870,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .addMeterCreditEntitlementCart(
-                                Subscription.MeterCreditEntitlementCart.builder()
+                                MeterCreditEntitlementCartResponse.builder()
                                     .creditEntitlementId("credit_entitlement_id")
                                     .meterId("meter_id")
                                     .meterName("meter_name")
@@ -3876,7 +3879,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .addMeter(
-                                Subscription.Meter.builder()
+                                MeterCartResponseItem.builder()
                                     .currency(Currency.AED)
                                     .freeThreshold(0L)
                                     .measurementUnit("measurement_unit")
@@ -3947,7 +3950,7 @@ internal class UnwrapWebhookEventTest {
                         .cancelAtNextBillingDate(true)
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addCreditEntitlementCart(
-                            Subscription.CreditEntitlementCart.builder()
+                            CreditEntitlementCartResponse.builder()
                                 .creditEntitlementId("credit_entitlement_id")
                                 .creditEntitlementName("credit_entitlement_name")
                                 .creditsAmount("credits_amount")
@@ -3987,7 +3990,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .addMeterCreditEntitlementCart(
-                            Subscription.MeterCreditEntitlementCart.builder()
+                            MeterCreditEntitlementCartResponse.builder()
                                 .creditEntitlementId("credit_entitlement_id")
                                 .meterId("meter_id")
                                 .meterName("meter_name")
@@ -3996,7 +3999,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .addMeter(
-                            Subscription.Meter.builder()
+                            MeterCartResponseItem.builder()
                                 .currency(Currency.AED)
                                 .freeThreshold(0L)
                                 .measurementUnit("measurement_unit")
@@ -4096,7 +4099,7 @@ internal class UnwrapWebhookEventTest {
                             .cancelAtNextBillingDate(true)
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .addCreditEntitlementCart(
-                                Subscription.CreditEntitlementCart.builder()
+                                CreditEntitlementCartResponse.builder()
                                     .creditEntitlementId("credit_entitlement_id")
                                     .creditEntitlementName("credit_entitlement_name")
                                     .creditsAmount("credits_amount")
@@ -4136,7 +4139,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .addMeterCreditEntitlementCart(
-                                Subscription.MeterCreditEntitlementCart.builder()
+                                MeterCreditEntitlementCartResponse.builder()
                                     .creditEntitlementId("credit_entitlement_id")
                                     .meterId("meter_id")
                                     .meterName("meter_name")
@@ -4145,7 +4148,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .addMeter(
-                                Subscription.Meter.builder()
+                                MeterCartResponseItem.builder()
                                     .currency(Currency.AED)
                                     .freeThreshold(0L)
                                     .measurementUnit("measurement_unit")
@@ -4216,7 +4219,7 @@ internal class UnwrapWebhookEventTest {
                         .cancelAtNextBillingDate(true)
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addCreditEntitlementCart(
-                            Subscription.CreditEntitlementCart.builder()
+                            CreditEntitlementCartResponse.builder()
                                 .creditEntitlementId("credit_entitlement_id")
                                 .creditEntitlementName("credit_entitlement_name")
                                 .creditsAmount("credits_amount")
@@ -4256,7 +4259,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .addMeterCreditEntitlementCart(
-                            Subscription.MeterCreditEntitlementCart.builder()
+                            MeterCreditEntitlementCartResponse.builder()
                                 .creditEntitlementId("credit_entitlement_id")
                                 .meterId("meter_id")
                                 .meterName("meter_name")
@@ -4265,7 +4268,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .addMeter(
-                            Subscription.Meter.builder()
+                            MeterCartResponseItem.builder()
                                 .currency(Currency.AED)
                                 .freeThreshold(0L)
                                 .measurementUnit("measurement_unit")
@@ -4366,7 +4369,7 @@ internal class UnwrapWebhookEventTest {
                             .cancelAtNextBillingDate(true)
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .addCreditEntitlementCart(
-                                Subscription.CreditEntitlementCart.builder()
+                                CreditEntitlementCartResponse.builder()
                                     .creditEntitlementId("credit_entitlement_id")
                                     .creditEntitlementName("credit_entitlement_name")
                                     .creditsAmount("credits_amount")
@@ -4406,7 +4409,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .addMeterCreditEntitlementCart(
-                                Subscription.MeterCreditEntitlementCart.builder()
+                                MeterCreditEntitlementCartResponse.builder()
                                     .creditEntitlementId("credit_entitlement_id")
                                     .meterId("meter_id")
                                     .meterName("meter_name")
@@ -4415,7 +4418,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .addMeter(
-                                Subscription.Meter.builder()
+                                MeterCartResponseItem.builder()
                                     .currency(Currency.AED)
                                     .freeThreshold(0L)
                                     .measurementUnit("measurement_unit")
@@ -4486,7 +4489,7 @@ internal class UnwrapWebhookEventTest {
                         .cancelAtNextBillingDate(true)
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addCreditEntitlementCart(
-                            Subscription.CreditEntitlementCart.builder()
+                            CreditEntitlementCartResponse.builder()
                                 .creditEntitlementId("credit_entitlement_id")
                                 .creditEntitlementName("credit_entitlement_name")
                                 .creditsAmount("credits_amount")
@@ -4526,7 +4529,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .addMeterCreditEntitlementCart(
-                            Subscription.MeterCreditEntitlementCart.builder()
+                            MeterCreditEntitlementCartResponse.builder()
                                 .creditEntitlementId("credit_entitlement_id")
                                 .meterId("meter_id")
                                 .meterName("meter_name")
@@ -4535,7 +4538,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .addMeter(
-                            Subscription.Meter.builder()
+                            MeterCartResponseItem.builder()
                                 .currency(Currency.AED)
                                 .freeThreshold(0L)
                                 .measurementUnit("measurement_unit")
@@ -4635,7 +4638,7 @@ internal class UnwrapWebhookEventTest {
                             .cancelAtNextBillingDate(true)
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .addCreditEntitlementCart(
-                                Subscription.CreditEntitlementCart.builder()
+                                CreditEntitlementCartResponse.builder()
                                     .creditEntitlementId("credit_entitlement_id")
                                     .creditEntitlementName("credit_entitlement_name")
                                     .creditsAmount("credits_amount")
@@ -4675,7 +4678,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .addMeterCreditEntitlementCart(
-                                Subscription.MeterCreditEntitlementCart.builder()
+                                MeterCreditEntitlementCartResponse.builder()
                                     .creditEntitlementId("credit_entitlement_id")
                                     .meterId("meter_id")
                                     .meterName("meter_name")
@@ -4684,7 +4687,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .addMeter(
-                                Subscription.Meter.builder()
+                                MeterCartResponseItem.builder()
                                     .currency(Currency.AED)
                                     .freeThreshold(0L)
                                     .measurementUnit("measurement_unit")
@@ -4755,7 +4758,7 @@ internal class UnwrapWebhookEventTest {
                         .cancelAtNextBillingDate(true)
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addCreditEntitlementCart(
-                            Subscription.CreditEntitlementCart.builder()
+                            CreditEntitlementCartResponse.builder()
                                 .creditEntitlementId("credit_entitlement_id")
                                 .creditEntitlementName("credit_entitlement_name")
                                 .creditsAmount("credits_amount")
@@ -4795,7 +4798,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .addMeterCreditEntitlementCart(
-                            Subscription.MeterCreditEntitlementCart.builder()
+                            MeterCreditEntitlementCartResponse.builder()
                                 .creditEntitlementId("credit_entitlement_id")
                                 .meterId("meter_id")
                                 .meterName("meter_name")
@@ -4804,7 +4807,7 @@ internal class UnwrapWebhookEventTest {
                                 .build()
                         )
                         .addMeter(
-                            Subscription.Meter.builder()
+                            MeterCartResponseItem.builder()
                                 .currency(Currency.AED)
                                 .freeThreshold(0L)
                                 .measurementUnit("measurement_unit")
@@ -4904,7 +4907,7 @@ internal class UnwrapWebhookEventTest {
                             .cancelAtNextBillingDate(true)
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .addCreditEntitlementCart(
-                                Subscription.CreditEntitlementCart.builder()
+                                CreditEntitlementCartResponse.builder()
                                     .creditEntitlementId("credit_entitlement_id")
                                     .creditEntitlementName("credit_entitlement_name")
                                     .creditsAmount("credits_amount")
@@ -4944,7 +4947,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .addMeterCreditEntitlementCart(
-                                Subscription.MeterCreditEntitlementCart.builder()
+                                MeterCreditEntitlementCartResponse.builder()
                                     .creditEntitlementId("credit_entitlement_id")
                                     .meterId("meter_id")
                                     .meterName("meter_name")
@@ -4953,7 +4956,7 @@ internal class UnwrapWebhookEventTest {
                                     .build()
                             )
                             .addMeter(
-                                Subscription.Meter.builder()
+                                MeterCartResponseItem.builder()
                                     .currency(Currency.AED)
                                     .freeThreshold(0L)
                                     .measurementUnit("measurement_unit")
