@@ -23,7 +23,7 @@ internal class ProductTest {
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addCreditEntitlement(
-                    Product.CreditEntitlement.builder()
+                    CreditEntitlementMappingResponse.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .creditEntitlementId("credit_entitlement_id")
                         .creditEntitlementName("credit_entitlement_name")
@@ -71,10 +71,10 @@ internal class ProductTest {
                 .addAddon("string")
                 .description("description")
                 .digitalProductDelivery(
-                    Product.DigitalProductDelivery.builder()
+                    DigitalProductDelivery.builder()
                         .externalUrl("external_url")
                         .addFile(
-                            Product.DigitalProductDelivery.File.builder()
+                            DigitalProductDeliveryFile.builder()
                                 .fileId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .fileName("file_name")
                                 .url("url")
@@ -98,7 +98,7 @@ internal class ProductTest {
         assertThat(product.createdAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(product.creditEntitlements())
             .containsExactly(
-                Product.CreditEntitlement.builder()
+                CreditEntitlementMappingResponse.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .creditEntitlementId("credit_entitlement_id")
                     .creditEntitlementName("credit_entitlement_name")
@@ -151,10 +151,10 @@ internal class ProductTest {
         assertThat(product.description()).isEqualTo("description")
         assertThat(product.digitalProductDelivery())
             .isEqualTo(
-                Product.DigitalProductDelivery.builder()
+                DigitalProductDelivery.builder()
                     .externalUrl("external_url")
                     .addFile(
-                        Product.DigitalProductDelivery.File.builder()
+                        DigitalProductDeliveryFile.builder()
                             .fileId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                             .fileName("file_name")
                             .url("url")
@@ -182,7 +182,7 @@ internal class ProductTest {
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addCreditEntitlement(
-                    Product.CreditEntitlement.builder()
+                    CreditEntitlementMappingResponse.builder()
                         .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .creditEntitlementId("credit_entitlement_id")
                         .creditEntitlementName("credit_entitlement_name")
@@ -230,10 +230,10 @@ internal class ProductTest {
                 .addAddon("string")
                 .description("description")
                 .digitalProductDelivery(
-                    Product.DigitalProductDelivery.builder()
+                    DigitalProductDelivery.builder()
                         .externalUrl("external_url")
                         .addFile(
-                            Product.DigitalProductDelivery.File.builder()
+                            DigitalProductDeliveryFile.builder()
                                 .fileId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                                 .fileName("file_name")
                                 .url("url")
