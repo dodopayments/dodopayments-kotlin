@@ -10,8 +10,10 @@ import com.dodopayments.api.core.checkKnown
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
+import com.dodopayments.api.models.creditentitlements.CbbOverageBehavior
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.payments.BillingAddress
+import com.dodopayments.api.models.payments.CustomFieldResponse
 import com.dodopayments.api.models.payments.CustomerLimitedDetails
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -1517,7 +1519,7 @@ private constructor(
         private val creditEntitlementName: JsonField<String>,
         private val creditsAmount: JsonField<String>,
         private val overageBalance: JsonField<String>,
-        private val overageChargeAtBilling: JsonField<Boolean>,
+        private val overageBehavior: JsonField<CbbOverageBehavior>,
         private val overageEnabled: JsonField<Boolean>,
         private val productId: JsonField<String>,
         private val remainingBalance: JsonField<String>,
@@ -1547,9 +1549,9 @@ private constructor(
             @JsonProperty("overage_balance")
             @ExcludeMissing
             overageBalance: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("overage_charge_at_billing")
+            @JsonProperty("overage_behavior")
             @ExcludeMissing
-            overageChargeAtBilling: JsonField<Boolean> = JsonMissing.of(),
+            overageBehavior: JsonField<CbbOverageBehavior> = JsonMissing.of(),
             @JsonProperty("overage_enabled")
             @ExcludeMissing
             overageEnabled: JsonField<Boolean> = JsonMissing.of(),
@@ -1589,7 +1591,7 @@ private constructor(
             creditEntitlementName,
             creditsAmount,
             overageBalance,
-            overageChargeAtBilling,
+            overageBehavior,
             overageEnabled,
             productId,
             remainingBalance,
@@ -1633,11 +1635,19 @@ private constructor(
         fun overageBalance(): String = overageBalance.getRequired("overage_balance")
 
         /**
+         * Controls how overage is handled at the end of a billing cycle.
+         *
+         * |Preset                    |Charge at billing|Credits reduce overage|Preserve overage at reset|
+         * |--------------------------|:---------------:|:--------------------:|:-----------------------:|
+         * |`forgive_at_reset`        |       No        |          No          |           No            |
+         * |`invoice_at_billing`      |       Yes       |          No          |           No            |
+         * |`carry_deficit`           |       No        |          No          |           Yes           |
+         * |`carry_deficit_auto_repay`|       No        |         Yes          |           Yes           |
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun overageChargeAtBilling(): Boolean =
-            overageChargeAtBilling.getRequired("overage_charge_at_billing")
+        fun overageBehavior(): CbbOverageBehavior = overageBehavior.getRequired("overage_behavior")
 
         /**
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
@@ -1759,14 +1769,14 @@ private constructor(
         fun _overageBalance(): JsonField<String> = overageBalance
 
         /**
-         * Returns the raw JSON value of [overageChargeAtBilling].
+         * Returns the raw JSON value of [overageBehavior].
          *
-         * Unlike [overageChargeAtBilling], this method doesn't throw if the JSON field has an
-         * unexpected type.
+         * Unlike [overageBehavior], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
-        @JsonProperty("overage_charge_at_billing")
+        @JsonProperty("overage_behavior")
         @ExcludeMissing
-        fun _overageChargeAtBilling(): JsonField<Boolean> = overageChargeAtBilling
+        fun _overageBehavior(): JsonField<CbbOverageBehavior> = overageBehavior
 
         /**
          * Returns the raw JSON value of [overageEnabled].
@@ -1905,7 +1915,7 @@ private constructor(
              * .creditEntitlementName()
              * .creditsAmount()
              * .overageBalance()
-             * .overageChargeAtBilling()
+             * .overageBehavior()
              * .overageEnabled()
              * .productId()
              * .remainingBalance()
@@ -1923,7 +1933,7 @@ private constructor(
             private var creditEntitlementName: JsonField<String>? = null
             private var creditsAmount: JsonField<String>? = null
             private var overageBalance: JsonField<String>? = null
-            private var overageChargeAtBilling: JsonField<Boolean>? = null
+            private var overageBehavior: JsonField<CbbOverageBehavior>? = null
             private var overageEnabled: JsonField<Boolean>? = null
             private var productId: JsonField<String>? = null
             private var remainingBalance: JsonField<String>? = null
@@ -1943,7 +1953,7 @@ private constructor(
                 creditEntitlementName = creditEntitlementCart.creditEntitlementName
                 creditsAmount = creditEntitlementCart.creditsAmount
                 overageBalance = creditEntitlementCart.overageBalance
-                overageChargeAtBilling = creditEntitlementCart.overageChargeAtBilling
+                overageBehavior = creditEntitlementCart.overageBehavior
                 overageEnabled = creditEntitlementCart.overageEnabled
                 productId = creditEntitlementCart.productId
                 remainingBalance = creditEntitlementCart.remainingBalance
@@ -2015,18 +2025,28 @@ private constructor(
                 this.overageBalance = overageBalance
             }
 
-            fun overageChargeAtBilling(overageChargeAtBilling: Boolean) =
-                overageChargeAtBilling(JsonField.of(overageChargeAtBilling))
+            /**
+             * Controls how overage is handled at the end of a billing cycle.
+             *
+             * |Preset                    |Charge at billing|Credits reduce overage|Preserve overage at reset|
+             * |--------------------------|:---------------:|:--------------------:|:-----------------------:|
+             * |`forgive_at_reset`        |       No        |          No          |           No            |
+             * |`invoice_at_billing`      |       Yes       |          No          |           No            |
+             * |`carry_deficit`           |       No        |          No          |           Yes           |
+             * |`carry_deficit_auto_repay`|       No        |         Yes          |           Yes           |
+             */
+            fun overageBehavior(overageBehavior: CbbOverageBehavior) =
+                overageBehavior(JsonField.of(overageBehavior))
 
             /**
-             * Sets [Builder.overageChargeAtBilling] to an arbitrary JSON value.
+             * Sets [Builder.overageBehavior] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.overageChargeAtBilling] with a well-typed [Boolean]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
+             * You should usually call [Builder.overageBehavior] with a well-typed
+             * [CbbOverageBehavior] value instead. This method is primarily for setting the field to
+             * an undocumented or not yet supported value.
              */
-            fun overageChargeAtBilling(overageChargeAtBilling: JsonField<Boolean>) = apply {
-                this.overageChargeAtBilling = overageChargeAtBilling
+            fun overageBehavior(overageBehavior: JsonField<CbbOverageBehavior>) = apply {
+                this.overageBehavior = overageBehavior
             }
 
             fun overageEnabled(overageEnabled: Boolean) =
@@ -2262,7 +2282,7 @@ private constructor(
              * .creditEntitlementName()
              * .creditsAmount()
              * .overageBalance()
-             * .overageChargeAtBilling()
+             * .overageBehavior()
              * .overageEnabled()
              * .productId()
              * .remainingBalance()
@@ -2278,7 +2298,7 @@ private constructor(
                     checkRequired("creditEntitlementName", creditEntitlementName),
                     checkRequired("creditsAmount", creditsAmount),
                     checkRequired("overageBalance", overageBalance),
-                    checkRequired("overageChargeAtBilling", overageChargeAtBilling),
+                    checkRequired("overageBehavior", overageBehavior),
                     checkRequired("overageEnabled", overageEnabled),
                     checkRequired("productId", productId),
                     checkRequired("remainingBalance", remainingBalance),
@@ -2306,7 +2326,7 @@ private constructor(
             creditEntitlementName()
             creditsAmount()
             overageBalance()
-            overageChargeAtBilling()
+            overageBehavior().validate()
             overageEnabled()
             productId()
             remainingBalance()
@@ -2341,7 +2361,7 @@ private constructor(
                 (if (creditEntitlementName.asKnown() == null) 0 else 1) +
                 (if (creditsAmount.asKnown() == null) 0 else 1) +
                 (if (overageBalance.asKnown() == null) 0 else 1) +
-                (if (overageChargeAtBilling.asKnown() == null) 0 else 1) +
+                (overageBehavior.asKnown()?.validity() ?: 0) +
                 (if (overageEnabled.asKnown() == null) 0 else 1) +
                 (if (productId.asKnown() == null) 0 else 1) +
                 (if (remainingBalance.asKnown() == null) 0 else 1) +
@@ -2365,7 +2385,7 @@ private constructor(
                 creditEntitlementName == other.creditEntitlementName &&
                 creditsAmount == other.creditsAmount &&
                 overageBalance == other.overageBalance &&
-                overageChargeAtBilling == other.overageChargeAtBilling &&
+                overageBehavior == other.overageBehavior &&
                 overageEnabled == other.overageEnabled &&
                 productId == other.productId &&
                 remainingBalance == other.remainingBalance &&
@@ -2387,7 +2407,7 @@ private constructor(
                 creditEntitlementName,
                 creditsAmount,
                 overageBalance,
-                overageChargeAtBilling,
+                overageBehavior,
                 overageEnabled,
                 productId,
                 remainingBalance,
@@ -2407,7 +2427,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CreditEntitlementCart{creditEntitlementId=$creditEntitlementId, creditEntitlementName=$creditEntitlementName, creditsAmount=$creditsAmount, overageBalance=$overageBalance, overageChargeAtBilling=$overageChargeAtBilling, overageEnabled=$overageEnabled, productId=$productId, remainingBalance=$remainingBalance, rolloverEnabled=$rolloverEnabled, unit=$unit, expiresAfterDays=$expiresAfterDays, lowBalanceThresholdPercent=$lowBalanceThresholdPercent, maxRolloverCount=$maxRolloverCount, overageLimit=$overageLimit, rolloverPercentage=$rolloverPercentage, rolloverTimeframeCount=$rolloverTimeframeCount, rolloverTimeframeInterval=$rolloverTimeframeInterval, additionalProperties=$additionalProperties}"
+            "CreditEntitlementCart{creditEntitlementId=$creditEntitlementId, creditEntitlementName=$creditEntitlementName, creditsAmount=$creditsAmount, overageBalance=$overageBalance, overageBehavior=$overageBehavior, overageEnabled=$overageEnabled, productId=$productId, remainingBalance=$remainingBalance, rolloverEnabled=$rolloverEnabled, unit=$unit, expiresAfterDays=$expiresAfterDays, lowBalanceThresholdPercent=$lowBalanceThresholdPercent, maxRolloverCount=$maxRolloverCount, overageLimit=$overageLimit, rolloverPercentage=$rolloverPercentage, rolloverTimeframeCount=$rolloverTimeframeCount, rolloverTimeframeInterval=$rolloverTimeframeInterval, additionalProperties=$additionalProperties}"
     }
 
     /** Additional custom data associated with the subscription */
@@ -2851,8 +2871,8 @@ private constructor(
         private val measurementUnit: JsonField<String>,
         private val meterId: JsonField<String>,
         private val name: JsonField<String>,
-        private val pricePerUnit: JsonField<String>,
         private val description: JsonField<String>,
+        private val pricePerUnit: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -2869,20 +2889,20 @@ private constructor(
             measurementUnit: JsonField<String> = JsonMissing.of(),
             @JsonProperty("meter_id") @ExcludeMissing meterId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("price_per_unit")
-            @ExcludeMissing
-            pricePerUnit: JsonField<String> = JsonMissing.of(),
             @JsonProperty("description")
             @ExcludeMissing
             description: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("price_per_unit")
+            @ExcludeMissing
+            pricePerUnit: JsonField<String> = JsonMissing.of(),
         ) : this(
             currency,
             freeThreshold,
             measurementUnit,
             meterId,
             name,
-            pricePerUnit,
             description,
+            pricePerUnit,
             mutableMapOf(),
         )
 
@@ -2917,16 +2937,16 @@ private constructor(
         fun name(): String = name.getRequired("name")
 
         /**
-         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
          */
-        fun pricePerUnit(): String = pricePerUnit.getRequired("price_per_unit")
+        fun description(): String? = description.getNullable("description")
 
         /**
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
-        fun description(): String? = description.getNullable("description")
+        fun pricePerUnit(): String? = pricePerUnit.getNullable("price_per_unit")
 
         /**
          * Returns the raw JSON value of [currency].
@@ -2970,6 +2990,15 @@ private constructor(
         @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         /**
+         * Returns the raw JSON value of [description].
+         *
+         * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("description")
+        @ExcludeMissing
+        fun _description(): JsonField<String> = description
+
+        /**
          * Returns the raw JSON value of [pricePerUnit].
          *
          * Unlike [pricePerUnit], this method doesn't throw if the JSON field has an unexpected
@@ -2978,15 +3007,6 @@ private constructor(
         @JsonProperty("price_per_unit")
         @ExcludeMissing
         fun _pricePerUnit(): JsonField<String> = pricePerUnit
-
-        /**
-         * Returns the raw JSON value of [description].
-         *
-         * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("description")
-        @ExcludeMissing
-        fun _description(): JsonField<String> = description
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -3012,7 +3032,6 @@ private constructor(
              * .measurementUnit()
              * .meterId()
              * .name()
-             * .pricePerUnit()
              * ```
              */
             fun builder() = Builder()
@@ -3026,8 +3045,8 @@ private constructor(
             private var measurementUnit: JsonField<String>? = null
             private var meterId: JsonField<String>? = null
             private var name: JsonField<String>? = null
-            private var pricePerUnit: JsonField<String>? = null
             private var description: JsonField<String> = JsonMissing.of()
+            private var pricePerUnit: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(meter: Meter) = apply {
@@ -3036,8 +3055,8 @@ private constructor(
                 measurementUnit = meter.measurementUnit
                 meterId = meter.meterId
                 name = meter.name
-                pricePerUnit = meter.pricePerUnit
                 description = meter.description
+                pricePerUnit = meter.pricePerUnit
                 additionalProperties = meter.additionalProperties.toMutableMap()
             }
 
@@ -3101,19 +3120,6 @@ private constructor(
              */
             fun name(name: JsonField<String>) = apply { this.name = name }
 
-            fun pricePerUnit(pricePerUnit: String) = pricePerUnit(JsonField.of(pricePerUnit))
-
-            /**
-             * Sets [Builder.pricePerUnit] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.pricePerUnit] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun pricePerUnit(pricePerUnit: JsonField<String>) = apply {
-                this.pricePerUnit = pricePerUnit
-            }
-
             fun description(description: String?) = description(JsonField.ofNullable(description))
 
             /**
@@ -3125,6 +3131,20 @@ private constructor(
              */
             fun description(description: JsonField<String>) = apply {
                 this.description = description
+            }
+
+            fun pricePerUnit(pricePerUnit: String?) =
+                pricePerUnit(JsonField.ofNullable(pricePerUnit))
+
+            /**
+             * Sets [Builder.pricePerUnit] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.pricePerUnit] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun pricePerUnit(pricePerUnit: JsonField<String>) = apply {
+                this.pricePerUnit = pricePerUnit
             }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -3158,7 +3178,6 @@ private constructor(
              * .measurementUnit()
              * .meterId()
              * .name()
-             * .pricePerUnit()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -3170,8 +3189,8 @@ private constructor(
                     checkRequired("measurementUnit", measurementUnit),
                     checkRequired("meterId", meterId),
                     checkRequired("name", name),
-                    checkRequired("pricePerUnit", pricePerUnit),
                     description,
+                    pricePerUnit,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -3188,8 +3207,8 @@ private constructor(
             measurementUnit()
             meterId()
             name()
-            pricePerUnit()
             description()
+            pricePerUnit()
             validated = true
         }
 
@@ -3213,8 +3232,8 @@ private constructor(
                 (if (measurementUnit.asKnown() == null) 0 else 1) +
                 (if (meterId.asKnown() == null) 0 else 1) +
                 (if (name.asKnown() == null) 0 else 1) +
-                (if (pricePerUnit.asKnown() == null) 0 else 1) +
-                (if (description.asKnown() == null) 0 else 1)
+                (if (description.asKnown() == null) 0 else 1) +
+                (if (pricePerUnit.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -3227,8 +3246,8 @@ private constructor(
                 measurementUnit == other.measurementUnit &&
                 meterId == other.meterId &&
                 name == other.name &&
-                pricePerUnit == other.pricePerUnit &&
                 description == other.description &&
+                pricePerUnit == other.pricePerUnit &&
                 additionalProperties == other.additionalProperties
         }
 
@@ -3239,8 +3258,8 @@ private constructor(
                 measurementUnit,
                 meterId,
                 name,
-                pricePerUnit,
                 description,
+                pricePerUnit,
                 additionalProperties,
             )
         }
@@ -3248,203 +3267,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Meter{currency=$currency, freeThreshold=$freeThreshold, measurementUnit=$measurementUnit, meterId=$meterId, name=$name, pricePerUnit=$pricePerUnit, description=$description, additionalProperties=$additionalProperties}"
-    }
-
-    /** Customer's response to a custom field */
-    class CustomFieldResponse
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val key: JsonField<String>,
-        private val value: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("key") @ExcludeMissing key: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("value") @ExcludeMissing value: JsonField<String> = JsonMissing.of(),
-        ) : this(key, value, mutableMapOf())
-
-        /**
-         * Key matching the custom field definition
-         *
-         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun key(): String = key.getRequired("key")
-
-        /**
-         * Value provided by customer
-         *
-         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun value(): String = value.getRequired("value")
-
-        /**
-         * Returns the raw JSON value of [key].
-         *
-         * Unlike [key], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<String> = key
-
-        /**
-         * Returns the raw JSON value of [value].
-         *
-         * Unlike [value], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("value") @ExcludeMissing fun _value(): JsonField<String> = value
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [CustomFieldResponse].
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .key()
-             * .value()
-             * ```
-             */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [CustomFieldResponse]. */
-        class Builder internal constructor() {
-
-            private var key: JsonField<String>? = null
-            private var value: JsonField<String>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(customFieldResponse: CustomFieldResponse) = apply {
-                key = customFieldResponse.key
-                value = customFieldResponse.value
-                additionalProperties = customFieldResponse.additionalProperties.toMutableMap()
-            }
-
-            /** Key matching the custom field definition */
-            fun key(key: String) = key(JsonField.of(key))
-
-            /**
-             * Sets [Builder.key] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.key] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
-            fun key(key: JsonField<String>) = apply { this.key = key }
-
-            /** Value provided by customer */
-            fun value(value: String) = value(JsonField.of(value))
-
-            /**
-             * Sets [Builder.value] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.value] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun value(value: JsonField<String>) = apply { this.value = value }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [CustomFieldResponse].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .key()
-             * .value()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): CustomFieldResponse =
-                CustomFieldResponse(
-                    checkRequired("key", key),
-                    checkRequired("value", value),
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        fun validate(): CustomFieldResponse = apply {
-            if (validated) {
-                return@apply
-            }
-
-            key()
-            value()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: DodoPaymentsInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        internal fun validity(): Int =
-            (if (key.asKnown() == null) 0 else 1) + (if (value.asKnown() == null) 0 else 1)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is CustomFieldResponse &&
-                key == other.key &&
-                value == other.value &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy { Objects.hash(key, value, additionalProperties) }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "CustomFieldResponse{key=$key, value=$value, additionalProperties=$additionalProperties}"
+            "Meter{currency=$currency, freeThreshold=$freeThreshold, measurementUnit=$measurementUnit, meterId=$meterId, name=$name, description=$description, pricePerUnit=$pricePerUnit, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

@@ -1,20 +1,21 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.dodopayments.api.models.refunds
+package com.dodopayments.api.models.payments
 
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.refunds.RefundStatus
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class RefundListResponseTest {
+internal class RefundListItemTest {
 
     @Test
     fun create() {
-        val refundListResponse =
-            RefundListResponse.builder()
+        val refundListItem =
+            RefundListItem.builder()
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .isPartial(true)
@@ -26,23 +27,23 @@ internal class RefundListResponseTest {
                 .reason("reason")
                 .build()
 
-        assertThat(refundListResponse.businessId()).isEqualTo("business_id")
-        assertThat(refundListResponse.createdAt())
+        assertThat(refundListItem.businessId()).isEqualTo("business_id")
+        assertThat(refundListItem.createdAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(refundListResponse.isPartial()).isEqualTo(true)
-        assertThat(refundListResponse.paymentId()).isEqualTo("payment_id")
-        assertThat(refundListResponse.refundId()).isEqualTo("refund_id")
-        assertThat(refundListResponse.status()).isEqualTo(RefundStatus.SUCCEEDED)
-        assertThat(refundListResponse.amount()).isEqualTo(0)
-        assertThat(refundListResponse.currency()).isEqualTo(Currency.AED)
-        assertThat(refundListResponse.reason()).isEqualTo("reason")
+        assertThat(refundListItem.isPartial()).isEqualTo(true)
+        assertThat(refundListItem.paymentId()).isEqualTo("payment_id")
+        assertThat(refundListItem.refundId()).isEqualTo("refund_id")
+        assertThat(refundListItem.status()).isEqualTo(RefundStatus.SUCCEEDED)
+        assertThat(refundListItem.amount()).isEqualTo(0)
+        assertThat(refundListItem.currency()).isEqualTo(Currency.AED)
+        assertThat(refundListItem.reason()).isEqualTo("reason")
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val refundListResponse =
-            RefundListResponse.builder()
+        val refundListItem =
+            RefundListItem.builder()
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .isPartial(true)
@@ -54,12 +55,12 @@ internal class RefundListResponseTest {
                 .reason("reason")
                 .build()
 
-        val roundtrippedRefundListResponse =
+        val roundtrippedRefundListItem =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(refundListResponse),
-                jacksonTypeRef<RefundListResponse>(),
+                jsonMapper.writeValueAsString(refundListItem),
+                jacksonTypeRef<RefundListItem>(),
             )
 
-        assertThat(roundtrippedRefundListResponse).isEqualTo(refundListResponse)
+        assertThat(roundtrippedRefundListItem).isEqualTo(refundListItem)
     }
 }

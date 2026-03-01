@@ -10,9 +10,13 @@ import com.dodopayments.api.models.disputes.DisputeStatus
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.payments.BillingAddress
+import com.dodopayments.api.models.payments.CustomFieldResponse
 import com.dodopayments.api.models.payments.CustomerLimitedDetails
 import com.dodopayments.api.models.payments.IntentStatus
+import com.dodopayments.api.models.payments.OneTimeProductCartItem
 import com.dodopayments.api.models.payments.Payment
+import com.dodopayments.api.models.payments.PaymentRefundStatus
+import com.dodopayments.api.models.payments.RefundListItem
 import com.dodopayments.api.models.refunds.RefundStatus
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
@@ -75,7 +79,7 @@ internal class PaymentSucceededWebhookEventTest {
                         )
                         .paymentId("payment_id")
                         .addRefund(
-                            Payment.Refund.builder()
+                            RefundListItem.builder()
                                 .businessId("business_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .isPartial(true)
@@ -97,7 +101,7 @@ internal class PaymentSucceededWebhookEventTest {
                         .cardType("card_type")
                         .checkoutSessionId("checkout_session_id")
                         .addCustomFieldResponse(
-                            Payment.CustomFieldResponse.builder().key("key").value("value").build()
+                            CustomFieldResponse.builder().key("key").value("value").build()
                         )
                         .discountId("discount_id")
                         .errorCode("error_code")
@@ -108,12 +112,12 @@ internal class PaymentSucceededWebhookEventTest {
                         .paymentMethod("payment_method")
                         .paymentMethodType("payment_method_type")
                         .addProductCart(
-                            Payment.ProductCart.builder()
+                            OneTimeProductCartItem.builder()
                                 .productId("product_id")
                                 .quantity(0)
                                 .build()
                         )
-                        .refundStatus(Payment.RefundStatus.PARTIAL)
+                        .refundStatus(PaymentRefundStatus.PARTIAL)
                         .settlementTax(0)
                         .status(IntentStatus.SUCCEEDED)
                         .subscriptionId("subscription_id")
@@ -176,7 +180,7 @@ internal class PaymentSucceededWebhookEventTest {
                     )
                     .paymentId("payment_id")
                     .addRefund(
-                        Payment.Refund.builder()
+                        RefundListItem.builder()
                             .businessId("business_id")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .isPartial(true)
@@ -198,7 +202,7 @@ internal class PaymentSucceededWebhookEventTest {
                     .cardType("card_type")
                     .checkoutSessionId("checkout_session_id")
                     .addCustomFieldResponse(
-                        Payment.CustomFieldResponse.builder().key("key").value("value").build()
+                        CustomFieldResponse.builder().key("key").value("value").build()
                     )
                     .discountId("discount_id")
                     .errorCode("error_code")
@@ -209,9 +213,9 @@ internal class PaymentSucceededWebhookEventTest {
                     .paymentMethod("payment_method")
                     .paymentMethodType("payment_method_type")
                     .addProductCart(
-                        Payment.ProductCart.builder().productId("product_id").quantity(0).build()
+                        OneTimeProductCartItem.builder().productId("product_id").quantity(0).build()
                     )
-                    .refundStatus(Payment.RefundStatus.PARTIAL)
+                    .refundStatus(PaymentRefundStatus.PARTIAL)
                     .settlementTax(0)
                     .status(IntentStatus.SUCCEEDED)
                     .subscriptionId("subscription_id")
@@ -280,7 +284,7 @@ internal class PaymentSucceededWebhookEventTest {
                         )
                         .paymentId("payment_id")
                         .addRefund(
-                            Payment.Refund.builder()
+                            RefundListItem.builder()
                                 .businessId("business_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .isPartial(true)
@@ -302,7 +306,7 @@ internal class PaymentSucceededWebhookEventTest {
                         .cardType("card_type")
                         .checkoutSessionId("checkout_session_id")
                         .addCustomFieldResponse(
-                            Payment.CustomFieldResponse.builder().key("key").value("value").build()
+                            CustomFieldResponse.builder().key("key").value("value").build()
                         )
                         .discountId("discount_id")
                         .errorCode("error_code")
@@ -313,12 +317,12 @@ internal class PaymentSucceededWebhookEventTest {
                         .paymentMethod("payment_method")
                         .paymentMethodType("payment_method_type")
                         .addProductCart(
-                            Payment.ProductCart.builder()
+                            OneTimeProductCartItem.builder()
                                 .productId("product_id")
                                 .quantity(0)
                                 .build()
                         )
-                        .refundStatus(Payment.RefundStatus.PARTIAL)
+                        .refundStatus(PaymentRefundStatus.PARTIAL)
                         .settlementTax(0)
                         .status(IntentStatus.SUCCEEDED)
                         .subscriptionId("subscription_id")

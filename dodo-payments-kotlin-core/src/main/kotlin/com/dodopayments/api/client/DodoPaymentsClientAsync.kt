@@ -7,6 +7,7 @@ import com.dodopayments.api.services.async.AddonServiceAsync
 import com.dodopayments.api.services.async.BalanceServiceAsync
 import com.dodopayments.api.services.async.BrandServiceAsync
 import com.dodopayments.api.services.async.CheckoutSessionServiceAsync
+import com.dodopayments.api.services.async.CreditEntitlementServiceAsync
 import com.dodopayments.api.services.async.CustomerServiceAsync
 import com.dodopayments.api.services.async.DiscountServiceAsync
 import com.dodopayments.api.services.async.DisputeServiceAsync
@@ -103,6 +104,8 @@ interface DodoPaymentsClientAsync {
 
     fun balances(): BalanceServiceAsync
 
+    fun creditEntitlements(): CreditEntitlementServiceAsync
+
     /**
      * Closes this client, relinquishing any underlying resources.
      *
@@ -172,5 +175,7 @@ interface DodoPaymentsClientAsync {
         fun meters(): MeterServiceAsync.WithRawResponse
 
         fun balances(): BalanceServiceAsync.WithRawResponse
+
+        fun creditEntitlements(): CreditEntitlementServiceAsync.WithRawResponse
     }
 }

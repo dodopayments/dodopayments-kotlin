@@ -18,6 +18,8 @@ import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepareAsync
 import com.dodopayments.api.models.customers.Customer
 import com.dodopayments.api.models.customers.CustomerCreateParams
+import com.dodopayments.api.models.customers.CustomerListCreditEntitlementsParams
+import com.dodopayments.api.models.customers.CustomerListCreditEntitlementsResponse
 import com.dodopayments.api.models.customers.CustomerListPageAsync
 import com.dodopayments.api.models.customers.CustomerListPageResponse
 import com.dodopayments.api.models.customers.CustomerListParams
@@ -79,6 +81,13 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
     ): CustomerListPageAsync =
         // get /customers
         withRawResponse().list(params, requestOptions).parse()
+
+    override suspend fun listCreditEntitlements(
+        params: CustomerListCreditEntitlementsParams,
+        requestOptions: RequestOptions,
+    ): CustomerListCreditEntitlementsResponse =
+        // get /customers/{customer_id}/credit-entitlements
+        withRawResponse().listCreditEntitlements(params, requestOptions).parse()
 
     override suspend fun retrievePaymentMethods(
         params: CustomerRetrievePaymentMethodsParams,
@@ -231,6 +240,36 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
                             .params(params)
                             .response(it)
                             .build()
+                    }
+            }
+        }
+
+        private val listCreditEntitlementsHandler: Handler<CustomerListCreditEntitlementsResponse> =
+            jsonHandler<CustomerListCreditEntitlementsResponse>(clientOptions.jsonMapper)
+
+        override suspend fun listCreditEntitlements(
+            params: CustomerListCreditEntitlementsParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<CustomerListCreditEntitlementsResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("customerId", params.customerId())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("customers", params._pathParam(0), "credit-entitlements")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { listCreditEntitlementsHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
                     }
             }
         }

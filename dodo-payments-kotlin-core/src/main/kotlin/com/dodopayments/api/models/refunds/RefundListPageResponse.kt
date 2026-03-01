@@ -10,6 +10,7 @@ import com.dodopayments.api.core.checkKnown
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
+import com.dodopayments.api.models.payments.RefundListItem
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -20,7 +21,7 @@ import java.util.Objects
 class RefundListPageResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val items: JsonField<List<RefundListResponse>>,
+    private val items: JsonField<List<RefundListItem>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -28,21 +29,21 @@ private constructor(
     private constructor(
         @JsonProperty("items")
         @ExcludeMissing
-        items: JsonField<List<RefundListResponse>> = JsonMissing.of()
+        items: JsonField<List<RefundListItem>> = JsonMissing.of()
     ) : this(items, mutableMapOf())
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun items(): List<RefundListResponse> = items.getRequired("items")
+    fun items(): List<RefundListItem> = items.getRequired("items")
 
     /**
      * Returns the raw JSON value of [items].
      *
      * Unlike [items], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("items") @ExcludeMissing fun _items(): JsonField<List<RefundListResponse>> = items
+    @JsonProperty("items") @ExcludeMissing fun _items(): JsonField<List<RefundListItem>> = items
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -72,7 +73,7 @@ private constructor(
     /** A builder for [RefundListPageResponse]. */
     class Builder internal constructor() {
 
-        private var items: JsonField<MutableList<RefundListResponse>>? = null
+        private var items: JsonField<MutableList<RefundListItem>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(refundListPageResponse: RefundListPageResponse) = apply {
@@ -80,25 +81,25 @@ private constructor(
             additionalProperties = refundListPageResponse.additionalProperties.toMutableMap()
         }
 
-        fun items(items: List<RefundListResponse>) = items(JsonField.of(items))
+        fun items(items: List<RefundListItem>) = items(JsonField.of(items))
 
         /**
          * Sets [Builder.items] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.items] with a well-typed `List<RefundListResponse>`
-         * value instead. This method is primarily for setting the field to an undocumented or not
-         * yet supported value.
+         * You should usually call [Builder.items] with a well-typed `List<RefundListItem>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun items(items: JsonField<List<RefundListResponse>>) = apply {
+        fun items(items: JsonField<List<RefundListItem>>) = apply {
             this.items = items.map { it.toMutableList() }
         }
 
         /**
-         * Adds a single [RefundListResponse] to [items].
+         * Adds a single [RefundListItem] to [items].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addItem(item: RefundListResponse) = apply {
+        fun addItem(item: RefundListItem) = apply {
             items =
                 (items ?: JsonField.of(mutableListOf())).also { checkKnown("items", it).add(item) }
         }
