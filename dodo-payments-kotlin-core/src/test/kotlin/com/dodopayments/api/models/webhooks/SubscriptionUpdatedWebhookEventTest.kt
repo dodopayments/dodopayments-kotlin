@@ -4,9 +4,11 @@ package com.dodopayments.api.models.webhooks
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.creditentitlements.CbbOverageBehavior
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.payments.BillingAddress
+import com.dodopayments.api.models.payments.CustomFieldResponse
 import com.dodopayments.api.models.payments.CustomerLimitedDetails
 import com.dodopayments.api.models.subscriptions.AddonCartResponseItem
 import com.dodopayments.api.models.subscriptions.Subscription
@@ -46,7 +48,7 @@ internal class SubscriptionUpdatedWebhookEventTest {
                                 .creditEntitlementName("credit_entitlement_name")
                                 .creditsAmount("credits_amount")
                                 .overageBalance("overage_balance")
-                                .overageChargeAtBilling(true)
+                                .overageBehavior(CbbOverageBehavior.FORGIVE_AT_RESET)
                                 .overageEnabled(true)
                                 .productId("product_id")
                                 .remainingBalance("remaining_balance")
@@ -96,8 +98,8 @@ internal class SubscriptionUpdatedWebhookEventTest {
                                 .measurementUnit("measurement_unit")
                                 .meterId("meter_id")
                                 .name("name")
-                                .pricePerUnit("10.50")
                                 .description("description")
+                                .pricePerUnit("10.50")
                                 .build()
                         )
                         .nextBillingDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -116,10 +118,7 @@ internal class SubscriptionUpdatedWebhookEventTest {
                         .trialPeriodDays(0)
                         .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addCustomFieldResponse(
-                            Subscription.CustomFieldResponse.builder()
-                                .key("key")
-                                .value("value")
-                                .build()
+                            CustomFieldResponse.builder().key("key").value("value").build()
                         )
                         .discountCyclesRemaining(0)
                         .discountId("discount_id")
@@ -156,7 +155,7 @@ internal class SubscriptionUpdatedWebhookEventTest {
                             .creditEntitlementName("credit_entitlement_name")
                             .creditsAmount("credits_amount")
                             .overageBalance("overage_balance")
-                            .overageChargeAtBilling(true)
+                            .overageBehavior(CbbOverageBehavior.FORGIVE_AT_RESET)
                             .overageEnabled(true)
                             .productId("product_id")
                             .remainingBalance("remaining_balance")
@@ -206,8 +205,8 @@ internal class SubscriptionUpdatedWebhookEventTest {
                             .measurementUnit("measurement_unit")
                             .meterId("meter_id")
                             .name("name")
-                            .pricePerUnit("10.50")
                             .description("description")
+                            .pricePerUnit("10.50")
                             .build()
                     )
                     .nextBillingDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -226,7 +225,7 @@ internal class SubscriptionUpdatedWebhookEventTest {
                     .trialPeriodDays(0)
                     .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .addCustomFieldResponse(
-                        Subscription.CustomFieldResponse.builder().key("key").value("value").build()
+                        CustomFieldResponse.builder().key("key").value("value").build()
                     )
                     .discountCyclesRemaining(0)
                     .discountId("discount_id")
@@ -269,7 +268,7 @@ internal class SubscriptionUpdatedWebhookEventTest {
                                 .creditEntitlementName("credit_entitlement_name")
                                 .creditsAmount("credits_amount")
                                 .overageBalance("overage_balance")
-                                .overageChargeAtBilling(true)
+                                .overageBehavior(CbbOverageBehavior.FORGIVE_AT_RESET)
                                 .overageEnabled(true)
                                 .productId("product_id")
                                 .remainingBalance("remaining_balance")
@@ -319,8 +318,8 @@ internal class SubscriptionUpdatedWebhookEventTest {
                                 .measurementUnit("measurement_unit")
                                 .meterId("meter_id")
                                 .name("name")
-                                .pricePerUnit("10.50")
                                 .description("description")
+                                .pricePerUnit("10.50")
                                 .build()
                         )
                         .nextBillingDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -339,10 +338,7 @@ internal class SubscriptionUpdatedWebhookEventTest {
                         .trialPeriodDays(0)
                         .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addCustomFieldResponse(
-                            Subscription.CustomFieldResponse.builder()
-                                .key("key")
-                                .value("value")
-                                .build()
+                            CustomFieldResponse.builder().key("key").value("value").build()
                         )
                         .discountCyclesRemaining(0)
                         .discountId("discount_id")

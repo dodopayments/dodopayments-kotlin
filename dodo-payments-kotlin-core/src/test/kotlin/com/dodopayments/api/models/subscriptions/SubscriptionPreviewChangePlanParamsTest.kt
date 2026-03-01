@@ -12,18 +12,22 @@ internal class SubscriptionPreviewChangePlanParamsTest {
     fun create() {
         SubscriptionPreviewChangePlanParams.builder()
             .subscriptionId("subscription_id")
-            .productId("product_id")
-            .prorationBillingMode(
-                SubscriptionPreviewChangePlanParams.ProrationBillingMode.PRORATED_IMMEDIATELY
-            )
-            .quantity(0)
-            .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
-            .metadata(
-                SubscriptionPreviewChangePlanParams.Metadata.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
+            .updateSubscriptionPlanReq(
+                UpdateSubscriptionPlanReq.builder()
+                    .productId("product_id")
+                    .prorationBillingMode(
+                        UpdateSubscriptionPlanReq.ProrationBillingMode.PRORATED_IMMEDIATELY
+                    )
+                    .quantity(0)
+                    .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
+                    .metadata(
+                        UpdateSubscriptionPlanReq.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .onPaymentFailure(UpdateSubscriptionPlanReq.OnPaymentFailure.PREVENT_CHANGE)
                     .build()
             )
-            .onPaymentFailure(SubscriptionPreviewChangePlanParams.OnPaymentFailure.PREVENT_CHANGE)
             .build()
     }
 
@@ -32,11 +36,15 @@ internal class SubscriptionPreviewChangePlanParamsTest {
         val params =
             SubscriptionPreviewChangePlanParams.builder()
                 .subscriptionId("subscription_id")
-                .productId("product_id")
-                .prorationBillingMode(
-                    SubscriptionPreviewChangePlanParams.ProrationBillingMode.PRORATED_IMMEDIATELY
+                .updateSubscriptionPlanReq(
+                    UpdateSubscriptionPlanReq.builder()
+                        .productId("product_id")
+                        .prorationBillingMode(
+                            UpdateSubscriptionPlanReq.ProrationBillingMode.PRORATED_IMMEDIATELY
+                        )
+                        .quantity(0)
+                        .build()
                 )
-                .quantity(0)
                 .build()
 
         assertThat(params._pathParam(0)).isEqualTo("subscription_id")
@@ -49,40 +57,43 @@ internal class SubscriptionPreviewChangePlanParamsTest {
         val params =
             SubscriptionPreviewChangePlanParams.builder()
                 .subscriptionId("subscription_id")
-                .productId("product_id")
-                .prorationBillingMode(
-                    SubscriptionPreviewChangePlanParams.ProrationBillingMode.PRORATED_IMMEDIATELY
-                )
-                .quantity(0)
-                .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
-                .metadata(
-                    SubscriptionPreviewChangePlanParams.Metadata.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                .updateSubscriptionPlanReq(
+                    UpdateSubscriptionPlanReq.builder()
+                        .productId("product_id")
+                        .prorationBillingMode(
+                            UpdateSubscriptionPlanReq.ProrationBillingMode.PRORATED_IMMEDIATELY
+                        )
+                        .quantity(0)
+                        .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
+                        .metadata(
+                            UpdateSubscriptionPlanReq.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .onPaymentFailure(UpdateSubscriptionPlanReq.OnPaymentFailure.PREVENT_CHANGE)
                         .build()
-                )
-                .onPaymentFailure(
-                    SubscriptionPreviewChangePlanParams.OnPaymentFailure.PREVENT_CHANGE
                 )
                 .build()
 
         val body = params._body()
 
-        assertThat(body.productId()).isEqualTo("product_id")
-        assertThat(body.prorationBillingMode())
+        assertThat(body)
             .isEqualTo(
-                SubscriptionPreviewChangePlanParams.ProrationBillingMode.PRORATED_IMMEDIATELY
-            )
-        assertThat(body.quantity()).isEqualTo(0)
-        assertThat(body.addons())
-            .containsExactly(AttachAddon.builder().addonId("addon_id").quantity(0).build())
-        assertThat(body.metadata())
-            .isEqualTo(
-                SubscriptionPreviewChangePlanParams.Metadata.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                UpdateSubscriptionPlanReq.builder()
+                    .productId("product_id")
+                    .prorationBillingMode(
+                        UpdateSubscriptionPlanReq.ProrationBillingMode.PRORATED_IMMEDIATELY
+                    )
+                    .quantity(0)
+                    .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
+                    .metadata(
+                        UpdateSubscriptionPlanReq.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .onPaymentFailure(UpdateSubscriptionPlanReq.OnPaymentFailure.PREVENT_CHANGE)
                     .build()
             )
-        assertThat(body.onPaymentFailure())
-            .isEqualTo(SubscriptionPreviewChangePlanParams.OnPaymentFailure.PREVENT_CHANGE)
     }
 
     @Test
@@ -90,20 +101,28 @@ internal class SubscriptionPreviewChangePlanParamsTest {
         val params =
             SubscriptionPreviewChangePlanParams.builder()
                 .subscriptionId("subscription_id")
-                .productId("product_id")
-                .prorationBillingMode(
-                    SubscriptionPreviewChangePlanParams.ProrationBillingMode.PRORATED_IMMEDIATELY
+                .updateSubscriptionPlanReq(
+                    UpdateSubscriptionPlanReq.builder()
+                        .productId("product_id")
+                        .prorationBillingMode(
+                            UpdateSubscriptionPlanReq.ProrationBillingMode.PRORATED_IMMEDIATELY
+                        )
+                        .quantity(0)
+                        .build()
                 )
-                .quantity(0)
                 .build()
 
         val body = params._body()
 
-        assertThat(body.productId()).isEqualTo("product_id")
-        assertThat(body.prorationBillingMode())
+        assertThat(body)
             .isEqualTo(
-                SubscriptionPreviewChangePlanParams.ProrationBillingMode.PRORATED_IMMEDIATELY
+                UpdateSubscriptionPlanReq.builder()
+                    .productId("product_id")
+                    .prorationBillingMode(
+                        UpdateSubscriptionPlanReq.ProrationBillingMode.PRORATED_IMMEDIATELY
+                    )
+                    .quantity(0)
+                    .build()
             )
-        assertThat(body.quantity()).isEqualTo(0)
     }
 }

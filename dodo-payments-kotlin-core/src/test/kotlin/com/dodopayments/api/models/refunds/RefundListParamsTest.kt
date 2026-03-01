@@ -18,6 +18,7 @@ internal class RefundListParamsTest {
             .pageNumber(0)
             .pageSize(0)
             .status(RefundListParams.Status.SUCCEEDED)
+            .subscriptionId("subscription_id")
             .build()
     }
 
@@ -31,6 +32,7 @@ internal class RefundListParamsTest {
                 .pageNumber(0)
                 .pageSize(0)
                 .status(RefundListParams.Status.SUCCEEDED)
+                .subscriptionId("subscription_id")
                 .build()
 
         val queryParams = params._queryParams()
@@ -44,6 +46,7 @@ internal class RefundListParamsTest {
                     .put("page_number", "0")
                     .put("page_size", "0")
                     .put("status", "succeeded")
+                    .put("subscription_id", "subscription_id")
                     .build()
             )
     }

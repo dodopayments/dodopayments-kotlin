@@ -19,22 +19,19 @@ class AddMeterToPrice
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val meterId: JsonField<String>,
-    private val pricePerUnit: JsonField<String>,
     private val creditEntitlementId: JsonField<String>,
     private val description: JsonField<String>,
     private val freeThreshold: JsonField<Long>,
     private val measurementUnit: JsonField<String>,
     private val meterUnitsPerCredit: JsonField<String>,
     private val name: JsonField<String>,
+    private val pricePerUnit: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
         @JsonProperty("meter_id") @ExcludeMissing meterId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("price_per_unit")
-        @ExcludeMissing
-        pricePerUnit: JsonField<String> = JsonMissing.of(),
         @JsonProperty("credit_entitlement_id")
         @ExcludeMissing
         creditEntitlementId: JsonField<String> = JsonMissing.of(),
@@ -51,15 +48,18 @@ private constructor(
         @ExcludeMissing
         meterUnitsPerCredit: JsonField<String> = JsonMissing.of(),
         @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("price_per_unit")
+        @ExcludeMissing
+        pricePerUnit: JsonField<String> = JsonMissing.of(),
     ) : this(
         meterId,
-        pricePerUnit,
         creditEntitlementId,
         description,
         freeThreshold,
         measurementUnit,
         meterUnitsPerCredit,
         name,
+        pricePerUnit,
         mutableMapOf(),
     )
 
@@ -68,15 +68,6 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun meterId(): String = meterId.getRequired("meter_id")
-
-    /**
-     * The price per unit in lowest denomination. Must be greater than zero. Supports up to 5 digits
-     * before decimal point and 12 decimal places.
-     *
-     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
-     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun pricePerUnit(): String = pricePerUnit.getRequired("price_per_unit")
 
     /**
      * Optional credit entitlement ID to link this meter to for credit-based billing
@@ -125,20 +116,20 @@ private constructor(
     fun name(): String? = name.getNullable("name")
 
     /**
+     * The price per unit in lowest denomination. Must be greater than zero. Supports up to 5 digits
+     * before decimal point and 12 decimal places.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun pricePerUnit(): String? = pricePerUnit.getNullable("price_per_unit")
+
+    /**
      * Returns the raw JSON value of [meterId].
      *
      * Unlike [meterId], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("meter_id") @ExcludeMissing fun _meterId(): JsonField<String> = meterId
-
-    /**
-     * Returns the raw JSON value of [pricePerUnit].
-     *
-     * Unlike [pricePerUnit], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("price_per_unit")
-    @ExcludeMissing
-    fun _pricePerUnit(): JsonField<String> = pricePerUnit
 
     /**
      * Returns the raw JSON value of [creditEntitlementId].
@@ -192,6 +183,15 @@ private constructor(
      */
     @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
+    /**
+     * Returns the raw JSON value of [pricePerUnit].
+     *
+     * Unlike [pricePerUnit], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("price_per_unit")
+    @ExcludeMissing
+    fun _pricePerUnit(): JsonField<String> = pricePerUnit
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -212,7 +212,6 @@ private constructor(
          * The following fields are required:
          * ```kotlin
          * .meterId()
-         * .pricePerUnit()
          * ```
          */
         fun builder() = Builder()
@@ -222,24 +221,24 @@ private constructor(
     class Builder internal constructor() {
 
         private var meterId: JsonField<String>? = null
-        private var pricePerUnit: JsonField<String>? = null
         private var creditEntitlementId: JsonField<String> = JsonMissing.of()
         private var description: JsonField<String> = JsonMissing.of()
         private var freeThreshold: JsonField<Long> = JsonMissing.of()
         private var measurementUnit: JsonField<String> = JsonMissing.of()
         private var meterUnitsPerCredit: JsonField<String> = JsonMissing.of()
         private var name: JsonField<String> = JsonMissing.of()
+        private var pricePerUnit: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(addMeterToPrice: AddMeterToPrice) = apply {
             meterId = addMeterToPrice.meterId
-            pricePerUnit = addMeterToPrice.pricePerUnit
             creditEntitlementId = addMeterToPrice.creditEntitlementId
             description = addMeterToPrice.description
             freeThreshold = addMeterToPrice.freeThreshold
             measurementUnit = addMeterToPrice.measurementUnit
             meterUnitsPerCredit = addMeterToPrice.meterUnitsPerCredit
             name = addMeterToPrice.name
+            pricePerUnit = addMeterToPrice.pricePerUnit
             additionalProperties = addMeterToPrice.additionalProperties.toMutableMap()
         }
 
@@ -252,23 +251,6 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun meterId(meterId: JsonField<String>) = apply { this.meterId = meterId }
-
-        /**
-         * The price per unit in lowest denomination. Must be greater than zero. Supports up to 5
-         * digits before decimal point and 12 decimal places.
-         */
-        fun pricePerUnit(pricePerUnit: String) = pricePerUnit(JsonField.of(pricePerUnit))
-
-        /**
-         * Sets [Builder.pricePerUnit] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.pricePerUnit] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun pricePerUnit(pricePerUnit: JsonField<String>) = apply {
-            this.pricePerUnit = pricePerUnit
-        }
 
         /** Optional credit entitlement ID to link this meter to for credit-based billing */
         fun creditEntitlementId(creditEntitlementId: String?) =
@@ -360,6 +342,23 @@ private constructor(
          */
         fun name(name: JsonField<String>) = apply { this.name = name }
 
+        /**
+         * The price per unit in lowest denomination. Must be greater than zero. Supports up to 5
+         * digits before decimal point and 12 decimal places.
+         */
+        fun pricePerUnit(pricePerUnit: String?) = pricePerUnit(JsonField.ofNullable(pricePerUnit))
+
+        /**
+         * Sets [Builder.pricePerUnit] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.pricePerUnit] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun pricePerUnit(pricePerUnit: JsonField<String>) = apply {
+            this.pricePerUnit = pricePerUnit
+        }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -387,7 +386,6 @@ private constructor(
          * The following fields are required:
          * ```kotlin
          * .meterId()
-         * .pricePerUnit()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
@@ -395,13 +393,13 @@ private constructor(
         fun build(): AddMeterToPrice =
             AddMeterToPrice(
                 checkRequired("meterId", meterId),
-                checkRequired("pricePerUnit", pricePerUnit),
                 creditEntitlementId,
                 description,
                 freeThreshold,
                 measurementUnit,
                 meterUnitsPerCredit,
                 name,
+                pricePerUnit,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -414,13 +412,13 @@ private constructor(
         }
 
         meterId()
-        pricePerUnit()
         creditEntitlementId()
         description()
         freeThreshold()
         measurementUnit()
         meterUnitsPerCredit()
         name()
+        pricePerUnit()
         validated = true
     }
 
@@ -439,13 +437,13 @@ private constructor(
      */
     internal fun validity(): Int =
         (if (meterId.asKnown() == null) 0 else 1) +
-            (if (pricePerUnit.asKnown() == null) 0 else 1) +
             (if (creditEntitlementId.asKnown() == null) 0 else 1) +
             (if (description.asKnown() == null) 0 else 1) +
             (if (freeThreshold.asKnown() == null) 0 else 1) +
             (if (measurementUnit.asKnown() == null) 0 else 1) +
             (if (meterUnitsPerCredit.asKnown() == null) 0 else 1) +
-            (if (name.asKnown() == null) 0 else 1)
+            (if (name.asKnown() == null) 0 else 1) +
+            (if (pricePerUnit.asKnown() == null) 0 else 1)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -454,26 +452,26 @@ private constructor(
 
         return other is AddMeterToPrice &&
             meterId == other.meterId &&
-            pricePerUnit == other.pricePerUnit &&
             creditEntitlementId == other.creditEntitlementId &&
             description == other.description &&
             freeThreshold == other.freeThreshold &&
             measurementUnit == other.measurementUnit &&
             meterUnitsPerCredit == other.meterUnitsPerCredit &&
             name == other.name &&
+            pricePerUnit == other.pricePerUnit &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
         Objects.hash(
             meterId,
-            pricePerUnit,
             creditEntitlementId,
             description,
             freeThreshold,
             measurementUnit,
             meterUnitsPerCredit,
             name,
+            pricePerUnit,
             additionalProperties,
         )
     }
@@ -481,5 +479,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "AddMeterToPrice{meterId=$meterId, pricePerUnit=$pricePerUnit, creditEntitlementId=$creditEntitlementId, description=$description, freeThreshold=$freeThreshold, measurementUnit=$measurementUnit, meterUnitsPerCredit=$meterUnitsPerCredit, name=$name, additionalProperties=$additionalProperties}"
+        "AddMeterToPrice{meterId=$meterId, creditEntitlementId=$creditEntitlementId, description=$description, freeThreshold=$freeThreshold, measurementUnit=$measurementUnit, meterUnitsPerCredit=$meterUnitsPerCredit, name=$name, pricePerUnit=$pricePerUnit, additionalProperties=$additionalProperties}"
 }

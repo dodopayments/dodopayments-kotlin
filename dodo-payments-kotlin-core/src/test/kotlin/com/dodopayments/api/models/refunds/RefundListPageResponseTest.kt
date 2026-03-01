@@ -4,6 +4,7 @@ package com.dodopayments.api.models.refunds
 
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.payments.RefundListItem
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -16,7 +17,7 @@ internal class RefundListPageResponseTest {
         val refundListPageResponse =
             RefundListPageResponse.builder()
                 .addItem(
-                    RefundListResponse.builder()
+                    RefundListItem.builder()
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .isPartial(true)
@@ -32,7 +33,7 @@ internal class RefundListPageResponseTest {
 
         assertThat(refundListPageResponse.items())
             .containsExactly(
-                RefundListResponse.builder()
+                RefundListItem.builder()
                     .businessId("business_id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .isPartial(true)
@@ -52,7 +53,7 @@ internal class RefundListPageResponseTest {
         val refundListPageResponse =
             RefundListPageResponse.builder()
                 .addItem(
-                    RefundListResponse.builder()
+                    RefundListItem.builder()
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .isPartial(true)

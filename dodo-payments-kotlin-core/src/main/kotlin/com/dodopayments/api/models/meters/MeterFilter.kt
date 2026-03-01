@@ -4,7 +4,6 @@ package com.dodopayments.api.models.meters
 
 import com.dodopayments.api.core.BaseDeserializer
 import com.dodopayments.api.core.BaseSerializer
-import com.dodopayments.api.core.Enum
 import com.dodopayments.api.core.ExcludeMissing
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
@@ -433,7 +432,7 @@ private constructor(
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val key: JsonField<String>,
-            private val operator: JsonField<Operator>,
+            private val operator: JsonField<FilterOperator>,
             private val value: JsonField<Value>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
@@ -443,7 +442,7 @@ private constructor(
                 @JsonProperty("key") @ExcludeMissing key: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("operator")
                 @ExcludeMissing
-                operator: JsonField<Operator> = JsonMissing.of(),
+                operator: JsonField<FilterOperator> = JsonMissing.of(),
                 @JsonProperty("value") @ExcludeMissing value: JsonField<Value> = JsonMissing.of(),
             ) : this(key, operator, value, mutableMapOf())
 
@@ -461,7 +460,7 @@ private constructor(
              *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
-            fun operator(): Operator = operator.getRequired("operator")
+            fun operator(): FilterOperator = operator.getRequired("operator")
 
             /**
              * Filter value - can be string, number, or boolean
@@ -487,7 +486,7 @@ private constructor(
              */
             @JsonProperty("operator")
             @ExcludeMissing
-            fun _operator(): JsonField<Operator> = operator
+            fun _operator(): JsonField<FilterOperator> = operator
 
             /**
              * Returns the raw JSON value of [value].
@@ -527,7 +526,7 @@ private constructor(
             class Builder internal constructor() {
 
                 private var key: JsonField<String>? = null
-                private var operator: JsonField<Operator>? = null
+                private var operator: JsonField<FilterOperator>? = null
                 private var value: JsonField<Value>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -550,16 +549,18 @@ private constructor(
                  */
                 fun key(key: JsonField<String>) = apply { this.key = key }
 
-                fun operator(operator: Operator) = operator(JsonField.of(operator))
+                fun operator(operator: FilterOperator) = operator(JsonField.of(operator))
 
                 /**
                  * Sets [Builder.operator] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.operator] with a well-typed [Operator] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * You should usually call [Builder.operator] with a well-typed [FilterOperator]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
                  */
-                fun operator(operator: JsonField<Operator>) = apply { this.operator = operator }
+                fun operator(operator: JsonField<FilterOperator>) = apply {
+                    this.operator = operator
+                }
 
                 /** Filter value - can be string, number, or boolean */
                 fun value(value: Value) = value(JsonField.of(value))
@@ -658,172 +659,6 @@ private constructor(
                 (if (key.asKnown() == null) 0 else 1) +
                     (operator.asKnown()?.validity() ?: 0) +
                     (value.asKnown()?.validity() ?: 0)
-
-            class Operator @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    val EQUALS = of("equals")
-
-                    val NOT_EQUALS = of("not_equals")
-
-                    val GREATER_THAN = of("greater_than")
-
-                    val GREATER_THAN_OR_EQUALS = of("greater_than_or_equals")
-
-                    val LESS_THAN = of("less_than")
-
-                    val LESS_THAN_OR_EQUALS = of("less_than_or_equals")
-
-                    val CONTAINS = of("contains")
-
-                    val DOES_NOT_CONTAIN = of("does_not_contain")
-
-                    fun of(value: String) = Operator(JsonField.of(value))
-                }
-
-                /** An enum containing [Operator]'s known values. */
-                enum class Known {
-                    EQUALS,
-                    NOT_EQUALS,
-                    GREATER_THAN,
-                    GREATER_THAN_OR_EQUALS,
-                    LESS_THAN,
-                    LESS_THAN_OR_EQUALS,
-                    CONTAINS,
-                    DOES_NOT_CONTAIN,
-                }
-
-                /**
-                 * An enum containing [Operator]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [Operator] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    EQUALS,
-                    NOT_EQUALS,
-                    GREATER_THAN,
-                    GREATER_THAN_OR_EQUALS,
-                    LESS_THAN,
-                    LESS_THAN_OR_EQUALS,
-                    CONTAINS,
-                    DOES_NOT_CONTAIN,
-                    /**
-                     * An enum member indicating that [Operator] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        EQUALS -> Value.EQUALS
-                        NOT_EQUALS -> Value.NOT_EQUALS
-                        GREATER_THAN -> Value.GREATER_THAN
-                        GREATER_THAN_OR_EQUALS -> Value.GREATER_THAN_OR_EQUALS
-                        LESS_THAN -> Value.LESS_THAN
-                        LESS_THAN_OR_EQUALS -> Value.LESS_THAN_OR_EQUALS
-                        CONTAINS -> Value.CONTAINS
-                        DOES_NOT_CONTAIN -> Value.DOES_NOT_CONTAIN
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value is a not
-                 *   a known member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        EQUALS -> Known.EQUALS
-                        NOT_EQUALS -> Known.NOT_EQUALS
-                        GREATER_THAN -> Known.GREATER_THAN
-                        GREATER_THAN_OR_EQUALS -> Known.GREATER_THAN_OR_EQUALS
-                        LESS_THAN -> Known.LESS_THAN
-                        LESS_THAN_OR_EQUALS -> Known.LESS_THAN_OR_EQUALS
-                        CONTAINS -> Known.CONTAINS
-                        DOES_NOT_CONTAIN -> Known.DOES_NOT_CONTAIN
-                        else -> throw DodoPaymentsInvalidDataException("Unknown Operator: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value does not
-                 *   have the expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString()
-                        ?: throw DodoPaymentsInvalidDataException("Value is not a String")
-
-                private var validated: Boolean = false
-
-                fun validate(): Operator = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: DodoPaymentsInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Operator && value == other.value
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
 
             /** Filter value - can be string, number, or boolean */
             @JsonDeserialize(using = Value.Deserializer::class)
@@ -1469,7 +1304,7 @@ private constructor(
                 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                 private constructor(
                     private val key: JsonField<String>,
-                    private val operator: JsonField<Operator>,
+                    private val operator: JsonField<FilterOperator>,
                     private val value: JsonField<Value>,
                     private val additionalProperties: MutableMap<String, JsonValue>,
                 ) {
@@ -1481,7 +1316,7 @@ private constructor(
                         key: JsonField<String> = JsonMissing.of(),
                         @JsonProperty("operator")
                         @ExcludeMissing
-                        operator: JsonField<Operator> = JsonMissing.of(),
+                        operator: JsonField<FilterOperator> = JsonMissing.of(),
                         @JsonProperty("value")
                         @ExcludeMissing
                         value: JsonField<Value> = JsonMissing.of(),
@@ -1501,7 +1336,7 @@ private constructor(
                      *   type or is unexpectedly missing or null (e.g. if the server responded with
                      *   an unexpected value).
                      */
-                    fun operator(): Operator = operator.getRequired("operator")
+                    fun operator(): FilterOperator = operator.getRequired("operator")
 
                     /**
                      * Filter value - can be string, number, or boolean
@@ -1528,7 +1363,7 @@ private constructor(
                      */
                     @JsonProperty("operator")
                     @ExcludeMissing
-                    fun _operator(): JsonField<Operator> = operator
+                    fun _operator(): JsonField<FilterOperator> = operator
 
                     /**
                      * Returns the raw JSON value of [value].
@@ -1570,7 +1405,7 @@ private constructor(
                     class Builder internal constructor() {
 
                         private var key: JsonField<String>? = null
-                        private var operator: JsonField<Operator>? = null
+                        private var operator: JsonField<FilterOperator>? = null
                         private var value: JsonField<Value>? = null
                         private var additionalProperties: MutableMap<String, JsonValue> =
                             mutableMapOf()
@@ -1595,16 +1430,16 @@ private constructor(
                          */
                         fun key(key: JsonField<String>) = apply { this.key = key }
 
-                        fun operator(operator: Operator) = operator(JsonField.of(operator))
+                        fun operator(operator: FilterOperator) = operator(JsonField.of(operator))
 
                         /**
                          * Sets [Builder.operator] to an arbitrary JSON value.
                          *
-                         * You should usually call [Builder.operator] with a well-typed [Operator]
-                         * value instead. This method is primarily for setting the field to an
-                         * undocumented or not yet supported value.
+                         * You should usually call [Builder.operator] with a well-typed
+                         * [FilterOperator] value instead. This method is primarily for setting the
+                         * field to an undocumented or not yet supported value.
                          */
-                        fun operator(operator: JsonField<Operator>) = apply {
+                        fun operator(operator: JsonField<FilterOperator>) = apply {
                             this.operator = operator
                         }
 
@@ -1705,179 +1540,6 @@ private constructor(
                         (if (key.asKnown() == null) 0 else 1) +
                             (operator.asKnown()?.validity() ?: 0) +
                             (value.asKnown()?.validity() ?: 0)
-
-                    class Operator
-                    @JsonCreator
-                    private constructor(private val value: JsonField<String>) : Enum {
-
-                        /**
-                         * Returns this class instance's raw value.
-                         *
-                         * This is usually only useful if this instance was deserialized from data
-                         * that doesn't match any known member, and you want to know that value. For
-                         * example, if the SDK is on an older version than the API, then the API may
-                         * respond with new members that the SDK is unaware of.
-                         */
-                        @com.fasterxml.jackson.annotation.JsonValue
-                        fun _value(): JsonField<String> = value
-
-                        companion object {
-
-                            val EQUALS = of("equals")
-
-                            val NOT_EQUALS = of("not_equals")
-
-                            val GREATER_THAN = of("greater_than")
-
-                            val GREATER_THAN_OR_EQUALS = of("greater_than_or_equals")
-
-                            val LESS_THAN = of("less_than")
-
-                            val LESS_THAN_OR_EQUALS = of("less_than_or_equals")
-
-                            val CONTAINS = of("contains")
-
-                            val DOES_NOT_CONTAIN = of("does_not_contain")
-
-                            fun of(value: String) = Operator(JsonField.of(value))
-                        }
-
-                        /** An enum containing [Operator]'s known values. */
-                        enum class Known {
-                            EQUALS,
-                            NOT_EQUALS,
-                            GREATER_THAN,
-                            GREATER_THAN_OR_EQUALS,
-                            LESS_THAN,
-                            LESS_THAN_OR_EQUALS,
-                            CONTAINS,
-                            DOES_NOT_CONTAIN,
-                        }
-
-                        /**
-                         * An enum containing [Operator]'s known values, as well as an [_UNKNOWN]
-                         * member.
-                         *
-                         * An instance of [Operator] can contain an unknown value in a couple of
-                         * cases:
-                         * - It was deserialized from data that doesn't match any known member. For
-                         *   example, if the SDK is on an older version than the API, then the API
-                         *   may respond with new members that the SDK is unaware of.
-                         * - It was constructed with an arbitrary value using the [of] method.
-                         */
-                        enum class Value {
-                            EQUALS,
-                            NOT_EQUALS,
-                            GREATER_THAN,
-                            GREATER_THAN_OR_EQUALS,
-                            LESS_THAN,
-                            LESS_THAN_OR_EQUALS,
-                            CONTAINS,
-                            DOES_NOT_CONTAIN,
-                            /**
-                             * An enum member indicating that [Operator] was instantiated with an
-                             * unknown value.
-                             */
-                            _UNKNOWN,
-                        }
-
-                        /**
-                         * Returns an enum member corresponding to this class instance's value, or
-                         * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                         *
-                         * Use the [known] method instead if you're certain the value is always
-                         * known or if you want to throw for the unknown case.
-                         */
-                        fun value(): Value =
-                            when (this) {
-                                EQUALS -> Value.EQUALS
-                                NOT_EQUALS -> Value.NOT_EQUALS
-                                GREATER_THAN -> Value.GREATER_THAN
-                                GREATER_THAN_OR_EQUALS -> Value.GREATER_THAN_OR_EQUALS
-                                LESS_THAN -> Value.LESS_THAN
-                                LESS_THAN_OR_EQUALS -> Value.LESS_THAN_OR_EQUALS
-                                CONTAINS -> Value.CONTAINS
-                                DOES_NOT_CONTAIN -> Value.DOES_NOT_CONTAIN
-                                else -> Value._UNKNOWN
-                            }
-
-                        /**
-                         * Returns an enum member corresponding to this class instance's value.
-                         *
-                         * Use the [value] method instead if you're uncertain the value is always
-                         * known and don't want to throw for the unknown case.
-                         *
-                         * @throws DodoPaymentsInvalidDataException if this class instance's value
-                         *   is a not a known member.
-                         */
-                        fun known(): Known =
-                            when (this) {
-                                EQUALS -> Known.EQUALS
-                                NOT_EQUALS -> Known.NOT_EQUALS
-                                GREATER_THAN -> Known.GREATER_THAN
-                                GREATER_THAN_OR_EQUALS -> Known.GREATER_THAN_OR_EQUALS
-                                LESS_THAN -> Known.LESS_THAN
-                                LESS_THAN_OR_EQUALS -> Known.LESS_THAN_OR_EQUALS
-                                CONTAINS -> Known.CONTAINS
-                                DOES_NOT_CONTAIN -> Known.DOES_NOT_CONTAIN
-                                else ->
-                                    throw DodoPaymentsInvalidDataException(
-                                        "Unknown Operator: $value"
-                                    )
-                            }
-
-                        /**
-                         * Returns this class instance's primitive wire representation.
-                         *
-                         * This differs from the [toString] method because that method is primarily
-                         * for debugging and generally doesn't throw.
-                         *
-                         * @throws DodoPaymentsInvalidDataException if this class instance's value
-                         *   does not have the expected primitive type.
-                         */
-                        fun asString(): String =
-                            _value().asString()
-                                ?: throw DodoPaymentsInvalidDataException("Value is not a String")
-
-                        private var validated: Boolean = false
-
-                        fun validate(): Operator = apply {
-                            if (validated) {
-                                return@apply
-                            }
-
-                            known()
-                            validated = true
-                        }
-
-                        fun isValid(): Boolean =
-                            try {
-                                validate()
-                                true
-                            } catch (e: DodoPaymentsInvalidDataException) {
-                                false
-                            }
-
-                        /**
-                         * Returns a score indicating how many valid values are contained in this
-                         * object recursively.
-                         *
-                         * Used for best match union deserialization.
-                         */
-                        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                        override fun equals(other: Any?): Boolean {
-                            if (this === other) {
-                                return true
-                            }
-
-                            return other is Operator && value == other.value
-                        }
-
-                        override fun hashCode() = value.hashCode()
-
-                        override fun toString() = value.toString()
-                    }
 
                     /** Filter value - can be string, number, or boolean */
                     @JsonDeserialize(using = Value.Deserializer::class)
@@ -2564,7 +2226,7 @@ private constructor(
                         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                         private constructor(
                             private val key: JsonField<String>,
-                            private val operator: JsonField<Operator>,
+                            private val operator: JsonField<FilterOperator>,
                             private val value: JsonField<Value>,
                             private val additionalProperties: MutableMap<String, JsonValue>,
                         ) {
@@ -2576,7 +2238,7 @@ private constructor(
                                 key: JsonField<String> = JsonMissing.of(),
                                 @JsonProperty("operator")
                                 @ExcludeMissing
-                                operator: JsonField<Operator> = JsonMissing.of(),
+                                operator: JsonField<FilterOperator> = JsonMissing.of(),
                                 @JsonProperty("value")
                                 @ExcludeMissing
                                 value: JsonField<Value> = JsonMissing.of(),
@@ -2596,7 +2258,7 @@ private constructor(
                              *   unexpected type or is unexpectedly missing or null (e.g. if the
                              *   server responded with an unexpected value).
                              */
-                            fun operator(): Operator = operator.getRequired("operator")
+                            fun operator(): FilterOperator = operator.getRequired("operator")
 
                             /**
                              * Filter value - can be string, number, or boolean
@@ -2623,7 +2285,7 @@ private constructor(
                              */
                             @JsonProperty("operator")
                             @ExcludeMissing
-                            fun _operator(): JsonField<Operator> = operator
+                            fun _operator(): JsonField<FilterOperator> = operator
 
                             /**
                              * Returns the raw JSON value of [value].
@@ -2667,7 +2329,7 @@ private constructor(
                             class Builder internal constructor() {
 
                                 private var key: JsonField<String>? = null
-                                private var operator: JsonField<Operator>? = null
+                                private var operator: JsonField<FilterOperator>? = null
                                 private var value: JsonField<Value>? = null
                                 private var additionalProperties: MutableMap<String, JsonValue> =
                                     mutableMapOf()
@@ -2693,16 +2355,17 @@ private constructor(
                                  */
                                 fun key(key: JsonField<String>) = apply { this.key = key }
 
-                                fun operator(operator: Operator) = operator(JsonField.of(operator))
+                                fun operator(operator: FilterOperator) =
+                                    operator(JsonField.of(operator))
 
                                 /**
                                  * Sets [Builder.operator] to an arbitrary JSON value.
                                  *
                                  * You should usually call [Builder.operator] with a well-typed
-                                 * [Operator] value instead. This method is primarily for setting
-                                 * the field to an undocumented or not yet supported value.
+                                 * [FilterOperator] value instead. This method is primarily for
+                                 * setting the field to an undocumented or not yet supported value.
                                  */
-                                fun operator(operator: JsonField<Operator>) = apply {
+                                fun operator(operator: JsonField<FilterOperator>) = apply {
                                     this.operator = operator
                                 }
 
@@ -2805,187 +2468,6 @@ private constructor(
                                 (if (key.asKnown() == null) 0 else 1) +
                                     (operator.asKnown()?.validity() ?: 0) +
                                     (value.asKnown()?.validity() ?: 0)
-
-                            class Operator
-                            @JsonCreator
-                            private constructor(private val value: JsonField<String>) : Enum {
-
-                                /**
-                                 * Returns this class instance's raw value.
-                                 *
-                                 * This is usually only useful if this instance was deserialized
-                                 * from data that doesn't match any known member, and you want to
-                                 * know that value. For example, if the SDK is on an older version
-                                 * than the API, then the API may respond with new members that the
-                                 * SDK is unaware of.
-                                 */
-                                @com.fasterxml.jackson.annotation.JsonValue
-                                fun _value(): JsonField<String> = value
-
-                                companion object {
-
-                                    val EQUALS = of("equals")
-
-                                    val NOT_EQUALS = of("not_equals")
-
-                                    val GREATER_THAN = of("greater_than")
-
-                                    val GREATER_THAN_OR_EQUALS = of("greater_than_or_equals")
-
-                                    val LESS_THAN = of("less_than")
-
-                                    val LESS_THAN_OR_EQUALS = of("less_than_or_equals")
-
-                                    val CONTAINS = of("contains")
-
-                                    val DOES_NOT_CONTAIN = of("does_not_contain")
-
-                                    fun of(value: String) = Operator(JsonField.of(value))
-                                }
-
-                                /** An enum containing [Operator]'s known values. */
-                                enum class Known {
-                                    EQUALS,
-                                    NOT_EQUALS,
-                                    GREATER_THAN,
-                                    GREATER_THAN_OR_EQUALS,
-                                    LESS_THAN,
-                                    LESS_THAN_OR_EQUALS,
-                                    CONTAINS,
-                                    DOES_NOT_CONTAIN,
-                                }
-
-                                /**
-                                 * An enum containing [Operator]'s known values, as well as an
-                                 * [_UNKNOWN] member.
-                                 *
-                                 * An instance of [Operator] can contain an unknown value in a
-                                 * couple of cases:
-                                 * - It was deserialized from data that doesn't match any known
-                                 *   member. For example, if the SDK is on an older version than the
-                                 *   API, then the API may respond with new members that the SDK is
-                                 *   unaware of.
-                                 * - It was constructed with an arbitrary value using the [of]
-                                 *   method.
-                                 */
-                                enum class Value {
-                                    EQUALS,
-                                    NOT_EQUALS,
-                                    GREATER_THAN,
-                                    GREATER_THAN_OR_EQUALS,
-                                    LESS_THAN,
-                                    LESS_THAN_OR_EQUALS,
-                                    CONTAINS,
-                                    DOES_NOT_CONTAIN,
-                                    /**
-                                     * An enum member indicating that [Operator] was instantiated
-                                     * with an unknown value.
-                                     */
-                                    _UNKNOWN,
-                                }
-
-                                /**
-                                 * Returns an enum member corresponding to this class instance's
-                                 * value, or [Value._UNKNOWN] if the class was instantiated with an
-                                 * unknown value.
-                                 *
-                                 * Use the [known] method instead if you're certain the value is
-                                 * always known or if you want to throw for the unknown case.
-                                 */
-                                fun value(): Value =
-                                    when (this) {
-                                        EQUALS -> Value.EQUALS
-                                        NOT_EQUALS -> Value.NOT_EQUALS
-                                        GREATER_THAN -> Value.GREATER_THAN
-                                        GREATER_THAN_OR_EQUALS -> Value.GREATER_THAN_OR_EQUALS
-                                        LESS_THAN -> Value.LESS_THAN
-                                        LESS_THAN_OR_EQUALS -> Value.LESS_THAN_OR_EQUALS
-                                        CONTAINS -> Value.CONTAINS
-                                        DOES_NOT_CONTAIN -> Value.DOES_NOT_CONTAIN
-                                        else -> Value._UNKNOWN
-                                    }
-
-                                /**
-                                 * Returns an enum member corresponding to this class instance's
-                                 * value.
-                                 *
-                                 * Use the [value] method instead if you're uncertain the value is
-                                 * always known and don't want to throw for the unknown case.
-                                 *
-                                 * @throws DodoPaymentsInvalidDataException if this class instance's
-                                 *   value is a not a known member.
-                                 */
-                                fun known(): Known =
-                                    when (this) {
-                                        EQUALS -> Known.EQUALS
-                                        NOT_EQUALS -> Known.NOT_EQUALS
-                                        GREATER_THAN -> Known.GREATER_THAN
-                                        GREATER_THAN_OR_EQUALS -> Known.GREATER_THAN_OR_EQUALS
-                                        LESS_THAN -> Known.LESS_THAN
-                                        LESS_THAN_OR_EQUALS -> Known.LESS_THAN_OR_EQUALS
-                                        CONTAINS -> Known.CONTAINS
-                                        DOES_NOT_CONTAIN -> Known.DOES_NOT_CONTAIN
-                                        else ->
-                                            throw DodoPaymentsInvalidDataException(
-                                                "Unknown Operator: $value"
-                                            )
-                                    }
-
-                                /**
-                                 * Returns this class instance's primitive wire representation.
-                                 *
-                                 * This differs from the [toString] method because that method is
-                                 * primarily for debugging and generally doesn't throw.
-                                 *
-                                 * @throws DodoPaymentsInvalidDataException if this class instance's
-                                 *   value does not have the expected primitive type.
-                                 */
-                                fun asString(): String =
-                                    _value().asString()
-                                        ?: throw DodoPaymentsInvalidDataException(
-                                            "Value is not a String"
-                                        )
-
-                                private var validated: Boolean = false
-
-                                fun validate(): Operator = apply {
-                                    if (validated) {
-                                        return@apply
-                                    }
-
-                                    known()
-                                    validated = true
-                                }
-
-                                fun isValid(): Boolean =
-                                    try {
-                                        validate()
-                                        true
-                                    } catch (e: DodoPaymentsInvalidDataException) {
-                                        false
-                                    }
-
-                                /**
-                                 * Returns a score indicating how many valid values are contained in
-                                 * this object recursively.
-                                 *
-                                 * Used for best match union deserialization.
-                                 */
-                                internal fun validity(): Int =
-                                    if (value() == Value._UNKNOWN) 0 else 1
-
-                                override fun equals(other: Any?): Boolean {
-                                    if (this === other) {
-                                        return true
-                                    }
-
-                                    return other is Operator && value == other.value
-                                }
-
-                                override fun hashCode() = value.hashCode()
-
-                                override fun toString() = value.toString()
-                            }
 
                             /** Filter value - can be string, number, or boolean */
                             @JsonDeserialize(using = Value.Deserializer::class)
@@ -3437,7 +2919,7 @@ private constructor(
                             @JsonCreator(mode = JsonCreator.Mode.DISABLED)
                             private constructor(
                                 private val key: JsonField<String>,
-                                private val operator: JsonField<Operator>,
+                                private val operator: JsonField<FilterOperator>,
                                 private val value: JsonField<Value>,
                                 private val additionalProperties: MutableMap<String, JsonValue>,
                             ) {
@@ -3449,7 +2931,7 @@ private constructor(
                                     key: JsonField<String> = JsonMissing.of(),
                                     @JsonProperty("operator")
                                     @ExcludeMissing
-                                    operator: JsonField<Operator> = JsonMissing.of(),
+                                    operator: JsonField<FilterOperator> = JsonMissing.of(),
                                     @JsonProperty("value")
                                     @ExcludeMissing
                                     value: JsonField<Value> = JsonMissing.of(),
@@ -3469,7 +2951,7 @@ private constructor(
                                  *   unexpected type or is unexpectedly missing or null (e.g. if the
                                  *   server responded with an unexpected value).
                                  */
-                                fun operator(): Operator = operator.getRequired("operator")
+                                fun operator(): FilterOperator = operator.getRequired("operator")
 
                                 /**
                                  * Filter value - can be string, number, or boolean
@@ -3498,7 +2980,7 @@ private constructor(
                                  */
                                 @JsonProperty("operator")
                                 @ExcludeMissing
-                                fun _operator(): JsonField<Operator> = operator
+                                fun _operator(): JsonField<FilterOperator> = operator
 
                                 /**
                                  * Returns the raw JSON value of [value].
@@ -3542,7 +3024,7 @@ private constructor(
                                 class Builder internal constructor() {
 
                                     private var key: JsonField<String>? = null
-                                    private var operator: JsonField<Operator>? = null
+                                    private var operator: JsonField<FilterOperator>? = null
                                     private var value: JsonField<Value>? = null
                                     private var additionalProperties:
                                         MutableMap<String, JsonValue> =
@@ -3568,18 +3050,18 @@ private constructor(
                                      */
                                     fun key(key: JsonField<String>) = apply { this.key = key }
 
-                                    fun operator(operator: Operator) =
+                                    fun operator(operator: FilterOperator) =
                                         operator(JsonField.of(operator))
 
                                     /**
                                      * Sets [Builder.operator] to an arbitrary JSON value.
                                      *
                                      * You should usually call [Builder.operator] with a well-typed
-                                     * [Operator] value instead. This method is primarily for
+                                     * [FilterOperator] value instead. This method is primarily for
                                      * setting the field to an undocumented or not yet supported
                                      * value.
                                      */
-                                    fun operator(operator: JsonField<Operator>) = apply {
+                                    fun operator(operator: JsonField<FilterOperator>) = apply {
                                         this.operator = operator
                                     }
 
@@ -3689,187 +3171,6 @@ private constructor(
                                     (if (key.asKnown() == null) 0 else 1) +
                                         (operator.asKnown()?.validity() ?: 0) +
                                         (value.asKnown()?.validity() ?: 0)
-
-                                class Operator
-                                @JsonCreator
-                                private constructor(private val value: JsonField<String>) : Enum {
-
-                                    /**
-                                     * Returns this class instance's raw value.
-                                     *
-                                     * This is usually only useful if this instance was deserialized
-                                     * from data that doesn't match any known member, and you want
-                                     * to know that value. For example, if the SDK is on an older
-                                     * version than the API, then the API may respond with new
-                                     * members that the SDK is unaware of.
-                                     */
-                                    @com.fasterxml.jackson.annotation.JsonValue
-                                    fun _value(): JsonField<String> = value
-
-                                    companion object {
-
-                                        val EQUALS = of("equals")
-
-                                        val NOT_EQUALS = of("not_equals")
-
-                                        val GREATER_THAN = of("greater_than")
-
-                                        val GREATER_THAN_OR_EQUALS = of("greater_than_or_equals")
-
-                                        val LESS_THAN = of("less_than")
-
-                                        val LESS_THAN_OR_EQUALS = of("less_than_or_equals")
-
-                                        val CONTAINS = of("contains")
-
-                                        val DOES_NOT_CONTAIN = of("does_not_contain")
-
-                                        fun of(value: String) = Operator(JsonField.of(value))
-                                    }
-
-                                    /** An enum containing [Operator]'s known values. */
-                                    enum class Known {
-                                        EQUALS,
-                                        NOT_EQUALS,
-                                        GREATER_THAN,
-                                        GREATER_THAN_OR_EQUALS,
-                                        LESS_THAN,
-                                        LESS_THAN_OR_EQUALS,
-                                        CONTAINS,
-                                        DOES_NOT_CONTAIN,
-                                    }
-
-                                    /**
-                                     * An enum containing [Operator]'s known values, as well as an
-                                     * [_UNKNOWN] member.
-                                     *
-                                     * An instance of [Operator] can contain an unknown value in a
-                                     * couple of cases:
-                                     * - It was deserialized from data that doesn't match any known
-                                     *   member. For example, if the SDK is on an older version than
-                                     *   the API, then the API may respond with new members that the
-                                     *   SDK is unaware of.
-                                     * - It was constructed with an arbitrary value using the [of]
-                                     *   method.
-                                     */
-                                    enum class Value {
-                                        EQUALS,
-                                        NOT_EQUALS,
-                                        GREATER_THAN,
-                                        GREATER_THAN_OR_EQUALS,
-                                        LESS_THAN,
-                                        LESS_THAN_OR_EQUALS,
-                                        CONTAINS,
-                                        DOES_NOT_CONTAIN,
-                                        /**
-                                         * An enum member indicating that [Operator] was
-                                         * instantiated with an unknown value.
-                                         */
-                                        _UNKNOWN,
-                                    }
-
-                                    /**
-                                     * Returns an enum member corresponding to this class instance's
-                                     * value, or [Value._UNKNOWN] if the class was instantiated with
-                                     * an unknown value.
-                                     *
-                                     * Use the [known] method instead if you're certain the value is
-                                     * always known or if you want to throw for the unknown case.
-                                     */
-                                    fun value(): Value =
-                                        when (this) {
-                                            EQUALS -> Value.EQUALS
-                                            NOT_EQUALS -> Value.NOT_EQUALS
-                                            GREATER_THAN -> Value.GREATER_THAN
-                                            GREATER_THAN_OR_EQUALS -> Value.GREATER_THAN_OR_EQUALS
-                                            LESS_THAN -> Value.LESS_THAN
-                                            LESS_THAN_OR_EQUALS -> Value.LESS_THAN_OR_EQUALS
-                                            CONTAINS -> Value.CONTAINS
-                                            DOES_NOT_CONTAIN -> Value.DOES_NOT_CONTAIN
-                                            else -> Value._UNKNOWN
-                                        }
-
-                                    /**
-                                     * Returns an enum member corresponding to this class instance's
-                                     * value.
-                                     *
-                                     * Use the [value] method instead if you're uncertain the value
-                                     * is always known and don't want to throw for the unknown case.
-                                     *
-                                     * @throws DodoPaymentsInvalidDataException if this class
-                                     *   instance's value is a not a known member.
-                                     */
-                                    fun known(): Known =
-                                        when (this) {
-                                            EQUALS -> Known.EQUALS
-                                            NOT_EQUALS -> Known.NOT_EQUALS
-                                            GREATER_THAN -> Known.GREATER_THAN
-                                            GREATER_THAN_OR_EQUALS -> Known.GREATER_THAN_OR_EQUALS
-                                            LESS_THAN -> Known.LESS_THAN
-                                            LESS_THAN_OR_EQUALS -> Known.LESS_THAN_OR_EQUALS
-                                            CONTAINS -> Known.CONTAINS
-                                            DOES_NOT_CONTAIN -> Known.DOES_NOT_CONTAIN
-                                            else ->
-                                                throw DodoPaymentsInvalidDataException(
-                                                    "Unknown Operator: $value"
-                                                )
-                                        }
-
-                                    /**
-                                     * Returns this class instance's primitive wire representation.
-                                     *
-                                     * This differs from the [toString] method because that method
-                                     * is primarily for debugging and generally doesn't throw.
-                                     *
-                                     * @throws DodoPaymentsInvalidDataException if this class
-                                     *   instance's value does not have the expected primitive type.
-                                     */
-                                    fun asString(): String =
-                                        _value().asString()
-                                            ?: throw DodoPaymentsInvalidDataException(
-                                                "Value is not a String"
-                                            )
-
-                                    private var validated: Boolean = false
-
-                                    fun validate(): Operator = apply {
-                                        if (validated) {
-                                            return@apply
-                                        }
-
-                                        known()
-                                        validated = true
-                                    }
-
-                                    fun isValid(): Boolean =
-                                        try {
-                                            validate()
-                                            true
-                                        } catch (e: DodoPaymentsInvalidDataException) {
-                                            false
-                                        }
-
-                                    /**
-                                     * Returns a score indicating how many valid values are
-                                     * contained in this object recursively.
-                                     *
-                                     * Used for best match union deserialization.
-                                     */
-                                    internal fun validity(): Int =
-                                        if (value() == Value._UNKNOWN) 0 else 1
-
-                                    override fun equals(other: Any?): Boolean {
-                                        if (this === other) {
-                                            return true
-                                        }
-
-                                        return other is Operator && value == other.value
-                                    }
-
-                                    override fun hashCode() = value.hashCode()
-
-                                    override fun toString() = value.toString()
-                                }
 
                                 /** Filter value - can be string, number, or boolean */
                                 @JsonDeserialize(using = Value.Deserializer::class)
@@ -4117,151 +3418,6 @@ private constructor(
                                     "Clause{key=$key, operator=$operator, value=$value, additionalProperties=$additionalProperties}"
                             }
 
-                            class Conjunction
-                            @JsonCreator
-                            private constructor(private val value: JsonField<String>) : Enum {
-
-                                /**
-                                 * Returns this class instance's raw value.
-                                 *
-                                 * This is usually only useful if this instance was deserialized
-                                 * from data that doesn't match any known member, and you want to
-                                 * know that value. For example, if the SDK is on an older version
-                                 * than the API, then the API may respond with new members that the
-                                 * SDK is unaware of.
-                                 */
-                                @com.fasterxml.jackson.annotation.JsonValue
-                                fun _value(): JsonField<String> = value
-
-                                companion object {
-
-                                    val AND = of("and")
-
-                                    val OR = of("or")
-
-                                    fun of(value: String) = Conjunction(JsonField.of(value))
-                                }
-
-                                /** An enum containing [Conjunction]'s known values. */
-                                enum class Known {
-                                    AND,
-                                    OR,
-                                }
-
-                                /**
-                                 * An enum containing [Conjunction]'s known values, as well as an
-                                 * [_UNKNOWN] member.
-                                 *
-                                 * An instance of [Conjunction] can contain an unknown value in a
-                                 * couple of cases:
-                                 * - It was deserialized from data that doesn't match any known
-                                 *   member. For example, if the SDK is on an older version than the
-                                 *   API, then the API may respond with new members that the SDK is
-                                 *   unaware of.
-                                 * - It was constructed with an arbitrary value using the [of]
-                                 *   method.
-                                 */
-                                enum class Value {
-                                    AND,
-                                    OR,
-                                    /**
-                                     * An enum member indicating that [Conjunction] was instantiated
-                                     * with an unknown value.
-                                     */
-                                    _UNKNOWN,
-                                }
-
-                                /**
-                                 * Returns an enum member corresponding to this class instance's
-                                 * value, or [Value._UNKNOWN] if the class was instantiated with an
-                                 * unknown value.
-                                 *
-                                 * Use the [known] method instead if you're certain the value is
-                                 * always known or if you want to throw for the unknown case.
-                                 */
-                                fun value(): Value =
-                                    when (this) {
-                                        AND -> Value.AND
-                                        OR -> Value.OR
-                                        else -> Value._UNKNOWN
-                                    }
-
-                                /**
-                                 * Returns an enum member corresponding to this class instance's
-                                 * value.
-                                 *
-                                 * Use the [value] method instead if you're uncertain the value is
-                                 * always known and don't want to throw for the unknown case.
-                                 *
-                                 * @throws DodoPaymentsInvalidDataException if this class instance's
-                                 *   value is a not a known member.
-                                 */
-                                fun known(): Known =
-                                    when (this) {
-                                        AND -> Known.AND
-                                        OR -> Known.OR
-                                        else ->
-                                            throw DodoPaymentsInvalidDataException(
-                                                "Unknown Conjunction: $value"
-                                            )
-                                    }
-
-                                /**
-                                 * Returns this class instance's primitive wire representation.
-                                 *
-                                 * This differs from the [toString] method because that method is
-                                 * primarily for debugging and generally doesn't throw.
-                                 *
-                                 * @throws DodoPaymentsInvalidDataException if this class instance's
-                                 *   value does not have the expected primitive type.
-                                 */
-                                fun asString(): String =
-                                    _value().asString()
-                                        ?: throw DodoPaymentsInvalidDataException(
-                                            "Value is not a String"
-                                        )
-
-                                private var validated: Boolean = false
-
-                                fun validate(): Conjunction = apply {
-                                    if (validated) {
-                                        return@apply
-                                    }
-
-                                    known()
-                                    validated = true
-                                }
-
-                                fun isValid(): Boolean =
-                                    try {
-                                        validate()
-                                        true
-                                    } catch (e: DodoPaymentsInvalidDataException) {
-                                        false
-                                    }
-
-                                /**
-                                 * Returns a score indicating how many valid values are contained in
-                                 * this object recursively.
-                                 *
-                                 * Used for best match union deserialization.
-                                 */
-                                internal fun validity(): Int =
-                                    if (value() == Value._UNKNOWN) 0 else 1
-
-                                override fun equals(other: Any?): Boolean {
-                                    if (this === other) {
-                                        return true
-                                    }
-
-                                    return other is Conjunction && value == other.value
-                                }
-
-                                override fun hashCode() = value.hashCode()
-
-                                override fun toString() = value.toString()
-                            }
-
                             override fun equals(other: Any?): Boolean {
                                 if (this === other) {
                                     return true
@@ -4282,143 +3438,6 @@ private constructor(
                             override fun toString() =
                                 "InnerInnerInnerMeterFilter{clauses=$clauses, conjunction=$conjunction, additionalProperties=$additionalProperties}"
                         }
-                    }
-
-                    class Conjunction
-                    @JsonCreator
-                    private constructor(private val value: JsonField<String>) : Enum {
-
-                        /**
-                         * Returns this class instance's raw value.
-                         *
-                         * This is usually only useful if this instance was deserialized from data
-                         * that doesn't match any known member, and you want to know that value. For
-                         * example, if the SDK is on an older version than the API, then the API may
-                         * respond with new members that the SDK is unaware of.
-                         */
-                        @com.fasterxml.jackson.annotation.JsonValue
-                        fun _value(): JsonField<String> = value
-
-                        companion object {
-
-                            val AND = of("and")
-
-                            val OR = of("or")
-
-                            fun of(value: String) = Conjunction(JsonField.of(value))
-                        }
-
-                        /** An enum containing [Conjunction]'s known values. */
-                        enum class Known {
-                            AND,
-                            OR,
-                        }
-
-                        /**
-                         * An enum containing [Conjunction]'s known values, as well as an [_UNKNOWN]
-                         * member.
-                         *
-                         * An instance of [Conjunction] can contain an unknown value in a couple of
-                         * cases:
-                         * - It was deserialized from data that doesn't match any known member. For
-                         *   example, if the SDK is on an older version than the API, then the API
-                         *   may respond with new members that the SDK is unaware of.
-                         * - It was constructed with an arbitrary value using the [of] method.
-                         */
-                        enum class Value {
-                            AND,
-                            OR,
-                            /**
-                             * An enum member indicating that [Conjunction] was instantiated with an
-                             * unknown value.
-                             */
-                            _UNKNOWN,
-                        }
-
-                        /**
-                         * Returns an enum member corresponding to this class instance's value, or
-                         * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                         *
-                         * Use the [known] method instead if you're certain the value is always
-                         * known or if you want to throw for the unknown case.
-                         */
-                        fun value(): Value =
-                            when (this) {
-                                AND -> Value.AND
-                                OR -> Value.OR
-                                else -> Value._UNKNOWN
-                            }
-
-                        /**
-                         * Returns an enum member corresponding to this class instance's value.
-                         *
-                         * Use the [value] method instead if you're uncertain the value is always
-                         * known and don't want to throw for the unknown case.
-                         *
-                         * @throws DodoPaymentsInvalidDataException if this class instance's value
-                         *   is a not a known member.
-                         */
-                        fun known(): Known =
-                            when (this) {
-                                AND -> Known.AND
-                                OR -> Known.OR
-                                else ->
-                                    throw DodoPaymentsInvalidDataException(
-                                        "Unknown Conjunction: $value"
-                                    )
-                            }
-
-                        /**
-                         * Returns this class instance's primitive wire representation.
-                         *
-                         * This differs from the [toString] method because that method is primarily
-                         * for debugging and generally doesn't throw.
-                         *
-                         * @throws DodoPaymentsInvalidDataException if this class instance's value
-                         *   does not have the expected primitive type.
-                         */
-                        fun asString(): String =
-                            _value().asString()
-                                ?: throw DodoPaymentsInvalidDataException("Value is not a String")
-
-                        private var validated: Boolean = false
-
-                        fun validate(): Conjunction = apply {
-                            if (validated) {
-                                return@apply
-                            }
-
-                            known()
-                            validated = true
-                        }
-
-                        fun isValid(): Boolean =
-                            try {
-                                validate()
-                                true
-                            } catch (e: DodoPaymentsInvalidDataException) {
-                                false
-                            }
-
-                        /**
-                         * Returns a score indicating how many valid values are contained in this
-                         * object recursively.
-                         *
-                         * Used for best match union deserialization.
-                         */
-                        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                        override fun equals(other: Any?): Boolean {
-                            if (this === other) {
-                                return true
-                            }
-
-                            return other is Conjunction && value == other.value
-                        }
-
-                        override fun hashCode() = value.hashCode()
-
-                        override fun toString() = value.toString()
                     }
 
                     override fun equals(other: Any?): Boolean {
@@ -4443,138 +3462,6 @@ private constructor(
                 }
             }
 
-            class Conjunction
-            @JsonCreator
-            private constructor(private val value: JsonField<String>) : Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    val AND = of("and")
-
-                    val OR = of("or")
-
-                    fun of(value: String) = Conjunction(JsonField.of(value))
-                }
-
-                /** An enum containing [Conjunction]'s known values. */
-                enum class Known {
-                    AND,
-                    OR,
-                }
-
-                /**
-                 * An enum containing [Conjunction]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [Conjunction] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    AND,
-                    OR,
-                    /**
-                     * An enum member indicating that [Conjunction] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        AND -> Value.AND
-                        OR -> Value.OR
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value is a not
-                 *   a known member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        AND -> Known.AND
-                        OR -> Known.OR
-                        else ->
-                            throw DodoPaymentsInvalidDataException("Unknown Conjunction: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value does not
-                 *   have the expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString()
-                        ?: throw DodoPaymentsInvalidDataException("Value is not a String")
-
-                private var validated: Boolean = false
-
-                fun validate(): Conjunction = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: DodoPaymentsInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Conjunction && value == other.value
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
@@ -4595,135 +3482,6 @@ private constructor(
             override fun toString() =
                 "InnerMeterFilter{clauses=$clauses, conjunction=$conjunction, additionalProperties=$additionalProperties}"
         }
-    }
-
-    /** Logical conjunction to apply between clauses (and/or) */
-    class Conjunction @JsonCreator private constructor(private val value: JsonField<String>) :
-        Enum {
-
-        /**
-         * Returns this class instance's raw value.
-         *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
-         */
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-        companion object {
-
-            val AND = of("and")
-
-            val OR = of("or")
-
-            fun of(value: String) = Conjunction(JsonField.of(value))
-        }
-
-        /** An enum containing [Conjunction]'s known values. */
-        enum class Known {
-            AND,
-            OR,
-        }
-
-        /**
-         * An enum containing [Conjunction]'s known values, as well as an [_UNKNOWN] member.
-         *
-         * An instance of [Conjunction] can contain an unknown value in a couple of cases:
-         * - It was deserialized from data that doesn't match any known member. For example, if the
-         *   SDK is on an older version than the API, then the API may respond with new members that
-         *   the SDK is unaware of.
-         * - It was constructed with an arbitrary value using the [of] method.
-         */
-        enum class Value {
-            AND,
-            OR,
-            /**
-             * An enum member indicating that [Conjunction] was instantiated with an unknown value.
-             */
-            _UNKNOWN,
-        }
-
-        /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
-         * if the class was instantiated with an unknown value.
-         *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
-         */
-        fun value(): Value =
-            when (this) {
-                AND -> Value.AND
-                OR -> Value.OR
-                else -> Value._UNKNOWN
-            }
-
-        /**
-         * Returns an enum member corresponding to this class instance's value.
-         *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
-         *
-         * @throws DodoPaymentsInvalidDataException if this class instance's value is a not a known
-         *   member.
-         */
-        fun known(): Known =
-            when (this) {
-                AND -> Known.AND
-                OR -> Known.OR
-                else -> throw DodoPaymentsInvalidDataException("Unknown Conjunction: $value")
-            }
-
-        /**
-         * Returns this class instance's primitive wire representation.
-         *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
-         *
-         * @throws DodoPaymentsInvalidDataException if this class instance's value does not have the
-         *   expected primitive type.
-         */
-        fun asString(): String =
-            _value().asString() ?: throw DodoPaymentsInvalidDataException("Value is not a String")
-
-        private var validated: Boolean = false
-
-        fun validate(): Conjunction = apply {
-            if (validated) {
-                return@apply
-            }
-
-            known()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: DodoPaymentsInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Conjunction && value == other.value
-        }
-
-        override fun hashCode() = value.hashCode()
-
-        override fun toString() = value.toString()
     }
 
     override fun equals(other: Any?): Boolean {

@@ -2,7 +2,6 @@
 
 package com.dodopayments.api.models.products
 
-import com.dodopayments.api.core.Enum
 import com.dodopayments.api.core.ExcludeMissing
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
@@ -11,6 +10,7 @@ import com.dodopayments.api.core.checkKnown
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
+import com.dodopayments.api.models.creditentitlements.CbbOverageBehavior
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.TaxCategory
 import com.dodopayments.api.models.subscriptions.TimeInterval
@@ -976,11 +976,9 @@ private constructor(
         private val creditEntitlementName: JsonField<String>,
         private val creditEntitlementUnit: JsonField<String>,
         private val creditsAmount: JsonField<String>,
-        private val creditsReduceOverage: JsonField<Boolean>,
-        private val overageChargeAtBilling: JsonField<Boolean>,
+        private val overageBehavior: JsonField<CbbOverageBehavior>,
         private val overageEnabled: JsonField<Boolean>,
-        private val preserveOverageAtReset: JsonField<Boolean>,
-        private val prorationBehavior: JsonField<ProrationBehavior>,
+        private val prorationBehavior: JsonField<CbbProrationBehavior>,
         private val rolloverEnabled: JsonField<Boolean>,
         private val trialCreditsExpireAfterTrial: JsonField<Boolean>,
         private val currency: JsonField<Currency>,
@@ -1011,21 +1009,15 @@ private constructor(
             @JsonProperty("credits_amount")
             @ExcludeMissing
             creditsAmount: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("credits_reduce_overage")
+            @JsonProperty("overage_behavior")
             @ExcludeMissing
-            creditsReduceOverage: JsonField<Boolean> = JsonMissing.of(),
-            @JsonProperty("overage_charge_at_billing")
-            @ExcludeMissing
-            overageChargeAtBilling: JsonField<Boolean> = JsonMissing.of(),
+            overageBehavior: JsonField<CbbOverageBehavior> = JsonMissing.of(),
             @JsonProperty("overage_enabled")
             @ExcludeMissing
             overageEnabled: JsonField<Boolean> = JsonMissing.of(),
-            @JsonProperty("preserve_overage_at_reset")
-            @ExcludeMissing
-            preserveOverageAtReset: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("proration_behavior")
             @ExcludeMissing
-            prorationBehavior: JsonField<ProrationBehavior> = JsonMissing.of(),
+            prorationBehavior: JsonField<CbbProrationBehavior> = JsonMissing.of(),
             @JsonProperty("rollover_enabled")
             @ExcludeMissing
             rolloverEnabled: JsonField<Boolean> = JsonMissing.of(),
@@ -1068,10 +1060,8 @@ private constructor(
             creditEntitlementName,
             creditEntitlementUnit,
             creditsAmount,
-            creditsReduceOverage,
-            overageChargeAtBilling,
+            overageBehavior,
             overageEnabled,
-            preserveOverageAtReset,
             prorationBehavior,
             rolloverEnabled,
             trialCreditsExpireAfterTrial,
@@ -1131,22 +1121,12 @@ private constructor(
         fun creditsAmount(): String = creditsAmount.getRequired("credits_amount")
 
         /**
-         * Whether new credit grants reduce existing overage
+         * Controls how overage is handled at billing cycle end.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun creditsReduceOverage(): Boolean =
-            creditsReduceOverage.getRequired("credits_reduce_overage")
-
-        /**
-         * Whether overage is charged at billing
-         *
-         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun overageChargeAtBilling(): Boolean =
-            overageChargeAtBilling.getRequired("overage_charge_at_billing")
+        fun overageBehavior(): CbbOverageBehavior = overageBehavior.getRequired("overage_behavior")
 
         /**
          * Whether overage is enabled
@@ -1157,21 +1137,12 @@ private constructor(
         fun overageEnabled(): Boolean = overageEnabled.getRequired("overage_enabled")
 
         /**
-         * Whether to preserve overage balance when credits reset
-         *
-         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun preserveOverageAtReset(): Boolean =
-            preserveOverageAtReset.getRequired("preserve_overage_at_reset")
-
-        /**
          * Proration behavior for credit grants during plan changes
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun prorationBehavior(): ProrationBehavior =
+        fun prorationBehavior(): CbbProrationBehavior =
             prorationBehavior.getRequired("proration_behavior")
 
         /**
@@ -1322,24 +1293,14 @@ private constructor(
         fun _creditsAmount(): JsonField<String> = creditsAmount
 
         /**
-         * Returns the raw JSON value of [creditsReduceOverage].
+         * Returns the raw JSON value of [overageBehavior].
          *
-         * Unlike [creditsReduceOverage], this method doesn't throw if the JSON field has an
-         * unexpected type.
+         * Unlike [overageBehavior], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
-        @JsonProperty("credits_reduce_overage")
+        @JsonProperty("overage_behavior")
         @ExcludeMissing
-        fun _creditsReduceOverage(): JsonField<Boolean> = creditsReduceOverage
-
-        /**
-         * Returns the raw JSON value of [overageChargeAtBilling].
-         *
-         * Unlike [overageChargeAtBilling], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("overage_charge_at_billing")
-        @ExcludeMissing
-        fun _overageChargeAtBilling(): JsonField<Boolean> = overageChargeAtBilling
+        fun _overageBehavior(): JsonField<CbbOverageBehavior> = overageBehavior
 
         /**
          * Returns the raw JSON value of [overageEnabled].
@@ -1352,16 +1313,6 @@ private constructor(
         fun _overageEnabled(): JsonField<Boolean> = overageEnabled
 
         /**
-         * Returns the raw JSON value of [preserveOverageAtReset].
-         *
-         * Unlike [preserveOverageAtReset], this method doesn't throw if the JSON field has an
-         * unexpected type.
-         */
-        @JsonProperty("preserve_overage_at_reset")
-        @ExcludeMissing
-        fun _preserveOverageAtReset(): JsonField<Boolean> = preserveOverageAtReset
-
-        /**
          * Returns the raw JSON value of [prorationBehavior].
          *
          * Unlike [prorationBehavior], this method doesn't throw if the JSON field has an unexpected
@@ -1369,7 +1320,7 @@ private constructor(
          */
         @JsonProperty("proration_behavior")
         @ExcludeMissing
-        fun _prorationBehavior(): JsonField<ProrationBehavior> = prorationBehavior
+        fun _prorationBehavior(): JsonField<CbbProrationBehavior> = prorationBehavior
 
         /**
          * Returns the raw JSON value of [rolloverEnabled].
@@ -1512,10 +1463,8 @@ private constructor(
              * .creditEntitlementName()
              * .creditEntitlementUnit()
              * .creditsAmount()
-             * .creditsReduceOverage()
-             * .overageChargeAtBilling()
+             * .overageBehavior()
              * .overageEnabled()
-             * .preserveOverageAtReset()
              * .prorationBehavior()
              * .rolloverEnabled()
              * .trialCreditsExpireAfterTrial()
@@ -1532,11 +1481,9 @@ private constructor(
             private var creditEntitlementName: JsonField<String>? = null
             private var creditEntitlementUnit: JsonField<String>? = null
             private var creditsAmount: JsonField<String>? = null
-            private var creditsReduceOverage: JsonField<Boolean>? = null
-            private var overageChargeAtBilling: JsonField<Boolean>? = null
+            private var overageBehavior: JsonField<CbbOverageBehavior>? = null
             private var overageEnabled: JsonField<Boolean>? = null
-            private var preserveOverageAtReset: JsonField<Boolean>? = null
-            private var prorationBehavior: JsonField<ProrationBehavior>? = null
+            private var prorationBehavior: JsonField<CbbProrationBehavior>? = null
             private var rolloverEnabled: JsonField<Boolean>? = null
             private var trialCreditsExpireAfterTrial: JsonField<Boolean>? = null
             private var currency: JsonField<Currency> = JsonMissing.of()
@@ -1557,10 +1504,8 @@ private constructor(
                 creditEntitlementName = creditEntitlement.creditEntitlementName
                 creditEntitlementUnit = creditEntitlement.creditEntitlementUnit
                 creditsAmount = creditEntitlement.creditsAmount
-                creditsReduceOverage = creditEntitlement.creditsReduceOverage
-                overageChargeAtBilling = creditEntitlement.overageChargeAtBilling
+                overageBehavior = creditEntitlement.overageBehavior
                 overageEnabled = creditEntitlement.overageEnabled
-                preserveOverageAtReset = creditEntitlement.preserveOverageAtReset
                 prorationBehavior = creditEntitlement.prorationBehavior
                 rolloverEnabled = creditEntitlement.rolloverEnabled
                 trialCreditsExpireAfterTrial = creditEntitlement.trialCreditsExpireAfterTrial
@@ -1648,34 +1593,19 @@ private constructor(
                 this.creditsAmount = creditsAmount
             }
 
-            /** Whether new credit grants reduce existing overage */
-            fun creditsReduceOverage(creditsReduceOverage: Boolean) =
-                creditsReduceOverage(JsonField.of(creditsReduceOverage))
+            /** Controls how overage is handled at billing cycle end. */
+            fun overageBehavior(overageBehavior: CbbOverageBehavior) =
+                overageBehavior(JsonField.of(overageBehavior))
 
             /**
-             * Sets [Builder.creditsReduceOverage] to an arbitrary JSON value.
+             * Sets [Builder.overageBehavior] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.creditsReduceOverage] with a well-typed [Boolean]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
+             * You should usually call [Builder.overageBehavior] with a well-typed
+             * [CbbOverageBehavior] value instead. This method is primarily for setting the field to
+             * an undocumented or not yet supported value.
              */
-            fun creditsReduceOverage(creditsReduceOverage: JsonField<Boolean>) = apply {
-                this.creditsReduceOverage = creditsReduceOverage
-            }
-
-            /** Whether overage is charged at billing */
-            fun overageChargeAtBilling(overageChargeAtBilling: Boolean) =
-                overageChargeAtBilling(JsonField.of(overageChargeAtBilling))
-
-            /**
-             * Sets [Builder.overageChargeAtBilling] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.overageChargeAtBilling] with a well-typed [Boolean]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
-            fun overageChargeAtBilling(overageChargeAtBilling: JsonField<Boolean>) = apply {
-                this.overageChargeAtBilling = overageChargeAtBilling
+            fun overageBehavior(overageBehavior: JsonField<CbbOverageBehavior>) = apply {
+                this.overageBehavior = overageBehavior
             }
 
             /** Whether overage is enabled */
@@ -1693,33 +1623,18 @@ private constructor(
                 this.overageEnabled = overageEnabled
             }
 
-            /** Whether to preserve overage balance when credits reset */
-            fun preserveOverageAtReset(preserveOverageAtReset: Boolean) =
-                preserveOverageAtReset(JsonField.of(preserveOverageAtReset))
-
-            /**
-             * Sets [Builder.preserveOverageAtReset] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.preserveOverageAtReset] with a well-typed [Boolean]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
-            fun preserveOverageAtReset(preserveOverageAtReset: JsonField<Boolean>) = apply {
-                this.preserveOverageAtReset = preserveOverageAtReset
-            }
-
             /** Proration behavior for credit grants during plan changes */
-            fun prorationBehavior(prorationBehavior: ProrationBehavior) =
+            fun prorationBehavior(prorationBehavior: CbbProrationBehavior) =
                 prorationBehavior(JsonField.of(prorationBehavior))
 
             /**
              * Sets [Builder.prorationBehavior] to an arbitrary JSON value.
              *
              * You should usually call [Builder.prorationBehavior] with a well-typed
-             * [ProrationBehavior] value instead. This method is primarily for setting the field to
-             * an undocumented or not yet supported value.
+             * [CbbProrationBehavior] value instead. This method is primarily for setting the field
+             * to an undocumented or not yet supported value.
              */
-            fun prorationBehavior(prorationBehavior: JsonField<ProrationBehavior>) = apply {
+            fun prorationBehavior(prorationBehavior: JsonField<CbbProrationBehavior>) = apply {
                 this.prorationBehavior = prorationBehavior
             }
 
@@ -1971,10 +1886,8 @@ private constructor(
              * .creditEntitlementName()
              * .creditEntitlementUnit()
              * .creditsAmount()
-             * .creditsReduceOverage()
-             * .overageChargeAtBilling()
+             * .overageBehavior()
              * .overageEnabled()
-             * .preserveOverageAtReset()
              * .prorationBehavior()
              * .rolloverEnabled()
              * .trialCreditsExpireAfterTrial()
@@ -1989,10 +1902,8 @@ private constructor(
                     checkRequired("creditEntitlementName", creditEntitlementName),
                     checkRequired("creditEntitlementUnit", creditEntitlementUnit),
                     checkRequired("creditsAmount", creditsAmount),
-                    checkRequired("creditsReduceOverage", creditsReduceOverage),
-                    checkRequired("overageChargeAtBilling", overageChargeAtBilling),
+                    checkRequired("overageBehavior", overageBehavior),
                     checkRequired("overageEnabled", overageEnabled),
-                    checkRequired("preserveOverageAtReset", preserveOverageAtReset),
                     checkRequired("prorationBehavior", prorationBehavior),
                     checkRequired("rolloverEnabled", rolloverEnabled),
                     checkRequired("trialCreditsExpireAfterTrial", trialCreditsExpireAfterTrial),
@@ -2022,10 +1933,8 @@ private constructor(
             creditEntitlementName()
             creditEntitlementUnit()
             creditsAmount()
-            creditsReduceOverage()
-            overageChargeAtBilling()
+            overageBehavior().validate()
             overageEnabled()
-            preserveOverageAtReset()
             prorationBehavior().validate()
             rolloverEnabled()
             trialCreditsExpireAfterTrial()
@@ -2062,10 +1971,8 @@ private constructor(
                 (if (creditEntitlementName.asKnown() == null) 0 else 1) +
                 (if (creditEntitlementUnit.asKnown() == null) 0 else 1) +
                 (if (creditsAmount.asKnown() == null) 0 else 1) +
-                (if (creditsReduceOverage.asKnown() == null) 0 else 1) +
-                (if (overageChargeAtBilling.asKnown() == null) 0 else 1) +
+                (overageBehavior.asKnown()?.validity() ?: 0) +
                 (if (overageEnabled.asKnown() == null) 0 else 1) +
-                (if (preserveOverageAtReset.asKnown() == null) 0 else 1) +
                 (prorationBehavior.asKnown()?.validity() ?: 0) +
                 (if (rolloverEnabled.asKnown() == null) 0 else 1) +
                 (if (trialCreditsExpireAfterTrial.asKnown() == null) 0 else 1) +
@@ -2080,140 +1987,6 @@ private constructor(
                 (rolloverTimeframeInterval.asKnown()?.validity() ?: 0) +
                 (if (trialCredits.asKnown() == null) 0 else 1)
 
-        /** Proration behavior for credit grants during plan changes */
-        class ProrationBehavior
-        @JsonCreator
-        private constructor(private val value: JsonField<String>) : Enum {
-
-            /**
-             * Returns this class instance's raw value.
-             *
-             * This is usually only useful if this instance was deserialized from data that doesn't
-             * match any known member, and you want to know that value. For example, if the SDK is
-             * on an older version than the API, then the API may respond with new members that the
-             * SDK is unaware of.
-             */
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            companion object {
-
-                val PRORATE = of("prorate")
-
-                val NO_PRORATE = of("no_prorate")
-
-                fun of(value: String) = ProrationBehavior(JsonField.of(value))
-            }
-
-            /** An enum containing [ProrationBehavior]'s known values. */
-            enum class Known {
-                PRORATE,
-                NO_PRORATE,
-            }
-
-            /**
-             * An enum containing [ProrationBehavior]'s known values, as well as an [_UNKNOWN]
-             * member.
-             *
-             * An instance of [ProrationBehavior] can contain an unknown value in a couple of cases:
-             * - It was deserialized from data that doesn't match any known member. For example, if
-             *   the SDK is on an older version than the API, then the API may respond with new
-             *   members that the SDK is unaware of.
-             * - It was constructed with an arbitrary value using the [of] method.
-             */
-            enum class Value {
-                PRORATE,
-                NO_PRORATE,
-                /**
-                 * An enum member indicating that [ProrationBehavior] was instantiated with an
-                 * unknown value.
-                 */
-                _UNKNOWN,
-            }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value, or
-             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-             *
-             * Use the [known] method instead if you're certain the value is always known or if you
-             * want to throw for the unknown case.
-             */
-            fun value(): Value =
-                when (this) {
-                    PRORATE -> Value.PRORATE
-                    NO_PRORATE -> Value.NO_PRORATE
-                    else -> Value._UNKNOWN
-                }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value.
-             *
-             * Use the [value] method instead if you're uncertain the value is always known and
-             * don't want to throw for the unknown case.
-             *
-             * @throws DodoPaymentsInvalidDataException if this class instance's value is a not a
-             *   known member.
-             */
-            fun known(): Known =
-                when (this) {
-                    PRORATE -> Known.PRORATE
-                    NO_PRORATE -> Known.NO_PRORATE
-                    else ->
-                        throw DodoPaymentsInvalidDataException("Unknown ProrationBehavior: $value")
-                }
-
-            /**
-             * Returns this class instance's primitive wire representation.
-             *
-             * This differs from the [toString] method because that method is primarily for
-             * debugging and generally doesn't throw.
-             *
-             * @throws DodoPaymentsInvalidDataException if this class instance's value does not have
-             *   the expected primitive type.
-             */
-            fun asString(): String =
-                _value().asString()
-                    ?: throw DodoPaymentsInvalidDataException("Value is not a String")
-
-            private var validated: Boolean = false
-
-            fun validate(): ProrationBehavior = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                known()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: DodoPaymentsInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is ProrationBehavior && value == other.value
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-        }
-
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
@@ -2225,10 +1998,8 @@ private constructor(
                 creditEntitlementName == other.creditEntitlementName &&
                 creditEntitlementUnit == other.creditEntitlementUnit &&
                 creditsAmount == other.creditsAmount &&
-                creditsReduceOverage == other.creditsReduceOverage &&
-                overageChargeAtBilling == other.overageChargeAtBilling &&
+                overageBehavior == other.overageBehavior &&
                 overageEnabled == other.overageEnabled &&
-                preserveOverageAtReset == other.preserveOverageAtReset &&
                 prorationBehavior == other.prorationBehavior &&
                 rolloverEnabled == other.rolloverEnabled &&
                 trialCreditsExpireAfterTrial == other.trialCreditsExpireAfterTrial &&
@@ -2252,10 +2023,8 @@ private constructor(
                 creditEntitlementName,
                 creditEntitlementUnit,
                 creditsAmount,
-                creditsReduceOverage,
-                overageChargeAtBilling,
+                overageBehavior,
                 overageEnabled,
-                preserveOverageAtReset,
                 prorationBehavior,
                 rolloverEnabled,
                 trialCreditsExpireAfterTrial,
@@ -2276,7 +2045,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "CreditEntitlement{id=$id, creditEntitlementId=$creditEntitlementId, creditEntitlementName=$creditEntitlementName, creditEntitlementUnit=$creditEntitlementUnit, creditsAmount=$creditsAmount, creditsReduceOverage=$creditsReduceOverage, overageChargeAtBilling=$overageChargeAtBilling, overageEnabled=$overageEnabled, preserveOverageAtReset=$preserveOverageAtReset, prorationBehavior=$prorationBehavior, rolloverEnabled=$rolloverEnabled, trialCreditsExpireAfterTrial=$trialCreditsExpireAfterTrial, currency=$currency, expiresAfterDays=$expiresAfterDays, lowBalanceThresholdPercent=$lowBalanceThresholdPercent, maxRolloverCount=$maxRolloverCount, overageLimit=$overageLimit, pricePerUnit=$pricePerUnit, rolloverPercentage=$rolloverPercentage, rolloverTimeframeCount=$rolloverTimeframeCount, rolloverTimeframeInterval=$rolloverTimeframeInterval, trialCredits=$trialCredits, additionalProperties=$additionalProperties}"
+            "CreditEntitlement{id=$id, creditEntitlementId=$creditEntitlementId, creditEntitlementName=$creditEntitlementName, creditEntitlementUnit=$creditEntitlementUnit, creditsAmount=$creditsAmount, overageBehavior=$overageBehavior, overageEnabled=$overageEnabled, prorationBehavior=$prorationBehavior, rolloverEnabled=$rolloverEnabled, trialCreditsExpireAfterTrial=$trialCreditsExpireAfterTrial, currency=$currency, expiresAfterDays=$expiresAfterDays, lowBalanceThresholdPercent=$lowBalanceThresholdPercent, maxRolloverCount=$maxRolloverCount, overageLimit=$overageLimit, pricePerUnit=$pricePerUnit, rolloverPercentage=$rolloverPercentage, rolloverTimeframeCount=$rolloverTimeframeCount, rolloverTimeframeInterval=$rolloverTimeframeInterval, trialCredits=$trialCredits, additionalProperties=$additionalProperties}"
     }
 
     /** Additional custom data associated with the product */

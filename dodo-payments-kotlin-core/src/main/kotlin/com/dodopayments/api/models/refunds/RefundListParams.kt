@@ -21,6 +21,7 @@ private constructor(
     private val pageNumber: Int?,
     private val pageSize: Int?,
     private val status: Status?,
+    private val subscriptionId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -42,6 +43,9 @@ private constructor(
 
     /** Filter by status */
     fun status(): Status? = status
+
+    /** Filter by subscription id */
+    fun subscriptionId(): String? = subscriptionId
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -68,6 +72,7 @@ private constructor(
         private var pageNumber: Int? = null
         private var pageSize: Int? = null
         private var status: Status? = null
+        private var subscriptionId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -78,6 +83,7 @@ private constructor(
             pageNumber = refundListParams.pageNumber
             pageSize = refundListParams.pageSize
             status = refundListParams.status
+            subscriptionId = refundListParams.subscriptionId
             additionalHeaders = refundListParams.additionalHeaders.toBuilder()
             additionalQueryParams = refundListParams.additionalQueryParams.toBuilder()
         }
@@ -113,6 +119,9 @@ private constructor(
 
         /** Filter by status */
         fun status(status: Status?) = apply { this.status = status }
+
+        /** Filter by subscription id */
+        fun subscriptionId(subscriptionId: String?) = apply { this.subscriptionId = subscriptionId }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -225,6 +234,7 @@ private constructor(
                 pageNumber,
                 pageSize,
                 status,
+                subscriptionId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -245,6 +255,7 @@ private constructor(
                 pageNumber?.let { put("page_number", it.toString()) }
                 pageSize?.let { put("page_size", it.toString()) }
                 status?.let { put("status", it.toString()) }
+                subscriptionId?.let { put("subscription_id", it) }
                 putAll(additionalQueryParams)
             }
             .build()
@@ -399,6 +410,7 @@ private constructor(
             pageNumber == other.pageNumber &&
             pageSize == other.pageSize &&
             status == other.status &&
+            subscriptionId == other.subscriptionId &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
@@ -411,10 +423,11 @@ private constructor(
             pageNumber,
             pageSize,
             status,
+            subscriptionId,
             additionalHeaders,
             additionalQueryParams,
         )
 
     override fun toString() =
-        "RefundListParams{createdAtGte=$createdAtGte, createdAtLte=$createdAtLte, customerId=$customerId, pageNumber=$pageNumber, pageSize=$pageSize, status=$status, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "RefundListParams{createdAtGte=$createdAtGte, createdAtLte=$createdAtLte, customerId=$customerId, pageNumber=$pageNumber, pageSize=$pageSize, status=$status, subscriptionId=$subscriptionId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

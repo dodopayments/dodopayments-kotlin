@@ -16,6 +16,8 @@ import com.dodopayments.api.models.subscriptions.SubscriptionListPage
 import com.dodopayments.api.models.subscriptions.SubscriptionListParams
 import com.dodopayments.api.models.subscriptions.SubscriptionPreviewChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionPreviewChangePlanResponse
+import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveCreditUsageParams
+import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveCreditUsageResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveParams
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryPage
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryParams
@@ -124,6 +126,34 @@ interface SubscriptionService {
         params: SubscriptionPreviewChangePlanParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SubscriptionPreviewChangePlanResponse
+
+    fun retrieveCreditUsage(
+        subscriptionId: String,
+        params: SubscriptionRetrieveCreditUsageParams =
+            SubscriptionRetrieveCreditUsageParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): SubscriptionRetrieveCreditUsageResponse =
+        retrieveCreditUsage(
+            params.toBuilder().subscriptionId(subscriptionId).build(),
+            requestOptions,
+        )
+
+    /** @see retrieveCreditUsage */
+    fun retrieveCreditUsage(
+        params: SubscriptionRetrieveCreditUsageParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): SubscriptionRetrieveCreditUsageResponse
+
+    /** @see retrieveCreditUsage */
+    fun retrieveCreditUsage(
+        subscriptionId: String,
+        requestOptions: RequestOptions,
+    ): SubscriptionRetrieveCreditUsageResponse =
+        retrieveCreditUsage(
+            subscriptionId,
+            SubscriptionRetrieveCreditUsageParams.none(),
+            requestOptions,
+        )
 
     /**
      * Get detailed usage history for a subscription that includes usage-based billing (metered
@@ -357,6 +387,41 @@ interface SubscriptionService {
             params: SubscriptionPreviewChangePlanParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<SubscriptionPreviewChangePlanResponse>
+
+        /**
+         * Returns a raw HTTP response for `get /subscriptions/{subscription_id}/credit-usage`, but
+         * is otherwise the same as [SubscriptionService.retrieveCreditUsage].
+         */
+        @MustBeClosed
+        fun retrieveCreditUsage(
+            subscriptionId: String,
+            params: SubscriptionRetrieveCreditUsageParams =
+                SubscriptionRetrieveCreditUsageParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionRetrieveCreditUsageResponse> =
+            retrieveCreditUsage(
+                params.toBuilder().subscriptionId(subscriptionId).build(),
+                requestOptions,
+            )
+
+        /** @see retrieveCreditUsage */
+        @MustBeClosed
+        fun retrieveCreditUsage(
+            params: SubscriptionRetrieveCreditUsageParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<SubscriptionRetrieveCreditUsageResponse>
+
+        /** @see retrieveCreditUsage */
+        @MustBeClosed
+        fun retrieveCreditUsage(
+            subscriptionId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<SubscriptionRetrieveCreditUsageResponse> =
+            retrieveCreditUsage(
+                subscriptionId,
+                SubscriptionRetrieveCreditUsageParams.none(),
+                requestOptions,
+            )
 
         /**
          * Returns a raw HTTP response for `get /subscriptions/{subscription_id}/usage-history`, but

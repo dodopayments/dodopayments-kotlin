@@ -28,6 +28,8 @@ import com.dodopayments.api.models.subscriptions.SubscriptionListPageResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionListParams
 import com.dodopayments.api.models.subscriptions.SubscriptionPreviewChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionPreviewChangePlanResponse
+import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveCreditUsageParams
+import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveCreditUsageResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveParams
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryPageAsync
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryPageResponse
@@ -98,6 +100,13 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
     ): SubscriptionPreviewChangePlanResponse =
         // post /subscriptions/{subscription_id}/change-plan/preview
         withRawResponse().previewChangePlan(params, requestOptions).parse()
+
+    override suspend fun retrieveCreditUsage(
+        params: SubscriptionRetrieveCreditUsageParams,
+        requestOptions: RequestOptions,
+    ): SubscriptionRetrieveCreditUsageResponse =
+        // get /subscriptions/{subscription_id}/credit-usage
+        withRawResponse().retrieveCreditUsage(params, requestOptions).parse()
 
     override suspend fun retrieveUsageHistory(
         params: SubscriptionRetrieveUsageHistoryParams,
@@ -333,6 +342,36 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
             return errorHandler.handle(response).parseable {
                 response
                     .use { previewChangePlanHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val retrieveCreditUsageHandler: Handler<SubscriptionRetrieveCreditUsageResponse> =
+            jsonHandler<SubscriptionRetrieveCreditUsageResponse>(clientOptions.jsonMapper)
+
+        override suspend fun retrieveCreditUsage(
+            params: SubscriptionRetrieveCreditUsageParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<SubscriptionRetrieveCreditUsageResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("subscriptionId", params.subscriptionId())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("subscriptions", params._pathParam(0), "credit-usage")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { retrieveCreditUsageHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()
