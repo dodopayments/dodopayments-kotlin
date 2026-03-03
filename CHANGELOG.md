@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.86.3 (2026-03-03)
+
+Full Changelog: [v1.86.2...v1.86.3](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.86.2...v1.86.3)
+
+### Chores
+
+* **tests:** update webhook tests ([0a3d65f](https://github.com/dodopayments/dodopayments-kotlin/commit/0a3d65f90bf5e69fa441632832b88e6777fb7676))
+
 ## 1.86.2 (2026-03-01)
 
 Full Changelog: [v1.86.1...v1.86.2](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.86.1...v1.86.2)
