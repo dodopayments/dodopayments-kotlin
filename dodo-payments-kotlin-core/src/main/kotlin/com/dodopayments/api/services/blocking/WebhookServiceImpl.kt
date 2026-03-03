@@ -111,6 +111,7 @@ class WebhookServiceImpl internal constructor(private val clientOptions: ClientO
             try {
                 val webhookSecret =
                     checkRequired("webhookKey", unwrapParams.secret() ?: clientOptions.webhookKey)
+
                 val headersMap =
                     headers.names().associateWith { name -> headers.values(name) }.toMap()
 
