@@ -76,6 +76,15 @@ private constructor(
     fun name(): String? = body.name()
 
     /**
+     * Whether this discount should be preserved when a subscription changes plans. Default: false
+     * (discount is removed on plan change)
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun preserveOnPlanChange(): Boolean? = body.preserveOnPlanChange()
+
+    /**
      * List of product IDs to restrict usage (if any).
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -134,6 +143,14 @@ private constructor(
      * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _name(): JsonField<String> = body._name()
+
+    /**
+     * Returns the raw JSON value of [preserveOnPlanChange].
+     *
+     * Unlike [preserveOnPlanChange], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    fun _preserveOnPlanChange(): JsonField<Boolean> = body._preserveOnPlanChange()
 
     /**
      * Returns the raw JSON value of [restrictedTo].
@@ -275,6 +292,25 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun name(name: JsonField<String>) = apply { body.name(name) }
+
+        /**
+         * Whether this discount should be preserved when a subscription changes plans. Default:
+         * false (discount is removed on plan change)
+         */
+        fun preserveOnPlanChange(preserveOnPlanChange: Boolean) = apply {
+            body.preserveOnPlanChange(preserveOnPlanChange)
+        }
+
+        /**
+         * Sets [Builder.preserveOnPlanChange] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.preserveOnPlanChange] with a well-typed [Boolean] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun preserveOnPlanChange(preserveOnPlanChange: JsonField<Boolean>) = apply {
+            body.preserveOnPlanChange(preserveOnPlanChange)
+        }
 
         /** List of product IDs to restrict usage (if any). */
         fun restrictedTo(restrictedTo: List<String>?) = apply { body.restrictedTo(restrictedTo) }
@@ -500,6 +536,7 @@ private constructor(
         private val code: JsonField<String>,
         private val expiresAt: JsonField<OffsetDateTime>,
         private val name: JsonField<String>,
+        private val preserveOnPlanChange: JsonField<Boolean>,
         private val restrictedTo: JsonField<List<String>>,
         private val subscriptionCycles: JsonField<Int>,
         private val usageLimit: JsonField<Int>,
@@ -515,6 +552,9 @@ private constructor(
             @ExcludeMissing
             expiresAt: JsonField<OffsetDateTime> = JsonMissing.of(),
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("preserve_on_plan_change")
+            @ExcludeMissing
+            preserveOnPlanChange: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("restricted_to")
             @ExcludeMissing
             restrictedTo: JsonField<List<String>> = JsonMissing.of(),
@@ -530,6 +570,7 @@ private constructor(
             code,
             expiresAt,
             name,
+            preserveOnPlanChange,
             restrictedTo,
             subscriptionCycles,
             usageLimit,
@@ -581,6 +622,16 @@ private constructor(
          *   if the server responded with an unexpected value).
          */
         fun name(): String? = name.getNullable("name")
+
+        /**
+         * Whether this discount should be preserved when a subscription changes plans. Default:
+         * false (discount is removed on plan change)
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun preserveOnPlanChange(): Boolean? =
+            preserveOnPlanChange.getNullable("preserve_on_plan_change")
 
         /**
          * List of product IDs to restrict usage (if any).
@@ -646,6 +697,16 @@ private constructor(
         @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
         /**
+         * Returns the raw JSON value of [preserveOnPlanChange].
+         *
+         * Unlike [preserveOnPlanChange], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("preserve_on_plan_change")
+        @ExcludeMissing
+        fun _preserveOnPlanChange(): JsonField<Boolean> = preserveOnPlanChange
+
+        /**
          * Returns the raw JSON value of [restrictedTo].
          *
          * Unlike [restrictedTo], this method doesn't throw if the JSON field has an unexpected
@@ -706,6 +767,7 @@ private constructor(
             private var code: JsonField<String> = JsonMissing.of()
             private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
+            private var preserveOnPlanChange: JsonField<Boolean> = JsonMissing.of()
             private var restrictedTo: JsonField<MutableList<String>>? = null
             private var subscriptionCycles: JsonField<Int> = JsonMissing.of()
             private var usageLimit: JsonField<Int> = JsonMissing.of()
@@ -717,6 +779,7 @@ private constructor(
                 code = body.code
                 expiresAt = body.expiresAt
                 name = body.name
+                preserveOnPlanChange = body.preserveOnPlanChange
                 restrictedTo = body.restrictedTo.map { it.toMutableList() }
                 subscriptionCycles = body.subscriptionCycles
                 usageLimit = body.usageLimit
@@ -795,6 +858,24 @@ private constructor(
              * value.
              */
             fun name(name: JsonField<String>) = apply { this.name = name }
+
+            /**
+             * Whether this discount should be preserved when a subscription changes plans. Default:
+             * false (discount is removed on plan change)
+             */
+            fun preserveOnPlanChange(preserveOnPlanChange: Boolean) =
+                preserveOnPlanChange(JsonField.of(preserveOnPlanChange))
+
+            /**
+             * Sets [Builder.preserveOnPlanChange] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.preserveOnPlanChange] with a well-typed [Boolean]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun preserveOnPlanChange(preserveOnPlanChange: JsonField<Boolean>) = apply {
+                this.preserveOnPlanChange = preserveOnPlanChange
+            }
 
             /** List of product IDs to restrict usage (if any). */
             fun restrictedTo(restrictedTo: List<String>?) =
@@ -908,6 +989,7 @@ private constructor(
                     code,
                     expiresAt,
                     name,
+                    preserveOnPlanChange,
                     (restrictedTo ?: JsonMissing.of()).map { it.toImmutable() },
                     subscriptionCycles,
                     usageLimit,
@@ -927,6 +1009,7 @@ private constructor(
             code()
             expiresAt()
             name()
+            preserveOnPlanChange()
             restrictedTo()
             subscriptionCycles()
             usageLimit()
@@ -953,6 +1036,7 @@ private constructor(
                 (if (code.asKnown() == null) 0 else 1) +
                 (if (expiresAt.asKnown() == null) 0 else 1) +
                 (if (name.asKnown() == null) 0 else 1) +
+                (if (preserveOnPlanChange.asKnown() == null) 0 else 1) +
                 (restrictedTo.asKnown()?.size ?: 0) +
                 (if (subscriptionCycles.asKnown() == null) 0 else 1) +
                 (if (usageLimit.asKnown() == null) 0 else 1)
@@ -968,6 +1052,7 @@ private constructor(
                 code == other.code &&
                 expiresAt == other.expiresAt &&
                 name == other.name &&
+                preserveOnPlanChange == other.preserveOnPlanChange &&
                 restrictedTo == other.restrictedTo &&
                 subscriptionCycles == other.subscriptionCycles &&
                 usageLimit == other.usageLimit &&
@@ -981,6 +1066,7 @@ private constructor(
                 code,
                 expiresAt,
                 name,
+                preserveOnPlanChange,
                 restrictedTo,
                 subscriptionCycles,
                 usageLimit,
@@ -991,7 +1077,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{amount=$amount, type=$type, code=$code, expiresAt=$expiresAt, name=$name, restrictedTo=$restrictedTo, subscriptionCycles=$subscriptionCycles, usageLimit=$usageLimit, additionalProperties=$additionalProperties}"
+            "Body{amount=$amount, type=$type, code=$code, expiresAt=$expiresAt, name=$name, preserveOnPlanChange=$preserveOnPlanChange, restrictedTo=$restrictedTo, subscriptionCycles=$subscriptionCycles, usageLimit=$usageLimit, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
