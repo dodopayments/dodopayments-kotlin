@@ -26,6 +26,7 @@ private constructor(
     private val code: JsonField<String>,
     private val createdAt: JsonField<OffsetDateTime>,
     private val discountId: JsonField<String>,
+    private val preserveOnPlanChange: JsonField<Boolean>,
     private val restrictedTo: JsonField<List<String>>,
     private val timesUsed: JsonField<Int>,
     private val type: JsonField<DiscountType>,
@@ -49,6 +50,9 @@ private constructor(
         @JsonProperty("discount_id")
         @ExcludeMissing
         discountId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("preserve_on_plan_change")
+        @ExcludeMissing
+        preserveOnPlanChange: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("restricted_to")
         @ExcludeMissing
         restrictedTo: JsonField<List<String>> = JsonMissing.of(),
@@ -68,6 +72,7 @@ private constructor(
         code,
         createdAt,
         discountId,
+        preserveOnPlanChange,
         restrictedTo,
         timesUsed,
         type,
@@ -119,6 +124,16 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun discountId(): String = discountId.getRequired("discount_id")
+
+    /**
+     * Whether this discount should be preserved when a subscription changes plans. Default: false
+     * (discount is removed on plan change)
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun preserveOnPlanChange(): Boolean =
+        preserveOnPlanChange.getRequired("preserve_on_plan_change")
 
     /**
      * List of product IDs to which this discount is restricted.
@@ -215,6 +230,16 @@ private constructor(
     @JsonProperty("discount_id") @ExcludeMissing fun _discountId(): JsonField<String> = discountId
 
     /**
+     * Returns the raw JSON value of [preserveOnPlanChange].
+     *
+     * Unlike [preserveOnPlanChange], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("preserve_on_plan_change")
+    @ExcludeMissing
+    fun _preserveOnPlanChange(): JsonField<Boolean> = preserveOnPlanChange
+
+    /**
      * Returns the raw JSON value of [restrictedTo].
      *
      * Unlike [restrictedTo], this method doesn't throw if the JSON field has an unexpected type.
@@ -294,6 +319,7 @@ private constructor(
          * .code()
          * .createdAt()
          * .discountId()
+         * .preserveOnPlanChange()
          * .restrictedTo()
          * .timesUsed()
          * .type()
@@ -310,6 +336,7 @@ private constructor(
         private var code: JsonField<String>? = null
         private var createdAt: JsonField<OffsetDateTime>? = null
         private var discountId: JsonField<String>? = null
+        private var preserveOnPlanChange: JsonField<Boolean>? = null
         private var restrictedTo: JsonField<MutableList<String>>? = null
         private var timesUsed: JsonField<Int>? = null
         private var type: JsonField<DiscountType>? = null
@@ -325,6 +352,7 @@ private constructor(
             code = discount.code
             createdAt = discount.createdAt
             discountId = discount.discountId
+            preserveOnPlanChange = discount.preserveOnPlanChange
             restrictedTo = discount.restrictedTo.map { it.toMutableList() }
             timesUsed = discount.timesUsed
             type = discount.type
@@ -396,6 +424,24 @@ private constructor(
          * value.
          */
         fun discountId(discountId: JsonField<String>) = apply { this.discountId = discountId }
+
+        /**
+         * Whether this discount should be preserved when a subscription changes plans. Default:
+         * false (discount is removed on plan change)
+         */
+        fun preserveOnPlanChange(preserveOnPlanChange: Boolean) =
+            preserveOnPlanChange(JsonField.of(preserveOnPlanChange))
+
+        /**
+         * Sets [Builder.preserveOnPlanChange] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.preserveOnPlanChange] with a well-typed [Boolean] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun preserveOnPlanChange(preserveOnPlanChange: JsonField<Boolean>) = apply {
+            this.preserveOnPlanChange = preserveOnPlanChange
+        }
 
         /** List of product IDs to which this discount is restricted. */
         fun restrictedTo(restrictedTo: List<String>) = restrictedTo(JsonField.of(restrictedTo))
@@ -545,6 +591,7 @@ private constructor(
          * .code()
          * .createdAt()
          * .discountId()
+         * .preserveOnPlanChange()
          * .restrictedTo()
          * .timesUsed()
          * .type()
@@ -559,6 +606,7 @@ private constructor(
                 checkRequired("code", code),
                 checkRequired("createdAt", createdAt),
                 checkRequired("discountId", discountId),
+                checkRequired("preserveOnPlanChange", preserveOnPlanChange),
                 checkRequired("restrictedTo", restrictedTo).map { it.toImmutable() },
                 checkRequired("timesUsed", timesUsed),
                 checkRequired("type", type),
@@ -582,6 +630,7 @@ private constructor(
         code()
         createdAt()
         discountId()
+        preserveOnPlanChange()
         restrictedTo()
         timesUsed()
         type().validate()
@@ -611,6 +660,7 @@ private constructor(
             (if (code.asKnown() == null) 0 else 1) +
             (if (createdAt.asKnown() == null) 0 else 1) +
             (if (discountId.asKnown() == null) 0 else 1) +
+            (if (preserveOnPlanChange.asKnown() == null) 0 else 1) +
             (restrictedTo.asKnown()?.size ?: 0) +
             (if (timesUsed.asKnown() == null) 0 else 1) +
             (type.asKnown()?.validity() ?: 0) +
@@ -630,6 +680,7 @@ private constructor(
             code == other.code &&
             createdAt == other.createdAt &&
             discountId == other.discountId &&
+            preserveOnPlanChange == other.preserveOnPlanChange &&
             restrictedTo == other.restrictedTo &&
             timesUsed == other.timesUsed &&
             type == other.type &&
@@ -647,6 +698,7 @@ private constructor(
             code,
             createdAt,
             discountId,
+            preserveOnPlanChange,
             restrictedTo,
             timesUsed,
             type,
@@ -661,5 +713,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Discount{amount=$amount, businessId=$businessId, code=$code, createdAt=$createdAt, discountId=$discountId, restrictedTo=$restrictedTo, timesUsed=$timesUsed, type=$type, expiresAt=$expiresAt, name=$name, subscriptionCycles=$subscriptionCycles, usageLimit=$usageLimit, additionalProperties=$additionalProperties}"
+        "Discount{amount=$amount, businessId=$businessId, code=$code, createdAt=$createdAt, discountId=$discountId, preserveOnPlanChange=$preserveOnPlanChange, restrictedTo=$restrictedTo, timesUsed=$timesUsed, type=$type, expiresAt=$expiresAt, name=$name, subscriptionCycles=$subscriptionCycles, usageLimit=$usageLimit, additionalProperties=$additionalProperties}"
 }
