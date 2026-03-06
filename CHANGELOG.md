@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.87.2 (2026-03-06)
+
+Full Changelog: [v1.87.1...v1.87.2](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.87.1...v1.87.2)
+
+### Bug Fixes
+
+* **test:** add required customer and payloadType fields to WebhookPayloadTest Dispute builders ([1dc46a4](https://github.com/dodopayments/dodopayments-kotlin/commit/1dc46a43b40a7a20486e959d2a94fed037eaf8c3))
+
 ## 1.87.1 (2026-03-06)
 
 Full Changelog: [v1.87.0...v1.87.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.87.0...v1.87.1)
