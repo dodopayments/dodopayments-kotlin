@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.87.1 (2026-03-06)
+
+Full Changelog: [v1.87.0...v1.87.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.87.0...v1.87.1)
+
+### Chores
+
+* **internal:** bump palantir-java-format ([9b549b2](https://github.com/dodopayments/dodopayments-kotlin/commit/9b549b2f661a301ebb96bd4422e4ee4e82813629))
+* **internal:** codegen related update ([7d44f9c](https://github.com/dodopayments/dodopayments-kotlin/commit/7d44f9cdbdd6311f1370fdf05f73db4748fbf52a))
+* **test:** do not count install time for mock server timeout ([0bf3140](https://github.com/dodopayments/dodopayments-kotlin/commit/0bf31404e7d2be7288427ba1fabd177545b81039))
+
 ## 1.87.0 (2026-03-05)
 
 Full Changelog: [v1.86.3...v1.87.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.86.3...v1.87.0)
