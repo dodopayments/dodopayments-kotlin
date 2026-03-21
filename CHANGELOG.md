@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.87.3 (2026-03-21)
+
+Full Changelog: [v1.87.2...v1.87.3](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.87.2...v1.87.3)
+
+### Bug Fixes
+
+* **client:** allow updating header/query affecting fields in `toBuilder()` ([eddcb51](https://github.com/dodopayments/dodopayments-kotlin/commit/eddcb511a49ec6884dc4993af72fa1d4eb1aa82f))
+* **client:** incorrect `Retry-After` parsing ([93262a6](https://github.com/dodopayments/dodopayments-kotlin/commit/93262a61069eabede4770339b0d3a46bc4824831))
+
+
+### Chores
+
+* **internal:** bump ktfmt ([7472394](https://github.com/dodopayments/dodopayments-kotlin/commit/747239479e1df6da01b2dd8ceea54b993accf6a5))
+* **internal:** tweak CI branches ([474c847](https://github.com/dodopayments/dodopayments-kotlin/commit/474c84749256f833614eec3937a798d9a0be5603))
+* **internal:** update retry delay tests ([958af61](https://github.com/dodopayments/dodopayments-kotlin/commit/958af611639c2b16f573d26f48b419a2b929c116))
+* **tests:** bump steady to v0.19.4 ([c29ace5](https://github.com/dodopayments/dodopayments-kotlin/commit/c29ace559e567c2d0aacc057b80a9f05eb45000a))
+* **tests:** bump steady to v0.19.5 ([c6426b6](https://github.com/dodopayments/dodopayments-kotlin/commit/c6426b6752e18a3bb79ea0720a6f9577908cdce9))
+
+
+### Refactors
+
+* **tests:** switch from prism to steady ([0d01105](https://github.com/dodopayments/dodopayments-kotlin/commit/0d01105e549945b27482e52de00370f704ad4094))
+
 ## 1.87.2 (2026-03-06)
 
 Full Changelog: [v1.87.1...v1.87.2](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.87.1...v1.87.2)
