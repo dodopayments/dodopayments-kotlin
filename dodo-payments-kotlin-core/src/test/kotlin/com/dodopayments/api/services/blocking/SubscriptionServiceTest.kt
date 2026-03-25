@@ -179,6 +179,18 @@ internal class SubscriptionServiceTest {
     }
 
     @Test
+    fun cancelChangePlan() {
+        val client =
+            DodoPaymentsOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val subscriptionService = client.subscriptions()
+
+        subscriptionService.cancelChangePlan("subscription_id")
+    }
+
+    @Test
     fun changePlan() {
         val client =
             DodoPaymentsOkHttpClient.builder()
