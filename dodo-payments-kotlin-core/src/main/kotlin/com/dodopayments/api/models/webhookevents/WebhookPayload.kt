@@ -2732,6 +2732,7 @@ private constructor(
             private val discountId: JsonField<String>,
             private val expiresAt: JsonField<OffsetDateTime>,
             private val paymentMethodId: JsonField<String>,
+            private val scheduledChange: JsonField<Subscription.ScheduledChange>,
             private val taxId: JsonField<String>,
             private val payloadType: JsonField<PayloadType>,
             private val additionalProperties: MutableMap<String, JsonValue>,
@@ -2831,6 +2832,9 @@ private constructor(
                 @JsonProperty("payment_method_id")
                 @ExcludeMissing
                 paymentMethodId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("scheduled_change")
+                @ExcludeMissing
+                scheduledChange: JsonField<Subscription.ScheduledChange> = JsonMissing.of(),
                 @JsonProperty("tax_id") @ExcludeMissing taxId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("payload_type")
                 @ExcludeMissing
@@ -2866,6 +2870,7 @@ private constructor(
                 discountId,
                 expiresAt,
                 paymentMethodId,
+                scheduledChange,
                 taxId,
                 payloadType,
                 mutableMapOf(),
@@ -2903,6 +2908,7 @@ private constructor(
                     .discountId(discountId)
                     .expiresAt(expiresAt)
                     .paymentMethodId(paymentMethodId)
+                    .scheduledChange(scheduledChange)
                     .taxId(taxId)
                     .build()
 
@@ -3181,6 +3187,15 @@ private constructor(
              *   (e.g. if the server responded with an unexpected value).
              */
             fun paymentMethodId(): String? = paymentMethodId.getNullable("payment_method_id")
+
+            /**
+             * Scheduled plan change details, if any
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun scheduledChange(): Subscription.ScheduledChange? =
+                scheduledChange.getNullable("scheduled_change")
 
             /**
              * Tax identifier provided for this subscription (if applicable)
@@ -3494,6 +3509,16 @@ private constructor(
             fun _paymentMethodId(): JsonField<String> = paymentMethodId
 
             /**
+             * Returns the raw JSON value of [scheduledChange].
+             *
+             * Unlike [scheduledChange], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("scheduled_change")
+            @ExcludeMissing
+            fun _scheduledChange(): JsonField<Subscription.ScheduledChange> = scheduledChange
+
+            /**
              * Returns the raw JSON value of [taxId].
              *
              * Unlike [taxId], this method doesn't throw if the JSON field has an unexpected type.
@@ -3597,6 +3622,8 @@ private constructor(
                 private var discountId: JsonField<String> = JsonMissing.of()
                 private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var paymentMethodId: JsonField<String> = JsonMissing.of()
+                private var scheduledChange: JsonField<Subscription.ScheduledChange> =
+                    JsonMissing.of()
                 private var taxId: JsonField<String> = JsonMissing.of()
                 private var payloadType: JsonField<PayloadType>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -3635,6 +3662,7 @@ private constructor(
                     discountId = subscription.discountId
                     expiresAt = subscription.expiresAt
                     paymentMethodId = subscription.paymentMethodId
+                    scheduledChange = subscription.scheduledChange
                     taxId = subscription.taxId
                     payloadType = subscription.payloadType
                     additionalProperties = subscription.additionalProperties.toMutableMap()
@@ -4154,6 +4182,22 @@ private constructor(
                     this.paymentMethodId = paymentMethodId
                 }
 
+                /** Scheduled plan change details, if any */
+                fun scheduledChange(scheduledChange: Subscription.ScheduledChange?) =
+                    scheduledChange(JsonField.ofNullable(scheduledChange))
+
+                /**
+                 * Sets [Builder.scheduledChange] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.scheduledChange] with a well-typed
+                 * [Subscription.ScheduledChange] value instead. This method is primarily for
+                 * setting the field to an undocumented or not yet supported value.
+                 */
+                fun scheduledChange(scheduledChange: JsonField<Subscription.ScheduledChange>) =
+                    apply {
+                        this.scheduledChange = scheduledChange
+                    }
+
                 /** Tax identifier provided for this subscription (if applicable) */
                 fun taxId(taxId: String?) = taxId(JsonField.ofNullable(taxId))
 
@@ -4272,6 +4316,7 @@ private constructor(
                         discountId,
                         expiresAt,
                         paymentMethodId,
+                        scheduledChange,
                         taxId,
                         checkRequired("payloadType", payloadType),
                         additionalProperties.toMutableMap(),
@@ -4315,6 +4360,7 @@ private constructor(
                 discountId()
                 expiresAt()
                 paymentMethodId()
+                scheduledChange()?.validate()
                 taxId()
                 payloadType().validate()
                 validated = true
@@ -4365,6 +4411,7 @@ private constructor(
                     (if (discountId.asKnown() == null) 0 else 1) +
                     (if (expiresAt.asKnown() == null) 0 else 1) +
                     (if (paymentMethodId.asKnown() == null) 0 else 1) +
+                    (scheduledChange.asKnown()?.validity() ?: 0) +
                     (if (taxId.asKnown() == null) 0 else 1) +
                     (payloadType.asKnown()?.validity() ?: 0)
 
@@ -4530,6 +4577,7 @@ private constructor(
                     discountId == other.discountId &&
                     expiresAt == other.expiresAt &&
                     paymentMethodId == other.paymentMethodId &&
+                    scheduledChange == other.scheduledChange &&
                     taxId == other.taxId &&
                     payloadType == other.payloadType &&
                     additionalProperties == other.additionalProperties
@@ -4567,6 +4615,7 @@ private constructor(
                     discountId,
                     expiresAt,
                     paymentMethodId,
+                    scheduledChange,
                     taxId,
                     payloadType,
                     additionalProperties,
@@ -4576,7 +4625,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Subscription{addons=$addons, billing=$billing, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, creditEntitlementCart=$creditEntitlementCart, currency=$currency, customer=$customer, metadata=$metadata, meterCreditEntitlementCart=$meterCreditEntitlementCart, meters=$meters, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancelledAt=$cancelledAt, customFieldResponses=$customFieldResponses, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, expiresAt=$expiresAt, paymentMethodId=$paymentMethodId, taxId=$taxId, payloadType=$payloadType, additionalProperties=$additionalProperties}"
+                "Subscription{addons=$addons, billing=$billing, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, creditEntitlementCart=$creditEntitlementCart, currency=$currency, customer=$customer, metadata=$metadata, meterCreditEntitlementCart=$meterCreditEntitlementCart, meters=$meters, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancelledAt=$cancelledAt, customFieldResponses=$customFieldResponses, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, expiresAt=$expiresAt, paymentMethodId=$paymentMethodId, scheduledChange=$scheduledChange, taxId=$taxId, payloadType=$payloadType, additionalProperties=$additionalProperties}"
         }
 
         class Refund

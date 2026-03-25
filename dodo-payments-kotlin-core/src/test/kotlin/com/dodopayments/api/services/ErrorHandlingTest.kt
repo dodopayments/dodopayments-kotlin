@@ -107,6 +107,7 @@ internal class ErrorHandlingTest {
                                 .build()
                         )
                         .billingCurrency(Currency.AED)
+                        .cancelUrl("cancel_url")
                         .confirm(true)
                         .addCustomField(
                             CustomField.builder()
@@ -269,6 +270,7 @@ internal class ErrorHandlingTest {
                                 .build()
                         )
                         .billingCurrency(Currency.AED)
+                        .cancelUrl("cancel_url")
                         .confirm(true)
                         .addCustomField(
                             CustomField.builder()
@@ -431,6 +433,7 @@ internal class ErrorHandlingTest {
                                 .build()
                         )
                         .billingCurrency(Currency.AED)
+                        .cancelUrl("cancel_url")
                         .confirm(true)
                         .addCustomField(
                             CustomField.builder()
@@ -593,6 +596,7 @@ internal class ErrorHandlingTest {
                                 .build()
                         )
                         .billingCurrency(Currency.AED)
+                        .cancelUrl("cancel_url")
                         .confirm(true)
                         .addCustomField(
                             CustomField.builder()
@@ -755,6 +759,7 @@ internal class ErrorHandlingTest {
                                 .build()
                         )
                         .billingCurrency(Currency.AED)
+                        .cancelUrl("cancel_url")
                         .confirm(true)
                         .addCustomField(
                             CustomField.builder()
@@ -917,6 +922,7 @@ internal class ErrorHandlingTest {
                                 .build()
                         )
                         .billingCurrency(Currency.AED)
+                        .cancelUrl("cancel_url")
                         .confirm(true)
                         .addCustomField(
                             CustomField.builder()
@@ -1079,6 +1085,7 @@ internal class ErrorHandlingTest {
                                 .build()
                         )
                         .billingCurrency(Currency.AED)
+                        .cancelUrl("cancel_url")
                         .confirm(true)
                         .addCustomField(
                             CustomField.builder()
@@ -1241,6 +1248,7 @@ internal class ErrorHandlingTest {
                                 .build()
                         )
                         .billingCurrency(Currency.AED)
+                        .cancelUrl("cancel_url")
                         .confirm(true)
                         .addCustomField(
                             CustomField.builder()
@@ -1403,6 +1411,7 @@ internal class ErrorHandlingTest {
                                 .build()
                         )
                         .billingCurrency(Currency.AED)
+                        .cancelUrl("cancel_url")
                         .confirm(true)
                         .addCustomField(
                             CustomField.builder()
@@ -1565,6 +1574,7 @@ internal class ErrorHandlingTest {
                                 .build()
                         )
                         .billingCurrency(Currency.AED)
+                        .cancelUrl("cancel_url")
                         .confirm(true)
                         .addCustomField(
                             CustomField.builder()
@@ -1727,6 +1737,7 @@ internal class ErrorHandlingTest {
                                 .build()
                         )
                         .billingCurrency(Currency.AED)
+                        .cancelUrl("cancel_url")
                         .confirm(true)
                         .addCustomField(
                             CustomField.builder()
@@ -1889,6 +1900,7 @@ internal class ErrorHandlingTest {
                                 .build()
                         )
                         .billingCurrency(Currency.AED)
+                        .cancelUrl("cancel_url")
                         .confirm(true)
                         .addCustomField(
                             CustomField.builder()
@@ -2051,6 +2063,7 @@ internal class ErrorHandlingTest {
                                 .build()
                         )
                         .billingCurrency(Currency.AED)
+                        .cancelUrl("cancel_url")
                         .confirm(true)
                         .addCustomField(
                             CustomField.builder()
@@ -2213,6 +2226,7 @@ internal class ErrorHandlingTest {
                                 .build()
                         )
                         .billingCurrency(Currency.AED)
+                        .cancelUrl("cancel_url")
                         .confirm(true)
                         .addCustomField(
                             CustomField.builder()
@@ -2375,6 +2389,7 @@ internal class ErrorHandlingTest {
                                 .build()
                         )
                         .billingCurrency(Currency.AED)
+                        .cancelUrl("cancel_url")
                         .confirm(true)
                         .addCustomField(
                             CustomField.builder()
@@ -2537,6 +2552,7 @@ internal class ErrorHandlingTest {
                                 .build()
                         )
                         .billingCurrency(Currency.AED)
+                        .cancelUrl("cancel_url")
                         .confirm(true)
                         .addCustomField(
                             CustomField.builder()
@@ -2697,6 +2713,7 @@ internal class ErrorHandlingTest {
                                 .build()
                         )
                         .billingCurrency(Currency.AED)
+                        .cancelUrl("cancel_url")
                         .confirm(true)
                         .addCustomField(
                             CustomField.builder()

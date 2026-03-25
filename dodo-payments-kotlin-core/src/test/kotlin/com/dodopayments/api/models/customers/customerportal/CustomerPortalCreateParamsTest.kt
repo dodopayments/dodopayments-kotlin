@@ -10,7 +10,11 @@ internal class CustomerPortalCreateParamsTest {
 
     @Test
     fun create() {
-        CustomerPortalCreateParams.builder().customerId("customer_id").sendEmail(true).build()
+        CustomerPortalCreateParams.builder()
+            .customerId("customer_id")
+            .returnUrl("return_url")
+            .sendEmail(true)
+            .build()
     }
 
     @Test
@@ -25,11 +29,21 @@ internal class CustomerPortalCreateParamsTest {
     @Test
     fun queryParams() {
         val params =
-            CustomerPortalCreateParams.builder().customerId("customer_id").sendEmail(true).build()
+            CustomerPortalCreateParams.builder()
+                .customerId("customer_id")
+                .returnUrl("return_url")
+                .sendEmail(true)
+                .build()
 
         val queryParams = params._queryParams()
 
-        assertThat(queryParams).isEqualTo(QueryParams.builder().put("send_email", "true").build())
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("return_url", "return_url")
+                    .put("send_email", "true")
+                    .build()
+            )
     }
 
     @Test

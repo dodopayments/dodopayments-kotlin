@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
@@ -219,6 +220,7 @@ private constructor(
     class ImmediateCharge
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
+        private val effectiveAt: JsonField<OffsetDateTime>,
         private val lineItems: JsonField<List<LineItem>>,
         private val summary: JsonField<Summary>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -226,11 +228,22 @@ private constructor(
 
         @JsonCreator
         private constructor(
+            @JsonProperty("effective_at")
+            @ExcludeMissing
+            effectiveAt: JsonField<OffsetDateTime> = JsonMissing.of(),
             @JsonProperty("line_items")
             @ExcludeMissing
             lineItems: JsonField<List<LineItem>> = JsonMissing.of(),
             @JsonProperty("summary") @ExcludeMissing summary: JsonField<Summary> = JsonMissing.of(),
-        ) : this(lineItems, summary, mutableMapOf())
+        ) : this(effectiveAt, lineItems, summary, mutableMapOf())
+
+        /**
+         * When the plan change will be effective
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun effectiveAt(): OffsetDateTime = effectiveAt.getRequired("effective_at")
 
         /**
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
@@ -243,6 +256,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun summary(): Summary = summary.getRequired("summary")
+
+        /**
+         * Returns the raw JSON value of [effectiveAt].
+         *
+         * Unlike [effectiveAt], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("effective_at")
+        @ExcludeMissing
+        fun _effectiveAt(): JsonField<OffsetDateTime> = effectiveAt
 
         /**
          * Returns the raw JSON value of [lineItems].
@@ -279,6 +301,7 @@ private constructor(
              *
              * The following fields are required:
              * ```kotlin
+             * .effectiveAt()
              * .lineItems()
              * .summary()
              * ```
@@ -289,14 +312,30 @@ private constructor(
         /** A builder for [ImmediateCharge]. */
         class Builder internal constructor() {
 
+            private var effectiveAt: JsonField<OffsetDateTime>? = null
             private var lineItems: JsonField<MutableList<LineItem>>? = null
             private var summary: JsonField<Summary>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(immediateCharge: ImmediateCharge) = apply {
+                effectiveAt = immediateCharge.effectiveAt
                 lineItems = immediateCharge.lineItems.map { it.toMutableList() }
                 summary = immediateCharge.summary
                 additionalProperties = immediateCharge.additionalProperties.toMutableMap()
+            }
+
+            /** When the plan change will be effective */
+            fun effectiveAt(effectiveAt: OffsetDateTime) = effectiveAt(JsonField.of(effectiveAt))
+
+            /**
+             * Sets [Builder.effectiveAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.effectiveAt] with a well-typed [OffsetDateTime]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun effectiveAt(effectiveAt: JsonField<OffsetDateTime>) = apply {
+                this.effectiveAt = effectiveAt
             }
 
             fun lineItems(lineItems: List<LineItem>) = lineItems(JsonField.of(lineItems))
@@ -371,6 +410,7 @@ private constructor(
              *
              * The following fields are required:
              * ```kotlin
+             * .effectiveAt()
              * .lineItems()
              * .summary()
              * ```
@@ -379,6 +419,7 @@ private constructor(
              */
             fun build(): ImmediateCharge =
                 ImmediateCharge(
+                    checkRequired("effectiveAt", effectiveAt),
                     checkRequired("lineItems", lineItems).map { it.toImmutable() },
                     checkRequired("summary", summary),
                     additionalProperties.toMutableMap(),
@@ -392,6 +433,7 @@ private constructor(
                 return@apply
             }
 
+            effectiveAt()
             lineItems().forEach { it.validate() }
             summary().validate()
             validated = true
@@ -412,7 +454,8 @@ private constructor(
          * Used for best match union deserialization.
          */
         internal fun validity(): Int =
-            (lineItems.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (effectiveAt.asKnown() == null) 0 else 1) +
+                (lineItems.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
                 (summary.asKnown()?.validity() ?: 0)
 
         @JsonDeserialize(using = LineItem.Deserializer::class)
@@ -3379,17 +3422,20 @@ private constructor(
             }
 
             return other is ImmediateCharge &&
+                effectiveAt == other.effectiveAt &&
                 lineItems == other.lineItems &&
                 summary == other.summary &&
                 additionalProperties == other.additionalProperties
         }
 
-        private val hashCode: Int by lazy { Objects.hash(lineItems, summary, additionalProperties) }
+        private val hashCode: Int by lazy {
+            Objects.hash(effectiveAt, lineItems, summary, additionalProperties)
+        }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ImmediateCharge{lineItems=$lineItems, summary=$summary, additionalProperties=$additionalProperties}"
+            "ImmediateCharge{effectiveAt=$effectiveAt, lineItems=$lineItems, summary=$summary, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
