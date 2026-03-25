@@ -24,6 +24,7 @@ internal class DisputeListPageResponseTest {
                         .disputeStage(DisputeStage.PRE_DISPUTE)
                         .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                         .paymentId("payment_id")
+                        .isResolvedByRdr(true)
                         .build()
                 )
                 .build()
@@ -39,6 +40,7 @@ internal class DisputeListPageResponseTest {
                     .disputeStage(DisputeStage.PRE_DISPUTE)
                     .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                     .paymentId("payment_id")
+                    .isResolvedByRdr(true)
                     .build()
             )
     }
@@ -58,6 +60,7 @@ internal class DisputeListPageResponseTest {
                         .disputeStage(DisputeStage.PRE_DISPUTE)
                         .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                         .paymentId("payment_id")
+                        .isResolvedByRdr(true)
                         .build()
                 )
                 .build()

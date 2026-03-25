@@ -37,6 +37,7 @@ internal class GetDisputeTest {
                 .disputeStage(DisputeStage.PRE_DISPUTE)
                 .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                 .paymentId("payment_id")
+                .isResolvedByRdr(true)
                 .reason("reason")
                 .remarks("remarks")
                 .build()
@@ -64,6 +65,7 @@ internal class GetDisputeTest {
         assertThat(getDispute.disputeStage()).isEqualTo(DisputeStage.PRE_DISPUTE)
         assertThat(getDispute.disputeStatus()).isEqualTo(DisputeStatus.DISPUTE_OPENED)
         assertThat(getDispute.paymentId()).isEqualTo("payment_id")
+        assertThat(getDispute.isResolvedByRdr()).isEqualTo(true)
         assertThat(getDispute.reason()).isEqualTo("reason")
         assertThat(getDispute.remarks()).isEqualTo("remarks")
     }
@@ -94,6 +96,7 @@ internal class GetDisputeTest {
                 .disputeStage(DisputeStage.PRE_DISPUTE)
                 .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                 .paymentId("payment_id")
+                .isResolvedByRdr(true)
                 .reason("reason")
                 .remarks("remarks")
                 .build()
