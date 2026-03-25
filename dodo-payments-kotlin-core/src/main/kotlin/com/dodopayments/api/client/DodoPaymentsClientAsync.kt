@@ -19,12 +19,14 @@ import com.dodopayments.api.services.async.MeterServiceAsync
 import com.dodopayments.api.services.async.MiscServiceAsync
 import com.dodopayments.api.services.async.PaymentServiceAsync
 import com.dodopayments.api.services.async.PayoutServiceAsync
+import com.dodopayments.api.services.async.ProductCollectionServiceAsync
 import com.dodopayments.api.services.async.ProductServiceAsync
 import com.dodopayments.api.services.async.RefundServiceAsync
 import com.dodopayments.api.services.async.SubscriptionServiceAsync
 import com.dodopayments.api.services.async.UsageEventServiceAsync
 import com.dodopayments.api.services.async.WebhookEventServiceAsync
 import com.dodopayments.api.services.async.WebhookServiceAsync
+import com.dodopayments.api.services.async.YourWebhookUrlServiceAsync
 
 /**
  * A client for interacting with the Dodo Payments REST API asynchronously. You can also switch to
@@ -106,6 +108,10 @@ interface DodoPaymentsClientAsync {
 
     fun creditEntitlements(): CreditEntitlementServiceAsync
 
+    fun productCollections(): ProductCollectionServiceAsync
+
+    fun yourWebhookUrl(): YourWebhookUrlServiceAsync
+
     /**
      * Closes this client, relinquishing any underlying resources.
      *
@@ -177,5 +183,9 @@ interface DodoPaymentsClientAsync {
         fun balances(): BalanceServiceAsync.WithRawResponse
 
         fun creditEntitlements(): CreditEntitlementServiceAsync.WithRawResponse
+
+        fun productCollections(): ProductCollectionServiceAsync.WithRawResponse
+
+        fun yourWebhookUrl(): YourWebhookUrlServiceAsync.WithRawResponse
     }
 }

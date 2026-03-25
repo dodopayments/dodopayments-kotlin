@@ -18,6 +18,7 @@ import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepare
 import com.dodopayments.api.models.subscriptions.Subscription
+import com.dodopayments.api.models.subscriptions.SubscriptionCancelChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeResponse
@@ -78,6 +79,14 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
     ): SubscriptionListPage =
         // get /subscriptions
         withRawResponse().list(params, requestOptions).parse()
+
+    override fun cancelChangePlan(
+        params: SubscriptionCancelChangePlanParams,
+        requestOptions: RequestOptions,
+    ) {
+        // delete /subscriptions/{subscription_id}/change-plan/scheduled
+        withRawResponse().cancelChangePlan(params, requestOptions)
+    }
 
     override fun changePlan(params: SubscriptionChangePlanParams, requestOptions: RequestOptions) {
         // post /subscriptions/{subscription_id}/change-plan
@@ -253,6 +262,35 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                             .response(it)
                             .build()
                     }
+            }
+        }
+
+        private val cancelChangePlanHandler: Handler<Void?> = emptyHandler()
+
+        override fun cancelChangePlan(
+            params: SubscriptionCancelChangePlanParams,
+            requestOptions: RequestOptions,
+        ): HttpResponse {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("subscriptionId", params.subscriptionId())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.DELETE)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments(
+                        "subscriptions",
+                        params._pathParam(0),
+                        "change-plan",
+                        "scheduled",
+                    )
+                    .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response.use { cancelChangePlanHandler.handle(it) }
             }
         }
 
