@@ -36,8 +36,6 @@ import com.dodopayments.api.services.async.PaymentServiceAsync
 import com.dodopayments.api.services.async.PaymentServiceAsyncImpl
 import com.dodopayments.api.services.async.PayoutServiceAsync
 import com.dodopayments.api.services.async.PayoutServiceAsyncImpl
-import com.dodopayments.api.services.async.ProductCollectionServiceAsync
-import com.dodopayments.api.services.async.ProductCollectionServiceAsyncImpl
 import com.dodopayments.api.services.async.ProductServiceAsync
 import com.dodopayments.api.services.async.ProductServiceAsyncImpl
 import com.dodopayments.api.services.async.RefundServiceAsync
@@ -50,8 +48,6 @@ import com.dodopayments.api.services.async.WebhookEventServiceAsync
 import com.dodopayments.api.services.async.WebhookEventServiceAsyncImpl
 import com.dodopayments.api.services.async.WebhookServiceAsync
 import com.dodopayments.api.services.async.WebhookServiceAsyncImpl
-import com.dodopayments.api.services.async.YourWebhookUrlServiceAsync
-import com.dodopayments.api.services.async.YourWebhookUrlServiceAsyncImpl
 
 class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
     DodoPaymentsClientAsync {
@@ -157,14 +153,6 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
         CreditEntitlementServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
-    private val productCollections: ProductCollectionServiceAsync by lazy {
-        ProductCollectionServiceAsyncImpl(clientOptionsWithUserAgent)
-    }
-
-    private val yourWebhookUrl: YourWebhookUrlServiceAsync by lazy {
-        YourWebhookUrlServiceAsyncImpl(clientOptionsWithUserAgent)
-    }
-
     override fun sync(): DodoPaymentsClient = sync
 
     override fun withRawResponse(): DodoPaymentsClientAsync.WithRawResponse = withRawResponse
@@ -215,10 +203,6 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
     override fun balances(): BalanceServiceAsync = balances
 
     override fun creditEntitlements(): CreditEntitlementServiceAsync = creditEntitlements
-
-    override fun productCollections(): ProductCollectionServiceAsync = productCollections
-
-    override fun yourWebhookUrl(): YourWebhookUrlServiceAsync = yourWebhookUrl
 
     override fun close() = clientOptions.close()
 
@@ -313,14 +297,6 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
             CreditEntitlementServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
-        private val productCollections: ProductCollectionServiceAsync.WithRawResponse by lazy {
-            ProductCollectionServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
-
-        private val yourWebhookUrl: YourWebhookUrlServiceAsync.WithRawResponse by lazy {
-            YourWebhookUrlServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
-
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): DodoPaymentsClientAsync.WithRawResponse =
@@ -374,10 +350,5 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
 
         override fun creditEntitlements(): CreditEntitlementServiceAsync.WithRawResponse =
             creditEntitlements
-
-        override fun productCollections(): ProductCollectionServiceAsync.WithRawResponse =
-            productCollections
-
-        override fun yourWebhookUrl(): YourWebhookUrlServiceAsync.WithRawResponse = yourWebhookUrl
     }
 }

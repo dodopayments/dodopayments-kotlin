@@ -6,7 +6,6 @@ import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponse
 import com.dodopayments.api.models.invoices.payments.PaymentRetrieveParams
-import com.dodopayments.api.models.invoices.payments.PaymentRetrievePayoutParams
 import com.dodopayments.api.models.invoices.payments.PaymentRetrieveRefundParams
 import com.google.errorprone.annotations.MustBeClosed
 
@@ -42,25 +41,6 @@ interface PaymentService {
     @MustBeClosed
     fun retrieve(paymentId: String, requestOptions: RequestOptions): HttpResponse =
         retrieve(paymentId, PaymentRetrieveParams.none(), requestOptions)
-
-    @MustBeClosed
-    fun retrievePayout(
-        payoutId: String,
-        params: PaymentRetrievePayoutParams = PaymentRetrievePayoutParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): HttpResponse = retrievePayout(params.toBuilder().payoutId(payoutId).build(), requestOptions)
-
-    /** @see retrievePayout */
-    @MustBeClosed
-    fun retrievePayout(
-        params: PaymentRetrievePayoutParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): HttpResponse
-
-    /** @see retrievePayout */
-    @MustBeClosed
-    fun retrievePayout(payoutId: String, requestOptions: RequestOptions): HttpResponse =
-        retrievePayout(payoutId, PaymentRetrievePayoutParams.none(), requestOptions)
 
     @MustBeClosed
     fun retrieveRefund(
@@ -113,30 +93,6 @@ interface PaymentService {
         @MustBeClosed
         fun retrieve(paymentId: String, requestOptions: RequestOptions): HttpResponse =
             retrieve(paymentId, PaymentRetrieveParams.none(), requestOptions)
-
-        /**
-         * Returns a raw HTTP response for `get /invoices/payouts/{payout_id}`, but is otherwise the
-         * same as [PaymentService.retrievePayout].
-         */
-        @MustBeClosed
-        fun retrievePayout(
-            payoutId: String,
-            params: PaymentRetrievePayoutParams = PaymentRetrievePayoutParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse =
-            retrievePayout(params.toBuilder().payoutId(payoutId).build(), requestOptions)
-
-        /** @see retrievePayout */
-        @MustBeClosed
-        fun retrievePayout(
-            params: PaymentRetrievePayoutParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse
-
-        /** @see retrievePayout */
-        @MustBeClosed
-        fun retrievePayout(payoutId: String, requestOptions: RequestOptions): HttpResponse =
-            retrievePayout(payoutId, PaymentRetrievePayoutParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /invoices/refunds/{refund_id}`, but is otherwise the

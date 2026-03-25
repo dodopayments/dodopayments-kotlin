@@ -13,7 +13,6 @@ import com.dodopayments.api.core.http.HttpResponse
 import com.dodopayments.api.core.http.HttpResponse.Handler
 import com.dodopayments.api.core.prepareAsync
 import com.dodopayments.api.models.invoices.payments.PaymentRetrieveParams
-import com.dodopayments.api.models.invoices.payments.PaymentRetrievePayoutParams
 import com.dodopayments.api.models.invoices.payments.PaymentRetrieveRefundParams
 
 class PaymentServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -34,13 +33,6 @@ class PaymentServiceAsyncImpl internal constructor(private val clientOptions: Cl
     ): HttpResponse =
         // get /invoices/payments/{payment_id}
         withRawResponse().retrieve(params, requestOptions)
-
-    override suspend fun retrievePayout(
-        params: PaymentRetrievePayoutParams,
-        requestOptions: RequestOptions,
-    ): HttpResponse =
-        // get /invoices/payouts/{payout_id}
-        withRawResponse().retrievePayout(params, requestOptions)
 
     override suspend fun retrieveRefund(
         params: PaymentRetrieveRefundParams,
@@ -74,26 +66,6 @@ class PaymentServiceAsyncImpl internal constructor(private val clientOptions: Cl
                     .method(HttpMethod.GET)
                     .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("invoices", "payments", params._pathParam(0))
-                    .putHeader("Accept", "application/pdf")
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
-            return errorHandler.handle(response)
-        }
-
-        override suspend fun retrievePayout(
-            params: PaymentRetrievePayoutParams,
-            requestOptions: RequestOptions,
-        ): HttpResponse {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
-            checkRequired("payoutId", params.payoutId())
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("invoices", "payouts", params._pathParam(0))
                     .putHeader("Accept", "application/pdf")
                     .build()
                     .prepareAsync(clientOptions, params)
