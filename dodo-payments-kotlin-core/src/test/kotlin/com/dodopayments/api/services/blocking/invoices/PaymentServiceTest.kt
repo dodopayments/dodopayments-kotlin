@@ -36,6 +36,21 @@ internal class PaymentServiceTest {
     }
 
     @Test
+    fun retrievePayout(wmRuntimeInfo: WireMockRuntimeInfo) {
+        val client =
+            DodoPaymentsOkHttpClient.builder()
+                .baseUrl(wmRuntimeInfo.httpBaseUrl)
+                .bearerToken("My Bearer Token")
+                .build()
+        val paymentService = client.invoices().payments()
+        stubFor(get(anyUrl()).willReturn(ok().withBody("abc")))
+
+        val response = paymentService.retrievePayout("payout_id")
+
+        assertThat(response.body()).hasContent("abc")
+    }
+
+    @Test
     fun retrieveRefund(wmRuntimeInfo: WireMockRuntimeInfo) {
         val client =
             DodoPaymentsOkHttpClient.builder()

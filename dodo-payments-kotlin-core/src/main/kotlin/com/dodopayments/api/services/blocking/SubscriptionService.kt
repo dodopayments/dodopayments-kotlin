@@ -7,6 +7,7 @@ import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponse
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.models.subscriptions.Subscription
+import com.dodopayments.api.models.subscriptions.SubscriptionCancelChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeResponse
@@ -88,6 +89,22 @@ interface SubscriptionService {
     /** @see list */
     fun list(requestOptions: RequestOptions): SubscriptionListPage =
         list(SubscriptionListParams.none(), requestOptions)
+
+    fun cancelChangePlan(
+        subscriptionId: String,
+        params: SubscriptionCancelChangePlanParams = SubscriptionCancelChangePlanParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ) = cancelChangePlan(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
+
+    /** @see cancelChangePlan */
+    fun cancelChangePlan(
+        params: SubscriptionCancelChangePlanParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    )
+
+    /** @see cancelChangePlan */
+    fun cancelChangePlan(subscriptionId: String, requestOptions: RequestOptions) =
+        cancelChangePlan(subscriptionId, SubscriptionCancelChangePlanParams.none(), requestOptions)
 
     fun changePlan(
         subscriptionId: String,
@@ -326,6 +343,38 @@ interface SubscriptionService {
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<SubscriptionListPage> =
             list(SubscriptionListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `delete
+         * /subscriptions/{subscription_id}/change-plan/scheduled`, but is otherwise the same as
+         * [SubscriptionService.cancelChangePlan].
+         */
+        @MustBeClosed
+        fun cancelChangePlan(
+            subscriptionId: String,
+            params: SubscriptionCancelChangePlanParams = SubscriptionCancelChangePlanParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse =
+            cancelChangePlan(
+                params.toBuilder().subscriptionId(subscriptionId).build(),
+                requestOptions,
+            )
+
+        /** @see cancelChangePlan */
+        @MustBeClosed
+        fun cancelChangePlan(
+            params: SubscriptionCancelChangePlanParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
+
+        /** @see cancelChangePlan */
+        @MustBeClosed
+        fun cancelChangePlan(subscriptionId: String, requestOptions: RequestOptions): HttpResponse =
+            cancelChangePlan(
+                subscriptionId,
+                SubscriptionCancelChangePlanParams.none(),
+                requestOptions,
+            )
 
         /**
          * Returns a raw HTTP response for `post /subscriptions/{subscription_id}/change-plan`, but
