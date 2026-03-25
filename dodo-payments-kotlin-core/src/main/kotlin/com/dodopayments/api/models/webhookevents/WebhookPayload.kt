@@ -2740,7 +2740,8 @@ private constructor(
             private val discountId: JsonField<String>,
             private val expiresAt: JsonField<OffsetDateTime>,
             private val paymentMethodId: JsonField<String>,
-            private val scheduledChange: JsonField<Subscription.ScheduledChange>,
+            private val scheduledChange:
+                JsonField<com.dodopayments.api.models.subscriptions.Subscription.ScheduledChange>,
             private val taxId: JsonField<String>,
             private val payloadType: JsonField<PayloadType>,
             private val additionalProperties: MutableMap<String, JsonValue>,
@@ -2844,7 +2845,11 @@ private constructor(
                 paymentMethodId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("scheduled_change")
                 @ExcludeMissing
-                scheduledChange: JsonField<Subscription.ScheduledChange> = JsonMissing.of(),
+                scheduledChange:
+                    JsonField<
+                        com.dodopayments.api.models.subscriptions.Subscription.ScheduledChange
+                    > =
+                    JsonMissing.of(),
                 @JsonProperty("tax_id") @ExcludeMissing taxId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("payload_type")
                 @ExcludeMissing
@@ -3205,7 +3210,8 @@ private constructor(
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
              */
-            fun scheduledChange(): Subscription.ScheduledChange? =
+            fun scheduledChange():
+                com.dodopayments.api.models.subscriptions.Subscription.ScheduledChange? =
                 scheduledChange.getNullable("scheduled_change")
 
             /**
@@ -3529,7 +3535,9 @@ private constructor(
              */
             @JsonProperty("scheduled_change")
             @ExcludeMissing
-            fun _scheduledChange(): JsonField<Subscription.ScheduledChange> = scheduledChange
+            fun _scheduledChange():
+                JsonField<com.dodopayments.api.models.subscriptions.Subscription.ScheduledChange> =
+                scheduledChange
 
             /**
              * Returns the raw JSON value of [taxId].
@@ -3637,7 +3645,10 @@ private constructor(
                 private var discountId: JsonField<String> = JsonMissing.of()
                 private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var paymentMethodId: JsonField<String> = JsonMissing.of()
-                private var scheduledChange: JsonField<Subscription.ScheduledChange> =
+                private var scheduledChange:
+                    JsonField<
+                        com.dodopayments.api.models.subscriptions.Subscription.ScheduledChange
+                    > =
                     JsonMissing.of()
                 private var taxId: JsonField<String> = JsonMissing.of()
                 private var payloadType: JsonField<PayloadType>? = null
@@ -4202,20 +4213,25 @@ private constructor(
                 }
 
                 /** Scheduled plan change details, if any */
-                fun scheduledChange(scheduledChange: Subscription.ScheduledChange?) =
-                    scheduledChange(JsonField.ofNullable(scheduledChange))
+                fun scheduledChange(
+                    scheduledChange:
+                        com.dodopayments.api.models.subscriptions.Subscription.ScheduledChange?
+                ) = scheduledChange(JsonField.ofNullable(scheduledChange))
 
                 /**
                  * Sets [Builder.scheduledChange] to an arbitrary JSON value.
                  *
                  * You should usually call [Builder.scheduledChange] with a well-typed
-                 * [Subscription.ScheduledChange] value instead. This method is primarily for
-                 * setting the field to an undocumented or not yet supported value.
+                 * [com.dodopayments.api.models.subscriptions.Subscription.ScheduledChange] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
                  */
-                fun scheduledChange(scheduledChange: JsonField<Subscription.ScheduledChange>) =
-                    apply {
-                        this.scheduledChange = scheduledChange
-                    }
+                fun scheduledChange(
+                    scheduledChange:
+                        JsonField<
+                            com.dodopayments.api.models.subscriptions.Subscription.ScheduledChange
+                        >
+                ) = apply { this.scheduledChange = scheduledChange }
 
                 /** Tax identifier provided for this subscription (if applicable) */
                 fun taxId(taxId: String?) = taxId(JsonField.ofNullable(taxId))
