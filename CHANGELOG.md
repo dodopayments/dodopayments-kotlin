@@ -1,5 +1,24 @@
 # Changelog
 
+## 1.92.0 (2026-03-25)
+
+Full Changelog: [v1.87.3...v1.92.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.87.3...v1.92.0)
+
+### Features
+
+* **api:** added cancel change plan endpoint ([ed68638](https://github.com/dodopayments/dodopayments-kotlin/commit/ed686382d1cf11ad3eaf29e24eea83e832311a37))
+* **api:** manual updates ([79694f7](https://github.com/dodopayments/dodopayments-kotlin/commit/79694f735a27dddfc8af3cc24d9082e4451e3227))
+* **api:** updated openapi spec to 1.92.1 ([ec688b8](https://github.com/dodopayments/dodopayments-kotlin/commit/ec688b815bde2ba3ddc507f53c3d8af0dcd4132e))
+* **api:** updated openapi spec to v1.92.3 ([d87aa83](https://github.com/dodopayments/dodopayments-kotlin/commit/d87aa8374ba70e689918048b2f8bc0102c1c6dd6))
+
+
+### Chores
+
+* **ci:** skip lint on metadata-only changes ([c7273c5](https://github.com/dodopayments/dodopayments-kotlin/commit/c7273c5967202a77fd25ba0526729f158c5f4c9a))
+* **internal:** update gitignore ([2e94846](https://github.com/dodopayments/dodopayments-kotlin/commit/2e948464f79c34b9ce86b76eeeed604ac080e5ba))
+* **tests:** bump steady to v0.19.6 ([84b8d07](https://github.com/dodopayments/dodopayments-kotlin/commit/84b8d07f32ee34762b3cd8855a9cba1fb30dfc0c))
+* **tests:** bump steady to v0.19.7 ([abe0284](https://github.com/dodopayments/dodopayments-kotlin/commit/abe0284873e765f9b462f814b6b57d091d92330f))
+
 ## 1.87.3 (2026-03-21)
 
 Full Changelog: [v1.87.2...v1.87.3](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.87.2...v1.87.3)
