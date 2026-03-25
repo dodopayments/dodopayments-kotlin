@@ -7,6 +7,11 @@ import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.fasterxml.jackson.annotation.JsonCreator
 
+/**
+ * All supported payment method types (from Hyperswitch).
+ *
+ * Used for disabled-payment-methods filtering and validation.
+ */
 class PaymentMethodTypes @JsonCreator private constructor(private val value: JsonField<String>) :
     Enum {
 

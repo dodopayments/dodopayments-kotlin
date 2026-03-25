@@ -26,6 +26,7 @@ private constructor(
     private val quantity: JsonField<Int>,
     private val addons: JsonField<List<AttachAddon>>,
     private val discountCode: JsonField<String>,
+    private val effectiveAt: JsonField<EffectiveAt>,
     private val metadata: JsonField<Metadata>,
     private val onPaymentFailure: JsonField<OnPaymentFailure>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -44,6 +45,9 @@ private constructor(
         @JsonProperty("discount_code")
         @ExcludeMissing
         discountCode: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("effective_at")
+        @ExcludeMissing
+        effectiveAt: JsonField<EffectiveAt> = JsonMissing.of(),
         @JsonProperty("metadata") @ExcludeMissing metadata: JsonField<Metadata> = JsonMissing.of(),
         @JsonProperty("on_payment_failure")
         @ExcludeMissing
@@ -54,6 +58,7 @@ private constructor(
         quantity,
         addons,
         discountCode,
+        effectiveAt,
         metadata,
         onPaymentFailure,
         mutableMapOf(),
@@ -102,6 +107,16 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun discountCode(): String? = discountCode.getNullable("discount_code")
+
+    /**
+     * When to apply the plan change.
+     * - `immediately` (default): Apply the plan change right away
+     * - `next_billing_date`: Schedule the change for the next billing date
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun effectiveAt(): EffectiveAt? = effectiveAt.getNullable("effective_at")
 
     /**
      * Metadata for the payment. If not passed, the metadata of the subscription will be taken
@@ -164,6 +179,15 @@ private constructor(
     fun _discountCode(): JsonField<String> = discountCode
 
     /**
+     * Returns the raw JSON value of [effectiveAt].
+     *
+     * Unlike [effectiveAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("effective_at")
+    @ExcludeMissing
+    fun _effectiveAt(): JsonField<EffectiveAt> = effectiveAt
+
+    /**
      * Returns the raw JSON value of [metadata].
      *
      * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
@@ -215,6 +239,7 @@ private constructor(
         private var quantity: JsonField<Int>? = null
         private var addons: JsonField<MutableList<AttachAddon>>? = null
         private var discountCode: JsonField<String> = JsonMissing.of()
+        private var effectiveAt: JsonField<EffectiveAt> = JsonMissing.of()
         private var metadata: JsonField<Metadata> = JsonMissing.of()
         private var onPaymentFailure: JsonField<OnPaymentFailure> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -225,6 +250,7 @@ private constructor(
             quantity = updateSubscriptionPlanReq.quantity
             addons = updateSubscriptionPlanReq.addons.map { it.toMutableList() }
             discountCode = updateSubscriptionPlanReq.discountCode
+            effectiveAt = updateSubscriptionPlanReq.effectiveAt
             metadata = updateSubscriptionPlanReq.metadata
             onPaymentFailure = updateSubscriptionPlanReq.onPaymentFailure
             additionalProperties = updateSubscriptionPlanReq.additionalProperties.toMutableMap()
@@ -314,6 +340,24 @@ private constructor(
         }
 
         /**
+         * When to apply the plan change.
+         * - `immediately` (default): Apply the plan change right away
+         * - `next_billing_date`: Schedule the change for the next billing date
+         */
+        fun effectiveAt(effectiveAt: EffectiveAt) = effectiveAt(JsonField.of(effectiveAt))
+
+        /**
+         * Sets [Builder.effectiveAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.effectiveAt] with a well-typed [EffectiveAt] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun effectiveAt(effectiveAt: JsonField<EffectiveAt>) = apply {
+            this.effectiveAt = effectiveAt
+        }
+
+        /**
          * Metadata for the payment. If not passed, the metadata of the subscription will be taken
          */
         fun metadata(metadata: Metadata?) = metadata(JsonField.ofNullable(metadata))
@@ -388,6 +432,7 @@ private constructor(
                 checkRequired("quantity", quantity),
                 (addons ?: JsonMissing.of()).map { it.toImmutable() },
                 discountCode,
+                effectiveAt,
                 metadata,
                 onPaymentFailure,
                 additionalProperties.toMutableMap(),
@@ -406,6 +451,7 @@ private constructor(
         quantity()
         addons()?.forEach { it.validate() }
         discountCode()
+        effectiveAt()?.validate()
         metadata()?.validate()
         onPaymentFailure()?.validate()
         validated = true
@@ -430,6 +476,7 @@ private constructor(
             (if (quantity.asKnown() == null) 0 else 1) +
             (addons.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
             (if (discountCode.asKnown() == null) 0 else 1) +
+            (effectiveAt.asKnown()?.validity() ?: 0) +
             (metadata.asKnown()?.validity() ?: 0) +
             (onPaymentFailure.asKnown()?.validity() ?: 0)
 
@@ -456,6 +503,8 @@ private constructor(
 
             val DIFFERENCE_IMMEDIATELY = of("difference_immediately")
 
+            val DO_NOT_BILL = of("do_not_bill")
+
             fun of(value: String) = ProrationBillingMode(JsonField.of(value))
         }
 
@@ -464,6 +513,7 @@ private constructor(
             PRORATED_IMMEDIATELY,
             FULL_IMMEDIATELY,
             DIFFERENCE_IMMEDIATELY,
+            DO_NOT_BILL,
         }
 
         /**
@@ -480,6 +530,7 @@ private constructor(
             PRORATED_IMMEDIATELY,
             FULL_IMMEDIATELY,
             DIFFERENCE_IMMEDIATELY,
+            DO_NOT_BILL,
             /**
              * An enum member indicating that [ProrationBillingMode] was instantiated with an
              * unknown value.
@@ -499,6 +550,7 @@ private constructor(
                 PRORATED_IMMEDIATELY -> Value.PRORATED_IMMEDIATELY
                 FULL_IMMEDIATELY -> Value.FULL_IMMEDIATELY
                 DIFFERENCE_IMMEDIATELY -> Value.DIFFERENCE_IMMEDIATELY
+                DO_NOT_BILL -> Value.DO_NOT_BILL
                 else -> Value._UNKNOWN
             }
 
@@ -516,6 +568,7 @@ private constructor(
                 PRORATED_IMMEDIATELY -> Known.PRORATED_IMMEDIATELY
                 FULL_IMMEDIATELY -> Known.FULL_IMMEDIATELY
                 DIFFERENCE_IMMEDIATELY -> Known.DIFFERENCE_IMMEDIATELY
+                DO_NOT_BILL -> Known.DO_NOT_BILL
                 else ->
                     throw DodoPaymentsInvalidDataException("Unknown ProrationBillingMode: $value")
             }
@@ -565,6 +618,139 @@ private constructor(
             }
 
             return other is ProrationBillingMode && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
+
+    /**
+     * When to apply the plan change.
+     * - `immediately` (default): Apply the plan change right away
+     * - `next_billing_date`: Schedule the change for the next billing date
+     */
+    class EffectiveAt @JsonCreator private constructor(private val value: JsonField<String>) :
+        Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            val IMMEDIATELY = of("immediately")
+
+            val NEXT_BILLING_DATE = of("next_billing_date")
+
+            fun of(value: String) = EffectiveAt(JsonField.of(value))
+        }
+
+        /** An enum containing [EffectiveAt]'s known values. */
+        enum class Known {
+            IMMEDIATELY,
+            NEXT_BILLING_DATE,
+        }
+
+        /**
+         * An enum containing [EffectiveAt]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [EffectiveAt] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            IMMEDIATELY,
+            NEXT_BILLING_DATE,
+            /**
+             * An enum member indicating that [EffectiveAt] was instantiated with an unknown value.
+             */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                IMMEDIATELY -> Value.IMMEDIATELY
+                NEXT_BILLING_DATE -> Value.NEXT_BILLING_DATE
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws DodoPaymentsInvalidDataException if this class instance's value is a not a known
+         *   member.
+         */
+        fun known(): Known =
+            when (this) {
+                IMMEDIATELY -> Known.IMMEDIATELY
+                NEXT_BILLING_DATE -> Known.NEXT_BILLING_DATE
+                else -> throw DodoPaymentsInvalidDataException("Unknown EffectiveAt: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws DodoPaymentsInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString() ?: throw DodoPaymentsInvalidDataException("Value is not a String")
+
+        private var validated: Boolean = false
+
+        fun validate(): EffectiveAt = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is EffectiveAt && value == other.value
         }
 
         override fun hashCode() = value.hashCode()
@@ -817,6 +1003,7 @@ private constructor(
             quantity == other.quantity &&
             addons == other.addons &&
             discountCode == other.discountCode &&
+            effectiveAt == other.effectiveAt &&
             metadata == other.metadata &&
             onPaymentFailure == other.onPaymentFailure &&
             additionalProperties == other.additionalProperties
@@ -829,6 +1016,7 @@ private constructor(
             quantity,
             addons,
             discountCode,
+            effectiveAt,
             metadata,
             onPaymentFailure,
             additionalProperties,
@@ -838,5 +1026,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "UpdateSubscriptionPlanReq{productId=$productId, prorationBillingMode=$prorationBillingMode, quantity=$quantity, addons=$addons, discountCode=$discountCode, metadata=$metadata, onPaymentFailure=$onPaymentFailure, additionalProperties=$additionalProperties}"
+        "UpdateSubscriptionPlanReq{productId=$productId, prorationBillingMode=$prorationBillingMode, quantity=$quantity, addons=$addons, discountCode=$discountCode, effectiveAt=$effectiveAt, metadata=$metadata, onPaymentFailure=$onPaymentFailure, additionalProperties=$additionalProperties}"
 }

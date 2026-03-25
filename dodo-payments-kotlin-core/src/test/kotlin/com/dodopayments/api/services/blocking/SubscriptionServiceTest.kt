@@ -199,6 +199,7 @@ internal class SubscriptionServiceTest {
                         .quantity(0)
                         .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
                         .discountCode("discount_code")
+                        .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
                         .metadata(
                             UpdateSubscriptionPlanReq.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -267,6 +268,7 @@ internal class SubscriptionServiceTest {
                             .quantity(0)
                             .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
                             .discountCode("discount_code")
+                            .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
                             .metadata(
                                 UpdateSubscriptionPlanReq.Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
