@@ -5,6 +5,7 @@ package com.dodopayments.api.services.blocking
 import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.checkRequired
+import com.dodopayments.api.core.handlers.emptyHandler
 import com.dodopayments.api.core.handlers.errorBodyHandler
 import com.dodopayments.api.core.handlers.errorHandler
 import com.dodopayments.api.core.handlers.jsonHandler
@@ -18,6 +19,7 @@ import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepare
 import com.dodopayments.api.models.customers.Customer
 import com.dodopayments.api.models.customers.CustomerCreateParams
+import com.dodopayments.api.models.customers.CustomerDeletePaymentMethodParams
 import com.dodopayments.api.models.customers.CustomerListCreditEntitlementsParams
 import com.dodopayments.api.models.customers.CustomerListCreditEntitlementsResponse
 import com.dodopayments.api.models.customers.CustomerListPage
@@ -75,6 +77,14 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
     ): CustomerListPage =
         // get /customers
         withRawResponse().list(params, requestOptions).parse()
+
+    override fun deletePaymentMethod(
+        params: CustomerDeletePaymentMethodParams,
+        requestOptions: RequestOptions,
+    ) {
+        // delete /customers/{customer_id}/payment-methods/{payment_method_id}
+        withRawResponse().deletePaymentMethod(params, requestOptions)
+    }
 
     override fun listCreditEntitlements(
         params: CustomerListCreditEntitlementsParams,
@@ -235,6 +245,35 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
                             .response(it)
                             .build()
                     }
+            }
+        }
+
+        private val deletePaymentMethodHandler: Handler<Void?> = emptyHandler()
+
+        override fun deletePaymentMethod(
+            params: CustomerDeletePaymentMethodParams,
+            requestOptions: RequestOptions,
+        ): HttpResponse {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("paymentMethodId", params.paymentMethodId())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.DELETE)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments(
+                        "customers",
+                        params._pathParam(0),
+                        "payment-methods",
+                        params._pathParam(1),
+                    )
+                    .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response.use { deletePaymentMethodHandler.handle(it) }
             }
         }
 

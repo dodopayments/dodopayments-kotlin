@@ -6,6 +6,7 @@ import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.customers.CustomerCreateParams
+import com.dodopayments.api.models.customers.CustomerDeletePaymentMethodParams
 import com.dodopayments.api.models.customers.CustomerUpdateParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -92,6 +93,23 @@ internal class CustomerServiceTest {
         val page = customerService.list()
 
         page.response().validate()
+    }
+
+    @Test
+    fun deletePaymentMethod() {
+        val client =
+            DodoPaymentsOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val customerService = client.customers()
+
+        customerService.deletePaymentMethod(
+            CustomerDeletePaymentMethodParams.builder()
+                .customerId("customer_id")
+                .paymentMethodId("payment_method_id")
+                .build()
+        )
     }
 
     @Test

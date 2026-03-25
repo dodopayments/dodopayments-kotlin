@@ -22,6 +22,7 @@ internal class DisputeListResponseTest {
                 .disputeStage(DisputeStage.PRE_DISPUTE)
                 .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                 .paymentId("payment_id")
+                .isResolvedByRdr(true)
                 .build()
 
         assertThat(disputeListResponse.amount()).isEqualTo("amount")
@@ -33,6 +34,7 @@ internal class DisputeListResponseTest {
         assertThat(disputeListResponse.disputeStage()).isEqualTo(DisputeStage.PRE_DISPUTE)
         assertThat(disputeListResponse.disputeStatus()).isEqualTo(DisputeStatus.DISPUTE_OPENED)
         assertThat(disputeListResponse.paymentId()).isEqualTo("payment_id")
+        assertThat(disputeListResponse.isResolvedByRdr()).isEqualTo(true)
     }
 
     @Test
@@ -48,6 +50,7 @@ internal class DisputeListResponseTest {
                 .disputeStage(DisputeStage.PRE_DISPUTE)
                 .disputeStatus(DisputeStatus.DISPUTE_OPENED)
                 .paymentId("payment_id")
+                .isResolvedByRdr(true)
                 .build()
 
         val roundtrippedDisputeListResponse =

@@ -4,9 +4,11 @@ package com.dodopayments.api.services.async
 
 import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
+import com.dodopayments.api.core.http.HttpResponse
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.models.customers.Customer
 import com.dodopayments.api.models.customers.CustomerCreateParams
+import com.dodopayments.api.models.customers.CustomerDeletePaymentMethodParams
 import com.dodopayments.api.models.customers.CustomerListCreditEntitlementsParams
 import com.dodopayments.api.models.customers.CustomerListCreditEntitlementsResponse
 import com.dodopayments.api.models.customers.CustomerListPageAsync
@@ -82,6 +84,22 @@ interface CustomerServiceAsync {
     /** @see list */
     suspend fun list(requestOptions: RequestOptions): CustomerListPageAsync =
         list(CustomerListParams.none(), requestOptions)
+
+    suspend fun deletePaymentMethod(
+        paymentMethodId: String,
+        params: CustomerDeletePaymentMethodParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ) =
+        deletePaymentMethod(
+            params.toBuilder().paymentMethodId(paymentMethodId).build(),
+            requestOptions,
+        )
+
+    /** @see deletePaymentMethod */
+    suspend fun deletePaymentMethod(
+        params: CustomerDeletePaymentMethodParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    )
 
     /** List all credit entitlements for a customer with their current balances */
     suspend fun listCreditEntitlements(
@@ -228,6 +246,29 @@ interface CustomerServiceAsync {
         @MustBeClosed
         suspend fun list(requestOptions: RequestOptions): HttpResponseFor<CustomerListPageAsync> =
             list(CustomerListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `delete
+         * /customers/{customer_id}/payment-methods/{payment_method_id}`, but is otherwise the same
+         * as [CustomerServiceAsync.deletePaymentMethod].
+         */
+        @MustBeClosed
+        suspend fun deletePaymentMethod(
+            paymentMethodId: String,
+            params: CustomerDeletePaymentMethodParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse =
+            deletePaymentMethod(
+                params.toBuilder().paymentMethodId(paymentMethodId).build(),
+                requestOptions,
+            )
+
+        /** @see deletePaymentMethod */
+        @MustBeClosed
+        suspend fun deletePaymentMethod(
+            params: CustomerDeletePaymentMethodParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
 
         /**
          * Returns a raw HTTP response for `get /customers/{customer_id}/credit-entitlements`, but
