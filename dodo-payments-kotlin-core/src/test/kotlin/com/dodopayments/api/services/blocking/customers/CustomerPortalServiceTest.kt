@@ -24,6 +24,7 @@ internal class CustomerPortalServiceTest {
             customerPortalService.create(
                 CustomerPortalCreateParams.builder()
                     .customerId("customer_id")
+                    .returnUrl("return_url")
                     .sendEmail(true)
                     .build()
             )

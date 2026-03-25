@@ -57,6 +57,7 @@ internal class CheckoutSessionServiceTest {
                             .build()
                     )
                     .billingCurrency(Currency.AED)
+                    .cancelUrl("cancel_url")
                     .confirm(true)
                     .addCustomField(
                         CustomField.builder()
@@ -224,6 +225,7 @@ internal class CheckoutSessionServiceTest {
                             .build()
                     )
                     .billingCurrency(Currency.AED)
+                    .cancelUrl("cancel_url")
                     .confirm(true)
                     .addCustomField(
                         CustomField.builder()

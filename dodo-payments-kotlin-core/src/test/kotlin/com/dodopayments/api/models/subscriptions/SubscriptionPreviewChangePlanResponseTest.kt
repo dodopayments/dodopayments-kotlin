@@ -23,6 +23,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
             SubscriptionPreviewChangePlanResponse.builder()
                 .immediateCharge(
                     SubscriptionPreviewChangePlanResponse.ImmediateCharge.builder()
+                        .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addLineItem(
                             SubscriptionPreviewChangePlanResponse.ImmediateCharge.LineItem
                                 .Subscription
@@ -157,6 +158,24 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                         .discountId("discount_id")
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
+                        .scheduledChange(
+                            Subscription.ScheduledChange.builder()
+                                .id("id")
+                                .addAddon(
+                                    Subscription.ScheduledChange.Addon.builder()
+                                        .addonId("addon_id")
+                                        .name("name")
+                                        .quantity(0)
+                                        .build()
+                                )
+                                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .productId("product_id")
+                                .quantity(0)
+                                .productDescription("product_description")
+                                .productName("product_name")
+                                .build()
+                        )
                         .taxId("tax_id")
                         .build()
                 )
@@ -165,6 +184,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
         assertThat(subscriptionPreviewChangePlanResponse.immediateCharge())
             .isEqualTo(
                 SubscriptionPreviewChangePlanResponse.ImmediateCharge.builder()
+                    .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .addLineItem(
                         SubscriptionPreviewChangePlanResponse.ImmediateCharge.LineItem.Subscription
                             .builder()
@@ -299,6 +319,24 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                     .discountId("discount_id")
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .paymentMethodId("payment_method_id")
+                    .scheduledChange(
+                        Subscription.ScheduledChange.builder()
+                            .id("id")
+                            .addAddon(
+                                Subscription.ScheduledChange.Addon.builder()
+                                    .addonId("addon_id")
+                                    .name("name")
+                                    .quantity(0)
+                                    .build()
+                            )
+                            .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .productId("product_id")
+                            .quantity(0)
+                            .productDescription("product_description")
+                            .productName("product_name")
+                            .build()
+                    )
                     .taxId("tax_id")
                     .build()
             )
@@ -311,6 +349,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
             SubscriptionPreviewChangePlanResponse.builder()
                 .immediateCharge(
                     SubscriptionPreviewChangePlanResponse.ImmediateCharge.builder()
+                        .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addLineItem(
                             SubscriptionPreviewChangePlanResponse.ImmediateCharge.LineItem
                                 .Subscription
@@ -445,6 +484,24 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                         .discountId("discount_id")
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
+                        .scheduledChange(
+                            Subscription.ScheduledChange.builder()
+                                .id("id")
+                                .addAddon(
+                                    Subscription.ScheduledChange.Addon.builder()
+                                        .addonId("addon_id")
+                                        .name("name")
+                                        .quantity(0)
+                                        .build()
+                                )
+                                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .productId("product_id")
+                                .quantity(0)
+                                .productDescription("product_description")
+                                .productName("product_name")
+                                .build()
+                        )
                         .taxId("tax_id")
                         .build()
                 )

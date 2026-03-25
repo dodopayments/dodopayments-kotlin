@@ -29,6 +29,7 @@ private constructor(
     private val allowedPaymentMethodTypes: JsonField<List<PaymentMethodTypes>>,
     private val billingAddress: JsonField<CheckoutSessionBillingAddress>,
     private val billingCurrency: JsonField<Currency>,
+    private val cancelUrl: JsonField<String>,
     private val confirm: JsonField<Boolean>,
     private val customFields: JsonField<List<CustomField>>,
     private val customer: JsonField<CustomerRequest>,
@@ -62,6 +63,7 @@ private constructor(
         @JsonProperty("billing_currency")
         @ExcludeMissing
         billingCurrency: JsonField<Currency> = JsonMissing.of(),
+        @JsonProperty("cancel_url") @ExcludeMissing cancelUrl: JsonField<String> = JsonMissing.of(),
         @JsonProperty("confirm") @ExcludeMissing confirm: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("custom_fields")
         @ExcludeMissing
@@ -105,6 +107,7 @@ private constructor(
         allowedPaymentMethodTypes,
         billingAddress,
         billingCurrency,
+        cancelUrl,
         confirm,
         customFields,
         customer,
@@ -160,6 +163,15 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun billingCurrency(): Currency? = billingCurrency.getNullable("billing_currency")
+
+    /**
+     * The URL to redirect the customer if they cancel or go back from the checkout. If not
+     * provided, the back button will not be displayed.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun cancelUrl(): String? = cancelUrl.getNullable("cancel_url")
 
     /**
      * If confirm is true, all the details will be finalized. If required data is missing, an API
@@ -323,6 +335,13 @@ private constructor(
     @JsonProperty("billing_currency")
     @ExcludeMissing
     fun _billingCurrency(): JsonField<Currency> = billingCurrency
+
+    /**
+     * Returns the raw JSON value of [cancelUrl].
+     *
+     * Unlike [cancelUrl], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("cancel_url") @ExcludeMissing fun _cancelUrl(): JsonField<String> = cancelUrl
 
     /**
      * Returns the raw JSON value of [confirm].
@@ -489,6 +508,7 @@ private constructor(
         private var allowedPaymentMethodTypes: JsonField<MutableList<PaymentMethodTypes>>? = null
         private var billingAddress: JsonField<CheckoutSessionBillingAddress> = JsonMissing.of()
         private var billingCurrency: JsonField<Currency> = JsonMissing.of()
+        private var cancelUrl: JsonField<String> = JsonMissing.of()
         private var confirm: JsonField<Boolean> = JsonMissing.of()
         private var customFields: JsonField<MutableList<CustomField>>? = null
         private var customer: JsonField<CustomerRequest> = JsonMissing.of()
@@ -513,6 +533,7 @@ private constructor(
                 checkoutSessionRequest.allowedPaymentMethodTypes.map { it.toMutableList() }
             billingAddress = checkoutSessionRequest.billingAddress
             billingCurrency = checkoutSessionRequest.billingCurrency
+            cancelUrl = checkoutSessionRequest.cancelUrl
             confirm = checkoutSessionRequest.confirm
             customFields = checkoutSessionRequest.customFields.map { it.toMutableList() }
             customer = checkoutSessionRequest.customer
@@ -622,6 +643,21 @@ private constructor(
         fun billingCurrency(billingCurrency: JsonField<Currency>) = apply {
             this.billingCurrency = billingCurrency
         }
+
+        /**
+         * The URL to redirect the customer if they cancel or go back from the checkout. If not
+         * provided, the back button will not be displayed.
+         */
+        fun cancelUrl(cancelUrl: String?) = cancelUrl(JsonField.ofNullable(cancelUrl))
+
+        /**
+         * Sets [Builder.cancelUrl] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cancelUrl] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun cancelUrl(cancelUrl: JsonField<String>) = apply { this.cancelUrl = cancelUrl }
 
         /**
          * If confirm is true, all the details will be finalized. If required data is missing, an
@@ -911,6 +947,7 @@ private constructor(
                 (allowedPaymentMethodTypes ?: JsonMissing.of()).map { it.toImmutable() },
                 billingAddress,
                 billingCurrency,
+                cancelUrl,
                 confirm,
                 (customFields ?: JsonMissing.of()).map { it.toImmutable() },
                 customer,
@@ -942,6 +979,7 @@ private constructor(
         allowedPaymentMethodTypes()?.forEach { it.validate() }
         billingAddress()?.validate()
         billingCurrency()?.validate()
+        cancelUrl()
         confirm()
         customFields()?.forEach { it.validate() }
         customer()?.validate()
@@ -979,6 +1017,7 @@ private constructor(
             (allowedPaymentMethodTypes.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
             (billingAddress.asKnown()?.validity() ?: 0) +
             (billingCurrency.asKnown()?.validity() ?: 0) +
+            (if (cancelUrl.asKnown() == null) 0 else 1) +
             (if (confirm.asKnown() == null) 0 else 1) +
             (customFields.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
             (customer.asKnown()?.validity() ?: 0) +
@@ -1104,6 +1143,7 @@ private constructor(
             allowedPaymentMethodTypes == other.allowedPaymentMethodTypes &&
             billingAddress == other.billingAddress &&
             billingCurrency == other.billingCurrency &&
+            cancelUrl == other.cancelUrl &&
             confirm == other.confirm &&
             customFields == other.customFields &&
             customer == other.customer &&
@@ -1129,6 +1169,7 @@ private constructor(
             allowedPaymentMethodTypes,
             billingAddress,
             billingCurrency,
+            cancelUrl,
             confirm,
             customFields,
             customer,
@@ -1152,5 +1193,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CheckoutSessionRequest{productCart=$productCart, allowedPaymentMethodTypes=$allowedPaymentMethodTypes, billingAddress=$billingAddress, billingCurrency=$billingCurrency, confirm=$confirm, customFields=$customFields, customer=$customer, customization=$customization, discountCode=$discountCode, featureFlags=$featureFlags, force3ds=$force3ds, metadata=$metadata, minimalAddress=$minimalAddress, paymentMethodId=$paymentMethodId, productCollectionId=$productCollectionId, returnUrl=$returnUrl, shortLink=$shortLink, showSavedPaymentMethods=$showSavedPaymentMethods, subscriptionData=$subscriptionData, taxId=$taxId, additionalProperties=$additionalProperties}"
+        "CheckoutSessionRequest{productCart=$productCart, allowedPaymentMethodTypes=$allowedPaymentMethodTypes, billingAddress=$billingAddress, billingCurrency=$billingCurrency, cancelUrl=$cancelUrl, confirm=$confirm, customFields=$customFields, customer=$customer, customization=$customization, discountCode=$discountCode, featureFlags=$featureFlags, force3ds=$force3ds, metadata=$metadata, minimalAddress=$minimalAddress, paymentMethodId=$paymentMethodId, productCollectionId=$productCollectionId, returnUrl=$returnUrl, shortLink=$shortLink, showSavedPaymentMethods=$showSavedPaymentMethods, subscriptionData=$subscriptionData, taxId=$taxId, additionalProperties=$additionalProperties}"
 }

@@ -79,6 +79,7 @@ internal class ServiceParamsTest {
                                 .build()
                         )
                         .billingCurrency(Currency.AED)
+                        .cancelUrl("cancel_url")
                         .confirm(true)
                         .addCustomField(
                             CustomField.builder()
