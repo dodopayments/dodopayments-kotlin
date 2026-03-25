@@ -19,14 +19,12 @@ import com.dodopayments.api.services.blocking.MeterService
 import com.dodopayments.api.services.blocking.MiscService
 import com.dodopayments.api.services.blocking.PaymentService
 import com.dodopayments.api.services.blocking.PayoutService
-import com.dodopayments.api.services.blocking.ProductCollectionService
 import com.dodopayments.api.services.blocking.ProductService
 import com.dodopayments.api.services.blocking.RefundService
 import com.dodopayments.api.services.blocking.SubscriptionService
 import com.dodopayments.api.services.blocking.UsageEventService
 import com.dodopayments.api.services.blocking.WebhookEventService
 import com.dodopayments.api.services.blocking.WebhookService
-import com.dodopayments.api.services.blocking.YourWebhookUrlService
 
 /**
  * A client for interacting with the Dodo Payments REST API synchronously. You can also switch to
@@ -108,10 +106,6 @@ interface DodoPaymentsClient {
 
     fun creditEntitlements(): CreditEntitlementService
 
-    fun productCollections(): ProductCollectionService
-
-    fun yourWebhookUrl(): YourWebhookUrlService
-
     /**
      * Closes this client, relinquishing any underlying resources.
      *
@@ -182,9 +176,5 @@ interface DodoPaymentsClient {
         fun balances(): BalanceService.WithRawResponse
 
         fun creditEntitlements(): CreditEntitlementService.WithRawResponse
-
-        fun productCollections(): ProductCollectionService.WithRawResponse
-
-        fun yourWebhookUrl(): YourWebhookUrlService.WithRawResponse
     }
 }
