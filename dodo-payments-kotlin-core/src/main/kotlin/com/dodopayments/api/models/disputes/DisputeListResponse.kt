@@ -27,6 +27,7 @@ private constructor(
     private val disputeStage: JsonField<DisputeStage>,
     private val disputeStatus: JsonField<DisputeStatus>,
     private val paymentId: JsonField<String>,
+    private val isResolvedByRdr: JsonField<Boolean>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -48,6 +49,9 @@ private constructor(
         @ExcludeMissing
         disputeStatus: JsonField<DisputeStatus> = JsonMissing.of(),
         @JsonProperty("payment_id") @ExcludeMissing paymentId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("is_resolved_by_rdr")
+        @ExcludeMissing
+        isResolvedByRdr: JsonField<Boolean> = JsonMissing.of(),
     ) : this(
         amount,
         businessId,
@@ -57,6 +61,7 @@ private constructor(
         disputeStage,
         disputeStatus,
         paymentId,
+        isResolvedByRdr,
         mutableMapOf(),
     )
 
@@ -125,6 +130,14 @@ private constructor(
     fun paymentId(): String = paymentId.getRequired("payment_id")
 
     /**
+     * Whether the dispute was resolved by Rapid Dispute Resolution
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun isResolvedByRdr(): Boolean? = isResolvedByRdr.getNullable("is_resolved_by_rdr")
+
+    /**
      * Returns the raw JSON value of [amount].
      *
      * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
@@ -186,6 +199,15 @@ private constructor(
      */
     @JsonProperty("payment_id") @ExcludeMissing fun _paymentId(): JsonField<String> = paymentId
 
+    /**
+     * Returns the raw JSON value of [isResolvedByRdr].
+     *
+     * Unlike [isResolvedByRdr], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("is_resolved_by_rdr")
+    @ExcludeMissing
+    fun _isResolvedByRdr(): JsonField<Boolean> = isResolvedByRdr
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -229,6 +251,7 @@ private constructor(
         private var disputeStage: JsonField<DisputeStage>? = null
         private var disputeStatus: JsonField<DisputeStatus>? = null
         private var paymentId: JsonField<String>? = null
+        private var isResolvedByRdr: JsonField<Boolean> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(disputeListResponse: DisputeListResponse) = apply {
@@ -240,6 +263,7 @@ private constructor(
             disputeStage = disputeListResponse.disputeStage
             disputeStatus = disputeListResponse.disputeStatus
             paymentId = disputeListResponse.paymentId
+            isResolvedByRdr = disputeListResponse.isResolvedByRdr
             additionalProperties = disputeListResponse.additionalProperties.toMutableMap()
         }
 
@@ -341,6 +365,28 @@ private constructor(
          */
         fun paymentId(paymentId: JsonField<String>) = apply { this.paymentId = paymentId }
 
+        /** Whether the dispute was resolved by Rapid Dispute Resolution */
+        fun isResolvedByRdr(isResolvedByRdr: Boolean?) =
+            isResolvedByRdr(JsonField.ofNullable(isResolvedByRdr))
+
+        /**
+         * Alias for [Builder.isResolvedByRdr].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun isResolvedByRdr(isResolvedByRdr: Boolean) = isResolvedByRdr(isResolvedByRdr as Boolean?)
+
+        /**
+         * Sets [Builder.isResolvedByRdr] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.isResolvedByRdr] with a well-typed [Boolean] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun isResolvedByRdr(isResolvedByRdr: JsonField<Boolean>) = apply {
+            this.isResolvedByRdr = isResolvedByRdr
+        }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -389,6 +435,7 @@ private constructor(
                 checkRequired("disputeStage", disputeStage),
                 checkRequired("disputeStatus", disputeStatus),
                 checkRequired("paymentId", paymentId),
+                isResolvedByRdr,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -408,6 +455,7 @@ private constructor(
         disputeStage().validate()
         disputeStatus().validate()
         paymentId()
+        isResolvedByRdr()
         validated = true
     }
 
@@ -432,7 +480,8 @@ private constructor(
             (if (disputeId.asKnown() == null) 0 else 1) +
             (disputeStage.asKnown()?.validity() ?: 0) +
             (disputeStatus.asKnown()?.validity() ?: 0) +
-            (if (paymentId.asKnown() == null) 0 else 1)
+            (if (paymentId.asKnown() == null) 0 else 1) +
+            (if (isResolvedByRdr.asKnown() == null) 0 else 1)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -448,6 +497,7 @@ private constructor(
             disputeStage == other.disputeStage &&
             disputeStatus == other.disputeStatus &&
             paymentId == other.paymentId &&
+            isResolvedByRdr == other.isResolvedByRdr &&
             additionalProperties == other.additionalProperties
     }
 
@@ -461,6 +511,7 @@ private constructor(
             disputeStage,
             disputeStatus,
             paymentId,
+            isResolvedByRdr,
             additionalProperties,
         )
     }
@@ -468,5 +519,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "DisputeListResponse{amount=$amount, businessId=$businessId, createdAt=$createdAt, currency=$currency, disputeId=$disputeId, disputeStage=$disputeStage, disputeStatus=$disputeStatus, paymentId=$paymentId, additionalProperties=$additionalProperties}"
+        "DisputeListResponse{amount=$amount, businessId=$businessId, createdAt=$createdAt, currency=$currency, disputeId=$disputeId, disputeStage=$disputeStage, disputeStatus=$disputeStatus, paymentId=$paymentId, isResolvedByRdr=$isResolvedByRdr, additionalProperties=$additionalProperties}"
 }
