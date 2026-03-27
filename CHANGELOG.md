@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.92.1 (2026-03-27)
+
+Full Changelog: [v1.92.0...v1.92.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.92.0...v1.92.1)
+
+### Chores
+
+* **internal:** update multipart form array serialization ([c59a559](https://github.com/dodopayments/dodopayments-kotlin/commit/c59a55988809eccb6cfaf7e7dc0d1257f68481bd))
+
 ## 1.92.0 (2026-03-25)
 
 Full Changelog: [v1.87.3...v1.92.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.87.3...v1.92.0)
