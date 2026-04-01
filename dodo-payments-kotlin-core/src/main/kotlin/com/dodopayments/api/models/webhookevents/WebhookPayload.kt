@@ -228,6 +228,13 @@ private constructor(
         fun data(creditBalanceLow: Data.CreditBalanceLow) =
             data(Data.ofCreditBalanceLow(creditBalanceLow))
 
+        /** Alias for calling [data] with `Data.ofAbandonedCheckout(abandonedCheckout)`. */
+        fun data(abandonedCheckout: Data.AbandonedCheckout) =
+            data(Data.ofAbandonedCheckout(abandonedCheckout))
+
+        /** Alias for calling [data] with `Data.ofDunningAttempt(dunningAttempt)`. */
+        fun data(dunningAttempt: Data.DunningAttempt) = data(Data.ofDunningAttempt(dunningAttempt))
+
         /**
          * The timestamp of when the event occurred (not necessarily the same of when it was
          * delivered)
@@ -344,6 +351,8 @@ private constructor(
         private val licenseKey: LicenseKey? = null,
         private val creditLedgerEntry: CreditLedgerEntry? = null,
         private val creditBalanceLow: CreditBalanceLow? = null,
+        private val abandonedCheckout: AbandonedCheckout? = null,
+        private val dunningAttempt: DunningAttempt? = null,
         private val _json: JsonValue? = null,
     ) {
 
@@ -363,6 +372,10 @@ private constructor(
 
         fun creditBalanceLow(): CreditBalanceLow? = creditBalanceLow
 
+        fun abandonedCheckout(): AbandonedCheckout? = abandonedCheckout
+
+        fun dunningAttempt(): DunningAttempt? = dunningAttempt
+
         fun isPayment(): Boolean = payment != null
 
         fun isSubscription(): Boolean = subscription != null
@@ -376,6 +389,10 @@ private constructor(
         fun isCreditLedgerEntry(): Boolean = creditLedgerEntry != null
 
         fun isCreditBalanceLow(): Boolean = creditBalanceLow != null
+
+        fun isAbandonedCheckout(): Boolean = abandonedCheckout != null
+
+        fun isDunningAttempt(): Boolean = dunningAttempt != null
 
         fun asPayment(): Payment = payment.getOrThrow("payment")
 
@@ -394,6 +411,11 @@ private constructor(
 
         fun asCreditBalanceLow(): CreditBalanceLow = creditBalanceLow.getOrThrow("creditBalanceLow")
 
+        fun asAbandonedCheckout(): AbandonedCheckout =
+            abandonedCheckout.getOrThrow("abandonedCheckout")
+
+        fun asDunningAttempt(): DunningAttempt = dunningAttempt.getOrThrow("dunningAttempt")
+
         fun _json(): JsonValue? = _json
 
         fun <T> accept(visitor: Visitor<T>): T =
@@ -405,6 +427,8 @@ private constructor(
                 licenseKey != null -> visitor.visitLicenseKey(licenseKey)
                 creditLedgerEntry != null -> visitor.visitCreditLedgerEntry(creditLedgerEntry)
                 creditBalanceLow != null -> visitor.visitCreditBalanceLow(creditBalanceLow)
+                abandonedCheckout != null -> visitor.visitAbandonedCheckout(abandonedCheckout)
+                dunningAttempt != null -> visitor.visitDunningAttempt(dunningAttempt)
                 else -> visitor.unknown(_json)
             }
 
@@ -443,6 +467,14 @@ private constructor(
 
                     override fun visitCreditBalanceLow(creditBalanceLow: CreditBalanceLow) {
                         creditBalanceLow.validate()
+                    }
+
+                    override fun visitAbandonedCheckout(abandonedCheckout: AbandonedCheckout) {
+                        abandonedCheckout.validate()
+                    }
+
+                    override fun visitDunningAttempt(dunningAttempt: DunningAttempt) {
+                        dunningAttempt.validate()
                     }
                 }
             )
@@ -483,6 +515,12 @@ private constructor(
                     override fun visitCreditBalanceLow(creditBalanceLow: CreditBalanceLow) =
                         creditBalanceLow.validity()
 
+                    override fun visitAbandonedCheckout(abandonedCheckout: AbandonedCheckout) =
+                        abandonedCheckout.validity()
+
+                    override fun visitDunningAttempt(dunningAttempt: DunningAttempt) =
+                        dunningAttempt.validity()
+
                     override fun unknown(json: JsonValue?) = 0
                 }
             )
@@ -499,7 +537,9 @@ private constructor(
                 dispute == other.dispute &&
                 licenseKey == other.licenseKey &&
                 creditLedgerEntry == other.creditLedgerEntry &&
-                creditBalanceLow == other.creditBalanceLow
+                creditBalanceLow == other.creditBalanceLow &&
+                abandonedCheckout == other.abandonedCheckout &&
+                dunningAttempt == other.dunningAttempt
         }
 
         override fun hashCode(): Int =
@@ -511,6 +551,8 @@ private constructor(
                 licenseKey,
                 creditLedgerEntry,
                 creditBalanceLow,
+                abandonedCheckout,
+                dunningAttempt,
             )
 
         override fun toString(): String =
@@ -522,6 +564,8 @@ private constructor(
                 licenseKey != null -> "Data{licenseKey=$licenseKey}"
                 creditLedgerEntry != null -> "Data{creditLedgerEntry=$creditLedgerEntry}"
                 creditBalanceLow != null -> "Data{creditBalanceLow=$creditBalanceLow}"
+                abandonedCheckout != null -> "Data{abandonedCheckout=$abandonedCheckout}"
+                dunningAttempt != null -> "Data{dunningAttempt=$dunningAttempt}"
                 _json != null -> "Data{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Data")
             }
@@ -545,6 +589,12 @@ private constructor(
 
             fun ofCreditBalanceLow(creditBalanceLow: CreditBalanceLow) =
                 Data(creditBalanceLow = creditBalanceLow)
+
+            fun ofAbandonedCheckout(abandonedCheckout: AbandonedCheckout) =
+                Data(abandonedCheckout = abandonedCheckout)
+
+            fun ofDunningAttempt(dunningAttempt: DunningAttempt) =
+                Data(dunningAttempt = dunningAttempt)
         }
 
         /** An interface that defines how to map each variant of [Data] to a value of type [T]. */
@@ -565,6 +615,10 @@ private constructor(
             fun visitCreditLedgerEntry(creditLedgerEntry: CreditLedgerEntry): T
 
             fun visitCreditBalanceLow(creditBalanceLow: CreditBalanceLow): T
+
+            fun visitAbandonedCheckout(abandonedCheckout: AbandonedCheckout): T
+
+            fun visitDunningAttempt(dunningAttempt: DunningAttempt): T
 
             /**
              * Maps an unknown variant of [Data] to a value of type [T].
@@ -608,6 +662,12 @@ private constructor(
                             tryDeserialize(node, jacksonTypeRef<CreditBalanceLow>())?.let {
                                 Data(creditBalanceLow = it, _json = json)
                             },
+                            tryDeserialize(node, jacksonTypeRef<AbandonedCheckout>())?.let {
+                                Data(abandonedCheckout = it, _json = json)
+                            },
+                            tryDeserialize(node, jacksonTypeRef<DunningAttempt>())?.let {
+                                Data(dunningAttempt = it, _json = json)
+                            },
                         )
                         .filterNotNull()
                         .allMaxBy { it.validity() }
@@ -641,6 +701,9 @@ private constructor(
                     value.creditLedgerEntry != null ->
                         generator.writeObject(value.creditLedgerEntry)
                     value.creditBalanceLow != null -> generator.writeObject(value.creditBalanceLow)
+                    value.abandonedCheckout != null ->
+                        generator.writeObject(value.abandonedCheckout)
+                    value.dunningAttempt != null -> generator.writeObject(value.dunningAttempt)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid Data")
                 }
@@ -8830,6 +8893,1676 @@ private constructor(
 
             override fun toString() =
                 "CreditBalanceLow{availableBalance=$availableBalance, creditEntitlementId=$creditEntitlementId, creditEntitlementName=$creditEntitlementName, customerId=$customerId, payloadType=$payloadType, subscriptionCreditsAmount=$subscriptionCreditsAmount, subscriptionId=$subscriptionId, thresholdAmount=$thresholdAmount, thresholdPercent=$thresholdPercent, additionalProperties=$additionalProperties}"
+        }
+
+        class AbandonedCheckout
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val abandonedAt: JsonField<OffsetDateTime>,
+            private val abandonmentReason: JsonField<AbandonmentReason>,
+            private val customerId: JsonField<String>,
+            private val payloadType: JsonField<PayloadType>,
+            private val paymentId: JsonField<String>,
+            private val status: JsonField<Status>,
+            private val recoveredPaymentId: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("abandoned_at")
+                @ExcludeMissing
+                abandonedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("abandonment_reason")
+                @ExcludeMissing
+                abandonmentReason: JsonField<AbandonmentReason> = JsonMissing.of(),
+                @JsonProperty("customer_id")
+                @ExcludeMissing
+                customerId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("payload_type")
+                @ExcludeMissing
+                payloadType: JsonField<PayloadType> = JsonMissing.of(),
+                @JsonProperty("payment_id")
+                @ExcludeMissing
+                paymentId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("status")
+                @ExcludeMissing
+                status: JsonField<Status> = JsonMissing.of(),
+                @JsonProperty("recovered_payment_id")
+                @ExcludeMissing
+                recoveredPaymentId: JsonField<String> = JsonMissing.of(),
+            ) : this(
+                abandonedAt,
+                abandonmentReason,
+                customerId,
+                payloadType,
+                paymentId,
+                status,
+                recoveredPaymentId,
+                mutableMapOf(),
+            )
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun abandonedAt(): OffsetDateTime = abandonedAt.getRequired("abandoned_at")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun abandonmentReason(): AbandonmentReason =
+                abandonmentReason.getRequired("abandonment_reason")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun customerId(): String = customerId.getRequired("customer_id")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun payloadType(): PayloadType = payloadType.getRequired("payload_type")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun paymentId(): String = paymentId.getRequired("payment_id")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun status(): Status = status.getRequired("status")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun recoveredPaymentId(): String? =
+                recoveredPaymentId.getNullable("recovered_payment_id")
+
+            /**
+             * Returns the raw JSON value of [abandonedAt].
+             *
+             * Unlike [abandonedAt], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("abandoned_at")
+            @ExcludeMissing
+            fun _abandonedAt(): JsonField<OffsetDateTime> = abandonedAt
+
+            /**
+             * Returns the raw JSON value of [abandonmentReason].
+             *
+             * Unlike [abandonmentReason], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("abandonment_reason")
+            @ExcludeMissing
+            fun _abandonmentReason(): JsonField<AbandonmentReason> = abandonmentReason
+
+            /**
+             * Returns the raw JSON value of [customerId].
+             *
+             * Unlike [customerId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("customer_id")
+            @ExcludeMissing
+            fun _customerId(): JsonField<String> = customerId
+
+            /**
+             * Returns the raw JSON value of [payloadType].
+             *
+             * Unlike [payloadType], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("payload_type")
+            @ExcludeMissing
+            fun _payloadType(): JsonField<PayloadType> = payloadType
+
+            /**
+             * Returns the raw JSON value of [paymentId].
+             *
+             * Unlike [paymentId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("payment_id")
+            @ExcludeMissing
+            fun _paymentId(): JsonField<String> = paymentId
+
+            /**
+             * Returns the raw JSON value of [status].
+             *
+             * Unlike [status], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("status") @ExcludeMissing fun _status(): JsonField<Status> = status
+
+            /**
+             * Returns the raw JSON value of [recoveredPaymentId].
+             *
+             * Unlike [recoveredPaymentId], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("recovered_payment_id")
+            @ExcludeMissing
+            fun _recoveredPaymentId(): JsonField<String> = recoveredPaymentId
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of [AbandonedCheckout].
+                 *
+                 * The following fields are required:
+                 * ```kotlin
+                 * .abandonedAt()
+                 * .abandonmentReason()
+                 * .customerId()
+                 * .payloadType()
+                 * .paymentId()
+                 * .status()
+                 * ```
+                 */
+                fun builder() = Builder()
+            }
+
+            /** A builder for [AbandonedCheckout]. */
+            class Builder internal constructor() {
+
+                private var abandonedAt: JsonField<OffsetDateTime>? = null
+                private var abandonmentReason: JsonField<AbandonmentReason>? = null
+                private var customerId: JsonField<String>? = null
+                private var payloadType: JsonField<PayloadType>? = null
+                private var paymentId: JsonField<String>? = null
+                private var status: JsonField<Status>? = null
+                private var recoveredPaymentId: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                internal fun from(abandonedCheckout: AbandonedCheckout) = apply {
+                    abandonedAt = abandonedCheckout.abandonedAt
+                    abandonmentReason = abandonedCheckout.abandonmentReason
+                    customerId = abandonedCheckout.customerId
+                    payloadType = abandonedCheckout.payloadType
+                    paymentId = abandonedCheckout.paymentId
+                    status = abandonedCheckout.status
+                    recoveredPaymentId = abandonedCheckout.recoveredPaymentId
+                    additionalProperties = abandonedCheckout.additionalProperties.toMutableMap()
+                }
+
+                fun abandonedAt(abandonedAt: OffsetDateTime) =
+                    abandonedAt(JsonField.of(abandonedAt))
+
+                /**
+                 * Sets [Builder.abandonedAt] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.abandonedAt] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun abandonedAt(abandonedAt: JsonField<OffsetDateTime>) = apply {
+                    this.abandonedAt = abandonedAt
+                }
+
+                fun abandonmentReason(abandonmentReason: AbandonmentReason) =
+                    abandonmentReason(JsonField.of(abandonmentReason))
+
+                /**
+                 * Sets [Builder.abandonmentReason] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.abandonmentReason] with a well-typed
+                 * [AbandonmentReason] value instead. This method is primarily for setting the field
+                 * to an undocumented or not yet supported value.
+                 */
+                fun abandonmentReason(abandonmentReason: JsonField<AbandonmentReason>) = apply {
+                    this.abandonmentReason = abandonmentReason
+                }
+
+                fun customerId(customerId: String) = customerId(JsonField.of(customerId))
+
+                /**
+                 * Sets [Builder.customerId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.customerId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun customerId(customerId: JsonField<String>) = apply {
+                    this.customerId = customerId
+                }
+
+                fun payloadType(payloadType: PayloadType) = payloadType(JsonField.of(payloadType))
+
+                /**
+                 * Sets [Builder.payloadType] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.payloadType] with a well-typed [PayloadType]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun payloadType(payloadType: JsonField<PayloadType>) = apply {
+                    this.payloadType = payloadType
+                }
+
+                fun paymentId(paymentId: String) = paymentId(JsonField.of(paymentId))
+
+                /**
+                 * Sets [Builder.paymentId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.paymentId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun paymentId(paymentId: JsonField<String>) = apply { this.paymentId = paymentId }
+
+                fun status(status: Status) = status(JsonField.of(status))
+
+                /**
+                 * Sets [Builder.status] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.status] with a well-typed [Status] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun status(status: JsonField<Status>) = apply { this.status = status }
+
+                fun recoveredPaymentId(recoveredPaymentId: String?) =
+                    recoveredPaymentId(JsonField.ofNullable(recoveredPaymentId))
+
+                /**
+                 * Sets [Builder.recoveredPaymentId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.recoveredPaymentId] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun recoveredPaymentId(recoveredPaymentId: JsonField<String>) = apply {
+                    this.recoveredPaymentId = recoveredPaymentId
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [AbandonedCheckout].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```kotlin
+                 * .abandonedAt()
+                 * .abandonmentReason()
+                 * .customerId()
+                 * .payloadType()
+                 * .paymentId()
+                 * .status()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
+                fun build(): AbandonedCheckout =
+                    AbandonedCheckout(
+                        checkRequired("abandonedAt", abandonedAt),
+                        checkRequired("abandonmentReason", abandonmentReason),
+                        checkRequired("customerId", customerId),
+                        checkRequired("payloadType", payloadType),
+                        checkRequired("paymentId", paymentId),
+                        checkRequired("status", status),
+                        recoveredPaymentId,
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): AbandonedCheckout = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                abandonedAt()
+                abandonmentReason().validate()
+                customerId()
+                payloadType().validate()
+                paymentId()
+                status().validate()
+                recoveredPaymentId()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: DodoPaymentsInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            internal fun validity(): Int =
+                (if (abandonedAt.asKnown() == null) 0 else 1) +
+                    (abandonmentReason.asKnown()?.validity() ?: 0) +
+                    (if (customerId.asKnown() == null) 0 else 1) +
+                    (payloadType.asKnown()?.validity() ?: 0) +
+                    (if (paymentId.asKnown() == null) 0 else 1) +
+                    (status.asKnown()?.validity() ?: 0) +
+                    (if (recoveredPaymentId.asKnown() == null) 0 else 1)
+
+            class AbandonmentReason
+            @JsonCreator
+            private constructor(private val value: JsonField<String>) : Enum {
+
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    val PAYMENT_FAILED = of("payment_failed")
+
+                    val CHECKOUT_INCOMPLETE = of("checkout_incomplete")
+
+                    fun of(value: String) = AbandonmentReason(JsonField.of(value))
+                }
+
+                /** An enum containing [AbandonmentReason]'s known values. */
+                enum class Known {
+                    PAYMENT_FAILED,
+                    CHECKOUT_INCOMPLETE,
+                }
+
+                /**
+                 * An enum containing [AbandonmentReason]'s known values, as well as an [_UNKNOWN]
+                 * member.
+                 *
+                 * An instance of [AbandonmentReason] can contain an unknown value in a couple of
+                 * cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    PAYMENT_FAILED,
+                    CHECKOUT_INCOMPLETE,
+                    /**
+                     * An enum member indicating that [AbandonmentReason] was instantiated with an
+                     * unknown value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        PAYMENT_FAILED -> Value.PAYMENT_FAILED
+                        CHECKOUT_INCOMPLETE -> Value.CHECKOUT_INCOMPLETE
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if this class instance's value is a not
+                 *   a known member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        PAYMENT_FAILED -> Known.PAYMENT_FAILED
+                        CHECKOUT_INCOMPLETE -> Known.CHECKOUT_INCOMPLETE
+                        else ->
+                            throw DodoPaymentsInvalidDataException(
+                                "Unknown AbandonmentReason: $value"
+                            )
+                    }
+
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString()
+                        ?: throw DodoPaymentsInvalidDataException("Value is not a String")
+
+                private var validated: Boolean = false
+
+                fun validate(): AbandonmentReason = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: DodoPaymentsInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is AbandonmentReason && value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+            }
+
+            class PayloadType
+            @JsonCreator
+            private constructor(private val value: JsonField<String>) : Enum {
+
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    val ABANDONED_CHECKOUT = of("AbandonedCheckout")
+
+                    fun of(value: String) = PayloadType(JsonField.of(value))
+                }
+
+                /** An enum containing [PayloadType]'s known values. */
+                enum class Known {
+                    ABANDONED_CHECKOUT
+                }
+
+                /**
+                 * An enum containing [PayloadType]'s known values, as well as an [_UNKNOWN] member.
+                 *
+                 * An instance of [PayloadType] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    ABANDONED_CHECKOUT,
+                    /**
+                     * An enum member indicating that [PayloadType] was instantiated with an unknown
+                     * value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        ABANDONED_CHECKOUT -> Value.ABANDONED_CHECKOUT
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if this class instance's value is a not
+                 *   a known member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        ABANDONED_CHECKOUT -> Known.ABANDONED_CHECKOUT
+                        else ->
+                            throw DodoPaymentsInvalidDataException("Unknown PayloadType: $value")
+                    }
+
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString()
+                        ?: throw DodoPaymentsInvalidDataException("Value is not a String")
+
+                private var validated: Boolean = false
+
+                fun validate(): PayloadType = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: DodoPaymentsInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is PayloadType && value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+            }
+
+            class Status @JsonCreator private constructor(private val value: JsonField<String>) :
+                Enum {
+
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    val ABANDONED = of("abandoned")
+
+                    val RECOVERING = of("recovering")
+
+                    val RECOVERED = of("recovered")
+
+                    val EXHAUSTED = of("exhausted")
+
+                    val OPTED_OUT = of("opted_out")
+
+                    fun of(value: String) = Status(JsonField.of(value))
+                }
+
+                /** An enum containing [Status]'s known values. */
+                enum class Known {
+                    ABANDONED,
+                    RECOVERING,
+                    RECOVERED,
+                    EXHAUSTED,
+                    OPTED_OUT,
+                }
+
+                /**
+                 * An enum containing [Status]'s known values, as well as an [_UNKNOWN] member.
+                 *
+                 * An instance of [Status] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    ABANDONED,
+                    RECOVERING,
+                    RECOVERED,
+                    EXHAUSTED,
+                    OPTED_OUT,
+                    /**
+                     * An enum member indicating that [Status] was instantiated with an unknown
+                     * value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        ABANDONED -> Value.ABANDONED
+                        RECOVERING -> Value.RECOVERING
+                        RECOVERED -> Value.RECOVERED
+                        EXHAUSTED -> Value.EXHAUSTED
+                        OPTED_OUT -> Value.OPTED_OUT
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if this class instance's value is a not
+                 *   a known member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        ABANDONED -> Known.ABANDONED
+                        RECOVERING -> Known.RECOVERING
+                        RECOVERED -> Known.RECOVERED
+                        EXHAUSTED -> Known.EXHAUSTED
+                        OPTED_OUT -> Known.OPTED_OUT
+                        else -> throw DodoPaymentsInvalidDataException("Unknown Status: $value")
+                    }
+
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString()
+                        ?: throw DodoPaymentsInvalidDataException("Value is not a String")
+
+                private var validated: Boolean = false
+
+                fun validate(): Status = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: DodoPaymentsInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Status && value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is AbandonedCheckout &&
+                    abandonedAt == other.abandonedAt &&
+                    abandonmentReason == other.abandonmentReason &&
+                    customerId == other.customerId &&
+                    payloadType == other.payloadType &&
+                    paymentId == other.paymentId &&
+                    status == other.status &&
+                    recoveredPaymentId == other.recoveredPaymentId &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(
+                    abandonedAt,
+                    abandonmentReason,
+                    customerId,
+                    payloadType,
+                    paymentId,
+                    status,
+                    recoveredPaymentId,
+                    additionalProperties,
+                )
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "AbandonedCheckout{abandonedAt=$abandonedAt, abandonmentReason=$abandonmentReason, customerId=$customerId, payloadType=$payloadType, paymentId=$paymentId, status=$status, recoveredPaymentId=$recoveredPaymentId, additionalProperties=$additionalProperties}"
+        }
+
+        class DunningAttempt
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val createdAt: JsonField<OffsetDateTime>,
+            private val customerId: JsonField<String>,
+            private val payloadType: JsonField<PayloadType>,
+            private val status: JsonField<Status>,
+            private val subscriptionId: JsonField<String>,
+            private val triggerState: JsonField<TriggerState>,
+            private val paymentId: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("created_at")
+                @ExcludeMissing
+                createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("customer_id")
+                @ExcludeMissing
+                customerId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("payload_type")
+                @ExcludeMissing
+                payloadType: JsonField<PayloadType> = JsonMissing.of(),
+                @JsonProperty("status")
+                @ExcludeMissing
+                status: JsonField<Status> = JsonMissing.of(),
+                @JsonProperty("subscription_id")
+                @ExcludeMissing
+                subscriptionId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("trigger_state")
+                @ExcludeMissing
+                triggerState: JsonField<TriggerState> = JsonMissing.of(),
+                @JsonProperty("payment_id")
+                @ExcludeMissing
+                paymentId: JsonField<String> = JsonMissing.of(),
+            ) : this(
+                createdAt,
+                customerId,
+                payloadType,
+                status,
+                subscriptionId,
+                triggerState,
+                paymentId,
+                mutableMapOf(),
+            )
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun customerId(): String = customerId.getRequired("customer_id")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun payloadType(): PayloadType = payloadType.getRequired("payload_type")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun status(): Status = status.getRequired("status")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun subscriptionId(): String = subscriptionId.getRequired("subscription_id")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun triggerState(): TriggerState = triggerState.getRequired("trigger_state")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun paymentId(): String? = paymentId.getNullable("payment_id")
+
+            /**
+             * Returns the raw JSON value of [createdAt].
+             *
+             * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("created_at")
+            @ExcludeMissing
+            fun _createdAt(): JsonField<OffsetDateTime> = createdAt
+
+            /**
+             * Returns the raw JSON value of [customerId].
+             *
+             * Unlike [customerId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("customer_id")
+            @ExcludeMissing
+            fun _customerId(): JsonField<String> = customerId
+
+            /**
+             * Returns the raw JSON value of [payloadType].
+             *
+             * Unlike [payloadType], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("payload_type")
+            @ExcludeMissing
+            fun _payloadType(): JsonField<PayloadType> = payloadType
+
+            /**
+             * Returns the raw JSON value of [status].
+             *
+             * Unlike [status], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("status") @ExcludeMissing fun _status(): JsonField<Status> = status
+
+            /**
+             * Returns the raw JSON value of [subscriptionId].
+             *
+             * Unlike [subscriptionId], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("subscription_id")
+            @ExcludeMissing
+            fun _subscriptionId(): JsonField<String> = subscriptionId
+
+            /**
+             * Returns the raw JSON value of [triggerState].
+             *
+             * Unlike [triggerState], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("trigger_state")
+            @ExcludeMissing
+            fun _triggerState(): JsonField<TriggerState> = triggerState
+
+            /**
+             * Returns the raw JSON value of [paymentId].
+             *
+             * Unlike [paymentId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("payment_id")
+            @ExcludeMissing
+            fun _paymentId(): JsonField<String> = paymentId
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of [DunningAttempt].
+                 *
+                 * The following fields are required:
+                 * ```kotlin
+                 * .createdAt()
+                 * .customerId()
+                 * .payloadType()
+                 * .status()
+                 * .subscriptionId()
+                 * .triggerState()
+                 * ```
+                 */
+                fun builder() = Builder()
+            }
+
+            /** A builder for [DunningAttempt]. */
+            class Builder internal constructor() {
+
+                private var createdAt: JsonField<OffsetDateTime>? = null
+                private var customerId: JsonField<String>? = null
+                private var payloadType: JsonField<PayloadType>? = null
+                private var status: JsonField<Status>? = null
+                private var subscriptionId: JsonField<String>? = null
+                private var triggerState: JsonField<TriggerState>? = null
+                private var paymentId: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                internal fun from(dunningAttempt: DunningAttempt) = apply {
+                    createdAt = dunningAttempt.createdAt
+                    customerId = dunningAttempt.customerId
+                    payloadType = dunningAttempt.payloadType
+                    status = dunningAttempt.status
+                    subscriptionId = dunningAttempt.subscriptionId
+                    triggerState = dunningAttempt.triggerState
+                    paymentId = dunningAttempt.paymentId
+                    additionalProperties = dunningAttempt.additionalProperties.toMutableMap()
+                }
+
+                fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
+
+                /**
+                 * Sets [Builder.createdAt] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
+                    this.createdAt = createdAt
+                }
+
+                fun customerId(customerId: String) = customerId(JsonField.of(customerId))
+
+                /**
+                 * Sets [Builder.customerId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.customerId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun customerId(customerId: JsonField<String>) = apply {
+                    this.customerId = customerId
+                }
+
+                fun payloadType(payloadType: PayloadType) = payloadType(JsonField.of(payloadType))
+
+                /**
+                 * Sets [Builder.payloadType] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.payloadType] with a well-typed [PayloadType]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun payloadType(payloadType: JsonField<PayloadType>) = apply {
+                    this.payloadType = payloadType
+                }
+
+                fun status(status: Status) = status(JsonField.of(status))
+
+                /**
+                 * Sets [Builder.status] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.status] with a well-typed [Status] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun status(status: JsonField<Status>) = apply { this.status = status }
+
+                fun subscriptionId(subscriptionId: String) =
+                    subscriptionId(JsonField.of(subscriptionId))
+
+                /**
+                 * Sets [Builder.subscriptionId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.subscriptionId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun subscriptionId(subscriptionId: JsonField<String>) = apply {
+                    this.subscriptionId = subscriptionId
+                }
+
+                fun triggerState(triggerState: TriggerState) =
+                    triggerState(JsonField.of(triggerState))
+
+                /**
+                 * Sets [Builder.triggerState] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.triggerState] with a well-typed [TriggerState]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun triggerState(triggerState: JsonField<TriggerState>) = apply {
+                    this.triggerState = triggerState
+                }
+
+                fun paymentId(paymentId: String?) = paymentId(JsonField.ofNullable(paymentId))
+
+                /**
+                 * Sets [Builder.paymentId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.paymentId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun paymentId(paymentId: JsonField<String>) = apply { this.paymentId = paymentId }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [DunningAttempt].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```kotlin
+                 * .createdAt()
+                 * .customerId()
+                 * .payloadType()
+                 * .status()
+                 * .subscriptionId()
+                 * .triggerState()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
+                fun build(): DunningAttempt =
+                    DunningAttempt(
+                        checkRequired("createdAt", createdAt),
+                        checkRequired("customerId", customerId),
+                        checkRequired("payloadType", payloadType),
+                        checkRequired("status", status),
+                        checkRequired("subscriptionId", subscriptionId),
+                        checkRequired("triggerState", triggerState),
+                        paymentId,
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): DunningAttempt = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                createdAt()
+                customerId()
+                payloadType().validate()
+                status().validate()
+                subscriptionId()
+                triggerState().validate()
+                paymentId()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: DodoPaymentsInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            internal fun validity(): Int =
+                (if (createdAt.asKnown() == null) 0 else 1) +
+                    (if (customerId.asKnown() == null) 0 else 1) +
+                    (payloadType.asKnown()?.validity() ?: 0) +
+                    (status.asKnown()?.validity() ?: 0) +
+                    (if (subscriptionId.asKnown() == null) 0 else 1) +
+                    (triggerState.asKnown()?.validity() ?: 0) +
+                    (if (paymentId.asKnown() == null) 0 else 1)
+
+            class PayloadType
+            @JsonCreator
+            private constructor(private val value: JsonField<String>) : Enum {
+
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    val DUNNING_ATTEMPT = of("DunningAttempt")
+
+                    fun of(value: String) = PayloadType(JsonField.of(value))
+                }
+
+                /** An enum containing [PayloadType]'s known values. */
+                enum class Known {
+                    DUNNING_ATTEMPT
+                }
+
+                /**
+                 * An enum containing [PayloadType]'s known values, as well as an [_UNKNOWN] member.
+                 *
+                 * An instance of [PayloadType] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    DUNNING_ATTEMPT,
+                    /**
+                     * An enum member indicating that [PayloadType] was instantiated with an unknown
+                     * value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        DUNNING_ATTEMPT -> Value.DUNNING_ATTEMPT
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if this class instance's value is a not
+                 *   a known member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        DUNNING_ATTEMPT -> Known.DUNNING_ATTEMPT
+                        else ->
+                            throw DodoPaymentsInvalidDataException("Unknown PayloadType: $value")
+                    }
+
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString()
+                        ?: throw DodoPaymentsInvalidDataException("Value is not a String")
+
+                private var validated: Boolean = false
+
+                fun validate(): PayloadType = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: DodoPaymentsInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is PayloadType && value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+            }
+
+            class Status @JsonCreator private constructor(private val value: JsonField<String>) :
+                Enum {
+
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    val RECOVERING = of("recovering")
+
+                    val RECOVERED = of("recovered")
+
+                    val EXHAUSTED = of("exhausted")
+
+                    fun of(value: String) = Status(JsonField.of(value))
+                }
+
+                /** An enum containing [Status]'s known values. */
+                enum class Known {
+                    RECOVERING,
+                    RECOVERED,
+                    EXHAUSTED,
+                }
+
+                /**
+                 * An enum containing [Status]'s known values, as well as an [_UNKNOWN] member.
+                 *
+                 * An instance of [Status] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    RECOVERING,
+                    RECOVERED,
+                    EXHAUSTED,
+                    /**
+                     * An enum member indicating that [Status] was instantiated with an unknown
+                     * value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        RECOVERING -> Value.RECOVERING
+                        RECOVERED -> Value.RECOVERED
+                        EXHAUSTED -> Value.EXHAUSTED
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if this class instance's value is a not
+                 *   a known member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        RECOVERING -> Known.RECOVERING
+                        RECOVERED -> Known.RECOVERED
+                        EXHAUSTED -> Known.EXHAUSTED
+                        else -> throw DodoPaymentsInvalidDataException("Unknown Status: $value")
+                    }
+
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString()
+                        ?: throw DodoPaymentsInvalidDataException("Value is not a String")
+
+                private var validated: Boolean = false
+
+                fun validate(): Status = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: DodoPaymentsInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is Status && value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+            }
+
+            class TriggerState
+            @JsonCreator
+            private constructor(private val value: JsonField<String>) : Enum {
+
+                /**
+                 * Returns this class instance's raw value.
+                 *
+                 * This is usually only useful if this instance was deserialized from data that
+                 * doesn't match any known member, and you want to know that value. For example, if
+                 * the SDK is on an older version than the API, then the API may respond with new
+                 * members that the SDK is unaware of.
+                 */
+                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+                companion object {
+
+                    val ON_HOLD = of("on_hold")
+
+                    val CANCELLED = of("cancelled")
+
+                    fun of(value: String) = TriggerState(JsonField.of(value))
+                }
+
+                /** An enum containing [TriggerState]'s known values. */
+                enum class Known {
+                    ON_HOLD,
+                    CANCELLED,
+                }
+
+                /**
+                 * An enum containing [TriggerState]'s known values, as well as an [_UNKNOWN]
+                 * member.
+                 *
+                 * An instance of [TriggerState] can contain an unknown value in a couple of cases:
+                 * - It was deserialized from data that doesn't match any known member. For example,
+                 *   if the SDK is on an older version than the API, then the API may respond with
+                 *   new members that the SDK is unaware of.
+                 * - It was constructed with an arbitrary value using the [of] method.
+                 */
+                enum class Value {
+                    ON_HOLD,
+                    CANCELLED,
+                    /**
+                     * An enum member indicating that [TriggerState] was instantiated with an
+                     * unknown value.
+                     */
+                    _UNKNOWN,
+                }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value, or
+                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+                 *
+                 * Use the [known] method instead if you're certain the value is always known or if
+                 * you want to throw for the unknown case.
+                 */
+                fun value(): Value =
+                    when (this) {
+                        ON_HOLD -> Value.ON_HOLD
+                        CANCELLED -> Value.CANCELLED
+                        else -> Value._UNKNOWN
+                    }
+
+                /**
+                 * Returns an enum member corresponding to this class instance's value.
+                 *
+                 * Use the [value] method instead if you're uncertain the value is always known and
+                 * don't want to throw for the unknown case.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if this class instance's value is a not
+                 *   a known member.
+                 */
+                fun known(): Known =
+                    when (this) {
+                        ON_HOLD -> Known.ON_HOLD
+                        CANCELLED -> Known.CANCELLED
+                        else ->
+                            throw DodoPaymentsInvalidDataException("Unknown TriggerState: $value")
+                    }
+
+                /**
+                 * Returns this class instance's primitive wire representation.
+                 *
+                 * This differs from the [toString] method because that method is primarily for
+                 * debugging and generally doesn't throw.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if this class instance's value does not
+                 *   have the expected primitive type.
+                 */
+                fun asString(): String =
+                    _value().asString()
+                        ?: throw DodoPaymentsInvalidDataException("Value is not a String")
+
+                private var validated: Boolean = false
+
+                fun validate(): TriggerState = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    known()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: DodoPaymentsInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return other is TriggerState && value == other.value
+                }
+
+                override fun hashCode() = value.hashCode()
+
+                override fun toString() = value.toString()
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is DunningAttempt &&
+                    createdAt == other.createdAt &&
+                    customerId == other.customerId &&
+                    payloadType == other.payloadType &&
+                    status == other.status &&
+                    subscriptionId == other.subscriptionId &&
+                    triggerState == other.triggerState &&
+                    paymentId == other.paymentId &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(
+                    createdAt,
+                    customerId,
+                    payloadType,
+                    status,
+                    subscriptionId,
+                    triggerState,
+                    paymentId,
+                    additionalProperties,
+                )
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "DunningAttempt{createdAt=$createdAt, customerId=$customerId, payloadType=$payloadType, status=$status, subscriptionId=$subscriptionId, triggerState=$triggerState, paymentId=$paymentId, additionalProperties=$additionalProperties}"
         }
     }
 

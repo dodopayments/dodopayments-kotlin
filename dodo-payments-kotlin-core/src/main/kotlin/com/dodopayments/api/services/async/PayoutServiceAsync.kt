@@ -7,6 +7,7 @@ import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.models.payouts.PayoutListPageAsync
 import com.dodopayments.api.models.payouts.PayoutListParams
+import com.dodopayments.api.services.async.payouts.BreakupServiceAsync
 import com.google.errorprone.annotations.MustBeClosed
 
 interface PayoutServiceAsync {
@@ -22,6 +23,8 @@ interface PayoutServiceAsync {
      * The original service is not modified.
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): PayoutServiceAsync
+
+    fun breakup(): BreakupServiceAsync
 
     suspend fun list(
         params: PayoutListParams = PayoutListParams.none(),
@@ -45,6 +48,8 @@ interface PayoutServiceAsync {
         fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): PayoutServiceAsync.WithRawResponse
+
+        fun breakup(): BreakupServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /payouts`, but is otherwise the same as
