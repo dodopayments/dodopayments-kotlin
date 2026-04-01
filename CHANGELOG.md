@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.93.0 (2026-04-01)
+
+Full Changelog: [v1.92.1...v1.93.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.92.1...v1.93.0)
+
+### Features
+
+* **api:** updated openapi spec to v1.93.0 ([fcf900b](https://github.com/dodopayments/dodopayments-kotlin/commit/fcf900b9c7043708f9094363c111876a0b32dd4e))
+
+
+### Chores
+
+* **tests:** bump steady to v0.20.1 ([83f8b68](https://github.com/dodopayments/dodopayments-kotlin/commit/83f8b685d635081352c9223baaa2b2345efea02d))
+* **tests:** bump steady to v0.20.2 ([b9489a1](https://github.com/dodopayments/dodopayments-kotlin/commit/b9489a165d27585716d6e185149587e185046037))
+
 ## 1.92.1 (2026-03-27)
 
 Full Changelog: [v1.92.0...v1.92.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.92.0...v1.92.1)
