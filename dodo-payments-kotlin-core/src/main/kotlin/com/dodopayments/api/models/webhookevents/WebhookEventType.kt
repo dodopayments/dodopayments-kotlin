@@ -92,6 +92,18 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
 
         val CREDIT_BALANCE_LOW = of("credit.balance_low")
 
+        val ABANDONED_CHECKOUT_DETECTED = of("abandoned_checkout.detected")
+
+        val ABANDONED_CHECKOUT_RECOVERED = of("abandoned_checkout.recovered")
+
+        val DUNNING_STARTED = of("dunning.started")
+
+        val DUNNING_RECOVERED = of("dunning.recovered")
+
+        val ACR_EMAIL = of("acr.email")
+
+        val DUNNING_EMAIL = of("dunning.email")
+
         fun of(value: String) = WebhookEventType(JsonField.of(value))
     }
 
@@ -132,6 +144,12 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         CREDIT_OVERAGE_CHARGED,
         CREDIT_MANUAL_ADJUSTMENT,
         CREDIT_BALANCE_LOW,
+        ABANDONED_CHECKOUT_DETECTED,
+        ABANDONED_CHECKOUT_RECOVERED,
+        DUNNING_STARTED,
+        DUNNING_RECOVERED,
+        ACR_EMAIL,
+        DUNNING_EMAIL,
     }
 
     /**
@@ -179,6 +197,12 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         CREDIT_OVERAGE_CHARGED,
         CREDIT_MANUAL_ADJUSTMENT,
         CREDIT_BALANCE_LOW,
+        ABANDONED_CHECKOUT_DETECTED,
+        ABANDONED_CHECKOUT_RECOVERED,
+        DUNNING_STARTED,
+        DUNNING_RECOVERED,
+        ACR_EMAIL,
+        DUNNING_EMAIL,
         /**
          * An enum member indicating that [WebhookEventType] was instantiated with an unknown value.
          */
@@ -229,6 +253,12 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             CREDIT_OVERAGE_CHARGED -> Value.CREDIT_OVERAGE_CHARGED
             CREDIT_MANUAL_ADJUSTMENT -> Value.CREDIT_MANUAL_ADJUSTMENT
             CREDIT_BALANCE_LOW -> Value.CREDIT_BALANCE_LOW
+            ABANDONED_CHECKOUT_DETECTED -> Value.ABANDONED_CHECKOUT_DETECTED
+            ABANDONED_CHECKOUT_RECOVERED -> Value.ABANDONED_CHECKOUT_RECOVERED
+            DUNNING_STARTED -> Value.DUNNING_STARTED
+            DUNNING_RECOVERED -> Value.DUNNING_RECOVERED
+            ACR_EMAIL -> Value.ACR_EMAIL
+            DUNNING_EMAIL -> Value.DUNNING_EMAIL
             else -> Value._UNKNOWN
         }
 
@@ -278,6 +308,12 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             CREDIT_OVERAGE_CHARGED -> Known.CREDIT_OVERAGE_CHARGED
             CREDIT_MANUAL_ADJUSTMENT -> Known.CREDIT_MANUAL_ADJUSTMENT
             CREDIT_BALANCE_LOW -> Known.CREDIT_BALANCE_LOW
+            ABANDONED_CHECKOUT_DETECTED -> Known.ABANDONED_CHECKOUT_DETECTED
+            ABANDONED_CHECKOUT_RECOVERED -> Known.ABANDONED_CHECKOUT_RECOVERED
+            DUNNING_STARTED -> Known.DUNNING_STARTED
+            DUNNING_RECOVERED -> Known.DUNNING_RECOVERED
+            ACR_EMAIL -> Known.ACR_EMAIL
+            DUNNING_EMAIL -> Known.DUNNING_EMAIL
             else -> throw DodoPaymentsInvalidDataException("Unknown WebhookEventType: $value")
         }
 

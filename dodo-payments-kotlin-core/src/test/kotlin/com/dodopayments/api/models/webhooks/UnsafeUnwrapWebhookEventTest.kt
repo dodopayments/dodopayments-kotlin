@@ -42,6 +42,198 @@ import org.junit.jupiter.params.provider.EnumSource
 internal class UnsafeUnwrapWebhookEventTest {
 
     @Test
+    fun ofAbandonedCheckoutDetected() {
+        val abandonedCheckoutDetected =
+            AbandonedCheckoutDetectedWebhookEvent.builder()
+                .businessId("business_id")
+                .data(
+                    AbandonedCheckoutDetectedWebhookEvent.Data.builder()
+                        .abandonedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .abandonmentReason(
+                            AbandonedCheckoutDetectedWebhookEvent.Data.AbandonmentReason
+                                .PAYMENT_FAILED
+                        )
+                        .customerId("customer_id")
+                        .paymentId("payment_id")
+                        .status(AbandonedCheckoutDetectedWebhookEvent.Data.Status.ABANDONED)
+                        .recoveredPaymentId("recovered_payment_id")
+                        .build()
+                )
+                .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .type(AbandonedCheckoutDetectedWebhookEvent.Type.ABANDONED_CHECKOUT_DETECTED)
+                .build()
+
+        val unsafeUnwrapWebhookEvent =
+            UnsafeUnwrapWebhookEvent.ofAbandonedCheckoutDetected(abandonedCheckoutDetected)
+
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected())
+            .isEqualTo(abandonedCheckoutDetected)
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditExpired()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditManualAdjustment()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditOverageCharged()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditRolledOver()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditRolloverForfeited()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeAccepted()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeCancelled()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeChallenged()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeExpired()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.paymentProcessing()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.paymentSucceeded()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.refundFailed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.refundSucceeded()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionActive()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionCancelled()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionExpired()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionFailed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
+    }
+
+    @Test
+    fun ofAbandonedCheckoutDetectedRoundtrip() {
+        val jsonMapper = jsonMapper()
+        val unsafeUnwrapWebhookEvent =
+            UnsafeUnwrapWebhookEvent.ofAbandonedCheckoutDetected(
+                AbandonedCheckoutDetectedWebhookEvent.builder()
+                    .businessId("business_id")
+                    .data(
+                        AbandonedCheckoutDetectedWebhookEvent.Data.builder()
+                            .abandonedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .abandonmentReason(
+                                AbandonedCheckoutDetectedWebhookEvent.Data.AbandonmentReason
+                                    .PAYMENT_FAILED
+                            )
+                            .customerId("customer_id")
+                            .paymentId("payment_id")
+                            .status(AbandonedCheckoutDetectedWebhookEvent.Data.Status.ABANDONED)
+                            .recoveredPaymentId("recovered_payment_id")
+                            .build()
+                    )
+                    .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .type(AbandonedCheckoutDetectedWebhookEvent.Type.ABANDONED_CHECKOUT_DETECTED)
+                    .build()
+            )
+
+        val roundtrippedUnsafeUnwrapWebhookEvent =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(unsafeUnwrapWebhookEvent),
+                jacksonTypeRef<UnsafeUnwrapWebhookEvent>(),
+            )
+
+        assertThat(roundtrippedUnsafeUnwrapWebhookEvent).isEqualTo(unsafeUnwrapWebhookEvent)
+    }
+
+    @Test
+    fun ofAbandonedCheckoutRecovered() {
+        val abandonedCheckoutRecovered =
+            AbandonedCheckoutRecoveredWebhookEvent.builder()
+                .businessId("business_id")
+                .data(
+                    AbandonedCheckoutRecoveredWebhookEvent.Data.builder()
+                        .abandonedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .abandonmentReason(
+                            AbandonedCheckoutRecoveredWebhookEvent.Data.AbandonmentReason
+                                .PAYMENT_FAILED
+                        )
+                        .customerId("customer_id")
+                        .paymentId("payment_id")
+                        .status(AbandonedCheckoutRecoveredWebhookEvent.Data.Status.ABANDONED)
+                        .recoveredPaymentId("recovered_payment_id")
+                        .build()
+                )
+                .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .type(AbandonedCheckoutRecoveredWebhookEvent.Type.ABANDONED_CHECKOUT_RECOVERED)
+                .build()
+
+        val unsafeUnwrapWebhookEvent =
+            UnsafeUnwrapWebhookEvent.ofAbandonedCheckoutRecovered(abandonedCheckoutRecovered)
+
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered())
+            .isEqualTo(abandonedCheckoutRecovered)
+        assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditExpired()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditManualAdjustment()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditOverageCharged()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditRolledOver()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditRolloverForfeited()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeAccepted()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeCancelled()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeChallenged()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeExpired()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.paymentProcessing()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.paymentSucceeded()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.refundFailed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.refundSucceeded()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionActive()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionCancelled()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionExpired()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionFailed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
+    }
+
+    @Test
+    fun ofAbandonedCheckoutRecoveredRoundtrip() {
+        val jsonMapper = jsonMapper()
+        val unsafeUnwrapWebhookEvent =
+            UnsafeUnwrapWebhookEvent.ofAbandonedCheckoutRecovered(
+                AbandonedCheckoutRecoveredWebhookEvent.builder()
+                    .businessId("business_id")
+                    .data(
+                        AbandonedCheckoutRecoveredWebhookEvent.Data.builder()
+                            .abandonedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .abandonmentReason(
+                                AbandonedCheckoutRecoveredWebhookEvent.Data.AbandonmentReason
+                                    .PAYMENT_FAILED
+                            )
+                            .customerId("customer_id")
+                            .paymentId("payment_id")
+                            .status(AbandonedCheckoutRecoveredWebhookEvent.Data.Status.ABANDONED)
+                            .recoveredPaymentId("recovered_payment_id")
+                            .build()
+                    )
+                    .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .type(AbandonedCheckoutRecoveredWebhookEvent.Type.ABANDONED_CHECKOUT_RECOVERED)
+                    .build()
+            )
+
+        val roundtrippedUnsafeUnwrapWebhookEvent =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(unsafeUnwrapWebhookEvent),
+                jacksonTypeRef<UnsafeUnwrapWebhookEvent>(),
+            )
+
+        assertThat(roundtrippedUnsafeUnwrapWebhookEvent).isEqualTo(unsafeUnwrapWebhookEvent)
+    }
+
+    @Test
     fun ofCreditAdded() {
         val creditAdded =
             CreditAddedWebhookEvent.builder()
@@ -72,6 +264,8 @@ internal class UnsafeUnwrapWebhookEventTest {
 
         val unsafeUnwrapWebhookEvent = UnsafeUnwrapWebhookEvent.ofCreditAdded(creditAdded)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isEqualTo(creditAdded)
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -87,6 +281,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -168,6 +364,8 @@ internal class UnsafeUnwrapWebhookEventTest {
 
         val unsafeUnwrapWebhookEvent = UnsafeUnwrapWebhookEvent.ofCreditBalanceLow(creditBalanceLow)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isEqualTo(creditBalanceLow)
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -183,6 +381,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -264,6 +464,8 @@ internal class UnsafeUnwrapWebhookEventTest {
 
         val unsafeUnwrapWebhookEvent = UnsafeUnwrapWebhookEvent.ofCreditDeducted(creditDeducted)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isEqualTo(creditDeducted)
@@ -279,6 +481,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -368,6 +572,8 @@ internal class UnsafeUnwrapWebhookEventTest {
 
         val unsafeUnwrapWebhookEvent = UnsafeUnwrapWebhookEvent.ofCreditExpired(creditExpired)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -383,6 +589,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -473,6 +681,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         val unsafeUnwrapWebhookEvent =
             UnsafeUnwrapWebhookEvent.ofCreditManualAdjustment(creditManualAdjustment)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -489,6 +699,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -579,6 +791,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         val unsafeUnwrapWebhookEvent =
             UnsafeUnwrapWebhookEvent.ofCreditOverageCharged(creditOverageCharged)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -594,6 +808,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -683,6 +899,8 @@ internal class UnsafeUnwrapWebhookEventTest {
 
         val unsafeUnwrapWebhookEvent = UnsafeUnwrapWebhookEvent.ofCreditRolledOver(creditRolledOver)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -698,6 +916,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -788,6 +1008,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         val unsafeUnwrapWebhookEvent =
             UnsafeUnwrapWebhookEvent.ofCreditRolloverForfeited(creditRolloverForfeited)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -804,6 +1026,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -887,6 +1111,8 @@ internal class UnsafeUnwrapWebhookEventTest {
 
         val unsafeUnwrapWebhookEvent = UnsafeUnwrapWebhookEvent.ofDisputeAccepted(disputeAccepted)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -902,6 +1128,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -979,6 +1207,8 @@ internal class UnsafeUnwrapWebhookEventTest {
 
         val unsafeUnwrapWebhookEvent = UnsafeUnwrapWebhookEvent.ofDisputeCancelled(disputeCancelled)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -994,6 +1224,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -1072,6 +1304,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         val unsafeUnwrapWebhookEvent =
             UnsafeUnwrapWebhookEvent.ofDisputeChallenged(disputeChallenged)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -1087,6 +1321,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -1164,6 +1400,8 @@ internal class UnsafeUnwrapWebhookEventTest {
 
         val unsafeUnwrapWebhookEvent = UnsafeUnwrapWebhookEvent.ofDisputeExpired(disputeExpired)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -1179,6 +1417,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -1256,6 +1496,8 @@ internal class UnsafeUnwrapWebhookEventTest {
 
         val unsafeUnwrapWebhookEvent = UnsafeUnwrapWebhookEvent.ofDisputeLost(disputeLost)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -1271,6 +1513,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isEqualTo(disputeLost)
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -1348,6 +1592,8 @@ internal class UnsafeUnwrapWebhookEventTest {
 
         val unsafeUnwrapWebhookEvent = UnsafeUnwrapWebhookEvent.ofDisputeOpened(disputeOpened)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -1363,6 +1609,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isEqualTo(disputeOpened)
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -1440,6 +1688,8 @@ internal class UnsafeUnwrapWebhookEventTest {
 
         val unsafeUnwrapWebhookEvent = UnsafeUnwrapWebhookEvent.ofDisputeWon(disputeWon)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -1455,6 +1705,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isEqualTo(disputeWon)
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -1508,6 +1760,182 @@ internal class UnsafeUnwrapWebhookEventTest {
     }
 
     @Test
+    fun ofDunningRecovered() {
+        val dunningRecovered =
+            DunningRecoveredWebhookEvent.builder()
+                .businessId("business_id")
+                .data(
+                    DunningRecoveredWebhookEvent.Data.builder()
+                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .customerId("customer_id")
+                        .status(DunningRecoveredWebhookEvent.Data.Status.RECOVERING)
+                        .subscriptionId("subscription_id")
+                        .triggerState(DunningRecoveredWebhookEvent.Data.TriggerState.ON_HOLD)
+                        .paymentId("payment_id")
+                        .build()
+                )
+                .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .type(DunningRecoveredWebhookEvent.Type.DUNNING_RECOVERED)
+                .build()
+
+        val unsafeUnwrapWebhookEvent = UnsafeUnwrapWebhookEvent.ofDunningRecovered(dunningRecovered)
+
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditExpired()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditManualAdjustment()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditOverageCharged()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditRolledOver()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditRolloverForfeited()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeAccepted()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeCancelled()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeChallenged()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeExpired()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isEqualTo(dunningRecovered)
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.paymentProcessing()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.paymentSucceeded()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.refundFailed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.refundSucceeded()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionActive()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionCancelled()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionExpired()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionFailed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
+    }
+
+    @Test
+    fun ofDunningRecoveredRoundtrip() {
+        val jsonMapper = jsonMapper()
+        val unsafeUnwrapWebhookEvent =
+            UnsafeUnwrapWebhookEvent.ofDunningRecovered(
+                DunningRecoveredWebhookEvent.builder()
+                    .businessId("business_id")
+                    .data(
+                        DunningRecoveredWebhookEvent.Data.builder()
+                            .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .customerId("customer_id")
+                            .status(DunningRecoveredWebhookEvent.Data.Status.RECOVERING)
+                            .subscriptionId("subscription_id")
+                            .triggerState(DunningRecoveredWebhookEvent.Data.TriggerState.ON_HOLD)
+                            .paymentId("payment_id")
+                            .build()
+                    )
+                    .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .type(DunningRecoveredWebhookEvent.Type.DUNNING_RECOVERED)
+                    .build()
+            )
+
+        val roundtrippedUnsafeUnwrapWebhookEvent =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(unsafeUnwrapWebhookEvent),
+                jacksonTypeRef<UnsafeUnwrapWebhookEvent>(),
+            )
+
+        assertThat(roundtrippedUnsafeUnwrapWebhookEvent).isEqualTo(unsafeUnwrapWebhookEvent)
+    }
+
+    @Test
+    fun ofDunningStarted() {
+        val dunningStarted =
+            DunningStartedWebhookEvent.builder()
+                .businessId("business_id")
+                .data(
+                    DunningStartedWebhookEvent.Data.builder()
+                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .customerId("customer_id")
+                        .status(DunningStartedWebhookEvent.Data.Status.RECOVERING)
+                        .subscriptionId("subscription_id")
+                        .triggerState(DunningStartedWebhookEvent.Data.TriggerState.ON_HOLD)
+                        .paymentId("payment_id")
+                        .build()
+                )
+                .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .type(DunningStartedWebhookEvent.Type.DUNNING_STARTED)
+                .build()
+
+        val unsafeUnwrapWebhookEvent = UnsafeUnwrapWebhookEvent.ofDunningStarted(dunningStarted)
+
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditExpired()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditManualAdjustment()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditOverageCharged()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditRolledOver()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.creditRolloverForfeited()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeAccepted()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeCancelled()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeChallenged()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeExpired()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isEqualTo(dunningStarted)
+        assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.paymentProcessing()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.paymentSucceeded()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.refundFailed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.refundSucceeded()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionActive()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionCancelled()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionExpired()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionFailed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionOnHold()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionPlanChanged()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.subscriptionUpdated()).isNull()
+    }
+
+    @Test
+    fun ofDunningStartedRoundtrip() {
+        val jsonMapper = jsonMapper()
+        val unsafeUnwrapWebhookEvent =
+            UnsafeUnwrapWebhookEvent.ofDunningStarted(
+                DunningStartedWebhookEvent.builder()
+                    .businessId("business_id")
+                    .data(
+                        DunningStartedWebhookEvent.Data.builder()
+                            .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .customerId("customer_id")
+                            .status(DunningStartedWebhookEvent.Data.Status.RECOVERING)
+                            .subscriptionId("subscription_id")
+                            .triggerState(DunningStartedWebhookEvent.Data.TriggerState.ON_HOLD)
+                            .paymentId("payment_id")
+                            .build()
+                    )
+                    .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .type(DunningStartedWebhookEvent.Type.DUNNING_STARTED)
+                    .build()
+            )
+
+        val roundtrippedUnsafeUnwrapWebhookEvent =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(unsafeUnwrapWebhookEvent),
+                jacksonTypeRef<UnsafeUnwrapWebhookEvent>(),
+            )
+
+        assertThat(roundtrippedUnsafeUnwrapWebhookEvent).isEqualTo(unsafeUnwrapWebhookEvent)
+    }
+
+    @Test
     fun ofLicenseKeyCreated() {
         val licenseKeyCreated =
             LicenseKeyCreatedWebhookEvent.builder()
@@ -1535,6 +1963,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         val unsafeUnwrapWebhookEvent =
             UnsafeUnwrapWebhookEvent.ofLicenseKeyCreated(licenseKeyCreated)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -1550,6 +1980,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isEqualTo(licenseKeyCreated)
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -1711,6 +2143,8 @@ internal class UnsafeUnwrapWebhookEventTest {
 
         val unsafeUnwrapWebhookEvent = UnsafeUnwrapWebhookEvent.ofPaymentCancelled(paymentCancelled)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -1726,6 +2160,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isEqualTo(paymentCancelled)
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -1967,6 +2403,8 @@ internal class UnsafeUnwrapWebhookEventTest {
 
         val unsafeUnwrapWebhookEvent = UnsafeUnwrapWebhookEvent.ofPaymentFailed(paymentFailed)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -1982,6 +2420,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isEqualTo(paymentFailed)
@@ -2224,6 +2664,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         val unsafeUnwrapWebhookEvent =
             UnsafeUnwrapWebhookEvent.ofPaymentProcessing(paymentProcessing)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -2239,6 +2681,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -2480,6 +2924,8 @@ internal class UnsafeUnwrapWebhookEventTest {
 
         val unsafeUnwrapWebhookEvent = UnsafeUnwrapWebhookEvent.ofPaymentSucceeded(paymentSucceeded)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -2495,6 +2941,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -2671,6 +3119,8 @@ internal class UnsafeUnwrapWebhookEventTest {
 
         val unsafeUnwrapWebhookEvent = UnsafeUnwrapWebhookEvent.ofRefundFailed(refundFailed)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -2686,6 +3136,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -2797,6 +3249,8 @@ internal class UnsafeUnwrapWebhookEventTest {
 
         val unsafeUnwrapWebhookEvent = UnsafeUnwrapWebhookEvent.ofRefundSucceeded(refundSucceeded)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -2812,6 +3266,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -3012,6 +3468,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         val unsafeUnwrapWebhookEvent =
             UnsafeUnwrapWebhookEvent.ofSubscriptionActive(subscriptionActive)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -3027,6 +3485,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -3318,6 +3778,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         val unsafeUnwrapWebhookEvent =
             UnsafeUnwrapWebhookEvent.ofSubscriptionCancelled(subscriptionCancelled)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -3333,6 +3795,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -3625,6 +4089,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         val unsafeUnwrapWebhookEvent =
             UnsafeUnwrapWebhookEvent.ofSubscriptionExpired(subscriptionExpired)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -3640,6 +4106,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -3931,6 +4399,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         val unsafeUnwrapWebhookEvent =
             UnsafeUnwrapWebhookEvent.ofSubscriptionFailed(subscriptionFailed)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -3946,6 +4416,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -4237,6 +4709,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         val unsafeUnwrapWebhookEvent =
             UnsafeUnwrapWebhookEvent.ofSubscriptionOnHold(subscriptionOnHold)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -4252,6 +4726,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -4543,6 +5019,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         val unsafeUnwrapWebhookEvent =
             UnsafeUnwrapWebhookEvent.ofSubscriptionPlanChanged(subscriptionPlanChanged)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -4558,6 +5036,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -4850,6 +5330,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         val unsafeUnwrapWebhookEvent =
             UnsafeUnwrapWebhookEvent.ofSubscriptionRenewed(subscriptionRenewed)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -4865,6 +5347,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()
@@ -5156,6 +5640,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         val unsafeUnwrapWebhookEvent =
             UnsafeUnwrapWebhookEvent.ofSubscriptionUpdated(subscriptionUpdated)
 
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditAdded()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditBalanceLow()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.creditDeducted()).isNull()
@@ -5171,6 +5657,8 @@ internal class UnsafeUnwrapWebhookEventTest {
         assertThat(unsafeUnwrapWebhookEvent.disputeLost()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeOpened()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unsafeUnwrapWebhookEvent.dunningStarted()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.licenseKeyCreated()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentCancelled()).isNull()
         assertThat(unsafeUnwrapWebhookEvent.paymentFailed()).isNull()

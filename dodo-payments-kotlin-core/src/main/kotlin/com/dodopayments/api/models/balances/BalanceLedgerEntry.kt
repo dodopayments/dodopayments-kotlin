@@ -622,6 +622,10 @@ private constructor(
 
             val CURRENCY_CONVERSION = of("currency_conversion")
 
+            val ABANDONED_CART_RECOVERY_FEE = of("abandoned_cart_recovery_fee")
+
+            val DUNNING_FEES = of("dunning_fees")
+
             fun of(value: String) = EventType(JsonField.of(value))
         }
 
@@ -645,6 +649,8 @@ private constructor(
             DODO_CREDITS,
             ADJUSTMENT,
             CURRENCY_CONVERSION,
+            ABANDONED_CART_RECOVERY_FEE,
+            DUNNING_FEES,
         }
 
         /**
@@ -675,6 +681,8 @@ private constructor(
             DODO_CREDITS,
             ADJUSTMENT,
             CURRENCY_CONVERSION,
+            ABANDONED_CART_RECOVERY_FEE,
+            DUNNING_FEES,
             /**
              * An enum member indicating that [EventType] was instantiated with an unknown value.
              */
@@ -708,6 +716,8 @@ private constructor(
                 DODO_CREDITS -> Value.DODO_CREDITS
                 ADJUSTMENT -> Value.ADJUSTMENT
                 CURRENCY_CONVERSION -> Value.CURRENCY_CONVERSION
+                ABANDONED_CART_RECOVERY_FEE -> Value.ABANDONED_CART_RECOVERY_FEE
+                DUNNING_FEES -> Value.DUNNING_FEES
                 else -> Value._UNKNOWN
             }
 
@@ -740,6 +750,8 @@ private constructor(
                 DODO_CREDITS -> Known.DODO_CREDITS
                 ADJUSTMENT -> Known.ADJUSTMENT
                 CURRENCY_CONVERSION -> Known.CURRENCY_CONVERSION
+                ABANDONED_CART_RECOVERY_FEE -> Known.ABANDONED_CART_RECOVERY_FEE
+                DUNNING_FEES -> Known.DUNNING_FEES
                 else -> throw DodoPaymentsInvalidDataException("Unknown EventType: $value")
             }
 

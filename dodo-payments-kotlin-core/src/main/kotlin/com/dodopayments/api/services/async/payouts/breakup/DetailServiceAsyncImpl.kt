@@ -1,0 +1,124 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package com.dodopayments.api.services.async.payouts.breakup
+
+import com.dodopayments.api.core.ClientOptions
+import com.dodopayments.api.core.RequestOptions
+import com.dodopayments.api.core.checkRequired
+import com.dodopayments.api.core.handlers.emptyHandler
+import com.dodopayments.api.core.handlers.errorBodyHandler
+import com.dodopayments.api.core.handlers.errorHandler
+import com.dodopayments.api.core.handlers.jsonHandler
+import com.dodopayments.api.core.http.HttpMethod
+import com.dodopayments.api.core.http.HttpRequest
+import com.dodopayments.api.core.http.HttpResponse
+import com.dodopayments.api.core.http.HttpResponse.Handler
+import com.dodopayments.api.core.http.HttpResponseFor
+import com.dodopayments.api.core.http.parseable
+import com.dodopayments.api.core.prepareAsync
+import com.dodopayments.api.models.payouts.breakup.details.DetailDownloadCsvParams
+import com.dodopayments.api.models.payouts.breakup.details.DetailListPageAsync
+import com.dodopayments.api.models.payouts.breakup.details.DetailListPageResponse
+import com.dodopayments.api.models.payouts.breakup.details.DetailListParams
+
+class DetailServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    DetailServiceAsync {
+
+    private val withRawResponse: DetailServiceAsync.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
+
+    override fun withRawResponse(): DetailServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): DetailServiceAsync =
+        DetailServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
+    override suspend fun list(
+        params: DetailListParams,
+        requestOptions: RequestOptions,
+    ): DetailListPageAsync =
+        // get /payouts/{payout_id}/breakup/details
+        withRawResponse().list(params, requestOptions).parse()
+
+    override suspend fun downloadCsv(
+        params: DetailDownloadCsvParams,
+        requestOptions: RequestOptions,
+    ) {
+        // get /payouts/{payout_id}/breakup/details/csv
+        withRawResponse().downloadCsv(params, requestOptions)
+    }
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        DetailServiceAsync.WithRawResponse {
+
+        private val errorHandler: Handler<HttpResponse> =
+            errorHandler(errorBodyHandler(clientOptions.jsonMapper))
+
+        override fun withOptions(
+            modifier: (ClientOptions.Builder) -> Unit
+        ): DetailServiceAsync.WithRawResponse =
+            DetailServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier).build()
+            )
+
+        private val listHandler: Handler<DetailListPageResponse> =
+            jsonHandler<DetailListPageResponse>(clientOptions.jsonMapper)
+
+        override suspend fun list(
+            params: DetailListParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<DetailListPageAsync> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("payoutId", params.payoutId())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("payouts", params._pathParam(0), "breakup", "details")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { listHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+                    .let {
+                        DetailListPageAsync.builder()
+                            .service(DetailServiceAsyncImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
+            }
+        }
+
+        private val downloadCsvHandler: Handler<Void?> = emptyHandler()
+
+        override suspend fun downloadCsv(
+            params: DetailDownloadCsvParams,
+            requestOptions: RequestOptions,
+        ): HttpResponse {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("payoutId", params.payoutId())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("payouts", params._pathParam(0), "breakup", "details", "csv")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response.use { downloadCsvHandler.handle(it) }
+            }
+        }
+    }
+}
