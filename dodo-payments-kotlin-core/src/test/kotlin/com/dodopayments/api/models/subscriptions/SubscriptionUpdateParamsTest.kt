@@ -25,6 +25,7 @@ internal class SubscriptionUpdateParamsTest {
                     .build()
             )
             .cancelAtNextBillingDate(true)
+            .cancelReason(SubscriptionUpdateParams.CancelReason.CANCELLED_BY_CUSTOMER)
             .addCreditEntitlementCart(
                 SubscriptionUpdateParams.CreditEntitlementCart.builder()
                     .creditEntitlementId("credit_entitlement_id")
@@ -81,6 +82,7 @@ internal class SubscriptionUpdateParamsTest {
                         .build()
                 )
                 .cancelAtNextBillingDate(true)
+                .cancelReason(SubscriptionUpdateParams.CancelReason.CANCELLED_BY_CUSTOMER)
                 .addCreditEntitlementCart(
                     SubscriptionUpdateParams.CreditEntitlementCart.builder()
                         .creditEntitlementId("credit_entitlement_id")
@@ -125,6 +127,8 @@ internal class SubscriptionUpdateParamsTest {
                     .build()
             )
         assertThat(body.cancelAtNextBillingDate()).isEqualTo(true)
+        assertThat(body.cancelReason())
+            .isEqualTo(SubscriptionUpdateParams.CancelReason.CANCELLED_BY_CUSTOMER)
         assertThat(body.creditEntitlementCart())
             .containsExactly(
                 SubscriptionUpdateParams.CreditEntitlementCart.builder()

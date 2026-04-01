@@ -2,6 +2,7 @@
 
 package com.dodopayments.api.models.subscriptions
 
+import com.dodopayments.api.core.Enum
 import com.dodopayments.api.core.ExcludeMissing
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
@@ -45,6 +46,12 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun cancelAtNextBillingDate(): Boolean? = body.cancelAtNextBillingDate()
+
+    /**
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun cancelReason(): CancelReason? = body.cancelReason()
 
     /**
      * Update credit entitlement cart settings
@@ -104,6 +111,13 @@ private constructor(
      * unexpected type.
      */
     fun _cancelAtNextBillingDate(): JsonField<Boolean> = body._cancelAtNextBillingDate()
+
+    /**
+     * Returns the raw JSON value of [cancelReason].
+     *
+     * Unlike [cancelReason], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _cancelReason(): JsonField<CancelReason> = body._cancelReason()
 
     /**
      * Returns the raw JSON value of [creditEntitlementCart].
@@ -198,9 +212,9 @@ private constructor(
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [billing]
          * - [cancelAtNextBillingDate]
+         * - [cancelReason]
          * - [creditEntitlementCart]
          * - [customerName]
-         * - [disableOnDemand]
          * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
@@ -238,6 +252,19 @@ private constructor(
          */
         fun cancelAtNextBillingDate(cancelAtNextBillingDate: JsonField<Boolean>) = apply {
             body.cancelAtNextBillingDate(cancelAtNextBillingDate)
+        }
+
+        fun cancelReason(cancelReason: CancelReason?) = apply { body.cancelReason(cancelReason) }
+
+        /**
+         * Sets [Builder.cancelReason] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cancelReason] with a well-typed [CancelReason] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun cancelReason(cancelReason: JsonField<CancelReason>) = apply {
+            body.cancelReason(cancelReason)
         }
 
         /** Update credit entitlement cart settings */
@@ -489,6 +516,7 @@ private constructor(
     private constructor(
         private val billing: JsonField<BillingAddress>,
         private val cancelAtNextBillingDate: JsonField<Boolean>,
+        private val cancelReason: JsonField<CancelReason>,
         private val creditEntitlementCart: JsonField<List<CreditEntitlementCart>>,
         private val customerName: JsonField<String>,
         private val disableOnDemand: JsonField<DisableOnDemand>,
@@ -507,6 +535,9 @@ private constructor(
             @JsonProperty("cancel_at_next_billing_date")
             @ExcludeMissing
             cancelAtNextBillingDate: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("cancel_reason")
+            @ExcludeMissing
+            cancelReason: JsonField<CancelReason> = JsonMissing.of(),
             @JsonProperty("credit_entitlement_cart")
             @ExcludeMissing
             creditEntitlementCart: JsonField<List<CreditEntitlementCart>> = JsonMissing.of(),
@@ -529,6 +560,7 @@ private constructor(
         ) : this(
             billing,
             cancelAtNextBillingDate,
+            cancelReason,
             creditEntitlementCart,
             customerName,
             disableOnDemand,
@@ -553,6 +585,12 @@ private constructor(
          */
         fun cancelAtNextBillingDate(): Boolean? =
             cancelAtNextBillingDate.getNullable("cancel_at_next_billing_date")
+
+        /**
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun cancelReason(): CancelReason? = cancelReason.getNullable("cancel_reason")
 
         /**
          * Update credit entitlement cart settings
@@ -615,6 +653,16 @@ private constructor(
         @JsonProperty("cancel_at_next_billing_date")
         @ExcludeMissing
         fun _cancelAtNextBillingDate(): JsonField<Boolean> = cancelAtNextBillingDate
+
+        /**
+         * Returns the raw JSON value of [cancelReason].
+         *
+         * Unlike [cancelReason], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("cancel_reason")
+        @ExcludeMissing
+        fun _cancelReason(): JsonField<CancelReason> = cancelReason
 
         /**
          * Returns the raw JSON value of [creditEntitlementCart].
@@ -702,6 +750,7 @@ private constructor(
 
             private var billing: JsonField<BillingAddress> = JsonMissing.of()
             private var cancelAtNextBillingDate: JsonField<Boolean> = JsonMissing.of()
+            private var cancelReason: JsonField<CancelReason> = JsonMissing.of()
             private var creditEntitlementCart: JsonField<MutableList<CreditEntitlementCart>>? = null
             private var customerName: JsonField<String> = JsonMissing.of()
             private var disableOnDemand: JsonField<DisableOnDemand> = JsonMissing.of()
@@ -714,6 +763,7 @@ private constructor(
             internal fun from(body: Body) = apply {
                 billing = body.billing
                 cancelAtNextBillingDate = body.cancelAtNextBillingDate
+                cancelReason = body.cancelReason
                 creditEntitlementCart = body.creditEntitlementCart.map { it.toMutableList() }
                 customerName = body.customerName
                 disableOnDemand = body.disableOnDemand
@@ -756,6 +806,20 @@ private constructor(
              */
             fun cancelAtNextBillingDate(cancelAtNextBillingDate: JsonField<Boolean>) = apply {
                 this.cancelAtNextBillingDate = cancelAtNextBillingDate
+            }
+
+            fun cancelReason(cancelReason: CancelReason?) =
+                cancelReason(JsonField.ofNullable(cancelReason))
+
+            /**
+             * Sets [Builder.cancelReason] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.cancelReason] with a well-typed [CancelReason] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun cancelReason(cancelReason: JsonField<CancelReason>) = apply {
+                this.cancelReason = cancelReason
             }
 
             /** Update credit entitlement cart settings */
@@ -890,6 +954,7 @@ private constructor(
                 Body(
                     billing,
                     cancelAtNextBillingDate,
+                    cancelReason,
                     (creditEntitlementCart ?: JsonMissing.of()).map { it.toImmutable() },
                     customerName,
                     disableOnDemand,
@@ -910,6 +975,7 @@ private constructor(
 
             billing()?.validate()
             cancelAtNextBillingDate()
+            cancelReason()?.validate()
             creditEntitlementCart()?.forEach { it.validate() }
             customerName()
             disableOnDemand()?.validate()
@@ -937,6 +1003,7 @@ private constructor(
         internal fun validity(): Int =
             (billing.asKnown()?.validity() ?: 0) +
                 (if (cancelAtNextBillingDate.asKnown() == null) 0 else 1) +
+                (cancelReason.asKnown()?.validity() ?: 0) +
                 (creditEntitlementCart.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
                 (if (customerName.asKnown() == null) 0 else 1) +
                 (disableOnDemand.asKnown()?.validity() ?: 0) +
@@ -953,6 +1020,7 @@ private constructor(
             return other is Body &&
                 billing == other.billing &&
                 cancelAtNextBillingDate == other.cancelAtNextBillingDate &&
+                cancelReason == other.cancelReason &&
                 creditEntitlementCart == other.creditEntitlementCart &&
                 customerName == other.customerName &&
                 disableOnDemand == other.disableOnDemand &&
@@ -967,6 +1035,7 @@ private constructor(
             Objects.hash(
                 billing,
                 cancelAtNextBillingDate,
+                cancelReason,
                 creditEntitlementCart,
                 customerName,
                 disableOnDemand,
@@ -981,7 +1050,141 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{billing=$billing, cancelAtNextBillingDate=$cancelAtNextBillingDate, creditEntitlementCart=$creditEntitlementCart, customerName=$customerName, disableOnDemand=$disableOnDemand, metadata=$metadata, nextBillingDate=$nextBillingDate, status=$status, taxId=$taxId, additionalProperties=$additionalProperties}"
+            "Body{billing=$billing, cancelAtNextBillingDate=$cancelAtNextBillingDate, cancelReason=$cancelReason, creditEntitlementCart=$creditEntitlementCart, customerName=$customerName, disableOnDemand=$disableOnDemand, metadata=$metadata, nextBillingDate=$nextBillingDate, status=$status, taxId=$taxId, additionalProperties=$additionalProperties}"
+    }
+
+    class CancelReason @JsonCreator private constructor(private val value: JsonField<String>) :
+        Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            val CANCELLED_BY_CUSTOMER = of("cancelled_by_customer")
+
+            val CANCELLED_BY_MERCHANT = of("cancelled_by_merchant")
+
+            val CANCELLED_BY_MERCHANT_SEND_DUNNING = of("cancelled_by_merchant_send_dunning")
+
+            fun of(value: String) = CancelReason(JsonField.of(value))
+        }
+
+        /** An enum containing [CancelReason]'s known values. */
+        enum class Known {
+            CANCELLED_BY_CUSTOMER,
+            CANCELLED_BY_MERCHANT,
+            CANCELLED_BY_MERCHANT_SEND_DUNNING,
+        }
+
+        /**
+         * An enum containing [CancelReason]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [CancelReason] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            CANCELLED_BY_CUSTOMER,
+            CANCELLED_BY_MERCHANT,
+            CANCELLED_BY_MERCHANT_SEND_DUNNING,
+            /**
+             * An enum member indicating that [CancelReason] was instantiated with an unknown value.
+             */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                CANCELLED_BY_CUSTOMER -> Value.CANCELLED_BY_CUSTOMER
+                CANCELLED_BY_MERCHANT -> Value.CANCELLED_BY_MERCHANT
+                CANCELLED_BY_MERCHANT_SEND_DUNNING -> Value.CANCELLED_BY_MERCHANT_SEND_DUNNING
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws DodoPaymentsInvalidDataException if this class instance's value is a not a known
+         *   member.
+         */
+        fun known(): Known =
+            when (this) {
+                CANCELLED_BY_CUSTOMER -> Known.CANCELLED_BY_CUSTOMER
+                CANCELLED_BY_MERCHANT -> Known.CANCELLED_BY_MERCHANT
+                CANCELLED_BY_MERCHANT_SEND_DUNNING -> Known.CANCELLED_BY_MERCHANT_SEND_DUNNING
+                else -> throw DodoPaymentsInvalidDataException("Unknown CancelReason: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws DodoPaymentsInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString() ?: throw DodoPaymentsInvalidDataException("Value is not a String")
+
+        private var validated: Boolean = false
+
+        fun validate(): CancelReason = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is CancelReason && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
     }
 
     class CreditEntitlementCart
