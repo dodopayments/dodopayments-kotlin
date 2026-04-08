@@ -70,6 +70,14 @@ private constructor(
     fun expiresAt(): OffsetDateTime? = body.expiresAt()
 
     /**
+     * Additional metadata for the discount
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun metadata(): Metadata? = body.metadata()
+
+    /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
@@ -136,6 +144,13 @@ private constructor(
      * Unlike [expiresAt], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _expiresAt(): JsonField<OffsetDateTime> = body._expiresAt()
+
+    /**
+     * Returns the raw JSON value of [metadata].
+     *
+     * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _metadata(): JsonField<Metadata> = body._metadata()
 
     /**
      * Returns the raw JSON value of [name].
@@ -220,7 +235,7 @@ private constructor(
          * - [type]
          * - [code]
          * - [expiresAt]
-         * - [name]
+         * - [metadata]
          * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
@@ -282,6 +297,18 @@ private constructor(
          * supported value.
          */
         fun expiresAt(expiresAt: JsonField<OffsetDateTime>) = apply { body.expiresAt(expiresAt) }
+
+        /** Additional metadata for the discount */
+        fun metadata(metadata: Metadata) = apply { body.metadata(metadata) }
+
+        /**
+         * Sets [Builder.metadata] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.metadata] with a well-typed [Metadata] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun metadata(metadata: JsonField<Metadata>) = apply { body.metadata(metadata) }
 
         fun name(name: String?) = apply { body.name(name) }
 
@@ -535,6 +562,7 @@ private constructor(
         private val type: JsonField<DiscountType>,
         private val code: JsonField<String>,
         private val expiresAt: JsonField<OffsetDateTime>,
+        private val metadata: JsonField<Metadata>,
         private val name: JsonField<String>,
         private val preserveOnPlanChange: JsonField<Boolean>,
         private val restrictedTo: JsonField<List<String>>,
@@ -551,6 +579,9 @@ private constructor(
             @JsonProperty("expires_at")
             @ExcludeMissing
             expiresAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("metadata")
+            @ExcludeMissing
+            metadata: JsonField<Metadata> = JsonMissing.of(),
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
             @JsonProperty("preserve_on_plan_change")
             @ExcludeMissing
@@ -569,6 +600,7 @@ private constructor(
             type,
             code,
             expiresAt,
+            metadata,
             name,
             preserveOnPlanChange,
             restrictedTo,
@@ -616,6 +648,14 @@ private constructor(
          *   if the server responded with an unexpected value).
          */
         fun expiresAt(): OffsetDateTime? = expiresAt.getNullable("expires_at")
+
+        /**
+         * Additional metadata for the discount
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun metadata(): Metadata? = metadata.getNullable("metadata")
 
         /**
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
@@ -688,6 +728,13 @@ private constructor(
         @JsonProperty("expires_at")
         @ExcludeMissing
         fun _expiresAt(): JsonField<OffsetDateTime> = expiresAt
+
+        /**
+         * Returns the raw JSON value of [metadata].
+         *
+         * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
 
         /**
          * Returns the raw JSON value of [name].
@@ -766,6 +813,7 @@ private constructor(
             private var type: JsonField<DiscountType>? = null
             private var code: JsonField<String> = JsonMissing.of()
             private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var metadata: JsonField<Metadata> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
             private var preserveOnPlanChange: JsonField<Boolean> = JsonMissing.of()
             private var restrictedTo: JsonField<MutableList<String>>? = null
@@ -778,6 +826,7 @@ private constructor(
                 type = body.type
                 code = body.code
                 expiresAt = body.expiresAt
+                metadata = body.metadata
                 name = body.name
                 preserveOnPlanChange = body.preserveOnPlanChange
                 restrictedTo = body.restrictedTo.map { it.toMutableList() }
@@ -847,6 +896,18 @@ private constructor(
             fun expiresAt(expiresAt: JsonField<OffsetDateTime>) = apply {
                 this.expiresAt = expiresAt
             }
+
+            /** Additional metadata for the discount */
+            fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
+
+            /**
+             * Sets [Builder.metadata] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
             fun name(name: String?) = name(JsonField.ofNullable(name))
 
@@ -988,6 +1049,7 @@ private constructor(
                     checkRequired("type", type),
                     code,
                     expiresAt,
+                    metadata,
                     name,
                     preserveOnPlanChange,
                     (restrictedTo ?: JsonMissing.of()).map { it.toImmutable() },
@@ -1008,6 +1070,7 @@ private constructor(
             type().validate()
             code()
             expiresAt()
+            metadata()?.validate()
             name()
             preserveOnPlanChange()
             restrictedTo()
@@ -1035,6 +1098,7 @@ private constructor(
                 (type.asKnown()?.validity() ?: 0) +
                 (if (code.asKnown() == null) 0 else 1) +
                 (if (expiresAt.asKnown() == null) 0 else 1) +
+                (metadata.asKnown()?.validity() ?: 0) +
                 (if (name.asKnown() == null) 0 else 1) +
                 (if (preserveOnPlanChange.asKnown() == null) 0 else 1) +
                 (restrictedTo.asKnown()?.size ?: 0) +
@@ -1051,6 +1115,7 @@ private constructor(
                 type == other.type &&
                 code == other.code &&
                 expiresAt == other.expiresAt &&
+                metadata == other.metadata &&
                 name == other.name &&
                 preserveOnPlanChange == other.preserveOnPlanChange &&
                 restrictedTo == other.restrictedTo &&
@@ -1065,6 +1130,7 @@ private constructor(
                 type,
                 code,
                 expiresAt,
+                metadata,
                 name,
                 preserveOnPlanChange,
                 restrictedTo,
@@ -1077,7 +1143,105 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{amount=$amount, type=$type, code=$code, expiresAt=$expiresAt, name=$name, preserveOnPlanChange=$preserveOnPlanChange, restrictedTo=$restrictedTo, subscriptionCycles=$subscriptionCycles, usageLimit=$usageLimit, additionalProperties=$additionalProperties}"
+            "Body{amount=$amount, type=$type, code=$code, expiresAt=$expiresAt, metadata=$metadata, name=$name, preserveOnPlanChange=$preserveOnPlanChange, restrictedTo=$restrictedTo, subscriptionCycles=$subscriptionCycles, usageLimit=$usageLimit, additionalProperties=$additionalProperties}"
+    }
+
+    /** Additional metadata for the discount */
+    class Metadata
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Metadata]. */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [Metadata]. */
+        class Builder internal constructor() {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(metadata: Metadata) = apply {
+                additionalProperties = metadata.additionalProperties.toMutableMap()
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Metadata].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Metadata = Metadata(additionalProperties.toImmutable())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Metadata = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Metadata && additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

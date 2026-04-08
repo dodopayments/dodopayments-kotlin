@@ -4,6 +4,7 @@ package com.dodopayments.api.services.blocking
 
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.discounts.DiscountCreateParams
 import com.dodopayments.api.models.discounts.DiscountType
 import com.dodopayments.api.models.discounts.DiscountUpdateParams
@@ -30,6 +31,11 @@ internal class DiscountServiceTest {
                     .type(DiscountType.PERCENTAGE)
                     .code("code")
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .metadata(
+                        DiscountCreateParams.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .name("name")
                     .preserveOnPlanChange(true)
                     .addRestrictedTo("string")
@@ -71,6 +77,11 @@ internal class DiscountServiceTest {
                     .amount(0)
                     .code("code")
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .metadata(
+                        DiscountUpdateParams.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .name("name")
                     .preserveOnPlanChange(true)
                     .addRestrictedTo("string")
