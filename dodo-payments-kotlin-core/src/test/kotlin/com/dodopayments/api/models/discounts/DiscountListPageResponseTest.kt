@@ -2,6 +2,7 @@
 
 package com.dodopayments.api.models.discounts
 
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
@@ -21,6 +22,11 @@ internal class DiscountListPageResponseTest {
                         .code("code")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .discountId("discount_id")
+                        .metadata(
+                            Discount.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .preserveOnPlanChange(true)
                         .addRestrictedTo("string")
                         .timesUsed(0)
@@ -41,6 +47,11 @@ internal class DiscountListPageResponseTest {
                     .code("code")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .discountId("discount_id")
+                    .metadata(
+                        Discount.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .preserveOnPlanChange(true)
                     .addRestrictedTo("string")
                     .timesUsed(0)
@@ -65,6 +76,11 @@ internal class DiscountListPageResponseTest {
                         .code("code")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .discountId("discount_id")
+                        .metadata(
+                            Discount.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .preserveOnPlanChange(true)
                         .addRestrictedTo("string")
                         .timesUsed(0)

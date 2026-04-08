@@ -2,6 +2,7 @@
 
 package com.dodopayments.api.models.discounts
 
+import com.dodopayments.api.core.JsonValue
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -15,6 +16,11 @@ internal class DiscountCreateParamsTest {
             .type(DiscountType.PERCENTAGE)
             .code("code")
             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+            .metadata(
+                DiscountCreateParams.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
             .name("name")
             .preserveOnPlanChange(true)
             .addRestrictedTo("string")
@@ -31,6 +37,11 @@ internal class DiscountCreateParamsTest {
                 .type(DiscountType.PERCENTAGE)
                 .code("code")
                 .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .metadata(
+                    DiscountCreateParams.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .name("name")
                 .preserveOnPlanChange(true)
                 .addRestrictedTo("string")
@@ -44,6 +55,12 @@ internal class DiscountCreateParamsTest {
         assertThat(body.type()).isEqualTo(DiscountType.PERCENTAGE)
         assertThat(body.code()).isEqualTo("code")
         assertThat(body.expiresAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.metadata())
+            .isEqualTo(
+                DiscountCreateParams.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(body.name()).isEqualTo("name")
         assertThat(body.preserveOnPlanChange()).isEqualTo(true)
         assertThat(body.restrictedTo()).containsExactly("string")

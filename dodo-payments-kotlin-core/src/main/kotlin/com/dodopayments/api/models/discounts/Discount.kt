@@ -26,6 +26,7 @@ private constructor(
     private val code: JsonField<String>,
     private val createdAt: JsonField<OffsetDateTime>,
     private val discountId: JsonField<String>,
+    private val metadata: JsonField<Metadata>,
     private val preserveOnPlanChange: JsonField<Boolean>,
     private val restrictedTo: JsonField<List<String>>,
     private val timesUsed: JsonField<Int>,
@@ -50,6 +51,7 @@ private constructor(
         @JsonProperty("discount_id")
         @ExcludeMissing
         discountId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("metadata") @ExcludeMissing metadata: JsonField<Metadata> = JsonMissing.of(),
         @JsonProperty("preserve_on_plan_change")
         @ExcludeMissing
         preserveOnPlanChange: JsonField<Boolean> = JsonMissing.of(),
@@ -72,6 +74,7 @@ private constructor(
         code,
         createdAt,
         discountId,
+        metadata,
         preserveOnPlanChange,
         restrictedTo,
         timesUsed,
@@ -124,6 +127,12 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun discountId(): String = discountId.getRequired("discount_id")
+
+    /**
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun metadata(): Metadata = metadata.getRequired("metadata")
 
     /**
      * Whether this discount should be preserved when a subscription changes plans. Default: false
@@ -230,6 +239,13 @@ private constructor(
     @JsonProperty("discount_id") @ExcludeMissing fun _discountId(): JsonField<String> = discountId
 
     /**
+     * Returns the raw JSON value of [metadata].
+     *
+     * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
+
+    /**
      * Returns the raw JSON value of [preserveOnPlanChange].
      *
      * Unlike [preserveOnPlanChange], this method doesn't throw if the JSON field has an unexpected
@@ -319,6 +335,7 @@ private constructor(
          * .code()
          * .createdAt()
          * .discountId()
+         * .metadata()
          * .preserveOnPlanChange()
          * .restrictedTo()
          * .timesUsed()
@@ -336,6 +353,7 @@ private constructor(
         private var code: JsonField<String>? = null
         private var createdAt: JsonField<OffsetDateTime>? = null
         private var discountId: JsonField<String>? = null
+        private var metadata: JsonField<Metadata>? = null
         private var preserveOnPlanChange: JsonField<Boolean>? = null
         private var restrictedTo: JsonField<MutableList<String>>? = null
         private var timesUsed: JsonField<Int>? = null
@@ -352,6 +370,7 @@ private constructor(
             code = discount.code
             createdAt = discount.createdAt
             discountId = discount.discountId
+            metadata = discount.metadata
             preserveOnPlanChange = discount.preserveOnPlanChange
             restrictedTo = discount.restrictedTo.map { it.toMutableList() }
             timesUsed = discount.timesUsed
@@ -424,6 +443,17 @@ private constructor(
          * value.
          */
         fun discountId(discountId: JsonField<String>) = apply { this.discountId = discountId }
+
+        fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
+
+        /**
+         * Sets [Builder.metadata] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.metadata] with a well-typed [Metadata] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
         /**
          * Whether this discount should be preserved when a subscription changes plans. Default:
@@ -591,6 +621,7 @@ private constructor(
          * .code()
          * .createdAt()
          * .discountId()
+         * .metadata()
          * .preserveOnPlanChange()
          * .restrictedTo()
          * .timesUsed()
@@ -606,6 +637,7 @@ private constructor(
                 checkRequired("code", code),
                 checkRequired("createdAt", createdAt),
                 checkRequired("discountId", discountId),
+                checkRequired("metadata", metadata),
                 checkRequired("preserveOnPlanChange", preserveOnPlanChange),
                 checkRequired("restrictedTo", restrictedTo).map { it.toImmutable() },
                 checkRequired("timesUsed", timesUsed),
@@ -630,6 +662,7 @@ private constructor(
         code()
         createdAt()
         discountId()
+        metadata().validate()
         preserveOnPlanChange()
         restrictedTo()
         timesUsed()
@@ -660,6 +693,7 @@ private constructor(
             (if (code.asKnown() == null) 0 else 1) +
             (if (createdAt.asKnown() == null) 0 else 1) +
             (if (discountId.asKnown() == null) 0 else 1) +
+            (metadata.asKnown()?.validity() ?: 0) +
             (if (preserveOnPlanChange.asKnown() == null) 0 else 1) +
             (restrictedTo.asKnown()?.size ?: 0) +
             (if (timesUsed.asKnown() == null) 0 else 1) +
@@ -668,6 +702,103 @@ private constructor(
             (if (name.asKnown() == null) 0 else 1) +
             (if (subscriptionCycles.asKnown() == null) 0 else 1) +
             (if (usageLimit.asKnown() == null) 0 else 1)
+
+    class Metadata
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Metadata]. */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [Metadata]. */
+        class Builder internal constructor() {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(metadata: Metadata) = apply {
+                additionalProperties = metadata.additionalProperties.toMutableMap()
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Metadata].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Metadata = Metadata(additionalProperties.toImmutable())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Metadata = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Metadata && additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -680,6 +811,7 @@ private constructor(
             code == other.code &&
             createdAt == other.createdAt &&
             discountId == other.discountId &&
+            metadata == other.metadata &&
             preserveOnPlanChange == other.preserveOnPlanChange &&
             restrictedTo == other.restrictedTo &&
             timesUsed == other.timesUsed &&
@@ -698,6 +830,7 @@ private constructor(
             code,
             createdAt,
             discountId,
+            metadata,
             preserveOnPlanChange,
             restrictedTo,
             timesUsed,
@@ -713,5 +846,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Discount{amount=$amount, businessId=$businessId, code=$code, createdAt=$createdAt, discountId=$discountId, preserveOnPlanChange=$preserveOnPlanChange, restrictedTo=$restrictedTo, timesUsed=$timesUsed, type=$type, expiresAt=$expiresAt, name=$name, subscriptionCycles=$subscriptionCycles, usageLimit=$usageLimit, additionalProperties=$additionalProperties}"
+        "Discount{amount=$amount, businessId=$businessId, code=$code, createdAt=$createdAt, discountId=$discountId, metadata=$metadata, preserveOnPlanChange=$preserveOnPlanChange, restrictedTo=$restrictedTo, timesUsed=$timesUsed, type=$type, expiresAt=$expiresAt, name=$name, subscriptionCycles=$subscriptionCycles, usageLimit=$usageLimit, additionalProperties=$additionalProperties}"
 }
