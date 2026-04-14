@@ -9,6 +9,7 @@ import com.dodopayments.api.services.async.LicenseKeyServiceAsync
 import java.util.Objects
 
 /** @see LicenseKeyServiceAsync.list */
+@Deprecated("deprecated")
 class LicenseKeyListPageAsync
 private constructor(
     private val service: LicenseKeyServiceAsync,

@@ -21,6 +21,23 @@ internal class ProductListPageResponseTest {
                     ProductListResponse.builder()
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .addEntitlement(
+                            ProductListResponse.Entitlement.builder()
+                                .id("id")
+                                .integrationConfig(
+                                    ProductListResponse.Entitlement.IntegrationConfig.GitHubConfig
+                                        .builder()
+                                        .permission("permission")
+                                        .targetId("target_id")
+                                        .build()
+                                )
+                                .integrationType(
+                                    ProductListResponse.Entitlement.IntegrationType.DISCORD
+                                )
+                                .name("name")
+                                .description("description")
+                                .build()
+                        )
                         .isRecurring(true)
                         .metadata(
                             ProductListResponse.Metadata.builder()
@@ -57,6 +74,23 @@ internal class ProductListPageResponseTest {
                 ProductListResponse.builder()
                     .businessId("business_id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .addEntitlement(
+                        ProductListResponse.Entitlement.builder()
+                            .id("id")
+                            .integrationConfig(
+                                ProductListResponse.Entitlement.IntegrationConfig.GitHubConfig
+                                    .builder()
+                                    .permission("permission")
+                                    .targetId("target_id")
+                                    .build()
+                            )
+                            .integrationType(
+                                ProductListResponse.Entitlement.IntegrationType.DISCORD
+                            )
+                            .name("name")
+                            .description("description")
+                            .build()
+                    )
                     .isRecurring(true)
                     .metadata(
                         ProductListResponse.Metadata.builder()
@@ -97,6 +131,23 @@ internal class ProductListPageResponseTest {
                     ProductListResponse.builder()
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .addEntitlement(
+                            ProductListResponse.Entitlement.builder()
+                                .id("id")
+                                .integrationConfig(
+                                    ProductListResponse.Entitlement.IntegrationConfig.GitHubConfig
+                                        .builder()
+                                        .permission("permission")
+                                        .targetId("target_id")
+                                        .build()
+                                )
+                                .integrationType(
+                                    ProductListResponse.Entitlement.IntegrationType.DISCORD
+                                )
+                                .name("name")
+                                .description("description")
+                                .build()
+                        )
                         .isRecurring(true)
                         .metadata(
                             ProductListResponse.Metadata.builder()
