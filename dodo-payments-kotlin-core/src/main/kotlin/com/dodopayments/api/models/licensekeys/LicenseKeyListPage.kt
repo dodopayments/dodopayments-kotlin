@@ -9,6 +9,7 @@ import com.dodopayments.api.services.blocking.LicenseKeyService
 import java.util.Objects
 
 /** @see LicenseKeyService.list */
+@Deprecated("deprecated")
 class LicenseKeyListPage
 private constructor(
     private val service: LicenseKeyService,

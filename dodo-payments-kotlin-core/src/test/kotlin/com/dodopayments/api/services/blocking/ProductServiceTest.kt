@@ -78,6 +78,7 @@ internal class ProductServiceTest {
                             .instructions("instructions")
                             .build()
                     )
+                    .addEntitlementId("string")
                     .licenseKeyActivationMessage("license_key_activation_message")
                     .licenseKeyActivationsLimit(0)
                     .licenseKeyDuration(
@@ -152,6 +153,7 @@ internal class ProductServiceTest {
                         .instructions("instructions")
                         .build()
                 )
+                .addEntitlementId("string")
                 .imageId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .licenseKeyActivationMessage("license_key_activation_message")
                 .licenseKeyActivationsLimit(0)

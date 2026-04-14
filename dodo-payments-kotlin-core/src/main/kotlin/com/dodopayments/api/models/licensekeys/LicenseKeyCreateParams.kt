@@ -7,6 +7,7 @@ import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.Params
+import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
@@ -18,20 +19,39 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
-@Deprecated("deprecated")
-class LicenseKeyUpdateParams
+class LicenseKeyCreateParams
 private constructor(
-    private val id: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun id(): String? = id
+    /**
+     * The customer this license key belongs to.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun customerId(): String = body.customerId()
 
     /**
-     * The updated activation limit for the license key. Use `null` to remove the limit, or omit
-     * this field to leave it unchanged.
+     * The license key string to import.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun key(): String = body.key()
+
+    /**
+     * The product this license key is for.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun productId(): String = body.productId()
+
+    /**
+     * Maximum number of activations allowed. Null means unlimited.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
@@ -39,22 +59,33 @@ private constructor(
     fun activationsLimit(): Int? = body.activationsLimit()
 
     /**
-     * Indicates whether the license key should be disabled. A value of `true` disables the key,
-     * while `false` enables it. Omit this field to leave it unchanged.
-     *
-     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
-    fun disabled(): Boolean? = body.disabled()
-
-    /**
-     * The updated expiration timestamp for the license key in UTC. Use `null` to remove the
-     * expiration date, or omit this field to leave it unchanged.
+     * Expiration timestamp. Null means the key never expires.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
     fun expiresAt(): OffsetDateTime? = body.expiresAt()
+
+    /**
+     * Returns the raw JSON value of [customerId].
+     *
+     * Unlike [customerId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _customerId(): JsonField<String> = body._customerId()
+
+    /**
+     * Returns the raw JSON value of [key].
+     *
+     * Unlike [key], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _key(): JsonField<String> = body._key()
+
+    /**
+     * Returns the raw JSON value of [productId].
+     *
+     * Unlike [productId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _productId(): JsonField<String> = body._productId()
 
     /**
      * Returns the raw JSON value of [activationsLimit].
@@ -63,13 +94,6 @@ private constructor(
      * type.
      */
     fun _activationsLimit(): JsonField<Int> = body._activationsLimit()
-
-    /**
-     * Returns the raw JSON value of [disabled].
-     *
-     * Unlike [disabled], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _disabled(): JsonField<Boolean> = body._disabled()
 
     /**
      * Returns the raw JSON value of [expiresAt].
@@ -90,44 +114,82 @@ private constructor(
 
     companion object {
 
-        fun none(): LicenseKeyUpdateParams = builder().build()
-
-        /** Returns a mutable builder for constructing an instance of [LicenseKeyUpdateParams]. */
+        /**
+         * Returns a mutable builder for constructing an instance of [LicenseKeyCreateParams].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .customerId()
+         * .key()
+         * .productId()
+         * ```
+         */
         fun builder() = Builder()
     }
 
-    /** A builder for [LicenseKeyUpdateParams]. */
+    /** A builder for [LicenseKeyCreateParams]. */
     class Builder internal constructor() {
 
-        private var id: String? = null
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
-        internal fun from(licenseKeyUpdateParams: LicenseKeyUpdateParams) = apply {
-            id = licenseKeyUpdateParams.id
-            body = licenseKeyUpdateParams.body.toBuilder()
-            additionalHeaders = licenseKeyUpdateParams.additionalHeaders.toBuilder()
-            additionalQueryParams = licenseKeyUpdateParams.additionalQueryParams.toBuilder()
+        internal fun from(licenseKeyCreateParams: LicenseKeyCreateParams) = apply {
+            body = licenseKeyCreateParams.body.toBuilder()
+            additionalHeaders = licenseKeyCreateParams.additionalHeaders.toBuilder()
+            additionalQueryParams = licenseKeyCreateParams.additionalQueryParams.toBuilder()
         }
-
-        fun id(id: String?) = apply { this.id = id }
 
         /**
          * Sets the entire request body.
          *
          * This is generally only useful if you are already constructing the body separately.
          * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [customerId]
+         * - [key]
+         * - [productId]
          * - [activationsLimit]
-         * - [disabled]
          * - [expiresAt]
+         * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
+        /** The customer this license key belongs to. */
+        fun customerId(customerId: String) = apply { body.customerId(customerId) }
+
         /**
-         * The updated activation limit for the license key. Use `null` to remove the limit, or omit
-         * this field to leave it unchanged.
+         * Sets [Builder.customerId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.customerId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
+        fun customerId(customerId: JsonField<String>) = apply { body.customerId(customerId) }
+
+        /** The license key string to import. */
+        fun key(key: String) = apply { body.key(key) }
+
+        /**
+         * Sets [Builder.key] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.key] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun key(key: JsonField<String>) = apply { body.key(key) }
+
+        /** The product this license key is for. */
+        fun productId(productId: String) = apply { body.productId(productId) }
+
+        /**
+         * Sets [Builder.productId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.productId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun productId(productId: JsonField<String>) = apply { body.productId(productId) }
+
+        /** Maximum number of activations allowed. Null means unlimited. */
         fun activationsLimit(activationsLimit: Int?) = apply {
             body.activationsLimit(activationsLimit)
         }
@@ -150,32 +212,7 @@ private constructor(
             body.activationsLimit(activationsLimit)
         }
 
-        /**
-         * Indicates whether the license key should be disabled. A value of `true` disables the key,
-         * while `false` enables it. Omit this field to leave it unchanged.
-         */
-        fun disabled(disabled: Boolean?) = apply { body.disabled(disabled) }
-
-        /**
-         * Alias for [Builder.disabled].
-         *
-         * This unboxed primitive overload exists for backwards compatibility.
-         */
-        fun disabled(disabled: Boolean) = disabled(disabled as Boolean?)
-
-        /**
-         * Sets [Builder.disabled] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.disabled] with a well-typed [Boolean] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun disabled(disabled: JsonField<Boolean>) = apply { body.disabled(disabled) }
-
-        /**
-         * The updated expiration timestamp for the license key in UTC. Use `null` to remove the
-         * expiration date, or omit this field to leave it unchanged.
-         */
+        /** Expiration timestamp. Null means the key never expires. */
         fun expiresAt(expiresAt: OffsetDateTime?) = apply { body.expiresAt(expiresAt) }
 
         /**
@@ -305,13 +342,21 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [LicenseKeyUpdateParams].
+         * Returns an immutable instance of [LicenseKeyCreateParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .customerId()
+         * .key()
+         * .productId()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): LicenseKeyUpdateParams =
-            LicenseKeyUpdateParams(
-                id,
+        fun build(): LicenseKeyCreateParams =
+            LicenseKeyCreateParams(
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -320,12 +365,6 @@ private constructor(
 
     fun _body(): Body = body
 
-    fun _pathParam(index: Int): String =
-        when (index) {
-            0 -> id ?: ""
-            else -> ""
-        }
-
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
@@ -333,28 +372,57 @@ private constructor(
     class Body
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
+        private val customerId: JsonField<String>,
+        private val key: JsonField<String>,
+        private val productId: JsonField<String>,
         private val activationsLimit: JsonField<Int>,
-        private val disabled: JsonField<Boolean>,
         private val expiresAt: JsonField<OffsetDateTime>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
         @JsonCreator
         private constructor(
+            @JsonProperty("customer_id")
+            @ExcludeMissing
+            customerId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("key") @ExcludeMissing key: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("product_id")
+            @ExcludeMissing
+            productId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("activations_limit")
             @ExcludeMissing
             activationsLimit: JsonField<Int> = JsonMissing.of(),
-            @JsonProperty("disabled")
-            @ExcludeMissing
-            disabled: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("expires_at")
             @ExcludeMissing
             expiresAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-        ) : this(activationsLimit, disabled, expiresAt, mutableMapOf())
+        ) : this(customerId, key, productId, activationsLimit, expiresAt, mutableMapOf())
 
         /**
-         * The updated activation limit for the license key. Use `null` to remove the limit, or omit
-         * this field to leave it unchanged.
+         * The customer this license key belongs to.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun customerId(): String = customerId.getRequired("customer_id")
+
+        /**
+         * The license key string to import.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun key(): String = key.getRequired("key")
+
+        /**
+         * The product this license key is for.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun productId(): String = productId.getRequired("product_id")
+
+        /**
+         * Maximum number of activations allowed. Null means unlimited.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
@@ -362,22 +430,35 @@ private constructor(
         fun activationsLimit(): Int? = activationsLimit.getNullable("activations_limit")
 
         /**
-         * Indicates whether the license key should be disabled. A value of `true` disables the key,
-         * while `false` enables it. Omit this field to leave it unchanged.
-         *
-         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
-         *   if the server responded with an unexpected value).
-         */
-        fun disabled(): Boolean? = disabled.getNullable("disabled")
-
-        /**
-         * The updated expiration timestamp for the license key in UTC. Use `null` to remove the
-         * expiration date, or omit this field to leave it unchanged.
+         * Expiration timestamp. Null means the key never expires.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
         fun expiresAt(): OffsetDateTime? = expiresAt.getNullable("expires_at")
+
+        /**
+         * Returns the raw JSON value of [customerId].
+         *
+         * Unlike [customerId], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("customer_id")
+        @ExcludeMissing
+        fun _customerId(): JsonField<String> = customerId
+
+        /**
+         * Returns the raw JSON value of [key].
+         *
+         * Unlike [key], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<String> = key
+
+        /**
+         * Returns the raw JSON value of [productId].
+         *
+         * Unlike [productId], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("product_id") @ExcludeMissing fun _productId(): JsonField<String> = productId
 
         /**
          * Returns the raw JSON value of [activationsLimit].
@@ -388,13 +469,6 @@ private constructor(
         @JsonProperty("activations_limit")
         @ExcludeMissing
         fun _activationsLimit(): JsonField<Int> = activationsLimit
-
-        /**
-         * Returns the raw JSON value of [disabled].
-         *
-         * Unlike [disabled], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("disabled") @ExcludeMissing fun _disabled(): JsonField<Boolean> = disabled
 
         /**
          * Returns the raw JSON value of [expiresAt].
@@ -419,29 +493,75 @@ private constructor(
 
         companion object {
 
-            /** Returns a mutable builder for constructing an instance of [Body]. */
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .customerId()
+             * .key()
+             * .productId()
+             * ```
+             */
             fun builder() = Builder()
         }
 
         /** A builder for [Body]. */
         class Builder internal constructor() {
 
+            private var customerId: JsonField<String>? = null
+            private var key: JsonField<String>? = null
+            private var productId: JsonField<String>? = null
             private var activationsLimit: JsonField<Int> = JsonMissing.of()
-            private var disabled: JsonField<Boolean> = JsonMissing.of()
             private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(body: Body) = apply {
+                customerId = body.customerId
+                key = body.key
+                productId = body.productId
                 activationsLimit = body.activationsLimit
-                disabled = body.disabled
                 expiresAt = body.expiresAt
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
+            /** The customer this license key belongs to. */
+            fun customerId(customerId: String) = customerId(JsonField.of(customerId))
+
             /**
-             * The updated activation limit for the license key. Use `null` to remove the limit, or
-             * omit this field to leave it unchanged.
+             * Sets [Builder.customerId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.customerId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
+            fun customerId(customerId: JsonField<String>) = apply { this.customerId = customerId }
+
+            /** The license key string to import. */
+            fun key(key: String) = key(JsonField.of(key))
+
+            /**
+             * Sets [Builder.key] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.key] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun key(key: JsonField<String>) = apply { this.key = key }
+
+            /** The product this license key is for. */
+            fun productId(productId: String) = productId(JsonField.of(productId))
+
+            /**
+             * Sets [Builder.productId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.productId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun productId(productId: JsonField<String>) = apply { this.productId = productId }
+
+            /** Maximum number of activations allowed. Null means unlimited. */
             fun activationsLimit(activationsLimit: Int?) =
                 activationsLimit(JsonField.ofNullable(activationsLimit))
 
@@ -463,32 +583,7 @@ private constructor(
                 this.activationsLimit = activationsLimit
             }
 
-            /**
-             * Indicates whether the license key should be disabled. A value of `true` disables the
-             * key, while `false` enables it. Omit this field to leave it unchanged.
-             */
-            fun disabled(disabled: Boolean?) = disabled(JsonField.ofNullable(disabled))
-
-            /**
-             * Alias for [Builder.disabled].
-             *
-             * This unboxed primitive overload exists for backwards compatibility.
-             */
-            fun disabled(disabled: Boolean) = disabled(disabled as Boolean?)
-
-            /**
-             * Sets [Builder.disabled] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.disabled] with a well-typed [Boolean] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun disabled(disabled: JsonField<Boolean>) = apply { this.disabled = disabled }
-
-            /**
-             * The updated expiration timestamp for the license key in UTC. Use `null` to remove the
-             * expiration date, or omit this field to leave it unchanged.
-             */
+            /** Expiration timestamp. Null means the key never expires. */
             fun expiresAt(expiresAt: OffsetDateTime?) = expiresAt(JsonField.ofNullable(expiresAt))
 
             /**
@@ -525,9 +620,25 @@ private constructor(
              * Returns an immutable instance of [Body].
              *
              * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .customerId()
+             * .key()
+             * .productId()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
              */
             fun build(): Body =
-                Body(activationsLimit, disabled, expiresAt, additionalProperties.toMutableMap())
+                Body(
+                    checkRequired("customerId", customerId),
+                    checkRequired("key", key),
+                    checkRequired("productId", productId),
+                    activationsLimit,
+                    expiresAt,
+                    additionalProperties.toMutableMap(),
+                )
         }
 
         private var validated: Boolean = false
@@ -537,8 +648,10 @@ private constructor(
                 return@apply
             }
 
+            customerId()
+            key()
+            productId()
             activationsLimit()
-            disabled()
             expiresAt()
             validated = true
         }
@@ -558,8 +671,10 @@ private constructor(
          * Used for best match union deserialization.
          */
         internal fun validity(): Int =
-            (if (activationsLimit.asKnown() == null) 0 else 1) +
-                (if (disabled.asKnown() == null) 0 else 1) +
+            (if (customerId.asKnown() == null) 0 else 1) +
+                (if (key.asKnown() == null) 0 else 1) +
+                (if (productId.asKnown() == null) 0 else 1) +
+                (if (activationsLimit.asKnown() == null) 0 else 1) +
                 (if (expiresAt.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
@@ -568,20 +683,29 @@ private constructor(
             }
 
             return other is Body &&
+                customerId == other.customerId &&
+                key == other.key &&
+                productId == other.productId &&
                 activationsLimit == other.activationsLimit &&
-                disabled == other.disabled &&
                 expiresAt == other.expiresAt &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(activationsLimit, disabled, expiresAt, additionalProperties)
+            Objects.hash(
+                customerId,
+                key,
+                productId,
+                activationsLimit,
+                expiresAt,
+                additionalProperties,
+            )
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{activationsLimit=$activationsLimit, disabled=$disabled, expiresAt=$expiresAt, additionalProperties=$additionalProperties}"
+            "Body{customerId=$customerId, key=$key, productId=$productId, activationsLimit=$activationsLimit, expiresAt=$expiresAt, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -589,15 +713,14 @@ private constructor(
             return true
         }
 
-        return other is LicenseKeyUpdateParams &&
-            id == other.id &&
+        return other is LicenseKeyCreateParams &&
             body == other.body &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = Objects.hash(id, body, additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int = Objects.hash(body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "LicenseKeyUpdateParams{id=$id, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "LicenseKeyCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

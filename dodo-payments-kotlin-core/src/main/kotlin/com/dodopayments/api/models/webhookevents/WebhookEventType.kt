@@ -104,6 +104,14 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
 
         val DUNNING_EMAIL = of("dunning.email")
 
+        val ENTITLEMENT_GRANT_CREATED = of("entitlement_grant.created")
+
+        val ENTITLEMENT_GRANT_DELIVERED = of("entitlement_grant.delivered")
+
+        val ENTITLEMENT_GRANT_FAILED = of("entitlement_grant.failed")
+
+        val ENTITLEMENT_GRANT_REVOKED = of("entitlement_grant.revoked")
+
         fun of(value: String) = WebhookEventType(JsonField.of(value))
     }
 
@@ -150,6 +158,10 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         DUNNING_RECOVERED,
         ACR_EMAIL,
         DUNNING_EMAIL,
+        ENTITLEMENT_GRANT_CREATED,
+        ENTITLEMENT_GRANT_DELIVERED,
+        ENTITLEMENT_GRANT_FAILED,
+        ENTITLEMENT_GRANT_REVOKED,
     }
 
     /**
@@ -203,6 +215,10 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         DUNNING_RECOVERED,
         ACR_EMAIL,
         DUNNING_EMAIL,
+        ENTITLEMENT_GRANT_CREATED,
+        ENTITLEMENT_GRANT_DELIVERED,
+        ENTITLEMENT_GRANT_FAILED,
+        ENTITLEMENT_GRANT_REVOKED,
         /**
          * An enum member indicating that [WebhookEventType] was instantiated with an unknown value.
          */
@@ -259,6 +275,10 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             DUNNING_RECOVERED -> Value.DUNNING_RECOVERED
             ACR_EMAIL -> Value.ACR_EMAIL
             DUNNING_EMAIL -> Value.DUNNING_EMAIL
+            ENTITLEMENT_GRANT_CREATED -> Value.ENTITLEMENT_GRANT_CREATED
+            ENTITLEMENT_GRANT_DELIVERED -> Value.ENTITLEMENT_GRANT_DELIVERED
+            ENTITLEMENT_GRANT_FAILED -> Value.ENTITLEMENT_GRANT_FAILED
+            ENTITLEMENT_GRANT_REVOKED -> Value.ENTITLEMENT_GRANT_REVOKED
             else -> Value._UNKNOWN
         }
 
@@ -314,6 +334,10 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             DUNNING_RECOVERED -> Known.DUNNING_RECOVERED
             ACR_EMAIL -> Known.ACR_EMAIL
             DUNNING_EMAIL -> Known.DUNNING_EMAIL
+            ENTITLEMENT_GRANT_CREATED -> Known.ENTITLEMENT_GRANT_CREATED
+            ENTITLEMENT_GRANT_DELIVERED -> Known.ENTITLEMENT_GRANT_DELIVERED
+            ENTITLEMENT_GRANT_FAILED -> Known.ENTITLEMENT_GRANT_FAILED
+            ENTITLEMENT_GRANT_REVOKED -> Known.ENTITLEMENT_GRANT_REVOKED
             else -> throw DodoPaymentsInvalidDataException("Unknown WebhookEventType: $value")
         }
 

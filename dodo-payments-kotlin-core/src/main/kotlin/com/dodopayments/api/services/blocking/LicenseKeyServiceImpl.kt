@@ -17,6 +17,7 @@ import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepare
 import com.dodopayments.api.models.licensekeys.LicenseKey
+import com.dodopayments.api.models.licensekeys.LicenseKeyCreateParams
 import com.dodopayments.api.models.licensekeys.LicenseKeyListPage
 import com.dodopayments.api.models.licensekeys.LicenseKeyListPageResponse
 import com.dodopayments.api.models.licensekeys.LicenseKeyListParams
@@ -35,6 +36,14 @@ class LicenseKeyServiceImpl internal constructor(private val clientOptions: Clie
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): LicenseKeyService =
         LicenseKeyServiceImpl(clientOptions.toBuilder().apply(modifier).build())
 
+    override fun create(
+        params: LicenseKeyCreateParams,
+        requestOptions: RequestOptions,
+    ): LicenseKey =
+        // post /license_keys
+        withRawResponse().create(params, requestOptions).parse()
+
+    @Deprecated("deprecated")
     override fun retrieve(
         params: LicenseKeyRetrieveParams,
         requestOptions: RequestOptions,
@@ -42,6 +51,7 @@ class LicenseKeyServiceImpl internal constructor(private val clientOptions: Clie
         // get /license_keys/{id}
         withRawResponse().retrieve(params, requestOptions).parse()
 
+    @Deprecated("deprecated")
     override fun update(
         params: LicenseKeyUpdateParams,
         requestOptions: RequestOptions,
@@ -49,6 +59,7 @@ class LicenseKeyServiceImpl internal constructor(private val clientOptions: Clie
         // patch /license_keys/{id}
         withRawResponse().update(params, requestOptions).parse()
 
+    @Deprecated("deprecated")
     override fun list(
         params: LicenseKeyListParams,
         requestOptions: RequestOptions,
@@ -69,9 +80,38 @@ class LicenseKeyServiceImpl internal constructor(private val clientOptions: Clie
                 clientOptions.toBuilder().apply(modifier).build()
             )
 
+        private val createHandler: Handler<LicenseKey> =
+            jsonHandler<LicenseKey>(clientOptions.jsonMapper)
+
+        override fun create(
+            params: LicenseKeyCreateParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<LicenseKey> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("license_keys")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { createHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
         private val retrieveHandler: Handler<LicenseKey> =
             jsonHandler<LicenseKey>(clientOptions.jsonMapper)
 
+        @Deprecated("deprecated")
         override fun retrieve(
             params: LicenseKeyRetrieveParams,
             requestOptions: RequestOptions,
@@ -102,6 +142,7 @@ class LicenseKeyServiceImpl internal constructor(private val clientOptions: Clie
         private val updateHandler: Handler<LicenseKey> =
             jsonHandler<LicenseKey>(clientOptions.jsonMapper)
 
+        @Deprecated("deprecated")
         override fun update(
             params: LicenseKeyUpdateParams,
             requestOptions: RequestOptions,
@@ -133,6 +174,7 @@ class LicenseKeyServiceImpl internal constructor(private val clientOptions: Clie
         private val listHandler: Handler<LicenseKeyListPageResponse> =
             jsonHandler<LicenseKeyListPageResponse>(clientOptions.jsonMapper)
 
+        @Deprecated("deprecated")
         override fun list(
             params: LicenseKeyListParams,
             requestOptions: RequestOptions,
