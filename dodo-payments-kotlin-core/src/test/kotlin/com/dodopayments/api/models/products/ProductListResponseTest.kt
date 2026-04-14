@@ -19,6 +19,20 @@ internal class ProductListResponseTest {
             ProductListResponse.builder()
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .addEntitlement(
+                    ProductListResponse.Entitlement.builder()
+                        .id("id")
+                        .integrationConfig(
+                            ProductListResponse.Entitlement.IntegrationConfig.GitHubConfig.builder()
+                                .permission("permission")
+                                .targetId("target_id")
+                                .build()
+                        )
+                        .integrationType(ProductListResponse.Entitlement.IntegrationType.DISCORD)
+                        .name("name")
+                        .description("description")
+                        .build()
+                )
                 .isRecurring(true)
                 .metadata(
                     ProductListResponse.Metadata.builder()
@@ -51,6 +65,21 @@ internal class ProductListResponseTest {
         assertThat(productListResponse.businessId()).isEqualTo("business_id")
         assertThat(productListResponse.createdAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(productListResponse.entitlements())
+            .containsExactly(
+                ProductListResponse.Entitlement.builder()
+                    .id("id")
+                    .integrationConfig(
+                        ProductListResponse.Entitlement.IntegrationConfig.GitHubConfig.builder()
+                            .permission("permission")
+                            .targetId("target_id")
+                            .build()
+                    )
+                    .integrationType(ProductListResponse.Entitlement.IntegrationType.DISCORD)
+                    .name("name")
+                    .description("description")
+                    .build()
+            )
         assertThat(productListResponse.isRecurring()).isEqualTo(true)
         assertThat(productListResponse.metadata())
             .isEqualTo(
@@ -92,6 +121,20 @@ internal class ProductListResponseTest {
             ProductListResponse.builder()
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .addEntitlement(
+                    ProductListResponse.Entitlement.builder()
+                        .id("id")
+                        .integrationConfig(
+                            ProductListResponse.Entitlement.IntegrationConfig.GitHubConfig.builder()
+                                .permission("permission")
+                                .targetId("target_id")
+                                .build()
+                        )
+                        .integrationType(ProductListResponse.Entitlement.IntegrationType.DISCORD)
+                        .name("name")
+                        .description("description")
+                        .build()
+                )
                 .isRecurring(true)
                 .metadata(
                     ProductListResponse.Metadata.builder()

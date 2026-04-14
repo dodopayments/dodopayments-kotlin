@@ -7,6 +7,7 @@ import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
 import java.util.Objects
 
+@Deprecated("deprecated")
 class LicenseKeyRetrieveParams
 private constructor(
     private val id: String?,

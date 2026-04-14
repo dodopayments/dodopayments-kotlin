@@ -18,6 +18,7 @@ internal class LicenseKeyListParamsTest {
             .pageNumber(0)
             .pageSize(0)
             .productId("product_id")
+            .source(LicenseKeyListParams.Source.AUTO)
             .status(LicenseKeyListParams.Status.ACTIVE)
             .build()
     }
@@ -32,6 +33,7 @@ internal class LicenseKeyListParamsTest {
                 .pageNumber(0)
                 .pageSize(0)
                 .productId("product_id")
+                .source(LicenseKeyListParams.Source.AUTO)
                 .status(LicenseKeyListParams.Status.ACTIVE)
                 .build()
 
@@ -46,6 +48,7 @@ internal class LicenseKeyListParamsTest {
                     .put("page_number", "0")
                     .put("page_size", "0")
                     .put("product_id", "product_id")
+                    .put("source", "auto")
                     .put("status", "active")
                     .build()
             )

@@ -70,6 +70,15 @@ private constructor(
     fun digitalProductDelivery(): DigitalProductDelivery? = body.digitalProductDelivery()
 
     /**
+     * Entitlement IDs to attach (replaces all existing when present) Send empty array to remove
+     * all, omit field to leave unchanged
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun entitlementIds(): List<String>? = body.entitlementIds()
+
+    /**
      * Product image id after its uploaded to S3
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -86,6 +95,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
+    @Deprecated("deprecated")
     fun licenseKeyActivationMessage(): String? = body.licenseKeyActivationMessage()
 
     /**
@@ -97,6 +107,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
+    @Deprecated("deprecated")
     fun licenseKeyActivationsLimit(): Int? = body.licenseKeyActivationsLimit()
 
     /**
@@ -119,7 +130,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
-    fun licenseKeyEnabled(): Boolean? = body.licenseKeyEnabled()
+    @Deprecated("deprecated") fun licenseKeyEnabled(): Boolean? = body.licenseKeyEnabled()
 
     /**
      * Additional metadata for the product
@@ -192,6 +203,13 @@ private constructor(
         body._digitalProductDelivery()
 
     /**
+     * Returns the raw JSON value of [entitlementIds].
+     *
+     * Unlike [entitlementIds], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _entitlementIds(): JsonField<List<String>> = body._entitlementIds()
+
+    /**
      * Returns the raw JSON value of [imageId].
      *
      * Unlike [imageId], this method doesn't throw if the JSON field has an unexpected type.
@@ -204,6 +222,7 @@ private constructor(
      * Unlike [licenseKeyActivationMessage], this method doesn't throw if the JSON field has an
      * unexpected type.
      */
+    @Deprecated("deprecated")
     fun _licenseKeyActivationMessage(): JsonField<String> = body._licenseKeyActivationMessage()
 
     /**
@@ -212,6 +231,7 @@ private constructor(
      * Unlike [licenseKeyActivationsLimit], this method doesn't throw if the JSON field has an
      * unexpected type.
      */
+    @Deprecated("deprecated")
     fun _licenseKeyActivationsLimit(): JsonField<Int> = body._licenseKeyActivationsLimit()
 
     /**
@@ -228,6 +248,7 @@ private constructor(
      * Unlike [licenseKeyEnabled], this method doesn't throw if the JSON field has an unexpected
      * type.
      */
+    @Deprecated("deprecated")
     fun _licenseKeyEnabled(): JsonField<Boolean> = body._licenseKeyEnabled()
 
     /**
@@ -394,6 +415,32 @@ private constructor(
                 body.digitalProductDelivery(digitalProductDelivery)
             }
 
+        /**
+         * Entitlement IDs to attach (replaces all existing when present) Send empty array to remove
+         * all, omit field to leave unchanged
+         */
+        fun entitlementIds(entitlementIds: List<String>?) = apply {
+            body.entitlementIds(entitlementIds)
+        }
+
+        /**
+         * Sets [Builder.entitlementIds] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.entitlementIds] with a well-typed `List<String>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun entitlementIds(entitlementIds: JsonField<List<String>>) = apply {
+            body.entitlementIds(entitlementIds)
+        }
+
+        /**
+         * Adds a single [String] to [entitlementIds].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addEntitlementId(entitlementId: String) = apply { body.addEntitlementId(entitlementId) }
+
         /** Product image id after its uploaded to S3 */
         fun imageId(imageId: String?) = apply { body.imageId(imageId) }
 
@@ -411,6 +458,7 @@ private constructor(
          * Only applicable if `license_key_enabled` is `true`. This message contains instructions
          * for activating the license key.
          */
+        @Deprecated("deprecated")
         fun licenseKeyActivationMessage(licenseKeyActivationMessage: String?) = apply {
             body.licenseKeyActivationMessage(licenseKeyActivationMessage)
         }
@@ -422,6 +470,7 @@ private constructor(
          * value instead. This method is primarily for setting the field to an undocumented or not
          * yet supported value.
          */
+        @Deprecated("deprecated")
         fun licenseKeyActivationMessage(licenseKeyActivationMessage: JsonField<String>) = apply {
             body.licenseKeyActivationMessage(licenseKeyActivationMessage)
         }
@@ -432,6 +481,7 @@ private constructor(
          * Only applicable if `license_key_enabled` is `true`. Represents the maximum number of
          * times the license key can be activated.
          */
+        @Deprecated("deprecated")
         fun licenseKeyActivationsLimit(licenseKeyActivationsLimit: Int?) = apply {
             body.licenseKeyActivationsLimit(licenseKeyActivationsLimit)
         }
@@ -441,6 +491,7 @@ private constructor(
          *
          * This unboxed primitive overload exists for backwards compatibility.
          */
+        @Deprecated("deprecated")
         fun licenseKeyActivationsLimit(licenseKeyActivationsLimit: Int) =
             licenseKeyActivationsLimit(licenseKeyActivationsLimit as Int?)
 
@@ -451,6 +502,7 @@ private constructor(
          * value instead. This method is primarily for setting the field to an undocumented or not
          * yet supported value.
          */
+        @Deprecated("deprecated")
         fun licenseKeyActivationsLimit(licenseKeyActivationsLimit: JsonField<Int>) = apply {
             body.licenseKeyActivationsLimit(licenseKeyActivationsLimit)
         }
@@ -482,6 +534,7 @@ private constructor(
          * If `true`, additional fields related to license key (duration, activations limit,
          * activation message) become applicable.
          */
+        @Deprecated("deprecated")
         fun licenseKeyEnabled(licenseKeyEnabled: Boolean?) = apply {
             body.licenseKeyEnabled(licenseKeyEnabled)
         }
@@ -491,6 +544,7 @@ private constructor(
          *
          * This unboxed primitive overload exists for backwards compatibility.
          */
+        @Deprecated("deprecated")
         fun licenseKeyEnabled(licenseKeyEnabled: Boolean) =
             licenseKeyEnabled(licenseKeyEnabled as Boolean?)
 
@@ -501,6 +555,7 @@ private constructor(
          * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
+        @Deprecated("deprecated")
         fun licenseKeyEnabled(licenseKeyEnabled: JsonField<Boolean>) = apply {
             body.licenseKeyEnabled(licenseKeyEnabled)
         }
@@ -713,6 +768,7 @@ private constructor(
         private val creditEntitlements: JsonField<List<AttachCreditEntitlement>>,
         private val description: JsonField<String>,
         private val digitalProductDelivery: JsonField<DigitalProductDelivery>,
+        private val entitlementIds: JsonField<List<String>>,
         private val imageId: JsonField<String>,
         private val licenseKeyActivationMessage: JsonField<String>,
         private val licenseKeyActivationsLimit: JsonField<Int>,
@@ -740,6 +796,9 @@ private constructor(
             @JsonProperty("digital_product_delivery")
             @ExcludeMissing
             digitalProductDelivery: JsonField<DigitalProductDelivery> = JsonMissing.of(),
+            @JsonProperty("entitlement_ids")
+            @ExcludeMissing
+            entitlementIds: JsonField<List<String>> = JsonMissing.of(),
             @JsonProperty("image_id") @ExcludeMissing imageId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("license_key_activation_message")
             @ExcludeMissing
@@ -767,6 +826,7 @@ private constructor(
             creditEntitlements,
             description,
             digitalProductDelivery,
+            entitlementIds,
             imageId,
             licenseKeyActivationMessage,
             licenseKeyActivationsLimit,
@@ -821,6 +881,15 @@ private constructor(
             digitalProductDelivery.getNullable("digital_product_delivery")
 
         /**
+         * Entitlement IDs to attach (replaces all existing when present) Send empty array to remove
+         * all, omit field to leave unchanged
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun entitlementIds(): List<String>? = entitlementIds.getNullable("entitlement_ids")
+
+        /**
          * Product image id after its uploaded to S3
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
@@ -837,6 +906,7 @@ private constructor(
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
+        @Deprecated("deprecated")
         fun licenseKeyActivationMessage(): String? =
             licenseKeyActivationMessage.getNullable("license_key_activation_message")
 
@@ -849,6 +919,7 @@ private constructor(
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
+        @Deprecated("deprecated")
         fun licenseKeyActivationsLimit(): Int? =
             licenseKeyActivationsLimit.getNullable("license_key_activations_limit")
 
@@ -873,6 +944,7 @@ private constructor(
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
+        @Deprecated("deprecated")
         fun licenseKeyEnabled(): Boolean? = licenseKeyEnabled.getNullable("license_key_enabled")
 
         /**
@@ -951,6 +1023,16 @@ private constructor(
         fun _digitalProductDelivery(): JsonField<DigitalProductDelivery> = digitalProductDelivery
 
         /**
+         * Returns the raw JSON value of [entitlementIds].
+         *
+         * Unlike [entitlementIds], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("entitlement_ids")
+        @ExcludeMissing
+        fun _entitlementIds(): JsonField<List<String>> = entitlementIds
+
+        /**
          * Returns the raw JSON value of [imageId].
          *
          * Unlike [imageId], this method doesn't throw if the JSON field has an unexpected type.
@@ -963,6 +1045,7 @@ private constructor(
          * Unlike [licenseKeyActivationMessage], this method doesn't throw if the JSON field has an
          * unexpected type.
          */
+        @Deprecated("deprecated")
         @JsonProperty("license_key_activation_message")
         @ExcludeMissing
         fun _licenseKeyActivationMessage(): JsonField<String> = licenseKeyActivationMessage
@@ -973,6 +1056,7 @@ private constructor(
          * Unlike [licenseKeyActivationsLimit], this method doesn't throw if the JSON field has an
          * unexpected type.
          */
+        @Deprecated("deprecated")
         @JsonProperty("license_key_activations_limit")
         @ExcludeMissing
         fun _licenseKeyActivationsLimit(): JsonField<Int> = licenseKeyActivationsLimit
@@ -993,6 +1077,7 @@ private constructor(
          * Unlike [licenseKeyEnabled], this method doesn't throw if the JSON field has an unexpected
          * type.
          */
+        @Deprecated("deprecated")
         @JsonProperty("license_key_enabled")
         @ExcludeMissing
         fun _licenseKeyEnabled(): JsonField<Boolean> = licenseKeyEnabled
@@ -1053,6 +1138,7 @@ private constructor(
             private var creditEntitlements: JsonField<MutableList<AttachCreditEntitlement>>? = null
             private var description: JsonField<String> = JsonMissing.of()
             private var digitalProductDelivery: JsonField<DigitalProductDelivery> = JsonMissing.of()
+            private var entitlementIds: JsonField<MutableList<String>>? = null
             private var imageId: JsonField<String> = JsonMissing.of()
             private var licenseKeyActivationMessage: JsonField<String> = JsonMissing.of()
             private var licenseKeyActivationsLimit: JsonField<Int> = JsonMissing.of()
@@ -1070,6 +1156,7 @@ private constructor(
                 creditEntitlements = body.creditEntitlements.map { it.toMutableList() }
                 description = body.description
                 digitalProductDelivery = body.digitalProductDelivery
+                entitlementIds = body.entitlementIds.map { it.toMutableList() }
                 imageId = body.imageId
                 licenseKeyActivationMessage = body.licenseKeyActivationMessage
                 licenseKeyActivationsLimit = body.licenseKeyActivationsLimit
@@ -1180,6 +1267,36 @@ private constructor(
                     this.digitalProductDelivery = digitalProductDelivery
                 }
 
+            /**
+             * Entitlement IDs to attach (replaces all existing when present) Send empty array to
+             * remove all, omit field to leave unchanged
+             */
+            fun entitlementIds(entitlementIds: List<String>?) =
+                entitlementIds(JsonField.ofNullable(entitlementIds))
+
+            /**
+             * Sets [Builder.entitlementIds] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.entitlementIds] with a well-typed `List<String>`
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun entitlementIds(entitlementIds: JsonField<List<String>>) = apply {
+                this.entitlementIds = entitlementIds.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [String] to [entitlementIds].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addEntitlementId(entitlementId: String) = apply {
+                entitlementIds =
+                    (entitlementIds ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("entitlementIds", it).add(entitlementId)
+                    }
+            }
+
             /** Product image id after its uploaded to S3 */
             fun imageId(imageId: String?) = imageId(JsonField.ofNullable(imageId))
 
@@ -1198,6 +1315,7 @@ private constructor(
              * Only applicable if `license_key_enabled` is `true`. This message contains
              * instructions for activating the license key.
              */
+            @Deprecated("deprecated")
             fun licenseKeyActivationMessage(licenseKeyActivationMessage: String?) =
                 licenseKeyActivationMessage(JsonField.ofNullable(licenseKeyActivationMessage))
 
@@ -1208,6 +1326,7 @@ private constructor(
              * [String] value instead. This method is primarily for setting the field to an
              * undocumented or not yet supported value.
              */
+            @Deprecated("deprecated")
             fun licenseKeyActivationMessage(licenseKeyActivationMessage: JsonField<String>) =
                 apply {
                     this.licenseKeyActivationMessage = licenseKeyActivationMessage
@@ -1219,6 +1338,7 @@ private constructor(
              * Only applicable if `license_key_enabled` is `true`. Represents the maximum number of
              * times the license key can be activated.
              */
+            @Deprecated("deprecated")
             fun licenseKeyActivationsLimit(licenseKeyActivationsLimit: Int?) =
                 licenseKeyActivationsLimit(JsonField.ofNullable(licenseKeyActivationsLimit))
 
@@ -1227,6 +1347,7 @@ private constructor(
              *
              * This unboxed primitive overload exists for backwards compatibility.
              */
+            @Deprecated("deprecated")
             fun licenseKeyActivationsLimit(licenseKeyActivationsLimit: Int) =
                 licenseKeyActivationsLimit(licenseKeyActivationsLimit as Int?)
 
@@ -1237,6 +1358,7 @@ private constructor(
              * value instead. This method is primarily for setting the field to an undocumented or
              * not yet supported value.
              */
+            @Deprecated("deprecated")
             fun licenseKeyActivationsLimit(licenseKeyActivationsLimit: JsonField<Int>) = apply {
                 this.licenseKeyActivationsLimit = licenseKeyActivationsLimit
             }
@@ -1267,6 +1389,7 @@ private constructor(
              * If `true`, additional fields related to license key (duration, activations limit,
              * activation message) become applicable.
              */
+            @Deprecated("deprecated")
             fun licenseKeyEnabled(licenseKeyEnabled: Boolean?) =
                 licenseKeyEnabled(JsonField.ofNullable(licenseKeyEnabled))
 
@@ -1275,6 +1398,7 @@ private constructor(
              *
              * This unboxed primitive overload exists for backwards compatibility.
              */
+            @Deprecated("deprecated")
             fun licenseKeyEnabled(licenseKeyEnabled: Boolean) =
                 licenseKeyEnabled(licenseKeyEnabled as Boolean?)
 
@@ -1285,6 +1409,7 @@ private constructor(
              * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
+            @Deprecated("deprecated")
             fun licenseKeyEnabled(licenseKeyEnabled: JsonField<Boolean>) = apply {
                 this.licenseKeyEnabled = licenseKeyEnabled
             }
@@ -1380,6 +1505,7 @@ private constructor(
                     (creditEntitlements ?: JsonMissing.of()).map { it.toImmutable() },
                     description,
                     digitalProductDelivery,
+                    (entitlementIds ?: JsonMissing.of()).map { it.toImmutable() },
                     imageId,
                     licenseKeyActivationMessage,
                     licenseKeyActivationsLimit,
@@ -1405,6 +1531,7 @@ private constructor(
             creditEntitlements()?.forEach { it.validate() }
             description()
             digitalProductDelivery()?.validate()
+            entitlementIds()
             imageId()
             licenseKeyActivationMessage()
             licenseKeyActivationsLimit()
@@ -1437,6 +1564,7 @@ private constructor(
                 (creditEntitlements.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
                 (if (description.asKnown() == null) 0 else 1) +
                 (digitalProductDelivery.asKnown()?.validity() ?: 0) +
+                (entitlementIds.asKnown()?.size ?: 0) +
                 (if (imageId.asKnown() == null) 0 else 1) +
                 (if (licenseKeyActivationMessage.asKnown() == null) 0 else 1) +
                 (if (licenseKeyActivationsLimit.asKnown() == null) 0 else 1) +
@@ -1458,6 +1586,7 @@ private constructor(
                 creditEntitlements == other.creditEntitlements &&
                 description == other.description &&
                 digitalProductDelivery == other.digitalProductDelivery &&
+                entitlementIds == other.entitlementIds &&
                 imageId == other.imageId &&
                 licenseKeyActivationMessage == other.licenseKeyActivationMessage &&
                 licenseKeyActivationsLimit == other.licenseKeyActivationsLimit &&
@@ -1477,6 +1606,7 @@ private constructor(
                 creditEntitlements,
                 description,
                 digitalProductDelivery,
+                entitlementIds,
                 imageId,
                 licenseKeyActivationMessage,
                 licenseKeyActivationsLimit,
@@ -1493,7 +1623,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{addons=$addons, brandId=$brandId, creditEntitlements=$creditEntitlements, description=$description, digitalProductDelivery=$digitalProductDelivery, imageId=$imageId, licenseKeyActivationMessage=$licenseKeyActivationMessage, licenseKeyActivationsLimit=$licenseKeyActivationsLimit, licenseKeyDuration=$licenseKeyDuration, licenseKeyEnabled=$licenseKeyEnabled, metadata=$metadata, name=$name, price=$price, taxCategory=$taxCategory, additionalProperties=$additionalProperties}"
+            "Body{addons=$addons, brandId=$brandId, creditEntitlements=$creditEntitlements, description=$description, digitalProductDelivery=$digitalProductDelivery, entitlementIds=$entitlementIds, imageId=$imageId, licenseKeyActivationMessage=$licenseKeyActivationMessage, licenseKeyActivationsLimit=$licenseKeyActivationsLimit, licenseKeyDuration=$licenseKeyDuration, licenseKeyEnabled=$licenseKeyEnabled, metadata=$metadata, name=$name, price=$price, taxCategory=$taxCategory, additionalProperties=$additionalProperties}"
     }
 
     /** Choose how you would like you digital product delivered */
