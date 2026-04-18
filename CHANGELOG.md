@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.95.1 (2026-04-18)
+
+Full Changelog: [v1.95.0...v1.95.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.95.0...v1.95.1)
+
+### Chores
+
+* **tests:** bump steady to v0.22.1 ([a0c409b](https://github.com/dodopayments/dodopayments-kotlin/commit/a0c409b6d919c0ecbd3bfc5a48068edd6a3fa77d))
+
 ## 1.95.0 (2026-04-14)
 
 Full Changelog: [v1.94.0...v1.95.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.94.0...v1.95.0)
