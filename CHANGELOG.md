@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.96.0 (2026-04-28)
+
+Full Changelog: [v1.95.1...v1.96.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.95.1...v1.96.0)
+
+### Features
+
+* support setting headers via env ([6bb94fa](https://github.com/dodopayments/dodopayments-kotlin/commit/6bb94fa4fee12ef9fe1fceba12a092cc3d0900ca))
+
 ## 1.95.1 (2026-04-18)
 
 Full Changelog: [v1.95.0...v1.95.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.95.0...v1.95.1)
