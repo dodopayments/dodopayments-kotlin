@@ -59,7 +59,6 @@ This library requires Java 8 or later.
 ```kotlin
 import com.dodopayments.api.client.DodoPaymentsClient
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
-import com.dodopayments.api.models.checkoutsessions.CheckoutSessionCreateParams
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionRequest
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionResponse
 import com.dodopayments.api.models.checkoutsessions.ProductItemReq
@@ -165,7 +164,6 @@ The default client is synchronous. To switch to asynchronous execution, call the
 ```kotlin
 import com.dodopayments.api.client.DodoPaymentsClient
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
-import com.dodopayments.api.models.checkoutsessions.CheckoutSessionCreateParams
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionRequest
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionResponse
 import com.dodopayments.api.models.checkoutsessions.ProductItemReq
@@ -188,7 +186,6 @@ Or create an asynchronous client from the beginning:
 ```kotlin
 import com.dodopayments.api.client.DodoPaymentsClientAsync
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClientAsync
-import com.dodopayments.api.models.checkoutsessions.CheckoutSessionCreateParams
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionRequest
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionResponse
 import com.dodopayments.api.models.checkoutsessions.ProductItemReq
@@ -257,7 +254,6 @@ To access this data, prefix any HTTP method call on a client or service with `wi
 ```kotlin
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.HttpResponseFor
-import com.dodopayments.api.models.checkoutsessions.CheckoutSessionCreateParams
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionRequest
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionResponse
 import com.dodopayments.api.models.checkoutsessions.ProductItemReq
