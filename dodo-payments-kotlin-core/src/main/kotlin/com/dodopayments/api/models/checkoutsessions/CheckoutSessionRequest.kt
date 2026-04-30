@@ -37,6 +37,7 @@ private constructor(
     private val discountCode: JsonField<String>,
     private val featureFlags: JsonField<CheckoutSessionFlags>,
     private val force3ds: JsonField<Boolean>,
+    private val mandateMinAmountInrPaise: JsonField<Int>,
     private val metadata: JsonField<Metadata>,
     private val minimalAddress: JsonField<Boolean>,
     private val paymentMethodId: JsonField<String>,
@@ -81,6 +82,9 @@ private constructor(
         @ExcludeMissing
         featureFlags: JsonField<CheckoutSessionFlags> = JsonMissing.of(),
         @JsonProperty("force_3ds") @ExcludeMissing force3ds: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("mandate_min_amount_inr_paise")
+        @ExcludeMissing
+        mandateMinAmountInrPaise: JsonField<Int> = JsonMissing.of(),
         @JsonProperty("metadata") @ExcludeMissing metadata: JsonField<Metadata> = JsonMissing.of(),
         @JsonProperty("minimal_address")
         @ExcludeMissing
@@ -115,6 +119,7 @@ private constructor(
         discountCode,
         featureFlags,
         force3ds,
+        mandateMinAmountInrPaise,
         metadata,
         minimalAddress,
         paymentMethodId,
@@ -225,6 +230,19 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun force3ds(): Boolean? = force3ds.getNullable("force_3ds")
+
+    /**
+     * Override the merchant-level mandate floor (in INR paise) for INR e-mandates on Indian-card
+     * recurring payments. The mandate amount sent to the processor is `max(this_floor,
+     * actual_billing_amount)`, so this is effectively the customer-facing authorization ceiling
+     * whenever billing is lower. When unset, the merchant setting applies; when that's also unset,
+     * the system default of ₹15,000 applies.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun mandateMinAmountInrPaise(): Int? =
+        mandateMinAmountInrPaise.getNullable("mandate_min_amount_inr_paise")
 
     /**
      * Additional metadata associated with the payment. Defaults to empty if not provided.
@@ -401,6 +419,16 @@ private constructor(
     @JsonProperty("force_3ds") @ExcludeMissing fun _force3ds(): JsonField<Boolean> = force3ds
 
     /**
+     * Returns the raw JSON value of [mandateMinAmountInrPaise].
+     *
+     * Unlike [mandateMinAmountInrPaise], this method doesn't throw if the JSON field has an
+     * unexpected type.
+     */
+    @JsonProperty("mandate_min_amount_inr_paise")
+    @ExcludeMissing
+    fun _mandateMinAmountInrPaise(): JsonField<Int> = mandateMinAmountInrPaise
+
+    /**
      * Returns the raw JSON value of [metadata].
      *
      * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
@@ -516,6 +544,7 @@ private constructor(
         private var discountCode: JsonField<String> = JsonMissing.of()
         private var featureFlags: JsonField<CheckoutSessionFlags> = JsonMissing.of()
         private var force3ds: JsonField<Boolean> = JsonMissing.of()
+        private var mandateMinAmountInrPaise: JsonField<Int> = JsonMissing.of()
         private var metadata: JsonField<Metadata> = JsonMissing.of()
         private var minimalAddress: JsonField<Boolean> = JsonMissing.of()
         private var paymentMethodId: JsonField<String> = JsonMissing.of()
@@ -541,6 +570,7 @@ private constructor(
             discountCode = checkoutSessionRequest.discountCode
             featureFlags = checkoutSessionRequest.featureFlags
             force3ds = checkoutSessionRequest.force3ds
+            mandateMinAmountInrPaise = checkoutSessionRequest.mandateMinAmountInrPaise
             metadata = checkoutSessionRequest.metadata
             minimalAddress = checkoutSessionRequest.minimalAddress
             paymentMethodId = checkoutSessionRequest.paymentMethodId
@@ -784,6 +814,35 @@ private constructor(
          */
         fun force3ds(force3ds: JsonField<Boolean>) = apply { this.force3ds = force3ds }
 
+        /**
+         * Override the merchant-level mandate floor (in INR paise) for INR e-mandates on
+         * Indian-card recurring payments. The mandate amount sent to the processor is
+         * `max(this_floor, actual_billing_amount)`, so this is effectively the customer-facing
+         * authorization ceiling whenever billing is lower. When unset, the merchant setting
+         * applies; when that's also unset, the system default of ₹15,000 applies.
+         */
+        fun mandateMinAmountInrPaise(mandateMinAmountInrPaise: Int?) =
+            mandateMinAmountInrPaise(JsonField.ofNullable(mandateMinAmountInrPaise))
+
+        /**
+         * Alias for [Builder.mandateMinAmountInrPaise].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun mandateMinAmountInrPaise(mandateMinAmountInrPaise: Int) =
+            mandateMinAmountInrPaise(mandateMinAmountInrPaise as Int?)
+
+        /**
+         * Sets [Builder.mandateMinAmountInrPaise] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.mandateMinAmountInrPaise] with a well-typed [Int] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun mandateMinAmountInrPaise(mandateMinAmountInrPaise: JsonField<Int>) = apply {
+            this.mandateMinAmountInrPaise = mandateMinAmountInrPaise
+        }
+
         /** Additional metadata associated with the payment. Defaults to empty if not provided. */
         fun metadata(metadata: Metadata?) = metadata(JsonField.ofNullable(metadata))
 
@@ -955,6 +1014,7 @@ private constructor(
                 discountCode,
                 featureFlags,
                 force3ds,
+                mandateMinAmountInrPaise,
                 metadata,
                 minimalAddress,
                 paymentMethodId,
@@ -987,6 +1047,7 @@ private constructor(
         discountCode()
         featureFlags()?.validate()
         force3ds()
+        mandateMinAmountInrPaise()
         metadata()?.validate()
         minimalAddress()
         paymentMethodId()
@@ -1025,6 +1086,7 @@ private constructor(
             (if (discountCode.asKnown() == null) 0 else 1) +
             (featureFlags.asKnown()?.validity() ?: 0) +
             (if (force3ds.asKnown() == null) 0 else 1) +
+            (if (mandateMinAmountInrPaise.asKnown() == null) 0 else 1) +
             (metadata.asKnown()?.validity() ?: 0) +
             (if (minimalAddress.asKnown() == null) 0 else 1) +
             (if (paymentMethodId.asKnown() == null) 0 else 1) +
@@ -1151,6 +1213,7 @@ private constructor(
             discountCode == other.discountCode &&
             featureFlags == other.featureFlags &&
             force3ds == other.force3ds &&
+            mandateMinAmountInrPaise == other.mandateMinAmountInrPaise &&
             metadata == other.metadata &&
             minimalAddress == other.minimalAddress &&
             paymentMethodId == other.paymentMethodId &&
@@ -1177,6 +1240,7 @@ private constructor(
             discountCode,
             featureFlags,
             force3ds,
+            mandateMinAmountInrPaise,
             metadata,
             minimalAddress,
             paymentMethodId,
@@ -1193,5 +1257,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CheckoutSessionRequest{productCart=$productCart, allowedPaymentMethodTypes=$allowedPaymentMethodTypes, billingAddress=$billingAddress, billingCurrency=$billingCurrency, cancelUrl=$cancelUrl, confirm=$confirm, customFields=$customFields, customer=$customer, customization=$customization, discountCode=$discountCode, featureFlags=$featureFlags, force3ds=$force3ds, metadata=$metadata, minimalAddress=$minimalAddress, paymentMethodId=$paymentMethodId, productCollectionId=$productCollectionId, returnUrl=$returnUrl, shortLink=$shortLink, showSavedPaymentMethods=$showSavedPaymentMethods, subscriptionData=$subscriptionData, taxId=$taxId, additionalProperties=$additionalProperties}"
+        "CheckoutSessionRequest{productCart=$productCart, allowedPaymentMethodTypes=$allowedPaymentMethodTypes, billingAddress=$billingAddress, billingCurrency=$billingCurrency, cancelUrl=$cancelUrl, confirm=$confirm, customFields=$customFields, customer=$customer, customization=$customization, discountCode=$discountCode, featureFlags=$featureFlags, force3ds=$force3ds, mandateMinAmountInrPaise=$mandateMinAmountInrPaise, metadata=$metadata, minimalAddress=$minimalAddress, paymentMethodId=$paymentMethodId, productCollectionId=$productCollectionId, returnUrl=$returnUrl, shortLink=$shortLink, showSavedPaymentMethods=$showSavedPaymentMethods, subscriptionData=$subscriptionData, taxId=$taxId, additionalProperties=$additionalProperties}"
 }

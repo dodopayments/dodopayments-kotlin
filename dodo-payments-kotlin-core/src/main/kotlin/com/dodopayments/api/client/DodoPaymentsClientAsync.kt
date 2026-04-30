@@ -11,6 +11,7 @@ import com.dodopayments.api.services.async.CreditEntitlementServiceAsync
 import com.dodopayments.api.services.async.CustomerServiceAsync
 import com.dodopayments.api.services.async.DiscountServiceAsync
 import com.dodopayments.api.services.async.DisputeServiceAsync
+import com.dodopayments.api.services.async.EntitlementServiceAsync
 import com.dodopayments.api.services.async.InvoiceServiceAsync
 import com.dodopayments.api.services.async.LicenseKeyInstanceServiceAsync
 import com.dodopayments.api.services.async.LicenseKeyServiceAsync
@@ -106,6 +107,8 @@ interface DodoPaymentsClientAsync {
 
     fun creditEntitlements(): CreditEntitlementServiceAsync
 
+    fun entitlements(): EntitlementServiceAsync
+
     /**
      * Closes this client, relinquishing any underlying resources.
      *
@@ -177,5 +180,7 @@ interface DodoPaymentsClientAsync {
         fun balances(): BalanceServiceAsync.WithRawResponse
 
         fun creditEntitlements(): CreditEntitlementServiceAsync.WithRawResponse
+
+        fun entitlements(): EntitlementServiceAsync.WithRawResponse
     }
 }

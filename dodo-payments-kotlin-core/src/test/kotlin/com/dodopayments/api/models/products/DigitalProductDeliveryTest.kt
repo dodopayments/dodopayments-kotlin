@@ -13,26 +13,32 @@ internal class DigitalProductDeliveryTest {
     fun create() {
         val digitalProductDelivery =
             DigitalProductDelivery.builder()
-                .externalUrl("external_url")
                 .addFile(
                     DigitalProductDeliveryFile.builder()
-                        .fileId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .fileName("file_name")
-                        .url("url")
+                        .downloadUrl("download_url")
+                        .expiresIn(0L)
+                        .fileId("file_id")
+                        .filename("filename")
+                        .contentType("content_type")
+                        .fileSize(0L)
                         .build()
                 )
+                .externalUrl("external_url")
                 .instructions("instructions")
                 .build()
 
-        assertThat(digitalProductDelivery.externalUrl()).isEqualTo("external_url")
         assertThat(digitalProductDelivery.files())
             .containsExactly(
                 DigitalProductDeliveryFile.builder()
-                    .fileId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .fileName("file_name")
-                    .url("url")
+                    .downloadUrl("download_url")
+                    .expiresIn(0L)
+                    .fileId("file_id")
+                    .filename("filename")
+                    .contentType("content_type")
+                    .fileSize(0L)
                     .build()
             )
+        assertThat(digitalProductDelivery.externalUrl()).isEqualTo("external_url")
         assertThat(digitalProductDelivery.instructions()).isEqualTo("instructions")
     }
 
@@ -41,14 +47,17 @@ internal class DigitalProductDeliveryTest {
         val jsonMapper = jsonMapper()
         val digitalProductDelivery =
             DigitalProductDelivery.builder()
-                .externalUrl("external_url")
                 .addFile(
                     DigitalProductDeliveryFile.builder()
-                        .fileId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                        .fileName("file_name")
-                        .url("url")
+                        .downloadUrl("download_url")
+                        .expiresIn(0L)
+                        .fileId("file_id")
+                        .filename("filename")
+                        .contentType("content_type")
+                        .fileSize(0L)
                         .build()
                 )
+                .externalUrl("external_url")
                 .instructions("instructions")
                 .build()
 

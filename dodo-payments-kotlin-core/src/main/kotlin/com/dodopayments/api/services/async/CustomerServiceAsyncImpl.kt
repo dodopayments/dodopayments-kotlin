@@ -22,6 +22,8 @@ import com.dodopayments.api.models.customers.CustomerCreateParams
 import com.dodopayments.api.models.customers.CustomerDeletePaymentMethodParams
 import com.dodopayments.api.models.customers.CustomerListCreditEntitlementsParams
 import com.dodopayments.api.models.customers.CustomerListCreditEntitlementsResponse
+import com.dodopayments.api.models.customers.CustomerListEntitlementsParams
+import com.dodopayments.api.models.customers.CustomerListEntitlementsResponse
 import com.dodopayments.api.models.customers.CustomerListPageAsync
 import com.dodopayments.api.models.customers.CustomerListPageResponse
 import com.dodopayments.api.models.customers.CustomerListParams
@@ -98,6 +100,13 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
     ): CustomerListCreditEntitlementsResponse =
         // get /customers/{customer_id}/credit-entitlements
         withRawResponse().listCreditEntitlements(params, requestOptions).parse()
+
+    override suspend fun listEntitlements(
+        params: CustomerListEntitlementsParams,
+        requestOptions: RequestOptions,
+    ): CustomerListEntitlementsResponse =
+        // get /customers/{customer_id}/entitlements
+        withRawResponse().listEntitlements(params, requestOptions).parse()
 
     override suspend fun retrievePaymentMethods(
         params: CustomerRetrievePaymentMethodsParams,
@@ -305,6 +314,36 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
             return errorHandler.handle(response).parseable {
                 response
                     .use { listCreditEntitlementsHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val listEntitlementsHandler: Handler<CustomerListEntitlementsResponse> =
+            jsonHandler<CustomerListEntitlementsResponse>(clientOptions.jsonMapper)
+
+        override suspend fun listEntitlements(
+            params: CustomerListEntitlementsParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<CustomerListEntitlementsResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("customerId", params.customerId())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("customers", params._pathParam(0), "entitlements")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { listEntitlementsHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()

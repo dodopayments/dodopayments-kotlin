@@ -59,7 +59,9 @@ internal class ProductCreateParamsTest {
                     .instructions("instructions")
                     .build()
             )
-            .addEntitlementId("string")
+            .addEntitlement(
+                ProductCreateParams.Entitlement.builder().entitlementId("entitlement_id").build()
+            )
             .licenseKeyActivationMessage("license_key_activation_message")
             .licenseKeyActivationsLimit(0)
             .licenseKeyDuration(
@@ -122,7 +124,11 @@ internal class ProductCreateParamsTest {
                         .instructions("instructions")
                         .build()
                 )
-                .addEntitlementId("string")
+                .addEntitlement(
+                    ProductCreateParams.Entitlement.builder()
+                        .entitlementId("entitlement_id")
+                        .build()
+                )
                 .licenseKeyActivationMessage("license_key_activation_message")
                 .licenseKeyActivationsLimit(0)
                 .licenseKeyDuration(
@@ -187,7 +193,10 @@ internal class ProductCreateParamsTest {
                     .instructions("instructions")
                     .build()
             )
-        assertThat(body.entitlementIds()).containsExactly("string")
+        assertThat(body.entitlements())
+            .containsExactly(
+                ProductCreateParams.Entitlement.builder().entitlementId("entitlement_id").build()
+            )
         assertThat(body.licenseKeyActivationMessage()).isEqualTo("license_key_activation_message")
         assertThat(body.licenseKeyActivationsLimit()).isEqualTo(0)
         assertThat(body.licenseKeyDuration())

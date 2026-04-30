@@ -24,6 +24,7 @@ private constructor(
     private val productId: JsonField<String>,
     private val prorationBillingMode: JsonField<ProrationBillingMode>,
     private val quantity: JsonField<Int>,
+    private val adaptiveCurrencyFeesInclusive: JsonField<Boolean>,
     private val addons: JsonField<List<AttachAddon>>,
     private val discountCode: JsonField<String>,
     private val effectiveAt: JsonField<EffectiveAt>,
@@ -39,6 +40,9 @@ private constructor(
         @ExcludeMissing
         prorationBillingMode: JsonField<ProrationBillingMode> = JsonMissing.of(),
         @JsonProperty("quantity") @ExcludeMissing quantity: JsonField<Int> = JsonMissing.of(),
+        @JsonProperty("adaptive_currency_fees_inclusive")
+        @ExcludeMissing
+        adaptiveCurrencyFeesInclusive: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("addons")
         @ExcludeMissing
         addons: JsonField<List<AttachAddon>> = JsonMissing.of(),
@@ -56,6 +60,7 @@ private constructor(
         productId,
         prorationBillingMode,
         quantity,
+        adaptiveCurrencyFeesInclusive,
         addons,
         discountCode,
         effectiveAt,
@@ -88,6 +93,16 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun quantity(): Int = quantity.getRequired("quantity")
+
+    /**
+     * Whether adaptive currency fees should be included in the price (true) or added on top
+     * (false). If not specified, uses the subscription's stored setting.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun adaptiveCurrencyFeesInclusive(): Boolean? =
+        adaptiveCurrencyFeesInclusive.getNullable("adaptive_currency_fees_inclusive")
 
     /**
      * Addons for the new plan. Note : Leaving this empty would remove any existing addons
@@ -161,6 +176,16 @@ private constructor(
      * Unlike [quantity], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("quantity") @ExcludeMissing fun _quantity(): JsonField<Int> = quantity
+
+    /**
+     * Returns the raw JSON value of [adaptiveCurrencyFeesInclusive].
+     *
+     * Unlike [adaptiveCurrencyFeesInclusive], this method doesn't throw if the JSON field has an
+     * unexpected type.
+     */
+    @JsonProperty("adaptive_currency_fees_inclusive")
+    @ExcludeMissing
+    fun _adaptiveCurrencyFeesInclusive(): JsonField<Boolean> = adaptiveCurrencyFeesInclusive
 
     /**
      * Returns the raw JSON value of [addons].
@@ -237,6 +262,7 @@ private constructor(
         private var productId: JsonField<String>? = null
         private var prorationBillingMode: JsonField<ProrationBillingMode>? = null
         private var quantity: JsonField<Int>? = null
+        private var adaptiveCurrencyFeesInclusive: JsonField<Boolean> = JsonMissing.of()
         private var addons: JsonField<MutableList<AttachAddon>>? = null
         private var discountCode: JsonField<String> = JsonMissing.of()
         private var effectiveAt: JsonField<EffectiveAt> = JsonMissing.of()
@@ -248,6 +274,7 @@ private constructor(
             productId = updateSubscriptionPlanReq.productId
             prorationBillingMode = updateSubscriptionPlanReq.prorationBillingMode
             quantity = updateSubscriptionPlanReq.quantity
+            adaptiveCurrencyFeesInclusive = updateSubscriptionPlanReq.adaptiveCurrencyFeesInclusive
             addons = updateSubscriptionPlanReq.addons.map { it.toMutableList() }
             discountCode = updateSubscriptionPlanReq.discountCode
             effectiveAt = updateSubscriptionPlanReq.effectiveAt
@@ -293,6 +320,33 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun quantity(quantity: JsonField<Int>) = apply { this.quantity = quantity }
+
+        /**
+         * Whether adaptive currency fees should be included in the price (true) or added on top
+         * (false). If not specified, uses the subscription's stored setting.
+         */
+        fun adaptiveCurrencyFeesInclusive(adaptiveCurrencyFeesInclusive: Boolean?) =
+            adaptiveCurrencyFeesInclusive(JsonField.ofNullable(adaptiveCurrencyFeesInclusive))
+
+        /**
+         * Alias for [Builder.adaptiveCurrencyFeesInclusive].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun adaptiveCurrencyFeesInclusive(adaptiveCurrencyFeesInclusive: Boolean) =
+            adaptiveCurrencyFeesInclusive(adaptiveCurrencyFeesInclusive as Boolean?)
+
+        /**
+         * Sets [Builder.adaptiveCurrencyFeesInclusive] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.adaptiveCurrencyFeesInclusive] with a well-typed
+         * [Boolean] value instead. This method is primarily for setting the field to an
+         * undocumented or not yet supported value.
+         */
+        fun adaptiveCurrencyFeesInclusive(adaptiveCurrencyFeesInclusive: JsonField<Boolean>) =
+            apply {
+                this.adaptiveCurrencyFeesInclusive = adaptiveCurrencyFeesInclusive
+            }
 
         /** Addons for the new plan. Note : Leaving this empty would remove any existing addons */
         fun addons(addons: List<AttachAddon>?) = addons(JsonField.ofNullable(addons))
@@ -430,6 +484,7 @@ private constructor(
                 checkRequired("productId", productId),
                 checkRequired("prorationBillingMode", prorationBillingMode),
                 checkRequired("quantity", quantity),
+                adaptiveCurrencyFeesInclusive,
                 (addons ?: JsonMissing.of()).map { it.toImmutable() },
                 discountCode,
                 effectiveAt,
@@ -449,6 +504,7 @@ private constructor(
         productId()
         prorationBillingMode().validate()
         quantity()
+        adaptiveCurrencyFeesInclusive()
         addons()?.forEach { it.validate() }
         discountCode()
         effectiveAt()?.validate()
@@ -474,6 +530,7 @@ private constructor(
         (if (productId.asKnown() == null) 0 else 1) +
             (prorationBillingMode.asKnown()?.validity() ?: 0) +
             (if (quantity.asKnown() == null) 0 else 1) +
+            (if (adaptiveCurrencyFeesInclusive.asKnown() == null) 0 else 1) +
             (addons.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
             (if (discountCode.asKnown() == null) 0 else 1) +
             (effectiveAt.asKnown()?.validity() ?: 0) +
@@ -1001,6 +1058,7 @@ private constructor(
             productId == other.productId &&
             prorationBillingMode == other.prorationBillingMode &&
             quantity == other.quantity &&
+            adaptiveCurrencyFeesInclusive == other.adaptiveCurrencyFeesInclusive &&
             addons == other.addons &&
             discountCode == other.discountCode &&
             effectiveAt == other.effectiveAt &&
@@ -1014,6 +1072,7 @@ private constructor(
             productId,
             prorationBillingMode,
             quantity,
+            adaptiveCurrencyFeesInclusive,
             addons,
             discountCode,
             effectiveAt,
@@ -1026,5 +1085,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "UpdateSubscriptionPlanReq{productId=$productId, prorationBillingMode=$prorationBillingMode, quantity=$quantity, addons=$addons, discountCode=$discountCode, effectiveAt=$effectiveAt, metadata=$metadata, onPaymentFailure=$onPaymentFailure, additionalProperties=$additionalProperties}"
+        "UpdateSubscriptionPlanReq{productId=$productId, prorationBillingMode=$prorationBillingMode, quantity=$quantity, adaptiveCurrencyFeesInclusive=$adaptiveCurrencyFeesInclusive, addons=$addons, discountCode=$discountCode, effectiveAt=$effectiveAt, metadata=$metadata, onPaymentFailure=$onPaymentFailure, additionalProperties=$additionalProperties}"
 }

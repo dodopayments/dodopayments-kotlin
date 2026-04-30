@@ -744,6 +744,8 @@ private constructor(
 
             val OVERAGE_CHARGED = of("overage_charged")
 
+            val OVERAGE_RESET = of("overage_reset")
+
             val AUTO_TOP_UP = of("auto_top_up")
 
             val MANUAL_ADJUSTMENT = of("manual_adjustment")
@@ -761,6 +763,7 @@ private constructor(
             CREDIT_ROLLED_OVER,
             ROLLOVER_FORFEITED,
             OVERAGE_CHARGED,
+            OVERAGE_RESET,
             AUTO_TOP_UP,
             MANUAL_ADJUSTMENT,
             REFUND,
@@ -782,6 +785,7 @@ private constructor(
             CREDIT_ROLLED_OVER,
             ROLLOVER_FORFEITED,
             OVERAGE_CHARGED,
+            OVERAGE_RESET,
             AUTO_TOP_UP,
             MANUAL_ADJUSTMENT,
             REFUND,
@@ -807,6 +811,7 @@ private constructor(
                 CREDIT_ROLLED_OVER -> Value.CREDIT_ROLLED_OVER
                 ROLLOVER_FORFEITED -> Value.ROLLOVER_FORFEITED
                 OVERAGE_CHARGED -> Value.OVERAGE_CHARGED
+                OVERAGE_RESET -> Value.OVERAGE_RESET
                 AUTO_TOP_UP -> Value.AUTO_TOP_UP
                 MANUAL_ADJUSTMENT -> Value.MANUAL_ADJUSTMENT
                 REFUND -> Value.REFUND
@@ -830,6 +835,7 @@ private constructor(
                 CREDIT_ROLLED_OVER -> Known.CREDIT_ROLLED_OVER
                 ROLLOVER_FORFEITED -> Known.ROLLOVER_FORFEITED
                 OVERAGE_CHARGED -> Known.OVERAGE_CHARGED
+                OVERAGE_RESET -> Known.OVERAGE_RESET
                 AUTO_TOP_UP -> Known.AUTO_TOP_UP
                 MANUAL_ADJUSTMENT -> Known.MANUAL_ADJUSTMENT
                 REFUND -> Known.REFUND

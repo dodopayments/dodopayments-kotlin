@@ -7,6 +7,7 @@ import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.checkKnown
+import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -16,60 +17,50 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
 
+/**
+ * Digital-product-delivery payload for a grant. Populated for grants whose entitlement has
+ * `integration_type = 'digital_files'`. `files` carries presigned download URLs; the source (EE
+ * service or legacy in-process S3 presigning) is opaque to the caller.
+ */
 class DigitalProductDelivery
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val externalUrl: JsonField<String>,
     private val files: JsonField<List<DigitalProductDeliveryFile>>,
+    private val externalUrl: JsonField<String>,
     private val instructions: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("external_url")
-        @ExcludeMissing
-        externalUrl: JsonField<String> = JsonMissing.of(),
         @JsonProperty("files")
         @ExcludeMissing
         files: JsonField<List<DigitalProductDeliveryFile>> = JsonMissing.of(),
+        @JsonProperty("external_url")
+        @ExcludeMissing
+        externalUrl: JsonField<String> = JsonMissing.of(),
         @JsonProperty("instructions")
         @ExcludeMissing
         instructions: JsonField<String> = JsonMissing.of(),
-    ) : this(externalUrl, files, instructions, mutableMapOf())
+    ) : this(files, externalUrl, instructions, mutableMapOf())
 
     /**
-     * External URL to digital product
-     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun files(): List<DigitalProductDeliveryFile> = files.getRequired("files")
+
+    /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
     fun externalUrl(): String? = externalUrl.getNullable("external_url")
 
     /**
-     * Uploaded files ids of digital product
-     *
-     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
-    fun files(): List<DigitalProductDeliveryFile>? = files.getNullable("files")
-
-    /**
-     * Instructions to download and use the digital product
-     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
     fun instructions(): String? = instructions.getNullable("instructions")
-
-    /**
-     * Returns the raw JSON value of [externalUrl].
-     *
-     * Unlike [externalUrl], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("external_url")
-    @ExcludeMissing
-    fun _externalUrl(): JsonField<String> = externalUrl
 
     /**
      * Returns the raw JSON value of [files].
@@ -79,6 +70,15 @@ private constructor(
     @JsonProperty("files")
     @ExcludeMissing
     fun _files(): JsonField<List<DigitalProductDeliveryFile>> = files
+
+    /**
+     * Returns the raw JSON value of [externalUrl].
+     *
+     * Unlike [externalUrl], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("external_url")
+    @ExcludeMissing
+    fun _externalUrl(): JsonField<String> = externalUrl
 
     /**
      * Returns the raw JSON value of [instructions].
@@ -103,39 +103,33 @@ private constructor(
 
     companion object {
 
-        /** Returns a mutable builder for constructing an instance of [DigitalProductDelivery]. */
+        /**
+         * Returns a mutable builder for constructing an instance of [DigitalProductDelivery].
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .files()
+         * ```
+         */
         fun builder() = Builder()
     }
 
     /** A builder for [DigitalProductDelivery]. */
     class Builder internal constructor() {
 
-        private var externalUrl: JsonField<String> = JsonMissing.of()
         private var files: JsonField<MutableList<DigitalProductDeliveryFile>>? = null
+        private var externalUrl: JsonField<String> = JsonMissing.of()
         private var instructions: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(digitalProductDelivery: DigitalProductDelivery) = apply {
-            externalUrl = digitalProductDelivery.externalUrl
             files = digitalProductDelivery.files.map { it.toMutableList() }
+            externalUrl = digitalProductDelivery.externalUrl
             instructions = digitalProductDelivery.instructions
             additionalProperties = digitalProductDelivery.additionalProperties.toMutableMap()
         }
 
-        /** External URL to digital product */
-        fun externalUrl(externalUrl: String?) = externalUrl(JsonField.ofNullable(externalUrl))
-
-        /**
-         * Sets [Builder.externalUrl] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.externalUrl] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun externalUrl(externalUrl: JsonField<String>) = apply { this.externalUrl = externalUrl }
-
-        /** Uploaded files ids of digital product */
-        fun files(files: List<DigitalProductDeliveryFile>?) = files(JsonField.ofNullable(files))
+        fun files(files: List<DigitalProductDeliveryFile>) = files(JsonField.of(files))
 
         /**
          * Sets [Builder.files] to an arbitrary JSON value.
@@ -158,7 +152,17 @@ private constructor(
                 (files ?: JsonField.of(mutableListOf())).also { checkKnown("files", it).add(file) }
         }
 
-        /** Instructions to download and use the digital product */
+        fun externalUrl(externalUrl: String?) = externalUrl(JsonField.ofNullable(externalUrl))
+
+        /**
+         * Sets [Builder.externalUrl] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.externalUrl] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun externalUrl(externalUrl: JsonField<String>) = apply { this.externalUrl = externalUrl }
+
         fun instructions(instructions: String?) = instructions(JsonField.ofNullable(instructions))
 
         /**
@@ -195,11 +199,18 @@ private constructor(
          * Returns an immutable instance of [DigitalProductDelivery].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```kotlin
+         * .files()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): DigitalProductDelivery =
             DigitalProductDelivery(
+                checkRequired("files", files).map { it.toImmutable() },
                 externalUrl,
-                (files ?: JsonMissing.of()).map { it.toImmutable() },
                 instructions,
                 additionalProperties.toMutableMap(),
             )
@@ -212,8 +223,8 @@ private constructor(
             return@apply
         }
 
+        files().forEach { it.validate() }
         externalUrl()
-        files()?.forEach { it.validate() }
         instructions()
         validated = true
     }
@@ -232,8 +243,8 @@ private constructor(
      * Used for best match union deserialization.
      */
     internal fun validity(): Int =
-        (if (externalUrl.asKnown() == null) 0 else 1) +
-            (files.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+        (files.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (externalUrl.asKnown() == null) 0 else 1) +
             (if (instructions.asKnown() == null) 0 else 1)
 
     override fun equals(other: Any?): Boolean {
@@ -242,18 +253,18 @@ private constructor(
         }
 
         return other is DigitalProductDelivery &&
-            externalUrl == other.externalUrl &&
             files == other.files &&
+            externalUrl == other.externalUrl &&
             instructions == other.instructions &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(externalUrl, files, instructions, additionalProperties)
+        Objects.hash(files, externalUrl, instructions, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "DigitalProductDelivery{externalUrl=$externalUrl, files=$files, instructions=$instructions, additionalProperties=$additionalProperties}"
+        "DigitalProductDelivery{files=$files, externalUrl=$externalUrl, instructions=$instructions, additionalProperties=$additionalProperties}"
 }

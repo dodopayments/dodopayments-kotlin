@@ -87,21 +87,26 @@ private constructor(
     /**
      * Choose how you would like you digital product delivered
      *
+     * deprecated: use entitlements instead
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
     fun digitalProductDelivery(): DigitalProductDelivery? = body.digitalProductDelivery()
 
     /**
-     * Optional entitlement IDs to attach to this product (max 20)
+     * Optional entitlements to attach to this product (max 20)
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
-    fun entitlementIds(): List<String>? = body.entitlementIds()
+    fun entitlements(): List<Entitlement>? = body.entitlements()
 
     /**
      * Optional message displayed during license key activation
+     *
+     * deprecated: use entitlements instead. Ignored when a `license_key` entitlement is attached
+     * via the `entitlements` field.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
@@ -111,6 +116,9 @@ private constructor(
 
     /**
      * The number of times the license key can be activated. Must be 0 or greater
+     *
+     * deprecated: use entitlements instead. Ignored when a `license_key` entitlement is attached
+     * via the `entitlements` field.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
@@ -122,6 +130,9 @@ private constructor(
      * Duration configuration for the license key. Set to null if you don't want the license key to
      * expire. For subscriptions, the lifetime of the license key is tied to the subscription period
      *
+     * deprecated: use entitlements instead. Ignored when a `license_key` entitlement is attached
+     * via the `entitlements` field.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
@@ -129,6 +140,10 @@ private constructor(
 
     /**
      * When true, generates and sends a license key to your customer. Defaults to false
+     *
+     * deprecated: use entitlements instead. If a `license_key` entitlement is also attached via the
+     * `entitlements` field, the `license_key_*` config fields below are ignored — the attached
+     * entitlement's config is the source of truth.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
@@ -203,11 +218,11 @@ private constructor(
         body._digitalProductDelivery()
 
     /**
-     * Returns the raw JSON value of [entitlementIds].
+     * Returns the raw JSON value of [entitlements].
      *
-     * Unlike [entitlementIds], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [entitlements], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _entitlementIds(): JsonField<List<String>> = body._entitlementIds()
+    fun _entitlements(): JsonField<List<Entitlement>> = body._entitlements()
 
     /**
      * Returns the raw JSON value of [licenseKeyActivationMessage].
@@ -416,7 +431,11 @@ private constructor(
          */
         fun description(description: JsonField<String>) = apply { body.description(description) }
 
-        /** Choose how you would like you digital product delivered */
+        /**
+         * Choose how you would like you digital product delivered
+         *
+         * deprecated: use entitlements instead
+         */
         fun digitalProductDelivery(digitalProductDelivery: DigitalProductDelivery?) = apply {
             body.digitalProductDelivery(digitalProductDelivery)
         }
@@ -433,30 +452,35 @@ private constructor(
                 body.digitalProductDelivery(digitalProductDelivery)
             }
 
-        /** Optional entitlement IDs to attach to this product (max 20) */
-        fun entitlementIds(entitlementIds: List<String>?) = apply {
-            body.entitlementIds(entitlementIds)
+        /** Optional entitlements to attach to this product (max 20) */
+        fun entitlements(entitlements: List<Entitlement>?) = apply {
+            body.entitlements(entitlements)
         }
 
         /**
-         * Sets [Builder.entitlementIds] to an arbitrary JSON value.
+         * Sets [Builder.entitlements] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.entitlementIds] with a well-typed `List<String>` value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.entitlements] with a well-typed `List<Entitlement>`
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
          */
-        fun entitlementIds(entitlementIds: JsonField<List<String>>) = apply {
-            body.entitlementIds(entitlementIds)
+        fun entitlements(entitlements: JsonField<List<Entitlement>>) = apply {
+            body.entitlements(entitlements)
         }
 
         /**
-         * Adds a single [String] to [entitlementIds].
+         * Adds a single [Entitlement] to [entitlements].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addEntitlementId(entitlementId: String) = apply { body.addEntitlementId(entitlementId) }
+        fun addEntitlement(entitlement: Entitlement) = apply { body.addEntitlement(entitlement) }
 
-        /** Optional message displayed during license key activation */
+        /**
+         * Optional message displayed during license key activation
+         *
+         * deprecated: use entitlements instead. Ignored when a `license_key` entitlement is
+         * attached via the `entitlements` field.
+         */
         @Deprecated("deprecated")
         fun licenseKeyActivationMessage(licenseKeyActivationMessage: String?) = apply {
             body.licenseKeyActivationMessage(licenseKeyActivationMessage)
@@ -474,7 +498,12 @@ private constructor(
             body.licenseKeyActivationMessage(licenseKeyActivationMessage)
         }
 
-        /** The number of times the license key can be activated. Must be 0 or greater */
+        /**
+         * The number of times the license key can be activated. Must be 0 or greater
+         *
+         * deprecated: use entitlements instead. Ignored when a `license_key` entitlement is
+         * attached via the `entitlements` field.
+         */
         @Deprecated("deprecated")
         fun licenseKeyActivationsLimit(licenseKeyActivationsLimit: Int?) = apply {
             body.licenseKeyActivationsLimit(licenseKeyActivationsLimit)
@@ -505,6 +534,9 @@ private constructor(
          * Duration configuration for the license key. Set to null if you don't want the license key
          * to expire. For subscriptions, the lifetime of the license key is tied to the subscription
          * period
+         *
+         * deprecated: use entitlements instead. Ignored when a `license_key` entitlement is
+         * attached via the `entitlements` field.
          */
         fun licenseKeyDuration(licenseKeyDuration: LicenseKeyDuration?) = apply {
             body.licenseKeyDuration(licenseKeyDuration)
@@ -521,7 +553,13 @@ private constructor(
             body.licenseKeyDuration(licenseKeyDuration)
         }
 
-        /** When true, generates and sends a license key to your customer. Defaults to false */
+        /**
+         * When true, generates and sends a license key to your customer. Defaults to false
+         *
+         * deprecated: use entitlements instead. If a `license_key` entitlement is also attached via
+         * the `entitlements` field, the `license_key_*` config fields below are ignored — the
+         * attached entitlement's config is the source of truth.
+         */
         @Deprecated("deprecated")
         fun licenseKeyEnabled(licenseKeyEnabled: Boolean?) = apply {
             body.licenseKeyEnabled(licenseKeyEnabled)
@@ -716,7 +754,7 @@ private constructor(
         private val creditEntitlements: JsonField<List<AttachCreditEntitlement>>,
         private val description: JsonField<String>,
         private val digitalProductDelivery: JsonField<DigitalProductDelivery>,
-        private val entitlementIds: JsonField<List<String>>,
+        private val entitlements: JsonField<List<Entitlement>>,
         private val licenseKeyActivationMessage: JsonField<String>,
         private val licenseKeyActivationsLimit: JsonField<Int>,
         private val licenseKeyDuration: JsonField<LicenseKeyDuration>,
@@ -745,9 +783,9 @@ private constructor(
             @JsonProperty("digital_product_delivery")
             @ExcludeMissing
             digitalProductDelivery: JsonField<DigitalProductDelivery> = JsonMissing.of(),
-            @JsonProperty("entitlement_ids")
+            @JsonProperty("entitlements")
             @ExcludeMissing
-            entitlementIds: JsonField<List<String>> = JsonMissing.of(),
+            entitlements: JsonField<List<Entitlement>> = JsonMissing.of(),
             @JsonProperty("license_key_activation_message")
             @ExcludeMissing
             licenseKeyActivationMessage: JsonField<String> = JsonMissing.of(),
@@ -772,7 +810,7 @@ private constructor(
             creditEntitlements,
             description,
             digitalProductDelivery,
-            entitlementIds,
+            entitlements,
             licenseKeyActivationMessage,
             licenseKeyActivationsLimit,
             licenseKeyDuration,
@@ -841,6 +879,8 @@ private constructor(
         /**
          * Choose how you would like you digital product delivered
          *
+         * deprecated: use entitlements instead
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
@@ -848,15 +888,18 @@ private constructor(
             digitalProductDelivery.getNullable("digital_product_delivery")
 
         /**
-         * Optional entitlement IDs to attach to this product (max 20)
+         * Optional entitlements to attach to this product (max 20)
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
-        fun entitlementIds(): List<String>? = entitlementIds.getNullable("entitlement_ids")
+        fun entitlements(): List<Entitlement>? = entitlements.getNullable("entitlements")
 
         /**
          * Optional message displayed during license key activation
+         *
+         * deprecated: use entitlements instead. Ignored when a `license_key` entitlement is
+         * attached via the `entitlements` field.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
@@ -867,6 +910,9 @@ private constructor(
 
         /**
          * The number of times the license key can be activated. Must be 0 or greater
+         *
+         * deprecated: use entitlements instead. Ignored when a `license_key` entitlement is
+         * attached via the `entitlements` field.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
@@ -880,6 +926,9 @@ private constructor(
          * to expire. For subscriptions, the lifetime of the license key is tied to the subscription
          * period
          *
+         * deprecated: use entitlements instead. Ignored when a `license_key` entitlement is
+         * attached via the `entitlements` field.
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
@@ -888,6 +937,10 @@ private constructor(
 
         /**
          * When true, generates and sends a license key to your customer. Defaults to false
+         *
+         * deprecated: use entitlements instead. If a `license_key` entitlement is also attached via
+         * the `entitlements` field, the `license_key_*` config fields below are ignored — the
+         * attached entitlement's config is the source of truth.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
@@ -970,14 +1023,14 @@ private constructor(
         fun _digitalProductDelivery(): JsonField<DigitalProductDelivery> = digitalProductDelivery
 
         /**
-         * Returns the raw JSON value of [entitlementIds].
+         * Returns the raw JSON value of [entitlements].
          *
-         * Unlike [entitlementIds], this method doesn't throw if the JSON field has an unexpected
+         * Unlike [entitlements], this method doesn't throw if the JSON field has an unexpected
          * type.
          */
-        @JsonProperty("entitlement_ids")
+        @JsonProperty("entitlements")
         @ExcludeMissing
-        fun _entitlementIds(): JsonField<List<String>> = entitlementIds
+        fun _entitlements(): JsonField<List<Entitlement>> = entitlements
 
         /**
          * Returns the raw JSON value of [licenseKeyActivationMessage].
@@ -1067,7 +1120,7 @@ private constructor(
             private var creditEntitlements: JsonField<MutableList<AttachCreditEntitlement>>? = null
             private var description: JsonField<String> = JsonMissing.of()
             private var digitalProductDelivery: JsonField<DigitalProductDelivery> = JsonMissing.of()
-            private var entitlementIds: JsonField<MutableList<String>>? = null
+            private var entitlements: JsonField<MutableList<Entitlement>>? = null
             private var licenseKeyActivationMessage: JsonField<String> = JsonMissing.of()
             private var licenseKeyActivationsLimit: JsonField<Int> = JsonMissing.of()
             private var licenseKeyDuration: JsonField<LicenseKeyDuration> = JsonMissing.of()
@@ -1084,7 +1137,7 @@ private constructor(
                 creditEntitlements = body.creditEntitlements.map { it.toMutableList() }
                 description = body.description
                 digitalProductDelivery = body.digitalProductDelivery
-                entitlementIds = body.entitlementIds.map { it.toMutableList() }
+                entitlements = body.entitlements.map { it.toMutableList() }
                 licenseKeyActivationMessage = body.licenseKeyActivationMessage
                 licenseKeyActivationsLimit = body.licenseKeyActivationsLimit
                 licenseKeyDuration = body.licenseKeyDuration
@@ -1220,7 +1273,11 @@ private constructor(
                 this.description = description
             }
 
-            /** Choose how you would like you digital product delivered */
+            /**
+             * Choose how you would like you digital product delivered
+             *
+             * deprecated: use entitlements instead
+             */
             fun digitalProductDelivery(digitalProductDelivery: DigitalProductDelivery?) =
                 digitalProductDelivery(JsonField.ofNullable(digitalProductDelivery))
 
@@ -1236,34 +1293,39 @@ private constructor(
                     this.digitalProductDelivery = digitalProductDelivery
                 }
 
-            /** Optional entitlement IDs to attach to this product (max 20) */
-            fun entitlementIds(entitlementIds: List<String>?) =
-                entitlementIds(JsonField.ofNullable(entitlementIds))
+            /** Optional entitlements to attach to this product (max 20) */
+            fun entitlements(entitlements: List<Entitlement>?) =
+                entitlements(JsonField.ofNullable(entitlements))
 
             /**
-             * Sets [Builder.entitlementIds] to an arbitrary JSON value.
+             * Sets [Builder.entitlements] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.entitlementIds] with a well-typed `List<String>`
+             * You should usually call [Builder.entitlements] with a well-typed `List<Entitlement>`
              * value instead. This method is primarily for setting the field to an undocumented or
              * not yet supported value.
              */
-            fun entitlementIds(entitlementIds: JsonField<List<String>>) = apply {
-                this.entitlementIds = entitlementIds.map { it.toMutableList() }
+            fun entitlements(entitlements: JsonField<List<Entitlement>>) = apply {
+                this.entitlements = entitlements.map { it.toMutableList() }
             }
 
             /**
-             * Adds a single [String] to [entitlementIds].
+             * Adds a single [Entitlement] to [entitlements].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addEntitlementId(entitlementId: String) = apply {
-                entitlementIds =
-                    (entitlementIds ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("entitlementIds", it).add(entitlementId)
+            fun addEntitlement(entitlement: Entitlement) = apply {
+                entitlements =
+                    (entitlements ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("entitlements", it).add(entitlement)
                     }
             }
 
-            /** Optional message displayed during license key activation */
+            /**
+             * Optional message displayed during license key activation
+             *
+             * deprecated: use entitlements instead. Ignored when a `license_key` entitlement is
+             * attached via the `entitlements` field.
+             */
             @Deprecated("deprecated")
             fun licenseKeyActivationMessage(licenseKeyActivationMessage: String?) =
                 licenseKeyActivationMessage(JsonField.ofNullable(licenseKeyActivationMessage))
@@ -1281,7 +1343,12 @@ private constructor(
                     this.licenseKeyActivationMessage = licenseKeyActivationMessage
                 }
 
-            /** The number of times the license key can be activated. Must be 0 or greater */
+            /**
+             * The number of times the license key can be activated. Must be 0 or greater
+             *
+             * deprecated: use entitlements instead. Ignored when a `license_key` entitlement is
+             * attached via the `entitlements` field.
+             */
             @Deprecated("deprecated")
             fun licenseKeyActivationsLimit(licenseKeyActivationsLimit: Int?) =
                 licenseKeyActivationsLimit(JsonField.ofNullable(licenseKeyActivationsLimit))
@@ -1311,6 +1378,9 @@ private constructor(
              * Duration configuration for the license key. Set to null if you don't want the license
              * key to expire. For subscriptions, the lifetime of the license key is tied to the
              * subscription period
+             *
+             * deprecated: use entitlements instead. Ignored when a `license_key` entitlement is
+             * attached via the `entitlements` field.
              */
             fun licenseKeyDuration(licenseKeyDuration: LicenseKeyDuration?) =
                 licenseKeyDuration(JsonField.ofNullable(licenseKeyDuration))
@@ -1326,7 +1396,13 @@ private constructor(
                 this.licenseKeyDuration = licenseKeyDuration
             }
 
-            /** When true, generates and sends a license key to your customer. Defaults to false */
+            /**
+             * When true, generates and sends a license key to your customer. Defaults to false
+             *
+             * deprecated: use entitlements instead. If a `license_key` entitlement is also attached
+             * via the `entitlements` field, the `license_key_*` config fields below are ignored —
+             * the attached entitlement's config is the source of truth.
+             */
             @Deprecated("deprecated")
             fun licenseKeyEnabled(licenseKeyEnabled: Boolean?) =
                 licenseKeyEnabled(JsonField.ofNullable(licenseKeyEnabled))
@@ -1407,7 +1483,7 @@ private constructor(
                     (creditEntitlements ?: JsonMissing.of()).map { it.toImmutable() },
                     description,
                     digitalProductDelivery,
-                    (entitlementIds ?: JsonMissing.of()).map { it.toImmutable() },
+                    (entitlements ?: JsonMissing.of()).map { it.toImmutable() },
                     licenseKeyActivationMessage,
                     licenseKeyActivationsLimit,
                     licenseKeyDuration,
@@ -1432,7 +1508,7 @@ private constructor(
             creditEntitlements()?.forEach { it.validate() }
             description()
             digitalProductDelivery()?.validate()
-            entitlementIds()
+            entitlements()?.forEach { it.validate() }
             licenseKeyActivationMessage()
             licenseKeyActivationsLimit()
             licenseKeyDuration()?.validate()
@@ -1464,7 +1540,7 @@ private constructor(
                 (creditEntitlements.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
                 (if (description.asKnown() == null) 0 else 1) +
                 (digitalProductDelivery.asKnown()?.validity() ?: 0) +
-                (entitlementIds.asKnown()?.size ?: 0) +
+                (entitlements.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
                 (if (licenseKeyActivationMessage.asKnown() == null) 0 else 1) +
                 (if (licenseKeyActivationsLimit.asKnown() == null) 0 else 1) +
                 (licenseKeyDuration.asKnown()?.validity() ?: 0) +
@@ -1485,7 +1561,7 @@ private constructor(
                 creditEntitlements == other.creditEntitlements &&
                 description == other.description &&
                 digitalProductDelivery == other.digitalProductDelivery &&
-                entitlementIds == other.entitlementIds &&
+                entitlements == other.entitlements &&
                 licenseKeyActivationMessage == other.licenseKeyActivationMessage &&
                 licenseKeyActivationsLimit == other.licenseKeyActivationsLimit &&
                 licenseKeyDuration == other.licenseKeyDuration &&
@@ -1504,7 +1580,7 @@ private constructor(
                 creditEntitlements,
                 description,
                 digitalProductDelivery,
-                entitlementIds,
+                entitlements,
                 licenseKeyActivationMessage,
                 licenseKeyActivationsLimit,
                 licenseKeyDuration,
@@ -1517,10 +1593,14 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{name=$name, price=$price, taxCategory=$taxCategory, addons=$addons, brandId=$brandId, creditEntitlements=$creditEntitlements, description=$description, digitalProductDelivery=$digitalProductDelivery, entitlementIds=$entitlementIds, licenseKeyActivationMessage=$licenseKeyActivationMessage, licenseKeyActivationsLimit=$licenseKeyActivationsLimit, licenseKeyDuration=$licenseKeyDuration, licenseKeyEnabled=$licenseKeyEnabled, metadata=$metadata, additionalProperties=$additionalProperties}"
+            "Body{name=$name, price=$price, taxCategory=$taxCategory, addons=$addons, brandId=$brandId, creditEntitlements=$creditEntitlements, description=$description, digitalProductDelivery=$digitalProductDelivery, entitlements=$entitlements, licenseKeyActivationMessage=$licenseKeyActivationMessage, licenseKeyActivationsLimit=$licenseKeyActivationsLimit, licenseKeyDuration=$licenseKeyDuration, licenseKeyEnabled=$licenseKeyEnabled, metadata=$metadata, additionalProperties=$additionalProperties}"
     }
 
-    /** Choose how you would like you digital product delivered */
+    /**
+     * Choose how you would like you digital product delivered
+     *
+     * deprecated: use entitlements instead
+     */
     class DigitalProductDelivery
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
@@ -1717,6 +1797,178 @@ private constructor(
 
         override fun toString() =
             "DigitalProductDelivery{externalUrl=$externalUrl, instructions=$instructions, additionalProperties=$additionalProperties}"
+    }
+
+    /**
+     * Request struct for attaching an entitlement to a product.
+     *
+     * Mirrors the `credit_entitlements` attach shape — every "attach something to a product" array
+     * takes objects, not bare IDs. Uniform shape leaves room for per-attachment settings later
+     * without another API break.
+     */
+    class Entitlement
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
+        private val entitlementId: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("entitlement_id")
+            @ExcludeMissing
+            entitlementId: JsonField<String> = JsonMissing.of()
+        ) : this(entitlementId, mutableMapOf())
+
+        /**
+         * ID of the entitlement to attach to the product
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun entitlementId(): String = entitlementId.getRequired("entitlement_id")
+
+        /**
+         * Returns the raw JSON value of [entitlementId].
+         *
+         * Unlike [entitlementId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("entitlement_id")
+        @ExcludeMissing
+        fun _entitlementId(): JsonField<String> = entitlementId
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [Entitlement].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .entitlementId()
+             * ```
+             */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [Entitlement]. */
+        class Builder internal constructor() {
+
+            private var entitlementId: JsonField<String>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(entitlement: Entitlement) = apply {
+                entitlementId = entitlement.entitlementId
+                additionalProperties = entitlement.additionalProperties.toMutableMap()
+            }
+
+            /** ID of the entitlement to attach to the product */
+            fun entitlementId(entitlementId: String) = entitlementId(JsonField.of(entitlementId))
+
+            /**
+             * Sets [Builder.entitlementId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.entitlementId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun entitlementId(entitlementId: JsonField<String>) = apply {
+                this.entitlementId = entitlementId
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Entitlement].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .entitlementId()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): Entitlement =
+                Entitlement(
+                    checkRequired("entitlementId", entitlementId),
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Entitlement = apply {
+            if (validated) {
+                return@apply
+            }
+
+            entitlementId()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int = (if (entitlementId.asKnown() == null) 0 else 1)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Entitlement &&
+                entitlementId == other.entitlementId &&
+                additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy { Objects.hash(entitlementId, additionalProperties) }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Entitlement{entitlementId=$entitlementId, additionalProperties=$additionalProperties}"
     }
 
     /** Additional metadata for the product */
