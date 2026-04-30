@@ -14,15 +14,14 @@ private constructor(
     private val service: EntitlementServiceAsync,
     private val params: EntitlementListParams,
     private val response: EntitlementListPageResponse,
-) : PageAsync<EntitlementListResponse> {
+) : PageAsync<Entitlement> {
 
     /**
      * Delegates to [EntitlementListPageResponse], but gracefully handles missing data.
      *
      * @see EntitlementListPageResponse.items
      */
-    override fun items(): List<EntitlementListResponse> =
-        response._items().getNullable("items") ?: emptyList()
+    override fun items(): List<Entitlement> = response._items().getNullable("items") ?: emptyList()
 
     override fun hasNextPage(): Boolean = items().isNotEmpty()
 
@@ -33,7 +32,7 @@ private constructor(
 
     override suspend fun nextPage(): EntitlementListPageAsync = service.list(nextPageParams())
 
-    fun autoPager(): AutoPagerAsync<EntitlementListResponse> = AutoPagerAsync.from(this)
+    fun autoPager(): AutoPagerAsync<Entitlement> = AutoPagerAsync.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): EntitlementListParams = params

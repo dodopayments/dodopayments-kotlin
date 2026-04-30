@@ -4,6 +4,8 @@ package com.dodopayments.api.models.webhooks
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.entitlements.grants.EntitlementGrant
+import com.dodopayments.api.models.entitlements.grants.LicenseKeyGrant
 import com.dodopayments.api.models.products.DigitalProductDelivery
 import com.dodopayments.api.models.products.DigitalProductDeliveryFile
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
@@ -19,14 +21,14 @@ internal class EntitlementGrantDeliveredWebhookEventTest {
             EntitlementGrantDeliveredWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    EntitlementGrantDeliveredWebhookEvent.Data.builder()
+                    EntitlementGrant.builder()
                         .id("id")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .customerId("customer_id")
                         .entitlementId("entitlement_id")
                         .externalId("external_id")
-                        .status(EntitlementGrantDeliveredWebhookEvent.Data.Status.PENDING)
+                        .status(EntitlementGrant.Status.PENDING)
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .deliveredAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .digitalProductDelivery(
@@ -48,7 +50,7 @@ internal class EntitlementGrantDeliveredWebhookEventTest {
                         .errorCode("error_code")
                         .errorMessage("error_message")
                         .licenseKey(
-                            EntitlementGrantDeliveredWebhookEvent.Data.LicenseKey.builder()
+                            LicenseKeyGrant.builder()
                                 .activationsUsed(0)
                                 .key("key")
                                 .activationsLimit(0)
@@ -71,14 +73,14 @@ internal class EntitlementGrantDeliveredWebhookEventTest {
         assertThat(entitlementGrantDeliveredWebhookEvent.businessId()).isEqualTo("business_id")
         assertThat(entitlementGrantDeliveredWebhookEvent.data())
             .isEqualTo(
-                EntitlementGrantDeliveredWebhookEvent.Data.builder()
+                EntitlementGrant.builder()
                     .id("id")
                     .businessId("business_id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .customerId("customer_id")
                     .entitlementId("entitlement_id")
                     .externalId("external_id")
-                    .status(EntitlementGrantDeliveredWebhookEvent.Data.Status.PENDING)
+                    .status(EntitlementGrant.Status.PENDING)
                     .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .deliveredAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .digitalProductDelivery(
@@ -100,7 +102,7 @@ internal class EntitlementGrantDeliveredWebhookEventTest {
                     .errorCode("error_code")
                     .errorMessage("error_message")
                     .licenseKey(
-                        EntitlementGrantDeliveredWebhookEvent.Data.LicenseKey.builder()
+                        LicenseKeyGrant.builder()
                             .activationsUsed(0)
                             .key("key")
                             .activationsLimit(0)
@@ -129,14 +131,14 @@ internal class EntitlementGrantDeliveredWebhookEventTest {
             EntitlementGrantDeliveredWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    EntitlementGrantDeliveredWebhookEvent.Data.builder()
+                    EntitlementGrant.builder()
                         .id("id")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .customerId("customer_id")
                         .entitlementId("entitlement_id")
                         .externalId("external_id")
-                        .status(EntitlementGrantDeliveredWebhookEvent.Data.Status.PENDING)
+                        .status(EntitlementGrant.Status.PENDING)
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .deliveredAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .digitalProductDelivery(
@@ -158,7 +160,7 @@ internal class EntitlementGrantDeliveredWebhookEventTest {
                         .errorCode("error_code")
                         .errorMessage("error_message")
                         .licenseKey(
-                            EntitlementGrantDeliveredWebhookEvent.Data.LicenseKey.builder()
+                            LicenseKeyGrant.builder()
                                 .activationsUsed(0)
                                 .key("key")
                                 .activationsLimit(0)

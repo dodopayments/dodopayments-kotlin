@@ -4,6 +4,8 @@ package com.dodopayments.api.models.products
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.entitlements.EntitlementIntegrationType
+import com.dodopayments.api.models.entitlements.IntegrationConfigResponse
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.TaxCategory
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
@@ -20,15 +22,15 @@ internal class ProductListResponseTest {
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addEntitlement(
-                    ProductListResponse.Entitlement.builder()
+                    ProductEntitlementSummary.builder()
                         .id("id")
                         .integrationConfig(
-                            ProductListResponse.Entitlement.IntegrationConfig.GitHubConfig.builder()
+                            IntegrationConfigResponse.GitHubConfig.builder()
                                 .permission("permission")
                                 .targetId("target_id")
                                 .build()
                         )
-                        .integrationType(ProductListResponse.Entitlement.IntegrationType.DISCORD)
+                        .integrationType(EntitlementIntegrationType.DISCORD)
                         .name("name")
                         .description("description")
                         .build()
@@ -67,15 +69,15 @@ internal class ProductListResponseTest {
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(productListResponse.entitlements())
             .containsExactly(
-                ProductListResponse.Entitlement.builder()
+                ProductEntitlementSummary.builder()
                     .id("id")
                     .integrationConfig(
-                        ProductListResponse.Entitlement.IntegrationConfig.GitHubConfig.builder()
+                        IntegrationConfigResponse.GitHubConfig.builder()
                             .permission("permission")
                             .targetId("target_id")
                             .build()
                     )
-                    .integrationType(ProductListResponse.Entitlement.IntegrationType.DISCORD)
+                    .integrationType(EntitlementIntegrationType.DISCORD)
                     .name("name")
                     .description("description")
                     .build()
@@ -122,15 +124,15 @@ internal class ProductListResponseTest {
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addEntitlement(
-                    ProductListResponse.Entitlement.builder()
+                    ProductEntitlementSummary.builder()
                         .id("id")
                         .integrationConfig(
-                            ProductListResponse.Entitlement.IntegrationConfig.GitHubConfig.builder()
+                            IntegrationConfigResponse.GitHubConfig.builder()
                                 .permission("permission")
                                 .targetId("target_id")
                                 .build()
                         )
-                        .integrationType(ProductListResponse.Entitlement.IntegrationType.DISCORD)
+                        .integrationType(EntitlementIntegrationType.DISCORD)
                         .name("name")
                         .description("description")
                         .build()

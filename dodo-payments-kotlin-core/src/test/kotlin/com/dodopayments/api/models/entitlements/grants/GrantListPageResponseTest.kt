@@ -18,14 +18,14 @@ internal class GrantListPageResponseTest {
         val grantListPageResponse =
             GrantListPageResponse.builder()
                 .addItem(
-                    GrantListResponse.builder()
+                    EntitlementGrant.builder()
                         .id("id")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .customerId("customer_id")
                         .entitlementId("entitlement_id")
                         .externalId("external_id")
-                        .status(GrantListResponse.Status.PENDING)
+                        .status(EntitlementGrant.Status.PENDING)
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .deliveredAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .digitalProductDelivery(
@@ -47,7 +47,7 @@ internal class GrantListPageResponseTest {
                         .errorCode("error_code")
                         .errorMessage("error_message")
                         .licenseKey(
-                            GrantListResponse.LicenseKey.builder()
+                            LicenseKeyGrant.builder()
                                 .activationsUsed(0)
                                 .key("key")
                                 .activationsLimit(0)
@@ -67,14 +67,14 @@ internal class GrantListPageResponseTest {
 
         assertThat(grantListPageResponse.items())
             .containsExactly(
-                GrantListResponse.builder()
+                EntitlementGrant.builder()
                     .id("id")
                     .businessId("business_id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .customerId("customer_id")
                     .entitlementId("entitlement_id")
                     .externalId("external_id")
-                    .status(GrantListResponse.Status.PENDING)
+                    .status(EntitlementGrant.Status.PENDING)
                     .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .deliveredAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .digitalProductDelivery(
@@ -96,7 +96,7 @@ internal class GrantListPageResponseTest {
                     .errorCode("error_code")
                     .errorMessage("error_message")
                     .licenseKey(
-                        GrantListResponse.LicenseKey.builder()
+                        LicenseKeyGrant.builder()
                             .activationsUsed(0)
                             .key("key")
                             .activationsLimit(0)
@@ -120,14 +120,14 @@ internal class GrantListPageResponseTest {
         val grantListPageResponse =
             GrantListPageResponse.builder()
                 .addItem(
-                    GrantListResponse.builder()
+                    EntitlementGrant.builder()
                         .id("id")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .customerId("customer_id")
                         .entitlementId("entitlement_id")
                         .externalId("external_id")
-                        .status(GrantListResponse.Status.PENDING)
+                        .status(EntitlementGrant.Status.PENDING)
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .deliveredAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .digitalProductDelivery(
@@ -149,7 +149,7 @@ internal class GrantListPageResponseTest {
                         .errorCode("error_code")
                         .errorMessage("error_message")
                         .licenseKey(
-                            GrantListResponse.LicenseKey.builder()
+                            LicenseKeyGrant.builder()
                                 .activationsUsed(0)
                                 .key("key")
                                 .activationsLimit(0)

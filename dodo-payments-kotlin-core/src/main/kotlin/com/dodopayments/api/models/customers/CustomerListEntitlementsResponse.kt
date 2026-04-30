@@ -11,6 +11,7 @@ import com.dodopayments.api.core.checkKnown
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
+import com.dodopayments.api.models.entitlements.EntitlementIntegrationType
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -177,7 +178,7 @@ private constructor(
         private val entitlementId: JsonField<String>,
         private val entitlementName: JsonField<String>,
         private val grantId: JsonField<String>,
-        private val integrationType: JsonField<IntegrationType>,
+        private val integrationType: JsonField<EntitlementIntegrationType>,
         private val status: JsonField<Status>,
         private val updatedAt: JsonField<OffsetDateTime>,
         private val deliveredAt: JsonField<OffsetDateTime>,
@@ -200,7 +201,7 @@ private constructor(
             @JsonProperty("grant_id") @ExcludeMissing grantId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("integration_type")
             @ExcludeMissing
-            integrationType: JsonField<IntegrationType> = JsonMissing.of(),
+            integrationType: JsonField<EntitlementIntegrationType> = JsonMissing.of(),
             @JsonProperty("status") @ExcludeMissing status: JsonField<Status> = JsonMissing.of(),
             @JsonProperty("updated_at")
             @ExcludeMissing
@@ -260,7 +261,8 @@ private constructor(
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun integrationType(): IntegrationType = integrationType.getRequired("integration_type")
+        fun integrationType(): EntitlementIntegrationType =
+            integrationType.getRequired("integration_type")
 
         /**
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
@@ -337,7 +339,7 @@ private constructor(
          */
         @JsonProperty("integration_type")
         @ExcludeMissing
-        fun _integrationType(): JsonField<IntegrationType> = integrationType
+        fun _integrationType(): JsonField<EntitlementIntegrationType> = integrationType
 
         /**
          * Returns the raw JSON value of [status].
@@ -421,7 +423,7 @@ private constructor(
             private var entitlementId: JsonField<String>? = null
             private var entitlementName: JsonField<String>? = null
             private var grantId: JsonField<String>? = null
-            private var integrationType: JsonField<IntegrationType>? = null
+            private var integrationType: JsonField<EntitlementIntegrationType>? = null
             private var status: JsonField<Status>? = null
             private var updatedAt: JsonField<OffsetDateTime>? = null
             private var deliveredAt: JsonField<OffsetDateTime> = JsonMissing.of()
@@ -496,17 +498,17 @@ private constructor(
              */
             fun grantId(grantId: JsonField<String>) = apply { this.grantId = grantId }
 
-            fun integrationType(integrationType: IntegrationType) =
+            fun integrationType(integrationType: EntitlementIntegrationType) =
                 integrationType(JsonField.of(integrationType))
 
             /**
              * Sets [Builder.integrationType] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.integrationType] with a well-typed [IntegrationType]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
+             * You should usually call [Builder.integrationType] with a well-typed
+             * [EntitlementIntegrationType] value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
              */
-            fun integrationType(integrationType: JsonField<IntegrationType>) = apply {
+            fun integrationType(integrationType: JsonField<EntitlementIntegrationType>) = apply {
                 this.integrationType = integrationType
             }
 
@@ -673,174 +675,6 @@ private constructor(
                 (if (deliveredAt.asKnown() == null) 0 else 1) +
                 (if (entitlementDescription.asKnown() == null) 0 else 1) +
                 (if (revokedAt.asKnown() == null) 0 else 1)
-
-        class IntegrationType
-        @JsonCreator
-        private constructor(private val value: JsonField<String>) : Enum {
-
-            /**
-             * Returns this class instance's raw value.
-             *
-             * This is usually only useful if this instance was deserialized from data that doesn't
-             * match any known member, and you want to know that value. For example, if the SDK is
-             * on an older version than the API, then the API may respond with new members that the
-             * SDK is unaware of.
-             */
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-            companion object {
-
-                val DISCORD = of("discord")
-
-                val TELEGRAM = of("telegram")
-
-                val GITHUB = of("github")
-
-                val FIGMA = of("figma")
-
-                val FRAMER = of("framer")
-
-                val NOTION = of("notion")
-
-                val DIGITAL_FILES = of("digital_files")
-
-                val LICENSE_KEY = of("license_key")
-
-                fun of(value: String) = IntegrationType(JsonField.of(value))
-            }
-
-            /** An enum containing [IntegrationType]'s known values. */
-            enum class Known {
-                DISCORD,
-                TELEGRAM,
-                GITHUB,
-                FIGMA,
-                FRAMER,
-                NOTION,
-                DIGITAL_FILES,
-                LICENSE_KEY,
-            }
-
-            /**
-             * An enum containing [IntegrationType]'s known values, as well as an [_UNKNOWN] member.
-             *
-             * An instance of [IntegrationType] can contain an unknown value in a couple of cases:
-             * - It was deserialized from data that doesn't match any known member. For example, if
-             *   the SDK is on an older version than the API, then the API may respond with new
-             *   members that the SDK is unaware of.
-             * - It was constructed with an arbitrary value using the [of] method.
-             */
-            enum class Value {
-                DISCORD,
-                TELEGRAM,
-                GITHUB,
-                FIGMA,
-                FRAMER,
-                NOTION,
-                DIGITAL_FILES,
-                LICENSE_KEY,
-                /**
-                 * An enum member indicating that [IntegrationType] was instantiated with an unknown
-                 * value.
-                 */
-                _UNKNOWN,
-            }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value, or
-             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-             *
-             * Use the [known] method instead if you're certain the value is always known or if you
-             * want to throw for the unknown case.
-             */
-            fun value(): Value =
-                when (this) {
-                    DISCORD -> Value.DISCORD
-                    TELEGRAM -> Value.TELEGRAM
-                    GITHUB -> Value.GITHUB
-                    FIGMA -> Value.FIGMA
-                    FRAMER -> Value.FRAMER
-                    NOTION -> Value.NOTION
-                    DIGITAL_FILES -> Value.DIGITAL_FILES
-                    LICENSE_KEY -> Value.LICENSE_KEY
-                    else -> Value._UNKNOWN
-                }
-
-            /**
-             * Returns an enum member corresponding to this class instance's value.
-             *
-             * Use the [value] method instead if you're uncertain the value is always known and
-             * don't want to throw for the unknown case.
-             *
-             * @throws DodoPaymentsInvalidDataException if this class instance's value is a not a
-             *   known member.
-             */
-            fun known(): Known =
-                when (this) {
-                    DISCORD -> Known.DISCORD
-                    TELEGRAM -> Known.TELEGRAM
-                    GITHUB -> Known.GITHUB
-                    FIGMA -> Known.FIGMA
-                    FRAMER -> Known.FRAMER
-                    NOTION -> Known.NOTION
-                    DIGITAL_FILES -> Known.DIGITAL_FILES
-                    LICENSE_KEY -> Known.LICENSE_KEY
-                    else ->
-                        throw DodoPaymentsInvalidDataException("Unknown IntegrationType: $value")
-                }
-
-            /**
-             * Returns this class instance's primitive wire representation.
-             *
-             * This differs from the [toString] method because that method is primarily for
-             * debugging and generally doesn't throw.
-             *
-             * @throws DodoPaymentsInvalidDataException if this class instance's value does not have
-             *   the expected primitive type.
-             */
-            fun asString(): String =
-                _value().asString()
-                    ?: throw DodoPaymentsInvalidDataException("Value is not a String")
-
-            private var validated: Boolean = false
-
-            fun validate(): IntegrationType = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                known()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: DodoPaymentsInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return other is IntegrationType && value == other.value
-            }
-
-            override fun hashCode() = value.hashCode()
-
-            override fun toString() = value.toString()
-        }
 
         class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 

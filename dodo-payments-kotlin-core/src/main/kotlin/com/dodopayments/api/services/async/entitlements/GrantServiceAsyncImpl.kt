@@ -16,11 +16,11 @@ import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepareAsync
+import com.dodopayments.api.models.entitlements.grants.EntitlementGrant
 import com.dodopayments.api.models.entitlements.grants.GrantListPageAsync
 import com.dodopayments.api.models.entitlements.grants.GrantListPageResponse
 import com.dodopayments.api.models.entitlements.grants.GrantListParams
 import com.dodopayments.api.models.entitlements.grants.GrantRevokeParams
-import com.dodopayments.api.models.entitlements.grants.GrantRevokeResponse
 
 class GrantServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     GrantServiceAsync {
@@ -44,7 +44,7 @@ class GrantServiceAsyncImpl internal constructor(private val clientOptions: Clie
     override suspend fun revoke(
         params: GrantRevokeParams,
         requestOptions: RequestOptions,
-    ): GrantRevokeResponse =
+    ): EntitlementGrant =
         // delete /entitlements/{id}/grants/{grant_id}
         withRawResponse().revoke(params, requestOptions).parse()
 
@@ -98,13 +98,13 @@ class GrantServiceAsyncImpl internal constructor(private val clientOptions: Clie
             }
         }
 
-        private val revokeHandler: Handler<GrantRevokeResponse> =
-            jsonHandler<GrantRevokeResponse>(clientOptions.jsonMapper)
+        private val revokeHandler: Handler<EntitlementGrant> =
+            jsonHandler<EntitlementGrant>(clientOptions.jsonMapper)
 
         override suspend fun revoke(
             params: GrantRevokeParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<GrantRevokeResponse> {
+        ): HttpResponseFor<EntitlementGrant> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("grantId", params.grantId())

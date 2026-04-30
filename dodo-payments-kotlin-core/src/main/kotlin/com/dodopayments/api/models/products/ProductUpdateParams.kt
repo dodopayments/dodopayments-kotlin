@@ -8,7 +8,6 @@ import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.Params
 import com.dodopayments.api.core.checkKnown
-import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
 import com.dodopayments.api.core.toImmutable
@@ -79,7 +78,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
-    fun entitlements(): List<Entitlement>? = body.entitlements()
+    fun entitlements(): List<AttachProductEntitlement>? = body.entitlements()
 
     /**
      * Product image id after its uploaded to S3
@@ -218,7 +217,7 @@ private constructor(
      *
      * Unlike [entitlements], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _entitlements(): JsonField<List<Entitlement>> = body._entitlements()
+    fun _entitlements(): JsonField<List<AttachProductEntitlement>> = body._entitlements()
 
     /**
      * Returns the raw JSON value of [imageId].
@@ -434,27 +433,29 @@ private constructor(
          * Entitlements to attach (replaces all existing when present) Send empty array to remove
          * all, omit field to leave unchanged
          */
-        fun entitlements(entitlements: List<Entitlement>?) = apply {
+        fun entitlements(entitlements: List<AttachProductEntitlement>?) = apply {
             body.entitlements(entitlements)
         }
 
         /**
          * Sets [Builder.entitlements] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.entitlements] with a well-typed `List<Entitlement>`
-         * value instead. This method is primarily for setting the field to an undocumented or not
-         * yet supported value.
+         * You should usually call [Builder.entitlements] with a well-typed
+         * `List<AttachProductEntitlement>` value instead. This method is primarily for setting the
+         * field to an undocumented or not yet supported value.
          */
-        fun entitlements(entitlements: JsonField<List<Entitlement>>) = apply {
+        fun entitlements(entitlements: JsonField<List<AttachProductEntitlement>>) = apply {
             body.entitlements(entitlements)
         }
 
         /**
-         * Adds a single [Entitlement] to [entitlements].
+         * Adds a single [AttachProductEntitlement] to [entitlements].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addEntitlement(entitlement: Entitlement) = apply { body.addEntitlement(entitlement) }
+        fun addEntitlement(entitlement: AttachProductEntitlement) = apply {
+            body.addEntitlement(entitlement)
+        }
 
         /** Product image id after its uploaded to S3 */
         fun imageId(imageId: String?) = apply { body.imageId(imageId) }
@@ -791,7 +792,7 @@ private constructor(
         private val creditEntitlements: JsonField<List<AttachCreditEntitlement>>,
         private val description: JsonField<String>,
         private val digitalProductDelivery: JsonField<DigitalProductDelivery>,
-        private val entitlements: JsonField<List<Entitlement>>,
+        private val entitlements: JsonField<List<AttachProductEntitlement>>,
         private val imageId: JsonField<String>,
         private val licenseKeyActivationMessage: JsonField<String>,
         private val licenseKeyActivationsLimit: JsonField<Int>,
@@ -821,7 +822,7 @@ private constructor(
             digitalProductDelivery: JsonField<DigitalProductDelivery> = JsonMissing.of(),
             @JsonProperty("entitlements")
             @ExcludeMissing
-            entitlements: JsonField<List<Entitlement>> = JsonMissing.of(),
+            entitlements: JsonField<List<AttachProductEntitlement>> = JsonMissing.of(),
             @JsonProperty("image_id") @ExcludeMissing imageId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("license_key_activation_message")
             @ExcludeMissing
@@ -912,7 +913,8 @@ private constructor(
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
-        fun entitlements(): List<Entitlement>? = entitlements.getNullable("entitlements")
+        fun entitlements(): List<AttachProductEntitlement>? =
+            entitlements.getNullable("entitlements")
 
         /**
          * Product image id after its uploaded to S3
@@ -1063,7 +1065,7 @@ private constructor(
          */
         @JsonProperty("entitlements")
         @ExcludeMissing
-        fun _entitlements(): JsonField<List<Entitlement>> = entitlements
+        fun _entitlements(): JsonField<List<AttachProductEntitlement>> = entitlements
 
         /**
          * Returns the raw JSON value of [imageId].
@@ -1171,7 +1173,7 @@ private constructor(
             private var creditEntitlements: JsonField<MutableList<AttachCreditEntitlement>>? = null
             private var description: JsonField<String> = JsonMissing.of()
             private var digitalProductDelivery: JsonField<DigitalProductDelivery> = JsonMissing.of()
-            private var entitlements: JsonField<MutableList<Entitlement>>? = null
+            private var entitlements: JsonField<MutableList<AttachProductEntitlement>>? = null
             private var imageId: JsonField<String> = JsonMissing.of()
             private var licenseKeyActivationMessage: JsonField<String> = JsonMissing.of()
             private var licenseKeyActivationsLimit: JsonField<Int> = JsonMissing.of()
@@ -1308,26 +1310,26 @@ private constructor(
              * Entitlements to attach (replaces all existing when present) Send empty array to
              * remove all, omit field to leave unchanged
              */
-            fun entitlements(entitlements: List<Entitlement>?) =
+            fun entitlements(entitlements: List<AttachProductEntitlement>?) =
                 entitlements(JsonField.ofNullable(entitlements))
 
             /**
              * Sets [Builder.entitlements] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.entitlements] with a well-typed `List<Entitlement>`
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
+             * You should usually call [Builder.entitlements] with a well-typed
+             * `List<AttachProductEntitlement>` value instead. This method is primarily for setting
+             * the field to an undocumented or not yet supported value.
              */
-            fun entitlements(entitlements: JsonField<List<Entitlement>>) = apply {
+            fun entitlements(entitlements: JsonField<List<AttachProductEntitlement>>) = apply {
                 this.entitlements = entitlements.map { it.toMutableList() }
             }
 
             /**
-             * Adds a single [Entitlement] to [entitlements].
+             * Adds a single [AttachProductEntitlement] to [entitlements].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addEntitlement(entitlement: Entitlement) = apply {
+            fun addEntitlement(entitlement: AttachProductEntitlement) = apply {
                 entitlements =
                     (entitlements ?: JsonField.of(mutableListOf())).also {
                         checkKnown("entitlements", it).add(entitlement)
@@ -1923,178 +1925,6 @@ private constructor(
 
         override fun toString() =
             "DigitalProductDelivery{externalUrl=$externalUrl, files=$files, instructions=$instructions, additionalProperties=$additionalProperties}"
-    }
-
-    /**
-     * Request struct for attaching an entitlement to a product.
-     *
-     * Mirrors the `credit_entitlements` attach shape — every "attach something to a product" array
-     * takes objects, not bare IDs. Uniform shape leaves room for per-attachment settings later
-     * without another API break.
-     */
-    class Entitlement
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val entitlementId: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("entitlement_id")
-            @ExcludeMissing
-            entitlementId: JsonField<String> = JsonMissing.of()
-        ) : this(entitlementId, mutableMapOf())
-
-        /**
-         * ID of the entitlement to attach to the product
-         *
-         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun entitlementId(): String = entitlementId.getRequired("entitlement_id")
-
-        /**
-         * Returns the raw JSON value of [entitlementId].
-         *
-         * Unlike [entitlementId], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("entitlement_id")
-        @ExcludeMissing
-        fun _entitlementId(): JsonField<String> = entitlementId
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [Entitlement].
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .entitlementId()
-             * ```
-             */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [Entitlement]. */
-        class Builder internal constructor() {
-
-            private var entitlementId: JsonField<String>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(entitlement: Entitlement) = apply {
-                entitlementId = entitlement.entitlementId
-                additionalProperties = entitlement.additionalProperties.toMutableMap()
-            }
-
-            /** ID of the entitlement to attach to the product */
-            fun entitlementId(entitlementId: String) = entitlementId(JsonField.of(entitlementId))
-
-            /**
-             * Sets [Builder.entitlementId] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.entitlementId] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun entitlementId(entitlementId: JsonField<String>) = apply {
-                this.entitlementId = entitlementId
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Entitlement].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .entitlementId()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): Entitlement =
-                Entitlement(
-                    checkRequired("entitlementId", entitlementId),
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        fun validate(): Entitlement = apply {
-            if (validated) {
-                return@apply
-            }
-
-            entitlementId()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: DodoPaymentsInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        internal fun validity(): Int = (if (entitlementId.asKnown() == null) 0 else 1)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is Entitlement &&
-                entitlementId == other.entitlementId &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy { Objects.hash(entitlementId, additionalProperties) }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Entitlement{entitlementId=$entitlementId, additionalProperties=$additionalProperties}"
     }
 
     /** Additional metadata for the product */

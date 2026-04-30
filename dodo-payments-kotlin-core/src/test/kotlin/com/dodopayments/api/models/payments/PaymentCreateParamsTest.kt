@@ -24,7 +24,7 @@ internal class PaymentCreateParamsTest {
             )
             .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
             .addProductCart(
-                PaymentCreateParams.ProductCart.builder()
+                OneTimeProductCartItem.builder()
                     .productId("product_id")
                     .quantity(0)
                     .amount(0)
@@ -66,7 +66,7 @@ internal class PaymentCreateParamsTest {
                 )
                 .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
                 .addProductCart(
-                    PaymentCreateParams.ProductCart.builder()
+                    OneTimeProductCartItem.builder()
                         .productId("product_id")
                         .quantity(0)
                         .amount(0)
@@ -112,7 +112,7 @@ internal class PaymentCreateParamsTest {
             )
         assertThat(body.productCart())
             .containsExactly(
-                PaymentCreateParams.ProductCart.builder()
+                OneTimeProductCartItem.builder()
                     .productId("product_id")
                     .quantity(0)
                     .amount(0)
@@ -146,10 +146,7 @@ internal class PaymentCreateParamsTest {
                 .billing(BillingAddress.builder().country(CountryCode.AF).build())
                 .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
                 .addProductCart(
-                    PaymentCreateParams.ProductCart.builder()
-                        .productId("product_id")
-                        .quantity(0)
-                        .build()
+                    OneTimeProductCartItem.builder().productId("product_id").quantity(0).build()
                 )
                 .build()
 
@@ -165,10 +162,7 @@ internal class PaymentCreateParamsTest {
             )
         assertThat(body.productCart())
             .containsExactly(
-                PaymentCreateParams.ProductCart.builder()
-                    .productId("product_id")
-                    .quantity(0)
-                    .build()
+                OneTimeProductCartItem.builder().productId("product_id").quantity(0).build()
             )
     }
 }

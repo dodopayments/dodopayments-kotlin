@@ -6,15 +6,13 @@ import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponse
 import com.dodopayments.api.core.http.HttpResponseFor
+import com.dodopayments.api.models.entitlements.Entitlement
 import com.dodopayments.api.models.entitlements.EntitlementCreateParams
-import com.dodopayments.api.models.entitlements.EntitlementCreateResponse
 import com.dodopayments.api.models.entitlements.EntitlementDeleteParams
 import com.dodopayments.api.models.entitlements.EntitlementListPageAsync
 import com.dodopayments.api.models.entitlements.EntitlementListParams
 import com.dodopayments.api.models.entitlements.EntitlementRetrieveParams
-import com.dodopayments.api.models.entitlements.EntitlementRetrieveResponse
 import com.dodopayments.api.models.entitlements.EntitlementUpdateParams
-import com.dodopayments.api.models.entitlements.EntitlementUpdateResponse
 import com.dodopayments.api.services.async.entitlements.FileServiceAsync
 import com.dodopayments.api.services.async.entitlements.GrantServiceAsync
 import com.google.errorprone.annotations.MustBeClosed
@@ -41,23 +39,23 @@ interface EntitlementServiceAsync {
     suspend fun create(
         params: EntitlementCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): EntitlementCreateResponse
+    ): Entitlement
 
     /** GET /entitlements/{id} */
     suspend fun retrieve(
         id: String,
         params: EntitlementRetrieveParams = EntitlementRetrieveParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): EntitlementRetrieveResponse = retrieve(params.toBuilder().id(id).build(), requestOptions)
+    ): Entitlement = retrieve(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see retrieve */
     suspend fun retrieve(
         params: EntitlementRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): EntitlementRetrieveResponse
+    ): Entitlement
 
     /** @see retrieve */
-    suspend fun retrieve(id: String, requestOptions: RequestOptions): EntitlementRetrieveResponse =
+    suspend fun retrieve(id: String, requestOptions: RequestOptions): Entitlement =
         retrieve(id, EntitlementRetrieveParams.none(), requestOptions)
 
     /** PATCH /entitlements/{id} */
@@ -65,16 +63,16 @@ interface EntitlementServiceAsync {
         id: String,
         params: EntitlementUpdateParams = EntitlementUpdateParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): EntitlementUpdateResponse = update(params.toBuilder().id(id).build(), requestOptions)
+    ): Entitlement = update(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see update */
     suspend fun update(
         params: EntitlementUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): EntitlementUpdateResponse
+    ): Entitlement
 
     /** @see update */
-    suspend fun update(id: String, requestOptions: RequestOptions): EntitlementUpdateResponse =
+    suspend fun update(id: String, requestOptions: RequestOptions): Entitlement =
         update(id, EntitlementUpdateParams.none(), requestOptions)
 
     /** GET /entitlements */
@@ -131,7 +129,7 @@ interface EntitlementServiceAsync {
         suspend fun create(
             params: EntitlementCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<EntitlementCreateResponse>
+        ): HttpResponseFor<Entitlement>
 
         /**
          * Returns a raw HTTP response for `get /entitlements/{id}`, but is otherwise the same as
@@ -142,7 +140,7 @@ interface EntitlementServiceAsync {
             id: String,
             params: EntitlementRetrieveParams = EntitlementRetrieveParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<EntitlementRetrieveResponse> =
+        ): HttpResponseFor<Entitlement> =
             retrieve(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see retrieve */
@@ -150,14 +148,14 @@ interface EntitlementServiceAsync {
         suspend fun retrieve(
             params: EntitlementRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<EntitlementRetrieveResponse>
+        ): HttpResponseFor<Entitlement>
 
         /** @see retrieve */
         @MustBeClosed
         suspend fun retrieve(
             id: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<EntitlementRetrieveResponse> =
+        ): HttpResponseFor<Entitlement> =
             retrieve(id, EntitlementRetrieveParams.none(), requestOptions)
 
         /**
@@ -169,23 +167,21 @@ interface EntitlementServiceAsync {
             id: String,
             params: EntitlementUpdateParams = EntitlementUpdateParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<EntitlementUpdateResponse> =
-            update(params.toBuilder().id(id).build(), requestOptions)
+        ): HttpResponseFor<Entitlement> = update(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see update */
         @MustBeClosed
         suspend fun update(
             params: EntitlementUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<EntitlementUpdateResponse>
+        ): HttpResponseFor<Entitlement>
 
         /** @see update */
         @MustBeClosed
         suspend fun update(
             id: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<EntitlementUpdateResponse> =
-            update(id, EntitlementUpdateParams.none(), requestOptions)
+        ): HttpResponseFor<Entitlement> = update(id, EntitlementUpdateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /entitlements`, but is otherwise the same as

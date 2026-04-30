@@ -9,22 +9,22 @@ import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class EntitlementCreateResponseTest {
+internal class EntitlementTest {
 
     @Test
     fun create() {
-        val entitlementCreateResponse =
-            EntitlementCreateResponse.builder()
+        val entitlement =
+            Entitlement.builder()
                 .id("id")
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .integrationConfig(
-                    EntitlementCreateResponse.IntegrationConfig.GitHubConfig.builder()
+                    IntegrationConfigResponse.GitHubConfig.builder()
                         .permission("permission")
                         .targetId("target_id")
                         .build()
                 )
-                .integrationType(EntitlementCreateResponse.IntegrationType.DISCORD)
+                .integrationType(EntitlementIntegrationType.DISCORD)
                 .isActive(true)
                 .name("name")
                 .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -32,45 +32,43 @@ internal class EntitlementCreateResponseTest {
                 .metadata(JsonValue.from(mapOf<String, Any>()))
                 .build()
 
-        assertThat(entitlementCreateResponse.id()).isEqualTo("id")
-        assertThat(entitlementCreateResponse.businessId()).isEqualTo("business_id")
-        assertThat(entitlementCreateResponse.createdAt())
+        assertThat(entitlement.id()).isEqualTo("id")
+        assertThat(entitlement.businessId()).isEqualTo("business_id")
+        assertThat(entitlement.createdAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(entitlementCreateResponse.integrationConfig())
+        assertThat(entitlement.integrationConfig())
             .isEqualTo(
-                EntitlementCreateResponse.IntegrationConfig.ofGitHub(
-                    EntitlementCreateResponse.IntegrationConfig.GitHubConfig.builder()
+                IntegrationConfigResponse.ofGitHubConfig(
+                    IntegrationConfigResponse.GitHubConfig.builder()
                         .permission("permission")
                         .targetId("target_id")
                         .build()
                 )
             )
-        assertThat(entitlementCreateResponse.integrationType())
-            .isEqualTo(EntitlementCreateResponse.IntegrationType.DISCORD)
-        assertThat(entitlementCreateResponse.isActive()).isEqualTo(true)
-        assertThat(entitlementCreateResponse.name()).isEqualTo("name")
-        assertThat(entitlementCreateResponse.updatedAt())
+        assertThat(entitlement.integrationType()).isEqualTo(EntitlementIntegrationType.DISCORD)
+        assertThat(entitlement.isActive()).isEqualTo(true)
+        assertThat(entitlement.name()).isEqualTo("name")
+        assertThat(entitlement.updatedAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(entitlementCreateResponse.description()).isEqualTo("description")
-        assertThat(entitlementCreateResponse._metadata())
-            .isEqualTo(JsonValue.from(mapOf<String, Any>()))
+        assertThat(entitlement.description()).isEqualTo("description")
+        assertThat(entitlement._metadata()).isEqualTo(JsonValue.from(mapOf<String, Any>()))
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val entitlementCreateResponse =
-            EntitlementCreateResponse.builder()
+        val entitlement =
+            Entitlement.builder()
                 .id("id")
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .integrationConfig(
-                    EntitlementCreateResponse.IntegrationConfig.GitHubConfig.builder()
+                    IntegrationConfigResponse.GitHubConfig.builder()
                         .permission("permission")
                         .targetId("target_id")
                         .build()
                 )
-                .integrationType(EntitlementCreateResponse.IntegrationType.DISCORD)
+                .integrationType(EntitlementIntegrationType.DISCORD)
                 .isActive(true)
                 .name("name")
                 .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -78,12 +76,12 @@ internal class EntitlementCreateResponseTest {
                 .metadata(JsonValue.from(mapOf<String, Any>()))
                 .build()
 
-        val roundtrippedEntitlementCreateResponse =
+        val roundtrippedEntitlement =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(entitlementCreateResponse),
-                jacksonTypeRef<EntitlementCreateResponse>(),
+                jsonMapper.writeValueAsString(entitlement),
+                jacksonTypeRef<Entitlement>(),
             )
 
-        assertThat(roundtrippedEntitlementCreateResponse).isEqualTo(entitlementCreateResponse)
+        assertThat(roundtrippedEntitlement).isEqualTo(entitlement)
     }
 }
