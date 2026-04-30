@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.97.0 (2026-04-30)
+
+Full Changelog: [v1.96.1...v1.97.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.96.1...v1.97.0)
+
+### Features
+
+* **api:** added more models to make the dx easy ([2411603](https://github.com/dodopayments/dodopayments-kotlin/commit/24116035ff6043fcf6359dcc1b1c45be8f1a9e2c))
+* **api:** updated openapi spec to v1.97.5 ([238218a](https://github.com/dodopayments/dodopayments-kotlin/commit/238218a86ee679acaa1d4be9f9103f343aeb92fe))
+
 ## 1.96.1 (2026-04-29)
 
 Full Changelog: [v1.96.0...v1.96.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.96.0...v1.96.1)
