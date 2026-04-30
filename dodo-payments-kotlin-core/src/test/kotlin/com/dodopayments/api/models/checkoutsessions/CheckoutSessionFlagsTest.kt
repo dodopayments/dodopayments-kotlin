@@ -27,6 +27,7 @@ internal class CheckoutSessionFlagsTest {
                 .allowTaxId(true)
                 .alwaysCreateNewCustomer(true)
                 .redirectImmediately(true)
+                .requirePhoneNumber(true)
                 .build()
 
         assertThat(checkoutSessionFlags.allowCurrencySelection()).isEqualTo(true)
@@ -43,6 +44,7 @@ internal class CheckoutSessionFlagsTest {
         assertThat(checkoutSessionFlags.allowTaxId()).isEqualTo(true)
         assertThat(checkoutSessionFlags.alwaysCreateNewCustomer()).isEqualTo(true)
         assertThat(checkoutSessionFlags.redirectImmediately()).isEqualTo(true)
+        assertThat(checkoutSessionFlags.requirePhoneNumber()).isEqualTo(true)
     }
 
     @Test
@@ -64,6 +66,7 @@ internal class CheckoutSessionFlagsTest {
                 .allowTaxId(true)
                 .alwaysCreateNewCustomer(true)
                 .redirectImmediately(true)
+                .requirePhoneNumber(true)
                 .build()
 
         val roundtrippedCheckoutSessionFlags =

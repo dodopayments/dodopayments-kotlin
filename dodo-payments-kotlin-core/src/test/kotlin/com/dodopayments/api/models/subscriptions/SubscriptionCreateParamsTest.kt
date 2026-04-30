@@ -34,6 +34,7 @@ internal class SubscriptionCreateParamsTest {
             .billingCurrency(Currency.AED)
             .discountCode("discount_code")
             .force3ds(true)
+            .mandateMinAmountInrPaise(0)
             .metadata(
                 SubscriptionCreateParams.Metadata.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -58,6 +59,7 @@ internal class SubscriptionCreateParamsTest {
             .paymentLink(true)
             .paymentMethodId("payment_method_id")
             .redirectImmediately(true)
+            .requirePhoneNumber(true)
             .returnUrl("return_url")
             .shortLink(true)
             .showSavedPaymentMethods(true)
@@ -87,6 +89,7 @@ internal class SubscriptionCreateParamsTest {
                 .billingCurrency(Currency.AED)
                 .discountCode("discount_code")
                 .force3ds(true)
+                .mandateMinAmountInrPaise(0)
                 .metadata(
                     SubscriptionCreateParams.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -111,6 +114,7 @@ internal class SubscriptionCreateParamsTest {
                 .paymentLink(true)
                 .paymentMethodId("payment_method_id")
                 .redirectImmediately(true)
+                .requirePhoneNumber(true)
                 .returnUrl("return_url")
                 .shortLink(true)
                 .showSavedPaymentMethods(true)
@@ -144,6 +148,7 @@ internal class SubscriptionCreateParamsTest {
         assertThat(body.billingCurrency()).isEqualTo(Currency.AED)
         assertThat(body.discountCode()).isEqualTo("discount_code")
         assertThat(body.force3ds()).isEqualTo(true)
+        assertThat(body.mandateMinAmountInrPaise()).isEqualTo(0)
         assertThat(body.metadata())
             .isEqualTo(
                 SubscriptionCreateParams.Metadata.builder()
@@ -171,6 +176,7 @@ internal class SubscriptionCreateParamsTest {
         assertThat(body.paymentLink()).isEqualTo(true)
         assertThat(body.paymentMethodId()).isEqualTo("payment_method_id")
         assertThat(body.redirectImmediately()).isEqualTo(true)
+        assertThat(body.requirePhoneNumber()).isEqualTo(true)
         assertThat(body.returnUrl()).isEqualTo("return_url")
         assertThat(body.shortLink()).isEqualTo(true)
         assertThat(body.showSavedPaymentMethods()).isEqualTo(true)

@@ -78,7 +78,11 @@ internal class ProductServiceTest {
                             .instructions("instructions")
                             .build()
                     )
-                    .addEntitlementId("string")
+                    .addEntitlement(
+                        ProductCreateParams.Entitlement.builder()
+                            .entitlementId("entitlement_id")
+                            .build()
+                    )
                     .licenseKeyActivationMessage("license_key_activation_message")
                     .licenseKeyActivationsLimit(0)
                     .licenseKeyDuration(
@@ -153,7 +157,11 @@ internal class ProductServiceTest {
                         .instructions("instructions")
                         .build()
                 )
-                .addEntitlementId("string")
+                .addEntitlement(
+                    ProductUpdateParams.Entitlement.builder()
+                        .entitlementId("entitlement_id")
+                        .build()
+                )
                 .imageId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .licenseKeyActivationMessage("license_key_activation_message")
                 .licenseKeyActivationsLimit(0)

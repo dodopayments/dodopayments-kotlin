@@ -9,12 +9,16 @@ import java.util.Objects
 
 class LicenseKeyInstanceListParams
 private constructor(
+    private val grantId: String?,
     private val licenseKeyId: String?,
     private val pageNumber: Int?,
     private val pageSize: Int?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
+
+    /** Filter instances by entitlement grant ID */
+    fun grantId(): String? = grantId
 
     /** Filter by license key ID */
     fun licenseKeyId(): String? = licenseKeyId
@@ -46,6 +50,7 @@ private constructor(
     /** A builder for [LicenseKeyInstanceListParams]. */
     class Builder internal constructor() {
 
+        private var grantId: String? = null
         private var licenseKeyId: String? = null
         private var pageNumber: Int? = null
         private var pageSize: Int? = null
@@ -53,12 +58,16 @@ private constructor(
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(licenseKeyInstanceListParams: LicenseKeyInstanceListParams) = apply {
+            grantId = licenseKeyInstanceListParams.grantId
             licenseKeyId = licenseKeyInstanceListParams.licenseKeyId
             pageNumber = licenseKeyInstanceListParams.pageNumber
             pageSize = licenseKeyInstanceListParams.pageSize
             additionalHeaders = licenseKeyInstanceListParams.additionalHeaders.toBuilder()
             additionalQueryParams = licenseKeyInstanceListParams.additionalQueryParams.toBuilder()
         }
+
+        /** Filter instances by entitlement grant ID */
+        fun grantId(grantId: String?) = apply { this.grantId = grantId }
 
         /** Filter by license key ID */
         fun licenseKeyId(licenseKeyId: String?) = apply { this.licenseKeyId = licenseKeyId }
@@ -188,6 +197,7 @@ private constructor(
          */
         fun build(): LicenseKeyInstanceListParams =
             LicenseKeyInstanceListParams(
+                grantId,
                 licenseKeyId,
                 pageNumber,
                 pageSize,
@@ -201,6 +211,7 @@ private constructor(
     override fun _queryParams(): QueryParams =
         QueryParams.builder()
             .apply {
+                grantId?.let { put("grant_id", it) }
                 licenseKeyId?.let { put("license_key_id", it) }
                 pageNumber?.let { put("page_number", it.toString()) }
                 pageSize?.let { put("page_size", it.toString()) }
@@ -214,6 +225,7 @@ private constructor(
         }
 
         return other is LicenseKeyInstanceListParams &&
+            grantId == other.grantId &&
             licenseKeyId == other.licenseKeyId &&
             pageNumber == other.pageNumber &&
             pageSize == other.pageSize &&
@@ -222,8 +234,15 @@ private constructor(
     }
 
     override fun hashCode(): Int =
-        Objects.hash(licenseKeyId, pageNumber, pageSize, additionalHeaders, additionalQueryParams)
+        Objects.hash(
+            grantId,
+            licenseKeyId,
+            pageNumber,
+            pageSize,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
-        "LicenseKeyInstanceListParams{licenseKeyId=$licenseKeyId, pageNumber=$pageNumber, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "LicenseKeyInstanceListParams{grantId=$grantId, licenseKeyId=$licenseKeyId, pageNumber=$pageNumber, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

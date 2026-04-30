@@ -20,6 +20,8 @@ import com.dodopayments.api.services.blocking.DiscountService
 import com.dodopayments.api.services.blocking.DiscountServiceImpl
 import com.dodopayments.api.services.blocking.DisputeService
 import com.dodopayments.api.services.blocking.DisputeServiceImpl
+import com.dodopayments.api.services.blocking.EntitlementService
+import com.dodopayments.api.services.blocking.EntitlementServiceImpl
 import com.dodopayments.api.services.blocking.InvoiceService
 import com.dodopayments.api.services.blocking.InvoiceServiceImpl
 import com.dodopayments.api.services.blocking.LicenseKeyInstanceService
@@ -130,6 +132,10 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
         CreditEntitlementServiceImpl(clientOptionsWithUserAgent)
     }
 
+    private val entitlements: EntitlementService by lazy {
+        EntitlementServiceImpl(clientOptionsWithUserAgent)
+    }
+
     override fun async(): DodoPaymentsClientAsync = async
 
     override fun withRawResponse(): DodoPaymentsClient.WithRawResponse = withRawResponse
@@ -180,6 +186,8 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
     override fun balances(): BalanceService = balances
 
     override fun creditEntitlements(): CreditEntitlementService = creditEntitlements
+
+    override fun entitlements(): EntitlementService = entitlements
 
     override fun close() = clientOptions.close()
 
@@ -274,6 +282,10 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
             CreditEntitlementServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val entitlements: EntitlementService.WithRawResponse by lazy {
+            EntitlementServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): DodoPaymentsClient.WithRawResponse =
@@ -326,5 +338,7 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
 
         override fun creditEntitlements(): CreditEntitlementService.WithRawResponse =
             creditEntitlements
+
+        override fun entitlements(): EntitlementService.WithRawResponse = entitlements
     }
 }

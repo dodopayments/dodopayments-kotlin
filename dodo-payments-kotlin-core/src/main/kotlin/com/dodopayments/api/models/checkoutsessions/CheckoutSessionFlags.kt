@@ -31,6 +31,7 @@ private constructor(
     private val allowTaxId: JsonField<Boolean>,
     private val alwaysCreateNewCustomer: JsonField<Boolean>,
     private val redirectImmediately: JsonField<Boolean>,
+    private val requirePhoneNumber: JsonField<Boolean>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -78,6 +79,9 @@ private constructor(
         @JsonProperty("redirect_immediately")
         @ExcludeMissing
         redirectImmediately: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("require_phone_number")
+        @ExcludeMissing
+        requirePhoneNumber: JsonField<Boolean> = JsonMissing.of(),
     ) : this(
         allowCurrencySelection,
         allowCustomerEditingCity,
@@ -93,6 +97,7 @@ private constructor(
         allowTaxId,
         alwaysCreateNewCustomer,
         redirectImmediately,
+        requirePhoneNumber,
         mutableMapOf(),
     )
 
@@ -215,6 +220,17 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun redirectImmediately(): Boolean? = redirectImmediately.getNullable("redirect_immediately")
+
+    /**
+     * If true, the customer must provide a phone number to complete checkout. Requires
+     * `allow_phone_number_collection` to also be true.
+     *
+     * Default is false
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun requirePhoneNumber(): Boolean? = requirePhoneNumber.getNullable("require_phone_number")
 
     /**
      * Returns the raw JSON value of [allowCurrencySelection].
@@ -353,6 +369,16 @@ private constructor(
     @ExcludeMissing
     fun _redirectImmediately(): JsonField<Boolean> = redirectImmediately
 
+    /**
+     * Returns the raw JSON value of [requirePhoneNumber].
+     *
+     * Unlike [requirePhoneNumber], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("require_phone_number")
+    @ExcludeMissing
+    fun _requirePhoneNumber(): JsonField<Boolean> = requirePhoneNumber
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -388,6 +414,7 @@ private constructor(
         private var allowTaxId: JsonField<Boolean> = JsonMissing.of()
         private var alwaysCreateNewCustomer: JsonField<Boolean> = JsonMissing.of()
         private var redirectImmediately: JsonField<Boolean> = JsonMissing.of()
+        private var requirePhoneNumber: JsonField<Boolean> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(checkoutSessionFlags: CheckoutSessionFlags) = apply {
@@ -405,6 +432,7 @@ private constructor(
             allowTaxId = checkoutSessionFlags.allowTaxId
             alwaysCreateNewCustomer = checkoutSessionFlags.alwaysCreateNewCustomer
             redirectImmediately = checkoutSessionFlags.redirectImmediately
+            requirePhoneNumber = checkoutSessionFlags.requirePhoneNumber
             additionalProperties = checkoutSessionFlags.additionalProperties.toMutableMap()
         }
 
@@ -632,6 +660,26 @@ private constructor(
             this.redirectImmediately = redirectImmediately
         }
 
+        /**
+         * If true, the customer must provide a phone number to complete checkout. Requires
+         * `allow_phone_number_collection` to also be true.
+         *
+         * Default is false
+         */
+        fun requirePhoneNumber(requirePhoneNumber: Boolean) =
+            requirePhoneNumber(JsonField.of(requirePhoneNumber))
+
+        /**
+         * Sets [Builder.requirePhoneNumber] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.requirePhoneNumber] with a well-typed [Boolean] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun requirePhoneNumber(requirePhoneNumber: JsonField<Boolean>) = apply {
+            this.requirePhoneNumber = requirePhoneNumber
+        }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -672,6 +720,7 @@ private constructor(
                 allowTaxId,
                 alwaysCreateNewCustomer,
                 redirectImmediately,
+                requirePhoneNumber,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -697,6 +746,7 @@ private constructor(
         allowTaxId()
         alwaysCreateNewCustomer()
         redirectImmediately()
+        requirePhoneNumber()
         validated = true
     }
 
@@ -727,7 +777,8 @@ private constructor(
             (if (allowPhoneNumberCollection.asKnown() == null) 0 else 1) +
             (if (allowTaxId.asKnown() == null) 0 else 1) +
             (if (alwaysCreateNewCustomer.asKnown() == null) 0 else 1) +
-            (if (redirectImmediately.asKnown() == null) 0 else 1)
+            (if (redirectImmediately.asKnown() == null) 0 else 1) +
+            (if (requirePhoneNumber.asKnown() == null) 0 else 1)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -749,6 +800,7 @@ private constructor(
             allowTaxId == other.allowTaxId &&
             alwaysCreateNewCustomer == other.alwaysCreateNewCustomer &&
             redirectImmediately == other.redirectImmediately &&
+            requirePhoneNumber == other.requirePhoneNumber &&
             additionalProperties == other.additionalProperties
     }
 
@@ -768,6 +820,7 @@ private constructor(
             allowTaxId,
             alwaysCreateNewCustomer,
             redirectImmediately,
+            requirePhoneNumber,
             additionalProperties,
         )
     }
@@ -775,5 +828,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CheckoutSessionFlags{allowCurrencySelection=$allowCurrencySelection, allowCustomerEditingCity=$allowCustomerEditingCity, allowCustomerEditingCountry=$allowCustomerEditingCountry, allowCustomerEditingEmail=$allowCustomerEditingEmail, allowCustomerEditingName=$allowCustomerEditingName, allowCustomerEditingState=$allowCustomerEditingState, allowCustomerEditingStreet=$allowCustomerEditingStreet, allowCustomerEditingTaxId=$allowCustomerEditingTaxId, allowCustomerEditingZipcode=$allowCustomerEditingZipcode, allowDiscountCode=$allowDiscountCode, allowPhoneNumberCollection=$allowPhoneNumberCollection, allowTaxId=$allowTaxId, alwaysCreateNewCustomer=$alwaysCreateNewCustomer, redirectImmediately=$redirectImmediately, additionalProperties=$additionalProperties}"
+        "CheckoutSessionFlags{allowCurrencySelection=$allowCurrencySelection, allowCustomerEditingCity=$allowCustomerEditingCity, allowCustomerEditingCountry=$allowCustomerEditingCountry, allowCustomerEditingEmail=$allowCustomerEditingEmail, allowCustomerEditingName=$allowCustomerEditingName, allowCustomerEditingState=$allowCustomerEditingState, allowCustomerEditingStreet=$allowCustomerEditingStreet, allowCustomerEditingTaxId=$allowCustomerEditingTaxId, allowCustomerEditingZipcode=$allowCustomerEditingZipcode, allowDiscountCode=$allowDiscountCode, allowPhoneNumberCollection=$allowPhoneNumberCollection, allowTaxId=$allowTaxId, alwaysCreateNewCustomer=$alwaysCreateNewCustomer, redirectImmediately=$redirectImmediately, requirePhoneNumber=$requirePhoneNumber, additionalProperties=$additionalProperties}"
 }

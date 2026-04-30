@@ -57,6 +57,7 @@ internal class SubscriptionServiceTest {
                     .billingCurrency(Currency.AED)
                     .discountCode("discount_code")
                     .force3ds(true)
+                    .mandateMinAmountInrPaise(0)
                     .metadata(
                         SubscriptionCreateParams.Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -81,6 +82,7 @@ internal class SubscriptionServiceTest {
                     .paymentLink(true)
                     .paymentMethodId("payment_method_id")
                     .redirectImmediately(true)
+                    .requirePhoneNumber(true)
                     .returnUrl("return_url")
                     .shortLink(true)
                     .showSavedPaymentMethods(true)
@@ -130,6 +132,10 @@ internal class SubscriptionServiceTest {
                     )
                     .cancelAtNextBillingDate(true)
                     .cancelReason(SubscriptionUpdateParams.CancelReason.CANCELLED_BY_CUSTOMER)
+                    .cancellationComment("cancellation_comment")
+                    .cancellationFeedback(
+                        SubscriptionUpdateParams.CancellationFeedback.TOO_EXPENSIVE
+                    )
                     .addCreditEntitlementCart(
                         SubscriptionUpdateParams.CreditEntitlementCart.builder()
                             .creditEntitlementId("credit_entitlement_id")
@@ -210,6 +216,7 @@ internal class SubscriptionServiceTest {
                             UpdateSubscriptionPlanReq.ProrationBillingMode.PRORATED_IMMEDIATELY
                         )
                         .quantity(0)
+                        .adaptiveCurrencyFeesInclusive(true)
                         .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
                         .discountCode("discount_code")
                         .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
@@ -279,6 +286,7 @@ internal class SubscriptionServiceTest {
                                 UpdateSubscriptionPlanReq.ProrationBillingMode.PRORATED_IMMEDIATELY
                             )
                             .quantity(0)
+                            .adaptiveCurrencyFeesInclusive(true)
                             .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
                             .discountCode("discount_code")
                             .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)

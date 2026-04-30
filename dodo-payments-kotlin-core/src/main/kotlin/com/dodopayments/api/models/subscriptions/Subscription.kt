@@ -2,6 +2,7 @@
 
 package com.dodopayments.api.models.subscriptions
 
+import com.dodopayments.api.core.Enum
 import com.dodopayments.api.core.ExcludeMissing
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
@@ -50,6 +51,8 @@ private constructor(
     private val subscriptionPeriodInterval: JsonField<TimeInterval>,
     private val taxInclusive: JsonField<Boolean>,
     private val trialPeriodDays: JsonField<Int>,
+    private val cancellationComment: JsonField<String>,
+    private val cancellationFeedback: JsonField<CancellationFeedback>,
     private val cancelledAt: JsonField<OffsetDateTime>,
     private val customFieldResponses: JsonField<List<CustomFieldResponse>>,
     private val discountCyclesRemaining: JsonField<Int>,
@@ -126,6 +129,12 @@ private constructor(
         @JsonProperty("trial_period_days")
         @ExcludeMissing
         trialPeriodDays: JsonField<Int> = JsonMissing.of(),
+        @JsonProperty("cancellation_comment")
+        @ExcludeMissing
+        cancellationComment: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("cancellation_feedback")
+        @ExcludeMissing
+        cancellationFeedback: JsonField<CancellationFeedback> = JsonMissing.of(),
         @JsonProperty("cancelled_at")
         @ExcludeMissing
         cancelledAt: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -173,6 +182,8 @@ private constructor(
         subscriptionPeriodInterval,
         taxInclusive,
         trialPeriodDays,
+        cancellationComment,
+        cancellationFeedback,
         cancelledAt,
         customFieldResponses,
         discountCyclesRemaining,
@@ -382,6 +393,23 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun trialPeriodDays(): Int = trialPeriodDays.getRequired("trial_period_days")
+
+    /**
+     * Free-text cancellation comment, if any
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun cancellationComment(): String? = cancellationComment.getNullable("cancellation_comment")
+
+    /**
+     * Customer-supplied churn reason, if any
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun cancellationFeedback(): CancellationFeedback? =
+        cancellationFeedback.getNullable("cancellation_feedback")
 
     /**
      * Cancelled timestamp if the subscription is cancelled
@@ -663,6 +691,26 @@ private constructor(
     fun _trialPeriodDays(): JsonField<Int> = trialPeriodDays
 
     /**
+     * Returns the raw JSON value of [cancellationComment].
+     *
+     * Unlike [cancellationComment], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("cancellation_comment")
+    @ExcludeMissing
+    fun _cancellationComment(): JsonField<String> = cancellationComment
+
+    /**
+     * Returns the raw JSON value of [cancellationFeedback].
+     *
+     * Unlike [cancellationFeedback], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("cancellation_feedback")
+    @ExcludeMissing
+    fun _cancellationFeedback(): JsonField<CancellationFeedback> = cancellationFeedback
+
+    /**
      * Returns the raw JSON value of [cancelledAt].
      *
      * Unlike [cancelledAt], this method doesn't throw if the JSON field has an unexpected type.
@@ -810,6 +858,8 @@ private constructor(
         private var subscriptionPeriodInterval: JsonField<TimeInterval>? = null
         private var taxInclusive: JsonField<Boolean>? = null
         private var trialPeriodDays: JsonField<Int>? = null
+        private var cancellationComment: JsonField<String> = JsonMissing.of()
+        private var cancellationFeedback: JsonField<CancellationFeedback> = JsonMissing.of()
         private var cancelledAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var customFieldResponses: JsonField<MutableList<CustomFieldResponse>>? = null
         private var discountCyclesRemaining: JsonField<Int> = JsonMissing.of()
@@ -846,6 +896,8 @@ private constructor(
             subscriptionPeriodInterval = subscription.subscriptionPeriodInterval
             taxInclusive = subscription.taxInclusive
             trialPeriodDays = subscription.trialPeriodDays
+            cancellationComment = subscription.cancellationComment
+            cancellationFeedback = subscription.cancellationFeedback
             cancelledAt = subscription.cancelledAt
             customFieldResponses = subscription.customFieldResponses.map { it.toMutableList() }
             discountCyclesRemaining = subscription.discountCyclesRemaining
@@ -1244,6 +1296,36 @@ private constructor(
             this.trialPeriodDays = trialPeriodDays
         }
 
+        /** Free-text cancellation comment, if any */
+        fun cancellationComment(cancellationComment: String?) =
+            cancellationComment(JsonField.ofNullable(cancellationComment))
+
+        /**
+         * Sets [Builder.cancellationComment] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cancellationComment] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun cancellationComment(cancellationComment: JsonField<String>) = apply {
+            this.cancellationComment = cancellationComment
+        }
+
+        /** Customer-supplied churn reason, if any */
+        fun cancellationFeedback(cancellationFeedback: CancellationFeedback?) =
+            cancellationFeedback(JsonField.ofNullable(cancellationFeedback))
+
+        /**
+         * Sets [Builder.cancellationFeedback] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cancellationFeedback] with a well-typed
+         * [CancellationFeedback] value instead. This method is primarily for setting the field to
+         * an undocumented or not yet supported value.
+         */
+        fun cancellationFeedback(cancellationFeedback: JsonField<CancellationFeedback>) = apply {
+            this.cancellationFeedback = cancellationFeedback
+        }
+
         /** Cancelled timestamp if the subscription is cancelled */
         fun cancelledAt(cancelledAt: OffsetDateTime?) =
             cancelledAt(JsonField.ofNullable(cancelledAt))
@@ -1459,6 +1541,8 @@ private constructor(
                 checkRequired("subscriptionPeriodInterval", subscriptionPeriodInterval),
                 checkRequired("taxInclusive", taxInclusive),
                 checkRequired("trialPeriodDays", trialPeriodDays),
+                cancellationComment,
+                cancellationFeedback,
                 cancelledAt,
                 (customFieldResponses ?: JsonMissing.of()).map { it.toImmutable() },
                 discountCyclesRemaining,
@@ -1502,6 +1586,8 @@ private constructor(
         subscriptionPeriodInterval().validate()
         taxInclusive()
         trialPeriodDays()
+        cancellationComment()
+        cancellationFeedback()?.validate()
         cancelledAt()
         customFieldResponses()?.forEach { it.validate() }
         discountCyclesRemaining()
@@ -1551,6 +1637,8 @@ private constructor(
             (subscriptionPeriodInterval.asKnown()?.validity() ?: 0) +
             (if (taxInclusive.asKnown() == null) 0 else 1) +
             (if (trialPeriodDays.asKnown() == null) 0 else 1) +
+            (if (cancellationComment.asKnown() == null) 0 else 1) +
+            (cancellationFeedback.asKnown()?.validity() ?: 0) +
             (if (cancelledAt.asKnown() == null) 0 else 1) +
             (customFieldResponses.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
             (if (discountCyclesRemaining.asKnown() == null) 0 else 1) +
@@ -1656,6 +1744,175 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
+    }
+
+    /** Customer-supplied churn reason, if any */
+    class CancellationFeedback
+    @JsonCreator
+    private constructor(private val value: JsonField<String>) : Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            val TOO_EXPENSIVE = of("too_expensive")
+
+            val MISSING_FEATURES = of("missing_features")
+
+            val SWITCHED_SERVICE = of("switched_service")
+
+            val UNUSED = of("unused")
+
+            val CUSTOMER_SERVICE = of("customer_service")
+
+            val LOW_QUALITY = of("low_quality")
+
+            val TOO_COMPLEX = of("too_complex")
+
+            val OTHER = of("other")
+
+            fun of(value: String) = CancellationFeedback(JsonField.of(value))
+        }
+
+        /** An enum containing [CancellationFeedback]'s known values. */
+        enum class Known {
+            TOO_EXPENSIVE,
+            MISSING_FEATURES,
+            SWITCHED_SERVICE,
+            UNUSED,
+            CUSTOMER_SERVICE,
+            LOW_QUALITY,
+            TOO_COMPLEX,
+            OTHER,
+        }
+
+        /**
+         * An enum containing [CancellationFeedback]'s known values, as well as an [_UNKNOWN]
+         * member.
+         *
+         * An instance of [CancellationFeedback] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            TOO_EXPENSIVE,
+            MISSING_FEATURES,
+            SWITCHED_SERVICE,
+            UNUSED,
+            CUSTOMER_SERVICE,
+            LOW_QUALITY,
+            TOO_COMPLEX,
+            OTHER,
+            /**
+             * An enum member indicating that [CancellationFeedback] was instantiated with an
+             * unknown value.
+             */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                TOO_EXPENSIVE -> Value.TOO_EXPENSIVE
+                MISSING_FEATURES -> Value.MISSING_FEATURES
+                SWITCHED_SERVICE -> Value.SWITCHED_SERVICE
+                UNUSED -> Value.UNUSED
+                CUSTOMER_SERVICE -> Value.CUSTOMER_SERVICE
+                LOW_QUALITY -> Value.LOW_QUALITY
+                TOO_COMPLEX -> Value.TOO_COMPLEX
+                OTHER -> Value.OTHER
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws DodoPaymentsInvalidDataException if this class instance's value is a not a known
+         *   member.
+         */
+        fun known(): Known =
+            when (this) {
+                TOO_EXPENSIVE -> Known.TOO_EXPENSIVE
+                MISSING_FEATURES -> Known.MISSING_FEATURES
+                SWITCHED_SERVICE -> Known.SWITCHED_SERVICE
+                UNUSED -> Known.UNUSED
+                CUSTOMER_SERVICE -> Known.CUSTOMER_SERVICE
+                LOW_QUALITY -> Known.LOW_QUALITY
+                TOO_COMPLEX -> Known.TOO_COMPLEX
+                OTHER -> Known.OTHER
+                else ->
+                    throw DodoPaymentsInvalidDataException("Unknown CancellationFeedback: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws DodoPaymentsInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString() ?: throw DodoPaymentsInvalidDataException("Value is not a String")
+
+        private var validated: Boolean = false
+
+        fun validate(): CancellationFeedback = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is CancellationFeedback && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
     }
 
     /** Scheduled plan change details, if any */
@@ -2415,6 +2672,8 @@ private constructor(
             subscriptionPeriodInterval == other.subscriptionPeriodInterval &&
             taxInclusive == other.taxInclusive &&
             trialPeriodDays == other.trialPeriodDays &&
+            cancellationComment == other.cancellationComment &&
+            cancellationFeedback == other.cancellationFeedback &&
             cancelledAt == other.cancelledAt &&
             customFieldResponses == other.customFieldResponses &&
             discountCyclesRemaining == other.discountCyclesRemaining &&
@@ -2452,6 +2711,8 @@ private constructor(
             subscriptionPeriodInterval,
             taxInclusive,
             trialPeriodDays,
+            cancellationComment,
+            cancellationFeedback,
             cancelledAt,
             customFieldResponses,
             discountCyclesRemaining,
@@ -2467,5 +2728,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Subscription{addons=$addons, billing=$billing, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, creditEntitlementCart=$creditEntitlementCart, currency=$currency, customer=$customer, metadata=$metadata, meterCreditEntitlementCart=$meterCreditEntitlementCart, meters=$meters, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancelledAt=$cancelledAt, customFieldResponses=$customFieldResponses, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, expiresAt=$expiresAt, paymentMethodId=$paymentMethodId, scheduledChange=$scheduledChange, taxId=$taxId, additionalProperties=$additionalProperties}"
+        "Subscription{addons=$addons, billing=$billing, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, creditEntitlementCart=$creditEntitlementCart, currency=$currency, customer=$customer, metadata=$metadata, meterCreditEntitlementCart=$meterCreditEntitlementCart, meters=$meters, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancellationComment=$cancellationComment, cancellationFeedback=$cancellationFeedback, cancelledAt=$cancelledAt, customFieldResponses=$customFieldResponses, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, expiresAt=$expiresAt, paymentMethodId=$paymentMethodId, scheduledChange=$scheduledChange, taxId=$taxId, additionalProperties=$additionalProperties}"
 }

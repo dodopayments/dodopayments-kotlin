@@ -88,6 +88,8 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
 
         val CREDIT_OVERAGE_CHARGED = of("credit.overage_charged")
 
+        val CREDIT_OVERAGE_RESET = of("credit.overage_reset")
+
         val CREDIT_MANUAL_ADJUSTMENT = of("credit.manual_adjustment")
 
         val CREDIT_BALANCE_LOW = of("credit.balance_low")
@@ -150,6 +152,7 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         CREDIT_ROLLED_OVER,
         CREDIT_ROLLOVER_FORFEITED,
         CREDIT_OVERAGE_CHARGED,
+        CREDIT_OVERAGE_RESET,
         CREDIT_MANUAL_ADJUSTMENT,
         CREDIT_BALANCE_LOW,
         ABANDONED_CHECKOUT_DETECTED,
@@ -207,6 +210,7 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         CREDIT_ROLLED_OVER,
         CREDIT_ROLLOVER_FORFEITED,
         CREDIT_OVERAGE_CHARGED,
+        CREDIT_OVERAGE_RESET,
         CREDIT_MANUAL_ADJUSTMENT,
         CREDIT_BALANCE_LOW,
         ABANDONED_CHECKOUT_DETECTED,
@@ -267,6 +271,7 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             CREDIT_ROLLED_OVER -> Value.CREDIT_ROLLED_OVER
             CREDIT_ROLLOVER_FORFEITED -> Value.CREDIT_ROLLOVER_FORFEITED
             CREDIT_OVERAGE_CHARGED -> Value.CREDIT_OVERAGE_CHARGED
+            CREDIT_OVERAGE_RESET -> Value.CREDIT_OVERAGE_RESET
             CREDIT_MANUAL_ADJUSTMENT -> Value.CREDIT_MANUAL_ADJUSTMENT
             CREDIT_BALANCE_LOW -> Value.CREDIT_BALANCE_LOW
             ABANDONED_CHECKOUT_DETECTED -> Value.ABANDONED_CHECKOUT_DETECTED
@@ -326,6 +331,7 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             CREDIT_ROLLED_OVER -> Known.CREDIT_ROLLED_OVER
             CREDIT_ROLLOVER_FORFEITED -> Known.CREDIT_ROLLOVER_FORFEITED
             CREDIT_OVERAGE_CHARGED -> Known.CREDIT_OVERAGE_CHARGED
+            CREDIT_OVERAGE_RESET -> Known.CREDIT_OVERAGE_RESET
             CREDIT_MANUAL_ADJUSTMENT -> Known.CREDIT_MANUAL_ADJUSTMENT
             CREDIT_BALANCE_LOW -> Known.CREDIT_BALANCE_LOW
             ABANDONED_CHECKOUT_DETECTED -> Known.ABANDONED_CHECKOUT_DETECTED

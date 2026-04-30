@@ -13,15 +13,20 @@ internal class DigitalProductDeliveryFileTest {
     fun create() {
         val digitalProductDeliveryFile =
             DigitalProductDeliveryFile.builder()
-                .fileId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .fileName("file_name")
-                .url("url")
+                .downloadUrl("download_url")
+                .expiresIn(0L)
+                .fileId("file_id")
+                .filename("filename")
+                .contentType("content_type")
+                .fileSize(0L)
                 .build()
 
-        assertThat(digitalProductDeliveryFile.fileId())
-            .isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(digitalProductDeliveryFile.fileName()).isEqualTo("file_name")
-        assertThat(digitalProductDeliveryFile.url()).isEqualTo("url")
+        assertThat(digitalProductDeliveryFile.downloadUrl()).isEqualTo("download_url")
+        assertThat(digitalProductDeliveryFile.expiresIn()).isEqualTo(0L)
+        assertThat(digitalProductDeliveryFile.fileId()).isEqualTo("file_id")
+        assertThat(digitalProductDeliveryFile.filename()).isEqualTo("filename")
+        assertThat(digitalProductDeliveryFile.contentType()).isEqualTo("content_type")
+        assertThat(digitalProductDeliveryFile.fileSize()).isEqualTo(0L)
     }
 
     @Test
@@ -29,9 +34,12 @@ internal class DigitalProductDeliveryFileTest {
         val jsonMapper = jsonMapper()
         val digitalProductDeliveryFile =
             DigitalProductDeliveryFile.builder()
-                .fileId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .fileName("file_name")
-                .url("url")
+                .downloadUrl("download_url")
+                .expiresIn(0L)
+                .fileId("file_id")
+                .filename("filename")
+                .contentType("content_type")
+                .fileSize(0L)
                 .build()
 
         val roundtrippedDigitalProductDeliveryFile =
