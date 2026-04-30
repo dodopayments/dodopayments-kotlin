@@ -11,6 +11,7 @@ import com.dodopayments.api.services.blocking.CreditEntitlementService
 import com.dodopayments.api.services.blocking.CustomerService
 import com.dodopayments.api.services.blocking.DiscountService
 import com.dodopayments.api.services.blocking.DisputeService
+import com.dodopayments.api.services.blocking.EntitlementService
 import com.dodopayments.api.services.blocking.InvoiceService
 import com.dodopayments.api.services.blocking.LicenseKeyInstanceService
 import com.dodopayments.api.services.blocking.LicenseKeyService
@@ -106,6 +107,8 @@ interface DodoPaymentsClient {
 
     fun creditEntitlements(): CreditEntitlementService
 
+    fun entitlements(): EntitlementService
+
     /**
      * Closes this client, relinquishing any underlying resources.
      *
@@ -176,5 +179,7 @@ interface DodoPaymentsClient {
         fun balances(): BalanceService.WithRawResponse
 
         fun creditEntitlements(): CreditEntitlementService.WithRawResponse
+
+        fun entitlements(): EntitlementService.WithRawResponse
     }
 }

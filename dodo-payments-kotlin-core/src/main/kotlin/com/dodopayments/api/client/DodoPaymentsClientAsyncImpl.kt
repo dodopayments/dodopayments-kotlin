@@ -20,6 +20,8 @@ import com.dodopayments.api.services.async.DiscountServiceAsync
 import com.dodopayments.api.services.async.DiscountServiceAsyncImpl
 import com.dodopayments.api.services.async.DisputeServiceAsync
 import com.dodopayments.api.services.async.DisputeServiceAsyncImpl
+import com.dodopayments.api.services.async.EntitlementServiceAsync
+import com.dodopayments.api.services.async.EntitlementServiceAsyncImpl
 import com.dodopayments.api.services.async.InvoiceServiceAsync
 import com.dodopayments.api.services.async.InvoiceServiceAsyncImpl
 import com.dodopayments.api.services.async.LicenseKeyInstanceServiceAsync
@@ -153,6 +155,10 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
         CreditEntitlementServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
+    private val entitlements: EntitlementServiceAsync by lazy {
+        EntitlementServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
+
     override fun sync(): DodoPaymentsClient = sync
 
     override fun withRawResponse(): DodoPaymentsClientAsync.WithRawResponse = withRawResponse
@@ -203,6 +209,8 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
     override fun balances(): BalanceServiceAsync = balances
 
     override fun creditEntitlements(): CreditEntitlementServiceAsync = creditEntitlements
+
+    override fun entitlements(): EntitlementServiceAsync = entitlements
 
     override fun close() = clientOptions.close()
 
@@ -297,6 +305,10 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
             CreditEntitlementServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val entitlements: EntitlementServiceAsync.WithRawResponse by lazy {
+            EntitlementServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): DodoPaymentsClientAsync.WithRawResponse =
@@ -350,5 +362,7 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
 
         override fun creditEntitlements(): CreditEntitlementServiceAsync.WithRawResponse =
             creditEntitlements
+
+        override fun entitlements(): EntitlementServiceAsync.WithRawResponse = entitlements
     }
 }

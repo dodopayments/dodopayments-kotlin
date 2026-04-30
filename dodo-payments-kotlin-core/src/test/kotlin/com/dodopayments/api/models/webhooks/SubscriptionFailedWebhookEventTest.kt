@@ -119,6 +119,8 @@ internal class SubscriptionFailedWebhookEventTest {
                         .subscriptionPeriodInterval(TimeInterval.DAY)
                         .taxInclusive(true)
                         .trialPeriodDays(0)
+                        .cancellationComment("cancellation_comment")
+                        .cancellationFeedback(Subscription.CancellationFeedback.TOO_EXPENSIVE)
                         .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addCustomFieldResponse(
                             CustomFieldResponse.builder().key("key").value("value").build()
@@ -244,6 +246,8 @@ internal class SubscriptionFailedWebhookEventTest {
                     .subscriptionPeriodInterval(TimeInterval.DAY)
                     .taxInclusive(true)
                     .trialPeriodDays(0)
+                    .cancellationComment("cancellation_comment")
+                    .cancellationFeedback(Subscription.CancellationFeedback.TOO_EXPENSIVE)
                     .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .addCustomFieldResponse(
                         CustomFieldResponse.builder().key("key").value("value").build()
@@ -375,6 +379,8 @@ internal class SubscriptionFailedWebhookEventTest {
                         .subscriptionPeriodInterval(TimeInterval.DAY)
                         .taxInclusive(true)
                         .trialPeriodDays(0)
+                        .cancellationComment("cancellation_comment")
+                        .cancellationFeedback(Subscription.CancellationFeedback.TOO_EXPENSIVE)
                         .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addCustomFieldResponse(
                             CustomFieldResponse.builder().key("key").value("value").build()

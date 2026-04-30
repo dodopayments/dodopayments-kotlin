@@ -19,6 +19,7 @@ internal class SubscriptionChangePlanParamsTest {
                         UpdateSubscriptionPlanReq.ProrationBillingMode.PRORATED_IMMEDIATELY
                     )
                     .quantity(0)
+                    .adaptiveCurrencyFeesInclusive(true)
                     .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
                     .discountCode("discount_code")
                     .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
@@ -66,6 +67,7 @@ internal class SubscriptionChangePlanParamsTest {
                             UpdateSubscriptionPlanReq.ProrationBillingMode.PRORATED_IMMEDIATELY
                         )
                         .quantity(0)
+                        .adaptiveCurrencyFeesInclusive(true)
                         .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
                         .discountCode("discount_code")
                         .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
@@ -89,6 +91,7 @@ internal class SubscriptionChangePlanParamsTest {
                         UpdateSubscriptionPlanReq.ProrationBillingMode.PRORATED_IMMEDIATELY
                     )
                     .quantity(0)
+                    .adaptiveCurrencyFeesInclusive(true)
                     .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
                     .discountCode("discount_code")
                     .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)

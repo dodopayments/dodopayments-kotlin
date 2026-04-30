@@ -22,6 +22,8 @@ import com.dodopayments.api.models.customers.CustomerCreateParams
 import com.dodopayments.api.models.customers.CustomerDeletePaymentMethodParams
 import com.dodopayments.api.models.customers.CustomerListCreditEntitlementsParams
 import com.dodopayments.api.models.customers.CustomerListCreditEntitlementsResponse
+import com.dodopayments.api.models.customers.CustomerListEntitlementsParams
+import com.dodopayments.api.models.customers.CustomerListEntitlementsResponse
 import com.dodopayments.api.models.customers.CustomerListPage
 import com.dodopayments.api.models.customers.CustomerListPageResponse
 import com.dodopayments.api.models.customers.CustomerListParams
@@ -92,6 +94,13 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
     ): CustomerListCreditEntitlementsResponse =
         // get /customers/{customer_id}/credit-entitlements
         withRawResponse().listCreditEntitlements(params, requestOptions).parse()
+
+    override fun listEntitlements(
+        params: CustomerListEntitlementsParams,
+        requestOptions: RequestOptions,
+    ): CustomerListEntitlementsResponse =
+        // get /customers/{customer_id}/entitlements
+        withRawResponse().listEntitlements(params, requestOptions).parse()
 
     override fun retrievePaymentMethods(
         params: CustomerRetrievePaymentMethodsParams,
@@ -299,6 +308,36 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
             return errorHandler.handle(response).parseable {
                 response
                     .use { listCreditEntitlementsHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val listEntitlementsHandler: Handler<CustomerListEntitlementsResponse> =
+            jsonHandler<CustomerListEntitlementsResponse>(clientOptions.jsonMapper)
+
+        override fun listEntitlements(
+            params: CustomerListEntitlementsParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<CustomerListEntitlementsResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("customerId", params.customerId())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("customers", params._pathParam(0), "entitlements")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { listEntitlementsHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()

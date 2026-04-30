@@ -29,6 +29,7 @@ private constructor(
     private val creditExpired: CreditExpiredWebhookEvent? = null,
     private val creditManualAdjustment: CreditManualAdjustmentWebhookEvent? = null,
     private val creditOverageCharged: CreditOverageChargedWebhookEvent? = null,
+    private val creditOverageReset: CreditOverageResetWebhookEvent? = null,
     private val creditRolledOver: CreditRolledOverWebhookEvent? = null,
     private val creditRolloverForfeited: CreditRolloverForfeitedWebhookEvent? = null,
     private val disputeAccepted: DisputeAcceptedWebhookEvent? = null,
@@ -40,6 +41,10 @@ private constructor(
     private val disputeWon: DisputeWonWebhookEvent? = null,
     private val dunningRecovered: DunningRecoveredWebhookEvent? = null,
     private val dunningStarted: DunningStartedWebhookEvent? = null,
+    private val entitlementGrantCreated: EntitlementGrantCreatedWebhookEvent? = null,
+    private val entitlementGrantDelivered: EntitlementGrantDeliveredWebhookEvent? = null,
+    private val entitlementGrantFailed: EntitlementGrantFailedWebhookEvent? = null,
+    private val entitlementGrantRevoked: EntitlementGrantRevokedWebhookEvent? = null,
     private val licenseKeyCreated: LicenseKeyCreatedWebhookEvent? = null,
     private val paymentCancelled: PaymentCancelledWebhookEvent? = null,
     private val paymentFailed: PaymentFailedWebhookEvent? = null,
@@ -76,6 +81,8 @@ private constructor(
 
     fun creditOverageCharged(): CreditOverageChargedWebhookEvent? = creditOverageCharged
 
+    fun creditOverageReset(): CreditOverageResetWebhookEvent? = creditOverageReset
+
     fun creditRolledOver(): CreditRolledOverWebhookEvent? = creditRolledOver
 
     fun creditRolloverForfeited(): CreditRolloverForfeitedWebhookEvent? = creditRolloverForfeited
@@ -97,6 +104,15 @@ private constructor(
     fun dunningRecovered(): DunningRecoveredWebhookEvent? = dunningRecovered
 
     fun dunningStarted(): DunningStartedWebhookEvent? = dunningStarted
+
+    fun entitlementGrantCreated(): EntitlementGrantCreatedWebhookEvent? = entitlementGrantCreated
+
+    fun entitlementGrantDelivered(): EntitlementGrantDeliveredWebhookEvent? =
+        entitlementGrantDelivered
+
+    fun entitlementGrantFailed(): EntitlementGrantFailedWebhookEvent? = entitlementGrantFailed
+
+    fun entitlementGrantRevoked(): EntitlementGrantRevokedWebhookEvent? = entitlementGrantRevoked
 
     fun licenseKeyCreated(): LicenseKeyCreatedWebhookEvent? = licenseKeyCreated
 
@@ -144,6 +160,8 @@ private constructor(
 
     fun isCreditOverageCharged(): Boolean = creditOverageCharged != null
 
+    fun isCreditOverageReset(): Boolean = creditOverageReset != null
+
     fun isCreditRolledOver(): Boolean = creditRolledOver != null
 
     fun isCreditRolloverForfeited(): Boolean = creditRolloverForfeited != null
@@ -165,6 +183,14 @@ private constructor(
     fun isDunningRecovered(): Boolean = dunningRecovered != null
 
     fun isDunningStarted(): Boolean = dunningStarted != null
+
+    fun isEntitlementGrantCreated(): Boolean = entitlementGrantCreated != null
+
+    fun isEntitlementGrantDelivered(): Boolean = entitlementGrantDelivered != null
+
+    fun isEntitlementGrantFailed(): Boolean = entitlementGrantFailed != null
+
+    fun isEntitlementGrantRevoked(): Boolean = entitlementGrantRevoked != null
 
     fun isLicenseKeyCreated(): Boolean = licenseKeyCreated != null
 
@@ -217,6 +243,9 @@ private constructor(
     fun asCreditOverageCharged(): CreditOverageChargedWebhookEvent =
         creditOverageCharged.getOrThrow("creditOverageCharged")
 
+    fun asCreditOverageReset(): CreditOverageResetWebhookEvent =
+        creditOverageReset.getOrThrow("creditOverageReset")
+
     fun asCreditRolledOver(): CreditRolledOverWebhookEvent =
         creditRolledOver.getOrThrow("creditRolledOver")
 
@@ -244,6 +273,18 @@ private constructor(
         dunningRecovered.getOrThrow("dunningRecovered")
 
     fun asDunningStarted(): DunningStartedWebhookEvent = dunningStarted.getOrThrow("dunningStarted")
+
+    fun asEntitlementGrantCreated(): EntitlementGrantCreatedWebhookEvent =
+        entitlementGrantCreated.getOrThrow("entitlementGrantCreated")
+
+    fun asEntitlementGrantDelivered(): EntitlementGrantDeliveredWebhookEvent =
+        entitlementGrantDelivered.getOrThrow("entitlementGrantDelivered")
+
+    fun asEntitlementGrantFailed(): EntitlementGrantFailedWebhookEvent =
+        entitlementGrantFailed.getOrThrow("entitlementGrantFailed")
+
+    fun asEntitlementGrantRevoked(): EntitlementGrantRevokedWebhookEvent =
+        entitlementGrantRevoked.getOrThrow("entitlementGrantRevoked")
 
     fun asLicenseKeyCreated(): LicenseKeyCreatedWebhookEvent =
         licenseKeyCreated.getOrThrow("licenseKeyCreated")
@@ -303,6 +344,7 @@ private constructor(
             creditManualAdjustment != null ->
                 visitor.visitCreditManualAdjustment(creditManualAdjustment)
             creditOverageCharged != null -> visitor.visitCreditOverageCharged(creditOverageCharged)
+            creditOverageReset != null -> visitor.visitCreditOverageReset(creditOverageReset)
             creditRolledOver != null -> visitor.visitCreditRolledOver(creditRolledOver)
             creditRolloverForfeited != null ->
                 visitor.visitCreditRolloverForfeited(creditRolloverForfeited)
@@ -315,6 +357,14 @@ private constructor(
             disputeWon != null -> visitor.visitDisputeWon(disputeWon)
             dunningRecovered != null -> visitor.visitDunningRecovered(dunningRecovered)
             dunningStarted != null -> visitor.visitDunningStarted(dunningStarted)
+            entitlementGrantCreated != null ->
+                visitor.visitEntitlementGrantCreated(entitlementGrantCreated)
+            entitlementGrantDelivered != null ->
+                visitor.visitEntitlementGrantDelivered(entitlementGrantDelivered)
+            entitlementGrantFailed != null ->
+                visitor.visitEntitlementGrantFailed(entitlementGrantFailed)
+            entitlementGrantRevoked != null ->
+                visitor.visitEntitlementGrantRevoked(entitlementGrantRevoked)
             licenseKeyCreated != null -> visitor.visitLicenseKeyCreated(licenseKeyCreated)
             paymentCancelled != null -> visitor.visitPaymentCancelled(paymentCancelled)
             paymentFailed != null -> visitor.visitPaymentFailed(paymentFailed)
@@ -384,6 +434,12 @@ private constructor(
                     creditOverageCharged.validate()
                 }
 
+                override fun visitCreditOverageReset(
+                    creditOverageReset: CreditOverageResetWebhookEvent
+                ) {
+                    creditOverageReset.validate()
+                }
+
                 override fun visitCreditRolledOver(creditRolledOver: CreditRolledOverWebhookEvent) {
                     creditRolledOver.validate()
                 }
@@ -430,6 +486,30 @@ private constructor(
 
                 override fun visitDunningStarted(dunningStarted: DunningStartedWebhookEvent) {
                     dunningStarted.validate()
+                }
+
+                override fun visitEntitlementGrantCreated(
+                    entitlementGrantCreated: EntitlementGrantCreatedWebhookEvent
+                ) {
+                    entitlementGrantCreated.validate()
+                }
+
+                override fun visitEntitlementGrantDelivered(
+                    entitlementGrantDelivered: EntitlementGrantDeliveredWebhookEvent
+                ) {
+                    entitlementGrantDelivered.validate()
+                }
+
+                override fun visitEntitlementGrantFailed(
+                    entitlementGrantFailed: EntitlementGrantFailedWebhookEvent
+                ) {
+                    entitlementGrantFailed.validate()
+                }
+
+                override fun visitEntitlementGrantRevoked(
+                    entitlementGrantRevoked: EntitlementGrantRevokedWebhookEvent
+                ) {
+                    entitlementGrantRevoked.validate()
                 }
 
                 override fun visitLicenseKeyCreated(
@@ -560,6 +640,10 @@ private constructor(
                     creditOverageCharged: CreditOverageChargedWebhookEvent
                 ) = creditOverageCharged.validity()
 
+                override fun visitCreditOverageReset(
+                    creditOverageReset: CreditOverageResetWebhookEvent
+                ) = creditOverageReset.validity()
+
                 override fun visitCreditRolledOver(creditRolledOver: CreditRolledOverWebhookEvent) =
                     creditRolledOver.validity()
 
@@ -594,6 +678,22 @@ private constructor(
 
                 override fun visitDunningStarted(dunningStarted: DunningStartedWebhookEvent) =
                     dunningStarted.validity()
+
+                override fun visitEntitlementGrantCreated(
+                    entitlementGrantCreated: EntitlementGrantCreatedWebhookEvent
+                ) = entitlementGrantCreated.validity()
+
+                override fun visitEntitlementGrantDelivered(
+                    entitlementGrantDelivered: EntitlementGrantDeliveredWebhookEvent
+                ) = entitlementGrantDelivered.validity()
+
+                override fun visitEntitlementGrantFailed(
+                    entitlementGrantFailed: EntitlementGrantFailedWebhookEvent
+                ) = entitlementGrantFailed.validity()
+
+                override fun visitEntitlementGrantRevoked(
+                    entitlementGrantRevoked: EntitlementGrantRevokedWebhookEvent
+                ) = entitlementGrantRevoked.validity()
 
                 override fun visitLicenseKeyCreated(
                     licenseKeyCreated: LicenseKeyCreatedWebhookEvent
@@ -668,6 +768,7 @@ private constructor(
             creditExpired == other.creditExpired &&
             creditManualAdjustment == other.creditManualAdjustment &&
             creditOverageCharged == other.creditOverageCharged &&
+            creditOverageReset == other.creditOverageReset &&
             creditRolledOver == other.creditRolledOver &&
             creditRolloverForfeited == other.creditRolloverForfeited &&
             disputeAccepted == other.disputeAccepted &&
@@ -679,6 +780,10 @@ private constructor(
             disputeWon == other.disputeWon &&
             dunningRecovered == other.dunningRecovered &&
             dunningStarted == other.dunningStarted &&
+            entitlementGrantCreated == other.entitlementGrantCreated &&
+            entitlementGrantDelivered == other.entitlementGrantDelivered &&
+            entitlementGrantFailed == other.entitlementGrantFailed &&
+            entitlementGrantRevoked == other.entitlementGrantRevoked &&
             licenseKeyCreated == other.licenseKeyCreated &&
             paymentCancelled == other.paymentCancelled &&
             paymentFailed == other.paymentFailed &&
@@ -706,6 +811,7 @@ private constructor(
             creditExpired,
             creditManualAdjustment,
             creditOverageCharged,
+            creditOverageReset,
             creditRolledOver,
             creditRolloverForfeited,
             disputeAccepted,
@@ -717,6 +823,10 @@ private constructor(
             disputeWon,
             dunningRecovered,
             dunningStarted,
+            entitlementGrantCreated,
+            entitlementGrantDelivered,
+            entitlementGrantFailed,
+            entitlementGrantRevoked,
             licenseKeyCreated,
             paymentCancelled,
             paymentFailed,
@@ -749,6 +859,8 @@ private constructor(
                 "UnsafeUnwrapWebhookEvent{creditManualAdjustment=$creditManualAdjustment}"
             creditOverageCharged != null ->
                 "UnsafeUnwrapWebhookEvent{creditOverageCharged=$creditOverageCharged}"
+            creditOverageReset != null ->
+                "UnsafeUnwrapWebhookEvent{creditOverageReset=$creditOverageReset}"
             creditRolledOver != null ->
                 "UnsafeUnwrapWebhookEvent{creditRolledOver=$creditRolledOver}"
             creditRolloverForfeited != null ->
@@ -765,6 +877,14 @@ private constructor(
             dunningRecovered != null ->
                 "UnsafeUnwrapWebhookEvent{dunningRecovered=$dunningRecovered}"
             dunningStarted != null -> "UnsafeUnwrapWebhookEvent{dunningStarted=$dunningStarted}"
+            entitlementGrantCreated != null ->
+                "UnsafeUnwrapWebhookEvent{entitlementGrantCreated=$entitlementGrantCreated}"
+            entitlementGrantDelivered != null ->
+                "UnsafeUnwrapWebhookEvent{entitlementGrantDelivered=$entitlementGrantDelivered}"
+            entitlementGrantFailed != null ->
+                "UnsafeUnwrapWebhookEvent{entitlementGrantFailed=$entitlementGrantFailed}"
+            entitlementGrantRevoked != null ->
+                "UnsafeUnwrapWebhookEvent{entitlementGrantRevoked=$entitlementGrantRevoked}"
             licenseKeyCreated != null ->
                 "UnsafeUnwrapWebhookEvent{licenseKeyCreated=$licenseKeyCreated}"
             paymentCancelled != null ->
@@ -824,6 +944,9 @@ private constructor(
         fun ofCreditOverageCharged(creditOverageCharged: CreditOverageChargedWebhookEvent) =
             UnsafeUnwrapWebhookEvent(creditOverageCharged = creditOverageCharged)
 
+        fun ofCreditOverageReset(creditOverageReset: CreditOverageResetWebhookEvent) =
+            UnsafeUnwrapWebhookEvent(creditOverageReset = creditOverageReset)
+
         fun ofCreditRolledOver(creditRolledOver: CreditRolledOverWebhookEvent) =
             UnsafeUnwrapWebhookEvent(creditRolledOver = creditRolledOver)
 
@@ -857,6 +980,21 @@ private constructor(
 
         fun ofDunningStarted(dunningStarted: DunningStartedWebhookEvent) =
             UnsafeUnwrapWebhookEvent(dunningStarted = dunningStarted)
+
+        fun ofEntitlementGrantCreated(
+            entitlementGrantCreated: EntitlementGrantCreatedWebhookEvent
+        ) = UnsafeUnwrapWebhookEvent(entitlementGrantCreated = entitlementGrantCreated)
+
+        fun ofEntitlementGrantDelivered(
+            entitlementGrantDelivered: EntitlementGrantDeliveredWebhookEvent
+        ) = UnsafeUnwrapWebhookEvent(entitlementGrantDelivered = entitlementGrantDelivered)
+
+        fun ofEntitlementGrantFailed(entitlementGrantFailed: EntitlementGrantFailedWebhookEvent) =
+            UnsafeUnwrapWebhookEvent(entitlementGrantFailed = entitlementGrantFailed)
+
+        fun ofEntitlementGrantRevoked(
+            entitlementGrantRevoked: EntitlementGrantRevokedWebhookEvent
+        ) = UnsafeUnwrapWebhookEvent(entitlementGrantRevoked = entitlementGrantRevoked)
 
         fun ofLicenseKeyCreated(licenseKeyCreated: LicenseKeyCreatedWebhookEvent) =
             UnsafeUnwrapWebhookEvent(licenseKeyCreated = licenseKeyCreated)
@@ -933,6 +1071,8 @@ private constructor(
 
         fun visitCreditOverageCharged(creditOverageCharged: CreditOverageChargedWebhookEvent): T
 
+        fun visitCreditOverageReset(creditOverageReset: CreditOverageResetWebhookEvent): T
+
         fun visitCreditRolledOver(creditRolledOver: CreditRolledOverWebhookEvent): T
 
         fun visitCreditRolloverForfeited(
@@ -956,6 +1096,22 @@ private constructor(
         fun visitDunningRecovered(dunningRecovered: DunningRecoveredWebhookEvent): T
 
         fun visitDunningStarted(dunningStarted: DunningStartedWebhookEvent): T
+
+        fun visitEntitlementGrantCreated(
+            entitlementGrantCreated: EntitlementGrantCreatedWebhookEvent
+        ): T
+
+        fun visitEntitlementGrantDelivered(
+            entitlementGrantDelivered: EntitlementGrantDeliveredWebhookEvent
+        ): T
+
+        fun visitEntitlementGrantFailed(
+            entitlementGrantFailed: EntitlementGrantFailedWebhookEvent
+        ): T
+
+        fun visitEntitlementGrantRevoked(
+            entitlementGrantRevoked: EntitlementGrantRevokedWebhookEvent
+        ): T
 
         fun visitLicenseKeyCreated(licenseKeyCreated: LicenseKeyCreatedWebhookEvent): T
 
@@ -1052,6 +1208,10 @@ private constructor(
                             ?.let {
                                 UnsafeUnwrapWebhookEvent(creditOverageCharged = it, _json = json)
                             },
+                        tryDeserialize(node, jacksonTypeRef<CreditOverageResetWebhookEvent>())
+                            ?.let {
+                                UnsafeUnwrapWebhookEvent(creditOverageReset = it, _json = json)
+                            },
                         tryDeserialize(node, jacksonTypeRef<CreditRolledOverWebhookEvent>())?.let {
                             UnsafeUnwrapWebhookEvent(creditRolledOver = it, _json = json)
                         },
@@ -1086,6 +1246,28 @@ private constructor(
                         tryDeserialize(node, jacksonTypeRef<DunningStartedWebhookEvent>())?.let {
                             UnsafeUnwrapWebhookEvent(dunningStarted = it, _json = json)
                         },
+                        tryDeserialize(node, jacksonTypeRef<EntitlementGrantCreatedWebhookEvent>())
+                            ?.let {
+                                UnsafeUnwrapWebhookEvent(entitlementGrantCreated = it, _json = json)
+                            },
+                        tryDeserialize(
+                                node,
+                                jacksonTypeRef<EntitlementGrantDeliveredWebhookEvent>(),
+                            )
+                            ?.let {
+                                UnsafeUnwrapWebhookEvent(
+                                    entitlementGrantDelivered = it,
+                                    _json = json,
+                                )
+                            },
+                        tryDeserialize(node, jacksonTypeRef<EntitlementGrantFailedWebhookEvent>())
+                            ?.let {
+                                UnsafeUnwrapWebhookEvent(entitlementGrantFailed = it, _json = json)
+                            },
+                        tryDeserialize(node, jacksonTypeRef<EntitlementGrantRevokedWebhookEvent>())
+                            ?.let {
+                                UnsafeUnwrapWebhookEvent(entitlementGrantRevoked = it, _json = json)
+                            },
                         tryDeserialize(node, jacksonTypeRef<LicenseKeyCreatedWebhookEvent>())?.let {
                             UnsafeUnwrapWebhookEvent(licenseKeyCreated = it, _json = json)
                         },
@@ -1176,6 +1358,7 @@ private constructor(
                     generator.writeObject(value.creditManualAdjustment)
                 value.creditOverageCharged != null ->
                     generator.writeObject(value.creditOverageCharged)
+                value.creditOverageReset != null -> generator.writeObject(value.creditOverageReset)
                 value.creditRolledOver != null -> generator.writeObject(value.creditRolledOver)
                 value.creditRolloverForfeited != null ->
                     generator.writeObject(value.creditRolloverForfeited)
@@ -1188,6 +1371,14 @@ private constructor(
                 value.disputeWon != null -> generator.writeObject(value.disputeWon)
                 value.dunningRecovered != null -> generator.writeObject(value.dunningRecovered)
                 value.dunningStarted != null -> generator.writeObject(value.dunningStarted)
+                value.entitlementGrantCreated != null ->
+                    generator.writeObject(value.entitlementGrantCreated)
+                value.entitlementGrantDelivered != null ->
+                    generator.writeObject(value.entitlementGrantDelivered)
+                value.entitlementGrantFailed != null ->
+                    generator.writeObject(value.entitlementGrantFailed)
+                value.entitlementGrantRevoked != null ->
+                    generator.writeObject(value.entitlementGrantRevoked)
                 value.licenseKeyCreated != null -> generator.writeObject(value.licenseKeyCreated)
                 value.paymentCancelled != null -> generator.writeObject(value.paymentCancelled)
                 value.paymentFailed != null -> generator.writeObject(value.paymentFailed)

@@ -127,6 +127,20 @@ internal class CustomerServiceTest {
     }
 
     @Test
+    fun listEntitlements() {
+        val client =
+            DodoPaymentsOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val customerService = client.customers()
+
+        val response = customerService.listEntitlements("customer_id")
+
+        response.validate()
+    }
+
+    @Test
     fun retrievePaymentMethods() {
         val client =
             DodoPaymentsOkHttpClient.builder()

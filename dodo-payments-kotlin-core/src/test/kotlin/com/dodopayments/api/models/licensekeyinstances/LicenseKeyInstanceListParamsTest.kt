@@ -11,6 +11,7 @@ internal class LicenseKeyInstanceListParamsTest {
     @Test
     fun create() {
         LicenseKeyInstanceListParams.builder()
+            .grantId("grant_id")
             .licenseKeyId("license_key_id")
             .pageNumber(0)
             .pageSize(0)
@@ -21,6 +22,7 @@ internal class LicenseKeyInstanceListParamsTest {
     fun queryParams() {
         val params =
             LicenseKeyInstanceListParams.builder()
+                .grantId("grant_id")
                 .licenseKeyId("license_key_id")
                 .pageNumber(0)
                 .pageSize(0)
@@ -31,6 +33,7 @@ internal class LicenseKeyInstanceListParamsTest {
         assertThat(queryParams)
             .isEqualTo(
                 QueryParams.builder()
+                    .put("grant_id", "grant_id")
                     .put("license_key_id", "license_key_id")
                     .put("page_number", "0")
                     .put("page_size", "0")
