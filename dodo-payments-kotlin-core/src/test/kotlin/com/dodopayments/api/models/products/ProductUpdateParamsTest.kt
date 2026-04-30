@@ -48,7 +48,7 @@ internal class ProductUpdateParamsTest {
                     .build()
             )
             .addEntitlement(
-                ProductUpdateParams.Entitlement.builder().entitlementId("entitlement_id").build()
+                AttachProductEntitlement.builder().entitlementId("entitlement_id").build()
             )
             .imageId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .licenseKeyActivationMessage("license_key_activation_message")
@@ -125,9 +125,7 @@ internal class ProductUpdateParamsTest {
                         .build()
                 )
                 .addEntitlement(
-                    ProductUpdateParams.Entitlement.builder()
-                        .entitlementId("entitlement_id")
-                        .build()
+                    AttachProductEntitlement.builder().entitlementId("entitlement_id").build()
                 )
                 .imageId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .licenseKeyActivationMessage("license_key_activation_message")
@@ -194,7 +192,7 @@ internal class ProductUpdateParamsTest {
             )
         assertThat(body.entitlements())
             .containsExactly(
-                ProductUpdateParams.Entitlement.builder().entitlementId("entitlement_id").build()
+                AttachProductEntitlement.builder().entitlementId("entitlement_id").build()
             )
         assertThat(body.imageId()).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(body.licenseKeyActivationMessage()).isEqualTo("license_key_activation_message")

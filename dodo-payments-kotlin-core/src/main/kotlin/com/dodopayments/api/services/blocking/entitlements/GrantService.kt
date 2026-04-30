@@ -5,10 +5,10 @@ package com.dodopayments.api.services.blocking.entitlements
 import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponseFor
+import com.dodopayments.api.models.entitlements.grants.EntitlementGrant
 import com.dodopayments.api.models.entitlements.grants.GrantListPage
 import com.dodopayments.api.models.entitlements.grants.GrantListParams
 import com.dodopayments.api.models.entitlements.grants.GrantRevokeParams
-import com.dodopayments.api.models.entitlements.grants.GrantRevokeResponse
 import com.google.errorprone.annotations.MustBeClosed
 
 interface GrantService {
@@ -52,13 +52,13 @@ interface GrantService {
         grantId: String,
         params: GrantRevokeParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): GrantRevokeResponse = revoke(params.toBuilder().grantId(grantId).build(), requestOptions)
+    ): EntitlementGrant = revoke(params.toBuilder().grantId(grantId).build(), requestOptions)
 
     /** @see revoke */
     fun revoke(
         params: GrantRevokeParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): GrantRevokeResponse
+    ): EntitlementGrant
 
     /** A view of [GrantService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -102,7 +102,7 @@ interface GrantService {
             grantId: String,
             params: GrantRevokeParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<GrantRevokeResponse> =
+        ): HttpResponseFor<EntitlementGrant> =
             revoke(params.toBuilder().grantId(grantId).build(), requestOptions)
 
         /** @see revoke */
@@ -110,6 +110,6 @@ interface GrantService {
         fun revoke(
             params: GrantRevokeParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<GrantRevokeResponse>
+        ): HttpResponseFor<EntitlementGrant>
     }
 }

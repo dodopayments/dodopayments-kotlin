@@ -34,9 +34,9 @@ internal class GrantServiceTest {
                 .build()
         val grantService = client.entitlements().grants()
 
-        val response =
+        val entitlementGrant =
             grantService.revoke(GrantRevokeParams.builder().id("id").grantId("grant_id").build())
 
-        response.validate()
+        entitlementGrant.validate()
     }
 }

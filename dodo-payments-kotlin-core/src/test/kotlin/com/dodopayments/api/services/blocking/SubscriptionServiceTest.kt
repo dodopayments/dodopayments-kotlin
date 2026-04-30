@@ -9,8 +9,10 @@ import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
+import com.dodopayments.api.models.payments.OneTimeProductCartItem
 import com.dodopayments.api.models.payments.PaymentMethodTypes
 import com.dodopayments.api.models.subscriptions.AttachAddon
+import com.dodopayments.api.models.subscriptions.CancellationFeedback
 import com.dodopayments.api.models.subscriptions.OnDemandSubscription
 import com.dodopayments.api.models.subscriptions.SubscriptionChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeParams
@@ -73,7 +75,7 @@ internal class SubscriptionServiceTest {
                             .build()
                     )
                     .addOneTimeProductCart(
-                        SubscriptionCreateParams.OneTimeProductCart.builder()
+                        OneTimeProductCartItem.builder()
                             .productId("product_id")
                             .quantity(0)
                             .amount(0)
@@ -133,9 +135,7 @@ internal class SubscriptionServiceTest {
                     .cancelAtNextBillingDate(true)
                     .cancelReason(SubscriptionUpdateParams.CancelReason.CANCELLED_BY_CUSTOMER)
                     .cancellationComment("cancellation_comment")
-                    .cancellationFeedback(
-                        SubscriptionUpdateParams.CancellationFeedback.TOO_EXPENSIVE
-                    )
+                    .cancellationFeedback(CancellationFeedback.TOO_EXPENSIVE)
                     .addCreditEntitlementCart(
                         SubscriptionUpdateParams.CreditEntitlementCart.builder()
                             .creditEntitlementId("credit_entitlement_id")

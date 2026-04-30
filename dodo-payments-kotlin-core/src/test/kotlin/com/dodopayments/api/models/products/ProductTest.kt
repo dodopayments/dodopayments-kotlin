@@ -5,6 +5,8 @@ package com.dodopayments.api.models.products
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.creditentitlements.CbbOverageBehavior
+import com.dodopayments.api.models.entitlements.EntitlementIntegrationType
+import com.dodopayments.api.models.entitlements.IntegrationConfigResponse
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.TaxCategory
 import com.dodopayments.api.models.subscriptions.TimeInterval
@@ -47,15 +49,15 @@ internal class ProductTest {
                         .build()
                 )
                 .addEntitlement(
-                    Product.Entitlement.builder()
+                    ProductEntitlementSummary.builder()
                         .id("id")
                         .integrationConfig(
-                            Product.Entitlement.IntegrationConfig.GitHubConfig.builder()
+                            IntegrationConfigResponse.GitHubConfig.builder()
                                 .permission("permission")
                                 .targetId("target_id")
                                 .build()
                         )
-                        .integrationType(Product.Entitlement.IntegrationType.DISCORD)
+                        .integrationType(EntitlementIntegrationType.DISCORD)
                         .name("name")
                         .description("description")
                         .build()
@@ -140,15 +142,15 @@ internal class ProductTest {
             )
         assertThat(product.entitlements())
             .containsExactly(
-                Product.Entitlement.builder()
+                ProductEntitlementSummary.builder()
                     .id("id")
                     .integrationConfig(
-                        Product.Entitlement.IntegrationConfig.GitHubConfig.builder()
+                        IntegrationConfigResponse.GitHubConfig.builder()
                             .permission("permission")
                             .targetId("target_id")
                             .build()
                     )
-                    .integrationType(Product.Entitlement.IntegrationType.DISCORD)
+                    .integrationType(EntitlementIntegrationType.DISCORD)
                     .name("name")
                     .description("description")
                     .build()
@@ -241,15 +243,15 @@ internal class ProductTest {
                         .build()
                 )
                 .addEntitlement(
-                    Product.Entitlement.builder()
+                    ProductEntitlementSummary.builder()
                         .id("id")
                         .integrationConfig(
-                            Product.Entitlement.IntegrationConfig.GitHubConfig.builder()
+                            IntegrationConfigResponse.GitHubConfig.builder()
                                 .permission("permission")
                                 .targetId("target_id")
                                 .build()
                         )
-                        .integrationType(Product.Entitlement.IntegrationType.DISCORD)
+                        .integrationType(EntitlementIntegrationType.DISCORD)
                         .name("name")
                         .description("description")
                         .build()

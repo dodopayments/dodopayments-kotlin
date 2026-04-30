@@ -16,17 +16,17 @@ internal class EntitlementListPageResponseTest {
         val entitlementListPageResponse =
             EntitlementListPageResponse.builder()
                 .addItem(
-                    EntitlementListResponse.builder()
+                    Entitlement.builder()
                         .id("id")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .integrationConfig(
-                            EntitlementListResponse.IntegrationConfig.GitHubConfig.builder()
+                            IntegrationConfigResponse.GitHubConfig.builder()
                                 .permission("permission")
                                 .targetId("target_id")
                                 .build()
                         )
-                        .integrationType(EntitlementListResponse.IntegrationType.DISCORD)
+                        .integrationType(EntitlementIntegrationType.DISCORD)
                         .isActive(true)
                         .name("name")
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -38,17 +38,17 @@ internal class EntitlementListPageResponseTest {
 
         assertThat(entitlementListPageResponse.items())
             .containsExactly(
-                EntitlementListResponse.builder()
+                Entitlement.builder()
                     .id("id")
                     .businessId("business_id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .integrationConfig(
-                        EntitlementListResponse.IntegrationConfig.GitHubConfig.builder()
+                        IntegrationConfigResponse.GitHubConfig.builder()
                             .permission("permission")
                             .targetId("target_id")
                             .build()
                     )
-                    .integrationType(EntitlementListResponse.IntegrationType.DISCORD)
+                    .integrationType(EntitlementIntegrationType.DISCORD)
                     .isActive(true)
                     .name("name")
                     .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -64,17 +64,17 @@ internal class EntitlementListPageResponseTest {
         val entitlementListPageResponse =
             EntitlementListPageResponse.builder()
                 .addItem(
-                    EntitlementListResponse.builder()
+                    Entitlement.builder()
                         .id("id")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .integrationConfig(
-                            EntitlementListResponse.IntegrationConfig.GitHubConfig.builder()
+                            IntegrationConfigResponse.GitHubConfig.builder()
                                 .permission("permission")
                                 .targetId("target_id")
                                 .build()
                         )
-                        .integrationType(EntitlementListResponse.IntegrationType.DISCORD)
+                        .integrationType(EntitlementIntegrationType.DISCORD)
                         .isActive(true)
                         .name("name")
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

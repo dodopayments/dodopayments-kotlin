@@ -17,16 +17,14 @@ import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepareAsync
+import com.dodopayments.api.models.entitlements.Entitlement
 import com.dodopayments.api.models.entitlements.EntitlementCreateParams
-import com.dodopayments.api.models.entitlements.EntitlementCreateResponse
 import com.dodopayments.api.models.entitlements.EntitlementDeleteParams
 import com.dodopayments.api.models.entitlements.EntitlementListPageAsync
 import com.dodopayments.api.models.entitlements.EntitlementListPageResponse
 import com.dodopayments.api.models.entitlements.EntitlementListParams
 import com.dodopayments.api.models.entitlements.EntitlementRetrieveParams
-import com.dodopayments.api.models.entitlements.EntitlementRetrieveResponse
 import com.dodopayments.api.models.entitlements.EntitlementUpdateParams
-import com.dodopayments.api.models.entitlements.EntitlementUpdateResponse
 import com.dodopayments.api.services.async.entitlements.FileServiceAsync
 import com.dodopayments.api.services.async.entitlements.FileServiceAsyncImpl
 import com.dodopayments.api.services.async.entitlements.GrantServiceAsync
@@ -55,21 +53,21 @@ class EntitlementServiceAsyncImpl internal constructor(private val clientOptions
     override suspend fun create(
         params: EntitlementCreateParams,
         requestOptions: RequestOptions,
-    ): EntitlementCreateResponse =
+    ): Entitlement =
         // post /entitlements
         withRawResponse().create(params, requestOptions).parse()
 
     override suspend fun retrieve(
         params: EntitlementRetrieveParams,
         requestOptions: RequestOptions,
-    ): EntitlementRetrieveResponse =
+    ): Entitlement =
         // get /entitlements/{id}
         withRawResponse().retrieve(params, requestOptions).parse()
 
     override suspend fun update(
         params: EntitlementUpdateParams,
         requestOptions: RequestOptions,
-    ): EntitlementUpdateResponse =
+    ): Entitlement =
         // patch /entitlements/{id}
         withRawResponse().update(params, requestOptions).parse()
 
@@ -110,13 +108,13 @@ class EntitlementServiceAsyncImpl internal constructor(private val clientOptions
 
         override fun grants(): GrantServiceAsync.WithRawResponse = grants
 
-        private val createHandler: Handler<EntitlementCreateResponse> =
-            jsonHandler<EntitlementCreateResponse>(clientOptions.jsonMapper)
+        private val createHandler: Handler<Entitlement> =
+            jsonHandler<Entitlement>(clientOptions.jsonMapper)
 
         override suspend fun create(
             params: EntitlementCreateParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<EntitlementCreateResponse> {
+        ): HttpResponseFor<Entitlement> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -138,13 +136,13 @@ class EntitlementServiceAsyncImpl internal constructor(private val clientOptions
             }
         }
 
-        private val retrieveHandler: Handler<EntitlementRetrieveResponse> =
-            jsonHandler<EntitlementRetrieveResponse>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<Entitlement> =
+            jsonHandler<Entitlement>(clientOptions.jsonMapper)
 
         override suspend fun retrieve(
             params: EntitlementRetrieveParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<EntitlementRetrieveResponse> {
+        ): HttpResponseFor<Entitlement> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id())
@@ -168,13 +166,13 @@ class EntitlementServiceAsyncImpl internal constructor(private val clientOptions
             }
         }
 
-        private val updateHandler: Handler<EntitlementUpdateResponse> =
-            jsonHandler<EntitlementUpdateResponse>(clientOptions.jsonMapper)
+        private val updateHandler: Handler<Entitlement> =
+            jsonHandler<Entitlement>(clientOptions.jsonMapper)
 
         override suspend fun update(
             params: EntitlementUpdateParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<EntitlementUpdateResponse> {
+        ): HttpResponseFor<Entitlement> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id())
