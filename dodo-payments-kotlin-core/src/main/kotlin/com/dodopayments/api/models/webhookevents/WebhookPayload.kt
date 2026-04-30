@@ -756,8 +756,7 @@ private constructor(
             private val customer: JsonField<CustomerLimitedDetails>,
             private val digitalProductsDelivered: JsonField<Boolean>,
             private val disputes: JsonField<List<Dispute>>,
-            private val metadata:
-                JsonField<com.dodopayments.api.models.payments.Payment.Metadata>,
+            private val metadata: JsonField<com.dodopayments.api.models.payments.Payment.Metadata>,
             private val paymentId: JsonField<String>,
             private val refunds: JsonField<List<RefundListItem>>,
             private val settlementAmount: JsonField<Int>,
@@ -1718,7 +1717,8 @@ private constructor(
                 private var digitalProductsDelivered: JsonField<Boolean>? = null
                 private var disputes: JsonField<MutableList<Dispute>>? = null
                 private var metadata:
-                    JsonField<com.dodopayments.api.models.payments.Payment.Metadata>? = null
+                    JsonField<com.dodopayments.api.models.payments.Payment.Metadata>? =
+                    null
                 private var paymentId: JsonField<String>? = null
                 private var refunds: JsonField<MutableList<RefundListItem>>? = null
                 private var settlementAmount: JsonField<Int>? = null
@@ -1743,7 +1743,8 @@ private constructor(
                 private var productCart:
                     JsonField<
                         MutableList<com.dodopayments.api.models.payments.Payment.ProductCart>
-                    >? = null
+                    >? =
+                    null
                 private var refundStatus: JsonField<PaymentRefundStatus> = JsonMissing.of()
                 private var settlementTax: JsonField<Int> = JsonMissing.of()
                 private var status: JsonField<IntentStatus> = JsonMissing.of()
@@ -1921,15 +1922,13 @@ private constructor(
                  * Sets [Builder.metadata] to an arbitrary JSON value.
                  *
                  * You should usually call [Builder.metadata] with a well-typed
-                 * [com.dodopayments.api.models.payments.Payment.Metadata]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * [com.dodopayments.api.models.payments.Payment.Metadata] value instead. This
+                 * method is primarily for setting the field to an undocumented or not yet supported
+                 * value.
                  */
                 fun metadata(
                     metadata: JsonField<com.dodopayments.api.models.payments.Payment.Metadata>
-                ) = apply {
-                    this.metadata = metadata
-                }
+                ) = apply { this.metadata = metadata }
 
                 /** Unique identifier for the payment */
                 fun paymentId(paymentId: String) = paymentId(JsonField.of(paymentId))
@@ -2258,29 +2257,23 @@ private constructor(
                 /** List of products purchased in a one-time payment */
                 fun productCart(
                     productCart: List<com.dodopayments.api.models.payments.Payment.ProductCart>?
-                ) =
-                    productCart(JsonField.ofNullable(productCart))
+                ) = productCart(JsonField.ofNullable(productCart))
 
                 /**
                  * Sets [Builder.productCart] to an arbitrary JSON value.
                  *
                  * You should usually call [Builder.productCart] with a well-typed
                  * `List<com.dodopayments.api.models.payments.Payment.ProductCart>` value instead.
-                 * This method is primarily for setting
-                 * the field to an undocumented or not yet supported value.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
                 fun productCart(
                     productCart:
-                        JsonField<
-                            List<com.dodopayments.api.models.payments.Payment.ProductCart>
-                        >
-                ) = apply {
-                    this.productCart = productCart.map { it.toMutableList() }
-                }
+                        JsonField<List<com.dodopayments.api.models.payments.Payment.ProductCart>>
+                ) = apply { this.productCart = productCart.map { it.toMutableList() } }
 
                 /**
-                 * Adds a single
-                 * [com.dodopayments.api.models.payments.Payment.ProductCart] to
+                 * Adds a single [com.dodopayments.api.models.payments.Payment.ProductCart] to
                  * [Builder.productCart].
                  *
                  * @throws IllegalStateException if the field was previously set to a non-list.
@@ -3989,16 +3982,14 @@ private constructor(
                  * Sets [Builder.metadata] to an arbitrary JSON value.
                  *
                  * You should usually call [Builder.metadata] with a well-typed
-                 * [com.dodopayments.api.models.subscriptions.Subscription.Metadata] value
-                 * instead. This method is primarily for setting the
-                 * field to an undocumented or not yet supported value.
+                 * [com.dodopayments.api.models.subscriptions.Subscription.Metadata] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
                 fun metadata(
                     metadata:
                         JsonField<com.dodopayments.api.models.subscriptions.Subscription.Metadata>
-                ) = apply {
-                    this.metadata = metadata
-                }
+                ) = apply { this.metadata = metadata }
 
                 /** Meter credit entitlement cart settings for this subscription */
                 fun meterCreditEntitlementCart(
@@ -4869,8 +4860,7 @@ private constructor(
             private val createdAt: JsonField<OffsetDateTime>,
             private val customer: JsonField<CustomerLimitedDetails>,
             private val isPartial: JsonField<Boolean>,
-            private val metadata:
-                JsonField<com.dodopayments.api.models.refunds.Refund.Metadata>,
+            private val metadata: JsonField<com.dodopayments.api.models.refunds.Refund.Metadata>,
             private val paymentId: JsonField<String>,
             private val refundId: JsonField<String>,
             private val status: JsonField<RefundStatus>,
@@ -5204,7 +5194,8 @@ private constructor(
                 private var customer: JsonField<CustomerLimitedDetails>? = null
                 private var isPartial: JsonField<Boolean>? = null
                 private var metadata:
-                    JsonField<com.dodopayments.api.models.refunds.Refund.Metadata>? = null
+                    JsonField<com.dodopayments.api.models.refunds.Refund.Metadata>? =
+                    null
                 private var paymentId: JsonField<String>? = null
                 private var refundId: JsonField<String>? = null
                 private var status: JsonField<RefundStatus>? = null
@@ -5292,15 +5283,12 @@ private constructor(
                  * Sets [Builder.metadata] to an arbitrary JSON value.
                  *
                  * You should usually call [Builder.metadata] with a well-typed
-                 * [com.dodopayments.api.models.refunds.Refund.Metadata]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * [com.dodopayments.api.models.refunds.Refund.Metadata] value instead. This method
+                 * is primarily for setting the field to an undocumented or not yet supported value.
                  */
                 fun metadata(
                     metadata: JsonField<com.dodopayments.api.models.refunds.Refund.Metadata>
-                ) = apply {
-                    this.metadata = metadata
-                }
+                ) = apply { this.metadata = metadata }
 
                 /** The unique identifier of the payment associated with the refund. */
                 fun paymentId(paymentId: String) = paymentId(JsonField.of(paymentId))
@@ -6937,7 +6925,8 @@ private constructor(
                 private var key: JsonField<String>? = null
                 private var productId: JsonField<String>? = null
                 private var source:
-                    JsonField<com.dodopayments.api.models.licensekeys.LicenseKey.Source>? = null
+                    JsonField<com.dodopayments.api.models.licensekeys.LicenseKey.Source>? =
+                    null
                 private var status: JsonField<LicenseKeyStatus>? = null
                 private var activationsLimit: JsonField<Int> = JsonMissing.of()
                 private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
@@ -7068,9 +7057,9 @@ private constructor(
                  * Sets [Builder.source] to an arbitrary JSON value.
                  *
                  * You should usually call [Builder.source] with a well-typed
-                 * [com.dodopayments.api.models.licensekeys.LicenseKey.Source]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * [com.dodopayments.api.models.licensekeys.LicenseKey.Source] value instead. This
+                 * method is primarily for setting the field to an undocumented or not yet supported
+                 * value.
                  */
                 fun source(
                     source: JsonField<com.dodopayments.api.models.licensekeys.LicenseKey.Source>
@@ -7526,7 +7515,8 @@ private constructor(
                 transactionType:
                     JsonField<
                         com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry.TransactionType
-                    > = JsonMissing.of(),
+                    > =
+                    JsonMissing.of(),
                 @JsonProperty("description")
                 @ExcludeMissing
                 description: JsonField<String> = JsonMissing.of(),
@@ -7919,7 +7909,8 @@ private constructor(
                 private var transactionType:
                     JsonField<
                         com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry.TransactionType
-                    >? = null
+                    >? =
+                    null
                 private var description: JsonField<String> = JsonMissing.of()
                 private var grantId: JsonField<String> = JsonMissing.of()
                 private var referenceId: JsonField<String> = JsonMissing.of()
@@ -8091,26 +8082,22 @@ private constructor(
                 fun transactionType(
                     transactionType:
                         com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry.TransactionType
-                ) =
-                    transactionType(JsonField.of(transactionType))
+                ) = transactionType(JsonField.of(transactionType))
 
                 /**
                  * Sets [Builder.transactionType] to an arbitrary JSON value.
                  *
                  * You should usually call [Builder.transactionType] with a well-typed
                  * [com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry.TransactionType]
-                 * value instead. This method is primarily for
-                 * setting the field to an undocumented or not yet supported value.
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
                  */
                 fun transactionType(
                     transactionType:
                         JsonField<
                             com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry.TransactionType
                         >
-                ) =
-                    apply {
-                        this.transactionType = transactionType
-                    }
+                ) = apply { this.transactionType = transactionType }
 
                 fun description(description: String?) =
                     description(JsonField.ofNullable(description))
@@ -10871,7 +10858,9 @@ private constructor(
                 @JsonProperty("status")
                 @ExcludeMissing
                 status:
-                    JsonField<com.dodopayments.api.models.entitlements.grants.EntitlementGrant.Status> =
+                    JsonField<
+                        com.dodopayments.api.models.entitlements.grants.EntitlementGrant.Status
+                    > =
                     JsonMissing.of(),
                 @JsonProperty("updated_at")
                 @ExcludeMissing
@@ -11347,7 +11336,9 @@ private constructor(
                 private var entitlementId: JsonField<String>? = null
                 private var externalId: JsonField<String>? = null
                 private var status:
-                    JsonField<com.dodopayments.api.models.entitlements.grants.EntitlementGrant.Status>? =
+                    JsonField<
+                        com.dodopayments.api.models.entitlements.grants.EntitlementGrant.Status
+                    >? =
                     null
                 private var updatedAt: JsonField<OffsetDateTime>? = null
                 private var deliveredAt: JsonField<OffsetDateTime> = JsonMissing.of()
@@ -11476,16 +11467,16 @@ private constructor(
                  * Sets [Builder.status] to an arbitrary JSON value.
                  *
                  * You should usually call [Builder.status] with a well-typed
-                 * [com.dodopayments.api.models.entitlements.grants.EntitlementGrant.Status]
-                 * value instead. This method is primarily for setting the
-                 * field to an undocumented or not yet supported value.
+                 * [com.dodopayments.api.models.entitlements.grants.EntitlementGrant.Status] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
                  */
                 fun status(
                     status:
-                        JsonField<com.dodopayments.api.models.entitlements.grants.EntitlementGrant.Status>
-                ) = apply {
-                    this.status = status
-                }
+                        JsonField<
+                            com.dodopayments.api.models.entitlements.grants.EntitlementGrant.Status
+                        >
+                ) = apply { this.status = status }
 
                 fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))
 
