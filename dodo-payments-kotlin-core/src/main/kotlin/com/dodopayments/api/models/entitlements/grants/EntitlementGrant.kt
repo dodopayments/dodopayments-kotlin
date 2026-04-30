@@ -18,7 +18,7 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
-class GrantListResponse
+class EntitlementGrant
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
@@ -33,7 +33,7 @@ private constructor(
     private val digitalProductDelivery: JsonField<DigitalProductDelivery>,
     private val errorCode: JsonField<String>,
     private val errorMessage: JsonField<String>,
-    private val licenseKey: JsonField<LicenseKey>,
+    private val licenseKey: JsonField<LicenseKeyGrant>,
     private val metadata: JsonValue,
     private val oauthExpiresAt: JsonField<OffsetDateTime>,
     private val oauthUrl: JsonField<String>,
@@ -78,7 +78,7 @@ private constructor(
         errorMessage: JsonField<String> = JsonMissing.of(),
         @JsonProperty("license_key")
         @ExcludeMissing
-        licenseKey: JsonField<LicenseKey> = JsonMissing.of(),
+        licenseKey: JsonField<LicenseKeyGrant> = JsonMissing.of(),
         @JsonProperty("metadata") @ExcludeMissing metadata: JsonValue = JsonMissing.of(),
         @JsonProperty("oauth_expires_at")
         @ExcludeMissing
@@ -200,12 +200,12 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
-    fun licenseKey(): LicenseKey? = licenseKey.getNullable("license_key")
+    fun licenseKey(): LicenseKeyGrant? = licenseKey.getNullable("license_key")
 
     /**
      * This arbitrary value can be deserialized into a custom type using the `convert` method:
      * ```kotlin
-     * val myObject: MyClass = grantListResponse.metadata().convert(MyClass::class.java)
+     * val myObject: MyClass = entitlementGrant.metadata().convert(MyClass::class.java)
      * ```
      */
     @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonValue = metadata
@@ -350,7 +350,7 @@ private constructor(
      */
     @JsonProperty("license_key")
     @ExcludeMissing
-    fun _licenseKey(): JsonField<LicenseKey> = licenseKey
+    fun _licenseKey(): JsonField<LicenseKeyGrant> = licenseKey
 
     /**
      * Returns the raw JSON value of [oauthExpiresAt].
@@ -418,7 +418,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [GrantListResponse].
+         * Returns a mutable builder for constructing an instance of [EntitlementGrant].
          *
          * The following fields are required:
          * ```kotlin
@@ -435,7 +435,7 @@ private constructor(
         fun builder() = Builder()
     }
 
-    /** A builder for [GrantListResponse]. */
+    /** A builder for [EntitlementGrant]. */
     class Builder internal constructor() {
 
         private var id: JsonField<String>? = null
@@ -450,7 +450,7 @@ private constructor(
         private var digitalProductDelivery: JsonField<DigitalProductDelivery> = JsonMissing.of()
         private var errorCode: JsonField<String> = JsonMissing.of()
         private var errorMessage: JsonField<String> = JsonMissing.of()
-        private var licenseKey: JsonField<LicenseKey> = JsonMissing.of()
+        private var licenseKey: JsonField<LicenseKeyGrant> = JsonMissing.of()
         private var metadata: JsonValue = JsonMissing.of()
         private var oauthExpiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var oauthUrl: JsonField<String> = JsonMissing.of()
@@ -460,28 +460,28 @@ private constructor(
         private var subscriptionId: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-        internal fun from(grantListResponse: GrantListResponse) = apply {
-            id = grantListResponse.id
-            businessId = grantListResponse.businessId
-            createdAt = grantListResponse.createdAt
-            customerId = grantListResponse.customerId
-            entitlementId = grantListResponse.entitlementId
-            externalId = grantListResponse.externalId
-            status = grantListResponse.status
-            updatedAt = grantListResponse.updatedAt
-            deliveredAt = grantListResponse.deliveredAt
-            digitalProductDelivery = grantListResponse.digitalProductDelivery
-            errorCode = grantListResponse.errorCode
-            errorMessage = grantListResponse.errorMessage
-            licenseKey = grantListResponse.licenseKey
-            metadata = grantListResponse.metadata
-            oauthExpiresAt = grantListResponse.oauthExpiresAt
-            oauthUrl = grantListResponse.oauthUrl
-            paymentId = grantListResponse.paymentId
-            revocationReason = grantListResponse.revocationReason
-            revokedAt = grantListResponse.revokedAt
-            subscriptionId = grantListResponse.subscriptionId
-            additionalProperties = grantListResponse.additionalProperties.toMutableMap()
+        internal fun from(entitlementGrant: EntitlementGrant) = apply {
+            id = entitlementGrant.id
+            businessId = entitlementGrant.businessId
+            createdAt = entitlementGrant.createdAt
+            customerId = entitlementGrant.customerId
+            entitlementId = entitlementGrant.entitlementId
+            externalId = entitlementGrant.externalId
+            status = entitlementGrant.status
+            updatedAt = entitlementGrant.updatedAt
+            deliveredAt = entitlementGrant.deliveredAt
+            digitalProductDelivery = entitlementGrant.digitalProductDelivery
+            errorCode = entitlementGrant.errorCode
+            errorMessage = entitlementGrant.errorMessage
+            licenseKey = entitlementGrant.licenseKey
+            metadata = entitlementGrant.metadata
+            oauthExpiresAt = entitlementGrant.oauthExpiresAt
+            oauthUrl = entitlementGrant.oauthUrl
+            paymentId = entitlementGrant.paymentId
+            revocationReason = entitlementGrant.revocationReason
+            revokedAt = entitlementGrant.revokedAt
+            subscriptionId = entitlementGrant.subscriptionId
+            additionalProperties = entitlementGrant.additionalProperties.toMutableMap()
         }
 
         fun id(id: String) = id(JsonField.of(id))
@@ -630,16 +630,18 @@ private constructor(
         }
 
         /** Present only when the entitlement integration_type is `license_key`. */
-        fun licenseKey(licenseKey: LicenseKey?) = licenseKey(JsonField.ofNullable(licenseKey))
+        fun licenseKey(licenseKey: LicenseKeyGrant?) = licenseKey(JsonField.ofNullable(licenseKey))
 
         /**
          * Sets [Builder.licenseKey] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.licenseKey] with a well-typed [LicenseKey] value
+         * You should usually call [Builder.licenseKey] with a well-typed [LicenseKeyGrant] value
          * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun licenseKey(licenseKey: JsonField<LicenseKey>) = apply { this.licenseKey = licenseKey }
+        fun licenseKey(licenseKey: JsonField<LicenseKeyGrant>) = apply {
+            this.licenseKey = licenseKey
+        }
 
         fun metadata(metadata: JsonValue) = apply { this.metadata = metadata }
 
@@ -737,7 +739,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [GrantListResponse].
+         * Returns an immutable instance of [EntitlementGrant].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -755,8 +757,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): GrantListResponse =
-            GrantListResponse(
+        fun build(): EntitlementGrant =
+            EntitlementGrant(
                 checkRequired("id", id),
                 checkRequired("businessId", businessId),
                 checkRequired("createdAt", createdAt),
@@ -783,7 +785,7 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): GrantListResponse = apply {
+    fun validate(): EntitlementGrant = apply {
         if (validated) {
             return@apply
         }
@@ -981,298 +983,12 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    /** Present only when the entitlement integration_type is `license_key`. */
-    class LicenseKey
-    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
-    private constructor(
-        private val activationsUsed: JsonField<Int>,
-        private val key: JsonField<String>,
-        private val activationsLimit: JsonField<Int>,
-        private val expiresAt: JsonField<OffsetDateTime>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("activations_used")
-            @ExcludeMissing
-            activationsUsed: JsonField<Int> = JsonMissing.of(),
-            @JsonProperty("key") @ExcludeMissing key: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("activations_limit")
-            @ExcludeMissing
-            activationsLimit: JsonField<Int> = JsonMissing.of(),
-            @JsonProperty("expires_at")
-            @ExcludeMissing
-            expiresAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-        ) : this(activationsUsed, key, activationsLimit, expiresAt, mutableMapOf())
-
-        /**
-         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun activationsUsed(): Int = activationsUsed.getRequired("activations_used")
-
-        /**
-         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun key(): String = key.getRequired("key")
-
-        /**
-         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
-         *   if the server responded with an unexpected value).
-         */
-        fun activationsLimit(): Int? = activationsLimit.getNullable("activations_limit")
-
-        /**
-         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
-         *   if the server responded with an unexpected value).
-         */
-        fun expiresAt(): OffsetDateTime? = expiresAt.getNullable("expires_at")
-
-        /**
-         * Returns the raw JSON value of [activationsUsed].
-         *
-         * Unlike [activationsUsed], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("activations_used")
-        @ExcludeMissing
-        fun _activationsUsed(): JsonField<Int> = activationsUsed
-
-        /**
-         * Returns the raw JSON value of [key].
-         *
-         * Unlike [key], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<String> = key
-
-        /**
-         * Returns the raw JSON value of [activationsLimit].
-         *
-         * Unlike [activationsLimit], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("activations_limit")
-        @ExcludeMissing
-        fun _activationsLimit(): JsonField<Int> = activationsLimit
-
-        /**
-         * Returns the raw JSON value of [expiresAt].
-         *
-         * Unlike [expiresAt], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("expires_at")
-        @ExcludeMissing
-        fun _expiresAt(): JsonField<OffsetDateTime> = expiresAt
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [LicenseKey].
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .activationsUsed()
-             * .key()
-             * ```
-             */
-            fun builder() = Builder()
-        }
-
-        /** A builder for [LicenseKey]. */
-        class Builder internal constructor() {
-
-            private var activationsUsed: JsonField<Int>? = null
-            private var key: JsonField<String>? = null
-            private var activationsLimit: JsonField<Int> = JsonMissing.of()
-            private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            internal fun from(licenseKey: LicenseKey) = apply {
-                activationsUsed = licenseKey.activationsUsed
-                key = licenseKey.key
-                activationsLimit = licenseKey.activationsLimit
-                expiresAt = licenseKey.expiresAt
-                additionalProperties = licenseKey.additionalProperties.toMutableMap()
-            }
-
-            fun activationsUsed(activationsUsed: Int) =
-                activationsUsed(JsonField.of(activationsUsed))
-
-            /**
-             * Sets [Builder.activationsUsed] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.activationsUsed] with a well-typed [Int] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun activationsUsed(activationsUsed: JsonField<Int>) = apply {
-                this.activationsUsed = activationsUsed
-            }
-
-            fun key(key: String) = key(JsonField.of(key))
-
-            /**
-             * Sets [Builder.key] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.key] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
-            fun key(key: JsonField<String>) = apply { this.key = key }
-
-            fun activationsLimit(activationsLimit: Int?) =
-                activationsLimit(JsonField.ofNullable(activationsLimit))
-
-            /**
-             * Alias for [Builder.activationsLimit].
-             *
-             * This unboxed primitive overload exists for backwards compatibility.
-             */
-            fun activationsLimit(activationsLimit: Int) = activationsLimit(activationsLimit as Int?)
-
-            /**
-             * Sets [Builder.activationsLimit] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.activationsLimit] with a well-typed [Int] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun activationsLimit(activationsLimit: JsonField<Int>) = apply {
-                this.activationsLimit = activationsLimit
-            }
-
-            fun expiresAt(expiresAt: OffsetDateTime?) = expiresAt(JsonField.ofNullable(expiresAt))
-
-            /**
-             * Sets [Builder.expiresAt] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.expiresAt] with a well-typed [OffsetDateTime] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun expiresAt(expiresAt: JsonField<OffsetDateTime>) = apply {
-                this.expiresAt = expiresAt
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [LicenseKey].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```kotlin
-             * .activationsUsed()
-             * .key()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): LicenseKey =
-                LicenseKey(
-                    checkRequired("activationsUsed", activationsUsed),
-                    checkRequired("key", key),
-                    activationsLimit,
-                    expiresAt,
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        fun validate(): LicenseKey = apply {
-            if (validated) {
-                return@apply
-            }
-
-            activationsUsed()
-            key()
-            activationsLimit()
-            expiresAt()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: DodoPaymentsInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        internal fun validity(): Int =
-            (if (activationsUsed.asKnown() == null) 0 else 1) +
-                (if (key.asKnown() == null) 0 else 1) +
-                (if (activationsLimit.asKnown() == null) 0 else 1) +
-                (if (expiresAt.asKnown() == null) 0 else 1)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return other is LicenseKey &&
-                activationsUsed == other.activationsUsed &&
-                key == other.key &&
-                activationsLimit == other.activationsLimit &&
-                expiresAt == other.expiresAt &&
-                additionalProperties == other.additionalProperties
-        }
-
-        private val hashCode: Int by lazy {
-            Objects.hash(activationsUsed, key, activationsLimit, expiresAt, additionalProperties)
-        }
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "LicenseKey{activationsUsed=$activationsUsed, key=$key, activationsLimit=$activationsLimit, expiresAt=$expiresAt, additionalProperties=$additionalProperties}"
-    }
-
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return other is GrantListResponse &&
+        return other is EntitlementGrant &&
             id == other.id &&
             businessId == other.businessId &&
             createdAt == other.createdAt &&
@@ -1325,5 +1041,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "GrantListResponse{id=$id, businessId=$businessId, createdAt=$createdAt, customerId=$customerId, entitlementId=$entitlementId, externalId=$externalId, status=$status, updatedAt=$updatedAt, deliveredAt=$deliveredAt, digitalProductDelivery=$digitalProductDelivery, errorCode=$errorCode, errorMessage=$errorMessage, licenseKey=$licenseKey, metadata=$metadata, oauthExpiresAt=$oauthExpiresAt, oauthUrl=$oauthUrl, paymentId=$paymentId, revocationReason=$revocationReason, revokedAt=$revokedAt, subscriptionId=$subscriptionId, additionalProperties=$additionalProperties}"
+        "EntitlementGrant{id=$id, businessId=$businessId, createdAt=$createdAt, customerId=$customerId, entitlementId=$entitlementId, externalId=$externalId, status=$status, updatedAt=$updatedAt, deliveredAt=$deliveredAt, digitalProductDelivery=$digitalProductDelivery, errorCode=$errorCode, errorMessage=$errorMessage, licenseKey=$licenseKey, metadata=$metadata, oauthExpiresAt=$oauthExpiresAt, oauthUrl=$oauthUrl, paymentId=$paymentId, revocationReason=$revocationReason, revokedAt=$revokedAt, subscriptionId=$subscriptionId, additionalProperties=$additionalProperties}"
 }

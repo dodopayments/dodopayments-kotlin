@@ -11,9 +11,11 @@ import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.CustomFieldResponse
 import com.dodopayments.api.models.payments.CustomerLimitedDetails
 import com.dodopayments.api.models.subscriptions.AddonCartResponseItem
+import com.dodopayments.api.models.subscriptions.CancellationFeedback
 import com.dodopayments.api.models.subscriptions.CreditEntitlementCartResponse
 import com.dodopayments.api.models.subscriptions.MeterCartResponseItem
 import com.dodopayments.api.models.subscriptions.MeterCreditEntitlementCartResponse
+import com.dodopayments.api.models.subscriptions.ScheduledPlanChange
 import com.dodopayments.api.models.subscriptions.Subscription
 import com.dodopayments.api.models.subscriptions.SubscriptionStatus
 import com.dodopayments.api.models.subscriptions.TimeInterval
@@ -120,7 +122,7 @@ internal class SubscriptionCancelledWebhookEventTest {
                         .taxInclusive(true)
                         .trialPeriodDays(0)
                         .cancellationComment("cancellation_comment")
-                        .cancellationFeedback(Subscription.CancellationFeedback.TOO_EXPENSIVE)
+                        .cancellationFeedback(CancellationFeedback.TOO_EXPENSIVE)
                         .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addCustomFieldResponse(
                             CustomFieldResponse.builder().key("key").value("value").build()
@@ -130,10 +132,10 @@ internal class SubscriptionCancelledWebhookEventTest {
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
                         .scheduledChange(
-                            Subscription.ScheduledChange.builder()
+                            ScheduledPlanChange.builder()
                                 .id("id")
                                 .addAddon(
-                                    Subscription.ScheduledChange.Addon.builder()
+                                    ScheduledPlanChange.Addon.builder()
                                         .addonId("addon_id")
                                         .name("name")
                                         .quantity(0)
@@ -247,7 +249,7 @@ internal class SubscriptionCancelledWebhookEventTest {
                     .taxInclusive(true)
                     .trialPeriodDays(0)
                     .cancellationComment("cancellation_comment")
-                    .cancellationFeedback(Subscription.CancellationFeedback.TOO_EXPENSIVE)
+                    .cancellationFeedback(CancellationFeedback.TOO_EXPENSIVE)
                     .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .addCustomFieldResponse(
                         CustomFieldResponse.builder().key("key").value("value").build()
@@ -257,10 +259,10 @@ internal class SubscriptionCancelledWebhookEventTest {
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .paymentMethodId("payment_method_id")
                     .scheduledChange(
-                        Subscription.ScheduledChange.builder()
+                        ScheduledPlanChange.builder()
                             .id("id")
                             .addAddon(
-                                Subscription.ScheduledChange.Addon.builder()
+                                ScheduledPlanChange.Addon.builder()
                                     .addonId("addon_id")
                                     .name("name")
                                     .quantity(0)
@@ -380,7 +382,7 @@ internal class SubscriptionCancelledWebhookEventTest {
                         .taxInclusive(true)
                         .trialPeriodDays(0)
                         .cancellationComment("cancellation_comment")
-                        .cancellationFeedback(Subscription.CancellationFeedback.TOO_EXPENSIVE)
+                        .cancellationFeedback(CancellationFeedback.TOO_EXPENSIVE)
                         .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addCustomFieldResponse(
                             CustomFieldResponse.builder().key("key").value("value").build()
@@ -390,10 +392,10 @@ internal class SubscriptionCancelledWebhookEventTest {
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
                         .scheduledChange(
-                            Subscription.ScheduledChange.builder()
+                            ScheduledPlanChange.builder()
                                 .id("id")
                                 .addAddon(
-                                    Subscription.ScheduledChange.Addon.builder()
+                                    ScheduledPlanChange.Addon.builder()
                                         .addonId("addon_id")
                                         .name("name")
                                         .quantity(0)

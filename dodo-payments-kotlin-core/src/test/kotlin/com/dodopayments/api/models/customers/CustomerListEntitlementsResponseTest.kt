@@ -3,6 +3,7 @@
 package com.dodopayments.api.models.customers
 
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.entitlements.EntitlementIntegrationType
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -20,9 +21,7 @@ internal class CustomerListEntitlementsResponseTest {
                         .entitlementId("entitlement_id")
                         .entitlementName("entitlement_name")
                         .grantId("grant_id")
-                        .integrationType(
-                            CustomerListEntitlementsResponse.Item.IntegrationType.DISCORD
-                        )
+                        .integrationType(EntitlementIntegrationType.DISCORD)
                         .status(CustomerListEntitlementsResponse.Item.Status.PENDING)
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .deliveredAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -39,7 +38,7 @@ internal class CustomerListEntitlementsResponseTest {
                     .entitlementId("entitlement_id")
                     .entitlementName("entitlement_name")
                     .grantId("grant_id")
-                    .integrationType(CustomerListEntitlementsResponse.Item.IntegrationType.DISCORD)
+                    .integrationType(EntitlementIntegrationType.DISCORD)
                     .status(CustomerListEntitlementsResponse.Item.Status.PENDING)
                     .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .deliveredAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -60,9 +59,7 @@ internal class CustomerListEntitlementsResponseTest {
                         .entitlementId("entitlement_id")
                         .entitlementName("entitlement_name")
                         .grantId("grant_id")
-                        .integrationType(
-                            CustomerListEntitlementsResponse.Item.IntegrationType.DISCORD
-                        )
+                        .integrationType(EntitlementIntegrationType.DISCORD)
                         .status(CustomerListEntitlementsResponse.Item.Status.PENDING)
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .deliveredAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

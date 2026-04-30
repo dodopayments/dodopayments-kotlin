@@ -12,12 +12,12 @@ internal class EntitlementCreateParamsTest {
     fun create() {
         EntitlementCreateParams.builder()
             .integrationConfig(
-                EntitlementCreateParams.IntegrationConfig.GitHubConfig.builder()
+                IntegrationConfig.GitHubConfig.builder()
                     .permission("permission")
                     .targetId("target_id")
                     .build()
             )
-            .integrationType(EntitlementCreateParams.IntegrationType.DISCORD)
+            .integrationType(EntitlementIntegrationType.DISCORD)
             .name("name")
             .description("description")
             .metadata(
@@ -33,12 +33,12 @@ internal class EntitlementCreateParamsTest {
         val params =
             EntitlementCreateParams.builder()
                 .integrationConfig(
-                    EntitlementCreateParams.IntegrationConfig.GitHubConfig.builder()
+                    IntegrationConfig.GitHubConfig.builder()
                         .permission("permission")
                         .targetId("target_id")
                         .build()
                 )
-                .integrationType(EntitlementCreateParams.IntegrationType.DISCORD)
+                .integrationType(EntitlementIntegrationType.DISCORD)
                 .name("name")
                 .description("description")
                 .metadata(
@@ -52,15 +52,14 @@ internal class EntitlementCreateParamsTest {
 
         assertThat(body.integrationConfig())
             .isEqualTo(
-                EntitlementCreateParams.IntegrationConfig.ofGitHub(
-                    EntitlementCreateParams.IntegrationConfig.GitHubConfig.builder()
+                IntegrationConfig.ofGitHub(
+                    IntegrationConfig.GitHubConfig.builder()
                         .permission("permission")
                         .targetId("target_id")
                         .build()
                 )
             )
-        assertThat(body.integrationType())
-            .isEqualTo(EntitlementCreateParams.IntegrationType.DISCORD)
+        assertThat(body.integrationType()).isEqualTo(EntitlementIntegrationType.DISCORD)
         assertThat(body.name()).isEqualTo("name")
         assertThat(body.description()).isEqualTo("description")
         assertThat(body.metadata())
@@ -76,12 +75,12 @@ internal class EntitlementCreateParamsTest {
         val params =
             EntitlementCreateParams.builder()
                 .integrationConfig(
-                    EntitlementCreateParams.IntegrationConfig.GitHubConfig.builder()
+                    IntegrationConfig.GitHubConfig.builder()
                         .permission("permission")
                         .targetId("target_id")
                         .build()
                 )
-                .integrationType(EntitlementCreateParams.IntegrationType.DISCORD)
+                .integrationType(EntitlementIntegrationType.DISCORD)
                 .name("name")
                 .build()
 
@@ -89,15 +88,14 @@ internal class EntitlementCreateParamsTest {
 
         assertThat(body.integrationConfig())
             .isEqualTo(
-                EntitlementCreateParams.IntegrationConfig.ofGitHub(
-                    EntitlementCreateParams.IntegrationConfig.GitHubConfig.builder()
+                IntegrationConfig.ofGitHub(
+                    IntegrationConfig.GitHubConfig.builder()
                         .permission("permission")
                         .targetId("target_id")
                         .build()
                 )
             )
-        assertThat(body.integrationType())
-            .isEqualTo(EntitlementCreateParams.IntegrationType.DISCORD)
+        assertThat(body.integrationType()).isEqualTo(EntitlementIntegrationType.DISCORD)
         assertThat(body.name()).isEqualTo("name")
     }
 }

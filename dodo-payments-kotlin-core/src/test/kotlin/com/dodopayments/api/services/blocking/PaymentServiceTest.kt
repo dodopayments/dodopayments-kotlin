@@ -9,6 +9,7 @@ import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
+import com.dodopayments.api.models.payments.OneTimeProductCartItem
 import com.dodopayments.api.models.payments.PaymentCreateParams
 import com.dodopayments.api.models.payments.PaymentMethodTypes
 import org.junit.jupiter.api.Test
@@ -40,7 +41,7 @@ internal class PaymentServiceTest {
                     )
                     .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
                     .addProductCart(
-                        PaymentCreateParams.ProductCart.builder()
+                        OneTimeProductCartItem.builder()
                             .productId("product_id")
                             .quantity(0)
                             .amount(0)

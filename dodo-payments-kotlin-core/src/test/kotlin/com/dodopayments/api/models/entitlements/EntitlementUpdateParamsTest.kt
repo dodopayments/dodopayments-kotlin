@@ -14,7 +14,7 @@ internal class EntitlementUpdateParamsTest {
             .id("id")
             .description("description")
             .integrationConfig(
-                EntitlementUpdateParams.IntegrationConfig.GitHubConfig.builder()
+                IntegrationConfig.GitHubConfig.builder()
                     .permission("permission")
                     .targetId("target_id")
                     .build()
@@ -44,7 +44,7 @@ internal class EntitlementUpdateParamsTest {
                 .id("id")
                 .description("description")
                 .integrationConfig(
-                    EntitlementUpdateParams.IntegrationConfig.GitHubConfig.builder()
+                    IntegrationConfig.GitHubConfig.builder()
                         .permission("permission")
                         .targetId("target_id")
                         .build()
@@ -62,8 +62,8 @@ internal class EntitlementUpdateParamsTest {
         assertThat(body.description()).isEqualTo("description")
         assertThat(body.integrationConfig())
             .isEqualTo(
-                EntitlementUpdateParams.IntegrationConfig.ofGitHub(
-                    EntitlementUpdateParams.IntegrationConfig.GitHubConfig.builder()
+                IntegrationConfig.ofGitHub(
+                    IntegrationConfig.GitHubConfig.builder()
                         .permission("permission")
                         .targetId("target_id")
                         .build()

@@ -14,14 +14,14 @@ private constructor(
     private val service: GrantServiceAsync,
     private val params: GrantListParams,
     private val response: GrantListPageResponse,
-) : PageAsync<GrantListResponse> {
+) : PageAsync<EntitlementGrant> {
 
     /**
      * Delegates to [GrantListPageResponse], but gracefully handles missing data.
      *
      * @see GrantListPageResponse.items
      */
-    override fun items(): List<GrantListResponse> =
+    override fun items(): List<EntitlementGrant> =
         response._items().getNullable("items") ?: emptyList()
 
     override fun hasNextPage(): Boolean = items().isNotEmpty()
@@ -33,7 +33,7 @@ private constructor(
 
     override suspend fun nextPage(): GrantListPageAsync = service.list(nextPageParams())
 
-    fun autoPager(): AutoPagerAsync<GrantListResponse> = AutoPagerAsync.from(this)
+    fun autoPager(): AutoPagerAsync<EntitlementGrant> = AutoPagerAsync.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): GrantListParams = params

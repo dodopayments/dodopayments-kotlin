@@ -9,6 +9,7 @@ import com.dodopayments.api.models.creditentitlements.CbbOverageBehavior
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.TaxCategory
 import com.dodopayments.api.models.products.AttachCreditEntitlement
+import com.dodopayments.api.models.products.AttachProductEntitlement
 import com.dodopayments.api.models.products.CbbProrationBehavior
 import com.dodopayments.api.models.products.LicenseKeyDuration
 import com.dodopayments.api.models.products.Price
@@ -79,9 +80,7 @@ internal class ProductServiceTest {
                             .build()
                     )
                     .addEntitlement(
-                        ProductCreateParams.Entitlement.builder()
-                            .entitlementId("entitlement_id")
-                            .build()
+                        AttachProductEntitlement.builder().entitlementId("entitlement_id").build()
                     )
                     .licenseKeyActivationMessage("license_key_activation_message")
                     .licenseKeyActivationsLimit(0)
@@ -158,9 +157,7 @@ internal class ProductServiceTest {
                         .build()
                 )
                 .addEntitlement(
-                    ProductUpdateParams.Entitlement.builder()
-                        .entitlementId("entitlement_id")
-                        .build()
+                    AttachProductEntitlement.builder().entitlementId("entitlement_id").build()
                 )
                 .imageId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .licenseKeyActivationMessage("license_key_activation_message")
