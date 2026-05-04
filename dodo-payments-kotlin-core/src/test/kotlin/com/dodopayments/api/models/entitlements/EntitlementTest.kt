@@ -20,16 +20,20 @@ internal class EntitlementTest {
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .integrationConfig(
                     IntegrationConfigResponse.GitHubConfig.builder()
-                        .permission("permission")
+                        .permission(IntegrationConfigResponse.GitHubConfig.Permission.PULL)
                         .targetId("target_id")
                         .build()
                 )
                 .integrationType(EntitlementIntegrationType.DISCORD)
                 .isActive(true)
+                .metadata(
+                    Entitlement.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .name("name")
                 .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .description("description")
-                .metadata(JsonValue.from(mapOf<String, Any>()))
                 .build()
 
         assertThat(entitlement.id()).isEqualTo("id")
@@ -40,18 +44,23 @@ internal class EntitlementTest {
             .isEqualTo(
                 IntegrationConfigResponse.ofGitHubConfig(
                     IntegrationConfigResponse.GitHubConfig.builder()
-                        .permission("permission")
+                        .permission(IntegrationConfigResponse.GitHubConfig.Permission.PULL)
                         .targetId("target_id")
                         .build()
                 )
             )
         assertThat(entitlement.integrationType()).isEqualTo(EntitlementIntegrationType.DISCORD)
         assertThat(entitlement.isActive()).isEqualTo(true)
+        assertThat(entitlement.metadata())
+            .isEqualTo(
+                Entitlement.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(entitlement.name()).isEqualTo("name")
         assertThat(entitlement.updatedAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(entitlement.description()).isEqualTo("description")
-        assertThat(entitlement._metadata()).isEqualTo(JsonValue.from(mapOf<String, Any>()))
     }
 
     @Test
@@ -64,16 +73,20 @@ internal class EntitlementTest {
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .integrationConfig(
                     IntegrationConfigResponse.GitHubConfig.builder()
-                        .permission("permission")
+                        .permission(IntegrationConfigResponse.GitHubConfig.Permission.PULL)
                         .targetId("target_id")
                         .build()
                 )
                 .integrationType(EntitlementIntegrationType.DISCORD)
                 .isActive(true)
+                .metadata(
+                    Entitlement.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .name("name")
                 .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .description("description")
-                .metadata(JsonValue.from(mapOf<String, Any>()))
                 .build()
 
         val roundtrippedEntitlement =

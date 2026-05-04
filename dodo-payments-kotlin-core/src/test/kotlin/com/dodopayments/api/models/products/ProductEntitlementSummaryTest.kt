@@ -18,7 +18,7 @@ internal class ProductEntitlementSummaryTest {
                 .id("id")
                 .integrationConfig(
                     IntegrationConfigResponse.GitHubConfig.builder()
-                        .permission("permission")
+                        .permission(IntegrationConfigResponse.GitHubConfig.Permission.PULL)
                         .targetId("target_id")
                         .build()
                 )
@@ -32,7 +32,7 @@ internal class ProductEntitlementSummaryTest {
             .isEqualTo(
                 IntegrationConfigResponse.ofGitHubConfig(
                     IntegrationConfigResponse.GitHubConfig.builder()
-                        .permission("permission")
+                        .permission(IntegrationConfigResponse.GitHubConfig.Permission.PULL)
                         .targetId("target_id")
                         .build()
                 )
@@ -51,7 +51,7 @@ internal class ProductEntitlementSummaryTest {
                 .id("id")
                 .integrationConfig(
                     IntegrationConfigResponse.GitHubConfig.builder()
-                        .permission("permission")
+                        .permission(IntegrationConfigResponse.GitHubConfig.Permission.PULL)
                         .targetId("target_id")
                         .build()
                 )

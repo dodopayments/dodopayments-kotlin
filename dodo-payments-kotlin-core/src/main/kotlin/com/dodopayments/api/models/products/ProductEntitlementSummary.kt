@@ -57,10 +57,10 @@ private constructor(
     fun id(): String = id.getRequired("id")
 
     /**
-     * Public-facing variant of [`IntegrationConfig`]. Mirrors every variant shape on the wire
-     * EXCEPT `DigitalFiles`, which is replaced with a hydrated `digital_files` object (resolved
-     * download URLs etc.). The persisted JSONB stays ID-only via [`IntegrationConfig`]; this enum
-     * is response-only.
+     * Integration-specific configuration on an entitlement read response.
+     *
+     * For `digital_files` entitlements the response includes presigned download URLs for each
+     * attached file; other integrations match the shape supplied at creation.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -185,10 +185,10 @@ private constructor(
         fun id(id: JsonField<String>) = apply { this.id = id }
 
         /**
-         * Public-facing variant of [`IntegrationConfig`]. Mirrors every variant shape on the wire
-         * EXCEPT `DigitalFiles`, which is replaced with a hydrated `digital_files` object (resolved
-         * download URLs etc.). The persisted JSONB stays ID-only via [`IntegrationConfig`]; this
-         * enum is response-only.
+         * Integration-specific configuration on an entitlement read response.
+         *
+         * For `digital_files` entitlements the response includes presigned download URLs for each
+         * attached file; other integrations match the shape supplied at creation.
          */
         fun integrationConfig(integrationConfig: IntegrationConfigResponse) =
             integrationConfig(JsonField.of(integrationConfig))

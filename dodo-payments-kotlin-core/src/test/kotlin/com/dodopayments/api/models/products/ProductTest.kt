@@ -53,7 +53,7 @@ internal class ProductTest {
                         .id("id")
                         .integrationConfig(
                             IntegrationConfigResponse.GitHubConfig.builder()
-                                .permission("permission")
+                                .permission(IntegrationConfigResponse.GitHubConfig.Permission.PULL)
                                 .targetId("target_id")
                                 .build()
                         )
@@ -146,7 +146,7 @@ internal class ProductTest {
                     .id("id")
                     .integrationConfig(
                         IntegrationConfigResponse.GitHubConfig.builder()
-                            .permission("permission")
+                            .permission(IntegrationConfigResponse.GitHubConfig.Permission.PULL)
                             .targetId("target_id")
                             .build()
                     )
@@ -247,7 +247,7 @@ internal class ProductTest {
                         .id("id")
                         .integrationConfig(
                             IntegrationConfigResponse.GitHubConfig.builder()
-                                .permission("permission")
+                                .permission(IntegrationConfigResponse.GitHubConfig.Permission.PULL)
                                 .targetId("target_id")
                                 .build()
                         )

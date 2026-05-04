@@ -28,7 +28,8 @@ private constructor(
     ) : this(fileId, mutableMapOf())
 
     /**
-     * EE-issued digital file id; appended to `entitlements.integration_config.digital_file_ids`.
+     * Identifier of the attached file. Pass it to `DELETE /entitlements/{id}/files/{file_id}` to
+     * detach the file later.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -79,8 +80,8 @@ private constructor(
         }
 
         /**
-         * EE-issued digital file id; appended to
-         * `entitlements.integration_config.digital_file_ids`.
+         * Identifier of the attached file. Pass it to `DELETE /entitlements/{id}/files/{file_id}`
+         * to detach the file later.
          */
         fun fileId(fileId: String) = fileId(JsonField.of(fileId))
 

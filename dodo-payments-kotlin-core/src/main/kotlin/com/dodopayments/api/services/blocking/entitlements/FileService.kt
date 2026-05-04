@@ -25,12 +25,7 @@ interface FileService {
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): FileService
 
-    /**
-     * Companion to `post_entitlement_file`. Deletes the file from the Entitlements Engine
-     * (force=true) and atomically removes the `file_id` from the entitlement's
-     * `integration_config.digital_file_ids` JSONB array. EE delete happens first; if it fails we
-     * surface the error and leave local state untouched.
-     */
+    /** Detach a previously-attached file from a `digital_files` entitlement. */
     fun delete(
         fileId: String,
         params: FileDeleteParams,
@@ -40,12 +35,7 @@ interface FileService {
     /** @see delete */
     fun delete(params: FileDeleteParams, requestOptions: RequestOptions = RequestOptions.none())
 
-    /**
-     * Streams a multipart/form-data body to the Entitlements Engine (`POST
-     * /api/digital-files/dodo/files/upload`) and appends the returned `file_id` to the
-     * entitlement's `integration_config.digital_file_ids` using a JSONB array append. Compensates
-     * EE-side on local DB write failure (best-effort delete of the just-uploaded file).
-     */
+    /** Attach a file to a `digital_files` entitlement. Per-file size cap: 500 MiB. */
     fun upload(
         id: String,
         params: FileUploadParams = FileUploadParams.none(),
