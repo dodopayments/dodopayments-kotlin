@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
 
+/** One file in a digital-product delivery payload. */
 class DigitalProductDeliveryFile
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
@@ -42,6 +43,8 @@ private constructor(
     ) : this(downloadUrl, expiresIn, fileId, filename, contentType, fileSize, mutableMapOf())
 
     /**
+     * Short-lived presigned URL for downloading the file.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -56,24 +59,32 @@ private constructor(
     fun expiresIn(): Long = expiresIn.getRequired("expires_in")
 
     /**
+     * Identifier of the attached file.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun fileId(): String = fileId.getRequired("file_id")
 
     /**
+     * Original filename of the attached file.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun filename(): String = filename.getRequired("filename")
 
     /**
+     * Optional content-type declared at upload.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
     fun contentType(): String? = contentType.getNullable("content_type")
 
     /**
+     * Optional size of the file in bytes.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
@@ -174,6 +185,7 @@ private constructor(
             additionalProperties = digitalProductDeliveryFile.additionalProperties.toMutableMap()
         }
 
+        /** Short-lived presigned URL for downloading the file. */
         fun downloadUrl(downloadUrl: String) = downloadUrl(JsonField.of(downloadUrl))
 
         /**
@@ -196,6 +208,7 @@ private constructor(
          */
         fun expiresIn(expiresIn: JsonField<Long>) = apply { this.expiresIn = expiresIn }
 
+        /** Identifier of the attached file. */
         fun fileId(fileId: String) = fileId(JsonField.of(fileId))
 
         /**
@@ -206,6 +219,7 @@ private constructor(
          */
         fun fileId(fileId: JsonField<String>) = apply { this.fileId = fileId }
 
+        /** Original filename of the attached file. */
         fun filename(filename: String) = filename(JsonField.of(filename))
 
         /**
@@ -216,6 +230,7 @@ private constructor(
          */
         fun filename(filename: JsonField<String>) = apply { this.filename = filename }
 
+        /** Optional content-type declared at upload. */
         fun contentType(contentType: String?) = contentType(JsonField.ofNullable(contentType))
 
         /**
@@ -227,6 +242,7 @@ private constructor(
          */
         fun contentType(contentType: JsonField<String>) = apply { this.contentType = contentType }
 
+        /** Optional size of the file in bytes. */
         fun fileSize(fileSize: Long?) = fileSize(JsonField.ofNullable(fileSize))
 
         /**

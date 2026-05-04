@@ -18,9 +18,8 @@ import java.util.Collections
 import java.util.Objects
 
 /**
- * Digital-product-delivery payload for a grant. Populated for grants whose entitlement has
- * `integration_type = 'digital_files'`. `files` carries presigned download URLs; the source (EE
- * service or legacy in-process S3 presigning) is opaque to the caller.
+ * Digital-product-delivery payload, present on grants for `digital_files` entitlements. Each file
+ * carries a short-lived presigned download URL.
  */
 class DigitalProductDelivery
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
@@ -45,18 +44,25 @@ private constructor(
     ) : this(files, externalUrl, instructions, mutableMapOf())
 
     /**
+     * One entry per attached file.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun files(): List<DigitalProductDeliveryFile> = files.getRequired("files")
 
     /**
+     * Optional external URL, passed through from the entitlement configuration.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
     fun externalUrl(): String? = externalUrl.getNullable("external_url")
 
     /**
+     * Optional human-readable delivery instructions, passed through from the entitlement
+     * configuration.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
@@ -129,6 +135,7 @@ private constructor(
             additionalProperties = digitalProductDelivery.additionalProperties.toMutableMap()
         }
 
+        /** One entry per attached file. */
         fun files(files: List<DigitalProductDeliveryFile>) = files(JsonField.of(files))
 
         /**
@@ -152,6 +159,7 @@ private constructor(
                 (files ?: JsonField.of(mutableListOf())).also { checkKnown("files", it).add(file) }
         }
 
+        /** Optional external URL, passed through from the entitlement configuration. */
         fun externalUrl(externalUrl: String?) = externalUrl(JsonField.ofNullable(externalUrl))
 
         /**
@@ -163,6 +171,10 @@ private constructor(
          */
         fun externalUrl(externalUrl: JsonField<String>) = apply { this.externalUrl = externalUrl }
 
+        /**
+         * Optional human-readable delivery instructions, passed through from the entitlement
+         * configuration.
+         */
         fun instructions(instructions: String?) = instructions(JsonField.ofNullable(instructions))
 
         /**

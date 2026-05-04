@@ -43,10 +43,8 @@ interface GrantServiceAsync {
         list(id, GrantListParams.none(), requestOptions)
 
     /**
-     * Revokes a single entitlement grant for the caller's business. For LicenseKey integrations,
-     * also disables the backing license key. Idempotent: re-revoking an already-revoked grant
-     * returns 200 with current state. The revocation reason is always set to "manual" for
-     * API-initiated revocations.
+     * Revoke a single grant. Idempotent: re-revoking an already-revoked grant returns the grant in
+     * its current state.
      */
     suspend fun revoke(
         grantId: String,

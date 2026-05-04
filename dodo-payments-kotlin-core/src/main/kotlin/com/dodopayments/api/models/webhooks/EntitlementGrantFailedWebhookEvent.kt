@@ -49,6 +49,9 @@ private constructor(
     fun businessId(): String = businessId.getRequired("business_id")
 
     /**
+     * Detailed view of a single entitlement grant: who it's for, its lifecycle state, and any
+     * integration-specific delivery payload.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -160,6 +163,10 @@ private constructor(
          */
         fun businessId(businessId: JsonField<String>) = apply { this.businessId = businessId }
 
+        /**
+         * Detailed view of a single entitlement grant: who it's for, its lifecycle state, and any
+         * integration-specific delivery payload.
+         */
         fun data(data: EntitlementGrant) = data(JsonField.of(data))
 
         /**

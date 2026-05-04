@@ -4,6 +4,7 @@ package com.dodopayments.api.models.entitlements
 
 import com.dodopayments.api.core.BaseDeserializer
 import com.dodopayments.api.core.BaseSerializer
+import com.dodopayments.api.core.Enum
 import com.dodopayments.api.core.ExcludeMissing
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
@@ -30,8 +31,8 @@ import java.util.Collections
 import java.util.Objects
 
 /**
- * Platform-specific configuration for an entitlement. Each variant uses unique field names so
- * `#[serde(untagged)]` can disambiguate correctly.
+ * Integration-specific configuration supplied when creating or updating an entitlement. The shape
+ * required matches the entitlement's `integration_type`.
  */
 @JsonDeserialize(using = IntegrationConfig.Deserializer::class)
 @JsonSerialize(using = IntegrationConfig.Serializer::class)
@@ -355,7 +356,7 @@ private constructor(
     class GitHubConfig
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
-        private val permission: JsonField<String>,
+        private val permission: JsonField<Permission>,
         private val targetId: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -364,21 +365,23 @@ private constructor(
         private constructor(
             @JsonProperty("permission")
             @ExcludeMissing
-            permission: JsonField<String> = JsonMissing.of(),
+            permission: JsonField<Permission> = JsonMissing.of(),
             @JsonProperty("target_id")
             @ExcludeMissing
             targetId: JsonField<String> = JsonMissing.of(),
         ) : this(permission, targetId, mutableMapOf())
 
         /**
-         * One of: pull, push, admin, maintain, triage
+         * Permission to grant on the repository.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun permission(): String = permission.getRequired("permission")
+        fun permission(): Permission = permission.getRequired("permission")
 
         /**
+         * Repository or organisation slug to grant access to.
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
@@ -391,7 +394,7 @@ private constructor(
          */
         @JsonProperty("permission")
         @ExcludeMissing
-        fun _permission(): JsonField<String> = permission
+        fun _permission(): JsonField<Permission> = permission
 
         /**
          * Returns the raw JSON value of [targetId].
@@ -429,7 +432,7 @@ private constructor(
         /** A builder for [GitHubConfig]. */
         class Builder internal constructor() {
 
-            private var permission: JsonField<String>? = null
+            private var permission: JsonField<Permission>? = null
             private var targetId: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -439,18 +442,21 @@ private constructor(
                 additionalProperties = githubConfig.additionalProperties.toMutableMap()
             }
 
-            /** One of: pull, push, admin, maintain, triage */
-            fun permission(permission: String) = permission(JsonField.of(permission))
+            /** Permission to grant on the repository. */
+            fun permission(permission: Permission) = permission(JsonField.of(permission))
 
             /**
              * Sets [Builder.permission] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.permission] with a well-typed [String] value
+             * You should usually call [Builder.permission] with a well-typed [Permission] value
              * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun permission(permission: JsonField<String>) = apply { this.permission = permission }
+            fun permission(permission: JsonField<Permission>) = apply {
+                this.permission = permission
+            }
 
+            /** Repository or organisation slug to grant access to. */
             fun targetId(targetId: String) = targetId(JsonField.of(targetId))
 
             /**
@@ -509,7 +515,7 @@ private constructor(
                 return@apply
             }
 
-            permission()
+            permission().validate()
             targetId()
             validated = true
         }
@@ -529,8 +535,156 @@ private constructor(
          * Used for best match union deserialization.
          */
         internal fun validity(): Int =
-            (if (permission.asKnown() == null) 0 else 1) +
-                (if (targetId.asKnown() == null) 0 else 1)
+            (permission.asKnown()?.validity() ?: 0) + (if (targetId.asKnown() == null) 0 else 1)
+
+        /** Permission to grant on the repository. */
+        class Permission @JsonCreator private constructor(private val value: JsonField<String>) :
+            Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                val PULL = of("pull")
+
+                val PUSH = of("push")
+
+                val ADMIN = of("admin")
+
+                val MAINTAIN = of("maintain")
+
+                val TRIAGE = of("triage")
+
+                fun of(value: String) = Permission(JsonField.of(value))
+            }
+
+            /** An enum containing [Permission]'s known values. */
+            enum class Known {
+                PULL,
+                PUSH,
+                ADMIN,
+                MAINTAIN,
+                TRIAGE,
+            }
+
+            /**
+             * An enum containing [Permission]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [Permission] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                PULL,
+                PUSH,
+                ADMIN,
+                MAINTAIN,
+                TRIAGE,
+                /**
+                 * An enum member indicating that [Permission] was instantiated with an unknown
+                 * value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    PULL -> Value.PULL
+                    PUSH -> Value.PUSH
+                    ADMIN -> Value.ADMIN
+                    MAINTAIN -> Value.MAINTAIN
+                    TRIAGE -> Value.TRIAGE
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws DodoPaymentsInvalidDataException if this class instance's value is a not a
+             *   known member.
+             */
+            fun known(): Known =
+                when (this) {
+                    PULL -> Known.PULL
+                    PUSH -> Known.PUSH
+                    ADMIN -> Known.ADMIN
+                    MAINTAIN -> Known.MAINTAIN
+                    TRIAGE -> Known.TRIAGE
+                    else -> throw DodoPaymentsInvalidDataException("Unknown Permission: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws DodoPaymentsInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString()
+                    ?: throw DodoPaymentsInvalidDataException("Value is not a String")
+
+            private var validated: Boolean = false
+
+            fun validate(): Permission = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: DodoPaymentsInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Permission && value == other.value
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -568,12 +722,16 @@ private constructor(
         ) : this(guildId, roleId, mutableMapOf())
 
         /**
+         * Discord guild (server) ID.
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun guildId(): String = guildId.getRequired("guild_id")
 
         /**
+         * Optional Discord role to assign within the guild.
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
@@ -631,6 +789,7 @@ private constructor(
                 additionalProperties = discordConfig.additionalProperties.toMutableMap()
             }
 
+            /** Discord guild (server) ID. */
             fun guildId(guildId: String) = guildId(JsonField.of(guildId))
 
             /**
@@ -642,6 +801,7 @@ private constructor(
              */
             fun guildId(guildId: JsonField<String>) = apply { this.guildId = guildId }
 
+            /** Optional Discord role to assign within the guild. */
             fun roleId(roleId: String?) = roleId(JsonField.ofNullable(roleId))
 
             /**
@@ -753,6 +913,8 @@ private constructor(
         ) : this(chatId, mutableMapOf())
 
         /**
+         * Telegram chat ID. For groups this is typically a negative integer.
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
@@ -801,6 +963,7 @@ private constructor(
                 additionalProperties = telegramConfig.additionalProperties.toMutableMap()
             }
 
+            /** Telegram chat ID. For groups this is typically a negative integer. */
             fun chatId(chatId: String) = chatId(JsonField.of(chatId))
 
             /**
@@ -907,6 +1070,8 @@ private constructor(
         ) : this(figmaFileId, mutableMapOf())
 
         /**
+         * Figma file identifier to grant access to.
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
@@ -957,6 +1122,7 @@ private constructor(
                 additionalProperties = figmaConfig.additionalProperties.toMutableMap()
             }
 
+            /** Figma file identifier to grant access to. */
             fun figmaFileId(figmaFileId: String) = figmaFileId(JsonField.of(figmaFileId))
 
             /**
@@ -1068,6 +1234,8 @@ private constructor(
         ) : this(framerTemplateId, mutableMapOf())
 
         /**
+         * Framer template identifier to grant access to.
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
@@ -1119,6 +1287,7 @@ private constructor(
                 additionalProperties = framerConfig.additionalProperties.toMutableMap()
             }
 
+            /** Framer template identifier to grant access to. */
             fun framerTemplateId(framerTemplateId: String) =
                 framerTemplateId(JsonField.of(framerTemplateId))
 
@@ -1231,6 +1400,8 @@ private constructor(
         ) : this(notionTemplateId, mutableMapOf())
 
         /**
+         * Notion template identifier to grant access to.
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
@@ -1282,6 +1453,7 @@ private constructor(
                 additionalProperties = notionConfig.additionalProperties.toMutableMap()
             }
 
+            /** Notion template identifier to grant access to. */
             fun notionTemplateId(notionTemplateId: String) =
                 notionTemplateId(JsonField.of(notionTemplateId))
 
@@ -1406,31 +1578,38 @@ private constructor(
         ) : this(digitalFileIds, externalUrl, instructions, legacyFileIds, mutableMapOf())
 
         /**
+         * Files attached to this entitlement. Add files via `POST /entitlements/{id}/files` and
+         * remove them via `DELETE /entitlements/{id}/files/{file_id}`.
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun digitalFileIds(): List<String> = digitalFileIds.getRequired("digital_file_ids")
 
         /**
+         * Optional external URL shown to the customer alongside the files.
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
         fun externalUrl(): String? = externalUrl.getNullable("external_url")
 
         /**
+         * Optional human-readable delivery instructions shown to the customer alongside the files.
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
         fun instructions(): String? = instructions.getNullable("instructions")
 
         /**
-         * Three-way patchable field (mirrors the credit_entitlements pattern):
-         * * omitted → preserve persisted (`None`)
-         * * `null` → clear (`Some(None)`)
-         * * `[...]` → replace (`Some(Some(...))`)
+         * Three-way patchable list of legacy file identifiers:
+         * * omitted → preserve the current value
+         * * `null` → clear
+         * * `[...]` → replace
          *
-         * On Create / storage we collapse "clear" and empty-array to `None` so the persisted JSONB
-         * never carries a `null` legacy_file_ids key.
+         * On create, an omitted field, an explicit `null`, or an empty array all result in no
+         * legacy files attached.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
@@ -1518,6 +1697,10 @@ private constructor(
                 additionalProperties = digitalFilesConfig.additionalProperties.toMutableMap()
             }
 
+            /**
+             * Files attached to this entitlement. Add files via `POST /entitlements/{id}/files` and
+             * remove them via `DELETE /entitlements/{id}/files/{file_id}`.
+             */
             fun digitalFileIds(digitalFileIds: List<String>) =
                 digitalFileIds(JsonField.of(digitalFileIds))
 
@@ -1544,6 +1727,7 @@ private constructor(
                     }
             }
 
+            /** Optional external URL shown to the customer alongside the files. */
             fun externalUrl(externalUrl: String?) = externalUrl(JsonField.ofNullable(externalUrl))
 
             /**
@@ -1557,6 +1741,10 @@ private constructor(
                 this.externalUrl = externalUrl
             }
 
+            /**
+             * Optional human-readable delivery instructions shown to the customer alongside the
+             * files.
+             */
             fun instructions(instructions: String?) =
                 instructions(JsonField.ofNullable(instructions))
 
@@ -1572,13 +1760,13 @@ private constructor(
             }
 
             /**
-             * Three-way patchable field (mirrors the credit_entitlements pattern):
-             * * omitted → preserve persisted (`None`)
-             * * `null` → clear (`Some(None)`)
-             * * `[...]` → replace (`Some(Some(...))`)
+             * Three-way patchable list of legacy file identifiers:
+             * * omitted → preserve the current value
+             * * `null` → clear
+             * * `[...]` → replace
              *
-             * On Create / storage we collapse "clear" and empty-array to `None` so the persisted
-             * JSONB never carries a `null` legacy_file_ids key.
+             * On create, an omitted field, an explicit `null`, or an empty array all result in no
+             * legacy files attached.
              */
             fun legacyFileIds(legacyFileIds: List<String>?) =
                 legacyFileIds(JsonField.ofNullable(legacyFileIds))
@@ -1743,24 +1931,33 @@ private constructor(
         )
 
         /**
+         * Optional message displayed when a customer activates the license key (≤ 2500 characters).
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
         fun activationMessage(): String? = activationMessage.getNullable("activation_message")
 
         /**
+         * Maximum activations allowed per issued license key. Omit for unlimited.
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
         fun activationsLimit(): Int? = activationsLimit.getNullable("activations_limit")
 
         /**
+         * Validity duration of issued license keys. Provide both `duration_count` and
+         * `duration_interval` together for a fixed duration; omit both for non-expiring keys.
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
         fun durationCount(): Int? = durationCount.getNullable("duration_count")
 
         /**
+         * Unit of `duration_count`.
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
@@ -1841,6 +2038,10 @@ private constructor(
                 additionalProperties = licenseKeyConfig.additionalProperties.toMutableMap()
             }
 
+            /**
+             * Optional message displayed when a customer activates the license key (≤ 2500
+             * characters).
+             */
             fun activationMessage(activationMessage: String?) =
                 activationMessage(JsonField.ofNullable(activationMessage))
 
@@ -1855,6 +2056,7 @@ private constructor(
                 this.activationMessage = activationMessage
             }
 
+            /** Maximum activations allowed per issued license key. Omit for unlimited. */
             fun activationsLimit(activationsLimit: Int?) =
                 activationsLimit(JsonField.ofNullable(activationsLimit))
 
@@ -1876,6 +2078,10 @@ private constructor(
                 this.activationsLimit = activationsLimit
             }
 
+            /**
+             * Validity duration of issued license keys. Provide both `duration_count` and
+             * `duration_interval` together for a fixed duration; omit both for non-expiring keys.
+             */
             fun durationCount(durationCount: Int?) =
                 durationCount(JsonField.ofNullable(durationCount))
 
@@ -1897,6 +2103,7 @@ private constructor(
                 this.durationCount = durationCount
             }
 
+            /** Unit of `duration_count`. */
             fun durationInterval(durationInterval: TimeInterval?) =
                 durationInterval(JsonField.ofNullable(durationInterval))
 

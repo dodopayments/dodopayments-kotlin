@@ -19,7 +19,7 @@ internal class IntegrationConfigResponseTest {
     fun ofGitHubConfig() {
         val githubConfig =
             IntegrationConfigResponse.GitHubConfig.builder()
-                .permission("permission")
+                .permission(IntegrationConfigResponse.GitHubConfig.Permission.PULL)
                 .targetId("target_id")
                 .build()
 
@@ -41,7 +41,7 @@ internal class IntegrationConfigResponseTest {
         val integrationConfigResponse =
             IntegrationConfigResponse.ofGitHubConfig(
                 IntegrationConfigResponse.GitHubConfig.builder()
-                    .permission("permission")
+                    .permission(IntegrationConfigResponse.GitHubConfig.Permission.PULL)
                     .targetId("target_id")
                     .build()
             )
@@ -251,7 +251,6 @@ internal class IntegrationConfigResponseTest {
                                 .expiresIn(0L)
                                 .fileId("file_id")
                                 .filename("filename")
-                                .source("source")
                                 .contentType("content_type")
                                 .fileSize(0L)
                                 .build()
@@ -290,7 +289,6 @@ internal class IntegrationConfigResponseTest {
                                     .expiresIn(0L)
                                     .fileId("file_id")
                                     .filename("filename")
-                                    .source("source")
                                     .contentType("content_type")
                                     .fileSize(0L)
                                     .build()
