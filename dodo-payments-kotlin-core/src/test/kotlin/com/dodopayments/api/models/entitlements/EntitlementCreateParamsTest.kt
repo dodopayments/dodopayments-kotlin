@@ -13,7 +13,7 @@ internal class EntitlementCreateParamsTest {
         EntitlementCreateParams.builder()
             .integrationConfig(
                 IntegrationConfig.GitHubConfig.builder()
-                    .permission("permission")
+                    .permission(IntegrationConfig.GitHubConfig.Permission.PULL)
                     .targetId("target_id")
                     .build()
             )
@@ -34,7 +34,7 @@ internal class EntitlementCreateParamsTest {
             EntitlementCreateParams.builder()
                 .integrationConfig(
                     IntegrationConfig.GitHubConfig.builder()
-                        .permission("permission")
+                        .permission(IntegrationConfig.GitHubConfig.Permission.PULL)
                         .targetId("target_id")
                         .build()
                 )
@@ -54,7 +54,7 @@ internal class EntitlementCreateParamsTest {
             .isEqualTo(
                 IntegrationConfig.ofGitHub(
                     IntegrationConfig.GitHubConfig.builder()
-                        .permission("permission")
+                        .permission(IntegrationConfig.GitHubConfig.Permission.PULL)
                         .targetId("target_id")
                         .build()
                 )
@@ -76,7 +76,7 @@ internal class EntitlementCreateParamsTest {
             EntitlementCreateParams.builder()
                 .integrationConfig(
                     IntegrationConfig.GitHubConfig.builder()
-                        .permission("permission")
+                        .permission(IntegrationConfig.GitHubConfig.Permission.PULL)
                         .targetId("target_id")
                         .build()
                 )
@@ -90,7 +90,7 @@ internal class EntitlementCreateParamsTest {
             .isEqualTo(
                 IntegrationConfig.ofGitHub(
                     IntegrationConfig.GitHubConfig.builder()
-                        .permission("permission")
+                        .permission(IntegrationConfig.GitHubConfig.Permission.PULL)
                         .targetId("target_id")
                         .build()
                 )

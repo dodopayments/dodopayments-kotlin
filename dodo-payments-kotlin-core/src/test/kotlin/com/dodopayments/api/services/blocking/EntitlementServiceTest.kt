@@ -29,7 +29,7 @@ internal class EntitlementServiceTest {
                 EntitlementCreateParams.builder()
                     .integrationConfig(
                         IntegrationConfig.GitHubConfig.builder()
-                            .permission("permission")
+                            .permission(IntegrationConfig.GitHubConfig.Permission.PULL)
                             .targetId("target_id")
                             .build()
                     )
@@ -77,7 +77,7 @@ internal class EntitlementServiceTest {
                     .description("description")
                     .integrationConfig(
                         IntegrationConfig.GitHubConfig.builder()
-                            .permission("permission")
+                            .permission(IntegrationConfig.GitHubConfig.Permission.PULL)
                             .targetId("target_id")
                             .build()
                     )

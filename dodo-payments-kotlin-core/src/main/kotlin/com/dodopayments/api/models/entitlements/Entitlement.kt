@@ -7,6 +7,7 @@ import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.checkRequired
+import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -16,6 +17,10 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
+/**
+ * Detailed view of a single entitlement: identity, integration type, integration-specific
+ * configuration, and metadata.
+ */
 class Entitlement
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
@@ -25,10 +30,10 @@ private constructor(
     private val integrationConfig: JsonField<IntegrationConfigResponse>,
     private val integrationType: JsonField<EntitlementIntegrationType>,
     private val isActive: JsonField<Boolean>,
+    private val metadata: JsonField<Metadata>,
     private val name: JsonField<String>,
     private val updatedAt: JsonField<OffsetDateTime>,
     private val description: JsonField<String>,
-    private val metadata: JsonValue,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -48,6 +53,7 @@ private constructor(
         @ExcludeMissing
         integrationType: JsonField<EntitlementIntegrationType> = JsonMissing.of(),
         @JsonProperty("is_active") @ExcludeMissing isActive: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("metadata") @ExcludeMissing metadata: JsonField<Metadata> = JsonMissing.of(),
         @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
         @JsonProperty("updated_at")
         @ExcludeMissing
@@ -55,7 +61,6 @@ private constructor(
         @JsonProperty("description")
         @ExcludeMissing
         description: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("metadata") @ExcludeMissing metadata: JsonValue = JsonMissing.of(),
     ) : this(
         id,
         businessId,
@@ -63,36 +68,40 @@ private constructor(
         integrationConfig,
         integrationType,
         isActive,
+        metadata,
         name,
         updatedAt,
         description,
-        metadata,
         mutableMapOf(),
     )
 
     /**
+     * Unique identifier of the entitlement.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun id(): String = id.getRequired("id")
 
     /**
+     * Identifier of the business that owns this entitlement.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun businessId(): String = businessId.getRequired("business_id")
 
     /**
+     * Timestamp when the entitlement was created.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
 
     /**
-     * Public-facing variant of [`IntegrationConfig`]. Mirrors every variant shape on the wire
-     * EXCEPT `DigitalFiles`, which is replaced with a hydrated `digital_files` object (resolved
-     * download URLs etc.). The persisted JSONB stays ID-only via [`IntegrationConfig`]; this enum
-     * is response-only.
+     * Integration-specific configuration. For `digital_files` entitlements this includes presigned
+     * download URLs for each attached file.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -101,6 +110,8 @@ private constructor(
         integrationConfig.getRequired("integration_config")
 
     /**
+     * Platform integration this entitlement uses.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -108,36 +119,45 @@ private constructor(
         integrationType.getRequired("integration_type")
 
     /**
+     * Always `true` for entitlements returned by the public API; soft-deleted entitlements are not
+     * returned.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun isActive(): Boolean = isActive.getRequired("is_active")
 
     /**
+     * Arbitrary key-value metadata supplied at creation or via PATCH.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun metadata(): Metadata = metadata.getRequired("metadata")
+
+    /**
+     * Display name supplied at creation.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun name(): String = name.getRequired("name")
 
     /**
+     * Timestamp when the entitlement was last modified.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun updatedAt(): OffsetDateTime = updatedAt.getRequired("updated_at")
 
     /**
+     * Optional description supplied at creation.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
     fun description(): String? = description.getNullable("description")
-
-    /**
-     * This arbitrary value can be deserialized into a custom type using the `convert` method:
-     * ```kotlin
-     * val myObject: MyClass = entitlement.metadata().convert(MyClass::class.java)
-     * ```
-     */
-    @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonValue = metadata
 
     /**
      * Returns the raw JSON value of [id].
@@ -189,6 +209,13 @@ private constructor(
     @JsonProperty("is_active") @ExcludeMissing fun _isActive(): JsonField<Boolean> = isActive
 
     /**
+     * Returns the raw JSON value of [metadata].
+     *
+     * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
+
+    /**
      * Returns the raw JSON value of [name].
      *
      * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
@@ -236,6 +263,7 @@ private constructor(
          * .integrationConfig()
          * .integrationType()
          * .isActive()
+         * .metadata()
          * .name()
          * .updatedAt()
          * ```
@@ -252,10 +280,10 @@ private constructor(
         private var integrationConfig: JsonField<IntegrationConfigResponse>? = null
         private var integrationType: JsonField<EntitlementIntegrationType>? = null
         private var isActive: JsonField<Boolean>? = null
+        private var metadata: JsonField<Metadata>? = null
         private var name: JsonField<String>? = null
         private var updatedAt: JsonField<OffsetDateTime>? = null
         private var description: JsonField<String> = JsonMissing.of()
-        private var metadata: JsonValue = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(entitlement: Entitlement) = apply {
@@ -265,13 +293,14 @@ private constructor(
             integrationConfig = entitlement.integrationConfig
             integrationType = entitlement.integrationType
             isActive = entitlement.isActive
+            metadata = entitlement.metadata
             name = entitlement.name
             updatedAt = entitlement.updatedAt
             description = entitlement.description
-            metadata = entitlement.metadata
             additionalProperties = entitlement.additionalProperties.toMutableMap()
         }
 
+        /** Unique identifier of the entitlement. */
         fun id(id: String) = id(JsonField.of(id))
 
         /**
@@ -282,6 +311,7 @@ private constructor(
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
+        /** Identifier of the business that owns this entitlement. */
         fun businessId(businessId: String) = businessId(JsonField.of(businessId))
 
         /**
@@ -293,6 +323,7 @@ private constructor(
          */
         fun businessId(businessId: JsonField<String>) = apply { this.businessId = businessId }
 
+        /** Timestamp when the entitlement was created. */
         fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
 
         /**
@@ -305,10 +336,8 @@ private constructor(
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
         /**
-         * Public-facing variant of [`IntegrationConfig`]. Mirrors every variant shape on the wire
-         * EXCEPT `DigitalFiles`, which is replaced with a hydrated `digital_files` object (resolved
-         * download URLs etc.). The persisted JSONB stays ID-only via [`IntegrationConfig`]; this
-         * enum is response-only.
+         * Integration-specific configuration. For `digital_files` entitlements this includes
+         * presigned download URLs for each attached file.
          */
         fun integrationConfig(integrationConfig: IntegrationConfigResponse) =
             integrationConfig(JsonField.of(integrationConfig))
@@ -380,6 +409,7 @@ private constructor(
         fun integrationConfig(licenseKeyConfig: IntegrationConfigResponse.LicenseKeyConfig) =
             integrationConfig(IntegrationConfigResponse.ofLicenseKeyConfig(licenseKeyConfig))
 
+        /** Platform integration this entitlement uses. */
         fun integrationType(integrationType: EntitlementIntegrationType) =
             integrationType(JsonField.of(integrationType))
 
@@ -394,6 +424,10 @@ private constructor(
             this.integrationType = integrationType
         }
 
+        /**
+         * Always `true` for entitlements returned by the public API; soft-deleted entitlements are
+         * not returned.
+         */
         fun isActive(isActive: Boolean) = isActive(JsonField.of(isActive))
 
         /**
@@ -405,6 +439,19 @@ private constructor(
          */
         fun isActive(isActive: JsonField<Boolean>) = apply { this.isActive = isActive }
 
+        /** Arbitrary key-value metadata supplied at creation or via PATCH. */
+        fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
+
+        /**
+         * Sets [Builder.metadata] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.metadata] with a well-typed [Metadata] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
+
+        /** Display name supplied at creation. */
         fun name(name: String) = name(JsonField.of(name))
 
         /**
@@ -415,6 +462,7 @@ private constructor(
          */
         fun name(name: JsonField<String>) = apply { this.name = name }
 
+        /** Timestamp when the entitlement was last modified. */
         fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))
 
         /**
@@ -426,6 +474,7 @@ private constructor(
          */
         fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply { this.updatedAt = updatedAt }
 
+        /** Optional description supplied at creation. */
         fun description(description: String?) = description(JsonField.ofNullable(description))
 
         /**
@@ -436,8 +485,6 @@ private constructor(
          * value.
          */
         fun description(description: JsonField<String>) = apply { this.description = description }
-
-        fun metadata(metadata: JsonValue) = apply { this.metadata = metadata }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -471,6 +518,7 @@ private constructor(
          * .integrationConfig()
          * .integrationType()
          * .isActive()
+         * .metadata()
          * .name()
          * .updatedAt()
          * ```
@@ -485,10 +533,10 @@ private constructor(
                 checkRequired("integrationConfig", integrationConfig),
                 checkRequired("integrationType", integrationType),
                 checkRequired("isActive", isActive),
+                checkRequired("metadata", metadata),
                 checkRequired("name", name),
                 checkRequired("updatedAt", updatedAt),
                 description,
-                metadata,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -506,6 +554,7 @@ private constructor(
         integrationConfig().validate()
         integrationType().validate()
         isActive()
+        metadata().validate()
         name()
         updatedAt()
         description()
@@ -532,9 +581,108 @@ private constructor(
             (integrationConfig.asKnown()?.validity() ?: 0) +
             (integrationType.asKnown()?.validity() ?: 0) +
             (if (isActive.asKnown() == null) 0 else 1) +
+            (metadata.asKnown()?.validity() ?: 0) +
             (if (name.asKnown() == null) 0 else 1) +
             (if (updatedAt.asKnown() == null) 0 else 1) +
             (if (description.asKnown() == null) 0 else 1)
+
+    /** Arbitrary key-value metadata supplied at creation or via PATCH. */
+    class Metadata
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Metadata]. */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [Metadata]. */
+        class Builder internal constructor() {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(metadata: Metadata) = apply {
+                additionalProperties = metadata.additionalProperties.toMutableMap()
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Metadata].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Metadata = Metadata(additionalProperties.toImmutable())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Metadata = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Metadata && additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -548,10 +696,10 @@ private constructor(
             integrationConfig == other.integrationConfig &&
             integrationType == other.integrationType &&
             isActive == other.isActive &&
+            metadata == other.metadata &&
             name == other.name &&
             updatedAt == other.updatedAt &&
             description == other.description &&
-            metadata == other.metadata &&
             additionalProperties == other.additionalProperties
     }
 
@@ -563,10 +711,10 @@ private constructor(
             integrationConfig,
             integrationType,
             isActive,
+            metadata,
             name,
             updatedAt,
             description,
-            metadata,
             additionalProperties,
         )
     }
@@ -574,5 +722,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Entitlement{id=$id, businessId=$businessId, createdAt=$createdAt, integrationConfig=$integrationConfig, integrationType=$integrationType, isActive=$isActive, name=$name, updatedAt=$updatedAt, description=$description, metadata=$metadata, additionalProperties=$additionalProperties}"
+        "Entitlement{id=$id, businessId=$businessId, createdAt=$createdAt, integrationConfig=$integrationConfig, integrationType=$integrationType, isActive=$isActive, metadata=$metadata, name=$name, updatedAt=$updatedAt, description=$description, additionalProperties=$additionalProperties}"
 }
