@@ -99,6 +99,30 @@ private constructor(
 
     fun _json(): JsonValue? = _json
 
+    /**
+     * Maps this instance's current variant to a value of type [T] using the given [visitor].
+     *
+     * Note that this method is _not_ forwards compatible with new variants from the API, unless
+     * [visitor] overrides [Visitor.unknown]. To handle variants not known to this version of the
+     * SDK gracefully, consider overriding [Visitor.unknown]:
+     * ```kotlin
+     * import com.dodopayments.api.core.JsonValue
+     *
+     * val result: String? = integrationConfig.accept(object : IntegrationConfig.Visitor<String?> {
+     *     override fun visitGitHub(github: GitHubConfig): String? = github.toString()
+     *
+     *     // ...
+     *
+     *     override fun unknown(json: JsonValue?): String? {
+     *         // Or inspect the `json`.
+     *         return null
+     *     }
+     * })
+     * ```
+     *
+     * @throws DodoPaymentsInvalidDataException if [Visitor.unknown] is not overridden in [visitor]
+     *   and the current variant is unknown.
+     */
     fun <T> accept(visitor: Visitor<T>): T =
         when {
             github != null -> visitor.visitGitHub(github)
@@ -114,6 +138,14 @@ private constructor(
 
     private var validated: Boolean = false
 
+    /**
+     * Validates that the types of all values in this object match their expected types recursively.
+     *
+     * This method is _not_ forwards compatible with new types from the API for existing fields.
+     *
+     * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't match its
+     *   expected type.
+     */
     fun validate(): IntegrationConfig = apply {
         if (validated) {
             return@apply
@@ -510,6 +542,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't match
+         *   its expected type.
+         */
         fun validate(): GitHubConfig = apply {
             if (validated) {
                 return@apply
@@ -648,6 +689,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
             fun validate(): Permission = apply {
                 if (validated) {
                     return@apply
@@ -854,6 +905,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't match
+         *   its expected type.
+         */
         fun validate(): DiscordConfig = apply {
             if (validated) {
                 return@apply
@@ -1012,6 +1072,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't match
+         *   its expected type.
+         */
         fun validate(): TelegramConfig = apply {
             if (validated) {
                 return@apply
@@ -1176,6 +1245,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't match
+         *   its expected type.
+         */
         fun validate(): FigmaConfig = apply {
             if (validated) {
                 return@apply
@@ -1342,6 +1420,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't match
+         *   its expected type.
+         */
         fun validate(): FramerConfig = apply {
             if (validated) {
                 return@apply
@@ -1508,6 +1595,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't match
+         *   its expected type.
+         */
         fun validate(): NotionConfig = apply {
             if (validated) {
                 return@apply
@@ -1837,6 +1933,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't match
+         *   its expected type.
+         */
         fun validate(): DigitalFilesConfig = apply {
             if (validated) {
                 return@apply
@@ -2154,6 +2259,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't match
+         *   its expected type.
+         */
         fun validate(): LicenseKeyConfig = apply {
             if (validated) {
                 return@apply
