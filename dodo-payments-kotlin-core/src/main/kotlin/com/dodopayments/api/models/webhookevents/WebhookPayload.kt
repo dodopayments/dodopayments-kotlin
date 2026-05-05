@@ -316,6 +316,14 @@ private constructor(
 
     private var validated: Boolean = false
 
+    /**
+     * Validates that the types of all values in this object match their expected types recursively.
+     *
+     * This method is _not_ forwards compatible with new types from the API for existing fields.
+     *
+     * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't match its
+     *   expected type.
+     */
     fun validate(): WebhookPayload = apply {
         if (validated) {
             return@apply
@@ -441,6 +449,30 @@ private constructor(
 
         fun _json(): JsonValue? = _json
 
+        /**
+         * Maps this instance's current variant to a value of type [T] using the given [visitor].
+         *
+         * Note that this method is _not_ forwards compatible with new variants from the API, unless
+         * [visitor] overrides [Visitor.unknown]. To handle variants not known to this version of
+         * the SDK gracefully, consider overriding [Visitor.unknown]:
+         * ```kotlin
+         * import com.dodopayments.api.core.JsonValue
+         *
+         * val result: String? = data.accept(object : Data.Visitor<String?> {
+         *     override fun visitPayment(payment: Payment): String? = payment.toString()
+         *
+         *     // ...
+         *
+         *     override fun unknown(json: JsonValue?): String? {
+         *         // Or inspect the `json`.
+         *         return null
+         *     }
+         * })
+         * ```
+         *
+         * @throws DodoPaymentsInvalidDataException if [Visitor.unknown] is not overridden in
+         *   [visitor] and the current variant is unknown.
+         */
         fun <T> accept(visitor: Visitor<T>): T =
             when {
                 payment != null -> visitor.visitPayment(payment)
@@ -458,6 +490,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't match
+         *   its expected type.
+         */
         fun validate(): Data = apply {
             if (validated) {
                 return@apply
@@ -2491,6 +2532,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
             fun validate(): Payment = apply {
                 if (validated) {
                     return@apply
@@ -2677,6 +2728,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): PayloadType = apply {
                     if (validated) {
                         return@apply
@@ -4523,6 +4584,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
             fun validate(): Subscription = apply {
                 if (validated) {
                     return@apply
@@ -4705,6 +4776,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): PayloadType = apply {
                     if (validated) {
                         return@apply
@@ -5419,6 +5500,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
             fun validate(): Refund = apply {
                 if (validated) {
                     return@apply
@@ -5555,6 +5646,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): PayloadType = apply {
                     if (validated) {
                         return@apply
@@ -6280,6 +6381,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
             fun validate(): Dispute = apply {
                 if (validated) {
                     return@apply
@@ -6418,6 +6529,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): PayloadType = apply {
                     if (validated) {
                         return@apply
@@ -7188,6 +7309,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
             fun validate(): LicenseKey = apply {
                 if (validated) {
                     return@apply
@@ -7328,6 +7459,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): PayloadType = apply {
                     if (validated) {
                         return@apply
@@ -8181,6 +8322,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
             fun validate(): CreditLedgerEntry = apply {
                 if (validated) {
                     return@apply
@@ -8327,6 +8478,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): PayloadType = apply {
                     if (validated) {
                         return@apply
@@ -8877,6 +9038,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
             fun validate(): CreditBalanceLow = apply {
                 if (validated) {
                     return@apply
@@ -9007,6 +9178,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): PayloadType = apply {
                     if (validated) {
                         return@apply
@@ -9445,6 +9626,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
             fun validate(): AbandonedCheckout = apply {
                 if (validated) {
                     return@apply
@@ -9581,6 +9772,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): AbandonmentReason = apply {
                     if (validated) {
                         return@apply
@@ -9707,6 +9908,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): PayloadType = apply {
                     if (validated) {
                         return@apply
@@ -9855,6 +10066,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): Status = apply {
                     if (validated) {
                         return@apply
@@ -10286,6 +10507,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
             fun validate(): DunningAttempt = apply {
                 if (validated) {
                     return@apply
@@ -10412,6 +10643,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): PayloadType = apply {
                     if (validated) {
                         return@apply
@@ -10548,6 +10789,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): Status = apply {
                     if (validated) {
                         return@apply
@@ -10681,6 +10932,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): TriggerState = apply {
                     if (validated) {
                         return@apply
@@ -11701,6 +11962,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
             fun validate(): EntitlementGrant = apply {
                 if (validated) {
                     return@apply
@@ -11853,6 +12124,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): PayloadType = apply {
                     if (validated) {
                         return@apply
