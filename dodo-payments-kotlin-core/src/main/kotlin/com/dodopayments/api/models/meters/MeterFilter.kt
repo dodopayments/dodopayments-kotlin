@@ -200,6 +200,14 @@ private constructor(
 
     private var validated: Boolean = false
 
+    /**
+     * Validates that the types of all values in this object match their expected types recursively.
+     *
+     * This method is _not_ forwards compatible with new types from the API for existing fields.
+     *
+     * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't match its
+     *   expected type.
+     */
     fun validate(): MeterFilter = apply {
         if (validated) {
             return@apply
@@ -256,6 +264,30 @@ private constructor(
 
         fun _json(): JsonValue? = _json
 
+        /**
+         * Maps this instance's current variant to a value of type [T] using the given [visitor].
+         *
+         * Note that this method is _not_ forwards compatible with new variants from the API, unless
+         * [visitor] overrides [Visitor.unknown]. To handle variants not known to this version of
+         * the SDK gracefully, consider overriding [Visitor.unknown]:
+         * ```kotlin
+         * import com.dodopayments.api.core.JsonValue
+         *
+         * val result: String? = clauses.accept(object : Clauses.Visitor<String?> {
+         *     override fun visitDirectFilterConditions(directFilterConditions: List<MeterFilterCondition>): String? = directFilterConditions.toString()
+         *
+         *     // ...
+         *
+         *     override fun unknown(json: JsonValue?): String? {
+         *         // Or inspect the `json`.
+         *         return null
+         *     }
+         * })
+         * ```
+         *
+         * @throws DodoPaymentsInvalidDataException if [Visitor.unknown] is not overridden in
+         *   [visitor] and the current variant is unknown.
+         */
         fun <T> accept(visitor: Visitor<T>): T =
             when {
                 directFilterConditions != null ->
@@ -266,6 +298,15 @@ private constructor(
 
         private var validated: Boolean = false
 
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't match
+         *   its expected type.
+         */
         fun validate(): Clauses = apply {
             if (validated) {
                 return@apply
@@ -630,6 +671,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
             fun validate(): MeterFilterCondition = apply {
                 if (validated) {
                     return@apply
@@ -691,6 +742,31 @@ private constructor(
 
                 fun _json(): JsonValue? = _json
 
+                /**
+                 * Maps this instance's current variant to a value of type [T] using the given
+                 * [visitor].
+                 *
+                 * Note that this method is _not_ forwards compatible with new variants from the
+                 * API, unless [visitor] overrides [Visitor.unknown]. To handle variants not known
+                 * to this version of the SDK gracefully, consider overriding [Visitor.unknown]:
+                 * ```kotlin
+                 * import com.dodopayments.api.core.JsonValue
+                 *
+                 * val result: String? = value.accept(object : Value.Visitor<String?> {
+                 *     override fun visitString(string: String): String? = string.toString()
+                 *
+                 *     // ...
+                 *
+                 *     override fun unknown(json: JsonValue?): String? {
+                 *         // Or inspect the `json`.
+                 *         return null
+                 *     }
+                 * })
+                 * ```
+                 *
+                 * @throws DodoPaymentsInvalidDataException if [Visitor.unknown] is not overridden
+                 *   in [visitor] and the current variant is unknown.
+                 */
                 fun <T> accept(visitor: Visitor<T>): T =
                     when {
                         string != null -> visitor.visitString(string)
@@ -701,6 +777,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): Value = apply {
                     if (validated) {
                         return@apply
@@ -1056,6 +1142,16 @@ private constructor(
 
             private var validated: Boolean = false
 
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
             fun validate(): InnerMeterFilter = apply {
                 if (validated) {
                     return@apply
@@ -1113,6 +1209,31 @@ private constructor(
 
                 fun _json(): JsonValue? = _json
 
+                /**
+                 * Maps this instance's current variant to a value of type [T] using the given
+                 * [visitor].
+                 *
+                 * Note that this method is _not_ forwards compatible with new variants from the
+                 * API, unless [visitor] overrides [Visitor.unknown]. To handle variants not known
+                 * to this version of the SDK gracefully, consider overriding [Visitor.unknown]:
+                 * ```kotlin
+                 * import com.dodopayments.api.core.JsonValue
+                 *
+                 * val result: String? = innerClauses.accept(object : InnerClauses.Visitor<String?> {
+                 *     override fun visitLevel1FilterConditions(level1FilterConditions: List<MeterFilterCondition>): String? = level1FilterConditions.toString()
+                 *
+                 *     // ...
+                 *
+                 *     override fun unknown(json: JsonValue?): String? {
+                 *         // Or inspect the `json`.
+                 *         return null
+                 *     }
+                 * })
+                 * ```
+                 *
+                 * @throws DodoPaymentsInvalidDataException if [Visitor.unknown] is not overridden
+                 *   in [visitor] and the current variant is unknown.
+                 */
                 fun <T> accept(visitor: Visitor<T>): T =
                     when {
                         level1FilterConditions != null ->
@@ -1124,6 +1245,16 @@ private constructor(
 
                 private var validated: Boolean = false
 
+                /**
+                 * Validates that the types of all values in this object match their expected types
+                 * recursively.
+                 *
+                 * This method is _not_ forwards compatible with new types from the API for existing
+                 * fields.
+                 *
+                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+                 *   match its expected type.
+                 */
                 fun validate(): InnerClauses = apply {
                     if (validated) {
                         return@apply
@@ -1511,6 +1642,16 @@ private constructor(
 
                     private var validated: Boolean = false
 
+                    /**
+                     * Validates that the types of all values in this object match their expected
+                     * types recursively.
+                     *
+                     * This method is _not_ forwards compatible with new types from the API for
+                     * existing fields.
+                     *
+                     * @throws DodoPaymentsInvalidDataException if any value type in this object
+                     *   doesn't match its expected type.
+                     */
                     fun validate(): MeterFilterCondition = apply {
                         if (validated) {
                             return@apply
@@ -1572,6 +1713,32 @@ private constructor(
 
                         fun _json(): JsonValue? = _json
 
+                        /**
+                         * Maps this instance's current variant to a value of type [T] using the
+                         * given [visitor].
+                         *
+                         * Note that this method is _not_ forwards compatible with new variants from
+                         * the API, unless [visitor] overrides [Visitor.unknown]. To handle variants
+                         * not known to this version of the SDK gracefully, consider overriding
+                         * [Visitor.unknown]:
+                         * ```kotlin
+                         * import com.dodopayments.api.core.JsonValue
+                         *
+                         * val result: String? = value.accept(object : Value.Visitor<String?> {
+                         *     override fun visitString(string: String): String? = string.toString()
+                         *
+                         *     // ...
+                         *
+                         *     override fun unknown(json: JsonValue?): String? {
+                         *         // Or inspect the `json`.
+                         *         return null
+                         *     }
+                         * })
+                         * ```
+                         *
+                         * @throws DodoPaymentsInvalidDataException if [Visitor.unknown] is not
+                         *   overridden in [visitor] and the current variant is unknown.
+                         */
                         fun <T> accept(visitor: Visitor<T>): T =
                             when {
                                 string != null -> visitor.visitString(string)
@@ -1582,6 +1749,16 @@ private constructor(
 
                         private var validated: Boolean = false
 
+                        /**
+                         * Validates that the types of all values in this object match their
+                         * expected types recursively.
+                         *
+                         * This method is _not_ forwards compatible with new types from the API for
+                         * existing fields.
+                         *
+                         * @throws DodoPaymentsInvalidDataException if any value type in this object
+                         *   doesn't match its expected type.
+                         */
                         fun validate(): Value = apply {
                             if (validated) {
                                 return@apply
@@ -1950,6 +2127,16 @@ private constructor(
 
                     private var validated: Boolean = false
 
+                    /**
+                     * Validates that the types of all values in this object match their expected
+                     * types recursively.
+                     *
+                     * This method is _not_ forwards compatible with new types from the API for
+                     * existing fields.
+                     *
+                     * @throws DodoPaymentsInvalidDataException if any value type in this object
+                     *   doesn't match its expected type.
+                     */
                     fun validate(): InnerInnerMeterFilter = apply {
                         if (validated) {
                             return@apply
@@ -2010,6 +2197,32 @@ private constructor(
 
                         fun _json(): JsonValue? = _json
 
+                        /**
+                         * Maps this instance's current variant to a value of type [T] using the
+                         * given [visitor].
+                         *
+                         * Note that this method is _not_ forwards compatible with new variants from
+                         * the API, unless [visitor] overrides [Visitor.unknown]. To handle variants
+                         * not known to this version of the SDK gracefully, consider overriding
+                         * [Visitor.unknown]:
+                         * ```kotlin
+                         * import com.dodopayments.api.core.JsonValue
+                         *
+                         * val result: String? = innerInnerClauses.accept(object : InnerInnerClauses.Visitor<String?> {
+                         *     override fun visitLevel2FilterConditions(level2FilterConditions: List<MeterFilterCondition>): String? = level2FilterConditions.toString()
+                         *
+                         *     // ...
+                         *
+                         *     override fun unknown(json: JsonValue?): String? {
+                         *         // Or inspect the `json`.
+                         *         return null
+                         *     }
+                         * })
+                         * ```
+                         *
+                         * @throws DodoPaymentsInvalidDataException if [Visitor.unknown] is not
+                         *   overridden in [visitor] and the current variant is unknown.
+                         */
                         fun <T> accept(visitor: Visitor<T>): T =
                             when {
                                 level2FilterConditions != null ->
@@ -2021,6 +2234,16 @@ private constructor(
 
                         private var validated: Boolean = false
 
+                        /**
+                         * Validates that the types of all values in this object match their
+                         * expected types recursively.
+                         *
+                         * This method is _not_ forwards compatible with new types from the API for
+                         * existing fields.
+                         *
+                         * @throws DodoPaymentsInvalidDataException if any value type in this object
+                         *   doesn't match its expected type.
+                         */
                         fun validate(): InnerInnerClauses = apply {
                             if (validated) {
                                 return@apply
@@ -2439,6 +2662,16 @@ private constructor(
 
                             private var validated: Boolean = false
 
+                            /**
+                             * Validates that the types of all values in this object match their
+                             * expected types recursively.
+                             *
+                             * This method is _not_ forwards compatible with new types from the API
+                             * for existing fields.
+                             *
+                             * @throws DodoPaymentsInvalidDataException if any value type in this
+                             *   object doesn't match its expected type.
+                             */
                             fun validate(): MeterFilterCondition = apply {
                                 if (validated) {
                                     return@apply
@@ -2500,6 +2733,32 @@ private constructor(
 
                                 fun _json(): JsonValue? = _json
 
+                                /**
+                                 * Maps this instance's current variant to a value of type [T] using
+                                 * the given [visitor].
+                                 *
+                                 * Note that this method is _not_ forwards compatible with new
+                                 * variants from the API, unless [visitor] overrides
+                                 * [Visitor.unknown]. To handle variants not known to this version
+                                 * of the SDK gracefully, consider overriding [Visitor.unknown]:
+                                 * ```kotlin
+                                 * import com.dodopayments.api.core.JsonValue
+                                 *
+                                 * val result: String? = value.accept(object : Value.Visitor<String?> {
+                                 *     override fun visitString(string: String): String? = string.toString()
+                                 *
+                                 *     // ...
+                                 *
+                                 *     override fun unknown(json: JsonValue?): String? {
+                                 *         // Or inspect the `json`.
+                                 *         return null
+                                 *     }
+                                 * })
+                                 * ```
+                                 *
+                                 * @throws DodoPaymentsInvalidDataException if [Visitor.unknown] is
+                                 *   not overridden in [visitor] and the current variant is unknown.
+                                 */
                                 fun <T> accept(visitor: Visitor<T>): T =
                                     when {
                                         string != null -> visitor.visitString(string)
@@ -2510,6 +2769,16 @@ private constructor(
 
                                 private var validated: Boolean = false
 
+                                /**
+                                 * Validates that the types of all values in this object match their
+                                 * expected types recursively.
+                                 *
+                                 * This method is _not_ forwards compatible with new types from the
+                                 * API for existing fields.
+                                 *
+                                 * @throws DodoPaymentsInvalidDataException if any value type in
+                                 *   this object doesn't match its expected type.
+                                 */
                                 fun validate(): Value = apply {
                                     if (validated) {
                                         return@apply
@@ -2886,6 +3155,16 @@ private constructor(
 
                             private var validated: Boolean = false
 
+                            /**
+                             * Validates that the types of all values in this object match their
+                             * expected types recursively.
+                             *
+                             * This method is _not_ forwards compatible with new types from the API
+                             * for existing fields.
+                             *
+                             * @throws DodoPaymentsInvalidDataException if any value type in this
+                             *   object doesn't match its expected type.
+                             */
                             fun validate(): InnerInnerInnerMeterFilter = apply {
                                 if (validated) {
                                     return@apply
@@ -3142,6 +3421,16 @@ private constructor(
 
                                 private var validated: Boolean = false
 
+                                /**
+                                 * Validates that the types of all values in this object match their
+                                 * expected types recursively.
+                                 *
+                                 * This method is _not_ forwards compatible with new types from the
+                                 * API for existing fields.
+                                 *
+                                 * @throws DodoPaymentsInvalidDataException if any value type in
+                                 *   this object doesn't match its expected type.
+                                 */
                                 fun validate(): Clause = apply {
                                     if (validated) {
                                         return@apply
@@ -3203,6 +3492,34 @@ private constructor(
 
                                     fun _json(): JsonValue? = _json
 
+                                    /**
+                                     * Maps this instance's current variant to a value of type [T]
+                                     * using the given [visitor].
+                                     *
+                                     * Note that this method is _not_ forwards compatible with new
+                                     * variants from the API, unless [visitor] overrides
+                                     * [Visitor.unknown]. To handle variants not known to this
+                                     * version of the SDK gracefully, consider overriding
+                                     * [Visitor.unknown]:
+                                     * ```kotlin
+                                     * import com.dodopayments.api.core.JsonValue
+                                     *
+                                     * val result: String? = value.accept(object : Value.Visitor<String?> {
+                                     *     override fun visitString(string: String): String? = string.toString()
+                                     *
+                                     *     // ...
+                                     *
+                                     *     override fun unknown(json: JsonValue?): String? {
+                                     *         // Or inspect the `json`.
+                                     *         return null
+                                     *     }
+                                     * })
+                                     * ```
+                                     *
+                                     * @throws DodoPaymentsInvalidDataException if [Visitor.unknown]
+                                     *   is not overridden in [visitor] and the current variant is
+                                     *   unknown.
+                                     */
                                     fun <T> accept(visitor: Visitor<T>): T =
                                         when {
                                             string != null -> visitor.visitString(string)
@@ -3213,6 +3530,16 @@ private constructor(
 
                                     private var validated: Boolean = false
 
+                                    /**
+                                     * Validates that the types of all values in this object match
+                                     * their expected types recursively.
+                                     *
+                                     * This method is _not_ forwards compatible with new types from
+                                     * the API for existing fields.
+                                     *
+                                     * @throws DodoPaymentsInvalidDataException if any value type in
+                                     *   this object doesn't match its expected type.
+                                     */
                                     fun validate(): Value = apply {
                                         if (validated) {
                                             return@apply
