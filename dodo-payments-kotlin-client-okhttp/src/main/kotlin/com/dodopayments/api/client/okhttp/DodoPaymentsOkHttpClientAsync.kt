@@ -5,6 +5,7 @@ package com.dodopayments.api.client.okhttp
 import com.dodopayments.api.client.DodoPaymentsClientAsync
 import com.dodopayments.api.client.DodoPaymentsClientAsyncImpl
 import com.dodopayments.api.core.ClientOptions
+import com.dodopayments.api.core.LogLevel
 import com.dodopayments.api.core.Sleeper
 import com.dodopayments.api.core.Timeout
 import com.dodopayments.api.core.http.Headers
@@ -239,6 +240,15 @@ class DodoPaymentsOkHttpClientAsync private constructor() {
          * Defaults to 2.
          */
         fun maxRetries(maxRetries: Int) = apply { clientOptions.maxRetries(maxRetries) }
+
+        /**
+         * The level at which to log request and response information.
+         *
+         * [fromEnv] will set the level from environment variables. See [LogLevel.fromEnv].
+         *
+         * Defaults to [LogLevel.fromEnv].
+         */
+        fun logLevel(logLevel: LogLevel) = apply { clientOptions.logLevel(logLevel) }
 
         /** Bearer Token for API authentication */
         fun bearerToken(bearerToken: String) = apply { clientOptions.bearerToken(bearerToken) }
