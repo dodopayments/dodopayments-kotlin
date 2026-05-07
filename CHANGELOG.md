@@ -1,5 +1,30 @@
 # Changelog
 
+## 1.97.1 (2026-05-07)
+
+Full Changelog: [v1.97.1...v1.97.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.97.1...v1.97.1)
+
+### Features
+
+* **client:** improve logging ([9976dad](https://github.com/dodopayments/dodopayments-kotlin/commit/9976dad7525f5a00800e852814b1714ef410efd0))
+* **client:** more robust error parsing ([f933bea](https://github.com/dodopayments/dodopayments-kotlin/commit/f933bea1926082afe6b74bf4e8c54e123aa4a4f0))
+* **client:** support proxy authentication ([8a3d66b](https://github.com/dodopayments/dodopayments-kotlin/commit/8a3d66b5d2739d5918078e141868d1d5e3334ad9))
+
+
+### Performance Improvements
+
+* **client:** create one json mapper ([ad028ab](https://github.com/dodopayments/dodopayments-kotlin/commit/ad028abd272ad4f44544449d6d788e7463a3a401))
+
+
+### Chores
+
+* remove duplicated dokka setup ([cd0e9c7](https://github.com/dodopayments/dodopayments-kotlin/commit/cd0e9c725c1cb3b17cc81cc9177fab8cacb1a7d7))
+
+
+### Documentation
+
+* clarify forwards compat behavior ([76d2e29](https://github.com/dodopayments/dodopayments-kotlin/commit/76d2e29de8fd14a9f623a621dbf53511abfec24b))
+
 ## 1.97.1 (2026-05-04)
 
 Full Changelog: [v1.97.0...v1.97.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.97.0...v1.97.1)
