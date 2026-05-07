@@ -358,8 +358,6 @@ while (true) {
 
 ## Logging
 
-The SDK uses the standard [OkHttp logging interceptor](https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor).
-
 Enable logging by setting the `DODO_PAYMENTS_LOG` environment variable to `info`:
 
 ```sh
@@ -370,6 +368,19 @@ Or to `debug` for more verbose logging:
 
 ```sh
 export DODO_PAYMENTS_LOG=debug
+```
+
+Or configure the client manually using the `logLevel` method:
+
+```kotlin
+import com.dodopayments.api.client.DodoPaymentsClient
+import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
+import com.dodopayments.api.core.LogLevel
+
+val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.builder()
+    .fromEnv()
+    .logLevel(LogLevel.INFO)
+    .build()
 ```
 
 ## ProGuard and R8
