@@ -40,6 +40,7 @@ internal class SubscriptionCreateResponseTest {
                 .subscriptionId("subscription_id")
                 .clientSecret("client_secret")
                 .discountId("discount_id")
+                .addDiscountId("string")
                 .expiresOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addOneTimeProductCart(
                     SubscriptionCreateResponse.OneTimeProductCart.builder()
@@ -79,6 +80,7 @@ internal class SubscriptionCreateResponseTest {
         assertThat(subscriptionCreateResponse.subscriptionId()).isEqualTo("subscription_id")
         assertThat(subscriptionCreateResponse.clientSecret()).isEqualTo("client_secret")
         assertThat(subscriptionCreateResponse.discountId()).isEqualTo("discount_id")
+        assertThat(subscriptionCreateResponse.discountIds()).containsExactly("string")
         assertThat(subscriptionCreateResponse.expiresOn())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(subscriptionCreateResponse.oneTimeProductCart())
@@ -120,6 +122,7 @@ internal class SubscriptionCreateResponseTest {
                 .subscriptionId("subscription_id")
                 .clientSecret("client_secret")
                 .discountId("discount_id")
+                .addDiscountId("string")
                 .expiresOn(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addOneTimeProductCart(
                     SubscriptionCreateResponse.OneTimeProductCart.builder()

@@ -22,6 +22,7 @@ internal class SubscriptionChangePlanParamsTest {
                     .adaptiveCurrencyFeesInclusive(true)
                     .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
                     .discountCode("discount_code")
+                    .addDiscountCode("string")
                     .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
                     .metadata(
                         UpdateSubscriptionPlanReq.Metadata.builder()
@@ -70,6 +71,7 @@ internal class SubscriptionChangePlanParamsTest {
                         .adaptiveCurrencyFeesInclusive(true)
                         .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
                         .discountCode("discount_code")
+                        .addDiscountCode("string")
                         .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
                         .metadata(
                             UpdateSubscriptionPlanReq.Metadata.builder()
@@ -94,6 +96,7 @@ internal class SubscriptionChangePlanParamsTest {
                     .adaptiveCurrencyFeesInclusive(true)
                     .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
                     .discountCode("discount_code")
+                    .addDiscountCode("string")
                     .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
                     .metadata(
                         UpdateSubscriptionPlanReq.Metadata.builder()
