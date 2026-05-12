@@ -46,6 +46,12 @@ internal class SubscriptionListPageResponseTest {
                                 .phoneNumber("phone_number")
                                 .build()
                         )
+                        .addDiscount(
+                            SubscriptionListResponse.Discount.builder()
+                                .discountId("discount_id")
+                                .discountCyclesRemaining(0)
+                                .build()
+                        )
                         .metadata(
                             SubscriptionListResponse.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -119,6 +125,12 @@ internal class SubscriptionListPageResponseTest {
                                     .build()
                             )
                             .phoneNumber("phone_number")
+                            .build()
+                    )
+                    .addDiscount(
+                        SubscriptionListResponse.Discount.builder()
+                            .discountId("discount_id")
+                            .discountCyclesRemaining(0)
                             .build()
                     )
                     .metadata(
@@ -198,6 +210,12 @@ internal class SubscriptionListPageResponseTest {
                                         .build()
                                 )
                                 .phoneNumber("phone_number")
+                                .build()
+                        )
+                        .addDiscount(
+                            SubscriptionListResponse.Discount.builder()
+                                .discountId("discount_id")
+                                .discountCyclesRemaining(0)
                                 .build()
                         )
                         .metadata(

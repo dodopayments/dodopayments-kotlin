@@ -827,6 +827,7 @@ private constructor(
             private val checkoutSessionId: JsonField<String>,
             private val customFieldResponses: JsonField<List<CustomFieldResponse>>,
             private val discountId: JsonField<String>,
+            private val discounts: JsonField<List<Payment.Discount>>,
             private val errorCode: JsonField<String>,
             private val errorMessage: JsonField<String>,
             private val invoiceId: JsonField<String>,
@@ -915,6 +916,9 @@ private constructor(
                 @JsonProperty("discount_id")
                 @ExcludeMissing
                 discountId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("discounts")
+                @ExcludeMissing
+                discounts: JsonField<List<Payment.Discount>> = JsonMissing.of(),
                 @JsonProperty("error_code")
                 @ExcludeMissing
                 errorCode: JsonField<String> = JsonMissing.of(),
@@ -983,6 +987,7 @@ private constructor(
                 checkoutSessionId,
                 customFieldResponses,
                 discountId,
+                discounts,
                 errorCode,
                 errorMessage,
                 invoiceId,
@@ -1025,6 +1030,7 @@ private constructor(
                     .checkoutSessionId(checkoutSessionId)
                     .customFieldResponses(customFieldResponses)
                     .discountId(discountId)
+                    .discounts(discounts)
                     .errorCode(errorCode)
                     .errorMessage(errorMessage)
                     .invoiceId(invoiceId)
@@ -1234,12 +1240,21 @@ private constructor(
                 customFieldResponses.getNullable("custom_field_responses")
 
             /**
-             * The discount id if discount is applied
+             * DEPRECATED: Use discounts instead. Returns the first discount's ID if present.
              *
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
              */
+            @Deprecated("deprecated")
             fun discountId(): String? = discountId.getNullable("discount_id")
+
+            /**
+             * All stacked discounts applied, ordered by position
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun discounts(): List<Payment.Discount>? = discounts.getNullable("discounts")
 
             /**
              * An error code if the payment failed
@@ -1573,9 +1588,20 @@ private constructor(
              * Unlike [discountId], this method doesn't throw if the JSON field has an unexpected
              * type.
              */
+            @Deprecated("deprecated")
             @JsonProperty("discount_id")
             @ExcludeMissing
             fun _discountId(): JsonField<String> = discountId
+
+            /**
+             * Returns the raw JSON value of [discounts].
+             *
+             * Unlike [discounts], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("discounts")
+            @ExcludeMissing
+            fun _discounts(): JsonField<List<Payment.Discount>> = discounts
 
             /**
              * Returns the raw JSON value of [errorCode].
@@ -1790,6 +1816,7 @@ private constructor(
                 private var customFieldResponses: JsonField<MutableList<CustomFieldResponse>>? =
                     null
                 private var discountId: JsonField<String> = JsonMissing.of()
+                private var discounts: JsonField<MutableList<Payment.Discount>>? = null
                 private var errorCode: JsonField<String> = JsonMissing.of()
                 private var errorMessage: JsonField<String> = JsonMissing.of()
                 private var invoiceId: JsonField<String> = JsonMissing.of()
@@ -1834,6 +1861,7 @@ private constructor(
                     checkoutSessionId = payment.checkoutSessionId
                     customFieldResponses = payment.customFieldResponses.map { it.toMutableList() }
                     discountId = payment.discountId
+                    discounts = payment.discounts.map { it.toMutableList() }
                     errorCode = payment.errorCode
                     errorMessage = payment.errorMessage
                     invoiceId = payment.invoiceId
@@ -2199,7 +2227,10 @@ private constructor(
                         }
                 }
 
-                /** The discount id if discount is applied */
+                /**
+                 * DEPRECATED: Use discounts instead. Returns the first discount's ID if present.
+                 */
+                @Deprecated("deprecated")
                 fun discountId(discountId: String?) = discountId(JsonField.ofNullable(discountId))
 
                 /**
@@ -2209,8 +2240,36 @@ private constructor(
                  * instead. This method is primarily for setting the field to an undocumented or not
                  * yet supported value.
                  */
+                @Deprecated("deprecated")
                 fun discountId(discountId: JsonField<String>) = apply {
                     this.discountId = discountId
+                }
+
+                /** All stacked discounts applied, ordered by position */
+                fun discounts(discounts: List<Payment.Discount>?) =
+                    discounts(JsonField.ofNullable(discounts))
+
+                /**
+                 * Sets [Builder.discounts] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.discounts] with a well-typed
+                 * `List<Payment.Discount>` value instead. This method is primarily for setting the
+                 * field to an undocumented or not yet supported value.
+                 */
+                fun discounts(discounts: JsonField<List<Payment.Discount>>) = apply {
+                    this.discounts = discounts.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [Payment.Discount] to [discounts].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addDiscount(discount: Payment.Discount) = apply {
+                    discounts =
+                        (discounts ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("discounts", it).add(discount)
+                        }
                 }
 
                 /** An error code if the payment failed */
@@ -2534,6 +2593,7 @@ private constructor(
                         checkoutSessionId,
                         (customFieldResponses ?: JsonMissing.of()).map { it.toImmutable() },
                         discountId,
+                        (discounts ?: JsonMissing.of()).map { it.toImmutable() },
                         errorCode,
                         errorMessage,
                         invoiceId,
@@ -2592,6 +2652,7 @@ private constructor(
                 checkoutSessionId()
                 customFieldResponses()?.forEach { it.validate() }
                 discountId()
+                discounts()?.forEach { it.validate() }
                 errorCode()
                 errorMessage()
                 invoiceId()
@@ -2647,6 +2708,7 @@ private constructor(
                     (if (checkoutSessionId.asKnown() == null) 0 else 1) +
                     (customFieldResponses.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
                     (if (discountId.asKnown() == null) 0 else 1) +
+                    (discounts.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
                     (if (errorCode.asKnown() == null) 0 else 1) +
                     (if (errorMessage.asKnown() == null) 0 else 1) +
                     (if (invoiceId.asKnown() == null) 0 else 1) +
@@ -2827,6 +2889,7 @@ private constructor(
                     checkoutSessionId == other.checkoutSessionId &&
                     customFieldResponses == other.customFieldResponses &&
                     discountId == other.discountId &&
+                    discounts == other.discounts &&
                     errorCode == other.errorCode &&
                     errorMessage == other.errorMessage &&
                     invoiceId == other.invoiceId &&
@@ -2869,6 +2932,7 @@ private constructor(
                     checkoutSessionId,
                     customFieldResponses,
                     discountId,
+                    discounts,
                     errorCode,
                     errorMessage,
                     invoiceId,
@@ -2891,7 +2955,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Payment{billing=$billing, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, digitalProductsDelivered=$digitalProductsDelivered, disputes=$disputes, metadata=$metadata, paymentId=$paymentId, refunds=$refunds, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, totalAmount=$totalAmount, cardHolderName=$cardHolderName, cardIssuingCountry=$cardIssuingCountry, cardLastFour=$cardLastFour, cardNetwork=$cardNetwork, cardType=$cardType, checkoutSessionId=$checkoutSessionId, customFieldResponses=$customFieldResponses, discountId=$discountId, errorCode=$errorCode, errorMessage=$errorMessage, invoiceId=$invoiceId, invoiceUrl=$invoiceUrl, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, productCart=$productCart, refundStatus=$refundStatus, settlementTax=$settlementTax, status=$status, subscriptionId=$subscriptionId, tax=$tax, updatedAt=$updatedAt, payloadType=$payloadType, additionalProperties=$additionalProperties}"
+                "Payment{billing=$billing, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, digitalProductsDelivered=$digitalProductsDelivered, disputes=$disputes, metadata=$metadata, paymentId=$paymentId, refunds=$refunds, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, totalAmount=$totalAmount, cardHolderName=$cardHolderName, cardIssuingCountry=$cardIssuingCountry, cardLastFour=$cardLastFour, cardNetwork=$cardNetwork, cardType=$cardType, checkoutSessionId=$checkoutSessionId, customFieldResponses=$customFieldResponses, discountId=$discountId, discounts=$discounts, errorCode=$errorCode, errorMessage=$errorMessage, invoiceId=$invoiceId, invoiceUrl=$invoiceUrl, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, productCart=$productCart, refundStatus=$refundStatus, settlementTax=$settlementTax, status=$status, subscriptionId=$subscriptionId, tax=$tax, updatedAt=$updatedAt, payloadType=$payloadType, additionalProperties=$additionalProperties}"
         }
 
         /** Response struct representing subscription details */
@@ -2930,6 +2994,7 @@ private constructor(
             private val customFieldResponses: JsonField<List<CustomFieldResponse>>,
             private val discountCyclesRemaining: JsonField<Int>,
             private val discountId: JsonField<String>,
+            private val discounts: JsonField<List<Subscription.Discount>>,
             private val expiresAt: JsonField<OffsetDateTime>,
             private val paymentMethodId: JsonField<String>,
             private val scheduledChange: JsonField<ScheduledPlanChange>,
@@ -3034,6 +3099,9 @@ private constructor(
                 @JsonProperty("discount_id")
                 @ExcludeMissing
                 discountId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("discounts")
+                @ExcludeMissing
+                discounts: JsonField<List<Subscription.Discount>> = JsonMissing.of(),
                 @JsonProperty("expires_at")
                 @ExcludeMissing
                 expiresAt: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -3078,6 +3146,7 @@ private constructor(
                 customFieldResponses,
                 discountCyclesRemaining,
                 discountId,
+                discounts,
                 expiresAt,
                 paymentMethodId,
                 scheduledChange,
@@ -3118,6 +3187,7 @@ private constructor(
                     .customFieldResponses(customFieldResponses)
                     .discountCyclesRemaining(discountCyclesRemaining)
                     .discountId(discountId)
+                    .discounts(discounts)
                     .expiresAt(expiresAt)
                     .paymentMethodId(paymentMethodId)
                     .scheduledChange(scheduledChange)
@@ -3387,7 +3457,7 @@ private constructor(
                 customFieldResponses.getNullable("custom_field_responses")
 
             /**
-             * Number of remaining discount cycles if discount is applied
+             * DEPRECATED: Use discounts[].cycles_remaining instead.
              *
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
@@ -3396,12 +3466,20 @@ private constructor(
                 discountCyclesRemaining.getNullable("discount_cycles_remaining")
 
             /**
-             * The discount id if discount is applied
+             * DEPRECATED: Use discounts instead. Returns the first discount's ID if present.
              *
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
              */
             fun discountId(): String? = discountId.getNullable("discount_id")
+
+            /**
+             * All stacked discounts applied, ordered by position
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun discounts(): List<Subscription.Discount>? = discounts.getNullable("discounts")
 
             /**
              * Timestamp when the subscription will expire
@@ -3742,6 +3820,16 @@ private constructor(
             fun _discountId(): JsonField<String> = discountId
 
             /**
+             * Returns the raw JSON value of [discounts].
+             *
+             * Unlike [discounts], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("discounts")
+            @ExcludeMissing
+            fun _discounts(): JsonField<List<Subscription.Discount>> = discounts
+
+            /**
              * Returns the raw JSON value of [expiresAt].
              *
              * Unlike [expiresAt], this method doesn't throw if the JSON field has an unexpected
@@ -3877,6 +3965,7 @@ private constructor(
                     null
                 private var discountCyclesRemaining: JsonField<Int> = JsonMissing.of()
                 private var discountId: JsonField<String> = JsonMissing.of()
+                private var discounts: JsonField<MutableList<Subscription.Discount>>? = null
                 private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var paymentMethodId: JsonField<String> = JsonMissing.of()
                 private var scheduledChange: JsonField<ScheduledPlanChange> = JsonMissing.of()
@@ -3918,6 +4007,7 @@ private constructor(
                         subscription.customFieldResponses.map { it.toMutableList() }
                     discountCyclesRemaining = subscription.discountCyclesRemaining
                     discountId = subscription.discountId
+                    discounts = subscription.discounts.map { it.toMutableList() }
                     expiresAt = subscription.expiresAt
                     paymentMethodId = subscription.paymentMethodId
                     scheduledChange = subscription.scheduledChange
@@ -4408,7 +4498,7 @@ private constructor(
                         }
                 }
 
-                /** Number of remaining discount cycles if discount is applied */
+                /** DEPRECATED: Use discounts[].cycles_remaining instead. */
                 fun discountCyclesRemaining(discountCyclesRemaining: Int?) =
                     discountCyclesRemaining(JsonField.ofNullable(discountCyclesRemaining))
 
@@ -4431,7 +4521,9 @@ private constructor(
                     this.discountCyclesRemaining = discountCyclesRemaining
                 }
 
-                /** The discount id if discount is applied */
+                /**
+                 * DEPRECATED: Use discounts instead. Returns the first discount's ID if present.
+                 */
                 fun discountId(discountId: String?) = discountId(JsonField.ofNullable(discountId))
 
                 /**
@@ -4443,6 +4535,33 @@ private constructor(
                  */
                 fun discountId(discountId: JsonField<String>) = apply {
                     this.discountId = discountId
+                }
+
+                /** All stacked discounts applied, ordered by position */
+                fun discounts(discounts: List<Subscription.Discount>?) =
+                    discounts(JsonField.ofNullable(discounts))
+
+                /**
+                 * Sets [Builder.discounts] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.discounts] with a well-typed
+                 * `List<Subscription.Discount>` value instead. This method is primarily for setting
+                 * the field to an undocumented or not yet supported value.
+                 */
+                fun discounts(discounts: JsonField<List<Subscription.Discount>>) = apply {
+                    this.discounts = discounts.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [Subscription.Discount] to [discounts].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addDiscount(discount: Subscription.Discount) = apply {
+                    discounts =
+                        (discounts ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("discounts", it).add(discount)
+                        }
                 }
 
                 /** Timestamp when the subscription will expire */
@@ -4608,6 +4727,7 @@ private constructor(
                         (customFieldResponses ?: JsonMissing.of()).map { it.toImmutable() },
                         discountCyclesRemaining,
                         discountId,
+                        (discounts ?: JsonMissing.of()).map { it.toImmutable() },
                         expiresAt,
                         paymentMethodId,
                         scheduledChange,
@@ -4664,6 +4784,7 @@ private constructor(
                 customFieldResponses()?.forEach { it.validate() }
                 discountCyclesRemaining()
                 discountId()
+                discounts()?.forEach { it.validate() }
                 expiresAt()
                 paymentMethodId()
                 scheduledChange()?.validate()
@@ -4717,6 +4838,7 @@ private constructor(
                     (customFieldResponses.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
                     (if (discountCyclesRemaining.asKnown() == null) 0 else 1) +
                     (if (discountId.asKnown() == null) 0 else 1) +
+                    (discounts.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
                     (if (expiresAt.asKnown() == null) 0 else 1) +
                     (if (paymentMethodId.asKnown() == null) 0 else 1) +
                     (scheduledChange.asKnown()?.validity() ?: 0) +
@@ -4895,6 +5017,7 @@ private constructor(
                     customFieldResponses == other.customFieldResponses &&
                     discountCyclesRemaining == other.discountCyclesRemaining &&
                     discountId == other.discountId &&
+                    discounts == other.discounts &&
                     expiresAt == other.expiresAt &&
                     paymentMethodId == other.paymentMethodId &&
                     scheduledChange == other.scheduledChange &&
@@ -4935,6 +5058,7 @@ private constructor(
                     customFieldResponses,
                     discountCyclesRemaining,
                     discountId,
+                    discounts,
                     expiresAt,
                     paymentMethodId,
                     scheduledChange,
@@ -4947,7 +5071,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Subscription{addons=$addons, billing=$billing, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, creditEntitlementCart=$creditEntitlementCart, currency=$currency, customer=$customer, metadata=$metadata, meterCreditEntitlementCart=$meterCreditEntitlementCart, meters=$meters, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancellationComment=$cancellationComment, cancellationFeedback=$cancellationFeedback, cancelledAt=$cancelledAt, customFieldResponses=$customFieldResponses, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, expiresAt=$expiresAt, paymentMethodId=$paymentMethodId, scheduledChange=$scheduledChange, taxId=$taxId, payloadType=$payloadType, additionalProperties=$additionalProperties}"
+                "Subscription{addons=$addons, billing=$billing, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, creditEntitlementCart=$creditEntitlementCart, currency=$currency, customer=$customer, metadata=$metadata, meterCreditEntitlementCart=$meterCreditEntitlementCart, meters=$meters, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancellationComment=$cancellationComment, cancellationFeedback=$cancellationFeedback, cancelledAt=$cancelledAt, customFieldResponses=$customFieldResponses, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, discounts=$discounts, expiresAt=$expiresAt, paymentMethodId=$paymentMethodId, scheduledChange=$scheduledChange, taxId=$taxId, payloadType=$payloadType, additionalProperties=$additionalProperties}"
         }
 
         class Refund

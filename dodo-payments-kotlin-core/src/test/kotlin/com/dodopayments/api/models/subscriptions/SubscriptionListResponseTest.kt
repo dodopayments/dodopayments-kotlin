@@ -44,6 +44,12 @@ internal class SubscriptionListResponseTest {
                         .phoneNumber("phone_number")
                         .build()
                 )
+                .addDiscount(
+                    SubscriptionListResponse.Discount.builder()
+                        .discountId("discount_id")
+                        .discountCyclesRemaining(0)
+                        .build()
+                )
                 .metadata(
                     SubscriptionListResponse.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -115,6 +121,13 @@ internal class SubscriptionListResponseTest {
                             .build()
                     )
                     .phoneNumber("phone_number")
+                    .build()
+            )
+        assertThat(subscriptionListResponse.discounts())
+            .containsExactly(
+                SubscriptionListResponse.Discount.builder()
+                    .discountId("discount_id")
+                    .discountCyclesRemaining(0)
                     .build()
             )
         assertThat(subscriptionListResponse.metadata())
@@ -196,6 +209,12 @@ internal class SubscriptionListResponseTest {
                                 .build()
                         )
                         .phoneNumber("phone_number")
+                        .build()
+                )
+                .addDiscount(
+                    SubscriptionListResponse.Discount.builder()
+                        .discountId("discount_id")
+                        .discountCyclesRemaining(0)
                         .build()
                 )
                 .metadata(
