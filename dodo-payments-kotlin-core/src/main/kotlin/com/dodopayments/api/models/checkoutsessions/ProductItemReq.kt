@@ -25,6 +25,7 @@ private constructor(
     private val quantity: JsonField<Int>,
     private val addons: JsonField<List<AttachAddon>>,
     private val amount: JsonField<Int>,
+    private val creditEntitlements: JsonField<List<CreditEntitlement>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -36,7 +37,10 @@ private constructor(
         @ExcludeMissing
         addons: JsonField<List<AttachAddon>> = JsonMissing.of(),
         @JsonProperty("amount") @ExcludeMissing amount: JsonField<Int> = JsonMissing.of(),
-    ) : this(productId, quantity, addons, amount, mutableMapOf())
+        @JsonProperty("credit_entitlements")
+        @ExcludeMissing
+        creditEntitlements: JsonField<List<CreditEntitlement>> = JsonMissing.of(),
+    ) : this(productId, quantity, addons, amount, creditEntitlements, mutableMapOf())
 
     /**
      * unique id of the product
@@ -73,6 +77,18 @@ private constructor(
     fun amount(): Int? = amount.getNullable("amount")
 
     /**
+     * Per-checkout-session overrides for credit entitlements already attached to this product. Each
+     * entry overrides the `credits_amount` granted by the referenced credit entitlement when this
+     * checkout session is fulfilled. The credit_entitlement_id must already be attached to the
+     * product.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun creditEntitlements(): List<CreditEntitlement>? =
+        creditEntitlements.getNullable("credit_entitlements")
+
+    /**
      * Returns the raw JSON value of [productId].
      *
      * Unlike [productId], this method doesn't throw if the JSON field has an unexpected type.
@@ -99,6 +115,16 @@ private constructor(
      * Unlike [amount], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("amount") @ExcludeMissing fun _amount(): JsonField<Int> = amount
+
+    /**
+     * Returns the raw JSON value of [creditEntitlements].
+     *
+     * Unlike [creditEntitlements], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("credit_entitlements")
+    @ExcludeMissing
+    fun _creditEntitlements(): JsonField<List<CreditEntitlement>> = creditEntitlements
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -133,6 +159,7 @@ private constructor(
         private var quantity: JsonField<Int>? = null
         private var addons: JsonField<MutableList<AttachAddon>>? = null
         private var amount: JsonField<Int> = JsonMissing.of()
+        private var creditEntitlements: JsonField<MutableList<CreditEntitlement>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(productItemReq: ProductItemReq) = apply {
@@ -140,6 +167,7 @@ private constructor(
             quantity = productItemReq.quantity
             addons = productItemReq.addons.map { it.toMutableList() }
             amount = productItemReq.amount
+            creditEntitlements = productItemReq.creditEntitlements.map { it.toMutableList() }
             additionalProperties = productItemReq.additionalProperties.toMutableMap()
         }
 
@@ -216,6 +244,38 @@ private constructor(
          */
         fun amount(amount: JsonField<Int>) = apply { this.amount = amount }
 
+        /**
+         * Per-checkout-session overrides for credit entitlements already attached to this product.
+         * Each entry overrides the `credits_amount` granted by the referenced credit entitlement
+         * when this checkout session is fulfilled. The credit_entitlement_id must already be
+         * attached to the product.
+         */
+        fun creditEntitlements(creditEntitlements: List<CreditEntitlement>?) =
+            creditEntitlements(JsonField.ofNullable(creditEntitlements))
+
+        /**
+         * Sets [Builder.creditEntitlements] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.creditEntitlements] with a well-typed
+         * `List<CreditEntitlement>` value instead. This method is primarily for setting the field
+         * to an undocumented or not yet supported value.
+         */
+        fun creditEntitlements(creditEntitlements: JsonField<List<CreditEntitlement>>) = apply {
+            this.creditEntitlements = creditEntitlements.map { it.toMutableList() }
+        }
+
+        /**
+         * Adds a single [CreditEntitlement] to [creditEntitlements].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addCreditEntitlement(creditEntitlement: CreditEntitlement) = apply {
+            creditEntitlements =
+                (creditEntitlements ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("creditEntitlements", it).add(creditEntitlement)
+                }
+        }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -254,6 +314,7 @@ private constructor(
                 checkRequired("quantity", quantity),
                 (addons ?: JsonMissing.of()).map { it.toImmutable() },
                 amount,
+                (creditEntitlements ?: JsonMissing.of()).map { it.toImmutable() },
                 additionalProperties.toMutableMap(),
             )
     }
@@ -277,6 +338,7 @@ private constructor(
         quantity()
         addons()?.forEach { it.validate() }
         amount()
+        creditEntitlements()?.forEach { it.validate() }
         validated = true
     }
 
@@ -297,7 +359,237 @@ private constructor(
         (if (productId.asKnown() == null) 0 else 1) +
             (if (quantity.asKnown() == null) 0 else 1) +
             (addons.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
-            (if (amount.asKnown() == null) 0 else 1)
+            (if (amount.asKnown() == null) 0 else 1) +
+            (creditEntitlements.asKnown()?.sumOf { it.validity().toInt() } ?: 0)
+
+    /** Per-checkout-session override for a single credit entitlement attached to a product. */
+    class CreditEntitlement
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
+        private val creditEntitlementId: JsonField<String>,
+        private val creditsAmount: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("credit_entitlement_id")
+            @ExcludeMissing
+            creditEntitlementId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("credits_amount")
+            @ExcludeMissing
+            creditsAmount: JsonField<String> = JsonMissing.of(),
+        ) : this(creditEntitlementId, creditsAmount, mutableMapOf())
+
+        /**
+         * ID of the credit entitlement to override. Must already be attached to the product.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun creditEntitlementId(): String = creditEntitlementId.getRequired("credit_entitlement_id")
+
+        /**
+         * Number of credits to grant for this checkout session, overriding the product-level
+         * `credits_amount` set on the credit entitlement mapping. Must be greater than zero.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun creditsAmount(): String = creditsAmount.getRequired("credits_amount")
+
+        /**
+         * Returns the raw JSON value of [creditEntitlementId].
+         *
+         * Unlike [creditEntitlementId], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("credit_entitlement_id")
+        @ExcludeMissing
+        fun _creditEntitlementId(): JsonField<String> = creditEntitlementId
+
+        /**
+         * Returns the raw JSON value of [creditsAmount].
+         *
+         * Unlike [creditsAmount], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("credits_amount")
+        @ExcludeMissing
+        fun _creditsAmount(): JsonField<String> = creditsAmount
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [CreditEntitlement].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .creditEntitlementId()
+             * .creditsAmount()
+             * ```
+             */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [CreditEntitlement]. */
+        class Builder internal constructor() {
+
+            private var creditEntitlementId: JsonField<String>? = null
+            private var creditsAmount: JsonField<String>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(creditEntitlement: CreditEntitlement) = apply {
+                creditEntitlementId = creditEntitlement.creditEntitlementId
+                creditsAmount = creditEntitlement.creditsAmount
+                additionalProperties = creditEntitlement.additionalProperties.toMutableMap()
+            }
+
+            /**
+             * ID of the credit entitlement to override. Must already be attached to the product.
+             */
+            fun creditEntitlementId(creditEntitlementId: String) =
+                creditEntitlementId(JsonField.of(creditEntitlementId))
+
+            /**
+             * Sets [Builder.creditEntitlementId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.creditEntitlementId] with a well-typed [String]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun creditEntitlementId(creditEntitlementId: JsonField<String>) = apply {
+                this.creditEntitlementId = creditEntitlementId
+            }
+
+            /**
+             * Number of credits to grant for this checkout session, overriding the product-level
+             * `credits_amount` set on the credit entitlement mapping. Must be greater than zero.
+             */
+            fun creditsAmount(creditsAmount: String) = creditsAmount(JsonField.of(creditsAmount))
+
+            /**
+             * Sets [Builder.creditsAmount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.creditsAmount] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun creditsAmount(creditsAmount: JsonField<String>) = apply {
+                this.creditsAmount = creditsAmount
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [CreditEntitlement].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .creditEntitlementId()
+             * .creditsAmount()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): CreditEntitlement =
+                CreditEntitlement(
+                    checkRequired("creditEntitlementId", creditEntitlementId),
+                    checkRequired("creditsAmount", creditsAmount),
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't match
+         *   its expected type.
+         */
+        fun validate(): CreditEntitlement = apply {
+            if (validated) {
+                return@apply
+            }
+
+            creditEntitlementId()
+            creditsAmount()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            (if (creditEntitlementId.asKnown() == null) 0 else 1) +
+                (if (creditsAmount.asKnown() == null) 0 else 1)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is CreditEntitlement &&
+                creditEntitlementId == other.creditEntitlementId &&
+                creditsAmount == other.creditsAmount &&
+                additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy {
+            Objects.hash(creditEntitlementId, creditsAmount, additionalProperties)
+        }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "CreditEntitlement{creditEntitlementId=$creditEntitlementId, creditsAmount=$creditsAmount, additionalProperties=$additionalProperties}"
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -309,15 +601,16 @@ private constructor(
             quantity == other.quantity &&
             addons == other.addons &&
             amount == other.amount &&
+            creditEntitlements == other.creditEntitlements &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(productId, quantity, addons, amount, additionalProperties)
+        Objects.hash(productId, quantity, addons, amount, creditEntitlements, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ProductItemReq{productId=$productId, quantity=$quantity, addons=$addons, amount=$amount, additionalProperties=$additionalProperties}"
+        "ProductItemReq{productId=$productId, quantity=$quantity, addons=$addons, amount=$amount, creditEntitlements=$creditEntitlements, additionalProperties=$additionalProperties}"
 }

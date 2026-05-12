@@ -27,6 +27,7 @@ private constructor(
     private val paymentId: JsonField<String>,
     private val totalAmount: JsonField<Int>,
     private val discountId: JsonField<String>,
+    private val discountIds: JsonField<List<String>>,
     private val expiresOn: JsonField<OffsetDateTime>,
     private val paymentLink: JsonField<String>,
     private val productCart: JsonField<List<OneTimeProductCartItem>>,
@@ -49,6 +50,9 @@ private constructor(
         @JsonProperty("discount_id")
         @ExcludeMissing
         discountId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("discount_ids")
+        @ExcludeMissing
+        discountIds: JsonField<List<String>> = JsonMissing.of(),
         @JsonProperty("expires_on")
         @ExcludeMissing
         expiresOn: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -65,6 +69,7 @@ private constructor(
         paymentId,
         totalAmount,
         discountId,
+        discountIds,
         expiresOn,
         paymentLink,
         productCart,
@@ -112,12 +117,20 @@ private constructor(
     fun totalAmount(): Int = totalAmount.getRequired("total_amount")
 
     /**
-     * The discount id if discount is applied
+     * DEPRECATED: Use discount_ids instead. Returns the first discount's ID if present.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
-    fun discountId(): String? = discountId.getNullable("discount_id")
+    @Deprecated("deprecated") fun discountId(): String? = discountId.getNullable("discount_id")
+
+    /**
+     * All stacked discount IDs applied, in order of application
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun discountIds(): List<String>? = discountIds.getNullable("discount_ids")
 
     /**
      * Expiry timestamp of the payment link
@@ -187,7 +200,19 @@ private constructor(
      *
      * Unlike [discountId], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("discount_id") @ExcludeMissing fun _discountId(): JsonField<String> = discountId
+    @Deprecated("deprecated")
+    @JsonProperty("discount_id")
+    @ExcludeMissing
+    fun _discountId(): JsonField<String> = discountId
+
+    /**
+     * Returns the raw JSON value of [discountIds].
+     *
+     * Unlike [discountIds], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("discount_ids")
+    @ExcludeMissing
+    fun _discountIds(): JsonField<List<String>> = discountIds
 
     /**
      * Returns the raw JSON value of [expiresOn].
@@ -254,6 +279,7 @@ private constructor(
         private var paymentId: JsonField<String>? = null
         private var totalAmount: JsonField<Int>? = null
         private var discountId: JsonField<String> = JsonMissing.of()
+        private var discountIds: JsonField<MutableList<String>>? = null
         private var expiresOn: JsonField<OffsetDateTime> = JsonMissing.of()
         private var paymentLink: JsonField<String> = JsonMissing.of()
         private var productCart: JsonField<MutableList<OneTimeProductCartItem>>? = null
@@ -266,6 +292,7 @@ private constructor(
             paymentId = paymentCreateResponse.paymentId
             totalAmount = paymentCreateResponse.totalAmount
             discountId = paymentCreateResponse.discountId
+            discountIds = paymentCreateResponse.discountIds.map { it.toMutableList() }
             expiresOn = paymentCreateResponse.expiresOn
             paymentLink = paymentCreateResponse.paymentLink
             productCart = paymentCreateResponse.productCart.map { it.toMutableList() }
@@ -337,7 +364,8 @@ private constructor(
          */
         fun totalAmount(totalAmount: JsonField<Int>) = apply { this.totalAmount = totalAmount }
 
-        /** The discount id if discount is applied */
+        /** DEPRECATED: Use discount_ids instead. Returns the first discount's ID if present. */
+        @Deprecated("deprecated")
         fun discountId(discountId: String?) = discountId(JsonField.ofNullable(discountId))
 
         /**
@@ -347,7 +375,34 @@ private constructor(
          * This method is primarily for setting the field to an undocumented or not yet supported
          * value.
          */
+        @Deprecated("deprecated")
         fun discountId(discountId: JsonField<String>) = apply { this.discountId = discountId }
+
+        /** All stacked discount IDs applied, in order of application */
+        fun discountIds(discountIds: List<String>?) = discountIds(JsonField.ofNullable(discountIds))
+
+        /**
+         * Sets [Builder.discountIds] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.discountIds] with a well-typed `List<String>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun discountIds(discountIds: JsonField<List<String>>) = apply {
+            this.discountIds = discountIds.map { it.toMutableList() }
+        }
+
+        /**
+         * Adds a single [String] to [discountIds].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addDiscountId(discountId: String) = apply {
+            discountIds =
+                (discountIds ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("discountIds", it).add(discountId)
+                }
+        }
 
         /** Expiry timestamp of the payment link */
         fun expiresOn(expiresOn: OffsetDateTime?) = expiresOn(JsonField.ofNullable(expiresOn))
@@ -443,6 +498,7 @@ private constructor(
                 checkRequired("paymentId", paymentId),
                 checkRequired("totalAmount", totalAmount),
                 discountId,
+                (discountIds ?: JsonMissing.of()).map { it.toImmutable() },
                 expiresOn,
                 paymentLink,
                 (productCart ?: JsonMissing.of()).map { it.toImmutable() },
@@ -471,6 +527,7 @@ private constructor(
         paymentId()
         totalAmount()
         discountId()
+        discountIds()
         expiresOn()
         paymentLink()
         productCart()?.forEach { it.validate() }
@@ -497,6 +554,7 @@ private constructor(
             (if (paymentId.asKnown() == null) 0 else 1) +
             (if (totalAmount.asKnown() == null) 0 else 1) +
             (if (discountId.asKnown() == null) 0 else 1) +
+            (discountIds.asKnown()?.size ?: 0) +
             (if (expiresOn.asKnown() == null) 0 else 1) +
             (if (paymentLink.asKnown() == null) 0 else 1) +
             (productCart.asKnown()?.sumOf { it.validity().toInt() } ?: 0)
@@ -620,6 +678,7 @@ private constructor(
             paymentId == other.paymentId &&
             totalAmount == other.totalAmount &&
             discountId == other.discountId &&
+            discountIds == other.discountIds &&
             expiresOn == other.expiresOn &&
             paymentLink == other.paymentLink &&
             productCart == other.productCart &&
@@ -634,6 +693,7 @@ private constructor(
             paymentId,
             totalAmount,
             discountId,
+            discountIds,
             expiresOn,
             paymentLink,
             productCart,
@@ -644,5 +704,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "PaymentCreateResponse{clientSecret=$clientSecret, customer=$customer, metadata=$metadata, paymentId=$paymentId, totalAmount=$totalAmount, discountId=$discountId, expiresOn=$expiresOn, paymentLink=$paymentLink, productCart=$productCart, additionalProperties=$additionalProperties}"
+        "PaymentCreateResponse{clientSecret=$clientSecret, customer=$customer, metadata=$metadata, paymentId=$paymentId, totalAmount=$totalAmount, discountId=$discountId, discountIds=$discountIds, expiresOn=$expiresOn, paymentLink=$paymentLink, productCart=$productCart, additionalProperties=$additionalProperties}"
 }

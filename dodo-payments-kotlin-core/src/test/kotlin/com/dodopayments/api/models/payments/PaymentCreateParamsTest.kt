@@ -34,6 +34,7 @@ internal class PaymentCreateParamsTest {
             .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
             .billingCurrency(Currency.AED)
             .discountCode("discount_code")
+            .addDiscountCode("string")
             .force3ds(true)
             .metadata(
                 PaymentCreateParams.Metadata.builder()
@@ -76,6 +77,7 @@ internal class PaymentCreateParamsTest {
                 .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
                 .billingCurrency(Currency.AED)
                 .discountCode("discount_code")
+                .addDiscountCode("string")
                 .force3ds(true)
                 .metadata(
                     PaymentCreateParams.Metadata.builder()
@@ -122,6 +124,7 @@ internal class PaymentCreateParamsTest {
         assertThat(body.allowedPaymentMethodTypes()).containsExactly(PaymentMethodTypes.ACH)
         assertThat(body.billingCurrency()).isEqualTo(Currency.AED)
         assertThat(body.discountCode()).isEqualTo("discount_code")
+        assertThat(body.discountCodes()).containsExactly("string")
         assertThat(body.force3ds()).isEqualTo(true)
         assertThat(body.metadata())
             .isEqualTo(

@@ -22,6 +22,7 @@ internal class UpdateSubscriptionPlanReqTest {
                 .adaptiveCurrencyFeesInclusive(true)
                 .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
                 .discountCode("discount_code")
+                .addDiscountCode("string")
                 .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
                 .metadata(
                     UpdateSubscriptionPlanReq.Metadata.builder()
@@ -39,6 +40,7 @@ internal class UpdateSubscriptionPlanReqTest {
         assertThat(updateSubscriptionPlanReq.addons())
             .containsExactly(AttachAddon.builder().addonId("addon_id").quantity(0).build())
         assertThat(updateSubscriptionPlanReq.discountCode()).isEqualTo("discount_code")
+        assertThat(updateSubscriptionPlanReq.discountCodes()).containsExactly("string")
         assertThat(updateSubscriptionPlanReq.effectiveAt())
             .isEqualTo(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
         assertThat(updateSubscriptionPlanReq.metadata())
@@ -64,6 +66,7 @@ internal class UpdateSubscriptionPlanReqTest {
                 .adaptiveCurrencyFeesInclusive(true)
                 .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
                 .discountCode("discount_code")
+                .addDiscountCode("string")
                 .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
                 .metadata(
                     UpdateSubscriptionPlanReq.Metadata.builder()

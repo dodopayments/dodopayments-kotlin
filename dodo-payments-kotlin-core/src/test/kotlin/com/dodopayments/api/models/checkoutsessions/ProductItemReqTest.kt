@@ -18,6 +18,12 @@ internal class ProductItemReqTest {
                 .quantity(0)
                 .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
                 .amount(0)
+                .addCreditEntitlement(
+                    ProductItemReq.CreditEntitlement.builder()
+                        .creditEntitlementId("credit_entitlement_id")
+                        .creditsAmount("credits_amount")
+                        .build()
+                )
                 .build()
 
         assertThat(productItemReq.productId()).isEqualTo("product_id")
@@ -25,6 +31,13 @@ internal class ProductItemReqTest {
         assertThat(productItemReq.addons())
             .containsExactly(AttachAddon.builder().addonId("addon_id").quantity(0).build())
         assertThat(productItemReq.amount()).isEqualTo(0)
+        assertThat(productItemReq.creditEntitlements())
+            .containsExactly(
+                ProductItemReq.CreditEntitlement.builder()
+                    .creditEntitlementId("credit_entitlement_id")
+                    .creditsAmount("credits_amount")
+                    .build()
+            )
     }
 
     @Test
@@ -36,6 +49,12 @@ internal class ProductItemReqTest {
                 .quantity(0)
                 .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
                 .amount(0)
+                .addCreditEntitlement(
+                    ProductItemReq.CreditEntitlement.builder()
+                        .creditEntitlementId("credit_entitlement_id")
+                        .creditsAmount("credits_amount")
+                        .build()
+                )
                 .build()
 
         val roundtrippedProductItemReq =
