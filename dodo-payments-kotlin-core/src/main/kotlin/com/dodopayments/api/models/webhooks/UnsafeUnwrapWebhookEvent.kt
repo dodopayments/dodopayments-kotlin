@@ -5,7 +5,6 @@ package com.dodopayments.api.models.webhooks
 import com.dodopayments.api.core.BaseDeserializer
 import com.dodopayments.api.core.BaseSerializer
 import com.dodopayments.api.core.JsonValue
-import com.dodopayments.api.core.allMaxBy
 import com.dodopayments.api.core.getOrThrow
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.fasterxml.jackson.core.JsonGenerator
@@ -1197,175 +1196,243 @@ private constructor(
 
         override fun ObjectCodec.deserialize(node: JsonNode): UnsafeUnwrapWebhookEvent {
             val json = JsonValue.fromJsonNode(node)
+            val type = json.asObject()?.get("type")?.asString()
 
-            val bestMatches =
-                sequenceOf(
-                        tryDeserialize(
-                                node,
-                                jacksonTypeRef<AbandonedCheckoutDetectedWebhookEvent>(),
-                            )
-                            ?.let {
-                                UnsafeUnwrapWebhookEvent(
-                                    abandonedCheckoutDetected = it,
-                                    _json = json,
-                                )
-                            },
-                        tryDeserialize(
-                                node,
-                                jacksonTypeRef<AbandonedCheckoutRecoveredWebhookEvent>(),
-                            )
-                            ?.let {
-                                UnsafeUnwrapWebhookEvent(
-                                    abandonedCheckoutRecovered = it,
-                                    _json = json,
-                                )
-                            },
-                        tryDeserialize(node, jacksonTypeRef<CreditAddedWebhookEvent>())?.let {
-                            UnsafeUnwrapWebhookEvent(creditAdded = it, _json = json)
-                        },
-                        tryDeserialize(node, jacksonTypeRef<CreditBalanceLowWebhookEvent>())?.let {
-                            UnsafeUnwrapWebhookEvent(creditBalanceLow = it, _json = json)
-                        },
-                        tryDeserialize(node, jacksonTypeRef<CreditDeductedWebhookEvent>())?.let {
-                            UnsafeUnwrapWebhookEvent(creditDeducted = it, _json = json)
-                        },
-                        tryDeserialize(node, jacksonTypeRef<CreditExpiredWebhookEvent>())?.let {
-                            UnsafeUnwrapWebhookEvent(creditExpired = it, _json = json)
-                        },
-                        tryDeserialize(node, jacksonTypeRef<CreditManualAdjustmentWebhookEvent>())
-                            ?.let {
-                                UnsafeUnwrapWebhookEvent(creditManualAdjustment = it, _json = json)
-                            },
-                        tryDeserialize(node, jacksonTypeRef<CreditOverageChargedWebhookEvent>())
-                            ?.let {
-                                UnsafeUnwrapWebhookEvent(creditOverageCharged = it, _json = json)
-                            },
-                        tryDeserialize(node, jacksonTypeRef<CreditOverageResetWebhookEvent>())
-                            ?.let {
-                                UnsafeUnwrapWebhookEvent(creditOverageReset = it, _json = json)
-                            },
-                        tryDeserialize(node, jacksonTypeRef<CreditRolledOverWebhookEvent>())?.let {
-                            UnsafeUnwrapWebhookEvent(creditRolledOver = it, _json = json)
-                        },
-                        tryDeserialize(node, jacksonTypeRef<CreditRolloverForfeitedWebhookEvent>())
-                            ?.let {
-                                UnsafeUnwrapWebhookEvent(creditRolloverForfeited = it, _json = json)
-                            },
-                        tryDeserialize(node, jacksonTypeRef<DisputeAcceptedWebhookEvent>())?.let {
-                            UnsafeUnwrapWebhookEvent(disputeAccepted = it, _json = json)
-                        },
-                        tryDeserialize(node, jacksonTypeRef<DisputeCancelledWebhookEvent>())?.let {
-                            UnsafeUnwrapWebhookEvent(disputeCancelled = it, _json = json)
-                        },
-                        tryDeserialize(node, jacksonTypeRef<DisputeChallengedWebhookEvent>())?.let {
-                            UnsafeUnwrapWebhookEvent(disputeChallenged = it, _json = json)
-                        },
-                        tryDeserialize(node, jacksonTypeRef<DisputeExpiredWebhookEvent>())?.let {
-                            UnsafeUnwrapWebhookEvent(disputeExpired = it, _json = json)
-                        },
-                        tryDeserialize(node, jacksonTypeRef<DisputeLostWebhookEvent>())?.let {
-                            UnsafeUnwrapWebhookEvent(disputeLost = it, _json = json)
-                        },
-                        tryDeserialize(node, jacksonTypeRef<DisputeOpenedWebhookEvent>())?.let {
-                            UnsafeUnwrapWebhookEvent(disputeOpened = it, _json = json)
-                        },
-                        tryDeserialize(node, jacksonTypeRef<DisputeWonWebhookEvent>())?.let {
-                            UnsafeUnwrapWebhookEvent(disputeWon = it, _json = json)
-                        },
-                        tryDeserialize(node, jacksonTypeRef<DunningRecoveredWebhookEvent>())?.let {
-                            UnsafeUnwrapWebhookEvent(dunningRecovered = it, _json = json)
-                        },
-                        tryDeserialize(node, jacksonTypeRef<DunningStartedWebhookEvent>())?.let {
-                            UnsafeUnwrapWebhookEvent(dunningStarted = it, _json = json)
-                        },
-                        tryDeserialize(node, jacksonTypeRef<EntitlementGrantCreatedWebhookEvent>())
-                            ?.let {
-                                UnsafeUnwrapWebhookEvent(entitlementGrantCreated = it, _json = json)
-                            },
-                        tryDeserialize(
-                                node,
-                                jacksonTypeRef<EntitlementGrantDeliveredWebhookEvent>(),
-                            )
-                            ?.let {
-                                UnsafeUnwrapWebhookEvent(
-                                    entitlementGrantDelivered = it,
-                                    _json = json,
-                                )
-                            },
-                        tryDeserialize(node, jacksonTypeRef<EntitlementGrantFailedWebhookEvent>())
-                            ?.let {
-                                UnsafeUnwrapWebhookEvent(entitlementGrantFailed = it, _json = json)
-                            },
-                        tryDeserialize(node, jacksonTypeRef<EntitlementGrantRevokedWebhookEvent>())
-                            ?.let {
-                                UnsafeUnwrapWebhookEvent(entitlementGrantRevoked = it, _json = json)
-                            },
-                        tryDeserialize(node, jacksonTypeRef<LicenseKeyCreatedWebhookEvent>())?.let {
-                            UnsafeUnwrapWebhookEvent(licenseKeyCreated = it, _json = json)
-                        },
-                        tryDeserialize(node, jacksonTypeRef<PaymentCancelledWebhookEvent>())?.let {
-                            UnsafeUnwrapWebhookEvent(paymentCancelled = it, _json = json)
-                        },
-                        tryDeserialize(node, jacksonTypeRef<PaymentFailedWebhookEvent>())?.let {
-                            UnsafeUnwrapWebhookEvent(paymentFailed = it, _json = json)
-                        },
-                        tryDeserialize(node, jacksonTypeRef<PaymentProcessingWebhookEvent>())?.let {
-                            UnsafeUnwrapWebhookEvent(paymentProcessing = it, _json = json)
-                        },
-                        tryDeserialize(node, jacksonTypeRef<PaymentSucceededWebhookEvent>())?.let {
-                            UnsafeUnwrapWebhookEvent(paymentSucceeded = it, _json = json)
-                        },
-                        tryDeserialize(node, jacksonTypeRef<RefundFailedWebhookEvent>())?.let {
-                            UnsafeUnwrapWebhookEvent(refundFailed = it, _json = json)
-                        },
-                        tryDeserialize(node, jacksonTypeRef<RefundSucceededWebhookEvent>())?.let {
-                            UnsafeUnwrapWebhookEvent(refundSucceeded = it, _json = json)
-                        },
-                        tryDeserialize(node, jacksonTypeRef<SubscriptionActiveWebhookEvent>())
-                            ?.let {
-                                UnsafeUnwrapWebhookEvent(subscriptionActive = it, _json = json)
-                            },
-                        tryDeserialize(node, jacksonTypeRef<SubscriptionCancelledWebhookEvent>())
-                            ?.let {
-                                UnsafeUnwrapWebhookEvent(subscriptionCancelled = it, _json = json)
-                            },
-                        tryDeserialize(node, jacksonTypeRef<SubscriptionExpiredWebhookEvent>())
-                            ?.let {
-                                UnsafeUnwrapWebhookEvent(subscriptionExpired = it, _json = json)
-                            },
-                        tryDeserialize(node, jacksonTypeRef<SubscriptionFailedWebhookEvent>())
-                            ?.let {
-                                UnsafeUnwrapWebhookEvent(subscriptionFailed = it, _json = json)
-                            },
-                        tryDeserialize(node, jacksonTypeRef<SubscriptionOnHoldWebhookEvent>())
-                            ?.let {
-                                UnsafeUnwrapWebhookEvent(subscriptionOnHold = it, _json = json)
-                            },
-                        tryDeserialize(node, jacksonTypeRef<SubscriptionPlanChangedWebhookEvent>())
-                            ?.let {
-                                UnsafeUnwrapWebhookEvent(subscriptionPlanChanged = it, _json = json)
-                            },
-                        tryDeserialize(node, jacksonTypeRef<SubscriptionRenewedWebhookEvent>())
-                            ?.let {
-                                UnsafeUnwrapWebhookEvent(subscriptionRenewed = it, _json = json)
-                            },
-                        tryDeserialize(node, jacksonTypeRef<SubscriptionUpdatedWebhookEvent>())
-                            ?.let {
-                                UnsafeUnwrapWebhookEvent(subscriptionUpdated = it, _json = json)
-                            },
-                    )
-                    .filterNotNull()
-                    .allMaxBy { it.validity() }
-                    .toList()
-            return when (bestMatches.size) {
-                // This can happen if what we're deserializing is completely incompatible with all
-                // the possible variants (e.g. deserializing from boolean).
-                0 -> UnsafeUnwrapWebhookEvent(_json = json)
-                1 -> bestMatches.single()
-                // If there's more than one match with the highest validity, then use the first
-                // completely valid match, or simply the first match if none are completely valid.
-                else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
+            when (type) {
+                "abandoned_checkout.detected" -> {
+                    return tryDeserialize(
+                            node,
+                            jacksonTypeRef<AbandonedCheckoutDetectedWebhookEvent>(),
+                        )
+                        ?.let {
+                            UnsafeUnwrapWebhookEvent(abandonedCheckoutDetected = it, _json = json)
+                        } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "abandoned_checkout.recovered" -> {
+                    return tryDeserialize(
+                            node,
+                            jacksonTypeRef<AbandonedCheckoutRecoveredWebhookEvent>(),
+                        )
+                        ?.let {
+                            UnsafeUnwrapWebhookEvent(abandonedCheckoutRecovered = it, _json = json)
+                        } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "credit.added" -> {
+                    return tryDeserialize(node, jacksonTypeRef<CreditAddedWebhookEvent>())?.let {
+                        UnsafeUnwrapWebhookEvent(creditAdded = it, _json = json)
+                    } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "credit.balance_low" -> {
+                    return tryDeserialize(node, jacksonTypeRef<CreditBalanceLowWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(creditBalanceLow = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "credit.deducted" -> {
+                    return tryDeserialize(node, jacksonTypeRef<CreditDeductedWebhookEvent>())?.let {
+                        UnsafeUnwrapWebhookEvent(creditDeducted = it, _json = json)
+                    } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "credit.expired" -> {
+                    return tryDeserialize(node, jacksonTypeRef<CreditExpiredWebhookEvent>())?.let {
+                        UnsafeUnwrapWebhookEvent(creditExpired = it, _json = json)
+                    } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "credit.manual_adjustment" -> {
+                    return tryDeserialize(
+                            node,
+                            jacksonTypeRef<CreditManualAdjustmentWebhookEvent>(),
+                        )
+                        ?.let {
+                            UnsafeUnwrapWebhookEvent(creditManualAdjustment = it, _json = json)
+                        } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "credit.overage_charged" -> {
+                    return tryDeserialize(node, jacksonTypeRef<CreditOverageChargedWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(creditOverageCharged = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "credit.overage_reset" -> {
+                    return tryDeserialize(node, jacksonTypeRef<CreditOverageResetWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(creditOverageReset = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "credit.rolled_over" -> {
+                    return tryDeserialize(node, jacksonTypeRef<CreditRolledOverWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(creditRolledOver = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "credit.rollover_forfeited" -> {
+                    return tryDeserialize(
+                            node,
+                            jacksonTypeRef<CreditRolloverForfeitedWebhookEvent>(),
+                        )
+                        ?.let {
+                            UnsafeUnwrapWebhookEvent(creditRolloverForfeited = it, _json = json)
+                        } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "dispute.accepted" -> {
+                    return tryDeserialize(node, jacksonTypeRef<DisputeAcceptedWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(disputeAccepted = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "dispute.cancelled" -> {
+                    return tryDeserialize(node, jacksonTypeRef<DisputeCancelledWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(disputeCancelled = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "dispute.challenged" -> {
+                    return tryDeserialize(node, jacksonTypeRef<DisputeChallengedWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(disputeChallenged = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "dispute.expired" -> {
+                    return tryDeserialize(node, jacksonTypeRef<DisputeExpiredWebhookEvent>())?.let {
+                        UnsafeUnwrapWebhookEvent(disputeExpired = it, _json = json)
+                    } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "dispute.lost" -> {
+                    return tryDeserialize(node, jacksonTypeRef<DisputeLostWebhookEvent>())?.let {
+                        UnsafeUnwrapWebhookEvent(disputeLost = it, _json = json)
+                    } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "dispute.opened" -> {
+                    return tryDeserialize(node, jacksonTypeRef<DisputeOpenedWebhookEvent>())?.let {
+                        UnsafeUnwrapWebhookEvent(disputeOpened = it, _json = json)
+                    } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "dispute.won" -> {
+                    return tryDeserialize(node, jacksonTypeRef<DisputeWonWebhookEvent>())?.let {
+                        UnsafeUnwrapWebhookEvent(disputeWon = it, _json = json)
+                    } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "dunning.recovered" -> {
+                    return tryDeserialize(node, jacksonTypeRef<DunningRecoveredWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(dunningRecovered = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "dunning.started" -> {
+                    return tryDeserialize(node, jacksonTypeRef<DunningStartedWebhookEvent>())?.let {
+                        UnsafeUnwrapWebhookEvent(dunningStarted = it, _json = json)
+                    } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "entitlement_grant.created" -> {
+                    return tryDeserialize(
+                            node,
+                            jacksonTypeRef<EntitlementGrantCreatedWebhookEvent>(),
+                        )
+                        ?.let {
+                            UnsafeUnwrapWebhookEvent(entitlementGrantCreated = it, _json = json)
+                        } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "entitlement_grant.delivered" -> {
+                    return tryDeserialize(
+                            node,
+                            jacksonTypeRef<EntitlementGrantDeliveredWebhookEvent>(),
+                        )
+                        ?.let {
+                            UnsafeUnwrapWebhookEvent(entitlementGrantDelivered = it, _json = json)
+                        } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "entitlement_grant.failed" -> {
+                    return tryDeserialize(
+                            node,
+                            jacksonTypeRef<EntitlementGrantFailedWebhookEvent>(),
+                        )
+                        ?.let {
+                            UnsafeUnwrapWebhookEvent(entitlementGrantFailed = it, _json = json)
+                        } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "entitlement_grant.revoked" -> {
+                    return tryDeserialize(
+                            node,
+                            jacksonTypeRef<EntitlementGrantRevokedWebhookEvent>(),
+                        )
+                        ?.let {
+                            UnsafeUnwrapWebhookEvent(entitlementGrantRevoked = it, _json = json)
+                        } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "license_key.created" -> {
+                    return tryDeserialize(node, jacksonTypeRef<LicenseKeyCreatedWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(licenseKeyCreated = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "payment.cancelled" -> {
+                    return tryDeserialize(node, jacksonTypeRef<PaymentCancelledWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(paymentCancelled = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "payment.failed" -> {
+                    return tryDeserialize(node, jacksonTypeRef<PaymentFailedWebhookEvent>())?.let {
+                        UnsafeUnwrapWebhookEvent(paymentFailed = it, _json = json)
+                    } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "payment.processing" -> {
+                    return tryDeserialize(node, jacksonTypeRef<PaymentProcessingWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(paymentProcessing = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "payment.succeeded" -> {
+                    return tryDeserialize(node, jacksonTypeRef<PaymentSucceededWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(paymentSucceeded = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "refund.failed" -> {
+                    return tryDeserialize(node, jacksonTypeRef<RefundFailedWebhookEvent>())?.let {
+                        UnsafeUnwrapWebhookEvent(refundFailed = it, _json = json)
+                    } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "refund.succeeded" -> {
+                    return tryDeserialize(node, jacksonTypeRef<RefundSucceededWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(refundSucceeded = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "subscription.active" -> {
+                    return tryDeserialize(node, jacksonTypeRef<SubscriptionActiveWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(subscriptionActive = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "subscription.cancelled" -> {
+                    return tryDeserialize(node, jacksonTypeRef<SubscriptionCancelledWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(subscriptionCancelled = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "subscription.expired" -> {
+                    return tryDeserialize(node, jacksonTypeRef<SubscriptionExpiredWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(subscriptionExpired = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "subscription.failed" -> {
+                    return tryDeserialize(node, jacksonTypeRef<SubscriptionFailedWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(subscriptionFailed = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "subscription.on_hold" -> {
+                    return tryDeserialize(node, jacksonTypeRef<SubscriptionOnHoldWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(subscriptionOnHold = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "subscription.plan_changed" -> {
+                    return tryDeserialize(
+                            node,
+                            jacksonTypeRef<SubscriptionPlanChangedWebhookEvent>(),
+                        )
+                        ?.let {
+                            UnsafeUnwrapWebhookEvent(subscriptionPlanChanged = it, _json = json)
+                        } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "subscription.renewed" -> {
+                    return tryDeserialize(node, jacksonTypeRef<SubscriptionRenewedWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(subscriptionRenewed = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "subscription.updated" -> {
+                    return tryDeserialize(node, jacksonTypeRef<SubscriptionUpdatedWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(subscriptionUpdated = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
             }
+
+            return UnsafeUnwrapWebhookEvent(_json = json)
         }
     }
 
