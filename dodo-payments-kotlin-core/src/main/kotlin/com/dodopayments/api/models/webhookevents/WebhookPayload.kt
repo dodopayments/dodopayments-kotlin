@@ -835,7 +835,8 @@ private constructor(
             private val checkoutSessionId: JsonField<String>,
             private val customFieldResponses: JsonField<List<CustomFieldResponse>>,
             private val discountId: JsonField<String>,
-            private val discounts: JsonField<List<Payment.Discount>>,
+            private val discounts:
+                JsonField<List<com.dodopayments.api.models.payments.Payment.Discount>>,
             private val errorCode: JsonField<String>,
             private val errorMessage: JsonField<String>,
             private val invoiceId: JsonField<String>,
@@ -926,7 +927,8 @@ private constructor(
                 discountId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("discounts")
                 @ExcludeMissing
-                discounts: JsonField<List<Payment.Discount>> = JsonMissing.of(),
+                discounts: JsonField<List<com.dodopayments.api.models.payments.Payment.Discount>> =
+                    JsonMissing.of(),
                 @JsonProperty("error_code")
                 @ExcludeMissing
                 errorCode: JsonField<String> = JsonMissing.of(),
@@ -1262,7 +1264,8 @@ private constructor(
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
              */
-            fun discounts(): List<Payment.Discount>? = discounts.getNullable("discounts")
+            fun discounts(): List<com.dodopayments.api.models.payments.Payment.Discount>? =
+                discounts.getNullable("discounts")
 
             /**
              * An error code if the payment failed
@@ -1615,7 +1618,8 @@ private constructor(
              */
             @JsonProperty("discounts")
             @ExcludeMissing
-            fun _discounts(): JsonField<List<Payment.Discount>> = discounts
+            fun _discounts():
+                JsonField<List<com.dodopayments.api.models.payments.Payment.Discount>> = discounts
 
             /**
              * Returns the raw JSON value of [errorCode].
@@ -1819,7 +1823,9 @@ private constructor(
                 private var customFieldResponses: JsonField<MutableList<CustomFieldResponse>>? =
                     null
                 private var discountId: JsonField<String> = JsonMissing.of()
-                private var discounts: JsonField<MutableList<Payment.Discount>>? = null
+                private var discounts:
+                    JsonField<MutableList<com.dodopayments.api.models.payments.Payment.Discount>>? =
+                    null
                 private var errorCode: JsonField<String> = JsonMissing.of()
                 private var errorMessage: JsonField<String> = JsonMissing.of()
                 private var invoiceId: JsonField<String> = JsonMissing.of()
@@ -2249,31 +2255,36 @@ private constructor(
                 }
 
                 /** All stacked discounts applied, ordered by position */
-                fun discounts(discounts: List<Payment.Discount>?) =
-                    discounts(JsonField.ofNullable(discounts))
+                fun discounts(
+                    discounts: List<com.dodopayments.api.models.payments.Payment.Discount>?
+                ) = discounts(JsonField.ofNullable(discounts))
 
                 /**
                  * Sets [Builder.discounts] to an arbitrary JSON value.
                  *
                  * You should usually call [Builder.discounts] with a well-typed
-                 * `List<Payment.Discount>` value instead. This method is primarily for setting the
-                 * field to an undocumented or not yet supported value.
+                 * `List<com.dodopayments.api.models.payments.Payment.Discount>` value instead. This
+                 * method is primarily for setting the field to an undocumented or not yet supported
+                 * value.
                  */
-                fun discounts(discounts: JsonField<List<Payment.Discount>>) = apply {
-                    this.discounts = discounts.map { it.toMutableList() }
-                }
+                fun discounts(
+                    discounts:
+                        JsonField<List<com.dodopayments.api.models.payments.Payment.Discount>>
+                ) = apply { this.discounts = discounts.map { it.toMutableList() } }
 
                 /**
-                 * Adds a single [Payment.Discount] to [discounts].
+                 * Adds a single [com.dodopayments.api.models.payments.Payment.Discount] to
+                 * [discounts].
                  *
                  * @throws IllegalStateException if the field was previously set to a non-list.
                  */
-                fun addDiscount(discount: Payment.Discount) = apply {
-                    discounts =
-                        (discounts ?: JsonField.of(mutableListOf())).also {
-                            checkKnown("discounts", it).add(discount)
-                        }
-                }
+                fun addDiscount(discount: com.dodopayments.api.models.payments.Payment.Discount) =
+                    apply {
+                        discounts =
+                            (discounts ?: JsonField.of(mutableListOf())).also {
+                                checkKnown("discounts", it).add(discount)
+                            }
+                    }
 
                 /** An error code if the payment failed */
                 fun errorCode(errorCode: String?) = errorCode(JsonField.ofNullable(errorCode))
@@ -2867,7 +2878,8 @@ private constructor(
             private val customFieldResponses: JsonField<List<CustomFieldResponse>>,
             private val discountCyclesRemaining: JsonField<Int>,
             private val discountId: JsonField<String>,
-            private val discounts: JsonField<List<Subscription.Discount>>,
+            private val discounts:
+                JsonField<List<com.dodopayments.api.models.subscriptions.Subscription.Discount>>,
             private val expiresAt: JsonField<OffsetDateTime>,
             private val paymentMethodId: JsonField<String>,
             private val scheduledChange: JsonField<ScheduledPlanChange>,
@@ -2974,7 +2986,11 @@ private constructor(
                 discountId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("discounts")
                 @ExcludeMissing
-                discounts: JsonField<List<Subscription.Discount>> = JsonMissing.of(),
+                discounts:
+                    JsonField<
+                        List<com.dodopayments.api.models.subscriptions.Subscription.Discount>
+                    > =
+                    JsonMissing.of(),
                 @JsonProperty("expires_at")
                 @ExcludeMissing
                 expiresAt: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -3352,7 +3368,9 @@ private constructor(
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
              */
-            fun discounts(): List<Subscription.Discount>? = discounts.getNullable("discounts")
+            fun discounts():
+                List<com.dodopayments.api.models.subscriptions.Subscription.Discount>? =
+                discounts.getNullable("discounts")
 
             /**
              * Timestamp when the subscription will expire
@@ -3706,7 +3724,9 @@ private constructor(
              */
             @JsonProperty("discounts")
             @ExcludeMissing
-            fun _discounts(): JsonField<List<Subscription.Discount>> = discounts
+            fun _discounts():
+                JsonField<List<com.dodopayments.api.models.subscriptions.Subscription.Discount>> =
+                discounts
 
             /**
              * Returns the raw JSON value of [expiresAt].
@@ -3833,7 +3853,11 @@ private constructor(
                     null
                 private var discountCyclesRemaining: JsonField<Int> = JsonMissing.of()
                 private var discountId: JsonField<String> = JsonMissing.of()
-                private var discounts: JsonField<MutableList<Subscription.Discount>>? = null
+                private var discounts:
+                    JsonField<
+                        MutableList<com.dodopayments.api.models.subscriptions.Subscription.Discount>
+                    >? =
+                    null
                 private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var paymentMethodId: JsonField<String> = JsonMissing.of()
                 private var scheduledChange: JsonField<ScheduledPlanChange> = JsonMissing.of()
@@ -4406,26 +4430,35 @@ private constructor(
                 }
 
                 /** All stacked discounts applied, ordered by position */
-                fun discounts(discounts: List<Subscription.Discount>?) =
-                    discounts(JsonField.ofNullable(discounts))
+                fun discounts(
+                    discounts:
+                        List<com.dodopayments.api.models.subscriptions.Subscription.Discount>?
+                ) = discounts(JsonField.ofNullable(discounts))
 
                 /**
                  * Sets [Builder.discounts] to an arbitrary JSON value.
                  *
                  * You should usually call [Builder.discounts] with a well-typed
-                 * `List<Subscription.Discount>` value instead. This method is primarily for setting
-                 * the field to an undocumented or not yet supported value.
+                 * `List<com.dodopayments.api.models.subscriptions.Subscription.Discount>` value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
                  */
-                fun discounts(discounts: JsonField<List<Subscription.Discount>>) = apply {
-                    this.discounts = discounts.map { it.toMutableList() }
-                }
+                fun discounts(
+                    discounts:
+                        JsonField<
+                            List<com.dodopayments.api.models.subscriptions.Subscription.Discount>
+                        >
+                ) = apply { this.discounts = discounts.map { it.toMutableList() } }
 
                 /**
-                 * Adds a single [Subscription.Discount] to [discounts].
+                 * Adds a single [com.dodopayments.api.models.subscriptions.Subscription.Discount]
+                 * to [discounts].
                  *
                  * @throws IllegalStateException if the field was previously set to a non-list.
                  */
-                fun addDiscount(discount: Subscription.Discount) = apply {
+                fun addDiscount(
+                    discount: com.dodopayments.api.models.subscriptions.Subscription.Discount
+                ) = apply {
                     discounts =
                         (discounts ?: JsonField.of(mutableListOf())).also {
                             checkKnown("discounts", it).add(discount)
