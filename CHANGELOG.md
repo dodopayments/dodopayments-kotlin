@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.99.0 (2026-05-14)
+
+Full Changelog: [v1.98.0...v1.99.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.98.0...v1.99.0)
+
+### Features
+
+* **api:** stainless fixes ([4b6ba3c](https://github.com/dodopayments/dodopayments-kotlin/commit/4b6ba3cf9a23dd36c6fb4c1122d699320784f201))
+
 ## 1.98.0 (2026-05-14)
 
 Full Changelog: [v1.97.1...v1.98.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.97.1...v1.98.0)
