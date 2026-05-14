@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.98.0 (2026-05-14)
+
+Full Changelog: [v1.97.1...v1.98.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.97.1...v1.98.0)
+
+### Features
+
+* **api:** manual updates ([a2cf9ec](https://github.com/dodopayments/dodopayments-kotlin/commit/a2cf9ec6be9858539def9662751d881372ffcf96))
+* **api:** updated openapi spec to 1.98.0 ([9d0d86a](https://github.com/dodopayments/dodopayments-kotlin/commit/9d0d86aa0b968991302e957a5cc2d2af93224cc6))
+* **api:** updated openapi spec to v1.97.10 ([6c26b9c](https://github.com/dodopayments/dodopayments-kotlin/commit/6c26b9c79469bcebdda09f10c53aeb2269b33e8b))
+
+
+### Chores
+
+* redact api-key headers in debug logs ([1e63498](https://github.com/dodopayments/dodopayments-kotlin/commit/1e63498de734e6bfa3597a9d067296470463c3bb))
+
 ## 1.97.1 (2026-05-07)
 
 Full Changelog: [v1.97.1...v1.97.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.97.1...v1.97.1)
