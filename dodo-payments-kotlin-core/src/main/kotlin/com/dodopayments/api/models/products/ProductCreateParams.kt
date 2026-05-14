@@ -111,7 +111,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
-    @Deprecated("deprecated")
+    @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
     fun licenseKeyActivationMessage(): String? = body.licenseKeyActivationMessage()
 
     /**
@@ -123,7 +123,7 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
-    @Deprecated("deprecated")
+    @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
     fun licenseKeyActivationsLimit(): Int? = body.licenseKeyActivationsLimit()
 
     /**
@@ -148,7 +148,8 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
-    @Deprecated("deprecated") fun licenseKeyEnabled(): Boolean? = body.licenseKeyEnabled()
+    @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
+    fun licenseKeyEnabled(): Boolean? = body.licenseKeyEnabled()
 
     /**
      * Additional metadata for the product
@@ -230,7 +231,7 @@ private constructor(
      * Unlike [licenseKeyActivationMessage], this method doesn't throw if the JSON field has an
      * unexpected type.
      */
-    @Deprecated("deprecated")
+    @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
     fun _licenseKeyActivationMessage(): JsonField<String> = body._licenseKeyActivationMessage()
 
     /**
@@ -239,7 +240,7 @@ private constructor(
      * Unlike [licenseKeyActivationsLimit], this method doesn't throw if the JSON field has an
      * unexpected type.
      */
-    @Deprecated("deprecated")
+    @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
     fun _licenseKeyActivationsLimit(): JsonField<Int> = body._licenseKeyActivationsLimit()
 
     /**
@@ -256,7 +257,7 @@ private constructor(
      * Unlike [licenseKeyEnabled], this method doesn't throw if the JSON field has an unexpected
      * type.
      */
-    @Deprecated("deprecated")
+    @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
     fun _licenseKeyEnabled(): JsonField<Boolean> = body._licenseKeyEnabled()
 
     /**
@@ -483,7 +484,7 @@ private constructor(
          * deprecated: use entitlements instead. Ignored when a `license_key` entitlement is
          * attached via the `entitlements` field.
          */
-        @Deprecated("deprecated")
+        @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
         fun licenseKeyActivationMessage(licenseKeyActivationMessage: String?) = apply {
             body.licenseKeyActivationMessage(licenseKeyActivationMessage)
         }
@@ -495,7 +496,7 @@ private constructor(
          * value instead. This method is primarily for setting the field to an undocumented or not
          * yet supported value.
          */
-        @Deprecated("deprecated")
+        @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
         fun licenseKeyActivationMessage(licenseKeyActivationMessage: JsonField<String>) = apply {
             body.licenseKeyActivationMessage(licenseKeyActivationMessage)
         }
@@ -506,7 +507,7 @@ private constructor(
          * deprecated: use entitlements instead. Ignored when a `license_key` entitlement is
          * attached via the `entitlements` field.
          */
-        @Deprecated("deprecated")
+        @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
         fun licenseKeyActivationsLimit(licenseKeyActivationsLimit: Int?) = apply {
             body.licenseKeyActivationsLimit(licenseKeyActivationsLimit)
         }
@@ -516,7 +517,7 @@ private constructor(
          *
          * This unboxed primitive overload exists for backwards compatibility.
          */
-        @Deprecated("deprecated")
+        @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
         fun licenseKeyActivationsLimit(licenseKeyActivationsLimit: Int) =
             licenseKeyActivationsLimit(licenseKeyActivationsLimit as Int?)
 
@@ -527,7 +528,7 @@ private constructor(
          * value instead. This method is primarily for setting the field to an undocumented or not
          * yet supported value.
          */
-        @Deprecated("deprecated")
+        @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
         fun licenseKeyActivationsLimit(licenseKeyActivationsLimit: JsonField<Int>) = apply {
             body.licenseKeyActivationsLimit(licenseKeyActivationsLimit)
         }
@@ -562,7 +563,7 @@ private constructor(
          * the `entitlements` field, the `license_key_*` config fields below are ignored — the
          * attached entitlement's config is the source of truth.
          */
-        @Deprecated("deprecated")
+        @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
         fun licenseKeyEnabled(licenseKeyEnabled: Boolean?) = apply {
             body.licenseKeyEnabled(licenseKeyEnabled)
         }
@@ -572,7 +573,7 @@ private constructor(
          *
          * This unboxed primitive overload exists for backwards compatibility.
          */
-        @Deprecated("deprecated")
+        @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
         fun licenseKeyEnabled(licenseKeyEnabled: Boolean) =
             licenseKeyEnabled(licenseKeyEnabled as Boolean?)
 
@@ -583,7 +584,7 @@ private constructor(
          * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        @Deprecated("deprecated")
+        @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
         fun licenseKeyEnabled(licenseKeyEnabled: JsonField<Boolean>) = apply {
             body.licenseKeyEnabled(licenseKeyEnabled)
         }
@@ -907,7 +908,7 @@ private constructor(
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
-        @Deprecated("deprecated")
+        @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
         fun licenseKeyActivationMessage(): String? =
             licenseKeyActivationMessage.getNullable("license_key_activation_message")
 
@@ -920,7 +921,7 @@ private constructor(
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
-        @Deprecated("deprecated")
+        @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
         fun licenseKeyActivationsLimit(): Int? =
             licenseKeyActivationsLimit.getNullable("license_key_activations_limit")
 
@@ -948,7 +949,7 @@ private constructor(
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
-        @Deprecated("deprecated")
+        @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
         fun licenseKeyEnabled(): Boolean? = licenseKeyEnabled.getNullable("license_key_enabled")
 
         /**
@@ -1041,7 +1042,7 @@ private constructor(
          * Unlike [licenseKeyActivationMessage], this method doesn't throw if the JSON field has an
          * unexpected type.
          */
-        @Deprecated("deprecated")
+        @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
         @JsonProperty("license_key_activation_message")
         @ExcludeMissing
         fun _licenseKeyActivationMessage(): JsonField<String> = licenseKeyActivationMessage
@@ -1052,7 +1053,7 @@ private constructor(
          * Unlike [licenseKeyActivationsLimit], this method doesn't throw if the JSON field has an
          * unexpected type.
          */
-        @Deprecated("deprecated")
+        @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
         @JsonProperty("license_key_activations_limit")
         @ExcludeMissing
         fun _licenseKeyActivationsLimit(): JsonField<Int> = licenseKeyActivationsLimit
@@ -1073,7 +1074,7 @@ private constructor(
          * Unlike [licenseKeyEnabled], this method doesn't throw if the JSON field has an unexpected
          * type.
          */
-        @Deprecated("deprecated")
+        @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
         @JsonProperty("license_key_enabled")
         @ExcludeMissing
         fun _licenseKeyEnabled(): JsonField<Boolean> = licenseKeyEnabled
@@ -1329,7 +1330,7 @@ private constructor(
              * deprecated: use entitlements instead. Ignored when a `license_key` entitlement is
              * attached via the `entitlements` field.
              */
-            @Deprecated("deprecated")
+            @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
             fun licenseKeyActivationMessage(licenseKeyActivationMessage: String?) =
                 licenseKeyActivationMessage(JsonField.ofNullable(licenseKeyActivationMessage))
 
@@ -1340,7 +1341,7 @@ private constructor(
              * [String] value instead. This method is primarily for setting the field to an
              * undocumented or not yet supported value.
              */
-            @Deprecated("deprecated")
+            @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
             fun licenseKeyActivationMessage(licenseKeyActivationMessage: JsonField<String>) =
                 apply {
                     this.licenseKeyActivationMessage = licenseKeyActivationMessage
@@ -1352,7 +1353,7 @@ private constructor(
              * deprecated: use entitlements instead. Ignored when a `license_key` entitlement is
              * attached via the `entitlements` field.
              */
-            @Deprecated("deprecated")
+            @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
             fun licenseKeyActivationsLimit(licenseKeyActivationsLimit: Int?) =
                 licenseKeyActivationsLimit(JsonField.ofNullable(licenseKeyActivationsLimit))
 
@@ -1361,7 +1362,7 @@ private constructor(
              *
              * This unboxed primitive overload exists for backwards compatibility.
              */
-            @Deprecated("deprecated")
+            @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
             fun licenseKeyActivationsLimit(licenseKeyActivationsLimit: Int) =
                 licenseKeyActivationsLimit(licenseKeyActivationsLimit as Int?)
 
@@ -1372,7 +1373,7 @@ private constructor(
              * value instead. This method is primarily for setting the field to an undocumented or
              * not yet supported value.
              */
-            @Deprecated("deprecated")
+            @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
             fun licenseKeyActivationsLimit(licenseKeyActivationsLimit: JsonField<Int>) = apply {
                 this.licenseKeyActivationsLimit = licenseKeyActivationsLimit
             }
@@ -1406,7 +1407,7 @@ private constructor(
              * via the `entitlements` field, the `license_key_*` config fields below are ignored —
              * the attached entitlement's config is the source of truth.
              */
-            @Deprecated("deprecated")
+            @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
             fun licenseKeyEnabled(licenseKeyEnabled: Boolean?) =
                 licenseKeyEnabled(JsonField.ofNullable(licenseKeyEnabled))
 
@@ -1415,7 +1416,7 @@ private constructor(
              *
              * This unboxed primitive overload exists for backwards compatibility.
              */
-            @Deprecated("deprecated")
+            @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
             fun licenseKeyEnabled(licenseKeyEnabled: Boolean) =
                 licenseKeyEnabled(licenseKeyEnabled as Boolean?)
 
@@ -1426,7 +1427,7 @@ private constructor(
              * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            @Deprecated("deprecated")
+            @Deprecated("Use the dedicated entitlements API to configure license-key delivery.")
             fun licenseKeyEnabled(licenseKeyEnabled: JsonField<Boolean>) = apply {
                 this.licenseKeyEnabled = licenseKeyEnabled
             }

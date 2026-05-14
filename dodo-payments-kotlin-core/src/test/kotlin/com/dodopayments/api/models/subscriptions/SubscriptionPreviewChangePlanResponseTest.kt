@@ -35,12 +35,6 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                                 .prorationFactor(0.0)
                                 .quantity(0)
                                 .taxInclusive(true)
-                                .type(
-                                    SubscriptionPreviewChangePlanResponse.ImmediateCharge.LineItem
-                                        .Subscription
-                                        .Type
-                                        .SUBSCRIPTION
-                                )
                                 .unitPrice(0)
                                 .description("description")
                                 .name("name")
@@ -221,12 +215,6 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                             .prorationFactor(0.0)
                             .quantity(0)
                             .taxInclusive(true)
-                            .type(
-                                SubscriptionPreviewChangePlanResponse.ImmediateCharge.LineItem
-                                    .Subscription
-                                    .Type
-                                    .SUBSCRIPTION
-                            )
                             .unitPrice(0)
                             .description("description")
                             .name("name")
@@ -413,12 +401,6 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                                 .prorationFactor(0.0)
                                 .quantity(0)
                                 .taxInclusive(true)
-                                .type(
-                                    SubscriptionPreviewChangePlanResponse.ImmediateCharge.LineItem
-                                        .Subscription
-                                        .Type
-                                        .SUBSCRIPTION
-                                )
                                 .unitPrice(0)
                                 .description("description")
                                 .name("name")

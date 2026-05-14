@@ -70,7 +70,6 @@ internal class EntitlementGrantCreatedWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(EntitlementGrantCreatedWebhookEvent.Type.ENTITLEMENT_GRANT_CREATED)
                 .build()
 
         assertThat(entitlementGrantCreatedWebhookEvent.businessId()).isEqualTo("business_id")
@@ -126,8 +125,6 @@ internal class EntitlementGrantCreatedWebhookEventTest {
             )
         assertThat(entitlementGrantCreatedWebhookEvent.timestamp())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(entitlementGrantCreatedWebhookEvent.type())
-            .isEqualTo(EntitlementGrantCreatedWebhookEvent.Type.ENTITLEMENT_GRANT_CREATED)
     }
 
     @Test
@@ -186,7 +183,6 @@ internal class EntitlementGrantCreatedWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(EntitlementGrantCreatedWebhookEvent.Type.ENTITLEMENT_GRANT_CREATED)
                 .build()
 
         val roundtrippedEntitlementGrantCreatedWebhookEvent =

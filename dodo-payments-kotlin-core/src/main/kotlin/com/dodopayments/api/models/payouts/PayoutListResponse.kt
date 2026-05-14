@@ -109,7 +109,8 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    @Deprecated("deprecated") fun chargebacks(): Long = chargebacks.getRequired("chargebacks")
+    @Deprecated("Use the v3 payout breakup endpoints instead. Will be removed in a future release.")
+    fun chargebacks(): Long = chargebacks.getRequired("chargebacks")
 
     /**
      * The timestamp when the payout was created, in UTC.
@@ -157,7 +158,8 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    @Deprecated("deprecated") fun refunds(): Long = refunds.getRequired("refunds")
+    @Deprecated("Use the v3 payout breakup endpoints instead. Will be removed in a future release.")
+    fun refunds(): Long = refunds.getRequired("refunds")
 
     /**
      * The current status of the payout.
@@ -173,7 +175,8 @@ private constructor(
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    @Deprecated("deprecated") fun tax(): Long = tax.getRequired("tax")
+    @Deprecated("Use the v3 payout breakup endpoints instead. Will be removed in a future release.")
+    fun tax(): Long = tax.getRequired("tax")
 
     /**
      * The timestamp when the payout was last updated, in UTC.
@@ -226,7 +229,7 @@ private constructor(
      *
      * Unlike [chargebacks], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @Deprecated("deprecated")
+    @Deprecated("Use the v3 payout breakup endpoints instead. Will be removed in a future release.")
     @JsonProperty("chargebacks")
     @ExcludeMissing
     fun _chargebacks(): JsonField<Long> = chargebacks
@@ -275,7 +278,7 @@ private constructor(
      *
      * Unlike [refunds], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @Deprecated("deprecated")
+    @Deprecated("Use the v3 payout breakup endpoints instead. Will be removed in a future release.")
     @JsonProperty("refunds")
     @ExcludeMissing
     fun _refunds(): JsonField<Long> = refunds
@@ -292,7 +295,10 @@ private constructor(
      *
      * Unlike [tax], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @Deprecated("deprecated") @JsonProperty("tax") @ExcludeMissing fun _tax(): JsonField<Long> = tax
+    @Deprecated("Use the v3 payout breakup endpoints instead. Will be removed in a future release.")
+    @JsonProperty("tax")
+    @ExcludeMissing
+    fun _tax(): JsonField<Long> = tax
 
     /**
      * Returns the raw JSON value of [updatedAt].
@@ -426,7 +432,9 @@ private constructor(
         fun businessId(businessId: JsonField<String>) = apply { this.businessId = businessId }
 
         /** The total value of chargebacks associated with the payout. */
-        @Deprecated("deprecated")
+        @Deprecated(
+            "Use the v3 payout breakup endpoints instead. Will be removed in a future release."
+        )
         fun chargebacks(chargebacks: Long) = chargebacks(JsonField.of(chargebacks))
 
         /**
@@ -436,7 +444,9 @@ private constructor(
          * This method is primarily for setting the field to an undocumented or not yet supported
          * value.
          */
-        @Deprecated("deprecated")
+        @Deprecated(
+            "Use the v3 payout breakup endpoints instead. Will be removed in a future release."
+        )
         fun chargebacks(chargebacks: JsonField<Long>) = apply { this.chargebacks = chargebacks }
 
         /** The timestamp when the payout was created, in UTC. */
@@ -500,7 +510,10 @@ private constructor(
         fun payoutId(payoutId: JsonField<String>) = apply { this.payoutId = payoutId }
 
         /** The total value of refunds associated with the payout. */
-        @Deprecated("deprecated") fun refunds(refunds: Long) = refunds(JsonField.of(refunds))
+        @Deprecated(
+            "Use the v3 payout breakup endpoints instead. Will be removed in a future release."
+        )
+        fun refunds(refunds: Long) = refunds(JsonField.of(refunds))
 
         /**
          * Sets [Builder.refunds] to an arbitrary JSON value.
@@ -508,7 +521,9 @@ private constructor(
          * You should usually call [Builder.refunds] with a well-typed [Long] value instead. This
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        @Deprecated("deprecated")
+        @Deprecated(
+            "Use the v3 payout breakup endpoints instead. Will be removed in a future release."
+        )
         fun refunds(refunds: JsonField<Long>) = apply { this.refunds = refunds }
 
         /** The current status of the payout. */
@@ -523,7 +538,10 @@ private constructor(
         fun status(status: JsonField<Status>) = apply { this.status = status }
 
         /** The tax applied to the payout. */
-        @Deprecated("deprecated") fun tax(tax: Long) = tax(JsonField.of(tax))
+        @Deprecated(
+            "Use the v3 payout breakup endpoints instead. Will be removed in a future release."
+        )
+        fun tax(tax: Long) = tax(JsonField.of(tax))
 
         /**
          * Sets [Builder.tax] to an arbitrary JSON value.
@@ -531,7 +549,10 @@ private constructor(
          * You should usually call [Builder.tax] with a well-typed [Long] value instead. This method
          * is primarily for setting the field to an undocumented or not yet supported value.
          */
-        @Deprecated("deprecated") fun tax(tax: JsonField<Long>) = apply { this.tax = tax }
+        @Deprecated(
+            "Use the v3 payout breakup endpoints instead. Will be removed in a future release."
+        )
+        fun tax(tax: JsonField<Long>) = apply { this.tax = tax }
 
         /** The timestamp when the payout was last updated, in UTC. */
         fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))
