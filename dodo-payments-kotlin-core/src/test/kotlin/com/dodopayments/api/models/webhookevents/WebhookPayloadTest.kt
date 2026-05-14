@@ -78,7 +78,7 @@ internal class WebhookPayloadTest {
                                 .paymentId("payment_id")
                                 .isResolvedByRdr(true)
                                 .remarks("remarks")
-                                .payloadType(WebhookPayload.Data.Dispute.PayloadType.DISPUTE)
+                                .payloadType(JsonValue.from("Dispute"))
                                 .build()
                         )
                         .metadata(
@@ -213,7 +213,7 @@ internal class WebhookPayloadTest {
                                 .paymentId("payment_id")
                                 .isResolvedByRdr(true)
                                 .remarks("remarks")
-                                .payloadType(WebhookPayload.Data.Dispute.PayloadType.DISPUTE)
+                                .payloadType(JsonValue.from("Dispute"))
                                 .build()
                         )
                         .metadata(
@@ -353,7 +353,7 @@ internal class WebhookPayloadTest {
                                 .paymentId("payment_id")
                                 .isResolvedByRdr(true)
                                 .remarks("remarks")
-                                .payloadType(WebhookPayload.Data.Dispute.PayloadType.DISPUTE)
+                                .payloadType(JsonValue.from("Dispute"))
                                 .build()
                         )
                         .metadata(
