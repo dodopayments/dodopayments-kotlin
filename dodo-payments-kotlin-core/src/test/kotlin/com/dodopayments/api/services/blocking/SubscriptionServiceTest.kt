@@ -350,8 +350,8 @@ internal class SubscriptionServiceTest {
             subscriptionService.updatePaymentMethod(
                 SubscriptionUpdatePaymentMethodParams.builder()
                     .subscriptionId("subscription_id")
-                    .body(
-                        SubscriptionUpdatePaymentMethodParams.Body.New.builder()
+                    .paymentMethod(
+                        SubscriptionUpdatePaymentMethodParams.PaymentMethod.New.builder()
                             .returnUrl("return_url")
                             .build()
                     )
