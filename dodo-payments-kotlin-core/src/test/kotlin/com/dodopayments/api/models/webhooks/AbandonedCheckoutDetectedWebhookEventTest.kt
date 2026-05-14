@@ -29,7 +29,6 @@ internal class AbandonedCheckoutDetectedWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(AbandonedCheckoutDetectedWebhookEvent.Type.ABANDONED_CHECKOUT_DETECTED)
                 .build()
 
         assertThat(abandonedCheckoutDetectedWebhookEvent.businessId()).isEqualTo("business_id")
@@ -48,8 +47,6 @@ internal class AbandonedCheckoutDetectedWebhookEventTest {
             )
         assertThat(abandonedCheckoutDetectedWebhookEvent.timestamp())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(abandonedCheckoutDetectedWebhookEvent.type())
-            .isEqualTo(AbandonedCheckoutDetectedWebhookEvent.Type.ABANDONED_CHECKOUT_DETECTED)
     }
 
     @Test
@@ -72,7 +69,6 @@ internal class AbandonedCheckoutDetectedWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(AbandonedCheckoutDetectedWebhookEvent.Type.ABANDONED_CHECKOUT_DETECTED)
                 .build()
 
         val roundtrippedAbandonedCheckoutDetectedWebhookEvent =

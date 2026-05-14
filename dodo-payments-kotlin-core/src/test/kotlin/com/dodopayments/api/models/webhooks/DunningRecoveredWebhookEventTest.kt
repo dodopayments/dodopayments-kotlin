@@ -26,7 +26,6 @@ internal class DunningRecoveredWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(DunningRecoveredWebhookEvent.Type.DUNNING_RECOVERED)
                 .build()
 
         assertThat(dunningRecoveredWebhookEvent.businessId()).isEqualTo("business_id")
@@ -43,8 +42,6 @@ internal class DunningRecoveredWebhookEventTest {
             )
         assertThat(dunningRecoveredWebhookEvent.timestamp())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(dunningRecoveredWebhookEvent.type())
-            .isEqualTo(DunningRecoveredWebhookEvent.Type.DUNNING_RECOVERED)
     }
 
     @Test
@@ -64,7 +61,6 @@ internal class DunningRecoveredWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(DunningRecoveredWebhookEvent.Type.DUNNING_RECOVERED)
                 .build()
 
         val roundtrippedDunningRecoveredWebhookEvent =

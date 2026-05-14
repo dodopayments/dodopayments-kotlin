@@ -52,7 +52,6 @@ internal class RefundFailedWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(RefundFailedWebhookEvent.Type.REFUND_FAILED)
                 .build()
 
         assertThat(refundFailedWebhookEvent.businessId()).isEqualTo("business_id")
@@ -90,8 +89,6 @@ internal class RefundFailedWebhookEventTest {
             )
         assertThat(refundFailedWebhookEvent.timestamp())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(refundFailedWebhookEvent.type())
-            .isEqualTo(RefundFailedWebhookEvent.Type.REFUND_FAILED)
     }
 
     @Test
@@ -132,7 +129,6 @@ internal class RefundFailedWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(RefundFailedWebhookEvent.Type.REFUND_FAILED)
                 .build()
 
         val roundtrippedRefundFailedWebhookEvent =

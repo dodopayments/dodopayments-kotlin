@@ -33,7 +33,6 @@ internal class DisputeExpiredWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(DisputeExpiredWebhookEvent.Type.DISPUTE_EXPIRED)
                 .build()
 
         assertThat(disputeExpiredWebhookEvent.businessId()).isEqualTo("business_id")
@@ -54,8 +53,6 @@ internal class DisputeExpiredWebhookEventTest {
             )
         assertThat(disputeExpiredWebhookEvent.timestamp())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(disputeExpiredWebhookEvent.type())
-            .isEqualTo(DisputeExpiredWebhookEvent.Type.DISPUTE_EXPIRED)
     }
 
     @Test
@@ -79,7 +76,6 @@ internal class DisputeExpiredWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(DisputeExpiredWebhookEvent.Type.DISPUTE_EXPIRED)
                 .build()
 
         val roundtrippedDisputeExpiredWebhookEvent =

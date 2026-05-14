@@ -178,7 +178,6 @@ internal class SubscriptionExpiredWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(SubscriptionExpiredWebhookEvent.Type.SUBSCRIPTION_EXPIRED)
                 .build()
 
         assertThat(subscriptionExpiredWebhookEvent.businessId()).isEqualTo("business_id")
@@ -330,8 +329,6 @@ internal class SubscriptionExpiredWebhookEventTest {
             )
         assertThat(subscriptionExpiredWebhookEvent.timestamp())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(subscriptionExpiredWebhookEvent.type())
-            .isEqualTo(SubscriptionExpiredWebhookEvent.Type.SUBSCRIPTION_EXPIRED)
     }
 
     @Test
@@ -486,7 +483,6 @@ internal class SubscriptionExpiredWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(SubscriptionExpiredWebhookEvent.Type.SUBSCRIPTION_EXPIRED)
                 .build()
 
         val roundtrippedSubscriptionExpiredWebhookEvent =

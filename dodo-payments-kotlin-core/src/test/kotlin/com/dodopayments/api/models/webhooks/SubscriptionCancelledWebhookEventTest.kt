@@ -178,7 +178,6 @@ internal class SubscriptionCancelledWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(SubscriptionCancelledWebhookEvent.Type.SUBSCRIPTION_CANCELLED)
                 .build()
 
         assertThat(subscriptionCancelledWebhookEvent.businessId()).isEqualTo("business_id")
@@ -330,8 +329,6 @@ internal class SubscriptionCancelledWebhookEventTest {
             )
         assertThat(subscriptionCancelledWebhookEvent.timestamp())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(subscriptionCancelledWebhookEvent.type())
-            .isEqualTo(SubscriptionCancelledWebhookEvent.Type.SUBSCRIPTION_CANCELLED)
     }
 
     @Test
@@ -486,7 +483,6 @@ internal class SubscriptionCancelledWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(SubscriptionCancelledWebhookEvent.Type.SUBSCRIPTION_CANCELLED)
                 .build()
 
         val roundtrippedSubscriptionCancelledWebhookEvent =

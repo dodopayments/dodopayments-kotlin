@@ -4,13 +4,11 @@ package com.dodopayments.api.models.subscriptions
 
 import com.dodopayments.api.core.BaseDeserializer
 import com.dodopayments.api.core.BaseSerializer
-import com.dodopayments.api.core.Enum
 import com.dodopayments.api.core.ExcludeMissing
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.Params
-import com.dodopayments.api.core.allMaxBy
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.getOrThrow
 import com.dodopayments.api.core.http.Headers
@@ -91,6 +89,17 @@ private constructor(
 
         /** Alias for calling [body] with `Body.ofExisting(existing)`. */
         fun body(existing: Body.Existing) = body(Body.ofExisting(existing))
+
+        /**
+         * Alias for calling [body] with the following:
+         * ```kotlin
+         * Body.Existing.builder()
+         *     .paymentMethodId(paymentMethodId)
+         *     .build()
+         * ```
+         */
+        fun existingBody(paymentMethodId: String) =
+            body(Body.Existing.builder().paymentMethodId(paymentMethodId).build())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -382,29 +391,22 @@ private constructor(
 
             override fun ObjectCodec.deserialize(node: JsonNode): Body {
                 val json = JsonValue.fromJsonNode(node)
+                val type = json.asObject()?.get("type")?.asString()
 
-                val bestMatches =
-                    sequenceOf(
-                            tryDeserialize(node, jacksonTypeRef<New>())?.let {
-                                Body(new = it, _json = json)
-                            },
-                            tryDeserialize(node, jacksonTypeRef<Existing>())?.let {
-                                Body(existing = it, _json = json)
-                            },
-                        )
-                        .filterNotNull()
-                        .allMaxBy { it.validity() }
-                        .toList()
-                return when (bestMatches.size) {
-                    // This can happen if what we're deserializing is completely incompatible with
-                    // all the possible variants (e.g. deserializing from boolean).
-                    0 -> Body(_json = json)
-                    1 -> bestMatches.single()
-                    // If there's more than one match with the highest validity, then use the first
-                    // completely valid match, or simply the first match if none are completely
-                    // valid.
-                    else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
+                when (type) {
+                    "new" -> {
+                        return tryDeserialize(node, jacksonTypeRef<New>())?.let {
+                            Body(new = it, _json = json)
+                        } ?: Body(_json = json)
+                    }
+                    "existing" -> {
+                        return tryDeserialize(node, jacksonTypeRef<Existing>())?.let {
+                            Body(existing = it, _json = json)
+                        } ?: Body(_json = json)
+                    }
                 }
+
+                return Body(_json = json)
             }
         }
 
@@ -427,38 +429,35 @@ private constructor(
         class New
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
-            private val type: JsonField<Type>,
+            private val type: JsonValue,
             private val returnUrl: JsonField<String>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
             @JsonCreator
             private constructor(
-                @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
+                @JsonProperty("type") @ExcludeMissing type: JsonValue = JsonMissing.of(),
                 @JsonProperty("return_url")
                 @ExcludeMissing
                 returnUrl: JsonField<String> = JsonMissing.of(),
             ) : this(type, returnUrl, mutableMapOf())
 
             /**
-             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
-             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```kotlin
+             * JsonValue.from("new")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun type(): Type = type.getRequired("type")
+            @JsonProperty("type") @ExcludeMissing fun _type(): JsonValue = type
 
             /**
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
              */
             fun returnUrl(): String? = returnUrl.getNullable("return_url")
-
-            /**
-             * Returns the raw JSON value of [type].
-             *
-             * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
             /**
              * Returns the raw JSON value of [returnUrl].
@@ -484,21 +483,14 @@ private constructor(
 
             companion object {
 
-                /**
-                 * Returns a mutable builder for constructing an instance of [New].
-                 *
-                 * The following fields are required:
-                 * ```kotlin
-                 * .type()
-                 * ```
-                 */
+                /** Returns a mutable builder for constructing an instance of [New]. */
                 fun builder() = Builder()
             }
 
             /** A builder for [New]. */
             class Builder internal constructor() {
 
-                private var type: JsonField<Type>? = null
+                private var type: JsonValue = JsonValue.from("new")
                 private var returnUrl: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -508,16 +500,19 @@ private constructor(
                     additionalProperties = new.additionalProperties.toMutableMap()
                 }
 
-                fun type(type: Type) = type(JsonField.of(type))
-
                 /**
-                 * Sets [Builder.type] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.type] with a well-typed [Type] value instead.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```kotlin
+                 * JsonValue.from("new")
+                 * ```
+                 *
                  * This method is primarily for setting the field to an undocumented or not yet
                  * supported value.
                  */
-                fun type(type: JsonField<Type>) = apply { this.type = type }
+                fun type(type: JsonValue) = apply { this.type = type }
 
                 fun returnUrl(returnUrl: String?) = returnUrl(JsonField.ofNullable(returnUrl))
 
@@ -556,16 +551,8 @@ private constructor(
                  * Returns an immutable instance of [New].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
-                 *
-                 * The following fields are required:
-                 * ```kotlin
-                 * .type()
-                 * ```
-                 *
-                 * @throws IllegalStateException if any required field is unset.
                  */
-                fun build(): New =
-                    New(checkRequired("type", type), returnUrl, additionalProperties.toMutableMap())
+                fun build(): New = New(type, returnUrl, additionalProperties.toMutableMap())
             }
 
             private var validated: Boolean = false
@@ -585,7 +572,11 @@ private constructor(
                     return@apply
                 }
 
-                type().validate()
+                _type().let {
+                    if (it != JsonValue.from("new")) {
+                        throw DodoPaymentsInvalidDataException("'type' is invalid, received $it")
+                    }
+                }
                 returnUrl()
                 validated = true
             }
@@ -605,140 +596,8 @@ private constructor(
              * Used for best match union deserialization.
              */
             internal fun validity(): Int =
-                (type.asKnown()?.validity() ?: 0) + (if (returnUrl.asKnown() == null) 0 else 1)
-
-            class Type @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    val NEW = of("new")
-
-                    fun of(value: String) = Type(JsonField.of(value))
-                }
-
-                /** An enum containing [Type]'s known values. */
-                enum class Known {
-                    NEW
-                }
-
-                /**
-                 * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [Type] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    NEW,
-                    /**
-                     * An enum member indicating that [Type] was instantiated with an unknown value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        NEW -> Value.NEW
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value is a not
-                 *   a known member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        NEW -> Known.NEW
-                        else -> throw DodoPaymentsInvalidDataException("Unknown Type: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value does not
-                 *   have the expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString()
-                        ?: throw DodoPaymentsInvalidDataException("Value is not a String")
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
-                 */
-                fun validate(): Type = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: DodoPaymentsInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Type && value == other.value
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
+                type.let { if (it == JsonValue.from("new")) 1 else 0 } +
+                    (if (returnUrl.asKnown() == null) 0 else 1)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -765,7 +624,7 @@ private constructor(
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val paymentMethodId: JsonField<String>,
-            private val type: JsonField<Type>,
+            private val type: JsonValue,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
@@ -774,7 +633,7 @@ private constructor(
                 @JsonProperty("payment_method_id")
                 @ExcludeMissing
                 paymentMethodId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
+                @JsonProperty("type") @ExcludeMissing type: JsonValue = JsonMissing.of(),
             ) : this(paymentMethodId, type, mutableMapOf())
 
             /**
@@ -785,11 +644,15 @@ private constructor(
             fun paymentMethodId(): String = paymentMethodId.getRequired("payment_method_id")
 
             /**
-             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
-             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```kotlin
+             * JsonValue.from("existing")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun type(): Type = type.getRequired("type")
+            @JsonProperty("type") @ExcludeMissing fun _type(): JsonValue = type
 
             /**
              * Returns the raw JSON value of [paymentMethodId].
@@ -800,13 +663,6 @@ private constructor(
             @JsonProperty("payment_method_id")
             @ExcludeMissing
             fun _paymentMethodId(): JsonField<String> = paymentMethodId
-
-            /**
-             * Returns the raw JSON value of [type].
-             *
-             * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -828,7 +684,6 @@ private constructor(
                  * The following fields are required:
                  * ```kotlin
                  * .paymentMethodId()
-                 * .type()
                  * ```
                  */
                 fun builder() = Builder()
@@ -838,7 +693,7 @@ private constructor(
             class Builder internal constructor() {
 
                 private var paymentMethodId: JsonField<String>? = null
-                private var type: JsonField<Type>? = null
+                private var type: JsonValue = JsonValue.from("existing")
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 internal fun from(existing: Existing) = apply {
@@ -861,16 +716,19 @@ private constructor(
                     this.paymentMethodId = paymentMethodId
                 }
 
-                fun type(type: Type) = type(JsonField.of(type))
-
                 /**
-                 * Sets [Builder.type] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.type] with a well-typed [Type] value instead.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```kotlin
+                 * JsonValue.from("existing")
+                 * ```
+                 *
                  * This method is primarily for setting the field to an undocumented or not yet
                  * supported value.
                  */
-                fun type(type: JsonField<Type>) = apply { this.type = type }
+                fun type(type: JsonValue) = apply { this.type = type }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -902,7 +760,6 @@ private constructor(
                  * The following fields are required:
                  * ```kotlin
                  * .paymentMethodId()
-                 * .type()
                  * ```
                  *
                  * @throws IllegalStateException if any required field is unset.
@@ -910,7 +767,7 @@ private constructor(
                 fun build(): Existing =
                     Existing(
                         checkRequired("paymentMethodId", paymentMethodId),
-                        checkRequired("type", type),
+                        type,
                         additionalProperties.toMutableMap(),
                     )
             }
@@ -933,7 +790,11 @@ private constructor(
                 }
 
                 paymentMethodId()
-                type().validate()
+                _type().let {
+                    if (it != JsonValue.from("existing")) {
+                        throw DodoPaymentsInvalidDataException("'type' is invalid, received $it")
+                    }
+                }
                 validated = true
             }
 
@@ -953,140 +814,7 @@ private constructor(
              */
             internal fun validity(): Int =
                 (if (paymentMethodId.asKnown() == null) 0 else 1) +
-                    (type.asKnown()?.validity() ?: 0)
-
-            class Type @JsonCreator private constructor(private val value: JsonField<String>) :
-                Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    val EXISTING = of("existing")
-
-                    fun of(value: String) = Type(JsonField.of(value))
-                }
-
-                /** An enum containing [Type]'s known values. */
-                enum class Known {
-                    EXISTING
-                }
-
-                /**
-                 * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [Type] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    EXISTING,
-                    /**
-                     * An enum member indicating that [Type] was instantiated with an unknown value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        EXISTING -> Value.EXISTING
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value is a not
-                 *   a known member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        EXISTING -> Known.EXISTING
-                        else -> throw DodoPaymentsInvalidDataException("Unknown Type: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value does not
-                 *   have the expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString()
-                        ?: throw DodoPaymentsInvalidDataException("Value is not a String")
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
-                 */
-                fun validate(): Type = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: DodoPaymentsInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is Type && value == other.value
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
+                    type.let { if (it == JsonValue.from("existing")) 1 else 0 }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {

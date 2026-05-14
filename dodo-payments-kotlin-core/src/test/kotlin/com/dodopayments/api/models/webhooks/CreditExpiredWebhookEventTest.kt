@@ -37,7 +37,6 @@ internal class CreditExpiredWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(CreditExpiredWebhookEvent.Type.CREDIT_EXPIRED)
                 .build()
 
         assertThat(creditExpiredWebhookEvent.businessId()).isEqualTo("business_id")
@@ -64,8 +63,6 @@ internal class CreditExpiredWebhookEventTest {
             )
         assertThat(creditExpiredWebhookEvent.timestamp())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(creditExpiredWebhookEvent.type())
-            .isEqualTo(CreditExpiredWebhookEvent.Type.CREDIT_EXPIRED)
     }
 
     @Test
@@ -95,7 +92,6 @@ internal class CreditExpiredWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(CreditExpiredWebhookEvent.Type.CREDIT_EXPIRED)
                 .build()
 
         val roundtrippedCreditExpiredWebhookEvent =

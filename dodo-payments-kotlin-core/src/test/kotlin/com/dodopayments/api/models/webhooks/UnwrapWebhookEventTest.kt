@@ -66,7 +66,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(AbandonedCheckoutDetectedWebhookEvent.Type.ABANDONED_CHECKOUT_DETECTED)
                 .build()
 
         val unwrapWebhookEvent =
@@ -135,7 +134,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(AbandonedCheckoutDetectedWebhookEvent.Type.ABANDONED_CHECKOUT_DETECTED)
                     .build()
             )
 
@@ -167,7 +165,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(AbandonedCheckoutRecoveredWebhookEvent.Type.ABANDONED_CHECKOUT_RECOVERED)
                 .build()
 
         val unwrapWebhookEvent =
@@ -236,7 +233,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(AbandonedCheckoutRecoveredWebhookEvent.Type.ABANDONED_CHECKOUT_RECOVERED)
                     .build()
             )
 
@@ -275,7 +271,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(CreditAddedWebhookEvent.Type.CREDIT_ADDED)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofCreditAdded(creditAdded)
@@ -349,7 +344,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(CreditAddedWebhookEvent.Type.CREDIT_ADDED)
                     .build()
             )
 
@@ -380,7 +374,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(CreditBalanceLowWebhookEvent.Type.CREDIT_BALANCE_LOW)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofCreditBalanceLow(creditBalanceLow)
@@ -446,7 +439,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(CreditBalanceLowWebhookEvent.Type.CREDIT_BALANCE_LOW)
                     .build()
             )
 
@@ -485,7 +477,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(CreditDeductedWebhookEvent.Type.CREDIT_DEDUCTED)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofCreditDeducted(creditDeducted)
@@ -559,7 +550,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(CreditDeductedWebhookEvent.Type.CREDIT_DEDUCTED)
                     .build()
             )
 
@@ -598,7 +588,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(CreditExpiredWebhookEvent.Type.CREDIT_EXPIRED)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofCreditExpired(creditExpired)
@@ -672,7 +661,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(CreditExpiredWebhookEvent.Type.CREDIT_EXPIRED)
                     .build()
             )
 
@@ -711,7 +699,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(CreditManualAdjustmentWebhookEvent.Type.CREDIT_MANUAL_ADJUSTMENT)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofCreditManualAdjustment(creditManualAdjustment)
@@ -785,7 +772,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(CreditManualAdjustmentWebhookEvent.Type.CREDIT_MANUAL_ADJUSTMENT)
                     .build()
             )
 
@@ -824,7 +810,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(CreditOverageChargedWebhookEvent.Type.CREDIT_OVERAGE_CHARGED)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofCreditOverageCharged(creditOverageCharged)
@@ -898,7 +883,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(CreditOverageChargedWebhookEvent.Type.CREDIT_OVERAGE_CHARGED)
                     .build()
             )
 
@@ -937,7 +921,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(CreditOverageResetWebhookEvent.Type.CREDIT_OVERAGE_RESET)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofCreditOverageReset(creditOverageReset)
@@ -1011,7 +994,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(CreditOverageResetWebhookEvent.Type.CREDIT_OVERAGE_RESET)
                     .build()
             )
 
@@ -1050,7 +1032,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(CreditRolledOverWebhookEvent.Type.CREDIT_ROLLED_OVER)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofCreditRolledOver(creditRolledOver)
@@ -1124,7 +1105,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(CreditRolledOverWebhookEvent.Type.CREDIT_ROLLED_OVER)
                     .build()
             )
 
@@ -1163,7 +1143,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(CreditRolloverForfeitedWebhookEvent.Type.CREDIT_ROLLOVER_FORFEITED)
                 .build()
 
         val unwrapWebhookEvent =
@@ -1238,7 +1217,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(CreditRolloverForfeitedWebhookEvent.Type.CREDIT_ROLLOVER_FORFEITED)
                     .build()
             )
 
@@ -1271,7 +1249,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(DisputeAcceptedWebhookEvent.Type.DISPUTE_ACCEPTED)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofDisputeAccepted(disputeAccepted)
@@ -1339,7 +1316,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(DisputeAcceptedWebhookEvent.Type.DISPUTE_ACCEPTED)
                     .build()
             )
 
@@ -1372,7 +1348,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(DisputeCancelledWebhookEvent.Type.DISPUTE_CANCELLED)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofDisputeCancelled(disputeCancelled)
@@ -1440,7 +1415,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(DisputeCancelledWebhookEvent.Type.DISPUTE_CANCELLED)
                     .build()
             )
 
@@ -1473,7 +1447,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(DisputeChallengedWebhookEvent.Type.DISPUTE_CHALLENGED)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofDisputeChallenged(disputeChallenged)
@@ -1541,7 +1514,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(DisputeChallengedWebhookEvent.Type.DISPUTE_CHALLENGED)
                     .build()
             )
 
@@ -1574,7 +1546,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(DisputeExpiredWebhookEvent.Type.DISPUTE_EXPIRED)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofDisputeExpired(disputeExpired)
@@ -1642,7 +1613,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(DisputeExpiredWebhookEvent.Type.DISPUTE_EXPIRED)
                     .build()
             )
 
@@ -1675,7 +1645,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(DisputeLostWebhookEvent.Type.DISPUTE_LOST)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofDisputeLost(disputeLost)
@@ -1743,7 +1712,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(DisputeLostWebhookEvent.Type.DISPUTE_LOST)
                     .build()
             )
 
@@ -1776,7 +1744,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(DisputeOpenedWebhookEvent.Type.DISPUTE_OPENED)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofDisputeOpened(disputeOpened)
@@ -1844,7 +1811,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(DisputeOpenedWebhookEvent.Type.DISPUTE_OPENED)
                     .build()
             )
 
@@ -1877,7 +1843,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(DisputeWonWebhookEvent.Type.DISPUTE_WON)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofDisputeWon(disputeWon)
@@ -1945,7 +1910,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(DisputeWonWebhookEvent.Type.DISPUTE_WON)
                     .build()
             )
 
@@ -1974,7 +1938,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(DunningRecoveredWebhookEvent.Type.DUNNING_RECOVERED)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofDunningRecovered(dunningRecovered)
@@ -2038,7 +2001,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(DunningRecoveredWebhookEvent.Type.DUNNING_RECOVERED)
                     .build()
             )
 
@@ -2067,7 +2029,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(DunningStartedWebhookEvent.Type.DUNNING_STARTED)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofDunningStarted(dunningStarted)
@@ -2131,7 +2092,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(DunningStartedWebhookEvent.Type.DUNNING_STARTED)
                     .build()
             )
 
@@ -2199,7 +2159,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(EntitlementGrantCreatedWebhookEvent.Type.ENTITLEMENT_GRANT_CREATED)
                 .build()
 
         val unwrapWebhookEvent =
@@ -2303,7 +2262,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(EntitlementGrantCreatedWebhookEvent.Type.ENTITLEMENT_GRANT_CREATED)
                     .build()
             )
 
@@ -2371,7 +2329,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(EntitlementGrantDeliveredWebhookEvent.Type.ENTITLEMENT_GRANT_DELIVERED)
                 .build()
 
         val unwrapWebhookEvent =
@@ -2476,7 +2433,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(EntitlementGrantDeliveredWebhookEvent.Type.ENTITLEMENT_GRANT_DELIVERED)
                     .build()
             )
 
@@ -2544,7 +2500,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(EntitlementGrantFailedWebhookEvent.Type.ENTITLEMENT_GRANT_FAILED)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofEntitlementGrantFailed(entitlementGrantFailed)
@@ -2647,7 +2602,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(EntitlementGrantFailedWebhookEvent.Type.ENTITLEMENT_GRANT_FAILED)
                     .build()
             )
 
@@ -2715,7 +2669,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(EntitlementGrantRevokedWebhookEvent.Type.ENTITLEMENT_GRANT_REVOKED)
                 .build()
 
         val unwrapWebhookEvent =
@@ -2819,7 +2772,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(EntitlementGrantRevokedWebhookEvent.Type.ENTITLEMENT_GRANT_REVOKED)
                     .build()
             )
 
@@ -2855,7 +2807,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(LicenseKeyCreatedWebhookEvent.Type.LICENSE_KEY_CREATED)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofLicenseKeyCreated(licenseKeyCreated)
@@ -2926,7 +2877,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(LicenseKeyCreatedWebhookEvent.Type.LICENSE_KEY_CREATED)
                     .build()
             )
 
@@ -3065,7 +3015,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(PaymentCancelledWebhookEvent.Type.PAYMENT_CANCELLED)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofPaymentCancelled(paymentCancelled)
@@ -3239,7 +3188,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(PaymentCancelledWebhookEvent.Type.PAYMENT_CANCELLED)
                     .build()
             )
 
@@ -3378,7 +3326,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(PaymentFailedWebhookEvent.Type.PAYMENT_FAILED)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofPaymentFailed(paymentFailed)
@@ -3552,7 +3499,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(PaymentFailedWebhookEvent.Type.PAYMENT_FAILED)
                     .build()
             )
 
@@ -3691,7 +3637,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(PaymentProcessingWebhookEvent.Type.PAYMENT_PROCESSING)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofPaymentProcessing(paymentProcessing)
@@ -3865,7 +3810,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(PaymentProcessingWebhookEvent.Type.PAYMENT_PROCESSING)
                     .build()
             )
 
@@ -4004,7 +3948,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(PaymentSucceededWebhookEvent.Type.PAYMENT_SUCCEEDED)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofPaymentSucceeded(paymentSucceeded)
@@ -4178,7 +4121,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(PaymentSucceededWebhookEvent.Type.PAYMENT_SUCCEEDED)
                     .build()
             )
 
@@ -4228,7 +4170,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(RefundFailedWebhookEvent.Type.REFUND_FAILED)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofRefundFailed(refundFailed)
@@ -4313,7 +4254,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(RefundFailedWebhookEvent.Type.REFUND_FAILED)
                     .build()
             )
 
@@ -4363,7 +4303,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(RefundSucceededWebhookEvent.Type.REFUND_SUCCEEDED)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofRefundSucceeded(refundSucceeded)
@@ -4448,7 +4387,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(RefundSucceededWebhookEvent.Type.REFUND_SUCCEEDED)
                     .build()
             )
 
@@ -4612,7 +4550,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(SubscriptionActiveWebhookEvent.Type.SUBSCRIPTION_ACTIVE)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofSubscriptionActive(subscriptionActive)
@@ -4814,7 +4751,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(SubscriptionActiveWebhookEvent.Type.SUBSCRIPTION_ACTIVE)
                     .build()
             )
 
@@ -4978,7 +4914,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(SubscriptionCancelledWebhookEvent.Type.SUBSCRIPTION_CANCELLED)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofSubscriptionCancelled(subscriptionCancelled)
@@ -5180,7 +5115,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(SubscriptionCancelledWebhookEvent.Type.SUBSCRIPTION_CANCELLED)
                     .build()
             )
 
@@ -5344,7 +5278,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(SubscriptionExpiredWebhookEvent.Type.SUBSCRIPTION_EXPIRED)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofSubscriptionExpired(subscriptionExpired)
@@ -5546,7 +5479,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(SubscriptionExpiredWebhookEvent.Type.SUBSCRIPTION_EXPIRED)
                     .build()
             )
 
@@ -5710,7 +5642,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(SubscriptionFailedWebhookEvent.Type.SUBSCRIPTION_FAILED)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofSubscriptionFailed(subscriptionFailed)
@@ -5912,7 +5843,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(SubscriptionFailedWebhookEvent.Type.SUBSCRIPTION_FAILED)
                     .build()
             )
 
@@ -6076,7 +6006,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(SubscriptionOnHoldWebhookEvent.Type.SUBSCRIPTION_ON_HOLD)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofSubscriptionOnHold(subscriptionOnHold)
@@ -6278,7 +6207,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(SubscriptionOnHoldWebhookEvent.Type.SUBSCRIPTION_ON_HOLD)
                     .build()
             )
 
@@ -6442,7 +6370,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(SubscriptionPlanChangedWebhookEvent.Type.SUBSCRIPTION_PLAN_CHANGED)
                 .build()
 
         val unwrapWebhookEvent =
@@ -6645,7 +6572,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(SubscriptionPlanChangedWebhookEvent.Type.SUBSCRIPTION_PLAN_CHANGED)
                     .build()
             )
 
@@ -6809,7 +6735,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(SubscriptionRenewedWebhookEvent.Type.SUBSCRIPTION_RENEWED)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofSubscriptionRenewed(subscriptionRenewed)
@@ -7011,7 +6936,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(SubscriptionRenewedWebhookEvent.Type.SUBSCRIPTION_RENEWED)
                     .build()
             )
 
@@ -7175,7 +7099,6 @@ internal class UnwrapWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(SubscriptionUpdatedWebhookEvent.Type.SUBSCRIPTION_UPDATED)
                 .build()
 
         val unwrapWebhookEvent = UnwrapWebhookEvent.ofSubscriptionUpdated(subscriptionUpdated)
@@ -7377,7 +7300,6 @@ internal class UnwrapWebhookEventTest {
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                    .type(SubscriptionUpdatedWebhookEvent.Type.SUBSCRIPTION_UPDATED)
                     .build()
             )
 

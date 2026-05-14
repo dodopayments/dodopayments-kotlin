@@ -35,7 +35,6 @@ internal class LicenseKeyCreatedWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(LicenseKeyCreatedWebhookEvent.Type.LICENSE_KEY_CREATED)
                 .build()
 
         assertThat(licenseKeyCreatedWebhookEvent.businessId()).isEqualTo("business_id")
@@ -59,8 +58,6 @@ internal class LicenseKeyCreatedWebhookEventTest {
             )
         assertThat(licenseKeyCreatedWebhookEvent.timestamp())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(licenseKeyCreatedWebhookEvent.type())
-            .isEqualTo(LicenseKeyCreatedWebhookEvent.Type.LICENSE_KEY_CREATED)
     }
 
     @Test
@@ -87,7 +84,6 @@ internal class LicenseKeyCreatedWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(LicenseKeyCreatedWebhookEvent.Type.LICENSE_KEY_CREATED)
                 .build()
 
         val roundtrippedLicenseKeyCreatedWebhookEvent =

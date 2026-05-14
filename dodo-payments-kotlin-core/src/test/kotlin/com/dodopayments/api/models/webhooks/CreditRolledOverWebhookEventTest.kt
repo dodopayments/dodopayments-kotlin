@@ -37,7 +37,6 @@ internal class CreditRolledOverWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(CreditRolledOverWebhookEvent.Type.CREDIT_ROLLED_OVER)
                 .build()
 
         assertThat(creditRolledOverWebhookEvent.businessId()).isEqualTo("business_id")
@@ -64,8 +63,6 @@ internal class CreditRolledOverWebhookEventTest {
             )
         assertThat(creditRolledOverWebhookEvent.timestamp())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(creditRolledOverWebhookEvent.type())
-            .isEqualTo(CreditRolledOverWebhookEvent.Type.CREDIT_ROLLED_OVER)
     }
 
     @Test
@@ -95,7 +92,6 @@ internal class CreditRolledOverWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(CreditRolledOverWebhookEvent.Type.CREDIT_ROLLED_OVER)
                 .build()
 
         val roundtrippedCreditRolledOverWebhookEvent =
