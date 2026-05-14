@@ -178,7 +178,6 @@ internal class SubscriptionActiveWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(SubscriptionActiveWebhookEvent.Type.SUBSCRIPTION_ACTIVE)
                 .build()
 
         assertThat(subscriptionActiveWebhookEvent.businessId()).isEqualTo("business_id")
@@ -330,8 +329,6 @@ internal class SubscriptionActiveWebhookEventTest {
             )
         assertThat(subscriptionActiveWebhookEvent.timestamp())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(subscriptionActiveWebhookEvent.type())
-            .isEqualTo(SubscriptionActiveWebhookEvent.Type.SUBSCRIPTION_ACTIVE)
     }
 
     @Test
@@ -486,7 +483,6 @@ internal class SubscriptionActiveWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(SubscriptionActiveWebhookEvent.Type.SUBSCRIPTION_ACTIVE)
                 .build()
 
         val roundtrippedSubscriptionActiveWebhookEvent =

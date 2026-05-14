@@ -9,7 +9,6 @@ import com.dodopayments.api.core.ExcludeMissing
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
-import com.dodopayments.api.core.allMaxBy
 import com.dodopayments.api.core.checkKnown
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.getOrThrow
@@ -726,53 +725,62 @@ private constructor(
 
             override fun ObjectCodec.deserialize(node: JsonNode): Data {
                 val json = JsonValue.fromJsonNode(node)
+                val payloadType = json.asObject()?.get("payload_type")?.asString()
 
-                val bestMatches =
-                    sequenceOf(
-                            tryDeserialize(node, jacksonTypeRef<Payment>())?.let {
-                                Data(payment = it, _json = json)
-                            },
-                            tryDeserialize(node, jacksonTypeRef<Subscription>())?.let {
-                                Data(subscription = it, _json = json)
-                            },
-                            tryDeserialize(node, jacksonTypeRef<Refund>())?.let {
-                                Data(refund = it, _json = json)
-                            },
-                            tryDeserialize(node, jacksonTypeRef<Dispute>())?.let {
-                                Data(dispute = it, _json = json)
-                            },
-                            tryDeserialize(node, jacksonTypeRef<LicenseKey>())?.let {
-                                Data(licenseKey = it, _json = json)
-                            },
-                            tryDeserialize(node, jacksonTypeRef<CreditLedgerEntry>())?.let {
-                                Data(creditLedgerEntry = it, _json = json)
-                            },
-                            tryDeserialize(node, jacksonTypeRef<CreditBalanceLow>())?.let {
-                                Data(creditBalanceLow = it, _json = json)
-                            },
-                            tryDeserialize(node, jacksonTypeRef<AbandonedCheckout>())?.let {
-                                Data(abandonedCheckout = it, _json = json)
-                            },
-                            tryDeserialize(node, jacksonTypeRef<DunningAttempt>())?.let {
-                                Data(dunningAttempt = it, _json = json)
-                            },
-                            tryDeserialize(node, jacksonTypeRef<EntitlementGrant>())?.let {
-                                Data(entitlementGrant = it, _json = json)
-                            },
-                        )
-                        .filterNotNull()
-                        .allMaxBy { it.validity() }
-                        .toList()
-                return when (bestMatches.size) {
-                    // This can happen if what we're deserializing is completely incompatible with
-                    // all the possible variants (e.g. deserializing from boolean).
-                    0 -> Data(_json = json)
-                    1 -> bestMatches.single()
-                    // If there's more than one match with the highest validity, then use the first
-                    // completely valid match, or simply the first match if none are completely
-                    // valid.
-                    else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
+                when (payloadType) {
+                    "Payment" -> {
+                        return tryDeserialize(node, jacksonTypeRef<Payment>())?.let {
+                            Data(payment = it, _json = json)
+                        } ?: Data(_json = json)
+                    }
+                    "Subscription" -> {
+                        return tryDeserialize(node, jacksonTypeRef<Subscription>())?.let {
+                            Data(subscription = it, _json = json)
+                        } ?: Data(_json = json)
+                    }
+                    "Refund" -> {
+                        return tryDeserialize(node, jacksonTypeRef<Refund>())?.let {
+                            Data(refund = it, _json = json)
+                        } ?: Data(_json = json)
+                    }
+                    "Dispute" -> {
+                        return tryDeserialize(node, jacksonTypeRef<Dispute>())?.let {
+                            Data(dispute = it, _json = json)
+                        } ?: Data(_json = json)
+                    }
+                    "LicenseKey" -> {
+                        return tryDeserialize(node, jacksonTypeRef<LicenseKey>())?.let {
+                            Data(licenseKey = it, _json = json)
+                        } ?: Data(_json = json)
+                    }
+                    "CreditLedgerEntry" -> {
+                        return tryDeserialize(node, jacksonTypeRef<CreditLedgerEntry>())?.let {
+                            Data(creditLedgerEntry = it, _json = json)
+                        } ?: Data(_json = json)
+                    }
+                    "CreditBalanceLow" -> {
+                        return tryDeserialize(node, jacksonTypeRef<CreditBalanceLow>())?.let {
+                            Data(creditBalanceLow = it, _json = json)
+                        } ?: Data(_json = json)
+                    }
+                    "AbandonedCheckout" -> {
+                        return tryDeserialize(node, jacksonTypeRef<AbandonedCheckout>())?.let {
+                            Data(abandonedCheckout = it, _json = json)
+                        } ?: Data(_json = json)
+                    }
+                    "DunningAttempt" -> {
+                        return tryDeserialize(node, jacksonTypeRef<DunningAttempt>())?.let {
+                            Data(dunningAttempt = it, _json = json)
+                        } ?: Data(_json = json)
+                    }
+                    "EntitlementGrant" -> {
+                        return tryDeserialize(node, jacksonTypeRef<EntitlementGrant>())?.let {
+                            Data(entitlementGrant = it, _json = json)
+                        } ?: Data(_json = json)
+                    }
                 }
+
+                return Data(_json = json)
             }
         }
 
@@ -843,7 +851,7 @@ private constructor(
             private val subscriptionId: JsonField<String>,
             private val tax: JsonField<Int>,
             private val updatedAt: JsonField<OffsetDateTime>,
-            private val payloadType: JsonField<PayloadType>,
+            private val payloadType: JsonValue,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
@@ -963,7 +971,7 @@ private constructor(
                 updatedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
                 @JsonProperty("payload_type")
                 @ExcludeMissing
-                payloadType: JsonField<PayloadType> = JsonMissing.of(),
+                payloadType: JsonValue = JsonMissing.of(),
             ) : this(
                 billing,
                 brandId,
@@ -1245,7 +1253,7 @@ private constructor(
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
              */
-            @Deprecated("deprecated")
+            @Deprecated("Use `discounts` instead.")
             fun discountId(): String? = discountId.getNullable("discount_id")
 
             /**
@@ -1372,11 +1380,17 @@ private constructor(
             fun updatedAt(): OffsetDateTime? = updatedAt.getNullable("updated_at")
 
             /**
-             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
-             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```kotlin
+             * JsonValue.from("Payment")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun payloadType(): PayloadType = payloadType.getRequired("payload_type")
+            @JsonProperty("payload_type")
+            @ExcludeMissing
+            fun _payloadType(): JsonValue = payloadType
 
             /**
              * Returns the raw JSON value of [billing].
@@ -1588,7 +1602,7 @@ private constructor(
              * Unlike [discountId], this method doesn't throw if the JSON field has an unexpected
              * type.
              */
-            @Deprecated("deprecated")
+            @Deprecated("Use `discounts` instead.")
             @JsonProperty("discount_id")
             @ExcludeMissing
             fun _discountId(): JsonField<String> = discountId
@@ -1739,16 +1753,6 @@ private constructor(
             @ExcludeMissing
             fun _updatedAt(): JsonField<OffsetDateTime> = updatedAt
 
-            /**
-             * Returns the raw JSON value of [payloadType].
-             *
-             * Unlike [payloadType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("payload_type")
-            @ExcludeMissing
-            fun _payloadType(): JsonField<PayloadType> = payloadType
-
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
                 additionalProperties.put(key, value)
@@ -1782,7 +1786,6 @@ private constructor(
                  * .settlementAmount()
                  * .settlementCurrency()
                  * .totalAmount()
-                 * .payloadType()
                  * ```
                  */
                 fun builder() = Builder()
@@ -1835,7 +1838,7 @@ private constructor(
                 private var subscriptionId: JsonField<String> = JsonMissing.of()
                 private var tax: JsonField<Int> = JsonMissing.of()
                 private var updatedAt: JsonField<OffsetDateTime> = JsonMissing.of()
-                private var payloadType: JsonField<PayloadType>? = null
+                private var payloadType: JsonValue = JsonValue.from("Payment")
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 internal fun from(payment: Payment) = apply {
@@ -2230,7 +2233,7 @@ private constructor(
                 /**
                  * DEPRECATED: Use discounts instead. Returns the first discount's ID if present.
                  */
-                @Deprecated("deprecated")
+                @Deprecated("Use `discounts` instead.")
                 fun discountId(discountId: String?) = discountId(JsonField.ofNullable(discountId))
 
                 /**
@@ -2240,7 +2243,7 @@ private constructor(
                  * instead. This method is primarily for setting the field to an undocumented or not
                  * yet supported value.
                  */
-                @Deprecated("deprecated")
+                @Deprecated("Use `discounts` instead.")
                 fun discountId(discountId: JsonField<String>) = apply {
                     this.discountId = discountId
                 }
@@ -2508,18 +2511,19 @@ private constructor(
                     this.updatedAt = updatedAt
                 }
 
-                fun payloadType(payloadType: PayloadType) = payloadType(JsonField.of(payloadType))
-
                 /**
-                 * Sets [Builder.payloadType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.payloadType] with a well-typed [PayloadType]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```kotlin
+                 * JsonValue.from("Payment")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun payloadType(payloadType: JsonField<PayloadType>) = apply {
-                    this.payloadType = payloadType
-                }
+                fun payloadType(payloadType: JsonValue) = apply { this.payloadType = payloadType }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -2564,7 +2568,6 @@ private constructor(
                  * .settlementAmount()
                  * .settlementCurrency()
                  * .totalAmount()
-                 * .payloadType()
                  * ```
                  *
                  * @throws IllegalStateException if any required field is unset.
@@ -2608,7 +2611,7 @@ private constructor(
                         subscriptionId,
                         tax,
                         updatedAt,
-                        checkRequired("payloadType", payloadType),
+                        payloadType,
                         additionalProperties.toMutableMap(),
                     )
             }
@@ -2667,7 +2670,13 @@ private constructor(
                 subscriptionId()
                 tax()
                 updatedAt()
-                payloadType().validate()
+                _payloadType().let {
+                    if (it != JsonValue.from("Payment")) {
+                        throw DodoPaymentsInvalidDataException(
+                            "'payloadType' is invalid, received $it"
+                        )
+                    }
+                }
                 validated = true
             }
 
@@ -2723,143 +2732,7 @@ private constructor(
                     (if (subscriptionId.asKnown() == null) 0 else 1) +
                     (if (tax.asKnown() == null) 0 else 1) +
                     (if (updatedAt.asKnown() == null) 0 else 1) +
-                    (payloadType.asKnown()?.validity() ?: 0)
-
-            class PayloadType
-            @JsonCreator
-            private constructor(private val value: JsonField<String>) : Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    val PAYMENT = of("Payment")
-
-                    fun of(value: String) = PayloadType(JsonField.of(value))
-                }
-
-                /** An enum containing [PayloadType]'s known values. */
-                enum class Known {
-                    PAYMENT
-                }
-
-                /**
-                 * An enum containing [PayloadType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [PayloadType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    PAYMENT,
-                    /**
-                     * An enum member indicating that [PayloadType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        PAYMENT -> Value.PAYMENT
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value is a not
-                 *   a known member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        PAYMENT -> Known.PAYMENT
-                        else ->
-                            throw DodoPaymentsInvalidDataException("Unknown PayloadType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value does not
-                 *   have the expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString()
-                        ?: throw DodoPaymentsInvalidDataException("Value is not a String")
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
-                 */
-                fun validate(): PayloadType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: DodoPaymentsInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is PayloadType && value == other.value
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
+                    payloadType.let { if (it == JsonValue.from("Payment")) 1 else 0 }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -2999,7 +2872,7 @@ private constructor(
             private val paymentMethodId: JsonField<String>,
             private val scheduledChange: JsonField<ScheduledPlanChange>,
             private val taxId: JsonField<String>,
-            private val payloadType: JsonField<PayloadType>,
+            private val payloadType: JsonValue,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
@@ -3114,7 +2987,7 @@ private constructor(
                 @JsonProperty("tax_id") @ExcludeMissing taxId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("payload_type")
                 @ExcludeMissing
-                payloadType: JsonField<PayloadType> = JsonMissing.of(),
+                payloadType: JsonValue = JsonMissing.of(),
             ) : this(
                 addons,
                 billing,
@@ -3515,11 +3388,17 @@ private constructor(
             fun taxId(): String? = taxId.getNullable("tax_id")
 
             /**
-             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
-             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```kotlin
+             * JsonValue.from("Subscription")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun payloadType(): PayloadType = payloadType.getRequired("payload_type")
+            @JsonProperty("payload_type")
+            @ExcludeMissing
+            fun _payloadType(): JsonValue = payloadType
 
             /**
              * Returns the raw JSON value of [addons].
@@ -3866,16 +3745,6 @@ private constructor(
              */
             @JsonProperty("tax_id") @ExcludeMissing fun _taxId(): JsonField<String> = taxId
 
-            /**
-             * Returns the raw JSON value of [payloadType].
-             *
-             * Unlike [payloadType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("payload_type")
-            @ExcludeMissing
-            fun _payloadType(): JsonField<PayloadType> = payloadType
-
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
                 additionalProperties.put(key, value)
@@ -3919,7 +3788,6 @@ private constructor(
                  * .subscriptionPeriodInterval()
                  * .taxInclusive()
                  * .trialPeriodDays()
-                 * .payloadType()
                  * ```
                  */
                 fun builder() = Builder()
@@ -3970,7 +3838,7 @@ private constructor(
                 private var paymentMethodId: JsonField<String> = JsonMissing.of()
                 private var scheduledChange: JsonField<ScheduledPlanChange> = JsonMissing.of()
                 private var taxId: JsonField<String> = JsonMissing.of()
-                private var payloadType: JsonField<PayloadType>? = null
+                private var payloadType: JsonValue = JsonValue.from("Subscription")
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 internal fun from(subscription: Subscription) = apply {
@@ -4621,18 +4489,19 @@ private constructor(
                  */
                 fun taxId(taxId: JsonField<String>) = apply { this.taxId = taxId }
 
-                fun payloadType(payloadType: PayloadType) = payloadType(JsonField.of(payloadType))
-
                 /**
-                 * Sets [Builder.payloadType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.payloadType] with a well-typed [PayloadType]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```kotlin
+                 * JsonValue.from("Subscription")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun payloadType(payloadType: JsonField<PayloadType>) = apply {
-                    this.payloadType = payloadType
-                }
+                fun payloadType(payloadType: JsonValue) = apply { this.payloadType = payloadType }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -4687,7 +4556,6 @@ private constructor(
                  * .subscriptionPeriodInterval()
                  * .taxInclusive()
                  * .trialPeriodDays()
-                 * .payloadType()
                  * ```
                  *
                  * @throws IllegalStateException if any required field is unset.
@@ -4732,7 +4600,7 @@ private constructor(
                         paymentMethodId,
                         scheduledChange,
                         taxId,
-                        checkRequired("payloadType", payloadType),
+                        payloadType,
                         additionalProperties.toMutableMap(),
                     )
             }
@@ -4789,7 +4657,13 @@ private constructor(
                 paymentMethodId()
                 scheduledChange()?.validate()
                 taxId()
-                payloadType().validate()
+                _payloadType().let {
+                    if (it != JsonValue.from("Subscription")) {
+                        throw DodoPaymentsInvalidDataException(
+                            "'payloadType' is invalid, received $it"
+                        )
+                    }
+                }
                 validated = true
             }
 
@@ -4843,143 +4717,7 @@ private constructor(
                     (if (paymentMethodId.asKnown() == null) 0 else 1) +
                     (scheduledChange.asKnown()?.validity() ?: 0) +
                     (if (taxId.asKnown() == null) 0 else 1) +
-                    (payloadType.asKnown()?.validity() ?: 0)
-
-            class PayloadType
-            @JsonCreator
-            private constructor(private val value: JsonField<String>) : Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    val SUBSCRIPTION = of("Subscription")
-
-                    fun of(value: String) = PayloadType(JsonField.of(value))
-                }
-
-                /** An enum containing [PayloadType]'s known values. */
-                enum class Known {
-                    SUBSCRIPTION
-                }
-
-                /**
-                 * An enum containing [PayloadType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [PayloadType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    SUBSCRIPTION,
-                    /**
-                     * An enum member indicating that [PayloadType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        SUBSCRIPTION -> Value.SUBSCRIPTION
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value is a not
-                 *   a known member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        SUBSCRIPTION -> Known.SUBSCRIPTION
-                        else ->
-                            throw DodoPaymentsInvalidDataException("Unknown PayloadType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value does not
-                 *   have the expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString()
-                        ?: throw DodoPaymentsInvalidDataException("Value is not a String")
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
-                 */
-                fun validate(): PayloadType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: DodoPaymentsInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is PayloadType && value == other.value
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
+                    payloadType.let { if (it == JsonValue.from("Subscription")) 1 else 0 }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -5088,7 +4826,7 @@ private constructor(
             private val amount: JsonField<Int>,
             private val currency: JsonField<Currency>,
             private val reason: JsonField<String>,
-            private val payloadType: JsonField<PayloadType>,
+            private val payloadType: JsonValue,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
@@ -5128,7 +4866,7 @@ private constructor(
                 reason: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("payload_type")
                 @ExcludeMissing
-                payloadType: JsonField<PayloadType> = JsonMissing.of(),
+                payloadType: JsonValue = JsonMissing.of(),
             ) : this(
                 businessId,
                 createdAt,
@@ -5258,11 +4996,17 @@ private constructor(
             fun reason(): String? = reason.getNullable("reason")
 
             /**
-             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
-             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```kotlin
+             * JsonValue.from("Refund")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun payloadType(): PayloadType = payloadType.getRequired("payload_type")
+            @JsonProperty("payload_type")
+            @ExcludeMissing
+            fun _payloadType(): JsonValue = payloadType
 
             /**
              * Returns the raw JSON value of [businessId].
@@ -5364,16 +5108,6 @@ private constructor(
              */
             @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
 
-            /**
-             * Returns the raw JSON value of [payloadType].
-             *
-             * Unlike [payloadType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("payload_type")
-            @ExcludeMissing
-            fun _payloadType(): JsonField<PayloadType> = payloadType
-
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
                 additionalProperties.put(key, value)
@@ -5401,7 +5135,6 @@ private constructor(
                  * .paymentId()
                  * .refundId()
                  * .status()
-                 * .payloadType()
                  * ```
                  */
                 fun builder() = Builder()
@@ -5423,7 +5156,7 @@ private constructor(
                 private var amount: JsonField<Int> = JsonMissing.of()
                 private var currency: JsonField<Currency> = JsonMissing.of()
                 private var reason: JsonField<String> = JsonMissing.of()
-                private var payloadType: JsonField<PayloadType>? = null
+                private var payloadType: JsonValue = JsonValue.from("Refund")
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 internal fun from(refund: Refund) = apply {
@@ -5590,18 +5323,19 @@ private constructor(
                  */
                 fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
-                fun payloadType(payloadType: PayloadType) = payloadType(JsonField.of(payloadType))
-
                 /**
-                 * Sets [Builder.payloadType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.payloadType] with a well-typed [PayloadType]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```kotlin
+                 * JsonValue.from("Refund")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun payloadType(payloadType: JsonField<PayloadType>) = apply {
-                    this.payloadType = payloadType
-                }
+                fun payloadType(payloadType: JsonValue) = apply { this.payloadType = payloadType }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -5640,7 +5374,6 @@ private constructor(
                  * .paymentId()
                  * .refundId()
                  * .status()
-                 * .payloadType()
                  * ```
                  *
                  * @throws IllegalStateException if any required field is unset.
@@ -5658,7 +5391,7 @@ private constructor(
                         amount,
                         currency,
                         reason,
-                        checkRequired("payloadType", payloadType),
+                        payloadType,
                         additionalProperties.toMutableMap(),
                     )
             }
@@ -5691,7 +5424,13 @@ private constructor(
                 amount()
                 currency()?.validate()
                 reason()
-                payloadType().validate()
+                _payloadType().let {
+                    if (it != JsonValue.from("Refund")) {
+                        throw DodoPaymentsInvalidDataException(
+                            "'payloadType' is invalid, received $it"
+                        )
+                    }
+                }
                 validated = true
             }
 
@@ -5721,143 +5460,7 @@ private constructor(
                     (if (amount.asKnown() == null) 0 else 1) +
                     (currency.asKnown()?.validity() ?: 0) +
                     (if (reason.asKnown() == null) 0 else 1) +
-                    (payloadType.asKnown()?.validity() ?: 0)
-
-            class PayloadType
-            @JsonCreator
-            private constructor(private val value: JsonField<String>) : Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    val REFUND = of("Refund")
-
-                    fun of(value: String) = PayloadType(JsonField.of(value))
-                }
-
-                /** An enum containing [PayloadType]'s known values. */
-                enum class Known {
-                    REFUND
-                }
-
-                /**
-                 * An enum containing [PayloadType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [PayloadType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    REFUND,
-                    /**
-                     * An enum member indicating that [PayloadType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        REFUND -> Value.REFUND
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value is a not
-                 *   a known member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        REFUND -> Known.REFUND
-                        else ->
-                            throw DodoPaymentsInvalidDataException("Unknown PayloadType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value does not
-                 *   have the expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString()
-                        ?: throw DodoPaymentsInvalidDataException("Value is not a String")
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
-                 */
-                fun validate(): PayloadType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: DodoPaymentsInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is PayloadType && value == other.value
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
+                    payloadType.let { if (it == JsonValue.from("Refund")) 1 else 0 }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -5919,7 +5522,7 @@ private constructor(
             private val isResolvedByRdr: JsonField<Boolean>,
             private val reason: JsonField<String>,
             private val remarks: JsonField<String>,
-            private val payloadType: JsonField<PayloadType>,
+            private val payloadType: JsonValue,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
@@ -5963,7 +5566,7 @@ private constructor(
                 remarks: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("payload_type")
                 @ExcludeMissing
-                payloadType: JsonField<PayloadType> = JsonMissing.of(),
+                payloadType: JsonValue = JsonMissing.of(),
             ) : this(
                 amount,
                 businessId,
@@ -6103,11 +5706,17 @@ private constructor(
             fun remarks(): String? = remarks.getNullable("remarks")
 
             /**
-             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
-             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```kotlin
+             * JsonValue.from("Dispute")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun payloadType(): PayloadType = payloadType.getRequired("payload_type")
+            @JsonProperty("payload_type")
+            @ExcludeMissing
+            fun _payloadType(): JsonValue = payloadType
 
             /**
              * Returns the raw JSON value of [amount].
@@ -6218,16 +5827,6 @@ private constructor(
              */
             @JsonProperty("remarks") @ExcludeMissing fun _remarks(): JsonField<String> = remarks
 
-            /**
-             * Returns the raw JSON value of [payloadType].
-             *
-             * Unlike [payloadType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("payload_type")
-            @ExcludeMissing
-            fun _payloadType(): JsonField<PayloadType> = payloadType
-
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
                 additionalProperties.put(key, value)
@@ -6256,7 +5855,6 @@ private constructor(
                  * .disputeStage()
                  * .disputeStatus()
                  * .paymentId()
-                 * .payloadType()
                  * ```
                  */
                 fun builder() = Builder()
@@ -6277,7 +5875,7 @@ private constructor(
                 private var isResolvedByRdr: JsonField<Boolean> = JsonMissing.of()
                 private var reason: JsonField<String> = JsonMissing.of()
                 private var remarks: JsonField<String> = JsonMissing.of()
-                private var payloadType: JsonField<PayloadType>? = null
+                private var payloadType: JsonValue = JsonValue.from("Dispute")
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 internal fun from(dispute: Dispute) = apply {
@@ -6469,18 +6067,19 @@ private constructor(
                  */
                 fun remarks(remarks: JsonField<String>) = apply { this.remarks = remarks }
 
-                fun payloadType(payloadType: PayloadType) = payloadType(JsonField.of(payloadType))
-
                 /**
-                 * Sets [Builder.payloadType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.payloadType] with a well-typed [PayloadType]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```kotlin
+                 * JsonValue.from("Dispute")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun payloadType(payloadType: JsonField<PayloadType>) = apply {
-                    this.payloadType = payloadType
-                }
+                fun payloadType(payloadType: JsonValue) = apply { this.payloadType = payloadType }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -6520,7 +6119,6 @@ private constructor(
                  * .disputeStage()
                  * .disputeStatus()
                  * .paymentId()
-                 * .payloadType()
                  * ```
                  *
                  * @throws IllegalStateException if any required field is unset.
@@ -6539,7 +6137,7 @@ private constructor(
                         isResolvedByRdr,
                         reason,
                         remarks,
-                        checkRequired("payloadType", payloadType),
+                        payloadType,
                         additionalProperties.toMutableMap(),
                     )
             }
@@ -6573,7 +6171,13 @@ private constructor(
                 isResolvedByRdr()
                 reason()
                 remarks()
-                payloadType().validate()
+                _payloadType().let {
+                    if (it != JsonValue.from("Dispute")) {
+                        throw DodoPaymentsInvalidDataException(
+                            "'payloadType' is invalid, received $it"
+                        )
+                    }
+                }
                 validated = true
             }
 
@@ -6604,143 +6208,7 @@ private constructor(
                     (if (isResolvedByRdr.asKnown() == null) 0 else 1) +
                     (if (reason.asKnown() == null) 0 else 1) +
                     (if (remarks.asKnown() == null) 0 else 1) +
-                    (payloadType.asKnown()?.validity() ?: 0)
-
-            class PayloadType
-            @JsonCreator
-            private constructor(private val value: JsonField<String>) : Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    val DISPUTE = of("Dispute")
-
-                    fun of(value: String) = PayloadType(JsonField.of(value))
-                }
-
-                /** An enum containing [PayloadType]'s known values. */
-                enum class Known {
-                    DISPUTE
-                }
-
-                /**
-                 * An enum containing [PayloadType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [PayloadType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    DISPUTE,
-                    /**
-                     * An enum member indicating that [PayloadType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        DISPUTE -> Value.DISPUTE
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value is a not
-                 *   a known member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        DISPUTE -> Known.DISPUTE
-                        else ->
-                            throw DodoPaymentsInvalidDataException("Unknown PayloadType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value does not
-                 *   have the expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString()
-                        ?: throw DodoPaymentsInvalidDataException("Value is not a String")
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
-                 */
-                fun validate(): PayloadType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: DodoPaymentsInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is PayloadType && value == other.value
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
+                    payloadType.let { if (it == JsonValue.from("Dispute")) 1 else 0 }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -6806,7 +6274,7 @@ private constructor(
             private val expiresAt: JsonField<OffsetDateTime>,
             private val paymentId: JsonField<String>,
             private val subscriptionId: JsonField<String>,
-            private val payloadType: JsonField<PayloadType>,
+            private val payloadType: JsonValue,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
@@ -6850,7 +6318,7 @@ private constructor(
                 subscriptionId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("payload_type")
                 @ExcludeMissing
-                payloadType: JsonField<PayloadType> = JsonMissing.of(),
+                payloadType: JsonValue = JsonMissing.of(),
             ) : this(
                 id,
                 businessId,
@@ -7002,11 +6470,17 @@ private constructor(
             fun subscriptionId(): String? = subscriptionId.getNullable("subscription_id")
 
             /**
-             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
-             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```kotlin
+             * JsonValue.from("LicenseKey")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun payloadType(): PayloadType = payloadType.getRequired("payload_type")
+            @JsonProperty("payload_type")
+            @ExcludeMissing
+            fun _payloadType(): JsonValue = payloadType
 
             /**
              * Returns the raw JSON value of [id].
@@ -7131,16 +6605,6 @@ private constructor(
             @ExcludeMissing
             fun _subscriptionId(): JsonField<String> = subscriptionId
 
-            /**
-             * Returns the raw JSON value of [payloadType].
-             *
-             * Unlike [payloadType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("payload_type")
-            @ExcludeMissing
-            fun _payloadType(): JsonField<PayloadType> = payloadType
-
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
                 additionalProperties.put(key, value)
@@ -7169,7 +6633,6 @@ private constructor(
                  * .productId()
                  * .source()
                  * .status()
-                 * .payloadType()
                  * ```
                  */
                 fun builder() = Builder()
@@ -7193,7 +6656,7 @@ private constructor(
                 private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var paymentId: JsonField<String> = JsonMissing.of()
                 private var subscriptionId: JsonField<String> = JsonMissing.of()
-                private var payloadType: JsonField<PayloadType>? = null
+                private var payloadType: JsonValue = JsonValue.from("LicenseKey")
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 internal fun from(licenseKey: LicenseKey) = apply {
@@ -7406,18 +6869,19 @@ private constructor(
                     this.subscriptionId = subscriptionId
                 }
 
-                fun payloadType(payloadType: PayloadType) = payloadType(JsonField.of(payloadType))
-
                 /**
-                 * Sets [Builder.payloadType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.payloadType] with a well-typed [PayloadType]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```kotlin
+                 * JsonValue.from("LicenseKey")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun payloadType(payloadType: JsonField<PayloadType>) = apply {
-                    this.payloadType = payloadType
-                }
+                fun payloadType(payloadType: JsonValue) = apply { this.payloadType = payloadType }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -7457,7 +6921,6 @@ private constructor(
                  * .productId()
                  * .source()
                  * .status()
-                 * .payloadType()
                  * ```
                  *
                  * @throws IllegalStateException if any required field is unset.
@@ -7477,7 +6940,7 @@ private constructor(
                         expiresAt,
                         paymentId,
                         subscriptionId,
-                        checkRequired("payloadType", payloadType),
+                        payloadType,
                         additionalProperties.toMutableMap(),
                     )
             }
@@ -7512,7 +6975,13 @@ private constructor(
                 expiresAt()
                 paymentId()
                 subscriptionId()
-                payloadType().validate()
+                _payloadType().let {
+                    if (it != JsonValue.from("LicenseKey")) {
+                        throw DodoPaymentsInvalidDataException(
+                            "'payloadType' is invalid, received $it"
+                        )
+                    }
+                }
                 validated = true
             }
 
@@ -7544,143 +7013,7 @@ private constructor(
                     (if (expiresAt.asKnown() == null) 0 else 1) +
                     (if (paymentId.asKnown() == null) 0 else 1) +
                     (if (subscriptionId.asKnown() == null) 0 else 1) +
-                    (payloadType.asKnown()?.validity() ?: 0)
-
-            class PayloadType
-            @JsonCreator
-            private constructor(private val value: JsonField<String>) : Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    val LICENSE_KEY = of("LicenseKey")
-
-                    fun of(value: String) = PayloadType(JsonField.of(value))
-                }
-
-                /** An enum containing [PayloadType]'s known values. */
-                enum class Known {
-                    LICENSE_KEY
-                }
-
-                /**
-                 * An enum containing [PayloadType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [PayloadType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    LICENSE_KEY,
-                    /**
-                     * An enum member indicating that [PayloadType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        LICENSE_KEY -> Value.LICENSE_KEY
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value is a not
-                 *   a known member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        LICENSE_KEY -> Known.LICENSE_KEY
-                        else ->
-                            throw DodoPaymentsInvalidDataException("Unknown PayloadType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value does not
-                 *   have the expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString()
-                        ?: throw DodoPaymentsInvalidDataException("Value is not a String")
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
-                 */
-                fun validate(): PayloadType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: DodoPaymentsInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is PayloadType && value == other.value
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
+                    payloadType.let { if (it == JsonValue.from("LicenseKey")) 1 else 0 }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -7754,7 +7087,7 @@ private constructor(
             private val grantId: JsonField<String>,
             private val referenceId: JsonField<String>,
             private val referenceType: JsonField<String>,
-            private val payloadType: JsonField<PayloadType>,
+            private val payloadType: JsonValue,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
@@ -7812,7 +7145,7 @@ private constructor(
                 referenceType: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("payload_type")
                 @ExcludeMissing
-                payloadType: JsonField<PayloadType> = JsonMissing.of(),
+                payloadType: JsonValue = JsonMissing.of(),
             ) : this(
                 id,
                 amount,
@@ -7966,11 +7299,17 @@ private constructor(
             fun referenceType(): String? = referenceType.getNullable("reference_type")
 
             /**
-             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
-             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```kotlin
+             * JsonValue.from("CreditLedgerEntry")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun payloadType(): PayloadType = payloadType.getRequired("payload_type")
+            @JsonProperty("payload_type")
+            @ExcludeMissing
+            fun _payloadType(): JsonValue = payloadType
 
             /**
              * Returns the raw JSON value of [id].
@@ -8126,16 +7465,6 @@ private constructor(
             @ExcludeMissing
             fun _referenceType(): JsonField<String> = referenceType
 
-            /**
-             * Returns the raw JSON value of [payloadType].
-             *
-             * Unlike [payloadType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("payload_type")
-            @ExcludeMissing
-            fun _payloadType(): JsonField<PayloadType> = payloadType
-
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
                 additionalProperties.put(key, value)
@@ -8167,7 +7496,6 @@ private constructor(
                  * .overageAfter()
                  * .overageBefore()
                  * .transactionType()
-                 * .payloadType()
                  * ```
                  */
                 fun builder() = Builder()
@@ -8196,7 +7524,7 @@ private constructor(
                 private var grantId: JsonField<String> = JsonMissing.of()
                 private var referenceId: JsonField<String> = JsonMissing.of()
                 private var referenceType: JsonField<String> = JsonMissing.of()
-                private var payloadType: JsonField<PayloadType>? = null
+                private var payloadType: JsonValue = JsonValue.from("CreditLedgerEntry")
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 internal fun from(creditLedgerEntry: CreditLedgerEntry) = apply {
@@ -8433,18 +7761,19 @@ private constructor(
                     this.referenceType = referenceType
                 }
 
-                fun payloadType(payloadType: PayloadType) = payloadType(JsonField.of(payloadType))
-
                 /**
-                 * Sets [Builder.payloadType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.payloadType] with a well-typed [PayloadType]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```kotlin
+                 * JsonValue.from("CreditLedgerEntry")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun payloadType(payloadType: JsonField<PayloadType>) = apply {
-                    this.payloadType = payloadType
-                }
+                fun payloadType(payloadType: JsonValue) = apply { this.payloadType = payloadType }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -8487,7 +7816,6 @@ private constructor(
                  * .overageAfter()
                  * .overageBefore()
                  * .transactionType()
-                 * .payloadType()
                  * ```
                  *
                  * @throws IllegalStateException if any required field is unset.
@@ -8510,7 +7838,7 @@ private constructor(
                         grantId,
                         referenceId,
                         referenceType,
-                        checkRequired("payloadType", payloadType),
+                        payloadType,
                         additionalProperties.toMutableMap(),
                     )
             }
@@ -8548,7 +7876,13 @@ private constructor(
                 grantId()
                 referenceId()
                 referenceType()
-                payloadType().validate()
+                _payloadType().let {
+                    if (it != JsonValue.from("CreditLedgerEntry")) {
+                        throw DodoPaymentsInvalidDataException(
+                            "'payloadType' is invalid, received $it"
+                        )
+                    }
+                }
                 validated = true
             }
 
@@ -8583,143 +7917,7 @@ private constructor(
                     (if (grantId.asKnown() == null) 0 else 1) +
                     (if (referenceId.asKnown() == null) 0 else 1) +
                     (if (referenceType.asKnown() == null) 0 else 1) +
-                    (payloadType.asKnown()?.validity() ?: 0)
-
-            class PayloadType
-            @JsonCreator
-            private constructor(private val value: JsonField<String>) : Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    val CREDIT_LEDGER_ENTRY = of("CreditLedgerEntry")
-
-                    fun of(value: String) = PayloadType(JsonField.of(value))
-                }
-
-                /** An enum containing [PayloadType]'s known values. */
-                enum class Known {
-                    CREDIT_LEDGER_ENTRY
-                }
-
-                /**
-                 * An enum containing [PayloadType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [PayloadType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    CREDIT_LEDGER_ENTRY,
-                    /**
-                     * An enum member indicating that [PayloadType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        CREDIT_LEDGER_ENTRY -> Value.CREDIT_LEDGER_ENTRY
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value is a not
-                 *   a known member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        CREDIT_LEDGER_ENTRY -> Known.CREDIT_LEDGER_ENTRY
-                        else ->
-                            throw DodoPaymentsInvalidDataException("Unknown PayloadType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value does not
-                 *   have the expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString()
-                        ?: throw DodoPaymentsInvalidDataException("Value is not a String")
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
-                 */
-                fun validate(): PayloadType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: DodoPaymentsInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is PayloadType && value == other.value
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
+                    payloadType.let { if (it == JsonValue.from("CreditLedgerEntry")) 1 else 0 }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -8783,7 +7981,7 @@ private constructor(
             private val creditEntitlementId: JsonField<String>,
             private val creditEntitlementName: JsonField<String>,
             private val customerId: JsonField<String>,
-            private val payloadType: JsonField<PayloadType>,
+            private val payloadType: JsonValue,
             private val subscriptionCreditsAmount: JsonField<String>,
             private val subscriptionId: JsonField<String>,
             private val thresholdAmount: JsonField<String>,
@@ -8807,7 +8005,7 @@ private constructor(
                 customerId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("payload_type")
                 @ExcludeMissing
-                payloadType: JsonField<PayloadType> = JsonMissing.of(),
+                payloadType: JsonValue = JsonMissing.of(),
                 @JsonProperty("subscription_credits_amount")
                 @ExcludeMissing
                 subscriptionCreditsAmount: JsonField<String> = JsonMissing.of(),
@@ -8864,11 +8062,17 @@ private constructor(
             fun customerId(): String = customerId.getRequired("customer_id")
 
             /**
-             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
-             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```kotlin
+             * JsonValue.from("CreditBalanceLow")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun payloadType(): PayloadType = payloadType.getRequired("payload_type")
+            @JsonProperty("payload_type")
+            @ExcludeMissing
+            fun _payloadType(): JsonValue = payloadType
 
             /**
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
@@ -8940,16 +8144,6 @@ private constructor(
             fun _customerId(): JsonField<String> = customerId
 
             /**
-             * Returns the raw JSON value of [payloadType].
-             *
-             * Unlike [payloadType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("payload_type")
-            @ExcludeMissing
-            fun _payloadType(): JsonField<PayloadType> = payloadType
-
-            /**
              * Returns the raw JSON value of [subscriptionCreditsAmount].
              *
              * Unlike [subscriptionCreditsAmount], this method doesn't throw if the JSON field has
@@ -9012,7 +8206,6 @@ private constructor(
                  * .creditEntitlementId()
                  * .creditEntitlementName()
                  * .customerId()
-                 * .payloadType()
                  * .subscriptionCreditsAmount()
                  * .subscriptionId()
                  * .thresholdAmount()
@@ -9029,7 +8222,7 @@ private constructor(
                 private var creditEntitlementId: JsonField<String>? = null
                 private var creditEntitlementName: JsonField<String>? = null
                 private var customerId: JsonField<String>? = null
-                private var payloadType: JsonField<PayloadType>? = null
+                private var payloadType: JsonValue = JsonValue.from("CreditBalanceLow")
                 private var subscriptionCreditsAmount: JsonField<String>? = null
                 private var subscriptionId: JsonField<String>? = null
                 private var thresholdAmount: JsonField<String>? = null
@@ -9104,18 +8297,19 @@ private constructor(
                     this.customerId = customerId
                 }
 
-                fun payloadType(payloadType: PayloadType) = payloadType(JsonField.of(payloadType))
-
                 /**
-                 * Sets [Builder.payloadType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.payloadType] with a well-typed [PayloadType]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```kotlin
+                 * JsonValue.from("CreditBalanceLow")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun payloadType(payloadType: JsonField<PayloadType>) = apply {
-                    this.payloadType = payloadType
-                }
+                fun payloadType(payloadType: JsonValue) = apply { this.payloadType = payloadType }
 
                 fun subscriptionCreditsAmount(subscriptionCreditsAmount: String) =
                     subscriptionCreditsAmount(JsonField.of(subscriptionCreditsAmount))
@@ -9207,7 +8401,6 @@ private constructor(
                  * .creditEntitlementId()
                  * .creditEntitlementName()
                  * .customerId()
-                 * .payloadType()
                  * .subscriptionCreditsAmount()
                  * .subscriptionId()
                  * .thresholdAmount()
@@ -9222,7 +8415,7 @@ private constructor(
                         checkRequired("creditEntitlementId", creditEntitlementId),
                         checkRequired("creditEntitlementName", creditEntitlementName),
                         checkRequired("customerId", customerId),
-                        checkRequired("payloadType", payloadType),
+                        payloadType,
                         checkRequired("subscriptionCreditsAmount", subscriptionCreditsAmount),
                         checkRequired("subscriptionId", subscriptionId),
                         checkRequired("thresholdAmount", thresholdAmount),
@@ -9252,7 +8445,13 @@ private constructor(
                 creditEntitlementId()
                 creditEntitlementName()
                 customerId()
-                payloadType().validate()
+                _payloadType().let {
+                    if (it != JsonValue.from("CreditBalanceLow")) {
+                        throw DodoPaymentsInvalidDataException(
+                            "'payloadType' is invalid, received $it"
+                        )
+                    }
+                }
                 subscriptionCreditsAmount()
                 subscriptionId()
                 thresholdAmount()
@@ -9279,147 +8478,11 @@ private constructor(
                     (if (creditEntitlementId.asKnown() == null) 0 else 1) +
                     (if (creditEntitlementName.asKnown() == null) 0 else 1) +
                     (if (customerId.asKnown() == null) 0 else 1) +
-                    (payloadType.asKnown()?.validity() ?: 0) +
+                    payloadType.let { if (it == JsonValue.from("CreditBalanceLow")) 1 else 0 } +
                     (if (subscriptionCreditsAmount.asKnown() == null) 0 else 1) +
                     (if (subscriptionId.asKnown() == null) 0 else 1) +
                     (if (thresholdAmount.asKnown() == null) 0 else 1) +
                     (if (thresholdPercent.asKnown() == null) 0 else 1)
-
-            class PayloadType
-            @JsonCreator
-            private constructor(private val value: JsonField<String>) : Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    val CREDIT_BALANCE_LOW = of("CreditBalanceLow")
-
-                    fun of(value: String) = PayloadType(JsonField.of(value))
-                }
-
-                /** An enum containing [PayloadType]'s known values. */
-                enum class Known {
-                    CREDIT_BALANCE_LOW
-                }
-
-                /**
-                 * An enum containing [PayloadType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [PayloadType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    CREDIT_BALANCE_LOW,
-                    /**
-                     * An enum member indicating that [PayloadType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        CREDIT_BALANCE_LOW -> Value.CREDIT_BALANCE_LOW
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value is a not
-                 *   a known member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        CREDIT_BALANCE_LOW -> Known.CREDIT_BALANCE_LOW
-                        else ->
-                            throw DodoPaymentsInvalidDataException("Unknown PayloadType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value does not
-                 *   have the expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString()
-                        ?: throw DodoPaymentsInvalidDataException("Value is not a String")
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
-                 */
-                fun validate(): PayloadType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: DodoPaymentsInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is PayloadType && value == other.value
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -9466,7 +8529,7 @@ private constructor(
             private val abandonedAt: JsonField<OffsetDateTime>,
             private val abandonmentReason: JsonField<AbandonmentReason>,
             private val customerId: JsonField<String>,
-            private val payloadType: JsonField<PayloadType>,
+            private val payloadType: JsonValue,
             private val paymentId: JsonField<String>,
             private val status: JsonField<Status>,
             private val recoveredPaymentId: JsonField<String>,
@@ -9486,7 +8549,7 @@ private constructor(
                 customerId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("payload_type")
                 @ExcludeMissing
-                payloadType: JsonField<PayloadType> = JsonMissing.of(),
+                payloadType: JsonValue = JsonMissing.of(),
                 @JsonProperty("payment_id")
                 @ExcludeMissing
                 paymentId: JsonField<String> = JsonMissing.of(),
@@ -9530,11 +8593,17 @@ private constructor(
             fun customerId(): String = customerId.getRequired("customer_id")
 
             /**
-             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
-             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```kotlin
+             * JsonValue.from("AbandonedCheckout")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun payloadType(): PayloadType = payloadType.getRequired("payload_type")
+            @JsonProperty("payload_type")
+            @ExcludeMissing
+            fun _payloadType(): JsonValue = payloadType
 
             /**
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
@@ -9588,16 +8657,6 @@ private constructor(
             fun _customerId(): JsonField<String> = customerId
 
             /**
-             * Returns the raw JSON value of [payloadType].
-             *
-             * Unlike [payloadType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("payload_type")
-            @ExcludeMissing
-            fun _payloadType(): JsonField<PayloadType> = payloadType
-
-            /**
              * Returns the raw JSON value of [paymentId].
              *
              * Unlike [paymentId], this method doesn't throw if the JSON field has an unexpected
@@ -9646,7 +8705,6 @@ private constructor(
                  * .abandonedAt()
                  * .abandonmentReason()
                  * .customerId()
-                 * .payloadType()
                  * .paymentId()
                  * .status()
                  * ```
@@ -9660,7 +8718,7 @@ private constructor(
                 private var abandonedAt: JsonField<OffsetDateTime>? = null
                 private var abandonmentReason: JsonField<AbandonmentReason>? = null
                 private var customerId: JsonField<String>? = null
-                private var payloadType: JsonField<PayloadType>? = null
+                private var payloadType: JsonValue = JsonValue.from("AbandonedCheckout")
                 private var paymentId: JsonField<String>? = null
                 private var status: JsonField<Status>? = null
                 private var recoveredPaymentId: JsonField<String> = JsonMissing.of()
@@ -9718,18 +8776,19 @@ private constructor(
                     this.customerId = customerId
                 }
 
-                fun payloadType(payloadType: PayloadType) = payloadType(JsonField.of(payloadType))
-
                 /**
-                 * Sets [Builder.payloadType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.payloadType] with a well-typed [PayloadType]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```kotlin
+                 * JsonValue.from("AbandonedCheckout")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun payloadType(payloadType: JsonField<PayloadType>) = apply {
-                    this.payloadType = payloadType
-                }
+                fun payloadType(payloadType: JsonValue) = apply { this.payloadType = payloadType }
 
                 fun paymentId(paymentId: String) = paymentId(JsonField.of(paymentId))
 
@@ -9799,7 +8858,6 @@ private constructor(
                  * .abandonedAt()
                  * .abandonmentReason()
                  * .customerId()
-                 * .payloadType()
                  * .paymentId()
                  * .status()
                  * ```
@@ -9811,7 +8869,7 @@ private constructor(
                         checkRequired("abandonedAt", abandonedAt),
                         checkRequired("abandonmentReason", abandonmentReason),
                         checkRequired("customerId", customerId),
-                        checkRequired("payloadType", payloadType),
+                        payloadType,
                         checkRequired("paymentId", paymentId),
                         checkRequired("status", status),
                         recoveredPaymentId,
@@ -9839,7 +8897,13 @@ private constructor(
                 abandonedAt()
                 abandonmentReason().validate()
                 customerId()
-                payloadType().validate()
+                _payloadType().let {
+                    if (it != JsonValue.from("AbandonedCheckout")) {
+                        throw DodoPaymentsInvalidDataException(
+                            "'payloadType' is invalid, received $it"
+                        )
+                    }
+                }
                 paymentId()
                 status().validate()
                 recoveredPaymentId()
@@ -9864,7 +8928,7 @@ private constructor(
                 (if (abandonedAt.asKnown() == null) 0 else 1) +
                     (abandonmentReason.asKnown()?.validity() ?: 0) +
                     (if (customerId.asKnown() == null) 0 else 1) +
-                    (payloadType.asKnown()?.validity() ?: 0) +
+                    payloadType.let { if (it == JsonValue.from("AbandonedCheckout")) 1 else 0 } +
                     (if (paymentId.asKnown() == null) 0 else 1) +
                     (status.asKnown()?.validity() ?: 0) +
                     (if (recoveredPaymentId.asKnown() == null) 0 else 1)
@@ -10008,142 +9072,6 @@ private constructor(
                     }
 
                     return other is AbandonmentReason && value == other.value
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
-
-            class PayloadType
-            @JsonCreator
-            private constructor(private val value: JsonField<String>) : Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    val ABANDONED_CHECKOUT = of("AbandonedCheckout")
-
-                    fun of(value: String) = PayloadType(JsonField.of(value))
-                }
-
-                /** An enum containing [PayloadType]'s known values. */
-                enum class Known {
-                    ABANDONED_CHECKOUT
-                }
-
-                /**
-                 * An enum containing [PayloadType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [PayloadType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    ABANDONED_CHECKOUT,
-                    /**
-                     * An enum member indicating that [PayloadType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        ABANDONED_CHECKOUT -> Value.ABANDONED_CHECKOUT
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value is a not
-                 *   a known member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        ABANDONED_CHECKOUT -> Known.ABANDONED_CHECKOUT
-                        else ->
-                            throw DodoPaymentsInvalidDataException("Unknown PayloadType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value does not
-                 *   have the expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString()
-                        ?: throw DodoPaymentsInvalidDataException("Value is not a String")
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
-                 */
-                fun validate(): PayloadType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: DodoPaymentsInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is PayloadType && value == other.value
                 }
 
                 override fun hashCode() = value.hashCode()
@@ -10349,7 +9277,7 @@ private constructor(
         private constructor(
             private val createdAt: JsonField<OffsetDateTime>,
             private val customerId: JsonField<String>,
-            private val payloadType: JsonField<PayloadType>,
+            private val payloadType: JsonValue,
             private val status: JsonField<Status>,
             private val subscriptionId: JsonField<String>,
             private val triggerState: JsonField<TriggerState>,
@@ -10367,7 +9295,7 @@ private constructor(
                 customerId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("payload_type")
                 @ExcludeMissing
-                payloadType: JsonField<PayloadType> = JsonMissing.of(),
+                payloadType: JsonValue = JsonMissing.of(),
                 @JsonProperty("status")
                 @ExcludeMissing
                 status: JsonField<Status> = JsonMissing.of(),
@@ -10406,11 +9334,17 @@ private constructor(
             fun customerId(): String = customerId.getRequired("customer_id")
 
             /**
-             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
-             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```kotlin
+             * JsonValue.from("DunningAttempt")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun payloadType(): PayloadType = payloadType.getRequired("payload_type")
+            @JsonProperty("payload_type")
+            @ExcludeMissing
+            fun _payloadType(): JsonValue = payloadType
 
             /**
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
@@ -10458,16 +9392,6 @@ private constructor(
             @JsonProperty("customer_id")
             @ExcludeMissing
             fun _customerId(): JsonField<String> = customerId
-
-            /**
-             * Returns the raw JSON value of [payloadType].
-             *
-             * Unlike [payloadType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("payload_type")
-            @ExcludeMissing
-            fun _payloadType(): JsonField<PayloadType> = payloadType
 
             /**
              * Returns the raw JSON value of [status].
@@ -10527,7 +9451,6 @@ private constructor(
                  * ```kotlin
                  * .createdAt()
                  * .customerId()
-                 * .payloadType()
                  * .status()
                  * .subscriptionId()
                  * .triggerState()
@@ -10541,7 +9464,7 @@ private constructor(
 
                 private var createdAt: JsonField<OffsetDateTime>? = null
                 private var customerId: JsonField<String>? = null
-                private var payloadType: JsonField<PayloadType>? = null
+                private var payloadType: JsonValue = JsonValue.from("DunningAttempt")
                 private var status: JsonField<Status>? = null
                 private var subscriptionId: JsonField<String>? = null
                 private var triggerState: JsonField<TriggerState>? = null
@@ -10585,18 +9508,19 @@ private constructor(
                     this.customerId = customerId
                 }
 
-                fun payloadType(payloadType: PayloadType) = payloadType(JsonField.of(payloadType))
-
                 /**
-                 * Sets [Builder.payloadType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.payloadType] with a well-typed [PayloadType]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```kotlin
+                 * JsonValue.from("DunningAttempt")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun payloadType(payloadType: JsonField<PayloadType>) = apply {
-                    this.payloadType = payloadType
-                }
+                fun payloadType(payloadType: JsonValue) = apply { this.payloadType = payloadType }
 
                 fun status(status: Status) = status(JsonField.of(status))
 
@@ -10679,7 +9603,6 @@ private constructor(
                  * ```kotlin
                  * .createdAt()
                  * .customerId()
-                 * .payloadType()
                  * .status()
                  * .subscriptionId()
                  * .triggerState()
@@ -10691,7 +9614,7 @@ private constructor(
                     DunningAttempt(
                         checkRequired("createdAt", createdAt),
                         checkRequired("customerId", customerId),
-                        checkRequired("payloadType", payloadType),
+                        payloadType,
                         checkRequired("status", status),
                         checkRequired("subscriptionId", subscriptionId),
                         checkRequired("triggerState", triggerState),
@@ -10719,7 +9642,13 @@ private constructor(
 
                 createdAt()
                 customerId()
-                payloadType().validate()
+                _payloadType().let {
+                    if (it != JsonValue.from("DunningAttempt")) {
+                        throw DodoPaymentsInvalidDataException(
+                            "'payloadType' is invalid, received $it"
+                        )
+                    }
+                }
                 status().validate()
                 subscriptionId()
                 triggerState().validate()
@@ -10744,147 +9673,11 @@ private constructor(
             internal fun validity(): Int =
                 (if (createdAt.asKnown() == null) 0 else 1) +
                     (if (customerId.asKnown() == null) 0 else 1) +
-                    (payloadType.asKnown()?.validity() ?: 0) +
+                    payloadType.let { if (it == JsonValue.from("DunningAttempt")) 1 else 0 } +
                     (status.asKnown()?.validity() ?: 0) +
                     (if (subscriptionId.asKnown() == null) 0 else 1) +
                     (triggerState.asKnown()?.validity() ?: 0) +
                     (if (paymentId.asKnown() == null) 0 else 1)
-
-            class PayloadType
-            @JsonCreator
-            private constructor(private val value: JsonField<String>) : Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    val DUNNING_ATTEMPT = of("DunningAttempt")
-
-                    fun of(value: String) = PayloadType(JsonField.of(value))
-                }
-
-                /** An enum containing [PayloadType]'s known values. */
-                enum class Known {
-                    DUNNING_ATTEMPT
-                }
-
-                /**
-                 * An enum containing [PayloadType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [PayloadType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    DUNNING_ATTEMPT,
-                    /**
-                     * An enum member indicating that [PayloadType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        DUNNING_ATTEMPT -> Value.DUNNING_ATTEMPT
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value is a not
-                 *   a known member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        DUNNING_ATTEMPT -> Known.DUNNING_ATTEMPT
-                        else ->
-                            throw DodoPaymentsInvalidDataException("Unknown PayloadType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value does not
-                 *   have the expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString()
-                        ?: throw DodoPaymentsInvalidDataException("Value is not a String")
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
-                 */
-                fun validate(): PayloadType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: DodoPaymentsInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is PayloadType && value == other.value
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
 
             class Status @JsonCreator private constructor(private val value: JsonField<String>) :
                 Enum {
@@ -11240,7 +10033,7 @@ private constructor(
             private val revocationReason: JsonField<String>,
             private val revokedAt: JsonField<OffsetDateTime>,
             private val subscriptionId: JsonField<String>,
-            private val payloadType: JsonField<PayloadType>,
+            private val payloadType: JsonValue,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
@@ -11311,7 +10104,7 @@ private constructor(
                 subscriptionId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("payload_type")
                 @ExcludeMissing
-                payloadType: JsonField<PayloadType> = JsonMissing.of(),
+                payloadType: JsonValue = JsonMissing.of(),
             ) : this(
                 id,
                 businessId,
@@ -11528,11 +10321,17 @@ private constructor(
             fun subscriptionId(): String? = subscriptionId.getNullable("subscription_id")
 
             /**
-             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
-             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
+             * Expected to always return the following:
+             * ```kotlin
+             * JsonValue.from("EntitlementGrant")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
              */
-            fun payloadType(): PayloadType = payloadType.getRequired("payload_type")
+            @JsonProperty("payload_type")
+            @ExcludeMissing
+            fun _payloadType(): JsonValue = payloadType
 
             /**
              * Returns the raw JSON value of [id].
@@ -11724,16 +10523,6 @@ private constructor(
             @ExcludeMissing
             fun _subscriptionId(): JsonField<String> = subscriptionId
 
-            /**
-             * Returns the raw JSON value of [payloadType].
-             *
-             * Unlike [payloadType], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("payload_type")
-            @ExcludeMissing
-            fun _payloadType(): JsonField<PayloadType> = payloadType
-
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
                 additionalProperties.put(key, value)
@@ -11761,7 +10550,6 @@ private constructor(
                  * .metadata()
                  * .status()
                  * .updatedAt()
-                 * .payloadType()
                  * ```
                  */
                 fun builder() = Builder()
@@ -11798,7 +10586,7 @@ private constructor(
                 private var revocationReason: JsonField<String> = JsonMissing.of()
                 private var revokedAt: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var subscriptionId: JsonField<String> = JsonMissing.of()
-                private var payloadType: JsonField<PayloadType>? = null
+                private var payloadType: JsonValue = JsonValue.from("EntitlementGrant")
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 internal fun from(entitlementGrant: EntitlementGrant) = apply {
@@ -12115,18 +10903,19 @@ private constructor(
                     this.subscriptionId = subscriptionId
                 }
 
-                fun payloadType(payloadType: PayloadType) = payloadType(JsonField.of(payloadType))
-
                 /**
-                 * Sets [Builder.payloadType] to an arbitrary JSON value.
+                 * Sets the field to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.payloadType] with a well-typed [PayloadType]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```kotlin
+                 * JsonValue.from("EntitlementGrant")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun payloadType(payloadType: JsonField<PayloadType>) = apply {
-                    this.payloadType = payloadType
-                }
+                fun payloadType(payloadType: JsonValue) = apply { this.payloadType = payloadType }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -12165,7 +10954,6 @@ private constructor(
                  * .metadata()
                  * .status()
                  * .updatedAt()
-                 * .payloadType()
                  * ```
                  *
                  * @throws IllegalStateException if any required field is unset.
@@ -12191,7 +10979,7 @@ private constructor(
                         revocationReason,
                         revokedAt,
                         subscriptionId,
-                        checkRequired("payloadType", payloadType),
+                        payloadType,
                         additionalProperties.toMutableMap(),
                     )
             }
@@ -12232,7 +11020,13 @@ private constructor(
                 revocationReason()
                 revokedAt()
                 subscriptionId()
-                payloadType().validate()
+                _payloadType().let {
+                    if (it != JsonValue.from("EntitlementGrant")) {
+                        throw DodoPaymentsInvalidDataException(
+                            "'payloadType' is invalid, received $it"
+                        )
+                    }
+                }
                 validated = true
             }
 
@@ -12270,143 +11064,7 @@ private constructor(
                     (if (revocationReason.asKnown() == null) 0 else 1) +
                     (if (revokedAt.asKnown() == null) 0 else 1) +
                     (if (subscriptionId.asKnown() == null) 0 else 1) +
-                    (payloadType.asKnown()?.validity() ?: 0)
-
-            class PayloadType
-            @JsonCreator
-            private constructor(private val value: JsonField<String>) : Enum {
-
-                /**
-                 * Returns this class instance's raw value.
-                 *
-                 * This is usually only useful if this instance was deserialized from data that
-                 * doesn't match any known member, and you want to know that value. For example, if
-                 * the SDK is on an older version than the API, then the API may respond with new
-                 * members that the SDK is unaware of.
-                 */
-                @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-                companion object {
-
-                    val ENTITLEMENT_GRANT = of("EntitlementGrant")
-
-                    fun of(value: String) = PayloadType(JsonField.of(value))
-                }
-
-                /** An enum containing [PayloadType]'s known values. */
-                enum class Known {
-                    ENTITLEMENT_GRANT
-                }
-
-                /**
-                 * An enum containing [PayloadType]'s known values, as well as an [_UNKNOWN] member.
-                 *
-                 * An instance of [PayloadType] can contain an unknown value in a couple of cases:
-                 * - It was deserialized from data that doesn't match any known member. For example,
-                 *   if the SDK is on an older version than the API, then the API may respond with
-                 *   new members that the SDK is unaware of.
-                 * - It was constructed with an arbitrary value using the [of] method.
-                 */
-                enum class Value {
-                    ENTITLEMENT_GRANT,
-                    /**
-                     * An enum member indicating that [PayloadType] was instantiated with an unknown
-                     * value.
-                     */
-                    _UNKNOWN,
-                }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value, or
-                 * [Value._UNKNOWN] if the class was instantiated with an unknown value.
-                 *
-                 * Use the [known] method instead if you're certain the value is always known or if
-                 * you want to throw for the unknown case.
-                 */
-                fun value(): Value =
-                    when (this) {
-                        ENTITLEMENT_GRANT -> Value.ENTITLEMENT_GRANT
-                        else -> Value._UNKNOWN
-                    }
-
-                /**
-                 * Returns an enum member corresponding to this class instance's value.
-                 *
-                 * Use the [value] method instead if you're uncertain the value is always known and
-                 * don't want to throw for the unknown case.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value is a not
-                 *   a known member.
-                 */
-                fun known(): Known =
-                    when (this) {
-                        ENTITLEMENT_GRANT -> Known.ENTITLEMENT_GRANT
-                        else ->
-                            throw DodoPaymentsInvalidDataException("Unknown PayloadType: $value")
-                    }
-
-                /**
-                 * Returns this class instance's primitive wire representation.
-                 *
-                 * This differs from the [toString] method because that method is primarily for
-                 * debugging and generally doesn't throw.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if this class instance's value does not
-                 *   have the expected primitive type.
-                 */
-                fun asString(): String =
-                    _value().asString()
-                        ?: throw DodoPaymentsInvalidDataException("Value is not a String")
-
-                private var validated: Boolean = false
-
-                /**
-                 * Validates that the types of all values in this object match their expected types
-                 * recursively.
-                 *
-                 * This method is _not_ forwards compatible with new types from the API for existing
-                 * fields.
-                 *
-                 * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
-                 *   match its expected type.
-                 */
-                fun validate(): PayloadType = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    known()
-                    validated = true
-                }
-
-                fun isValid(): Boolean =
-                    try {
-                        validate()
-                        true
-                    } catch (e: DodoPaymentsInvalidDataException) {
-                        false
-                    }
-
-                /**
-                 * Returns a score indicating how many valid values are contained in this object
-                 * recursively.
-                 *
-                 * Used for best match union deserialization.
-                 */
-                internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-                override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
-
-                    return other is PayloadType && value == other.value
-                }
-
-                override fun hashCode() = value.hashCode()
-
-                override fun toString() = value.toString()
-            }
+                    payloadType.let { if (it == JsonValue.from("EntitlementGrant")) 1 else 0 }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {

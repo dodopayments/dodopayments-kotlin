@@ -37,7 +37,6 @@ internal class CreditOverageChargedWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(CreditOverageChargedWebhookEvent.Type.CREDIT_OVERAGE_CHARGED)
                 .build()
 
         assertThat(creditOverageChargedWebhookEvent.businessId()).isEqualTo("business_id")
@@ -64,8 +63,6 @@ internal class CreditOverageChargedWebhookEventTest {
             )
         assertThat(creditOverageChargedWebhookEvent.timestamp())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(creditOverageChargedWebhookEvent.type())
-            .isEqualTo(CreditOverageChargedWebhookEvent.Type.CREDIT_OVERAGE_CHARGED)
     }
 
     @Test
@@ -95,7 +92,6 @@ internal class CreditOverageChargedWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(CreditOverageChargedWebhookEvent.Type.CREDIT_OVERAGE_CHARGED)
                 .build()
 
         val roundtrippedCreditOverageChargedWebhookEvent =

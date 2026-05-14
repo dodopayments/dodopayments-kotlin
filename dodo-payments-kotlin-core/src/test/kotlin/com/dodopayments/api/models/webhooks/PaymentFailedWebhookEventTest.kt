@@ -151,7 +151,6 @@ internal class PaymentFailedWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(PaymentFailedWebhookEvent.Type.PAYMENT_FAILED)
                 .build()
 
         assertThat(paymentFailedWebhookEvent.businessId()).isEqualTo("business_id")
@@ -275,8 +274,6 @@ internal class PaymentFailedWebhookEventTest {
             )
         assertThat(paymentFailedWebhookEvent.timestamp())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(paymentFailedWebhookEvent.type())
-            .isEqualTo(PaymentFailedWebhookEvent.Type.PAYMENT_FAILED)
     }
 
     @Test
@@ -406,7 +403,6 @@ internal class PaymentFailedWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(PaymentFailedWebhookEvent.Type.PAYMENT_FAILED)
                 .build()
 
         val roundtrippedPaymentFailedWebhookEvent =

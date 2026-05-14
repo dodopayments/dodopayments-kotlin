@@ -33,7 +33,6 @@ internal class DisputeCancelledWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(DisputeCancelledWebhookEvent.Type.DISPUTE_CANCELLED)
                 .build()
 
         assertThat(disputeCancelledWebhookEvent.businessId()).isEqualTo("business_id")
@@ -54,8 +53,6 @@ internal class DisputeCancelledWebhookEventTest {
             )
         assertThat(disputeCancelledWebhookEvent.timestamp())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(disputeCancelledWebhookEvent.type())
-            .isEqualTo(DisputeCancelledWebhookEvent.Type.DISPUTE_CANCELLED)
     }
 
     @Test
@@ -79,7 +76,6 @@ internal class DisputeCancelledWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(DisputeCancelledWebhookEvent.Type.DISPUTE_CANCELLED)
                 .build()
 
         val roundtrippedDisputeCancelledWebhookEvent =

@@ -13,7 +13,6 @@ internal class SubscriptionUpdatePaymentMethodParamsTest {
             .subscriptionId("subscription_id")
             .body(
                 SubscriptionUpdatePaymentMethodParams.Body.New.builder()
-                    .type(SubscriptionUpdatePaymentMethodParams.Body.New.Type.NEW)
                     .returnUrl("return_url")
                     .build()
             )
@@ -25,11 +24,7 @@ internal class SubscriptionUpdatePaymentMethodParamsTest {
         val params =
             SubscriptionUpdatePaymentMethodParams.builder()
                 .subscriptionId("subscription_id")
-                .body(
-                    SubscriptionUpdatePaymentMethodParams.Body.New.builder()
-                        .type(SubscriptionUpdatePaymentMethodParams.Body.New.Type.NEW)
-                        .build()
-                )
+                .body(SubscriptionUpdatePaymentMethodParams.Body.New.builder().build())
                 .build()
 
         assertThat(params._pathParam(0)).isEqualTo("subscription_id")
@@ -44,7 +39,6 @@ internal class SubscriptionUpdatePaymentMethodParamsTest {
                 .subscriptionId("subscription_id")
                 .body(
                     SubscriptionUpdatePaymentMethodParams.Body.New.builder()
-                        .type(SubscriptionUpdatePaymentMethodParams.Body.New.Type.NEW)
                         .returnUrl("return_url")
                         .build()
                 )
@@ -56,7 +50,6 @@ internal class SubscriptionUpdatePaymentMethodParamsTest {
             .isEqualTo(
                 SubscriptionUpdatePaymentMethodParams.Body.ofNew(
                     SubscriptionUpdatePaymentMethodParams.Body.New.builder()
-                        .type(SubscriptionUpdatePaymentMethodParams.Body.New.Type.NEW)
                         .returnUrl("return_url")
                         .build()
                 )
@@ -68,11 +61,7 @@ internal class SubscriptionUpdatePaymentMethodParamsTest {
         val params =
             SubscriptionUpdatePaymentMethodParams.builder()
                 .subscriptionId("subscription_id")
-                .body(
-                    SubscriptionUpdatePaymentMethodParams.Body.New.builder()
-                        .type(SubscriptionUpdatePaymentMethodParams.Body.New.Type.NEW)
-                        .build()
-                )
+                .body(SubscriptionUpdatePaymentMethodParams.Body.New.builder().build())
                 .build()
 
         val body = params._body()
@@ -80,9 +69,7 @@ internal class SubscriptionUpdatePaymentMethodParamsTest {
         assertThat(body)
             .isEqualTo(
                 SubscriptionUpdatePaymentMethodParams.Body.ofNew(
-                    SubscriptionUpdatePaymentMethodParams.Body.New.builder()
-                        .type(SubscriptionUpdatePaymentMethodParams.Body.New.Type.NEW)
-                        .build()
+                    SubscriptionUpdatePaymentMethodParams.Body.New.builder().build()
                 )
             )
     }

@@ -151,7 +151,6 @@ internal class PaymentSucceededWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(PaymentSucceededWebhookEvent.Type.PAYMENT_SUCCEEDED)
                 .build()
 
         assertThat(paymentSucceededWebhookEvent.businessId()).isEqualTo("business_id")
@@ -275,8 +274,6 @@ internal class PaymentSucceededWebhookEventTest {
             )
         assertThat(paymentSucceededWebhookEvent.timestamp())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(paymentSucceededWebhookEvent.type())
-            .isEqualTo(PaymentSucceededWebhookEvent.Type.PAYMENT_SUCCEEDED)
     }
 
     @Test
@@ -406,7 +403,6 @@ internal class PaymentSucceededWebhookEventTest {
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .type(PaymentSucceededWebhookEvent.Type.PAYMENT_SUCCEEDED)
                 .build()
 
         val roundtrippedPaymentSucceededWebhookEvent =
