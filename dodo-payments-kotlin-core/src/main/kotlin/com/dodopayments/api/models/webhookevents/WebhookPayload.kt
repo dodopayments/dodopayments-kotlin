@@ -15,6 +15,7 @@ import com.dodopayments.api.core.getOrThrow
 import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry
+import com.dodopayments.api.models.discounts.DiscountDetail
 import com.dodopayments.api.models.disputes.Dispute
 import com.dodopayments.api.models.disputes.DisputeStage
 import com.dodopayments.api.models.disputes.DisputeStatus
@@ -835,7 +836,7 @@ private constructor(
             private val checkoutSessionId: JsonField<String>,
             private val customFieldResponses: JsonField<List<CustomFieldResponse>>,
             private val discountId: JsonField<String>,
-            private val discounts: JsonField<List<Payment.Discount>>,
+            private val discounts: JsonField<List<DiscountDetail>>,
             private val errorCode: JsonField<String>,
             private val errorMessage: JsonField<String>,
             private val invoiceId: JsonField<String>,
@@ -924,7 +925,7 @@ private constructor(
                 discountId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("discounts")
                 @ExcludeMissing
-                discounts: JsonField<List<Payment.Discount>> = JsonMissing.of(),
+                discounts: JsonField<List<DiscountDetail>> = JsonMissing.of(),
                 @JsonProperty("error_code")
                 @ExcludeMissing
                 errorCode: JsonField<String> = JsonMissing.of(),
@@ -1257,7 +1258,7 @@ private constructor(
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
              */
-            fun discounts(): List<Payment.Discount>? = discounts.getNullable("discounts")
+            fun discounts(): List<DiscountDetail>? = discounts.getNullable("discounts")
 
             /**
              * An error code if the payment failed
@@ -1608,7 +1609,7 @@ private constructor(
              */
             @JsonProperty("discounts")
             @ExcludeMissing
-            fun _discounts(): JsonField<List<Payment.Discount>> = discounts
+            fun _discounts(): JsonField<List<DiscountDetail>> = discounts
 
             /**
              * Returns the raw JSON value of [errorCode].
@@ -1808,7 +1809,7 @@ private constructor(
                 private var customFieldResponses: JsonField<MutableList<CustomFieldResponse>>? =
                     null
                 private var discountId: JsonField<String> = JsonMissing.of()
-                private var discounts: JsonField<MutableList<Payment.Discount>>? = null
+                private var discounts: JsonField<MutableList<DiscountDetail>>? = null
                 private var errorCode: JsonField<String> = JsonMissing.of()
                 private var errorMessage: JsonField<String> = JsonMissing.of()
                 private var invoiceId: JsonField<String> = JsonMissing.of()
@@ -2232,26 +2233,26 @@ private constructor(
                 }
 
                 /** All stacked discounts applied, ordered by position */
-                fun discounts(discounts: List<Payment.Discount>?) =
+                fun discounts(discounts: List<DiscountDetail>?) =
                     discounts(JsonField.ofNullable(discounts))
 
                 /**
                  * Sets [Builder.discounts] to an arbitrary JSON value.
                  *
                  * You should usually call [Builder.discounts] with a well-typed
-                 * `List<Payment.Discount>` value instead. This method is primarily for setting the
+                 * `List<DiscountDetail>` value instead. This method is primarily for setting the
                  * field to an undocumented or not yet supported value.
                  */
-                fun discounts(discounts: JsonField<List<Payment.Discount>>) = apply {
+                fun discounts(discounts: JsonField<List<DiscountDetail>>) = apply {
                     this.discounts = discounts.map { it.toMutableList() }
                 }
 
                 /**
-                 * Adds a single [Payment.Discount] to [discounts].
+                 * Adds a single [DiscountDetail] to [discounts].
                  *
                  * @throws IllegalStateException if the field was previously set to a non-list.
                  */
-                fun addDiscount(discount: Payment.Discount) = apply {
+                fun addDiscount(discount: DiscountDetail) = apply {
                     discounts =
                         (discounts ?: JsonField.of(mutableListOf())).also {
                             checkKnown("discounts", it).add(discount)
@@ -2843,7 +2844,7 @@ private constructor(
             private val customFieldResponses: JsonField<List<CustomFieldResponse>>,
             private val discountCyclesRemaining: JsonField<Int>,
             private val discountId: JsonField<String>,
-            private val discounts: JsonField<List<Subscription.Discount>>,
+            private val discounts: JsonField<List<DiscountDetail>>,
             private val expiresAt: JsonField<OffsetDateTime>,
             private val paymentMethodId: JsonField<String>,
             private val scheduledChange: JsonField<ScheduledPlanChange>,
@@ -2948,7 +2949,7 @@ private constructor(
                 discountId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("discounts")
                 @ExcludeMissing
-                discounts: JsonField<List<Subscription.Discount>> = JsonMissing.of(),
+                discounts: JsonField<List<DiscountDetail>> = JsonMissing.of(),
                 @JsonProperty("expires_at")
                 @ExcludeMissing
                 expiresAt: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -3325,7 +3326,7 @@ private constructor(
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
              */
-            fun discounts(): List<Subscription.Discount>? = discounts.getNullable("discounts")
+            fun discounts(): List<DiscountDetail>? = discounts.getNullable("discounts")
 
             /**
              * Timestamp when the subscription will expire
@@ -3677,7 +3678,7 @@ private constructor(
              */
             @JsonProperty("discounts")
             @ExcludeMissing
-            fun _discounts(): JsonField<List<Subscription.Discount>> = discounts
+            fun _discounts(): JsonField<List<DiscountDetail>> = discounts
 
             /**
              * Returns the raw JSON value of [expiresAt].
@@ -3802,7 +3803,7 @@ private constructor(
                     null
                 private var discountCyclesRemaining: JsonField<Int> = JsonMissing.of()
                 private var discountId: JsonField<String> = JsonMissing.of()
-                private var discounts: JsonField<MutableList<Subscription.Discount>>? = null
+                private var discounts: JsonField<MutableList<DiscountDetail>>? = null
                 private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var paymentMethodId: JsonField<String> = JsonMissing.of()
                 private var scheduledChange: JsonField<ScheduledPlanChange> = JsonMissing.of()
@@ -4371,26 +4372,26 @@ private constructor(
                 }
 
                 /** All stacked discounts applied, ordered by position */
-                fun discounts(discounts: List<Subscription.Discount>?) =
+                fun discounts(discounts: List<DiscountDetail>?) =
                     discounts(JsonField.ofNullable(discounts))
 
                 /**
                  * Sets [Builder.discounts] to an arbitrary JSON value.
                  *
                  * You should usually call [Builder.discounts] with a well-typed
-                 * `List<Subscription.Discount>` value instead. This method is primarily for setting
-                 * the field to an undocumented or not yet supported value.
+                 * `List<DiscountDetail>` value instead. This method is primarily for setting the
+                 * field to an undocumented or not yet supported value.
                  */
-                fun discounts(discounts: JsonField<List<Subscription.Discount>>) = apply {
+                fun discounts(discounts: JsonField<List<DiscountDetail>>) = apply {
                     this.discounts = discounts.map { it.toMutableList() }
                 }
 
                 /**
-                 * Adds a single [Subscription.Discount] to [discounts].
+                 * Adds a single [DiscountDetail] to [discounts].
                  *
                  * @throws IllegalStateException if the field was previously set to a non-list.
                  */
-                fun addDiscount(discount: Subscription.Discount) = apply {
+                fun addDiscount(discount: DiscountDetail) = apply {
                     discounts =
                         (discounts ?: JsonField.of(mutableListOf())).also {
                             checkKnown("discounts", it).add(discount)

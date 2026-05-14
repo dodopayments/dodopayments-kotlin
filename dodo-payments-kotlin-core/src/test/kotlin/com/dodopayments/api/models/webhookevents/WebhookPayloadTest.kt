@@ -4,6 +4,7 @@ package com.dodopayments.api.models.webhookevents
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.discounts.DiscountDetail
 import com.dodopayments.api.models.discounts.DiscountType
 import com.dodopayments.api.models.disputes.Dispute
 import com.dodopayments.api.models.disputes.DisputeStage
@@ -106,14 +107,14 @@ internal class WebhookPayloadTest {
                         )
                         .discountId("discount_id")
                         .addDiscount(
-                            Payment.Discount.builder()
+                            DiscountDetail.builder()
                                 .amount(0)
                                 .businessId("business_id")
                                 .code("code")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .discountId("discount_id")
                                 .metadata(
-                                    Payment.Discount.Metadata.builder()
+                                    DiscountDetail.Metadata.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
@@ -233,14 +234,14 @@ internal class WebhookPayloadTest {
                         )
                         .discountId("discount_id")
                         .addDiscount(
-                            Payment.Discount.builder()
+                            DiscountDetail.builder()
                                 .amount(0)
                                 .businessId("business_id")
                                 .code("code")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .discountId("discount_id")
                                 .metadata(
-                                    Payment.Discount.Metadata.builder()
+                                    DiscountDetail.Metadata.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
@@ -365,14 +366,14 @@ internal class WebhookPayloadTest {
                         )
                         .discountId("discount_id")
                         .addDiscount(
-                            Payment.Discount.builder()
+                            DiscountDetail.builder()
                                 .amount(0)
                                 .businessId("business_id")
                                 .code("code")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .discountId("discount_id")
                                 .metadata(
-                                    Payment.Discount.Metadata.builder()
+                                    DiscountDetail.Metadata.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
