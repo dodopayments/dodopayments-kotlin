@@ -15,7 +15,6 @@ import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.CustomFieldResponse
 import com.dodopayments.api.models.payments.CustomerLimitedDetails
 import com.dodopayments.api.models.payments.IntentStatus
-import com.dodopayments.api.models.payments.OneTimeProductCartItem
 import com.dodopayments.api.models.payments.Payment
 import com.dodopayments.api.models.payments.PaymentRefundStatus
 import com.dodopayments.api.models.payments.RefundListItem
@@ -147,7 +146,7 @@ internal class WebhookPayloadTest {
                         .paymentMethod("payment_method")
                         .paymentMethodType("payment_method_type")
                         .addProductCart(
-                            OneTimeProductCartItem.builder()
+                            Payment.ProductCart.builder()
                                 .productId("product_id")
                                 .quantity(0)
                                 .build()
@@ -282,7 +281,7 @@ internal class WebhookPayloadTest {
                         .paymentMethod("payment_method")
                         .paymentMethodType("payment_method_type")
                         .addProductCart(
-                            OneTimeProductCartItem.builder()
+                            Payment.ProductCart.builder()
                                 .productId("product_id")
                                 .quantity(0)
                                 .build()
@@ -422,7 +421,7 @@ internal class WebhookPayloadTest {
                         .paymentMethod("payment_method")
                         .paymentMethodType("payment_method_type")
                         .addProductCart(
-                            OneTimeProductCartItem.builder()
+                            Payment.ProductCart.builder()
                                 .productId("product_id")
                                 .quantity(0)
                                 .build()
