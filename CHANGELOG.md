@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.99.1 (2026-05-21)
+
+Full Changelog: [v1.99.0...v1.99.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.99.0...v1.99.1)
+
+### Features
+
+* **api:** fixed a breaking modal change ([7db2a7d](https://github.com/dodopayments/dodopayments-kotlin/commit/7db2a7d3b76feee2041f422c3cccadcbc962da57))
+* **api:** updated openapi spec to v1.99.0 and added missing endpoints as well ([7b36dad](https://github.com/dodopayments/dodopayments-kotlin/commit/7b36dadd53bdb36cc6da654cfd2072a1d63a1066))
+
+
+### Styles
+
+* apply ktfmt to WebhookPayload ([#89](https://github.com/dodopayments/dodopayments-kotlin/issues/89)) ([5f10414](https://github.com/dodopayments/dodopayments-kotlin/commit/5f10414c128996e93866e25eaf18f613c16727ca))
+
 ## 1.99.0 (2026-05-14)
 
 Full Changelog: [v1.98.0...v1.99.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.98.0...v1.99.0)
