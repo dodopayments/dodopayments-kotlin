@@ -844,7 +844,8 @@ private constructor(
             private val paymentLink: JsonField<String>,
             private val paymentMethod: JsonField<String>,
             private val paymentMethodType: JsonField<String>,
-            private val productCart: JsonField<List<Payment.ProductCart>>,
+            private val productCart:
+                JsonField<List<com.dodopayments.api.models.payments.Payment.ProductCart>>,
             private val refundStatus: JsonField<PaymentRefundStatus>,
             private val settlementTax: JsonField<Int>,
             private val status: JsonField<IntentStatus>,
@@ -950,7 +951,9 @@ private constructor(
                 paymentMethodType: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("product_cart")
                 @ExcludeMissing
-                productCart: JsonField<List<Payment.ProductCart>> = JsonMissing.of(),
+                productCart:
+                    JsonField<List<com.dodopayments.api.models.payments.Payment.ProductCart>> =
+                    JsonMissing.of(),
                 @JsonProperty("refund_status")
                 @ExcludeMissing
                 refundStatus: JsonField<PaymentRefundStatus> = JsonMissing.of(),
@@ -1324,7 +1327,8 @@ private constructor(
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
              */
-            fun productCart(): List<Payment.ProductCart>? = productCart.getNullable("product_cart")
+            fun productCart(): List<com.dodopayments.api.models.payments.Payment.ProductCart>? =
+                productCart.getNullable("product_cart")
 
             /**
              * Summary of the refund status for this payment. None if no succeeded refunds exist.
@@ -1692,7 +1696,9 @@ private constructor(
              */
             @JsonProperty("product_cart")
             @ExcludeMissing
-            fun _productCart(): JsonField<List<Payment.ProductCart>> = productCart
+            fun _productCart():
+                JsonField<List<com.dodopayments.api.models.payments.Payment.ProductCart>> =
+                productCart
 
             /**
              * Returns the raw JSON value of [refundStatus].
@@ -1822,7 +1828,11 @@ private constructor(
                 private var paymentLink: JsonField<String> = JsonMissing.of()
                 private var paymentMethod: JsonField<String> = JsonMissing.of()
                 private var paymentMethodType: JsonField<String> = JsonMissing.of()
-                private var productCart: JsonField<MutableList<Payment.ProductCart>>? = null
+                private var productCart:
+                    JsonField<
+                        MutableList<com.dodopayments.api.models.payments.Payment.ProductCart>
+                    >? =
+                    null
                 private var refundStatus: JsonField<PaymentRefundStatus> = JsonMissing.of()
                 private var settlementTax: JsonField<Int> = JsonMissing.of()
                 private var status: JsonField<IntentStatus> = JsonMissing.of()
@@ -2365,26 +2375,32 @@ private constructor(
                 }
 
                 /** List of products purchased in a one-time payment */
-                fun productCart(productCart: List<Payment.ProductCart>?) =
-                    productCart(JsonField.ofNullable(productCart))
+                fun productCart(
+                    productCart: List<com.dodopayments.api.models.payments.Payment.ProductCart>?
+                ) = productCart(JsonField.ofNullable(productCart))
 
                 /**
                  * Sets [Builder.productCart] to an arbitrary JSON value.
                  *
                  * You should usually call [Builder.productCart] with a well-typed
-                 * `List<Payment.ProductCart>` value instead. This method is primarily for setting
-                 * the field to an undocumented or not yet supported value.
+                 * `List<com.dodopayments.api.models.payments.Payment.ProductCart>` value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
                  */
-                fun productCart(productCart: JsonField<List<Payment.ProductCart>>) = apply {
-                    this.productCart = productCart.map { it.toMutableList() }
-                }
+                fun productCart(
+                    productCart:
+                        JsonField<List<com.dodopayments.api.models.payments.Payment.ProductCart>>
+                ) = apply { this.productCart = productCart.map { it.toMutableList() } }
 
                 /**
-                 * Adds a single [Payment.ProductCart] to [Builder.productCart].
+                 * Adds a single [com.dodopayments.api.models.payments.Payment.ProductCart] to
+                 * [Builder.productCart].
                  *
                  * @throws IllegalStateException if the field was previously set to a non-list.
                  */
-                fun addProductCart(productCart: Payment.ProductCart) = apply {
+                fun addProductCart(
+                    productCart: com.dodopayments.api.models.payments.Payment.ProductCart
+                ) = apply {
                     this.productCart =
                         (this.productCart ?: JsonField.of(mutableListOf())).also {
                             checkKnown("productCart", it).add(productCart)
