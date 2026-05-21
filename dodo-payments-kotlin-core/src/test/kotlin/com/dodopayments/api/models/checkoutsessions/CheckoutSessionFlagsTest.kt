@@ -14,6 +14,7 @@ internal class CheckoutSessionFlagsTest {
         val checkoutSessionFlags =
             CheckoutSessionFlags.builder()
                 .allowCurrencySelection(true)
+                .allowCustomerEditingBusinessName(true)
                 .allowCustomerEditingCity(true)
                 .allowCustomerEditingCountry(true)
                 .allowCustomerEditingEmail(true)
@@ -31,6 +32,7 @@ internal class CheckoutSessionFlagsTest {
                 .build()
 
         assertThat(checkoutSessionFlags.allowCurrencySelection()).isEqualTo(true)
+        assertThat(checkoutSessionFlags.allowCustomerEditingBusinessName()).isEqualTo(true)
         assertThat(checkoutSessionFlags.allowCustomerEditingCity()).isEqualTo(true)
         assertThat(checkoutSessionFlags.allowCustomerEditingCountry()).isEqualTo(true)
         assertThat(checkoutSessionFlags.allowCustomerEditingEmail()).isEqualTo(true)
@@ -53,6 +55,7 @@ internal class CheckoutSessionFlagsTest {
         val checkoutSessionFlags =
             CheckoutSessionFlags.builder()
                 .allowCurrencySelection(true)
+                .allowCustomerEditingBusinessName(true)
                 .allowCustomerEditingCity(true)
                 .allowCustomerEditingCountry(true)
                 .allowCustomerEditingEmail(true)

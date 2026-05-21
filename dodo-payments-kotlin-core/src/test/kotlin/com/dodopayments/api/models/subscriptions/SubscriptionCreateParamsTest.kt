@@ -8,7 +8,6 @@ import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.CustomerRequest
-import com.dodopayments.api.models.payments.OneTimeProductCartItem
 import com.dodopayments.api.models.payments.PaymentMethodTypes
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -33,6 +32,7 @@ internal class SubscriptionCreateParamsTest {
             .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
             .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
             .billingCurrency(Currency.AED)
+            .customerBusinessName("customer_business_name")
             .discountCode("discount_code")
             .addDiscountCode("string")
             .force3ds(true)
@@ -52,7 +52,7 @@ internal class SubscriptionCreateParamsTest {
                     .build()
             )
             .addOneTimeProductCart(
-                OneTimeProductCartItem.builder()
+                SubscriptionCreateParams.OneTimeProductCart.builder()
                     .productId("product_id")
                     .quantity(0)
                     .amount(0)
@@ -89,6 +89,7 @@ internal class SubscriptionCreateParamsTest {
                 .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
                 .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
                 .billingCurrency(Currency.AED)
+                .customerBusinessName("customer_business_name")
                 .discountCode("discount_code")
                 .addDiscountCode("string")
                 .force3ds(true)
@@ -108,7 +109,7 @@ internal class SubscriptionCreateParamsTest {
                         .build()
                 )
                 .addOneTimeProductCart(
-                    OneTimeProductCartItem.builder()
+                    SubscriptionCreateParams.OneTimeProductCart.builder()
                         .productId("product_id")
                         .quantity(0)
                         .amount(0)
@@ -149,6 +150,7 @@ internal class SubscriptionCreateParamsTest {
             .containsExactly(AttachAddon.builder().addonId("addon_id").quantity(0).build())
         assertThat(body.allowedPaymentMethodTypes()).containsExactly(PaymentMethodTypes.ACH)
         assertThat(body.billingCurrency()).isEqualTo(Currency.AED)
+        assertThat(body.customerBusinessName()).isEqualTo("customer_business_name")
         assertThat(body.discountCode()).isEqualTo("discount_code")
         assertThat(body.discountCodes()).containsExactly("string")
         assertThat(body.force3ds()).isEqualTo(true)
@@ -171,7 +173,7 @@ internal class SubscriptionCreateParamsTest {
             )
         assertThat(body.oneTimeProductCart())
             .containsExactly(
-                OneTimeProductCartItem.builder()
+                SubscriptionCreateParams.OneTimeProductCart.builder()
                     .productId("product_id")
                     .quantity(0)
                     .amount(0)

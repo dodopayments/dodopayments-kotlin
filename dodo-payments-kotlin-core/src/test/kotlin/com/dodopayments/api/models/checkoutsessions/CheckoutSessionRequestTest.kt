@@ -59,6 +59,7 @@ internal class CheckoutSessionRequestTest {
                         .build()
                 )
                 .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
+                .customerBusinessName("customer_business_name")
                 .customization(
                     CheckoutSessionCustomization.builder()
                         .forceLanguage("force_language")
@@ -122,6 +123,7 @@ internal class CheckoutSessionRequestTest {
                 .featureFlags(
                     CheckoutSessionFlags.builder()
                         .allowCurrencySelection(true)
+                        .allowCustomerEditingBusinessName(true)
                         .allowCustomerEditingCity(true)
                         .allowCustomerEditingCountry(true)
                         .allowCustomerEditingEmail(true)
@@ -215,6 +217,8 @@ internal class CheckoutSessionRequestTest {
                     AttachExistingCustomer.builder().customerId("customer_id").build()
                 )
             )
+        assertThat(checkoutSessionRequest.customerBusinessName())
+            .isEqualTo("customer_business_name")
         assertThat(checkoutSessionRequest.customization())
             .isEqualTo(
                 CheckoutSessionCustomization.builder()
@@ -280,6 +284,7 @@ internal class CheckoutSessionRequestTest {
             .isEqualTo(
                 CheckoutSessionFlags.builder()
                     .allowCurrencySelection(true)
+                    .allowCustomerEditingBusinessName(true)
                     .allowCustomerEditingCity(true)
                     .allowCustomerEditingCountry(true)
                     .allowCustomerEditingEmail(true)
@@ -371,6 +376,7 @@ internal class CheckoutSessionRequestTest {
                         .build()
                 )
                 .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
+                .customerBusinessName("customer_business_name")
                 .customization(
                     CheckoutSessionCustomization.builder()
                         .forceLanguage("force_language")
@@ -434,6 +440,7 @@ internal class CheckoutSessionRequestTest {
                 .featureFlags(
                     CheckoutSessionFlags.builder()
                         .allowCurrencySelection(true)
+                        .allowCustomerEditingBusinessName(true)
                         .allowCustomerEditingCity(true)
                         .allowCustomerEditingCountry(true)
                         .allowCustomerEditingEmail(true)

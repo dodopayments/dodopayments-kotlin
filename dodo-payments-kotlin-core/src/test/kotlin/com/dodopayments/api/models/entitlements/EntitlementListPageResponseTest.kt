@@ -22,7 +22,7 @@ internal class EntitlementListPageResponseTest {
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .integrationConfig(
                             IntegrationConfigResponse.GitHubConfig.builder()
-                                .permission(IntegrationConfigResponse.GitHubConfig.Permission.PULL)
+                                .permission(GitHubPermission.PULL)
                                 .targetId("target_id")
                                 .build()
                         )
@@ -48,7 +48,7 @@ internal class EntitlementListPageResponseTest {
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .integrationConfig(
                         IntegrationConfigResponse.GitHubConfig.builder()
-                            .permission(IntegrationConfigResponse.GitHubConfig.Permission.PULL)
+                            .permission(GitHubPermission.PULL)
                             .targetId("target_id")
                             .build()
                     )
@@ -78,7 +78,7 @@ internal class EntitlementListPageResponseTest {
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .integrationConfig(
                             IntegrationConfigResponse.GitHubConfig.builder()
-                                .permission(IntegrationConfigResponse.GitHubConfig.Permission.PULL)
+                                .permission(GitHubPermission.PULL)
                                 .targetId("target_id")
                                 .build()
                         )

@@ -57,6 +57,7 @@ internal class CheckoutSessionCreateParamsTest {
                             .build()
                     )
                     .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
+                    .customerBusinessName("customer_business_name")
                     .customization(
                         CheckoutSessionCustomization.builder()
                             .forceLanguage("force_language")
@@ -120,6 +121,7 @@ internal class CheckoutSessionCreateParamsTest {
                     .featureFlags(
                         CheckoutSessionFlags.builder()
                             .allowCurrencySelection(true)
+                            .allowCustomerEditingBusinessName(true)
                             .allowCustomerEditingCity(true)
                             .allowCustomerEditingCountry(true)
                             .allowCustomerEditingEmail(true)
@@ -217,6 +219,7 @@ internal class CheckoutSessionCreateParamsTest {
                         .customer(
                             AttachExistingCustomer.builder().customerId("customer_id").build()
                         )
+                        .customerBusinessName("customer_business_name")
                         .customization(
                             CheckoutSessionCustomization.builder()
                                 .forceLanguage("force_language")
@@ -280,6 +283,7 @@ internal class CheckoutSessionCreateParamsTest {
                         .featureFlags(
                             CheckoutSessionFlags.builder()
                                 .allowCurrencySelection(true)
+                                .allowCustomerEditingBusinessName(true)
                                 .allowCustomerEditingCity(true)
                                 .allowCustomerEditingCountry(true)
                                 .allowCustomerEditingEmail(true)
@@ -371,6 +375,7 @@ internal class CheckoutSessionCreateParamsTest {
                             .build()
                     )
                     .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
+                    .customerBusinessName("customer_business_name")
                     .customization(
                         CheckoutSessionCustomization.builder()
                             .forceLanguage("force_language")
@@ -434,6 +439,7 @@ internal class CheckoutSessionCreateParamsTest {
                     .featureFlags(
                         CheckoutSessionFlags.builder()
                             .allowCurrencySelection(true)
+                            .allowCustomerEditingBusinessName(true)
                             .allowCustomerEditingCity(true)
                             .allowCustomerEditingCountry(true)
                             .allowCustomerEditingEmail(true)

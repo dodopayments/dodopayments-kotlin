@@ -38,6 +38,8 @@ import com.dodopayments.api.services.blocking.PaymentService
 import com.dodopayments.api.services.blocking.PaymentServiceImpl
 import com.dodopayments.api.services.blocking.PayoutService
 import com.dodopayments.api.services.blocking.PayoutServiceImpl
+import com.dodopayments.api.services.blocking.ProductCollectionService
+import com.dodopayments.api.services.blocking.ProductCollectionServiceImpl
 import com.dodopayments.api.services.blocking.ProductService
 import com.dodopayments.api.services.blocking.ProductServiceImpl
 import com.dodopayments.api.services.blocking.RefundService
@@ -136,6 +138,10 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
         EntitlementServiceImpl(clientOptionsWithUserAgent)
     }
 
+    private val productCollections: ProductCollectionService by lazy {
+        ProductCollectionServiceImpl(clientOptionsWithUserAgent)
+    }
+
     override fun async(): DodoPaymentsClientAsync = async
 
     override fun withRawResponse(): DodoPaymentsClient.WithRawResponse = withRawResponse
@@ -188,6 +194,8 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
     override fun creditEntitlements(): CreditEntitlementService = creditEntitlements
 
     override fun entitlements(): EntitlementService = entitlements
+
+    override fun productCollections(): ProductCollectionService = productCollections
 
     override fun close() = clientOptions.close()
 
@@ -286,6 +294,10 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
             EntitlementServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val productCollections: ProductCollectionService.WithRawResponse by lazy {
+            ProductCollectionServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): DodoPaymentsClient.WithRawResponse =
@@ -340,5 +352,8 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
             creditEntitlements
 
         override fun entitlements(): EntitlementService.WithRawResponse = entitlements
+
+        override fun productCollections(): ProductCollectionService.WithRawResponse =
+            productCollections
     }
 }

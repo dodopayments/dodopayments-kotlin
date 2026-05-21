@@ -8,6 +8,7 @@ import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.entitlements.EntitlementCreateParams
 import com.dodopayments.api.models.entitlements.EntitlementIntegrationType
 import com.dodopayments.api.models.entitlements.EntitlementUpdateParams
+import com.dodopayments.api.models.entitlements.GitHubPermission
 import com.dodopayments.api.models.entitlements.IntegrationConfig
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -29,7 +30,7 @@ internal class EntitlementServiceTest {
                 EntitlementCreateParams.builder()
                     .integrationConfig(
                         IntegrationConfig.GitHubConfig.builder()
-                            .permission(IntegrationConfig.GitHubConfig.Permission.PULL)
+                            .permission(GitHubPermission.PULL)
                             .targetId("target_id")
                             .build()
                     )
@@ -77,7 +78,7 @@ internal class EntitlementServiceTest {
                     .description("description")
                     .integrationConfig(
                         IntegrationConfig.GitHubConfig.builder()
-                            .permission(IntegrationConfig.GitHubConfig.Permission.PULL)
+                            .permission(GitHubPermission.PULL)
                             .targetId("target_id")
                             .build()
                     )

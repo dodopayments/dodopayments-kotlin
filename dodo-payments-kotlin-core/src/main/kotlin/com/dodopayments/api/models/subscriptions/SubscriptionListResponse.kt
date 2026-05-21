@@ -47,6 +47,7 @@ private constructor(
     private val taxInclusive: JsonField<Boolean>,
     private val trialPeriodDays: JsonField<Int>,
     private val cancelledAt: JsonField<OffsetDateTime>,
+    private val customerBusinessName: JsonField<String>,
     private val discountCyclesRemaining: JsonField<Int>,
     private val discountId: JsonField<String>,
     private val paymentMethodId: JsonField<String>,
@@ -114,6 +115,9 @@ private constructor(
         @JsonProperty("cancelled_at")
         @ExcludeMissing
         cancelledAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("customer_business_name")
+        @ExcludeMissing
+        customerBusinessName: JsonField<String> = JsonMissing.of(),
         @JsonProperty("discount_cycles_remaining")
         @ExcludeMissing
         discountCyclesRemaining: JsonField<Int> = JsonMissing.of(),
@@ -153,6 +157,7 @@ private constructor(
         taxInclusive,
         trialPeriodDays,
         cancelledAt,
+        customerBusinessName,
         discountCyclesRemaining,
         discountId,
         paymentMethodId,
@@ -342,6 +347,15 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun cancelledAt(): OffsetDateTime? = cancelledAt.getNullable("cancelled_at")
+
+    /**
+     * Business / legal name associated with the tax id (B2B). When set this is used on the invoice
+     * in place of the customer's personal name.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun customerBusinessName(): String? = customerBusinessName.getNullable("customer_business_name")
 
     /**
      * DEPRECATED: Use discounts[].cycles_remaining instead.
@@ -584,6 +598,16 @@ private constructor(
     fun _cancelledAt(): JsonField<OffsetDateTime> = cancelledAt
 
     /**
+     * Returns the raw JSON value of [customerBusinessName].
+     *
+     * Unlike [customerBusinessName], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("customer_business_name")
+    @ExcludeMissing
+    fun _customerBusinessName(): JsonField<String> = customerBusinessName
+
+    /**
      * Returns the raw JSON value of [discountCyclesRemaining].
      *
      * Unlike [discountCyclesRemaining], this method doesn't throw if the JSON field has an
@@ -704,6 +728,7 @@ private constructor(
         private var taxInclusive: JsonField<Boolean>? = null
         private var trialPeriodDays: JsonField<Int>? = null
         private var cancelledAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var customerBusinessName: JsonField<String> = JsonMissing.of()
         private var discountCyclesRemaining: JsonField<Int> = JsonMissing.of()
         private var discountId: JsonField<String> = JsonMissing.of()
         private var paymentMethodId: JsonField<String> = JsonMissing.of()
@@ -735,6 +760,7 @@ private constructor(
             taxInclusive = subscriptionListResponse.taxInclusive
             trialPeriodDays = subscriptionListResponse.trialPeriodDays
             cancelledAt = subscriptionListResponse.cancelledAt
+            customerBusinessName = subscriptionListResponse.customerBusinessName
             discountCyclesRemaining = subscriptionListResponse.discountCyclesRemaining
             discountId = subscriptionListResponse.discountId
             paymentMethodId = subscriptionListResponse.paymentMethodId
@@ -1060,6 +1086,24 @@ private constructor(
             this.cancelledAt = cancelledAt
         }
 
+        /**
+         * Business / legal name associated with the tax id (B2B). When set this is used on the
+         * invoice in place of the customer's personal name.
+         */
+        fun customerBusinessName(customerBusinessName: String?) =
+            customerBusinessName(JsonField.ofNullable(customerBusinessName))
+
+        /**
+         * Sets [Builder.customerBusinessName] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.customerBusinessName] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun customerBusinessName(customerBusinessName: JsonField<String>) = apply {
+            this.customerBusinessName = customerBusinessName
+        }
+
         /** DEPRECATED: Use discounts[].cycles_remaining instead. */
         fun discountCyclesRemaining(discountCyclesRemaining: Int?) =
             discountCyclesRemaining(JsonField.ofNullable(discountCyclesRemaining))
@@ -1223,6 +1267,7 @@ private constructor(
                 checkRequired("taxInclusive", taxInclusive),
                 checkRequired("trialPeriodDays", trialPeriodDays),
                 cancelledAt,
+                customerBusinessName,
                 discountCyclesRemaining,
                 discountId,
                 paymentMethodId,
@@ -1270,6 +1315,7 @@ private constructor(
         taxInclusive()
         trialPeriodDays()
         cancelledAt()
+        customerBusinessName()
         discountCyclesRemaining()
         discountId()
         paymentMethodId()
@@ -1315,6 +1361,7 @@ private constructor(
             (if (taxInclusive.asKnown() == null) 0 else 1) +
             (if (trialPeriodDays.asKnown() == null) 0 else 1) +
             (if (cancelledAt.asKnown() == null) 0 else 1) +
+            (if (customerBusinessName.asKnown() == null) 0 else 1) +
             (if (discountCyclesRemaining.asKnown() == null) 0 else 1) +
             (if (discountId.asKnown() == null) 0 else 1) +
             (if (paymentMethodId.asKnown() == null) 0 else 1) +
@@ -1687,6 +1734,7 @@ private constructor(
             taxInclusive == other.taxInclusive &&
             trialPeriodDays == other.trialPeriodDays &&
             cancelledAt == other.cancelledAt &&
+            customerBusinessName == other.customerBusinessName &&
             discountCyclesRemaining == other.discountCyclesRemaining &&
             discountId == other.discountId &&
             paymentMethodId == other.paymentMethodId &&
@@ -1720,6 +1768,7 @@ private constructor(
             taxInclusive,
             trialPeriodDays,
             cancelledAt,
+            customerBusinessName,
             discountCyclesRemaining,
             discountId,
             paymentMethodId,
@@ -1733,5 +1782,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "SubscriptionListResponse{billing=$billing, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, currency=$currency, customer=$customer, discounts=$discounts, metadata=$metadata, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancelledAt=$cancelledAt, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, paymentMethodId=$paymentMethodId, productName=$productName, scheduledChange=$scheduledChange, taxId=$taxId, additionalProperties=$additionalProperties}"
+        "SubscriptionListResponse{billing=$billing, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, currency=$currency, customer=$customer, discounts=$discounts, metadata=$metadata, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancelledAt=$cancelledAt, customerBusinessName=$customerBusinessName, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, paymentMethodId=$paymentMethodId, productName=$productName, scheduledChange=$scheduledChange, taxId=$taxId, additionalProperties=$additionalProperties}"
 }

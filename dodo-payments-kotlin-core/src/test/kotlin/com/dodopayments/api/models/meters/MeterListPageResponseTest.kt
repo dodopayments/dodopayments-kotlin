@@ -32,14 +32,14 @@ internal class MeterListPageResponseTest {
                         .description("description")
                         .filter(
                             MeterFilter.builder()
-                                .clausesOfDirectFilterConditions(
+                                .clausesOfMeterFilterConditionList(
                                     listOf(
-                                        MeterFilter.Clauses.MeterFilterCondition.builder()
+                                        FilterType.MeterFilterCondition.builder()
                                             .key("user_id")
                                             .operator(FilterOperator.EQUALS)
                                             .value("user123")
                                             .build(),
-                                        MeterFilter.Clauses.MeterFilterCondition.builder()
+                                        FilterType.MeterFilterCondition.builder()
                                             .key("amount")
                                             .operator(FilterOperator.GREATER_THAN)
                                             .value(100.0)
@@ -72,14 +72,14 @@ internal class MeterListPageResponseTest {
                     .description("description")
                     .filter(
                         MeterFilter.builder()
-                            .clausesOfDirectFilterConditions(
+                            .clausesOfMeterFilterConditionList(
                                 listOf(
-                                    MeterFilter.Clauses.MeterFilterCondition.builder()
+                                    FilterType.MeterFilterCondition.builder()
                                         .key("user_id")
                                         .operator(FilterOperator.EQUALS)
                                         .value("user123")
                                         .build(),
-                                    MeterFilter.Clauses.MeterFilterCondition.builder()
+                                    FilterType.MeterFilterCondition.builder()
                                         .key("amount")
                                         .operator(FilterOperator.GREATER_THAN)
                                         .value(100.0)
@@ -116,14 +116,14 @@ internal class MeterListPageResponseTest {
                         .description("description")
                         .filter(
                             MeterFilter.builder()
-                                .clausesOfDirectFilterConditions(
+                                .clausesOfMeterFilterConditionList(
                                     listOf(
-                                        MeterFilter.Clauses.MeterFilterCondition.builder()
+                                        FilterType.MeterFilterCondition.builder()
                                             .key("user_id")
                                             .operator(FilterOperator.EQUALS)
                                             .value("user123")
                                             .build(),
-                                        MeterFilter.Clauses.MeterFilterCondition.builder()
+                                        FilterType.MeterFilterCondition.builder()
                                             .key("amount")
                                             .operator(FilterOperator.GREATER_THAN)
                                             .value(100.0)

@@ -115,6 +115,7 @@ internal class SubscriptionTest {
                 .addCustomFieldResponse(
                     CustomFieldResponse.builder().key("key").value("value").build()
                 )
+                .customerBusinessName("customer_business_name")
                 .discountCyclesRemaining(0)
                 .discountId("discount_id")
                 .addDiscount(
@@ -269,6 +270,7 @@ internal class SubscriptionTest {
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(subscription.customFieldResponses())
             .containsExactly(CustomFieldResponse.builder().key("key").value("value").build())
+        assertThat(subscription.customerBusinessName()).isEqualTo("customer_business_name")
         assertThat(subscription.discountCyclesRemaining()).isEqualTo(0)
         assertThat(subscription.discountId()).isEqualTo("discount_id")
         assertThat(subscription.discounts())
@@ -418,6 +420,7 @@ internal class SubscriptionTest {
                 .addCustomFieldResponse(
                     CustomFieldResponse.builder().key("key").value("value").build()
                 )
+                .customerBusinessName("customer_business_name")
                 .discountCyclesRemaining(0)
                 .discountId("discount_id")
                 .addDiscount(
