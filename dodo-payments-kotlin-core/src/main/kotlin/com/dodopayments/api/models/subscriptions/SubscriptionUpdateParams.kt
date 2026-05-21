@@ -78,6 +78,16 @@ private constructor(
     fun creditEntitlementCart(): List<CreditEntitlementCart>? = body.creditEntitlementCart()
 
     /**
+     * Optional business / legal name associated with the tax id. When provided together with a
+     * valid tax id for a B2B subscription, this name is rendered on the invoice instead of the
+     * customer's personal name. Send `null` to explicitly clear the business name.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun customerBusinessName(): String? = body.customerBusinessName()
+
+    /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
@@ -159,6 +169,14 @@ private constructor(
      */
     fun _creditEntitlementCart(): JsonField<List<CreditEntitlementCart>> =
         body._creditEntitlementCart()
+
+    /**
+     * Returns the raw JSON value of [customerBusinessName].
+     *
+     * Unlike [customerBusinessName], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    fun _customerBusinessName(): JsonField<String> = body._customerBusinessName()
 
     /**
      * Returns the raw JSON value of [customerName].
@@ -359,6 +377,26 @@ private constructor(
          */
         fun addCreditEntitlementCart(creditEntitlementCart: CreditEntitlementCart) = apply {
             body.addCreditEntitlementCart(creditEntitlementCart)
+        }
+
+        /**
+         * Optional business / legal name associated with the tax id. When provided together with a
+         * valid tax id for a B2B subscription, this name is rendered on the invoice instead of the
+         * customer's personal name. Send `null` to explicitly clear the business name.
+         */
+        fun customerBusinessName(customerBusinessName: String?) = apply {
+            body.customerBusinessName(customerBusinessName)
+        }
+
+        /**
+         * Sets [Builder.customerBusinessName] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.customerBusinessName] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun customerBusinessName(customerBusinessName: JsonField<String>) = apply {
+            body.customerBusinessName(customerBusinessName)
         }
 
         fun customerName(customerName: String?) = apply { body.customerName(customerName) }
@@ -588,6 +626,7 @@ private constructor(
         private val cancellationComment: JsonField<String>,
         private val cancellationFeedback: JsonField<CancellationFeedback>,
         private val creditEntitlementCart: JsonField<List<CreditEntitlementCart>>,
+        private val customerBusinessName: JsonField<String>,
         private val customerName: JsonField<String>,
         private val disableOnDemand: JsonField<DisableOnDemand>,
         private val metadata: JsonField<Metadata>,
@@ -617,6 +656,9 @@ private constructor(
             @JsonProperty("credit_entitlement_cart")
             @ExcludeMissing
             creditEntitlementCart: JsonField<List<CreditEntitlementCart>> = JsonMissing.of(),
+            @JsonProperty("customer_business_name")
+            @ExcludeMissing
+            customerBusinessName: JsonField<String> = JsonMissing.of(),
             @JsonProperty("customer_name")
             @ExcludeMissing
             customerName: JsonField<String> = JsonMissing.of(),
@@ -640,6 +682,7 @@ private constructor(
             cancellationComment,
             cancellationFeedback,
             creditEntitlementCart,
+            customerBusinessName,
             customerName,
             disableOnDemand,
             metadata,
@@ -695,6 +738,17 @@ private constructor(
          */
         fun creditEntitlementCart(): List<CreditEntitlementCart>? =
             creditEntitlementCart.getNullable("credit_entitlement_cart")
+
+        /**
+         * Optional business / legal name associated with the tax id. When provided together with a
+         * valid tax id for a B2B subscription, this name is rendered on the invoice instead of the
+         * customer's personal name. Send `null` to explicitly clear the business name.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun customerBusinessName(): String? =
+            customerBusinessName.getNullable("customer_business_name")
 
         /**
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
@@ -790,6 +844,16 @@ private constructor(
         fun _creditEntitlementCart(): JsonField<List<CreditEntitlementCart>> = creditEntitlementCart
 
         /**
+         * Returns the raw JSON value of [customerBusinessName].
+         *
+         * Unlike [customerBusinessName], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("customer_business_name")
+        @ExcludeMissing
+        fun _customerBusinessName(): JsonField<String> = customerBusinessName
+
+        /**
          * Returns the raw JSON value of [customerName].
          *
          * Unlike [customerName], this method doesn't throw if the JSON field has an unexpected
@@ -869,6 +933,7 @@ private constructor(
             private var cancellationComment: JsonField<String> = JsonMissing.of()
             private var cancellationFeedback: JsonField<CancellationFeedback> = JsonMissing.of()
             private var creditEntitlementCart: JsonField<MutableList<CreditEntitlementCart>>? = null
+            private var customerBusinessName: JsonField<String> = JsonMissing.of()
             private var customerName: JsonField<String> = JsonMissing.of()
             private var disableOnDemand: JsonField<DisableOnDemand> = JsonMissing.of()
             private var metadata: JsonField<Metadata> = JsonMissing.of()
@@ -884,6 +949,7 @@ private constructor(
                 cancellationComment = body.cancellationComment
                 cancellationFeedback = body.cancellationFeedback
                 creditEntitlementCart = body.creditEntitlementCart.map { it.toMutableList() }
+                customerBusinessName = body.customerBusinessName
                 customerName = body.customerName
                 disableOnDemand = body.disableOnDemand
                 metadata = body.metadata
@@ -1007,6 +1073,26 @@ private constructor(
                     }
             }
 
+            /**
+             * Optional business / legal name associated with the tax id. When provided together
+             * with a valid tax id for a B2B subscription, this name is rendered on the invoice
+             * instead of the customer's personal name. Send `null` to explicitly clear the business
+             * name.
+             */
+            fun customerBusinessName(customerBusinessName: String?) =
+                customerBusinessName(JsonField.ofNullable(customerBusinessName))
+
+            /**
+             * Sets [Builder.customerBusinessName] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.customerBusinessName] with a well-typed [String]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun customerBusinessName(customerBusinessName: JsonField<String>) = apply {
+                this.customerBusinessName = customerBusinessName
+            }
+
             fun customerName(customerName: String?) =
                 customerName(JsonField.ofNullable(customerName))
 
@@ -1114,6 +1200,7 @@ private constructor(
                     cancellationComment,
                     cancellationFeedback,
                     (creditEntitlementCart ?: JsonMissing.of()).map { it.toImmutable() },
+                    customerBusinessName,
                     customerName,
                     disableOnDemand,
                     metadata,
@@ -1146,6 +1233,7 @@ private constructor(
             cancellationComment()
             cancellationFeedback()?.validate()
             creditEntitlementCart()?.forEach { it.validate() }
+            customerBusinessName()
             customerName()
             disableOnDemand()?.validate()
             metadata()?.validate()
@@ -1176,6 +1264,7 @@ private constructor(
                 (if (cancellationComment.asKnown() == null) 0 else 1) +
                 (cancellationFeedback.asKnown()?.validity() ?: 0) +
                 (creditEntitlementCart.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                (if (customerBusinessName.asKnown() == null) 0 else 1) +
                 (if (customerName.asKnown() == null) 0 else 1) +
                 (disableOnDemand.asKnown()?.validity() ?: 0) +
                 (metadata.asKnown()?.validity() ?: 0) +
@@ -1195,6 +1284,7 @@ private constructor(
                 cancellationComment == other.cancellationComment &&
                 cancellationFeedback == other.cancellationFeedback &&
                 creditEntitlementCart == other.creditEntitlementCart &&
+                customerBusinessName == other.customerBusinessName &&
                 customerName == other.customerName &&
                 disableOnDemand == other.disableOnDemand &&
                 metadata == other.metadata &&
@@ -1212,6 +1302,7 @@ private constructor(
                 cancellationComment,
                 cancellationFeedback,
                 creditEntitlementCart,
+                customerBusinessName,
                 customerName,
                 disableOnDemand,
                 metadata,
@@ -1225,7 +1316,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{billing=$billing, cancelAtNextBillingDate=$cancelAtNextBillingDate, cancelReason=$cancelReason, cancellationComment=$cancellationComment, cancellationFeedback=$cancellationFeedback, creditEntitlementCart=$creditEntitlementCart, customerName=$customerName, disableOnDemand=$disableOnDemand, metadata=$metadata, nextBillingDate=$nextBillingDate, status=$status, taxId=$taxId, additionalProperties=$additionalProperties}"
+            "Body{billing=$billing, cancelAtNextBillingDate=$cancelAtNextBillingDate, cancelReason=$cancelReason, cancellationComment=$cancellationComment, cancellationFeedback=$cancellationFeedback, creditEntitlementCart=$creditEntitlementCart, customerBusinessName=$customerBusinessName, customerName=$customerName, disableOnDemand=$disableOnDemand, metadata=$metadata, nextBillingDate=$nextBillingDate, status=$status, taxId=$taxId, additionalProperties=$additionalProperties}"
     }
 
     class CancelReason @JsonCreator private constructor(private val value: JsonField<String>) :

@@ -180,6 +180,8 @@ class PaymentMethodTypes @JsonCreator private constructor(private val value: Jso
 
         val SOFORT = of("sofort")
 
+        val SUNBIT = of("sunbit")
+
         val SWISH = of("swish")
 
         val TOUCH_N_GO = of("touch_n_go")
@@ -316,6 +318,7 @@ class PaymentMethodTypes @JsonCreator private constructor(private val value: Jso
         SEPA,
         SEPA_BANK_TRANSFER,
         SOFORT,
+        SUNBIT,
         SWISH,
         TOUCH_N_GO,
         TRUSTLY,
@@ -432,6 +435,7 @@ class PaymentMethodTypes @JsonCreator private constructor(private val value: Jso
         SEPA,
         SEPA_BANK_TRANSFER,
         SOFORT,
+        SUNBIT,
         SWISH,
         TOUCH_N_GO,
         TRUSTLY,
@@ -552,6 +556,7 @@ class PaymentMethodTypes @JsonCreator private constructor(private val value: Jso
             SEPA -> Value.SEPA
             SEPA_BANK_TRANSFER -> Value.SEPA_BANK_TRANSFER
             SOFORT -> Value.SOFORT
+            SUNBIT -> Value.SUNBIT
             SWISH -> Value.SWISH
             TOUCH_N_GO -> Value.TOUCH_N_GO
             TRUSTLY -> Value.TRUSTLY
@@ -670,6 +675,7 @@ class PaymentMethodTypes @JsonCreator private constructor(private val value: Jso
             SEPA -> Known.SEPA
             SEPA_BANK_TRANSFER -> Known.SEPA_BANK_TRANSFER
             SOFORT -> Known.SOFORT
+            SUNBIT -> Known.SUNBIT
             SWISH -> Known.SWISH
             TOUCH_N_GO -> Known.TOUCH_N_GO
             TRUSTLY -> Known.TRUSTLY

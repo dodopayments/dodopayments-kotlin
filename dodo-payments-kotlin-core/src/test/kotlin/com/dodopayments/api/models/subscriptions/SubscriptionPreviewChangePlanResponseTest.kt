@@ -152,6 +152,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                         .addCustomFieldResponse(
                             CustomFieldResponse.builder().key("key").value("value").build()
                         )
+                        .customerBusinessName("customer_business_name")
                         .discountCyclesRemaining(0)
                         .discountId("discount_id")
                         .addDiscount(
@@ -333,6 +334,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                     .addCustomFieldResponse(
                         CustomFieldResponse.builder().key("key").value("value").build()
                     )
+                    .customerBusinessName("customer_business_name")
                     .discountCyclesRemaining(0)
                     .discountId("discount_id")
                     .addDiscount(
@@ -518,6 +520,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                         .addCustomFieldResponse(
                             CustomFieldResponse.builder().key("key").value("value").build()
                         )
+                        .customerBusinessName("customer_business_name")
                         .discountCyclesRemaining(0)
                         .discountId("discount_id")
                         .addDiscount(

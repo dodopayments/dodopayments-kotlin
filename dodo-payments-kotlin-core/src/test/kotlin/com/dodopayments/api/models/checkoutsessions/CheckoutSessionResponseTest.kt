@@ -15,10 +15,16 @@ internal class CheckoutSessionResponseTest {
             CheckoutSessionResponse.builder()
                 .sessionId("session_id")
                 .checkoutUrl("checkout_url")
+                .clientSecret("client_secret")
+                .paymentId("payment_id")
+                .publishableKey("publishable_key")
                 .build()
 
         assertThat(checkoutSessionResponse.sessionId()).isEqualTo("session_id")
         assertThat(checkoutSessionResponse.checkoutUrl()).isEqualTo("checkout_url")
+        assertThat(checkoutSessionResponse.clientSecret()).isEqualTo("client_secret")
+        assertThat(checkoutSessionResponse.paymentId()).isEqualTo("payment_id")
+        assertThat(checkoutSessionResponse.publishableKey()).isEqualTo("publishable_key")
     }
 
     @Test
@@ -28,6 +34,9 @@ internal class CheckoutSessionResponseTest {
             CheckoutSessionResponse.builder()
                 .sessionId("session_id")
                 .checkoutUrl("checkout_url")
+                .clientSecret("client_secret")
+                .paymentId("payment_id")
+                .publishableKey("publishable_key")
                 .build()
 
         val roundtrippedCheckoutSessionResponse =

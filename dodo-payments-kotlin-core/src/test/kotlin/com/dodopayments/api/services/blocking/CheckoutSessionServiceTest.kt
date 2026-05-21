@@ -76,6 +76,7 @@ internal class CheckoutSessionServiceTest {
                             .build()
                     )
                     .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
+                    .customerBusinessName("customer_business_name")
                     .customization(
                         CheckoutSessionCustomization.builder()
                             .forceLanguage("force_language")
@@ -139,6 +140,7 @@ internal class CheckoutSessionServiceTest {
                     .featureFlags(
                         CheckoutSessionFlags.builder()
                             .allowCurrencySelection(true)
+                            .allowCustomerEditingBusinessName(true)
                             .allowCustomerEditingCity(true)
                             .allowCustomerEditingCountry(true)
                             .allowCustomerEditingEmail(true)
@@ -253,6 +255,7 @@ internal class CheckoutSessionServiceTest {
                             .build()
                     )
                     .customer(AttachExistingCustomer.builder().customerId("customer_id").build())
+                    .customerBusinessName("customer_business_name")
                     .customization(
                         CheckoutSessionCustomization.builder()
                             .forceLanguage("force_language")
@@ -316,6 +319,7 @@ internal class CheckoutSessionServiceTest {
                     .featureFlags(
                         CheckoutSessionFlags.builder()
                             .allowCurrencySelection(true)
+                            .allowCustomerEditingBusinessName(true)
                             .allowCustomerEditingCity(true)
                             .allowCustomerEditingCountry(true)
                             .allowCustomerEditingEmail(true)

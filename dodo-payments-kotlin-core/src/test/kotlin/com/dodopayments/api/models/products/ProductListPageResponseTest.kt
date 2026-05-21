@@ -5,6 +5,7 @@ package com.dodopayments.api.models.products
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.entitlements.EntitlementIntegrationType
+import com.dodopayments.api.models.entitlements.GitHubPermission
 import com.dodopayments.api.models.entitlements.IntegrationConfigResponse
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.TaxCategory
@@ -28,9 +29,7 @@ internal class ProductListPageResponseTest {
                                 .id("id")
                                 .integrationConfig(
                                     IntegrationConfigResponse.GitHubConfig.builder()
-                                        .permission(
-                                            IntegrationConfigResponse.GitHubConfig.Permission.PULL
-                                        )
+                                        .permission(GitHubPermission.PULL)
                                         .targetId("target_id")
                                         .build()
                                 )
@@ -79,9 +78,7 @@ internal class ProductListPageResponseTest {
                             .id("id")
                             .integrationConfig(
                                 IntegrationConfigResponse.GitHubConfig.builder()
-                                    .permission(
-                                        IntegrationConfigResponse.GitHubConfig.Permission.PULL
-                                    )
+                                    .permission(GitHubPermission.PULL)
                                     .targetId("target_id")
                                     .build()
                             )
@@ -134,9 +131,7 @@ internal class ProductListPageResponseTest {
                                 .id("id")
                                 .integrationConfig(
                                     IntegrationConfigResponse.GitHubConfig.builder()
-                                        .permission(
-                                            IntegrationConfigResponse.GitHubConfig.Permission.PULL
-                                        )
+                                        .permission(GitHubPermission.PULL)
                                         .targetId("target_id")
                                         .build()
                                 )

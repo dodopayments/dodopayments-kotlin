@@ -6,6 +6,7 @@ import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClientAsync
 import com.dodopayments.api.models.meters.Conjunction
 import com.dodopayments.api.models.meters.FilterOperator
+import com.dodopayments.api.models.meters.FilterType
 import com.dodopayments.api.models.meters.MeterAggregation
 import com.dodopayments.api.models.meters.MeterCreateParams
 import com.dodopayments.api.models.meters.MeterFilter
@@ -39,14 +40,14 @@ internal class MeterServiceAsyncTest {
                     .description("description")
                     .filter(
                         MeterFilter.builder()
-                            .clausesOfDirectFilterConditions(
+                            .clausesOfMeterFilterConditionList(
                                 listOf(
-                                    MeterFilter.Clauses.MeterFilterCondition.builder()
+                                    FilterType.MeterFilterCondition.builder()
                                         .key("user_id")
                                         .operator(FilterOperator.EQUALS)
                                         .value("user123")
                                         .build(),
-                                    MeterFilter.Clauses.MeterFilterCondition.builder()
+                                    FilterType.MeterFilterCondition.builder()
                                         .key("amount")
                                         .operator(FilterOperator.GREATER_THAN)
                                         .value(100.0)

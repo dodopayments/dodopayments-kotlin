@@ -13,14 +13,14 @@ internal class MeterFilterTest {
     fun create() {
         val meterFilter =
             MeterFilter.builder()
-                .clausesOfDirectFilterConditions(
+                .clausesOfMeterFilterConditionList(
                     listOf(
-                        MeterFilter.Clauses.MeterFilterCondition.builder()
+                        FilterType.MeterFilterCondition.builder()
                             .key("user_id")
                             .operator(FilterOperator.EQUALS)
                             .value("user123")
                             .build(),
-                        MeterFilter.Clauses.MeterFilterCondition.builder()
+                        FilterType.MeterFilterCondition.builder()
                             .key("amount")
                             .operator(FilterOperator.GREATER_THAN)
                             .value(100.0)
@@ -32,14 +32,14 @@ internal class MeterFilterTest {
 
         assertThat(meterFilter.clauses())
             .isEqualTo(
-                MeterFilter.Clauses.ofDirectFilterConditions(
+                FilterType.ofMeterFilterConditionList(
                     listOf(
-                        MeterFilter.Clauses.MeterFilterCondition.builder()
+                        FilterType.MeterFilterCondition.builder()
                             .key("user_id")
                             .operator(FilterOperator.EQUALS)
                             .value("user123")
                             .build(),
-                        MeterFilter.Clauses.MeterFilterCondition.builder()
+                        FilterType.MeterFilterCondition.builder()
                             .key("amount")
                             .operator(FilterOperator.GREATER_THAN)
                             .value(100.0)
@@ -55,14 +55,14 @@ internal class MeterFilterTest {
         val jsonMapper = jsonMapper()
         val meterFilter =
             MeterFilter.builder()
-                .clausesOfDirectFilterConditions(
+                .clausesOfMeterFilterConditionList(
                     listOf(
-                        MeterFilter.Clauses.MeterFilterCondition.builder()
+                        FilterType.MeterFilterCondition.builder()
                             .key("user_id")
                             .operator(FilterOperator.EQUALS)
                             .value("user123")
                             .build(),
-                        MeterFilter.Clauses.MeterFilterCondition.builder()
+                        FilterType.MeterFilterCondition.builder()
                             .key("amount")
                             .operator(FilterOperator.GREATER_THAN)
                             .value(100.0)

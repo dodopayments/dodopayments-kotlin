@@ -9,7 +9,6 @@ import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
-import com.dodopayments.api.models.payments.OneTimeProductCartItem
 import com.dodopayments.api.models.payments.PaymentMethodTypes
 import com.dodopayments.api.models.subscriptions.AttachAddon
 import com.dodopayments.api.models.subscriptions.CancellationFeedback
@@ -57,6 +56,7 @@ internal class SubscriptionServiceTest {
                     .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
                     .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
                     .billingCurrency(Currency.AED)
+                    .customerBusinessName("customer_business_name")
                     .discountCode("discount_code")
                     .addDiscountCode("string")
                     .force3ds(true)
@@ -76,7 +76,7 @@ internal class SubscriptionServiceTest {
                             .build()
                     )
                     .addOneTimeProductCart(
-                        OneTimeProductCartItem.builder()
+                        SubscriptionCreateParams.OneTimeProductCart.builder()
                             .productId("product_id")
                             .quantity(0)
                             .amount(0)
@@ -152,6 +152,7 @@ internal class SubscriptionServiceTest {
                             .rolloverTimeframeInterval(TimeInterval.DAY)
                             .build()
                     )
+                    .customerBusinessName("customer_business_name")
                     .customerName("customer_name")
                     .disableOnDemand(
                         SubscriptionUpdateParams.DisableOnDemand.builder()
