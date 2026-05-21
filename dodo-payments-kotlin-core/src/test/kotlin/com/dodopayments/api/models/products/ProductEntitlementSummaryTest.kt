@@ -4,6 +4,7 @@ package com.dodopayments.api.models.products
 
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.entitlements.EntitlementIntegrationType
+import com.dodopayments.api.models.entitlements.GitHubPermission
 import com.dodopayments.api.models.entitlements.IntegrationConfigResponse
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
@@ -18,7 +19,7 @@ internal class ProductEntitlementSummaryTest {
                 .id("id")
                 .integrationConfig(
                     IntegrationConfigResponse.GitHubConfig.builder()
-                        .permission(IntegrationConfigResponse.GitHubConfig.Permission.PULL)
+                        .permission(GitHubPermission.PULL)
                         .targetId("target_id")
                         .build()
                 )
@@ -32,7 +33,7 @@ internal class ProductEntitlementSummaryTest {
             .isEqualTo(
                 IntegrationConfigResponse.ofGitHubConfig(
                     IntegrationConfigResponse.GitHubConfig.builder()
-                        .permission(IntegrationConfigResponse.GitHubConfig.Permission.PULL)
+                        .permission(GitHubPermission.PULL)
                         .targetId("target_id")
                         .build()
                 )
@@ -51,7 +52,7 @@ internal class ProductEntitlementSummaryTest {
                 .id("id")
                 .integrationConfig(
                     IntegrationConfigResponse.GitHubConfig.builder()
-                        .permission(IntegrationConfigResponse.GitHubConfig.Permission.PULL)
+                        .permission(GitHubPermission.PULL)
                         .targetId("target_id")
                         .build()
                 )

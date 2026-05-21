@@ -19,7 +19,7 @@ internal class IntegrationConfigResponseTest {
     fun ofGitHubConfig() {
         val githubConfig =
             IntegrationConfigResponse.GitHubConfig.builder()
-                .permission(IntegrationConfigResponse.GitHubConfig.Permission.PULL)
+                .permission(GitHubPermission.PULL)
                 .targetId("target_id")
                 .build()
 
@@ -41,7 +41,7 @@ internal class IntegrationConfigResponseTest {
         val integrationConfigResponse =
             IntegrationConfigResponse.ofGitHubConfig(
                 IntegrationConfigResponse.GitHubConfig.builder()
-                    .permission(IntegrationConfigResponse.GitHubConfig.Permission.PULL)
+                    .permission(GitHubPermission.PULL)
                     .targetId("target_id")
                     .build()
             )

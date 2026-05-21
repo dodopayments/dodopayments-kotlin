@@ -54,13 +54,9 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
 
         val SUBSCRIPTION_ON_HOLD = of("subscription.on_hold")
 
+        val SUBSCRIPTION_PAUSED = of("subscription.paused")
+
         val SUBSCRIPTION_CANCELLED = of("subscription.cancelled")
-
-        val SUBSCRIPTION_CANCELLATION_SCHEDULED = of("subscription.cancellation_scheduled")
-
-        val SUBSCRIPTION_TRIAL_ENDING = of("subscription.trial_ending")
-
-        val SUBSCRIPTION_UPCOMING_RENEWAL = of("subscription.upcoming_renewal")
 
         val SUBSCRIPTION_FAILED = of("subscription.failed")
 
@@ -108,10 +104,6 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
 
         val DUNNING_RECOVERED = of("dunning.recovered")
 
-        val ACR_EMAIL = of("acr.email")
-
-        val DUNNING_EMAIL = of("dunning.email")
-
         val ENTITLEMENT_GRANT_CREATED = of("entitlement_grant.created")
 
         val ENTITLEMENT_GRANT_DELIVERED = of("entitlement_grant.delivered")
@@ -141,10 +133,8 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         SUBSCRIPTION_ACTIVE,
         SUBSCRIPTION_RENEWED,
         SUBSCRIPTION_ON_HOLD,
+        SUBSCRIPTION_PAUSED,
         SUBSCRIPTION_CANCELLED,
-        SUBSCRIPTION_CANCELLATION_SCHEDULED,
-        SUBSCRIPTION_TRIAL_ENDING,
-        SUBSCRIPTION_UPCOMING_RENEWAL,
         SUBSCRIPTION_FAILED,
         SUBSCRIPTION_EXPIRED,
         SUBSCRIPTION_PLAN_CHANGED,
@@ -168,8 +158,6 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         ABANDONED_CHECKOUT_RECOVERED,
         DUNNING_STARTED,
         DUNNING_RECOVERED,
-        ACR_EMAIL,
-        DUNNING_EMAIL,
         ENTITLEMENT_GRANT_CREATED,
         ENTITLEMENT_GRANT_DELIVERED,
         ENTITLEMENT_GRANT_FAILED,
@@ -202,10 +190,8 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         SUBSCRIPTION_ACTIVE,
         SUBSCRIPTION_RENEWED,
         SUBSCRIPTION_ON_HOLD,
+        SUBSCRIPTION_PAUSED,
         SUBSCRIPTION_CANCELLED,
-        SUBSCRIPTION_CANCELLATION_SCHEDULED,
-        SUBSCRIPTION_TRIAL_ENDING,
-        SUBSCRIPTION_UPCOMING_RENEWAL,
         SUBSCRIPTION_FAILED,
         SUBSCRIPTION_EXPIRED,
         SUBSCRIPTION_PLAN_CHANGED,
@@ -229,8 +215,6 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         ABANDONED_CHECKOUT_RECOVERED,
         DUNNING_STARTED,
         DUNNING_RECOVERED,
-        ACR_EMAIL,
-        DUNNING_EMAIL,
         ENTITLEMENT_GRANT_CREATED,
         ENTITLEMENT_GRANT_DELIVERED,
         ENTITLEMENT_GRANT_FAILED,
@@ -266,10 +250,8 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             SUBSCRIPTION_ACTIVE -> Value.SUBSCRIPTION_ACTIVE
             SUBSCRIPTION_RENEWED -> Value.SUBSCRIPTION_RENEWED
             SUBSCRIPTION_ON_HOLD -> Value.SUBSCRIPTION_ON_HOLD
+            SUBSCRIPTION_PAUSED -> Value.SUBSCRIPTION_PAUSED
             SUBSCRIPTION_CANCELLED -> Value.SUBSCRIPTION_CANCELLED
-            SUBSCRIPTION_CANCELLATION_SCHEDULED -> Value.SUBSCRIPTION_CANCELLATION_SCHEDULED
-            SUBSCRIPTION_TRIAL_ENDING -> Value.SUBSCRIPTION_TRIAL_ENDING
-            SUBSCRIPTION_UPCOMING_RENEWAL -> Value.SUBSCRIPTION_UPCOMING_RENEWAL
             SUBSCRIPTION_FAILED -> Value.SUBSCRIPTION_FAILED
             SUBSCRIPTION_EXPIRED -> Value.SUBSCRIPTION_EXPIRED
             SUBSCRIPTION_PLAN_CHANGED -> Value.SUBSCRIPTION_PLAN_CHANGED
@@ -293,8 +275,6 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             ABANDONED_CHECKOUT_RECOVERED -> Value.ABANDONED_CHECKOUT_RECOVERED
             DUNNING_STARTED -> Value.DUNNING_STARTED
             DUNNING_RECOVERED -> Value.DUNNING_RECOVERED
-            ACR_EMAIL -> Value.ACR_EMAIL
-            DUNNING_EMAIL -> Value.DUNNING_EMAIL
             ENTITLEMENT_GRANT_CREATED -> Value.ENTITLEMENT_GRANT_CREATED
             ENTITLEMENT_GRANT_DELIVERED -> Value.ENTITLEMENT_GRANT_DELIVERED
             ENTITLEMENT_GRANT_FAILED -> Value.ENTITLEMENT_GRANT_FAILED
@@ -329,10 +309,8 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             SUBSCRIPTION_ACTIVE -> Known.SUBSCRIPTION_ACTIVE
             SUBSCRIPTION_RENEWED -> Known.SUBSCRIPTION_RENEWED
             SUBSCRIPTION_ON_HOLD -> Known.SUBSCRIPTION_ON_HOLD
+            SUBSCRIPTION_PAUSED -> Known.SUBSCRIPTION_PAUSED
             SUBSCRIPTION_CANCELLED -> Known.SUBSCRIPTION_CANCELLED
-            SUBSCRIPTION_CANCELLATION_SCHEDULED -> Known.SUBSCRIPTION_CANCELLATION_SCHEDULED
-            SUBSCRIPTION_TRIAL_ENDING -> Known.SUBSCRIPTION_TRIAL_ENDING
-            SUBSCRIPTION_UPCOMING_RENEWAL -> Known.SUBSCRIPTION_UPCOMING_RENEWAL
             SUBSCRIPTION_FAILED -> Known.SUBSCRIPTION_FAILED
             SUBSCRIPTION_EXPIRED -> Known.SUBSCRIPTION_EXPIRED
             SUBSCRIPTION_PLAN_CHANGED -> Known.SUBSCRIPTION_PLAN_CHANGED
@@ -356,8 +334,6 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             ABANDONED_CHECKOUT_RECOVERED -> Known.ABANDONED_CHECKOUT_RECOVERED
             DUNNING_STARTED -> Known.DUNNING_STARTED
             DUNNING_RECOVERED -> Known.DUNNING_RECOVERED
-            ACR_EMAIL -> Known.ACR_EMAIL
-            DUNNING_EMAIL -> Known.DUNNING_EMAIL
             ENTITLEMENT_GRANT_CREATED -> Known.ENTITLEMENT_GRANT_CREATED
             ENTITLEMENT_GRANT_DELIVERED -> Known.ENTITLEMENT_GRANT_DELIVERED
             ENTITLEMENT_GRANT_FAILED -> Known.ENTITLEMENT_GRANT_FAILED
