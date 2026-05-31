@@ -31,6 +31,7 @@ private constructor(
 
     /**
      * The discount amount.
+     *
      * - If `discount_type` is **not** `percentage`, `amount` is in **USD cents**. For example,
      *   `100` means `$1.00`. Only USD is allowed.
      * - If `discount_type` **is** `percentage`, `amount` is in **basis points**. For example, `540`
@@ -242,6 +243,7 @@ private constructor(
 
         /**
          * The discount amount.
+         *
          * - If `discount_type` is **not** `percentage`, `amount` is in **USD cents**. For example,
          *   `100` means `$1.00`. Only USD is allowed.
          * - If `discount_type` **is** `percentage`, `amount` is in **basis points**. For example,
@@ -611,6 +613,7 @@ private constructor(
 
         /**
          * The discount amount.
+         *
          * - If `discount_type` is **not** `percentage`, `amount` is in **USD cents**. For example,
          *   `100` means `$1.00`. Only USD is allowed.
          * - If `discount_type` **is** `percentage`, `amount` is in **basis points**. For example,
@@ -837,6 +840,7 @@ private constructor(
 
             /**
              * The discount amount.
+             *
              * - If `discount_type` is **not** `percentage`, `amount` is in **USD cents**. For
              *   example, `100` means `$1.00`. Only USD is allowed.
              * - If `discount_type` **is** `percentage`, `amount` is in **basis points**. For
@@ -1244,8 +1248,9 @@ private constructor(
          *
          * Used for best match union deserialization.
          */
-        internal fun validity(): Int =
-            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+        internal fun validity(): Int = additionalProperties.count { (_, value) ->
+            !value.isNull() && !value.isMissing()
+        }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
