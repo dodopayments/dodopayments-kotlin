@@ -36,6 +36,7 @@ private constructor(
     private val metadata: JsonField<Metadata>,
     private val paymentId: JsonField<String>,
     private val refunds: JsonField<List<RefundListItem>>,
+    private val retryAttempt: JsonField<Int>,
     private val settlementAmount: JsonField<Int>,
     private val settlementCurrency: JsonField<Currency>,
     private val totalAmount: JsonField<Int>,
@@ -92,6 +93,9 @@ private constructor(
         @JsonProperty("refunds")
         @ExcludeMissing
         refunds: JsonField<List<RefundListItem>> = JsonMissing.of(),
+        @JsonProperty("retry_attempt")
+        @ExcludeMissing
+        retryAttempt: JsonField<Int> = JsonMissing.of(),
         @JsonProperty("settlement_amount")
         @ExcludeMissing
         settlementAmount: JsonField<Int> = JsonMissing.of(),
@@ -172,6 +176,7 @@ private constructor(
         metadata,
         paymentId,
         refunds,
+        retryAttempt,
         settlementAmount,
         settlementCurrency,
         totalAmount,
@@ -289,6 +294,16 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun refunds(): List<RefundListItem> = refunds.getRequired("refunds")
+
+    /**
+     * Retry attempt number for subscription renewal payments. `0` for the original payment, `1`+
+     * for each scheduled off-session retry after a failed renewal. Always `0` for non-subscription
+     * payments.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun retryAttempt(): Int = retryAttempt.getRequired("retry_attempt")
 
     /**
      * The amount that will be credited to your Dodo balance after currency conversion and
@@ -592,6 +607,15 @@ private constructor(
     fun _refunds(): JsonField<List<RefundListItem>> = refunds
 
     /**
+     * Returns the raw JSON value of [retryAttempt].
+     *
+     * Unlike [retryAttempt], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("retry_attempt")
+    @ExcludeMissing
+    fun _retryAttempt(): JsonField<Int> = retryAttempt
+
+    /**
      * Returns the raw JSON value of [settlementAmount].
      *
      * Unlike [settlementAmount], this method doesn't throw if the JSON field has an unexpected
@@ -848,6 +872,7 @@ private constructor(
          * .metadata()
          * .paymentId()
          * .refunds()
+         * .retryAttempt()
          * .settlementAmount()
          * .settlementCurrency()
          * .totalAmount()
@@ -870,6 +895,7 @@ private constructor(
         private var metadata: JsonField<Metadata>? = null
         private var paymentId: JsonField<String>? = null
         private var refunds: JsonField<MutableList<RefundListItem>>? = null
+        private var retryAttempt: JsonField<Int>? = null
         private var settlementAmount: JsonField<Int>? = null
         private var settlementCurrency: JsonField<Currency>? = null
         private var totalAmount: JsonField<Int>? = null
@@ -910,6 +936,7 @@ private constructor(
             metadata = payment.metadata
             paymentId = payment.paymentId
             refunds = payment.refunds.map { it.toMutableList() }
+            retryAttempt = payment.retryAttempt
             settlementAmount = payment.settlementAmount
             settlementCurrency = payment.settlementCurrency
             totalAmount = payment.totalAmount
@@ -1102,6 +1129,22 @@ private constructor(
                     checkKnown("refunds", it).add(refund)
                 }
         }
+
+        /**
+         * Retry attempt number for subscription renewal payments. `0` for the original payment,
+         * `1`+ for each scheduled off-session retry after a failed renewal. Always `0` for
+         * non-subscription payments.
+         */
+        fun retryAttempt(retryAttempt: Int) = retryAttempt(JsonField.of(retryAttempt))
+
+        /**
+         * Sets [Builder.retryAttempt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.retryAttempt] with a well-typed [Int] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun retryAttempt(retryAttempt: JsonField<Int>) = apply { this.retryAttempt = retryAttempt }
 
         /**
          * The amount that will be credited to your Dodo balance after currency conversion and
@@ -1559,6 +1602,7 @@ private constructor(
          * .metadata()
          * .paymentId()
          * .refunds()
+         * .retryAttempt()
          * .settlementAmount()
          * .settlementCurrency()
          * .totalAmount()
@@ -1579,6 +1623,7 @@ private constructor(
                 checkRequired("metadata", metadata),
                 checkRequired("paymentId", paymentId),
                 checkRequired("refunds", refunds).map { it.toImmutable() },
+                checkRequired("retryAttempt", retryAttempt),
                 checkRequired("settlementAmount", settlementAmount),
                 checkRequired("settlementCurrency", settlementCurrency),
                 checkRequired("totalAmount", totalAmount),
@@ -1635,6 +1680,7 @@ private constructor(
         metadata().validate()
         paymentId()
         refunds().forEach { it.validate() }
+        retryAttempt()
         settlementAmount()
         settlementCurrency().validate()
         totalAmount()
@@ -1689,6 +1735,7 @@ private constructor(
             (metadata.asKnown()?.validity() ?: 0) +
             (if (paymentId.asKnown() == null) 0 else 1) +
             (refunds.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (retryAttempt.asKnown() == null) 0 else 1) +
             (if (settlementAmount.asKnown() == null) 0 else 1) +
             (settlementCurrency.asKnown()?.validity() ?: 0) +
             (if (totalAmount.asKnown() == null) 0 else 1) +
@@ -2042,6 +2089,7 @@ private constructor(
             metadata == other.metadata &&
             paymentId == other.paymentId &&
             refunds == other.refunds &&
+            retryAttempt == other.retryAttempt &&
             settlementAmount == other.settlementAmount &&
             settlementCurrency == other.settlementCurrency &&
             totalAmount == other.totalAmount &&
@@ -2084,6 +2132,7 @@ private constructor(
             metadata,
             paymentId,
             refunds,
+            retryAttempt,
             settlementAmount,
             settlementCurrency,
             totalAmount,
@@ -2117,5 +2166,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Payment{billing=$billing, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, digitalProductsDelivered=$digitalProductsDelivered, disputes=$disputes, metadata=$metadata, paymentId=$paymentId, refunds=$refunds, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, totalAmount=$totalAmount, cardHolderName=$cardHolderName, cardIssuingCountry=$cardIssuingCountry, cardLastFour=$cardLastFour, cardNetwork=$cardNetwork, cardType=$cardType, checkoutSessionId=$checkoutSessionId, customFieldResponses=$customFieldResponses, discountId=$discountId, discounts=$discounts, errorCode=$errorCode, errorMessage=$errorMessage, invoiceId=$invoiceId, invoiceUrl=$invoiceUrl, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, productCart=$productCart, refundStatus=$refundStatus, settlementTax=$settlementTax, status=$status, subscriptionId=$subscriptionId, tax=$tax, updatedAt=$updatedAt, additionalProperties=$additionalProperties}"
+        "Payment{billing=$billing, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, digitalProductsDelivered=$digitalProductsDelivered, disputes=$disputes, metadata=$metadata, paymentId=$paymentId, refunds=$refunds, retryAttempt=$retryAttempt, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, totalAmount=$totalAmount, cardHolderName=$cardHolderName, cardIssuingCountry=$cardIssuingCountry, cardLastFour=$cardLastFour, cardNetwork=$cardNetwork, cardType=$cardType, checkoutSessionId=$checkoutSessionId, customFieldResponses=$customFieldResponses, discountId=$discountId, discounts=$discounts, errorCode=$errorCode, errorMessage=$errorMessage, invoiceId=$invoiceId, invoiceUrl=$invoiceUrl, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, productCart=$productCart, refundStatus=$refundStatus, settlementTax=$settlementTax, status=$status, subscriptionId=$subscriptionId, tax=$tax, updatedAt=$updatedAt, additionalProperties=$additionalProperties}"
 }

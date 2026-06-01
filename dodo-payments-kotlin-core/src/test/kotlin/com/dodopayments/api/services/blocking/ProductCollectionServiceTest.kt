@@ -39,6 +39,21 @@ internal class ProductCollectionServiceTest {
                     .name("name")
                     .brandId("brand_id")
                     .description("description")
+                    .effectiveAtOnDowngrade(
+                        ProductCollectionCreateParams.EffectiveAtOnDowngrade.IMMEDIATELY
+                    )
+                    .effectiveAtOnUpgrade(
+                        ProductCollectionCreateParams.EffectiveAtOnUpgrade.IMMEDIATELY
+                    )
+                    .onPaymentFailure(ProductCollectionCreateParams.OnPaymentFailure.PREVENT_CHANGE)
+                    .prorationBillingModeOnDowngrade(
+                        ProductCollectionCreateParams.ProrationBillingModeOnDowngrade
+                            .PRORATED_IMMEDIATELY
+                    )
+                    .prorationBillingModeOnUpgrade(
+                        ProductCollectionCreateParams.ProrationBillingModeOnUpgrade
+                            .PRORATED_IMMEDIATELY
+                    )
                     .build()
             )
 
@@ -73,9 +88,23 @@ internal class ProductCollectionServiceTest {
                 .id("id")
                 .brandId("brand_id")
                 .description("description")
+                .effectiveAtOnDowngrade(
+                    ProductCollectionUpdateParams.EffectiveAtOnDowngrade.IMMEDIATELY
+                )
+                .effectiveAtOnUpgrade(
+                    ProductCollectionUpdateParams.EffectiveAtOnUpgrade.IMMEDIATELY
+                )
                 .addGroupOrder("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .imageId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .name("name")
+                .onPaymentFailure(ProductCollectionUpdateParams.OnPaymentFailure.PREVENT_CHANGE)
+                .prorationBillingModeOnDowngrade(
+                    ProductCollectionUpdateParams.ProrationBillingModeOnDowngrade
+                        .PRORATED_IMMEDIATELY
+                )
+                .prorationBillingModeOnUpgrade(
+                    ProductCollectionUpdateParams.ProrationBillingModeOnUpgrade.PRORATED_IMMEDIATELY
+                )
                 .build()
         )
     }
