@@ -1,13 +1,5 @@
 # Changelog
 
-## [1.102.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.101.0...v1.102.0) (2026-06-01)
-
-
-### Features
-
-* **readme:** drop 'generated with Stainless' attribution from SDK READMEs ([4fb4da9](https://github.com/dodopayments/dodopayments-kotlin/commit/4fb4da9059031e4670ac1702cc8dc1982c1b971b))
-* **readme:** drop 'generated with Stainless' attribution from SDK READMEs ([7dc528c](https://github.com/dodopayments/dodopayments-kotlin/commit/7dc528cf2c1d13b9ce41fa5ef9299368ca203d4f))
-
 ## [1.99.2](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.99.1...v1.99.2) (2026-06-01)
 
 
