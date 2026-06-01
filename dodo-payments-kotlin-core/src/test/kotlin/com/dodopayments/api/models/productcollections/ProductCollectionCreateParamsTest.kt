@@ -22,6 +22,17 @@ internal class ProductCollectionCreateParamsTest {
             .name("name")
             .brandId("brand_id")
             .description("description")
+            .effectiveAtOnDowngrade(
+                ProductCollectionCreateParams.EffectiveAtOnDowngrade.IMMEDIATELY
+            )
+            .effectiveAtOnUpgrade(ProductCollectionCreateParams.EffectiveAtOnUpgrade.IMMEDIATELY)
+            .onPaymentFailure(ProductCollectionCreateParams.OnPaymentFailure.PREVENT_CHANGE)
+            .prorationBillingModeOnDowngrade(
+                ProductCollectionCreateParams.ProrationBillingModeOnDowngrade.PRORATED_IMMEDIATELY
+            )
+            .prorationBillingModeOnUpgrade(
+                ProductCollectionCreateParams.ProrationBillingModeOnUpgrade.PRORATED_IMMEDIATELY
+            )
             .build()
     }
 
@@ -41,6 +52,20 @@ internal class ProductCollectionCreateParamsTest {
                 .name("name")
                 .brandId("brand_id")
                 .description("description")
+                .effectiveAtOnDowngrade(
+                    ProductCollectionCreateParams.EffectiveAtOnDowngrade.IMMEDIATELY
+                )
+                .effectiveAtOnUpgrade(
+                    ProductCollectionCreateParams.EffectiveAtOnUpgrade.IMMEDIATELY
+                )
+                .onPaymentFailure(ProductCollectionCreateParams.OnPaymentFailure.PREVENT_CHANGE)
+                .prorationBillingModeOnDowngrade(
+                    ProductCollectionCreateParams.ProrationBillingModeOnDowngrade
+                        .PRORATED_IMMEDIATELY
+                )
+                .prorationBillingModeOnUpgrade(
+                    ProductCollectionCreateParams.ProrationBillingModeOnUpgrade.PRORATED_IMMEDIATELY
+                )
                 .build()
 
         val body = params._body()
@@ -56,6 +81,20 @@ internal class ProductCollectionCreateParamsTest {
         assertThat(body.name()).isEqualTo("name")
         assertThat(body.brandId()).isEqualTo("brand_id")
         assertThat(body.description()).isEqualTo("description")
+        assertThat(body.effectiveAtOnDowngrade())
+            .isEqualTo(ProductCollectionCreateParams.EffectiveAtOnDowngrade.IMMEDIATELY)
+        assertThat(body.effectiveAtOnUpgrade())
+            .isEqualTo(ProductCollectionCreateParams.EffectiveAtOnUpgrade.IMMEDIATELY)
+        assertThat(body.onPaymentFailure())
+            .isEqualTo(ProductCollectionCreateParams.OnPaymentFailure.PREVENT_CHANGE)
+        assertThat(body.prorationBillingModeOnDowngrade())
+            .isEqualTo(
+                ProductCollectionCreateParams.ProrationBillingModeOnDowngrade.PRORATED_IMMEDIATELY
+            )
+        assertThat(body.prorationBillingModeOnUpgrade())
+            .isEqualTo(
+                ProductCollectionCreateParams.ProrationBillingModeOnUpgrade.PRORATED_IMMEDIATELY
+            )
     }
 
     @Test
