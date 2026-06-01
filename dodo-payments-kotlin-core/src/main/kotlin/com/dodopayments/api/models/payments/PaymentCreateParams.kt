@@ -1532,9 +1532,8 @@ private constructor(
             fun allowedPaymentMethodTypes(
                 allowedPaymentMethodTypes: JsonField<List<PaymentMethodTypes>>
             ) = apply {
-                this.allowedPaymentMethodTypes = allowedPaymentMethodTypes.map {
-                    it.toMutableList()
-                }
+                this.allowedPaymentMethodTypes =
+                    allowedPaymentMethodTypes.map { it.toMutableList() }
             }
 
             /**
@@ -2086,9 +2085,8 @@ private constructor(
          *
          * Used for best match union deserialization.
          */
-        internal fun validity(): Int = additionalProperties.count { (_, value) ->
-            !value.isNull() && !value.isMissing()
-        }
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
