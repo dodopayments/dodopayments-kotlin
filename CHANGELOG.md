@@ -1,18 +1,5 @@
 # Changelog
 
-## [1.101.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.99.2...v1.101.0) (2026-06-01)
-
-
-### Features
-
-* **api:** regenerate SDK from latest OpenAPI spec (1.101.0) ([8c788d2](https://github.com/dodopayments/dodopayments-kotlin/commit/8c788d251ce90a5d04f1a5a952b94a5e596400e9))
-
-
-### Chores
-
-* re-seal custom code for 1.101.0 spec (python/go/typescript/kotlin/ruby/php) ([9c6a83c](https://github.com/dodopayments/dodopayments-kotlin/commit/9c6a83c73e594cf4f219bb994a30aaf9d0ead490))
-* release 1.101.0 ([3ee825e](https://github.com/dodopayments/dodopayments-kotlin/commit/3ee825e4ae8b0cef9832ba7f5e5cad6869cc2b0e))
-
 ## [1.99.2](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.99.1...v1.99.2) (2026-06-01)
 
 
