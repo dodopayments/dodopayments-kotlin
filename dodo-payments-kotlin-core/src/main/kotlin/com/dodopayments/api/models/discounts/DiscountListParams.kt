@@ -26,7 +26,7 @@ private constructor(
     /** Filter by discount code (partial match, case-insensitive) */
     fun code(): String? = code
 
-    /** Filter by discount type (percentage) */
+    /** Filter by discount type */
     fun discountType(): DiscountType? = discountType
 
     /** Page number (default = 0). */
@@ -90,7 +90,7 @@ private constructor(
         /** Filter by discount code (partial match, case-insensitive) */
         fun code(code: String?) = apply { this.code = code }
 
-        /** Filter by discount type (percentage) */
+        /** Filter by discount type */
         fun discountType(discountType: DiscountType?) = apply { this.discountType = discountType }
 
         /** Page number (default = 0). */

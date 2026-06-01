@@ -99,7 +99,7 @@ private constructor(
     )
 
     /**
-     * The discount amount (basis points for percentage, USD cents for flat)
+     * The discount amount in **basis points** (e.g., 540 => 5.4%).
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -429,7 +429,7 @@ private constructor(
             additionalProperties = discountDetail.additionalProperties.toMutableMap()
         }
 
-        /** The discount amount (basis points for percentage, USD cents for flat) */
+        /** The discount amount in **basis points** (e.g., 540 => 5.4%). */
         fun amount(amount: Int) = amount(JsonField.of(amount))
 
         /**
@@ -880,8 +880,9 @@ private constructor(
          *
          * Used for best match union deserialization.
          */
-        internal fun validity(): Int =
-            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+        internal fun validity(): Int = additionalProperties.count { (_, value) ->
+            !value.isNull() && !value.isMissing()
+        }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
