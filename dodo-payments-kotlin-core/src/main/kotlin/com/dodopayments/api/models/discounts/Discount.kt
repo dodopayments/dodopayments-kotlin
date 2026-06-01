@@ -87,9 +87,7 @@ private constructor(
     )
 
     /**
-     * The discount amount.
-     * - If `discount_type` is `percentage`, this is in **basis points** (e.g., 540 => 5.4%).
-     * - Otherwise, this is **USD cents** (e.g., 100 => `$1.00`).
+     * The discount amount in **basis points** (e.g., 540 => 5.4%).
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -161,7 +159,7 @@ private constructor(
     fun timesUsed(): Int = timesUsed.getRequired("times_used")
 
     /**
-     * The type of discount, e.g. `percentage`, `flat`, or `flat_per_unit`.
+     * The type of discount. Currently only `percentage` is supported.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -382,11 +380,7 @@ private constructor(
             additionalProperties = discount.additionalProperties.toMutableMap()
         }
 
-        /**
-         * The discount amount.
-         * - If `discount_type` is `percentage`, this is in **basis points** (e.g., 540 => 5.4%).
-         * - Otherwise, this is **USD cents** (e.g., 100 => `$1.00`).
-         */
+        /** The discount amount in **basis points** (e.g., 540 => 5.4%). */
         fun amount(amount: Int) = amount(JsonField.of(amount))
 
         /**
@@ -510,7 +504,7 @@ private constructor(
          */
         fun timesUsed(timesUsed: JsonField<Int>) = apply { this.timesUsed = timesUsed }
 
-        /** The type of discount, e.g. `percentage`, `flat`, or `flat_per_unit`. */
+        /** The type of discount. Currently only `percentage` is supported. */
         fun type(type: DiscountType) = type(JsonField.of(type))
 
         /**
@@ -799,8 +793,9 @@ private constructor(
          *
          * Used for best match union deserialization.
          */
-        internal fun validity(): Int =
-            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+        internal fun validity(): Int = additionalProperties.count { (_, value) ->
+            !value.isNull() && !value.isMissing()
+        }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
