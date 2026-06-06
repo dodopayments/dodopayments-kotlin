@@ -13,6 +13,7 @@ internal class GrantListParamsTest {
         GrantListParams.builder()
             .id("id")
             .customerId("customer_id")
+            .integrationType(GrantListParams.IntegrationType.DISCORD)
             .pageNumber(0)
             .pageSize(0)
             .status(GrantListParams.Status.PENDING)
@@ -34,6 +35,7 @@ internal class GrantListParamsTest {
             GrantListParams.builder()
                 .id("id")
                 .customerId("customer_id")
+                .integrationType(GrantListParams.IntegrationType.DISCORD)
                 .pageNumber(0)
                 .pageSize(0)
                 .status(GrantListParams.Status.PENDING)
@@ -45,6 +47,7 @@ internal class GrantListParamsTest {
             .isEqualTo(
                 QueryParams.builder()
                     .put("customer_id", "customer_id")
+                    .put("integration_type", "discord")
                     .put("page_number", "0")
                     .put("page_size", "0")
                     .put("status", "Pending")

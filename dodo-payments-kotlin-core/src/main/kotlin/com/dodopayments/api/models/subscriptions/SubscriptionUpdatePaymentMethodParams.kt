@@ -9,11 +9,14 @@ import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.Params
+import com.dodopayments.api.core.checkKnown
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.getOrThrow
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
+import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
+import com.dodopayments.api.models.payments.PaymentMethodTypes
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -437,6 +440,7 @@ private constructor(
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val type: JsonValue,
+            private val allowedPaymentMethodTypes: JsonField<List<PaymentMethodTypes>>,
             private val returnUrl: JsonField<String>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
@@ -444,10 +448,13 @@ private constructor(
             @JsonCreator
             private constructor(
                 @JsonProperty("type") @ExcludeMissing type: JsonValue = JsonMissing.of(),
+                @JsonProperty("allowed_payment_method_types")
+                @ExcludeMissing
+                allowedPaymentMethodTypes: JsonField<List<PaymentMethodTypes>> = JsonMissing.of(),
                 @JsonProperty("return_url")
                 @ExcludeMissing
                 returnUrl: JsonField<String> = JsonMissing.of(),
-            ) : this(type, returnUrl, mutableMapOf())
+            ) : this(type, allowedPaymentMethodTypes, returnUrl, mutableMapOf())
 
             /**
              * Expected to always return the following:
@@ -461,10 +468,34 @@ private constructor(
             @JsonProperty("type") @ExcludeMissing fun _type(): JsonValue = type
 
             /**
+             * List of payment methods allowed during checkout.
+             *
+             * Customers will **never** see payment methods that are **not** in this list. However,
+             * adding a method here **does not guarantee** customers will see it. Availability still
+             * depends on other factors (e.g., customer location, merchant settings).
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun allowedPaymentMethodTypes(): List<PaymentMethodTypes>? =
+                allowedPaymentMethodTypes.getNullable("allowed_payment_method_types")
+
+            /**
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
              */
             fun returnUrl(): String? = returnUrl.getNullable("return_url")
+
+            /**
+             * Returns the raw JSON value of [allowedPaymentMethodTypes].
+             *
+             * Unlike [allowedPaymentMethodTypes], this method doesn't throw if the JSON field has
+             * an unexpected type.
+             */
+            @JsonProperty("allowed_payment_method_types")
+            @ExcludeMissing
+            fun _allowedPaymentMethodTypes(): JsonField<List<PaymentMethodTypes>> =
+                allowedPaymentMethodTypes
 
             /**
              * Returns the raw JSON value of [returnUrl].
@@ -498,11 +529,15 @@ private constructor(
             class Builder internal constructor() {
 
                 private var type: JsonValue = JsonValue.from("new")
+                private var allowedPaymentMethodTypes: JsonField<MutableList<PaymentMethodTypes>>? =
+                    null
                 private var returnUrl: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 internal fun from(new: New) = apply {
                     type = new.type
+                    allowedPaymentMethodTypes =
+                        new.allowedPaymentMethodTypes.map { it.toMutableList() }
                     returnUrl = new.returnUrl
                     additionalProperties = new.additionalProperties.toMutableMap()
                 }
@@ -520,6 +555,46 @@ private constructor(
                  * supported value.
                  */
                 fun type(type: JsonValue) = apply { this.type = type }
+
+                /**
+                 * List of payment methods allowed during checkout.
+                 *
+                 * Customers will **never** see payment methods that are **not** in this list.
+                 * However, adding a method here **does not guarantee** customers will see it.
+                 * Availability still depends on other factors (e.g., customer location, merchant
+                 * settings).
+                 */
+                fun allowedPaymentMethodTypes(
+                    allowedPaymentMethodTypes: List<PaymentMethodTypes>?
+                ) = allowedPaymentMethodTypes(JsonField.ofNullable(allowedPaymentMethodTypes))
+
+                /**
+                 * Sets [Builder.allowedPaymentMethodTypes] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.allowedPaymentMethodTypes] with a well-typed
+                 * `List<PaymentMethodTypes>` value instead. This method is primarily for setting
+                 * the field to an undocumented or not yet supported value.
+                 */
+                fun allowedPaymentMethodTypes(
+                    allowedPaymentMethodTypes: JsonField<List<PaymentMethodTypes>>
+                ) = apply {
+                    this.allowedPaymentMethodTypes =
+                        allowedPaymentMethodTypes.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [PaymentMethodTypes] to [allowedPaymentMethodTypes].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addAllowedPaymentMethodType(allowedPaymentMethodType: PaymentMethodTypes) =
+                    apply {
+                        allowedPaymentMethodTypes =
+                            (allowedPaymentMethodTypes ?: JsonField.of(mutableListOf())).also {
+                                checkKnown("allowedPaymentMethodTypes", it)
+                                    .add(allowedPaymentMethodType)
+                            }
+                    }
 
                 fun returnUrl(returnUrl: String?) = returnUrl(JsonField.ofNullable(returnUrl))
 
@@ -559,7 +634,13 @@ private constructor(
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  */
-                fun build(): New = New(type, returnUrl, additionalProperties.toMutableMap())
+                fun build(): New =
+                    New(
+                        type,
+                        (allowedPaymentMethodTypes ?: JsonMissing.of()).map { it.toImmutable() },
+                        returnUrl,
+                        additionalProperties.toMutableMap(),
+                    )
             }
 
             private var validated: Boolean = false
@@ -584,6 +665,7 @@ private constructor(
                         throw DodoPaymentsInvalidDataException("'type' is invalid, received $it")
                     }
                 }
+                allowedPaymentMethodTypes()?.forEach { it.validate() }
                 returnUrl()
                 validated = true
             }
@@ -604,6 +686,7 @@ private constructor(
              */
             internal fun validity(): Int =
                 type.let { if (it == JsonValue.from("new")) 1 else 0 } +
+                    (allowedPaymentMethodTypes.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
                     (if (returnUrl.asKnown() == null) 0 else 1)
 
             override fun equals(other: Any?): Boolean {
@@ -613,18 +696,19 @@ private constructor(
 
                 return other is New &&
                     type == other.type &&
+                    allowedPaymentMethodTypes == other.allowedPaymentMethodTypes &&
                     returnUrl == other.returnUrl &&
                     additionalProperties == other.additionalProperties
             }
 
             private val hashCode: Int by lazy {
-                Objects.hash(type, returnUrl, additionalProperties)
+                Objects.hash(type, allowedPaymentMethodTypes, returnUrl, additionalProperties)
             }
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "New{type=$type, returnUrl=$returnUrl, additionalProperties=$additionalProperties}"
+                "New{type=$type, allowedPaymentMethodTypes=$allowedPaymentMethodTypes, returnUrl=$returnUrl, additionalProperties=$additionalProperties}"
         }
 
         class Existing

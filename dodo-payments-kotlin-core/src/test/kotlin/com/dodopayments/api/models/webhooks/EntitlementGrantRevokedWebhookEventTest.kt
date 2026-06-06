@@ -4,6 +4,7 @@ package com.dodopayments.api.models.webhooks
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.entitlements.EntitlementIntegrationType
 import com.dodopayments.api.models.entitlements.grants.EntitlementGrant
 import com.dodopayments.api.models.entitlements.grants.LicenseKeyGrant
 import com.dodopayments.api.models.products.DigitalProductDelivery
@@ -27,6 +28,7 @@ internal class EntitlementGrantRevokedWebhookEventTest {
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .customerId("customer_id")
                         .entitlementId("entitlement_id")
+                        .integrationType(EntitlementIntegrationType.DISCORD)
                         .metadata(
                             EntitlementGrant.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -81,6 +83,7 @@ internal class EntitlementGrantRevokedWebhookEventTest {
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .customerId("customer_id")
                     .entitlementId("entitlement_id")
+                    .integrationType(EntitlementIntegrationType.DISCORD)
                     .metadata(
                         EntitlementGrant.Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -140,6 +143,7 @@ internal class EntitlementGrantRevokedWebhookEventTest {
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .customerId("customer_id")
                         .entitlementId("entitlement_id")
+                        .integrationType(EntitlementIntegrationType.DISCORD)
                         .metadata(
                             EntitlementGrant.Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))

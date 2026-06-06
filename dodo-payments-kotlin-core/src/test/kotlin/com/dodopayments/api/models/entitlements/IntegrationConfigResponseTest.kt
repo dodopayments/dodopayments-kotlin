@@ -317,6 +317,7 @@ internal class IntegrationConfigResponseTest {
                 .activationsLimit(0)
                 .durationCount(0)
                 .durationInterval(TimeInterval.DAY)
+                .fulfillmentMode(IntegrationConfigResponse.LicenseKeyConfig.FulfillmentMode.AUTO)
                 .build()
 
         val integrationConfigResponse =
@@ -342,6 +343,9 @@ internal class IntegrationConfigResponseTest {
                     .activationsLimit(0)
                     .durationCount(0)
                     .durationInterval(TimeInterval.DAY)
+                    .fulfillmentMode(
+                        IntegrationConfigResponse.LicenseKeyConfig.FulfillmentMode.AUTO
+                    )
                     .build()
             )
 
