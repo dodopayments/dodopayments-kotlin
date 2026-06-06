@@ -40,4 +40,10 @@ dependencies {
     testImplementation("org.mockito:mockito-core:5.14.2")
     testImplementation("org.mockito:mockito-junit-jupiter:5.14.2")
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
+
+    // Bind SLF4J to a no-op implementation in tests so the "Failed to load class
+    // org.slf4j.impl.StaticLoggerBinder" warning isn't emitted to System.err on
+    // first SLF4J use (e.g. via kotlinx-coroutines). LoggingHttpClientTest
+    // captures System.err and would otherwise fail when the warning leaks in.
+    testRuntimeOnly("org.slf4j:slf4j-nop:1.7.36")
 }

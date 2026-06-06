@@ -61,7 +61,7 @@ internal class WebhookPayloadTest {
                         )
                         .digitalProductsDelivered(true)
                         .addDispute(
-                            Dispute.builder()
+                            WebhookPayload.Data.Dispute.builder()
                                 .amount("amount")
                                 .businessId("business_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -190,7 +190,7 @@ internal class WebhookPayloadTest {
                         )
                         .digitalProductsDelivered(true)
                         .addDispute(
-                            Dispute.builder()
+                            WebhookPayload.Data.Dispute.builder()
                                 .amount("amount")
                                 .businessId("business_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -324,7 +324,7 @@ internal class WebhookPayloadTest {
                         )
                         .digitalProductsDelivered(true)
                         .addDispute(
-                            Dispute.builder()
+                            WebhookPayload.Data.Dispute.builder()
                                 .amount("amount")
                                 .businessId("business_id")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
