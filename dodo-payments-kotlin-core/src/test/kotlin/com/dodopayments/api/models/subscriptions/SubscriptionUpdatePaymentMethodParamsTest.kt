@@ -2,6 +2,7 @@
 
 package com.dodopayments.api.models.subscriptions
 
+import com.dodopayments.api.models.payments.PaymentMethodTypes
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -13,6 +14,7 @@ internal class SubscriptionUpdatePaymentMethodParamsTest {
             .subscriptionId("subscription_id")
             .paymentMethod(
                 SubscriptionUpdatePaymentMethodParams.PaymentMethod.New.builder()
+                    .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
                     .returnUrl("return_url")
                     .build()
             )
@@ -41,6 +43,7 @@ internal class SubscriptionUpdatePaymentMethodParamsTest {
                 .subscriptionId("subscription_id")
                 .paymentMethod(
                     SubscriptionUpdatePaymentMethodParams.PaymentMethod.New.builder()
+                        .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
                         .returnUrl("return_url")
                         .build()
                 )
@@ -52,6 +55,7 @@ internal class SubscriptionUpdatePaymentMethodParamsTest {
             .isEqualTo(
                 SubscriptionUpdatePaymentMethodParams.PaymentMethod.ofNew(
                     SubscriptionUpdatePaymentMethodParams.PaymentMethod.New.builder()
+                        .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
                         .returnUrl("return_url")
                         .build()
                 )

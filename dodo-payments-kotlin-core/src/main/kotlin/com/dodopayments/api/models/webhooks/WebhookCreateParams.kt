@@ -356,11 +356,11 @@ private constructor(
         }
 
         fun putAdditionalHeader(name: String, value: String) = apply {
-            this.additionalHeaders.put(name, value)
+            additionalHeaders.put(name, value)
         }
 
         fun putAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            this.additionalHeaders.put(name, values)
+            additionalHeaders.put(name, values)
         }
 
         fun putAllAdditionalHeaders(additionalHeaders: com.dodopayments.api.core.http.Headers) =
@@ -373,11 +373,11 @@ private constructor(
         }
 
         fun replaceAdditionalHeaders(name: String, value: String) = apply {
-            this.additionalHeaders.replace(name, value)
+            additionalHeaders.replace(name, value)
         }
 
         fun replaceAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            this.additionalHeaders.replace(name, values)
+            additionalHeaders.replace(name, values)
         }
 
         fun replaceAllAdditionalHeaders(additionalHeaders: com.dodopayments.api.core.http.Headers) =
@@ -389,10 +389,10 @@ private constructor(
             this.additionalHeaders.replaceAll(additionalHeaders)
         }
 
-        fun removeAdditionalHeaders(name: String) = apply { this.additionalHeaders.remove(name) }
+        fun removeAdditionalHeaders(name: String) = apply { additionalHeaders.remove(name) }
 
         fun removeAllAdditionalHeaders(names: Set<String>) = apply {
-            this.additionalHeaders.removeAll(names)
+            additionalHeaders.removeAll(names)
         }
 
         fun additionalQueryParams(additionalQueryParams: QueryParams) = apply {

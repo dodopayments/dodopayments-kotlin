@@ -354,6 +354,7 @@ internal class SubscriptionServiceTest {
                     .subscriptionId("subscription_id")
                     .paymentMethod(
                         SubscriptionUpdatePaymentMethodParams.PaymentMethod.New.builder()
+                            .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
                             .returnUrl("return_url")
                             .build()
                     )
