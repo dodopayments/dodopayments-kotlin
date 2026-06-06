@@ -4,6 +4,7 @@ package com.dodopayments.api.models.entitlements
 
 import com.dodopayments.api.core.BaseDeserializer
 import com.dodopayments.api.core.BaseSerializer
+import com.dodopayments.api.core.Enum
 import com.dodopayments.api.core.ExcludeMissing
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
@@ -1540,6 +1541,7 @@ private constructor(
 
         /**
          * Three-way patchable list of legacy file identifiers:
+         *
          * * omitted → preserve the current value
          * * `null` → clear
          * * `[...]` → replace
@@ -1697,6 +1699,7 @@ private constructor(
 
             /**
              * Three-way patchable list of legacy file identifiers:
+             *
              * * omitted → preserve the current value
              * * `null` → clear
              * * `[...]` → replace
@@ -1850,6 +1853,7 @@ private constructor(
         private val activationsLimit: JsonField<Int>,
         private val durationCount: JsonField<Int>,
         private val durationInterval: JsonField<TimeInterval>,
+        private val fulfillmentMode: JsonField<FulfillmentMode>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -1867,11 +1871,15 @@ private constructor(
             @JsonProperty("duration_interval")
             @ExcludeMissing
             durationInterval: JsonField<TimeInterval> = JsonMissing.of(),
+            @JsonProperty("fulfillment_mode")
+            @ExcludeMissing
+            fulfillmentMode: JsonField<FulfillmentMode> = JsonMissing.of(),
         ) : this(
             activationMessage,
             activationsLimit,
             durationCount,
             durationInterval,
+            fulfillmentMode,
             mutableMapOf(),
         )
 
@@ -1907,6 +1915,15 @@ private constructor(
          *   if the server responded with an unexpected value).
          */
         fun durationInterval(): TimeInterval? = durationInterval.getNullable("duration_interval")
+
+        /**
+         * Fulfillment mode: `auto` (default) generates keys automatically; `manual` creates pending
+         * grants the merchant fulfills via the `POST /grants/{id}/license-key` endpoint.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun fulfillmentMode(): FulfillmentMode? = fulfillmentMode.getNullable("fulfillment_mode")
 
         /**
          * Returns the raw JSON value of [activationMessage].
@@ -1948,6 +1965,16 @@ private constructor(
         @ExcludeMissing
         fun _durationInterval(): JsonField<TimeInterval> = durationInterval
 
+        /**
+         * Returns the raw JSON value of [fulfillmentMode].
+         *
+         * Unlike [fulfillmentMode], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("fulfillment_mode")
+        @ExcludeMissing
+        fun _fulfillmentMode(): JsonField<FulfillmentMode> = fulfillmentMode
+
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -1973,6 +2000,7 @@ private constructor(
             private var activationsLimit: JsonField<Int> = JsonMissing.of()
             private var durationCount: JsonField<Int> = JsonMissing.of()
             private var durationInterval: JsonField<TimeInterval> = JsonMissing.of()
+            private var fulfillmentMode: JsonField<FulfillmentMode> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(licenseKeyConfig: LicenseKeyConfig) = apply {
@@ -1980,6 +2008,7 @@ private constructor(
                 activationsLimit = licenseKeyConfig.activationsLimit
                 durationCount = licenseKeyConfig.durationCount
                 durationInterval = licenseKeyConfig.durationInterval
+                fulfillmentMode = licenseKeyConfig.fulfillmentMode
                 additionalProperties = licenseKeyConfig.additionalProperties.toMutableMap()
             }
 
@@ -2063,6 +2092,25 @@ private constructor(
                 this.durationInterval = durationInterval
             }
 
+            /**
+             * Fulfillment mode: `auto` (default) generates keys automatically; `manual` creates
+             * pending grants the merchant fulfills via the `POST /grants/{id}/license-key`
+             * endpoint.
+             */
+            fun fulfillmentMode(fulfillmentMode: FulfillmentMode?) =
+                fulfillmentMode(JsonField.ofNullable(fulfillmentMode))
+
+            /**
+             * Sets [Builder.fulfillmentMode] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.fulfillmentMode] with a well-typed [FulfillmentMode]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun fulfillmentMode(fulfillmentMode: JsonField<FulfillmentMode>) = apply {
+                this.fulfillmentMode = fulfillmentMode
+            }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -2093,6 +2141,7 @@ private constructor(
                     activationsLimit,
                     durationCount,
                     durationInterval,
+                    fulfillmentMode,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -2117,6 +2166,7 @@ private constructor(
             activationsLimit()
             durationCount()
             durationInterval()?.validate()
+            fulfillmentMode()?.validate()
             validated = true
         }
 
@@ -2138,7 +2188,156 @@ private constructor(
             (if (activationMessage.asKnown() == null) 0 else 1) +
                 (if (activationsLimit.asKnown() == null) 0 else 1) +
                 (if (durationCount.asKnown() == null) 0 else 1) +
-                (durationInterval.asKnown()?.validity() ?: 0)
+                (durationInterval.asKnown()?.validity() ?: 0) +
+                (fulfillmentMode.asKnown()?.validity() ?: 0)
+
+        /**
+         * Fulfillment mode: `auto` (default) generates keys automatically; `manual` creates pending
+         * grants the merchant fulfills via the `POST /grants/{id}/license-key` endpoint.
+         */
+        class FulfillmentMode
+        @JsonCreator
+        private constructor(private val value: JsonField<String>) : Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                val AUTO = of("auto")
+
+                val MANUAL = of("manual")
+
+                fun of(value: String) = FulfillmentMode(JsonField.of(value))
+            }
+
+            /** An enum containing [FulfillmentMode]'s known values. */
+            enum class Known {
+                AUTO,
+                MANUAL,
+            }
+
+            /**
+             * An enum containing [FulfillmentMode]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [FulfillmentMode] can contain an unknown value in a couple of cases:
+             *
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             *
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                AUTO,
+                MANUAL,
+                /**
+                 * An enum member indicating that [FulfillmentMode] was instantiated with an unknown
+                 * value.
+                 */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    AUTO -> Value.AUTO
+                    MANUAL -> Value.MANUAL
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws DodoPaymentsInvalidDataException if this class instance's value is a not a
+             *   known member.
+             */
+            fun known(): Known =
+                when (this) {
+                    AUTO -> Known.AUTO
+                    MANUAL -> Known.MANUAL
+                    else ->
+                        throw DodoPaymentsInvalidDataException("Unknown FulfillmentMode: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws DodoPaymentsInvalidDataException if this class instance's value does not have
+             *   the expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString()
+                    ?: throw DodoPaymentsInvalidDataException("Value is not a String")
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
+            fun validate(): FulfillmentMode = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: DodoPaymentsInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is FulfillmentMode && value == other.value
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -2150,6 +2349,7 @@ private constructor(
                 activationsLimit == other.activationsLimit &&
                 durationCount == other.durationCount &&
                 durationInterval == other.durationInterval &&
+                fulfillmentMode == other.fulfillmentMode &&
                 additionalProperties == other.additionalProperties
         }
 
@@ -2159,6 +2359,7 @@ private constructor(
                 activationsLimit,
                 durationCount,
                 durationInterval,
+                fulfillmentMode,
                 additionalProperties,
             )
         }
@@ -2166,6 +2367,6 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "LicenseKeyConfig{activationMessage=$activationMessage, activationsLimit=$activationsLimit, durationCount=$durationCount, durationInterval=$durationInterval, additionalProperties=$additionalProperties}"
+            "LicenseKeyConfig{activationMessage=$activationMessage, activationsLimit=$activationsLimit, durationCount=$durationCount, durationInterval=$durationInterval, fulfillmentMode=$fulfillmentMode, additionalProperties=$additionalProperties}"
     }
 }
