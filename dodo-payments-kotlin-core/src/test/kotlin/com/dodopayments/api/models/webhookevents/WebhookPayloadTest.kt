@@ -80,6 +80,7 @@ internal class WebhookPayloadTest {
                                 .build()
                         )
                         .paymentId("payment_id")
+                        .paymentProvider(Payment.PaymentProvider.STRIPE)
                         .addRefund(
                             RefundListItem.builder()
                                 .businessId("business_id")
@@ -208,6 +209,7 @@ internal class WebhookPayloadTest {
                                 .build()
                         )
                         .paymentId("payment_id")
+                        .paymentProvider(Payment.PaymentProvider.STRIPE)
                         .addRefund(
                             RefundListItem.builder()
                                 .businessId("business_id")
@@ -341,6 +343,7 @@ internal class WebhookPayloadTest {
                                 .build()
                         )
                         .paymentId("payment_id")
+                        .paymentProvider(Payment.PaymentProvider.STRIPE)
                         .addRefund(
                             RefundListItem.builder()
                                 .businessId("business_id")
