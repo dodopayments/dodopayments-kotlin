@@ -4,6 +4,7 @@ package com.dodopayments.api.models.entitlements.grants
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.entitlements.EntitlementIntegrationType
 import com.dodopayments.api.models.products.DigitalProductDelivery
 import com.dodopayments.api.models.products.DigitalProductDeliveryFile
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
@@ -22,6 +23,7 @@ internal class EntitlementGrantTest {
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .customerId("customer_id")
                 .entitlementId("entitlement_id")
+                .integrationType(EntitlementIntegrationType.DISCORD)
                 .metadata(
                     EntitlementGrant.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -70,6 +72,7 @@ internal class EntitlementGrantTest {
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(entitlementGrant.customerId()).isEqualTo("customer_id")
         assertThat(entitlementGrant.entitlementId()).isEqualTo("entitlement_id")
+        assertThat(entitlementGrant.integrationType()).isEqualTo(EntitlementIntegrationType.DISCORD)
         assertThat(entitlementGrant.metadata())
             .isEqualTo(
                 EntitlementGrant.Metadata.builder()
@@ -129,6 +132,7 @@ internal class EntitlementGrantTest {
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .customerId("customer_id")
                 .entitlementId("entitlement_id")
+                .integrationType(EntitlementIntegrationType.DISCORD)
                 .metadata(
                     EntitlementGrant.Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))

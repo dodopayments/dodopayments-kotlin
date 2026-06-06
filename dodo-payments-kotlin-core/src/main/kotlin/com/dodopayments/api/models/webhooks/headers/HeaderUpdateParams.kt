@@ -136,43 +136,41 @@ private constructor(
         }
 
         fun putAdditionalHeader(name: String, value: String) = apply {
-            this.additionalHeaders.put(name, value)
+            additionalHeaders.put(name, value)
         }
 
         fun putAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            this.additionalHeaders.put(name, values)
+            additionalHeaders.put(name, values)
         }
 
-        fun putAllAdditionalHeaders(additionalHeaders: com.dodopayments.api.core.http.Headers) =
-            apply {
-                this.additionalHeaders.putAll(additionalHeaders)
-            }
+        fun putAllAdditionalHeaders(additionalHeaders: com.dodopayments.api.core.http.Headers) = apply {
+            this.additionalHeaders.putAll(additionalHeaders)
+        }
 
         fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
             this.additionalHeaders.putAll(additionalHeaders)
         }
 
         fun replaceAdditionalHeaders(name: String, value: String) = apply {
-            this.additionalHeaders.replace(name, value)
+            additionalHeaders.replace(name, value)
         }
 
         fun replaceAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            this.additionalHeaders.replace(name, values)
+            additionalHeaders.replace(name, values)
         }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: com.dodopayments.api.core.http.Headers) =
-            apply {
-                this.additionalHeaders.replaceAll(additionalHeaders)
-            }
+        fun replaceAllAdditionalHeaders(additionalHeaders: com.dodopayments.api.core.http.Headers) = apply {
+            this.additionalHeaders.replaceAll(additionalHeaders)
+        }
 
         fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
             this.additionalHeaders.replaceAll(additionalHeaders)
         }
 
-        fun removeAdditionalHeaders(name: String) = apply { this.additionalHeaders.remove(name) }
+        fun removeAdditionalHeaders(name: String) = apply { additionalHeaders.remove(name) }
 
         fun removeAllAdditionalHeaders(names: Set<String>) = apply {
-            this.additionalHeaders.removeAll(names)
+            additionalHeaders.removeAll(names)
         }
 
         fun additionalQueryParams(additionalQueryParams: QueryParams) = apply {
