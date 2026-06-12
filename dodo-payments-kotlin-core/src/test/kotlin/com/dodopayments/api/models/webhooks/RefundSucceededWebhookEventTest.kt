@@ -22,6 +22,7 @@ internal class RefundSucceededWebhookEventTest {
                 .businessId("business_id")
                 .data(
                     Refund.builder()
+                        .brandId("brand_id")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .customer(
@@ -58,6 +59,7 @@ internal class RefundSucceededWebhookEventTest {
         assertThat(refundSucceededWebhookEvent.data())
             .isEqualTo(
                 Refund.builder()
+                    .brandId("brand_id")
                     .businessId("business_id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .customer(
@@ -99,6 +101,7 @@ internal class RefundSucceededWebhookEventTest {
                 .businessId("business_id")
                 .data(
                     Refund.builder()
+                        .brandId("brand_id")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .customer(

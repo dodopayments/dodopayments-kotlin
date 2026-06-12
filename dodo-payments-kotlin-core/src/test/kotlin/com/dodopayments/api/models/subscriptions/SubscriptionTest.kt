@@ -33,6 +33,7 @@ internal class SubscriptionTest {
                         .zipcode("zipcode")
                         .build()
                 )
+                .brandId("brand_id")
                 .cancelAtNextBillingDate(true)
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addCreditEntitlementCart(
@@ -179,6 +180,7 @@ internal class SubscriptionTest {
                     .zipcode("zipcode")
                     .build()
             )
+        assertThat(subscription.brandId()).isEqualTo("brand_id")
         assertThat(subscription.cancelAtNextBillingDate()).isEqualTo(true)
         assertThat(subscription.createdAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -338,6 +340,7 @@ internal class SubscriptionTest {
                         .zipcode("zipcode")
                         .build()
                 )
+                .brandId("brand_id")
                 .cancelAtNextBillingDate(true)
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .addCreditEntitlementCart(

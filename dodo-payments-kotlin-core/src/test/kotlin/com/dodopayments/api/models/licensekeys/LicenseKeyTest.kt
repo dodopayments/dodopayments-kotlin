@@ -15,6 +15,7 @@ internal class LicenseKeyTest {
         val licenseKey =
             LicenseKey.builder()
                 .id("lic_123")
+                .brandId("brand_id")
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
                 .customerId("cus_123")
@@ -30,6 +31,7 @@ internal class LicenseKeyTest {
                 .build()
 
         assertThat(licenseKey.id()).isEqualTo("lic_123")
+        assertThat(licenseKey.brandId()).isEqualTo("brand_id")
         assertThat(licenseKey.businessId()).isEqualTo("business_id")
         assertThat(licenseKey.createdAt()).isEqualTo(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
         assertThat(licenseKey.customerId()).isEqualTo("cus_123")
@@ -50,6 +52,7 @@ internal class LicenseKeyTest {
         val licenseKey =
             LicenseKey.builder()
                 .id("lic_123")
+                .brandId("brand_id")
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
                 .customerId("cus_123")

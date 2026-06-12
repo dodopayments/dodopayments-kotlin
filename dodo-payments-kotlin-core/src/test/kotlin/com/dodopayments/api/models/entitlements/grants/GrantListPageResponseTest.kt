@@ -21,6 +21,7 @@ internal class GrantListPageResponseTest {
                 .addItem(
                     EntitlementGrant.builder()
                         .id("id")
+                        .brandId("brand_id")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .customerId("customer_id")
@@ -74,6 +75,7 @@ internal class GrantListPageResponseTest {
             .containsExactly(
                 EntitlementGrant.builder()
                     .id("id")
+                    .brandId("brand_id")
                     .businessId("business_id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .customerId("customer_id")
@@ -131,6 +133,7 @@ internal class GrantListPageResponseTest {
                 .addItem(
                     EntitlementGrant.builder()
                         .id("id")
+                        .brandId("brand_id")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .customerId("customer_id")

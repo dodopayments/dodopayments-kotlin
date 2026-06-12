@@ -39,8 +39,8 @@ private constructor(
     fun eventType(): String = eventType.getRequired("event_type")
 
     /**
-     * Total amount for this event type in the payout's currency (in smallest currency unit, e.g.,
-     * cents).
+     * Total amount for this event type in the payout's currency, in that currency's smallest unit
+     * (cents for USD, yen for JPY, fils for KWD).
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -115,8 +115,8 @@ private constructor(
         fun eventType(eventType: JsonField<String>) = apply { this.eventType = eventType }
 
         /**
-         * Total amount for this event type in the payout's currency (in smallest currency unit,
-         * e.g., cents).
+         * Total amount for this event type in the payout's currency, in that currency's smallest
+         * unit (cents for USD, yen for JPY, fils for KWD).
          */
         fun total(total: Long) = total(JsonField.of(total))
 

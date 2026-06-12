@@ -28,6 +28,7 @@ class EntitlementGrant
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
+    private val brandId: JsonField<String>,
     private val businessId: JsonField<String>,
     private val createdAt: JsonField<OffsetDateTime>,
     private val customerId: JsonField<String>,
@@ -53,6 +54,7 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("brand_id") @ExcludeMissing brandId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("business_id")
         @ExcludeMissing
         businessId: JsonField<String> = JsonMissing.of(),
@@ -102,6 +104,7 @@ private constructor(
         subscriptionId: JsonField<String> = JsonMissing.of(),
     ) : this(
         id,
+        brandId,
         businessId,
         createdAt,
         customerId,
@@ -131,6 +134,14 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun id(): String = id.getRequired("id")
+
+    /**
+     * Brand id this grant belongs to.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun brandId(): String = brandId.getRequired("brand_id")
 
     /**
      * Identifier of the business that owns the grant.
@@ -295,6 +306,13 @@ private constructor(
      * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+    /**
+     * Returns the raw JSON value of [brandId].
+     *
+     * Unlike [brandId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("brand_id") @ExcludeMissing fun _brandId(): JsonField<String> = brandId
 
     /**
      * Returns the raw JSON value of [businessId].
@@ -475,6 +493,7 @@ private constructor(
          * The following fields are required:
          * ```kotlin
          * .id()
+         * .brandId()
          * .businessId()
          * .createdAt()
          * .customerId()
@@ -492,6 +511,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var id: JsonField<String>? = null
+        private var brandId: JsonField<String>? = null
         private var businessId: JsonField<String>? = null
         private var createdAt: JsonField<OffsetDateTime>? = null
         private var customerId: JsonField<String>? = null
@@ -515,6 +535,7 @@ private constructor(
 
         internal fun from(entitlementGrant: EntitlementGrant) = apply {
             id = entitlementGrant.id
+            brandId = entitlementGrant.brandId
             businessId = entitlementGrant.businessId
             createdAt = entitlementGrant.createdAt
             customerId = entitlementGrant.customerId
@@ -547,6 +568,17 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
+
+        /** Brand id this grant belongs to. */
+        fun brandId(brandId: String) = brandId(JsonField.of(brandId))
+
+        /**
+         * Sets [Builder.brandId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.brandId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun brandId(brandId: JsonField<String>) = apply { this.brandId = brandId }
 
         /** Identifier of the business that owns the grant. */
         fun businessId(businessId: String) = businessId(JsonField.of(businessId))
@@ -835,6 +867,7 @@ private constructor(
          * The following fields are required:
          * ```kotlin
          * .id()
+         * .brandId()
          * .businessId()
          * .createdAt()
          * .customerId()
@@ -850,6 +883,7 @@ private constructor(
         fun build(): EntitlementGrant =
             EntitlementGrant(
                 checkRequired("id", id),
+                checkRequired("brandId", brandId),
                 checkRequired("businessId", businessId),
                 checkRequired("createdAt", createdAt),
                 checkRequired("customerId", customerId),
@@ -889,6 +923,7 @@ private constructor(
         }
 
         id()
+        brandId()
         businessId()
         createdAt()
         customerId()
@@ -926,6 +961,7 @@ private constructor(
      */
     internal fun validity(): Int =
         (if (id.asKnown() == null) 0 else 1) +
+            (if (brandId.asKnown() == null) 0 else 1) +
             (if (businessId.asKnown() == null) 0 else 1) +
             (if (createdAt.asKnown() == null) 0 else 1) +
             (if (customerId.asKnown() == null) 0 else 1) +
@@ -1207,6 +1243,7 @@ private constructor(
 
         return other is EntitlementGrant &&
             id == other.id &&
+            brandId == other.brandId &&
             businessId == other.businessId &&
             createdAt == other.createdAt &&
             customerId == other.customerId &&
@@ -1232,6 +1269,7 @@ private constructor(
     private val hashCode: Int by lazy {
         Objects.hash(
             id,
+            brandId,
             businessId,
             createdAt,
             customerId,
@@ -1258,5 +1296,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "EntitlementGrant{id=$id, businessId=$businessId, createdAt=$createdAt, customerId=$customerId, entitlementId=$entitlementId, integrationType=$integrationType, metadata=$metadata, status=$status, updatedAt=$updatedAt, deliveredAt=$deliveredAt, digitalProductDelivery=$digitalProductDelivery, errorCode=$errorCode, errorMessage=$errorMessage, licenseKey=$licenseKey, oauthExpiresAt=$oauthExpiresAt, oauthUrl=$oauthUrl, paymentId=$paymentId, revocationReason=$revocationReason, revokedAt=$revokedAt, subscriptionId=$subscriptionId, additionalProperties=$additionalProperties}"
+        "EntitlementGrant{id=$id, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, customerId=$customerId, entitlementId=$entitlementId, integrationType=$integrationType, metadata=$metadata, status=$status, updatedAt=$updatedAt, deliveredAt=$deliveredAt, digitalProductDelivery=$digitalProductDelivery, errorCode=$errorCode, errorMessage=$errorMessage, licenseKey=$licenseKey, oauthExpiresAt=$oauthExpiresAt, oauthUrl=$oauthUrl, paymentId=$paymentId, revocationReason=$revocationReason, revokedAt=$revokedAt, subscriptionId=$subscriptionId, additionalProperties=$additionalProperties}"
 }
