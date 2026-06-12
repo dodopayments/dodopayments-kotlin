@@ -17,6 +17,7 @@ internal class DunningRecoveredWebhookEventTest {
                 .businessId("business_id")
                 .data(
                     DunningRecoveredWebhookEvent.Data.builder()
+                        .brandId("brand_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .customerId("customer_id")
                         .status(DunningRecoveredWebhookEvent.Data.Status.RECOVERING)
@@ -32,6 +33,7 @@ internal class DunningRecoveredWebhookEventTest {
         assertThat(dunningRecoveredWebhookEvent.data())
             .isEqualTo(
                 DunningRecoveredWebhookEvent.Data.builder()
+                    .brandId("brand_id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .customerId("customer_id")
                     .status(DunningRecoveredWebhookEvent.Data.Status.RECOVERING)
@@ -52,6 +54,7 @@ internal class DunningRecoveredWebhookEventTest {
                 .businessId("business_id")
                 .data(
                     DunningRecoveredWebhookEvent.Data.builder()
+                        .brandId("brand_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .customerId("customer_id")
                         .status(DunningRecoveredWebhookEvent.Data.Status.RECOVERING)

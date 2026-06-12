@@ -109,7 +109,8 @@ private constructor(
     fun paymentId(): String = paymentId.getRequired("payment_id")
 
     /**
-     * Total amount of the payment in smallest currency unit (e.g. cents)
+     * Total amount of the payment in the currency's smallest unit (cents for USD, yen for JPY, fils
+     * for KWD)
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -354,7 +355,10 @@ private constructor(
          */
         fun paymentId(paymentId: JsonField<String>) = apply { this.paymentId = paymentId }
 
-        /** Total amount of the payment in smallest currency unit (e.g. cents) */
+        /**
+         * Total amount of the payment in the currency's smallest unit (cents for USD, yen for JPY,
+         * fils for KWD)
+         */
         fun totalAmount(totalAmount: Int) = totalAmount(JsonField.of(totalAmount))
 
         /**

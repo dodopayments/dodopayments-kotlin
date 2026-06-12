@@ -368,7 +368,8 @@ private constructor(
         fun pricePerUnit(): String = pricePerUnit.getRequired("price_per_unit")
 
         /**
-         * Total price charged for this meter in smallest currency unit (cents)
+         * Total price charged for this meter in the currency's smallest unit (cents for USD, yen
+         * for JPY, fils for KWD)
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -593,7 +594,10 @@ private constructor(
                 this.pricePerUnit = pricePerUnit
             }
 
-            /** Total price charged for this meter in smallest currency unit (cents) */
+            /**
+             * Total price charged for this meter in the currency's smallest unit (cents for USD,
+             * yen for JPY, fils for KWD)
+             */
             fun totalPrice(totalPrice: Int) = totalPrice(JsonField.of(totalPrice))
 
             /**

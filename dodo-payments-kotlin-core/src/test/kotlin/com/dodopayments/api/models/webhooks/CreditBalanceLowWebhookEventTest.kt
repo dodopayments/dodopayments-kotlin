@@ -18,6 +18,7 @@ internal class CreditBalanceLowWebhookEventTest {
                 .data(
                     CreditBalanceLowWebhookEvent.Data.builder()
                         .availableBalance("available_balance")
+                        .brandId("brand_id")
                         .creditEntitlementId("credit_entitlement_id")
                         .creditEntitlementName("credit_entitlement_name")
                         .customerId("customer_id")
@@ -35,6 +36,7 @@ internal class CreditBalanceLowWebhookEventTest {
             .isEqualTo(
                 CreditBalanceLowWebhookEvent.Data.builder()
                     .availableBalance("available_balance")
+                    .brandId("brand_id")
                     .creditEntitlementId("credit_entitlement_id")
                     .creditEntitlementName("credit_entitlement_name")
                     .customerId("customer_id")
@@ -57,6 +59,7 @@ internal class CreditBalanceLowWebhookEventTest {
                 .data(
                     CreditBalanceLowWebhookEvent.Data.builder()
                         .availableBalance("available_balance")
+                        .brandId("brand_id")
                         .creditEntitlementId("credit_entitlement_id")
                         .creditEntitlementName("credit_entitlement_name")
                         .customerId("customer_id")

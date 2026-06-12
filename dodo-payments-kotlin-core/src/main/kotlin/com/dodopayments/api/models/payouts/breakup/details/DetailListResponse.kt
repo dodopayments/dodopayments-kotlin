@@ -97,7 +97,8 @@ private constructor(
     fun eventType(): String = eventType.getRequired("event_type")
 
     /**
-     * Original amount in the original currency (in smallest currency unit, e.g., cents).
+     * Original amount in the original currency, in that currency's smallest unit (cents for USD,
+     * yen for JPY, fils for KWD).
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -113,8 +114,8 @@ private constructor(
     fun originalCurrency(): String = originalCurrency.getRequired("original_currency")
 
     /**
-     * Amount in the payout's currency (in smallest currency unit). Uses cumulative rounding to
-     * ensure sum matches payout total exactly.
+     * Amount in the payout's currency, in that currency's smallest unit (cents for USD, yen for
+     * JPY, fils for KWD). Uses cumulative rounding to ensure sum matches payout total exactly.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -319,7 +320,10 @@ private constructor(
          */
         fun eventType(eventType: JsonField<String>) = apply { this.eventType = eventType }
 
-        /** Original amount in the original currency (in smallest currency unit, e.g., cents). */
+        /**
+         * Original amount in the original currency, in that currency's smallest unit (cents for
+         * USD, yen for JPY, fils for KWD).
+         */
         fun originalAmount(originalAmount: Long) = originalAmount(JsonField.of(originalAmount))
 
         /**
@@ -349,8 +353,8 @@ private constructor(
         }
 
         /**
-         * Amount in the payout's currency (in smallest currency unit). Uses cumulative rounding to
-         * ensure sum matches payout total exactly.
+         * Amount in the payout's currency, in that currency's smallest unit (cents for USD, yen for
+         * JPY, fils for KWD). Uses cumulative rounding to ensure sum matches payout total exactly.
          */
         fun payoutCurrencyAmount(payoutCurrencyAmount: Long) =
             payoutCurrencyAmount(JsonField.of(payoutCurrencyAmount))
