@@ -20,6 +20,7 @@ internal class LicenseKeyCreatedWebhookEventTest {
                 .data(
                     LicenseKey.builder()
                         .id("lic_123")
+                        .brandId("brand_id")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
                         .customerId("cus_123")
@@ -42,6 +43,7 @@ internal class LicenseKeyCreatedWebhookEventTest {
             .isEqualTo(
                 LicenseKey.builder()
                     .id("lic_123")
+                    .brandId("brand_id")
                     .businessId("business_id")
                     .createdAt(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
                     .customerId("cus_123")
@@ -69,6 +71,7 @@ internal class LicenseKeyCreatedWebhookEventTest {
                 .data(
                     LicenseKey.builder()
                         .id("lic_123")
+                        .brandId("brand_id")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
                         .customerId("cus_123")

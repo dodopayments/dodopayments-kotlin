@@ -92,6 +92,7 @@ internal class ProductServiceTest {
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
+                    .pricingMode(ProductCreateParams.PricingMode.BY_CURRENCY)
                     .build()
             )
 
@@ -182,6 +183,7 @@ internal class ProductServiceTest {
                         .taxInclusive(true)
                         .build()
                 )
+                .pricingMode(ProductUpdateParams.PricingMode.BY_CURRENCY)
                 .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
                 .build()
         )

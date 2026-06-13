@@ -2,6 +2,7 @@
 
 package com.dodopayments.api.models.products
 
+import com.dodopayments.api.core.Enum
 import com.dodopayments.api.core.ExcludeMissing
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
@@ -168,6 +169,16 @@ private constructor(
     fun price(): Price? = body.price()
 
     /**
+     * Update the pricing mode. Omit to leave unchanged; set to null to clear (which archives all
+     * active localized rules for this product). Changing to a different non-null mode also archives
+     * any rules whose mode doesn't match the new mode.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun pricingMode(): PricingMode? = body.pricingMode()
+
+    /**
      * Tax category of the product.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -282,6 +293,13 @@ private constructor(
      * Unlike [price], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _price(): JsonField<Price> = body._price()
+
+    /**
+     * Returns the raw JSON value of [pricingMode].
+     *
+     * Unlike [pricingMode], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _pricingMode(): JsonField<PricingMode> = body._pricingMode()
 
     /**
      * Returns the raw JSON value of [taxCategory].
@@ -628,6 +646,24 @@ private constructor(
         /** Alias for calling [price] with `Price.ofUsageBased(usageBased)`. */
         fun price(usageBased: Price.UsageBasedPrice) = apply { body.price(usageBased) }
 
+        /**
+         * Update the pricing mode. Omit to leave unchanged; set to null to clear (which archives
+         * all active localized rules for this product). Changing to a different non-null mode also
+         * archives any rules whose mode doesn't match the new mode.
+         */
+        fun pricingMode(pricingMode: PricingMode?) = apply { body.pricingMode(pricingMode) }
+
+        /**
+         * Sets [Builder.pricingMode] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.pricingMode] with a well-typed [PricingMode] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun pricingMode(pricingMode: JsonField<PricingMode>) = apply {
+            body.pricingMode(pricingMode)
+        }
+
         /** Tax category of the product. */
         fun taxCategory(taxCategory: TaxCategory?) = apply { body.taxCategory(taxCategory) }
 
@@ -802,6 +838,7 @@ private constructor(
         private val metadata: JsonField<Metadata>,
         private val name: JsonField<String>,
         private val price: JsonField<Price>,
+        private val pricingMode: JsonField<PricingMode>,
         private val taxCategory: JsonField<TaxCategory>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -842,6 +879,9 @@ private constructor(
             metadata: JsonField<Metadata> = JsonMissing.of(),
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
             @JsonProperty("price") @ExcludeMissing price: JsonField<Price> = JsonMissing.of(),
+            @JsonProperty("pricing_mode")
+            @ExcludeMissing
+            pricingMode: JsonField<PricingMode> = JsonMissing.of(),
             @JsonProperty("tax_category")
             @ExcludeMissing
             taxCategory: JsonField<TaxCategory> = JsonMissing.of(),
@@ -860,6 +900,7 @@ private constructor(
             metadata,
             name,
             price,
+            pricingMode,
             taxCategory,
             mutableMapOf(),
         )
@@ -1008,6 +1049,16 @@ private constructor(
         fun price(): Price? = price.getNullable("price")
 
         /**
+         * Update the pricing mode. Omit to leave unchanged; set to null to clear (which archives
+         * all active localized rules for this product). Changing to a different non-null mode also
+         * archives any rules whose mode doesn't match the new mode.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun pricingMode(): PricingMode? = pricingMode.getNullable("pricing_mode")
+
+        /**
          * Tax category of the product.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
@@ -1140,6 +1191,15 @@ private constructor(
         @JsonProperty("price") @ExcludeMissing fun _price(): JsonField<Price> = price
 
         /**
+         * Returns the raw JSON value of [pricingMode].
+         *
+         * Unlike [pricingMode], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("pricing_mode")
+        @ExcludeMissing
+        fun _pricingMode(): JsonField<PricingMode> = pricingMode
+
+        /**
          * Returns the raw JSON value of [taxCategory].
          *
          * Unlike [taxCategory], this method doesn't throw if the JSON field has an unexpected type.
@@ -1183,6 +1243,7 @@ private constructor(
             private var metadata: JsonField<Metadata> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
             private var price: JsonField<Price> = JsonMissing.of()
+            private var pricingMode: JsonField<PricingMode> = JsonMissing.of()
             private var taxCategory: JsonField<TaxCategory> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -1201,6 +1262,7 @@ private constructor(
                 metadata = body.metadata
                 name = body.name
                 price = body.price
+                pricingMode = body.pricingMode
                 taxCategory = body.taxCategory
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
@@ -1507,6 +1569,25 @@ private constructor(
             /** Alias for calling [price] with `Price.ofUsageBased(usageBased)`. */
             fun price(usageBased: Price.UsageBasedPrice) = price(Price.ofUsageBased(usageBased))
 
+            /**
+             * Update the pricing mode. Omit to leave unchanged; set to null to clear (which
+             * archives all active localized rules for this product). Changing to a different
+             * non-null mode also archives any rules whose mode doesn't match the new mode.
+             */
+            fun pricingMode(pricingMode: PricingMode?) =
+                pricingMode(JsonField.ofNullable(pricingMode))
+
+            /**
+             * Sets [Builder.pricingMode] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.pricingMode] with a well-typed [PricingMode] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun pricingMode(pricingMode: JsonField<PricingMode>) = apply {
+                this.pricingMode = pricingMode
+            }
+
             /** Tax category of the product. */
             fun taxCategory(taxCategory: TaxCategory?) =
                 taxCategory(JsonField.ofNullable(taxCategory))
@@ -1562,6 +1643,7 @@ private constructor(
                     metadata,
                     name,
                     price,
+                    pricingMode,
                     taxCategory,
                     additionalProperties.toMutableMap(),
                 )
@@ -1597,6 +1679,7 @@ private constructor(
             metadata()?.validate()
             name()
             price()?.validate()
+            pricingMode()?.validate()
             taxCategory()?.validate()
             validated = true
         }
@@ -1630,6 +1713,7 @@ private constructor(
                 (metadata.asKnown()?.validity() ?: 0) +
                 (if (name.asKnown() == null) 0 else 1) +
                 (price.asKnown()?.validity() ?: 0) +
+                (pricingMode.asKnown()?.validity() ?: 0) +
                 (taxCategory.asKnown()?.validity() ?: 0)
 
         override fun equals(other: Any?): Boolean {
@@ -1652,6 +1736,7 @@ private constructor(
                 metadata == other.metadata &&
                 name == other.name &&
                 price == other.price &&
+                pricingMode == other.pricingMode &&
                 taxCategory == other.taxCategory &&
                 additionalProperties == other.additionalProperties
         }
@@ -1672,6 +1757,7 @@ private constructor(
                 metadata,
                 name,
                 price,
+                pricingMode,
                 taxCategory,
                 additionalProperties,
             )
@@ -1680,7 +1766,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{addons=$addons, brandId=$brandId, creditEntitlements=$creditEntitlements, description=$description, digitalProductDelivery=$digitalProductDelivery, entitlements=$entitlements, imageId=$imageId, licenseKeyActivationMessage=$licenseKeyActivationMessage, licenseKeyActivationsLimit=$licenseKeyActivationsLimit, licenseKeyDuration=$licenseKeyDuration, licenseKeyEnabled=$licenseKeyEnabled, metadata=$metadata, name=$name, price=$price, taxCategory=$taxCategory, additionalProperties=$additionalProperties}"
+            "Body{addons=$addons, brandId=$brandId, creditEntitlements=$creditEntitlements, description=$description, digitalProductDelivery=$digitalProductDelivery, entitlements=$entitlements, imageId=$imageId, licenseKeyActivationMessage=$licenseKeyActivationMessage, licenseKeyActivationsLimit=$licenseKeyActivationsLimit, licenseKeyDuration=$licenseKeyDuration, licenseKeyEnabled=$licenseKeyEnabled, metadata=$metadata, name=$name, price=$price, pricingMode=$pricingMode, taxCategory=$taxCategory, additionalProperties=$additionalProperties}"
     }
 
     /**
@@ -2051,6 +2137,148 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
+    }
+
+    /**
+     * Update the pricing mode. Omit to leave unchanged; set to null to clear (which archives all
+     * active localized rules for this product). Changing to a different non-null mode also archives
+     * any rules whose mode doesn't match the new mode.
+     */
+    class PricingMode @JsonCreator private constructor(private val value: JsonField<String>) :
+        Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            val BY_CURRENCY = of("by_currency")
+
+            val BY_COUNTRY = of("by_country")
+
+            fun of(value: String) = PricingMode(JsonField.of(value))
+        }
+
+        /** An enum containing [PricingMode]'s known values. */
+        enum class Known {
+            BY_CURRENCY,
+            BY_COUNTRY,
+        }
+
+        /**
+         * An enum containing [PricingMode]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [PricingMode] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            BY_CURRENCY,
+            BY_COUNTRY,
+            /**
+             * An enum member indicating that [PricingMode] was instantiated with an unknown value.
+             */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                BY_CURRENCY -> Value.BY_CURRENCY
+                BY_COUNTRY -> Value.BY_COUNTRY
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws DodoPaymentsInvalidDataException if this class instance's value is a not a known
+         *   member.
+         */
+        fun known(): Known =
+            when (this) {
+                BY_CURRENCY -> Known.BY_CURRENCY
+                BY_COUNTRY -> Known.BY_COUNTRY
+                else -> throw DodoPaymentsInvalidDataException("Unknown PricingMode: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws DodoPaymentsInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString() ?: throw DodoPaymentsInvalidDataException("Value is not a String")
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't match
+         *   its expected type.
+         */
+        fun validate(): PricingMode = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is PricingMode && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
     }
 
     override fun equals(other: Any?): Boolean {
