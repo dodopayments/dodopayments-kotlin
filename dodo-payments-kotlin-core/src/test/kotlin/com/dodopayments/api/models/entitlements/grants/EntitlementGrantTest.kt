@@ -19,6 +19,7 @@ internal class EntitlementGrantTest {
         val entitlementGrant =
             EntitlementGrant.builder()
                 .id("id")
+                .brandId("brand_id")
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .customerId("customer_id")
@@ -67,6 +68,7 @@ internal class EntitlementGrantTest {
                 .build()
 
         assertThat(entitlementGrant.id()).isEqualTo("id")
+        assertThat(entitlementGrant.brandId()).isEqualTo("brand_id")
         assertThat(entitlementGrant.businessId()).isEqualTo("business_id")
         assertThat(entitlementGrant.createdAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -128,6 +130,7 @@ internal class EntitlementGrantTest {
         val entitlementGrant =
             EntitlementGrant.builder()
                 .id("id")
+                .brandId("brand_id")
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .customerId("customer_id")

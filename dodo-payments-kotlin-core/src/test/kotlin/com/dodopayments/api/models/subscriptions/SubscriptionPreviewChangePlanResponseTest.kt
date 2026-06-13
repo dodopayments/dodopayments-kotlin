@@ -70,6 +70,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                                 .zipcode("zipcode")
                                 .build()
                         )
+                        .brandId("brand_id")
                         .cancelAtNextBillingDate(true)
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addCreditEntitlementCart(
@@ -252,6 +253,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                             .zipcode("zipcode")
                             .build()
                     )
+                    .brandId("brand_id")
                     .cancelAtNextBillingDate(true)
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .addCreditEntitlementCart(
@@ -438,6 +440,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                                 .zipcode("zipcode")
                                 .build()
                         )
+                        .brandId("brand_id")
                         .cancelAtNextBillingDate(true)
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .addCreditEntitlementCart(
