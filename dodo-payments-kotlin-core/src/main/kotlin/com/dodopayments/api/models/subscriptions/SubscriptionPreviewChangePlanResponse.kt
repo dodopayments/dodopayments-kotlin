@@ -2735,6 +2735,12 @@ private constructor(
             fun currency(): Currency = currency.getRequired("currency")
 
             /**
+             * Net credit movement in the smallest currency unit (e.g. cents). **Negative** –
+             * credits were deducted from the customer's balance to offset the charge (typical on
+             * upgrades). **Positive** – credits were added to the customer's balance, either from a
+             * downgrade proration refund or from topping-up the wallet to meet a gateway
+             * minimum-charge threshold. **Zero** – no credit movement occurred.
+             *
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
              *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -2905,6 +2911,13 @@ private constructor(
                  */
                 fun currency(currency: JsonField<Currency>) = apply { this.currency = currency }
 
+                /**
+                 * Net credit movement in the smallest currency unit (e.g. cents). **Negative** –
+                 * credits were deducted from the customer's balance to offset the charge (typical
+                 * on upgrades). **Positive** – credits were added to the customer's balance, either
+                 * from a downgrade proration refund or from topping-up the wallet to meet a gateway
+                 * minimum-charge threshold. **Zero** – no credit movement occurred.
+                 */
                 fun customerCredits(customerCredits: Long) =
                     customerCredits(JsonField.of(customerCredits))
 

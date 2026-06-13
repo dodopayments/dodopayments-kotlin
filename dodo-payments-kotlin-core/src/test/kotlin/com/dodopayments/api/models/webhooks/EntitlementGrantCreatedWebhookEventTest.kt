@@ -24,6 +24,7 @@ internal class EntitlementGrantCreatedWebhookEventTest {
                 .data(
                     EntitlementGrant.builder()
                         .id("id")
+                        .brandId("brand_id")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .customerId("customer_id")
@@ -79,6 +80,7 @@ internal class EntitlementGrantCreatedWebhookEventTest {
             .isEqualTo(
                 EntitlementGrant.builder()
                     .id("id")
+                    .brandId("brand_id")
                     .businessId("business_id")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .customerId("customer_id")
@@ -139,6 +141,7 @@ internal class EntitlementGrantCreatedWebhookEventTest {
                 .data(
                     EntitlementGrant.builder()
                         .id("id")
+                        .brandId("brand_id")
                         .businessId("business_id")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .customerId("customer_id")
