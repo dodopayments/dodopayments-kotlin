@@ -1915,8 +1915,9 @@ private constructor(
         fun durationInterval(): TimeInterval? = durationInterval.getNullable("duration_interval")
 
         /**
-         * Fulfillment mode: `auto` (default) generates keys automatically; `manual` creates pending
-         * grants the merchant fulfills via the `POST /grants/{id}/license-key` endpoint.
+         * How license keys are fulfilled. `auto` (default) generates and delivers keys to customers
+         * automatically; `manual` creates pending grants that you fulfill with the supplied key via
+         * `POST /grants/{grant_id}/license-key`.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
@@ -2091,9 +2092,9 @@ private constructor(
             }
 
             /**
-             * Fulfillment mode: `auto` (default) generates keys automatically; `manual` creates
-             * pending grants the merchant fulfills via the `POST /grants/{id}/license-key`
-             * endpoint.
+             * How license keys are fulfilled. `auto` (default) generates and delivers keys to
+             * customers automatically; `manual` creates pending grants that you fulfill with the
+             * supplied key via `POST /grants/{grant_id}/license-key`.
              */
             fun fulfillmentMode(fulfillmentMode: FulfillmentMode?) =
                 fulfillmentMode(JsonField.ofNullable(fulfillmentMode))
@@ -2190,8 +2191,9 @@ private constructor(
                 (fulfillmentMode.asKnown()?.validity() ?: 0)
 
         /**
-         * Fulfillment mode: `auto` (default) generates keys automatically; `manual` creates pending
-         * grants the merchant fulfills via the `POST /grants/{id}/license-key` endpoint.
+         * How license keys are fulfilled. `auto` (default) generates and delivers keys to customers
+         * automatically; `manual` creates pending grants that you fulfill with the supplied key via
+         * `POST /grants/{grant_id}/license-key`.
          */
         class FulfillmentMode
         @JsonCreator
