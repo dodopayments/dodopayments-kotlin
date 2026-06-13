@@ -26,6 +26,7 @@ internal class CheckoutSessionPreviewResponseTest {
                         .tax(0)
                         .build()
                 )
+                .isByop(true)
                 .addProductCart(
                     CheckoutSessionPreviewResponse.ProductCart.builder()
                         .addCreditEntitlement(
@@ -104,6 +105,7 @@ internal class CheckoutSessionPreviewResponseTest {
                     .tax(0)
                     .build()
             )
+        assertThat(checkoutSessionPreviewResponse.isByop()).isEqualTo(true)
         assertThat(checkoutSessionPreviewResponse.productCart())
             .containsExactly(
                 CheckoutSessionPreviewResponse.ProductCart.builder()
@@ -188,6 +190,7 @@ internal class CheckoutSessionPreviewResponseTest {
                         .tax(0)
                         .build()
                 )
+                .isByop(true)
                 .addProductCart(
                     CheckoutSessionPreviewResponse.ProductCart.builder()
                         .addCreditEntitlement(

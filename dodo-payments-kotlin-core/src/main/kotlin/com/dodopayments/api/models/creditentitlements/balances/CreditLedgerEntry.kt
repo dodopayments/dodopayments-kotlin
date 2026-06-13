@@ -25,6 +25,7 @@ private constructor(
     private val amount: JsonField<String>,
     private val balanceAfter: JsonField<String>,
     private val balanceBefore: JsonField<String>,
+    private val brandId: JsonField<String>,
     private val businessId: JsonField<String>,
     private val createdAt: JsonField<OffsetDateTime>,
     private val creditEntitlementId: JsonField<String>,
@@ -50,6 +51,7 @@ private constructor(
         @JsonProperty("balance_before")
         @ExcludeMissing
         balanceBefore: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("brand_id") @ExcludeMissing brandId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("business_id")
         @ExcludeMissing
         businessId: JsonField<String> = JsonMissing.of(),
@@ -87,6 +89,7 @@ private constructor(
         amount,
         balanceAfter,
         balanceBefore,
+        brandId,
         businessId,
         createdAt,
         creditEntitlementId,
@@ -125,6 +128,14 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun balanceBefore(): String = balanceBefore.getRequired("balance_before")
+
+    /**
+     * Brand id this credit ledger entry belongs to
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun brandId(): String = brandId.getRequired("brand_id")
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
@@ -229,6 +240,13 @@ private constructor(
     @JsonProperty("balance_before")
     @ExcludeMissing
     fun _balanceBefore(): JsonField<String> = balanceBefore
+
+    /**
+     * Returns the raw JSON value of [brandId].
+     *
+     * Unlike [brandId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("brand_id") @ExcludeMissing fun _brandId(): JsonField<String> = brandId
 
     /**
      * Returns the raw JSON value of [businessId].
@@ -352,6 +370,7 @@ private constructor(
          * .amount()
          * .balanceAfter()
          * .balanceBefore()
+         * .brandId()
          * .businessId()
          * .createdAt()
          * .creditEntitlementId()
@@ -372,6 +391,7 @@ private constructor(
         private var amount: JsonField<String>? = null
         private var balanceAfter: JsonField<String>? = null
         private var balanceBefore: JsonField<String>? = null
+        private var brandId: JsonField<String>? = null
         private var businessId: JsonField<String>? = null
         private var createdAt: JsonField<OffsetDateTime>? = null
         private var creditEntitlementId: JsonField<String>? = null
@@ -391,6 +411,7 @@ private constructor(
             amount = creditLedgerEntry.amount
             balanceAfter = creditLedgerEntry.balanceAfter
             balanceBefore = creditLedgerEntry.balanceBefore
+            brandId = creditLedgerEntry.brandId
             businessId = creditLedgerEntry.businessId
             createdAt = creditLedgerEntry.createdAt
             creditEntitlementId = creditLedgerEntry.creditEntitlementId
@@ -451,6 +472,17 @@ private constructor(
         fun balanceBefore(balanceBefore: JsonField<String>) = apply {
             this.balanceBefore = balanceBefore
         }
+
+        /** Brand id this credit ledger entry belongs to */
+        fun brandId(brandId: String) = brandId(JsonField.of(brandId))
+
+        /**
+         * Sets [Builder.brandId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.brandId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun brandId(brandId: JsonField<String>) = apply { this.brandId = brandId }
 
         fun businessId(businessId: String) = businessId(JsonField.of(businessId))
 
@@ -626,6 +658,7 @@ private constructor(
          * .amount()
          * .balanceAfter()
          * .balanceBefore()
+         * .brandId()
          * .businessId()
          * .createdAt()
          * .creditEntitlementId()
@@ -644,6 +677,7 @@ private constructor(
                 checkRequired("amount", amount),
                 checkRequired("balanceAfter", balanceAfter),
                 checkRequired("balanceBefore", balanceBefore),
+                checkRequired("brandId", brandId),
                 checkRequired("businessId", businessId),
                 checkRequired("createdAt", createdAt),
                 checkRequired("creditEntitlementId", creditEntitlementId),
@@ -679,6 +713,7 @@ private constructor(
         amount()
         balanceAfter()
         balanceBefore()
+        brandId()
         businessId()
         createdAt()
         creditEntitlementId()
@@ -712,6 +747,7 @@ private constructor(
             (if (amount.asKnown() == null) 0 else 1) +
             (if (balanceAfter.asKnown() == null) 0 else 1) +
             (if (balanceBefore.asKnown() == null) 0 else 1) +
+            (if (brandId.asKnown() == null) 0 else 1) +
             (if (businessId.asKnown() == null) 0 else 1) +
             (if (createdAt.asKnown() == null) 0 else 1) +
             (if (creditEntitlementId.asKnown() == null) 0 else 1) +
@@ -921,6 +957,7 @@ private constructor(
             amount == other.amount &&
             balanceAfter == other.balanceAfter &&
             balanceBefore == other.balanceBefore &&
+            brandId == other.brandId &&
             businessId == other.businessId &&
             createdAt == other.createdAt &&
             creditEntitlementId == other.creditEntitlementId &&
@@ -942,6 +979,7 @@ private constructor(
             amount,
             balanceAfter,
             balanceBefore,
+            brandId,
             businessId,
             createdAt,
             creditEntitlementId,
@@ -961,5 +999,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CreditLedgerEntry{id=$id, amount=$amount, balanceAfter=$balanceAfter, balanceBefore=$balanceBefore, businessId=$businessId, createdAt=$createdAt, creditEntitlementId=$creditEntitlementId, customerId=$customerId, isCredit=$isCredit, overageAfter=$overageAfter, overageBefore=$overageBefore, transactionType=$transactionType, description=$description, grantId=$grantId, referenceId=$referenceId, referenceType=$referenceType, additionalProperties=$additionalProperties}"
+        "CreditLedgerEntry{id=$id, amount=$amount, balanceAfter=$balanceAfter, balanceBefore=$balanceBefore, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, creditEntitlementId=$creditEntitlementId, customerId=$customerId, isCredit=$isCredit, overageAfter=$overageAfter, overageBefore=$overageBefore, transactionType=$transactionType, description=$description, grantId=$grantId, referenceId=$referenceId, referenceType=$referenceType, additionalProperties=$additionalProperties}"
 }

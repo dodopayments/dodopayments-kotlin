@@ -22,6 +22,7 @@ internal class AbandonedCheckoutDetectedWebhookEventTest {
                             AbandonedCheckoutDetectedWebhookEvent.Data.AbandonmentReason
                                 .PAYMENT_FAILED
                         )
+                        .brandId("brand_id")
                         .customerId("customer_id")
                         .paymentId("payment_id")
                         .status(AbandonedCheckoutDetectedWebhookEvent.Data.Status.ABANDONED)
@@ -39,6 +40,7 @@ internal class AbandonedCheckoutDetectedWebhookEventTest {
                     .abandonmentReason(
                         AbandonedCheckoutDetectedWebhookEvent.Data.AbandonmentReason.PAYMENT_FAILED
                     )
+                    .brandId("brand_id")
                     .customerId("customer_id")
                     .paymentId("payment_id")
                     .status(AbandonedCheckoutDetectedWebhookEvent.Data.Status.ABANDONED)
@@ -62,6 +64,7 @@ internal class AbandonedCheckoutDetectedWebhookEventTest {
                             AbandonedCheckoutDetectedWebhookEvent.Data.AbandonmentReason
                                 .PAYMENT_FAILED
                         )
+                        .brandId("brand_id")
                         .customerId("customer_id")
                         .paymentId("payment_id")
                         .status(AbandonedCheckoutDetectedWebhookEvent.Data.Status.ABANDONED)

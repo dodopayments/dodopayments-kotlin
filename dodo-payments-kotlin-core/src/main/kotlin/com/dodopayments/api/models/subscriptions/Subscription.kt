@@ -29,6 +29,7 @@ class Subscription
 private constructor(
     private val addons: JsonField<List<AddonCartResponseItem>>,
     private val billing: JsonField<BillingAddress>,
+    private val brandId: JsonField<String>,
     private val cancelAtNextBillingDate: JsonField<Boolean>,
     private val createdAt: JsonField<OffsetDateTime>,
     private val creditEntitlementCart: JsonField<List<CreditEntitlementCartResponse>>,
@@ -74,6 +75,7 @@ private constructor(
         @JsonProperty("billing")
         @ExcludeMissing
         billing: JsonField<BillingAddress> = JsonMissing.of(),
+        @JsonProperty("brand_id") @ExcludeMissing brandId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("cancel_at_next_billing_date")
         @ExcludeMissing
         cancelAtNextBillingDate: JsonField<Boolean> = JsonMissing.of(),
@@ -168,6 +170,7 @@ private constructor(
     ) : this(
         addons,
         billing,
+        brandId,
         cancelAtNextBillingDate,
         createdAt,
         creditEntitlementCart,
@@ -220,6 +223,14 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun billing(): BillingAddress = billing.getRequired("billing")
+
+    /**
+     * Brand id this subscription belongs to
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun brandId(): String = brandId.getRequired("brand_id")
 
     /**
      * Indicates if the subscription will cancel at the next billing date
@@ -347,7 +358,8 @@ private constructor(
     fun quantity(): Int = quantity.getRequired("quantity")
 
     /**
-     * Amount charged before tax for each recurring payment in smallest currency unit (e.g. cents)
+     * Amount charged before tax for each recurring payment in the currency's smallest unit (cents
+     * for USD, yen for JPY, fils for KWD)
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -519,6 +531,13 @@ private constructor(
      * Unlike [billing], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("billing") @ExcludeMissing fun _billing(): JsonField<BillingAddress> = billing
+
+    /**
+     * Returns the raw JSON value of [brandId].
+     *
+     * Unlike [brandId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("brand_id") @ExcludeMissing fun _brandId(): JsonField<String> = brandId
 
     /**
      * Returns the raw JSON value of [cancelAtNextBillingDate].
@@ -847,6 +866,7 @@ private constructor(
          * ```kotlin
          * .addons()
          * .billing()
+         * .brandId()
          * .cancelAtNextBillingDate()
          * .createdAt()
          * .creditEntitlementCart()
@@ -879,6 +899,7 @@ private constructor(
 
         private var addons: JsonField<MutableList<AddonCartResponseItem>>? = null
         private var billing: JsonField<BillingAddress>? = null
+        private var brandId: JsonField<String>? = null
         private var cancelAtNextBillingDate: JsonField<Boolean>? = null
         private var createdAt: JsonField<OffsetDateTime>? = null
         private var creditEntitlementCart: JsonField<MutableList<CreditEntitlementCartResponse>>? =
@@ -921,6 +942,7 @@ private constructor(
         internal fun from(subscription: Subscription) = apply {
             addons = subscription.addons.map { it.toMutableList() }
             billing = subscription.billing
+            brandId = subscription.brandId
             cancelAtNextBillingDate = subscription.cancelAtNextBillingDate
             createdAt = subscription.createdAt
             creditEntitlementCart = subscription.creditEntitlementCart.map { it.toMutableList() }
@@ -996,6 +1018,17 @@ private constructor(
          * supported value.
          */
         fun billing(billing: JsonField<BillingAddress>) = apply { this.billing = billing }
+
+        /** Brand id this subscription belongs to */
+        fun brandId(brandId: String) = brandId(JsonField.of(brandId))
+
+        /**
+         * Sets [Builder.brandId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.brandId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun brandId(brandId: JsonField<String>) = apply { this.brandId = brandId }
 
         /** Indicates if the subscription will cancel at the next billing date */
         fun cancelAtNextBillingDate(cancelAtNextBillingDate: Boolean) =
@@ -1244,8 +1277,8 @@ private constructor(
         fun quantity(quantity: JsonField<Int>) = apply { this.quantity = quantity }
 
         /**
-         * Amount charged before tax for each recurring payment in smallest currency unit (e.g.
-         * cents)
+         * Amount charged before tax for each recurring payment in the currency's smallest unit
+         * (cents for USD, yen for JPY, fils for KWD)
          */
         fun recurringPreTaxAmount(recurringPreTaxAmount: Int) =
             recurringPreTaxAmount(JsonField.of(recurringPreTaxAmount))
@@ -1579,6 +1612,7 @@ private constructor(
          * ```kotlin
          * .addons()
          * .billing()
+         * .brandId()
          * .cancelAtNextBillingDate()
          * .createdAt()
          * .creditEntitlementCart()
@@ -1609,6 +1643,7 @@ private constructor(
             Subscription(
                 checkRequired("addons", addons).map { it.toImmutable() },
                 checkRequired("billing", billing),
+                checkRequired("brandId", brandId),
                 checkRequired("cancelAtNextBillingDate", cancelAtNextBillingDate),
                 checkRequired("createdAt", createdAt),
                 checkRequired("creditEntitlementCart", creditEntitlementCart).map {
@@ -1668,6 +1703,7 @@ private constructor(
 
         addons().forEach { it.validate() }
         billing().validate()
+        brandId()
         cancelAtNextBillingDate()
         createdAt()
         creditEntitlementCart().forEach { it.validate() }
@@ -1721,6 +1757,7 @@ private constructor(
     internal fun validity(): Int =
         (addons.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
             (billing.asKnown()?.validity() ?: 0) +
+            (if (brandId.asKnown() == null) 0 else 1) +
             (if (cancelAtNextBillingDate.asKnown() == null) 0 else 1) +
             (if (createdAt.asKnown() == null) 0 else 1) +
             (creditEntitlementCart.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
@@ -1871,6 +1908,7 @@ private constructor(
         return other is Subscription &&
             addons == other.addons &&
             billing == other.billing &&
+            brandId == other.brandId &&
             cancelAtNextBillingDate == other.cancelAtNextBillingDate &&
             createdAt == other.createdAt &&
             creditEntitlementCart == other.creditEntitlementCart &&
@@ -1912,6 +1950,7 @@ private constructor(
         Objects.hash(
             addons,
             billing,
+            brandId,
             cancelAtNextBillingDate,
             createdAt,
             creditEntitlementCart,
@@ -1953,5 +1992,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Subscription{addons=$addons, billing=$billing, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, creditEntitlementCart=$creditEntitlementCart, currency=$currency, customer=$customer, metadata=$metadata, meterCreditEntitlementCart=$meterCreditEntitlementCart, meters=$meters, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancellationComment=$cancellationComment, cancellationFeedback=$cancellationFeedback, cancelledAt=$cancelledAt, customFieldResponses=$customFieldResponses, customerBusinessName=$customerBusinessName, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, discounts=$discounts, expiresAt=$expiresAt, paymentMethodId=$paymentMethodId, scheduledChange=$scheduledChange, taxId=$taxId, additionalProperties=$additionalProperties}"
+        "Subscription{addons=$addons, billing=$billing, brandId=$brandId, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, creditEntitlementCart=$creditEntitlementCart, currency=$currency, customer=$customer, metadata=$metadata, meterCreditEntitlementCart=$meterCreditEntitlementCart, meters=$meters, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancellationComment=$cancellationComment, cancellationFeedback=$cancellationFeedback, cancelledAt=$cancelledAt, customFieldResponses=$customFieldResponses, customerBusinessName=$customerBusinessName, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, discounts=$discounts, expiresAt=$expiresAt, paymentMethodId=$paymentMethodId, scheduledChange=$scheduledChange, taxId=$taxId, additionalProperties=$additionalProperties}"
 }
