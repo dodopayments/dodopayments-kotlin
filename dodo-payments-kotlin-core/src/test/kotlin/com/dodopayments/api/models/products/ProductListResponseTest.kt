@@ -61,6 +61,7 @@ internal class ProductListResponseTest {
                         .taxInclusive(true)
                         .build()
                 )
+                .pricingMode(ProductListResponse.PricingMode.BY_CURRENCY)
                 .taxInclusive(true)
                 .build()
 
@@ -112,6 +113,8 @@ internal class ProductListResponseTest {
                         .build()
                 )
             )
+        assertThat(productListResponse.pricingMode())
+            .isEqualTo(ProductListResponse.PricingMode.BY_CURRENCY)
         assertThat(productListResponse.taxInclusive()).isEqualTo(true)
     }
 
@@ -161,6 +164,7 @@ internal class ProductListResponseTest {
                         .taxInclusive(true)
                         .build()
                 )
+                .pricingMode(ProductListResponse.PricingMode.BY_CURRENCY)
                 .taxInclusive(true)
                 .build()
 
