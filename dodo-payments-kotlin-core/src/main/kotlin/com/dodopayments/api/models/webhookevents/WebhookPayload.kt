@@ -1166,7 +1166,7 @@ private constructor(
 
             /**
              * Which processor handled this payment. `stripe` / `adyen` for BYOP routes (the
-             * merchant's own Hyperswitch connector); `dodo` for everything Dodo processed itself.
+             * merchant's own payment connector); `dodo` for everything Dodo processed itself.
              *
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
              *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -2101,8 +2101,7 @@ private constructor(
 
                 /**
                  * Which processor handled this payment. `stripe` / `adyen` for BYOP routes (the
-                 * merchant's own Hyperswitch connector); `dodo` for everything Dodo processed
-                 * itself.
+                 * merchant's own payment connector); `dodo` for everything Dodo processed itself.
                  */
                 fun paymentProvider(
                     paymentProvider: com.dodopayments.api.models.payments.Payment.PaymentProvider
@@ -5962,8 +5961,7 @@ private constructor(
 
             /**
              * Which processor handled the underlying payment. `stripe` / `adyen` for BYOP routes
-             * (the merchant's own Hyperswitch connector); `dodo` for everything Dodo processed
-             * itself.
+             * (the merchant's own payment connector); `dodo` for everything Dodo processed itself.
              *
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
              *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -6348,7 +6346,7 @@ private constructor(
 
                 /**
                  * Which processor handled the underlying payment. `stripe` / `adyen` for BYOP
-                 * routes (the merchant's own Hyperswitch connector); `dodo` for everything Dodo
+                 * routes (the merchant's own payment connector); `dodo` for everything Dodo
                  * processed itself.
                  */
                 fun paymentProvider(paymentProvider: GetDispute.PaymentProvider) =
