@@ -284,6 +284,7 @@ private constructor(
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val availableBalance: JsonField<String>,
+        private val brandId: JsonField<String>,
         private val creditEntitlementId: JsonField<String>,
         private val creditEntitlementName: JsonField<String>,
         private val customerId: JsonField<String>,
@@ -299,6 +300,7 @@ private constructor(
             @JsonProperty("available_balance")
             @ExcludeMissing
             availableBalance: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("brand_id") @ExcludeMissing brandId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("credit_entitlement_id")
             @ExcludeMissing
             creditEntitlementId: JsonField<String> = JsonMissing.of(),
@@ -322,6 +324,7 @@ private constructor(
             thresholdPercent: JsonField<Int> = JsonMissing.of(),
         ) : this(
             availableBalance,
+            brandId,
             creditEntitlementId,
             creditEntitlementName,
             customerId,
@@ -337,6 +340,14 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun availableBalance(): String = availableBalance.getRequired("available_balance")
+
+        /**
+         * Brand id this credit entitlement belongs to
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun brandId(): String = brandId.getRequired("brand_id")
 
         /**
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
@@ -391,6 +402,13 @@ private constructor(
         @JsonProperty("available_balance")
         @ExcludeMissing
         fun _availableBalance(): JsonField<String> = availableBalance
+
+        /**
+         * Returns the raw JSON value of [brandId].
+         *
+         * Unlike [brandId], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("brand_id") @ExcludeMissing fun _brandId(): JsonField<String> = brandId
 
         /**
          * Returns the raw JSON value of [creditEntitlementId].
@@ -481,6 +499,7 @@ private constructor(
              * The following fields are required:
              * ```kotlin
              * .availableBalance()
+             * .brandId()
              * .creditEntitlementId()
              * .creditEntitlementName()
              * .customerId()
@@ -497,6 +516,7 @@ private constructor(
         class Builder internal constructor() {
 
             private var availableBalance: JsonField<String>? = null
+            private var brandId: JsonField<String>? = null
             private var creditEntitlementId: JsonField<String>? = null
             private var creditEntitlementName: JsonField<String>? = null
             private var customerId: JsonField<String>? = null
@@ -508,6 +528,7 @@ private constructor(
 
             internal fun from(data: Data) = apply {
                 availableBalance = data.availableBalance
+                brandId = data.brandId
                 creditEntitlementId = data.creditEntitlementId
                 creditEntitlementName = data.creditEntitlementName
                 customerId = data.customerId
@@ -531,6 +552,18 @@ private constructor(
             fun availableBalance(availableBalance: JsonField<String>) = apply {
                 this.availableBalance = availableBalance
             }
+
+            /** Brand id this credit entitlement belongs to */
+            fun brandId(brandId: String) = brandId(JsonField.of(brandId))
+
+            /**
+             * Sets [Builder.brandId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.brandId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun brandId(brandId: JsonField<String>) = apply { this.brandId = brandId }
 
             fun creditEntitlementId(creditEntitlementId: String) =
                 creditEntitlementId(JsonField.of(creditEntitlementId))
@@ -654,6 +687,7 @@ private constructor(
              * The following fields are required:
              * ```kotlin
              * .availableBalance()
+             * .brandId()
              * .creditEntitlementId()
              * .creditEntitlementName()
              * .customerId()
@@ -668,6 +702,7 @@ private constructor(
             fun build(): Data =
                 Data(
                     checkRequired("availableBalance", availableBalance),
+                    checkRequired("brandId", brandId),
                     checkRequired("creditEntitlementId", creditEntitlementId),
                     checkRequired("creditEntitlementName", creditEntitlementName),
                     checkRequired("customerId", customerId),
@@ -696,6 +731,7 @@ private constructor(
             }
 
             availableBalance()
+            brandId()
             creditEntitlementId()
             creditEntitlementName()
             customerId()
@@ -722,6 +758,7 @@ private constructor(
          */
         internal fun validity(): Int =
             (if (availableBalance.asKnown() == null) 0 else 1) +
+                (if (brandId.asKnown() == null) 0 else 1) +
                 (if (creditEntitlementId.asKnown() == null) 0 else 1) +
                 (if (creditEntitlementName.asKnown() == null) 0 else 1) +
                 (if (customerId.asKnown() == null) 0 else 1) +
@@ -737,6 +774,7 @@ private constructor(
 
             return other is Data &&
                 availableBalance == other.availableBalance &&
+                brandId == other.brandId &&
                 creditEntitlementId == other.creditEntitlementId &&
                 creditEntitlementName == other.creditEntitlementName &&
                 customerId == other.customerId &&
@@ -750,6 +788,7 @@ private constructor(
         private val hashCode: Int by lazy {
             Objects.hash(
                 availableBalance,
+                brandId,
                 creditEntitlementId,
                 creditEntitlementName,
                 customerId,
@@ -764,7 +803,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Data{availableBalance=$availableBalance, creditEntitlementId=$creditEntitlementId, creditEntitlementName=$creditEntitlementName, customerId=$customerId, subscriptionCreditsAmount=$subscriptionCreditsAmount, subscriptionId=$subscriptionId, thresholdAmount=$thresholdAmount, thresholdPercent=$thresholdPercent, additionalProperties=$additionalProperties}"
+            "Data{availableBalance=$availableBalance, brandId=$brandId, creditEntitlementId=$creditEntitlementId, creditEntitlementName=$creditEntitlementName, customerId=$customerId, subscriptionCreditsAmount=$subscriptionCreditsAmount, subscriptionId=$subscriptionId, thresholdAmount=$thresholdAmount, thresholdPercent=$thresholdPercent, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

@@ -74,6 +74,7 @@ internal class ProductUpdateParamsTest {
                     .taxInclusive(true)
                     .build()
             )
+            .pricingMode(ProductUpdateParams.PricingMode.BY_CURRENCY)
             .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
             .build()
     }
@@ -150,6 +151,7 @@ internal class ProductUpdateParamsTest {
                         .taxInclusive(true)
                         .build()
                 )
+                .pricingMode(ProductUpdateParams.PricingMode.BY_CURRENCY)
                 .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
                 .build()
 
@@ -219,6 +221,7 @@ internal class ProductUpdateParamsTest {
                         .build()
                 )
             )
+        assertThat(body.pricingMode()).isEqualTo(ProductUpdateParams.PricingMode.BY_CURRENCY)
         assertThat(body.taxCategory()).isEqualTo(TaxCategory.DIGITAL_PRODUCTS)
     }
 

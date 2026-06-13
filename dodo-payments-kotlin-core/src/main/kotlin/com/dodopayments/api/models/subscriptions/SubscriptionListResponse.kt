@@ -283,7 +283,8 @@ private constructor(
     fun quantity(): Int = quantity.getRequired("quantity")
 
     /**
-     * Amount charged before tax for each recurring payment in smallest currency unit (e.g. cents)
+     * Amount charged before tax for each recurring payment in the currency's smallest unit (cents
+     * for USD, yen for JPY, fils for KWD)
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -969,8 +970,8 @@ private constructor(
         fun quantity(quantity: JsonField<Int>) = apply { this.quantity = quantity }
 
         /**
-         * Amount charged before tax for each recurring payment in smallest currency unit (e.g.
-         * cents)
+         * Amount charged before tax for each recurring payment in the currency's smallest unit
+         * (cents for USD, yen for JPY, fils for KWD)
          */
         fun recurringPreTaxAmount(recurringPreTaxAmount: Int) =
             recurringPreTaxAmount(JsonField.of(recurringPreTaxAmount))
