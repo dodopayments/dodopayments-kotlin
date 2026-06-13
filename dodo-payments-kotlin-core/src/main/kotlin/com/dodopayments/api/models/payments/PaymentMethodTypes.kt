@@ -8,7 +8,7 @@ import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.fasterxml.jackson.annotation.JsonCreator
 
 /**
- * All supported payment method types (from Hyperswitch).
+ * All supported payment method types.
  *
  * Used for disabled-payment-methods filtering and validation.
  */
