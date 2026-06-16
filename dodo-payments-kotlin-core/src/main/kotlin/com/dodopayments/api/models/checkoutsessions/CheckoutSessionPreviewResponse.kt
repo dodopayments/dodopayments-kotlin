@@ -31,7 +31,9 @@ private constructor(
     private val productCart: JsonField<List<ProductCart>>,
     private val totalPrice: JsonField<Int>,
     private val recurringBreakup: JsonField<RecurringBreakup>,
+    private val taxIdBusinessName: JsonField<String>,
     private val taxIdErrMsg: JsonField<String>,
+    private val taxIdFormatName: JsonField<String>,
     private val totalTax: JsonField<Int>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -53,9 +55,15 @@ private constructor(
         @JsonProperty("recurring_breakup")
         @ExcludeMissing
         recurringBreakup: JsonField<RecurringBreakup> = JsonMissing.of(),
+        @JsonProperty("tax_id_business_name")
+        @ExcludeMissing
+        taxIdBusinessName: JsonField<String> = JsonMissing.of(),
         @JsonProperty("tax_id_err_msg")
         @ExcludeMissing
         taxIdErrMsg: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("tax_id_format_name")
+        @ExcludeMissing
+        taxIdFormatName: JsonField<String> = JsonMissing.of(),
         @JsonProperty("total_tax") @ExcludeMissing totalTax: JsonField<Int> = JsonMissing.of(),
     ) : this(
         billingCountry,
@@ -65,7 +73,9 @@ private constructor(
         productCart,
         totalPrice,
         recurringBreakup,
+        taxIdBusinessName,
         taxIdErrMsg,
+        taxIdFormatName,
         totalTax,
         mutableMapOf(),
     )
@@ -129,12 +139,28 @@ private constructor(
     fun recurringBreakup(): RecurringBreakup? = recurringBreakup.getNullable("recurring_breakup")
 
     /**
+     * Registered business name from the official registry (EU/GB/AU) when found
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun taxIdBusinessName(): String? = taxIdBusinessName.getNullable("tax_id_business_name")
+
+    /**
      * Error message if tax ID validation failed
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
     fun taxIdErrMsg(): String? = taxIdErrMsg.getNullable("tax_id_err_msg")
+
+    /**
+     * The matched tax ID notation (e.g. "VAT Number", "GSTIN") when valid
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun taxIdFormatName(): String? = taxIdFormatName.getNullable("tax_id_format_name")
 
     /**
      * Total tax
@@ -203,6 +229,16 @@ private constructor(
     fun _recurringBreakup(): JsonField<RecurringBreakup> = recurringBreakup
 
     /**
+     * Returns the raw JSON value of [taxIdBusinessName].
+     *
+     * Unlike [taxIdBusinessName], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("tax_id_business_name")
+    @ExcludeMissing
+    fun _taxIdBusinessName(): JsonField<String> = taxIdBusinessName
+
+    /**
      * Returns the raw JSON value of [taxIdErrMsg].
      *
      * Unlike [taxIdErrMsg], this method doesn't throw if the JSON field has an unexpected type.
@@ -210,6 +246,15 @@ private constructor(
     @JsonProperty("tax_id_err_msg")
     @ExcludeMissing
     fun _taxIdErrMsg(): JsonField<String> = taxIdErrMsg
+
+    /**
+     * Returns the raw JSON value of [taxIdFormatName].
+     *
+     * Unlike [taxIdFormatName], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("tax_id_format_name")
+    @ExcludeMissing
+    fun _taxIdFormatName(): JsonField<String> = taxIdFormatName
 
     /**
      * Returns the raw JSON value of [totalTax].
@@ -259,7 +304,9 @@ private constructor(
         private var productCart: JsonField<MutableList<ProductCart>>? = null
         private var totalPrice: JsonField<Int>? = null
         private var recurringBreakup: JsonField<RecurringBreakup> = JsonMissing.of()
+        private var taxIdBusinessName: JsonField<String> = JsonMissing.of()
         private var taxIdErrMsg: JsonField<String> = JsonMissing.of()
+        private var taxIdFormatName: JsonField<String> = JsonMissing.of()
         private var totalTax: JsonField<Int> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -271,7 +318,9 @@ private constructor(
             productCart = checkoutSessionPreviewResponse.productCart.map { it.toMutableList() }
             totalPrice = checkoutSessionPreviewResponse.totalPrice
             recurringBreakup = checkoutSessionPreviewResponse.recurringBreakup
+            taxIdBusinessName = checkoutSessionPreviewResponse.taxIdBusinessName
             taxIdErrMsg = checkoutSessionPreviewResponse.taxIdErrMsg
+            taxIdFormatName = checkoutSessionPreviewResponse.taxIdFormatName
             totalTax = checkoutSessionPreviewResponse.totalTax
             additionalProperties =
                 checkoutSessionPreviewResponse.additionalProperties.toMutableMap()
@@ -386,6 +435,21 @@ private constructor(
             this.recurringBreakup = recurringBreakup
         }
 
+        /** Registered business name from the official registry (EU/GB/AU) when found */
+        fun taxIdBusinessName(taxIdBusinessName: String?) =
+            taxIdBusinessName(JsonField.ofNullable(taxIdBusinessName))
+
+        /**
+         * Sets [Builder.taxIdBusinessName] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.taxIdBusinessName] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun taxIdBusinessName(taxIdBusinessName: JsonField<String>) = apply {
+            this.taxIdBusinessName = taxIdBusinessName
+        }
+
         /** Error message if tax ID validation failed */
         fun taxIdErrMsg(taxIdErrMsg: String?) = taxIdErrMsg(JsonField.ofNullable(taxIdErrMsg))
 
@@ -397,6 +461,21 @@ private constructor(
          * value.
          */
         fun taxIdErrMsg(taxIdErrMsg: JsonField<String>) = apply { this.taxIdErrMsg = taxIdErrMsg }
+
+        /** The matched tax ID notation (e.g. "VAT Number", "GSTIN") when valid */
+        fun taxIdFormatName(taxIdFormatName: String?) =
+            taxIdFormatName(JsonField.ofNullable(taxIdFormatName))
+
+        /**
+         * Sets [Builder.taxIdFormatName] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.taxIdFormatName] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun taxIdFormatName(taxIdFormatName: JsonField<String>) = apply {
+            this.taxIdFormatName = taxIdFormatName
+        }
 
         /** Total tax */
         fun totalTax(totalTax: Int?) = totalTax(JsonField.ofNullable(totalTax))
@@ -461,7 +540,9 @@ private constructor(
                 checkRequired("productCart", productCart).map { it.toImmutable() },
                 checkRequired("totalPrice", totalPrice),
                 recurringBreakup,
+                taxIdBusinessName,
                 taxIdErrMsg,
+                taxIdFormatName,
                 totalTax,
                 additionalProperties.toMutableMap(),
             )
@@ -489,7 +570,9 @@ private constructor(
         productCart().forEach { it.validate() }
         totalPrice()
         recurringBreakup()?.validate()
+        taxIdBusinessName()
         taxIdErrMsg()
+        taxIdFormatName()
         totalTax()
         validated = true
     }
@@ -515,7 +598,9 @@ private constructor(
             (productCart.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
             (if (totalPrice.asKnown() == null) 0 else 1) +
             (recurringBreakup.asKnown()?.validity() ?: 0) +
+            (if (taxIdBusinessName.asKnown() == null) 0 else 1) +
             (if (taxIdErrMsg.asKnown() == null) 0 else 1) +
+            (if (taxIdFormatName.asKnown() == null) 0 else 1) +
             (if (totalTax.asKnown() == null) 0 else 1)
 
     /** Breakup of the current payment */
@@ -3500,7 +3585,9 @@ private constructor(
             productCart == other.productCart &&
             totalPrice == other.totalPrice &&
             recurringBreakup == other.recurringBreakup &&
+            taxIdBusinessName == other.taxIdBusinessName &&
             taxIdErrMsg == other.taxIdErrMsg &&
+            taxIdFormatName == other.taxIdFormatName &&
             totalTax == other.totalTax &&
             additionalProperties == other.additionalProperties
     }
@@ -3514,7 +3601,9 @@ private constructor(
             productCart,
             totalPrice,
             recurringBreakup,
+            taxIdBusinessName,
             taxIdErrMsg,
+            taxIdFormatName,
             totalTax,
             additionalProperties,
         )
@@ -3523,5 +3612,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CheckoutSessionPreviewResponse{billingCountry=$billingCountry, currency=$currency, currentBreakup=$currentBreakup, isByop=$isByop, productCart=$productCart, totalPrice=$totalPrice, recurringBreakup=$recurringBreakup, taxIdErrMsg=$taxIdErrMsg, totalTax=$totalTax, additionalProperties=$additionalProperties}"
+        "CheckoutSessionPreviewResponse{billingCountry=$billingCountry, currency=$currency, currentBreakup=$currentBreakup, isByop=$isByop, productCart=$productCart, totalPrice=$totalPrice, recurringBreakup=$recurringBreakup, taxIdBusinessName=$taxIdBusinessName, taxIdErrMsg=$taxIdErrMsg, taxIdFormatName=$taxIdFormatName, totalTax=$totalTax, additionalProperties=$additionalProperties}"
 }
