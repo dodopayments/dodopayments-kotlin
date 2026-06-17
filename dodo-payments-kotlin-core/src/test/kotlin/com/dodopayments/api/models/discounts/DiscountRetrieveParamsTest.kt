@@ -9,14 +9,15 @@ internal class DiscountRetrieveParamsTest {
 
     @Test
     fun create() {
-        DiscountRetrieveParams.builder().discountId("discount_id").build()
+        DiscountRetrieveParams.builder().discountId("dsc_qxxEmg5PuM1uNTE0LgkP9").build()
     }
 
     @Test
     fun pathParams() {
-        val params = DiscountRetrieveParams.builder().discountId("discount_id").build()
+        val params =
+            DiscountRetrieveParams.builder().discountId("dsc_qxxEmg5PuM1uNTE0LgkP9").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("discount_id")
+        assertThat(params._pathParam(0)).isEqualTo("dsc_qxxEmg5PuM1uNTE0LgkP9")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }

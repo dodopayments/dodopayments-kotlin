@@ -11,8 +11,8 @@ internal class BalanceListGrantsParamsTest {
     @Test
     fun create() {
         BalanceListGrantsParams.builder()
-            .creditEntitlementId("credit_entitlement_id")
-            .customerId("customer_id")
+            .creditEntitlementId("cde_ztxm5XJsKxWucRWA3rjdM")
+            .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
             .pageNumber(0)
             .pageSize(0)
             .status(BalanceListGrantsParams.Status.ACTIVE)
@@ -23,12 +23,12 @@ internal class BalanceListGrantsParamsTest {
     fun pathParams() {
         val params =
             BalanceListGrantsParams.builder()
-                .creditEntitlementId("credit_entitlement_id")
-                .customerId("customer_id")
+                .creditEntitlementId("cde_ztxm5XJsKxWucRWA3rjdM")
+                .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                 .build()
 
-        assertThat(params._pathParam(0)).isEqualTo("credit_entitlement_id")
-        assertThat(params._pathParam(1)).isEqualTo("customer_id")
+        assertThat(params._pathParam(0)).isEqualTo("cde_ztxm5XJsKxWucRWA3rjdM")
+        assertThat(params._pathParam(1)).isEqualTo("cus_TV52uJWWXt2yIoBBxpjaa")
         // out-of-bound path param
         assertThat(params._pathParam(2)).isEqualTo("")
     }
@@ -37,8 +37,8 @@ internal class BalanceListGrantsParamsTest {
     fun queryParams() {
         val params =
             BalanceListGrantsParams.builder()
-                .creditEntitlementId("credit_entitlement_id")
-                .customerId("customer_id")
+                .creditEntitlementId("cde_ztxm5XJsKxWucRWA3rjdM")
+                .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                 .pageNumber(0)
                 .pageSize(0)
                 .status(BalanceListGrantsParams.Status.ACTIVE)
@@ -60,8 +60,8 @@ internal class BalanceListGrantsParamsTest {
     fun queryParamsWithoutOptionalFields() {
         val params =
             BalanceListGrantsParams.builder()
-                .creditEntitlementId("credit_entitlement_id")
-                .customerId("customer_id")
+                .creditEntitlementId("cde_ztxm5XJsKxWucRWA3rjdM")
+                .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                 .build()
 
         val queryParams = params._queryParams()

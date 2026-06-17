@@ -30,7 +30,7 @@ internal class PaymentServiceTest {
         val paymentService = client.invoices().payments()
         stubFor(get(anyUrl()).willReturn(ok().withBody("abc")))
 
-        val payment = paymentService.retrieve("payment_id")
+        val payment = paymentService.retrieve("pay_gr4RizvMOXFJ6xca3y2tU")
 
         assertThat(payment.body()).hasContent("abc")
     }
@@ -45,7 +45,7 @@ internal class PaymentServiceTest {
         val paymentService = client.invoices().payments()
         stubFor(get(anyUrl()).willReturn(ok().withBody("abc")))
 
-        val response = paymentService.retrievePayout("payout_id")
+        val response = paymentService.retrievePayout("pyt_zFTrrn4sk3x3y2vjDBW3T")
 
         assertThat(response.body()).hasContent("abc")
     }
@@ -60,7 +60,7 @@ internal class PaymentServiceTest {
         val paymentService = client.invoices().payments()
         stubFor(get(anyUrl()).willReturn(ok().withBody("abc")))
 
-        val response = paymentService.retrieveRefund("refund_id")
+        val response = paymentService.retrieveRefund("ref_F0gZetLvTxxBrMU2CZcmy")
 
         assertThat(response.body()).hasContent("abc")
     }

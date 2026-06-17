@@ -9,14 +9,14 @@ internal class MeterRetrieveParamsTest {
 
     @Test
     fun create() {
-        MeterRetrieveParams.builder().id("id").build()
+        MeterRetrieveParams.builder().id("mtr_h5tgTWL55OyMO0L2Q9w9v").build()
     }
 
     @Test
     fun pathParams() {
-        val params = MeterRetrieveParams.builder().id("id").build()
+        val params = MeterRetrieveParams.builder().id("mtr_h5tgTWL55OyMO0L2Q9w9v").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("id")
+        assertThat(params._pathParam(0)).isEqualTo("mtr_h5tgTWL55OyMO0L2Q9w9v")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }

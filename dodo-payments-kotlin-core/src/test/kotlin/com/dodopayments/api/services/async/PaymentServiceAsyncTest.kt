@@ -82,7 +82,7 @@ internal class PaymentServiceAsyncTest {
                 .build()
         val paymentServiceAsync = client.payments()
 
-        val payment = paymentServiceAsync.retrieve("payment_id")
+        val payment = paymentServiceAsync.retrieve("pay_gr4RizvMOXFJ6xca3y2tU")
 
         payment.validate()
     }
@@ -110,7 +110,7 @@ internal class PaymentServiceAsyncTest {
                 .build()
         val paymentServiceAsync = client.payments()
 
-        val response = paymentServiceAsync.retrieveLineItems("payment_id")
+        val response = paymentServiceAsync.retrieveLineItems("pay_gr4RizvMOXFJ6xca3y2tU")
 
         response.validate()
     }

@@ -10,7 +10,7 @@ internal class GroupCreateParamsTest {
     @Test
     fun create() {
         GroupCreateParams.builder()
-            .id("id")
+            .id("pdc_8BWv0hojwUH7iCDabr0NI")
             .productCollectionGroupDetails(
                 ProductCollectionGroupDetails.builder()
                     .addProduct(GroupProduct.builder().productId("product_id").status(true).build())
@@ -25,7 +25,7 @@ internal class GroupCreateParamsTest {
     fun pathParams() {
         val params =
             GroupCreateParams.builder()
-                .id("id")
+                .id("pdc_8BWv0hojwUH7iCDabr0NI")
                 .productCollectionGroupDetails(
                     ProductCollectionGroupDetails.builder()
                         .addProduct(GroupProduct.builder().productId("product_id").build())
@@ -33,7 +33,7 @@ internal class GroupCreateParamsTest {
                 )
                 .build()
 
-        assertThat(params._pathParam(0)).isEqualTo("id")
+        assertThat(params._pathParam(0)).isEqualTo("pdc_8BWv0hojwUH7iCDabr0NI")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -42,7 +42,7 @@ internal class GroupCreateParamsTest {
     fun body() {
         val params =
             GroupCreateParams.builder()
-                .id("id")
+                .id("pdc_8BWv0hojwUH7iCDabr0NI")
                 .productCollectionGroupDetails(
                     ProductCollectionGroupDetails.builder()
                         .addProduct(
@@ -70,7 +70,7 @@ internal class GroupCreateParamsTest {
     fun bodyWithoutOptionalFields() {
         val params =
             GroupCreateParams.builder()
-                .id("id")
+                .id("pdc_8BWv0hojwUH7iCDabr0NI")
                 .productCollectionGroupDetails(
                     ProductCollectionGroupDetails.builder()
                         .addProduct(GroupProduct.builder().productId("product_id").build())

@@ -9,14 +9,14 @@ internal class BreakupRetrieveParamsTest {
 
     @Test
     fun create() {
-        BreakupRetrieveParams.builder().payoutId("payout_id").build()
+        BreakupRetrieveParams.builder().payoutId("pyt_zFTrrn4sk3x3y2vjDBW3T").build()
     }
 
     @Test
     fun pathParams() {
-        val params = BreakupRetrieveParams.builder().payoutId("payout_id").build()
+        val params = BreakupRetrieveParams.builder().payoutId("pyt_zFTrrn4sk3x3y2vjDBW3T").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("payout_id")
+        assertThat(params._pathParam(0)).isEqualTo("pyt_zFTrrn4sk3x3y2vjDBW3T")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }

@@ -57,7 +57,7 @@ internal class EntitlementServiceTest {
                 .build()
         val entitlementService = client.entitlements()
 
-        val entitlement = entitlementService.retrieve("id")
+        val entitlement = entitlementService.retrieve("ent_jt7jcvI79Xh8eehqgWdcm")
 
         entitlement.validate()
     }
@@ -74,7 +74,7 @@ internal class EntitlementServiceTest {
         val entitlement =
             entitlementService.update(
                 EntitlementUpdateParams.builder()
-                    .id("id")
+                    .id("ent_jt7jcvI79Xh8eehqgWdcm")
                     .description("description")
                     .integrationConfig(
                         IntegrationConfig.GitHubConfig.builder()
@@ -117,6 +117,6 @@ internal class EntitlementServiceTest {
                 .build()
         val entitlementService = client.entitlements()
 
-        entitlementService.delete("id")
+        entitlementService.delete("ent_jt7jcvI79Xh8eehqgWdcm")
     }
 }
