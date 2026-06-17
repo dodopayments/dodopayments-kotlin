@@ -9,14 +9,14 @@ internal class CheckoutSessionRetrieveParamsTest {
 
     @Test
     fun create() {
-        CheckoutSessionRetrieveParams.builder().id("id").build()
+        CheckoutSessionRetrieveParams.builder().id("cks_n010SZaY4NXc7F1ck3Tq1").build()
     }
 
     @Test
     fun pathParams() {
-        val params = CheckoutSessionRetrieveParams.builder().id("id").build()
+        val params = CheckoutSessionRetrieveParams.builder().id("cks_n010SZaY4NXc7F1ck3Tq1").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("id")
+        assertThat(params._pathParam(0)).isEqualTo("cks_n010SZaY4NXc7F1ck3Tq1")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }

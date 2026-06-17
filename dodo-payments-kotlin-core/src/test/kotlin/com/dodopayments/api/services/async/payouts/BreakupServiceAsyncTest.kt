@@ -19,7 +19,7 @@ internal class BreakupServiceAsyncTest {
                 .build()
         val breakupServiceAsync = client.payouts().breakup()
 
-        val breakups = breakupServiceAsync.retrieve("payout_id")
+        val breakups = breakupServiceAsync.retrieve("pyt_zFTrrn4sk3x3y2vjDBW3T")
 
         breakups.forEach { it.validate() }
     }

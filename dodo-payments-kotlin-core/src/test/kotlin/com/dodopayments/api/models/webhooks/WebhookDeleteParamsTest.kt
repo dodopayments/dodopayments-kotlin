@@ -9,14 +9,14 @@ internal class WebhookDeleteParamsTest {
 
     @Test
     fun create() {
-        WebhookDeleteParams.builder().webhookId("webhook_id").build()
+        WebhookDeleteParams.builder().webhookId("whk_YdWqVEGKmSYKbsIyDxEab").build()
     }
 
     @Test
     fun pathParams() {
-        val params = WebhookDeleteParams.builder().webhookId("webhook_id").build()
+        val params = WebhookDeleteParams.builder().webhookId("whk_YdWqVEGKmSYKbsIyDxEab").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("webhook_id")
+        assertThat(params._pathParam(0)).isEqualTo("whk_YdWqVEGKmSYKbsIyDxEab")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }

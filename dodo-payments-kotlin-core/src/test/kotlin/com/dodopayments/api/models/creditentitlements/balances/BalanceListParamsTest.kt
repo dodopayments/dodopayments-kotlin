@@ -11,7 +11,7 @@ internal class BalanceListParamsTest {
     @Test
     fun create() {
         BalanceListParams.builder()
-            .creditEntitlementId("credit_entitlement_id")
+            .creditEntitlementId("cde_ztxm5XJsKxWucRWA3rjdM")
             .customerId("customer_id")
             .pageNumber(0)
             .pageSize(0)
@@ -21,9 +21,9 @@ internal class BalanceListParamsTest {
     @Test
     fun pathParams() {
         val params =
-            BalanceListParams.builder().creditEntitlementId("credit_entitlement_id").build()
+            BalanceListParams.builder().creditEntitlementId("cde_ztxm5XJsKxWucRWA3rjdM").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("credit_entitlement_id")
+        assertThat(params._pathParam(0)).isEqualTo("cde_ztxm5XJsKxWucRWA3rjdM")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -32,7 +32,7 @@ internal class BalanceListParamsTest {
     fun queryParams() {
         val params =
             BalanceListParams.builder()
-                .creditEntitlementId("credit_entitlement_id")
+                .creditEntitlementId("cde_ztxm5XJsKxWucRWA3rjdM")
                 .customerId("customer_id")
                 .pageNumber(0)
                 .pageSize(0)
@@ -53,7 +53,7 @@ internal class BalanceListParamsTest {
     @Test
     fun queryParamsWithoutOptionalFields() {
         val params =
-            BalanceListParams.builder().creditEntitlementId("credit_entitlement_id").build()
+            BalanceListParams.builder().creditEntitlementId("cde_ztxm5XJsKxWucRWA3rjdM").build()
 
         val queryParams = params._queryParams()
 

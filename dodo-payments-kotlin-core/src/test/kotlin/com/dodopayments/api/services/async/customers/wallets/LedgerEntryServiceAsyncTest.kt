@@ -24,7 +24,7 @@ internal class LedgerEntryServiceAsyncTest {
         val customerWallet =
             ledgerEntryServiceAsync.create(
                 LedgerEntryCreateParams.builder()
-                    .customerId("customer_id")
+                    .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                     .amount(0L)
                     .currency(Currency.AED)
                     .entryType(LedgerEntryCreateParams.EntryType.CREDIT)
@@ -45,7 +45,7 @@ internal class LedgerEntryServiceAsyncTest {
                 .build()
         val ledgerEntryServiceAsync = client.customers().wallets().ledgerEntries()
 
-        val page = ledgerEntryServiceAsync.list("customer_id")
+        val page = ledgerEntryServiceAsync.list("cus_TV52uJWWXt2yIoBBxpjaa")
 
         page.response().validate()
     }

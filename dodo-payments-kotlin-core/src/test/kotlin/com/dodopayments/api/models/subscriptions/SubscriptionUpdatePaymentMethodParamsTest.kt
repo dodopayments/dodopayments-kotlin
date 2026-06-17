@@ -11,7 +11,7 @@ internal class SubscriptionUpdatePaymentMethodParamsTest {
     @Test
     fun create() {
         SubscriptionUpdatePaymentMethodParams.builder()
-            .subscriptionId("subscription_id")
+            .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
             .paymentMethod(
                 SubscriptionUpdatePaymentMethodParams.PaymentMethod.New.builder()
                     .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
@@ -25,13 +25,13 @@ internal class SubscriptionUpdatePaymentMethodParamsTest {
     fun pathParams() {
         val params =
             SubscriptionUpdatePaymentMethodParams.builder()
-                .subscriptionId("subscription_id")
+                .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
                 .paymentMethod(
                     SubscriptionUpdatePaymentMethodParams.PaymentMethod.New.builder().build()
                 )
                 .build()
 
-        assertThat(params._pathParam(0)).isEqualTo("subscription_id")
+        assertThat(params._pathParam(0)).isEqualTo("sub_Iuaq622bbmmfOGrVTqdXv")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -40,7 +40,7 @@ internal class SubscriptionUpdatePaymentMethodParamsTest {
     fun body() {
         val params =
             SubscriptionUpdatePaymentMethodParams.builder()
-                .subscriptionId("subscription_id")
+                .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
                 .paymentMethod(
                     SubscriptionUpdatePaymentMethodParams.PaymentMethod.New.builder()
                         .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
@@ -66,7 +66,7 @@ internal class SubscriptionUpdatePaymentMethodParamsTest {
     fun bodyWithoutOptionalFields() {
         val params =
             SubscriptionUpdatePaymentMethodParams.builder()
-                .subscriptionId("subscription_id")
+                .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
                 .paymentMethod(
                     SubscriptionUpdatePaymentMethodParams.PaymentMethod.New.builder().build()
                 )

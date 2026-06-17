@@ -12,7 +12,7 @@ internal class LedgerEntryListParamsTest {
     @Test
     fun create() {
         LedgerEntryListParams.builder()
-            .customerId("customer_id")
+            .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
             .currency(Currency.AED)
             .pageNumber(0)
             .pageSize(0)
@@ -21,9 +21,9 @@ internal class LedgerEntryListParamsTest {
 
     @Test
     fun pathParams() {
-        val params = LedgerEntryListParams.builder().customerId("customer_id").build()
+        val params = LedgerEntryListParams.builder().customerId("cus_TV52uJWWXt2yIoBBxpjaa").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("customer_id")
+        assertThat(params._pathParam(0)).isEqualTo("cus_TV52uJWWXt2yIoBBxpjaa")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -32,7 +32,7 @@ internal class LedgerEntryListParamsTest {
     fun queryParams() {
         val params =
             LedgerEntryListParams.builder()
-                .customerId("customer_id")
+                .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                 .currency(Currency.AED)
                 .pageNumber(0)
                 .pageSize(0)
@@ -52,7 +52,7 @@ internal class LedgerEntryListParamsTest {
 
     @Test
     fun queryParamsWithoutOptionalFields() {
-        val params = LedgerEntryListParams.builder().customerId("customer_id").build()
+        val params = LedgerEntryListParams.builder().customerId("cus_TV52uJWWXt2yIoBBxpjaa").build()
 
         val queryParams = params._queryParams()
 

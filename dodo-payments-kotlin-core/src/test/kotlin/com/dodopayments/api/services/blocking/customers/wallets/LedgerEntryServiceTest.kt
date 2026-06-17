@@ -24,7 +24,7 @@ internal class LedgerEntryServiceTest {
         val customerWallet =
             ledgerEntryService.create(
                 LedgerEntryCreateParams.builder()
-                    .customerId("customer_id")
+                    .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                     .amount(0L)
                     .currency(Currency.AED)
                     .entryType(LedgerEntryCreateParams.EntryType.CREDIT)
@@ -45,7 +45,7 @@ internal class LedgerEntryServiceTest {
                 .build()
         val ledgerEntryService = client.customers().wallets().ledgerEntries()
 
-        val page = ledgerEntryService.list("customer_id")
+        val page = ledgerEntryService.list("cus_TV52uJWWXt2yIoBBxpjaa")
 
         page.response().validate()
     }

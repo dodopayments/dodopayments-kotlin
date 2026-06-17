@@ -10,14 +10,18 @@ internal class DetailListParamsTest {
 
     @Test
     fun create() {
-        DetailListParams.builder().payoutId("payout_id").pageNumber(0).pageSize(0).build()
+        DetailListParams.builder()
+            .payoutId("pyt_zFTrrn4sk3x3y2vjDBW3T")
+            .pageNumber(0)
+            .pageSize(0)
+            .build()
     }
 
     @Test
     fun pathParams() {
-        val params = DetailListParams.builder().payoutId("payout_id").build()
+        val params = DetailListParams.builder().payoutId("pyt_zFTrrn4sk3x3y2vjDBW3T").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("payout_id")
+        assertThat(params._pathParam(0)).isEqualTo("pyt_zFTrrn4sk3x3y2vjDBW3T")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -25,7 +29,11 @@ internal class DetailListParamsTest {
     @Test
     fun queryParams() {
         val params =
-            DetailListParams.builder().payoutId("payout_id").pageNumber(0).pageSize(0).build()
+            DetailListParams.builder()
+                .payoutId("pyt_zFTrrn4sk3x3y2vjDBW3T")
+                .pageNumber(0)
+                .pageSize(0)
+                .build()
 
         val queryParams = params._queryParams()
 
@@ -35,7 +43,7 @@ internal class DetailListParamsTest {
 
     @Test
     fun queryParamsWithoutOptionalFields() {
-        val params = DetailListParams.builder().payoutId("payout_id").build()
+        val params = DetailListParams.builder().payoutId("pyt_zFTrrn4sk3x3y2vjDBW3T").build()
 
         val queryParams = params._queryParams()
 
