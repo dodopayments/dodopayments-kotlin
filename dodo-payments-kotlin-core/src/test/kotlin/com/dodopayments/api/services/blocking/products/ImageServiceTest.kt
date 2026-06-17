@@ -21,7 +21,12 @@ internal class ImageServiceTest {
         val imageService = client.products().images()
 
         val image =
-            imageService.update(ImageUpdateParams.builder().id("id").forceUpdate(true).build())
+            imageService.update(
+                ImageUpdateParams.builder()
+                    .id("pdt_R8AWMPiV8RyJElcCKvAID")
+                    .forceUpdate(true)
+                    .build()
+            )
 
         image.validate()
     }

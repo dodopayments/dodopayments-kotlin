@@ -10,7 +10,7 @@ internal class CustomerDeletePaymentMethodParamsTest {
     @Test
     fun create() {
         CustomerDeletePaymentMethodParams.builder()
-            .customerId("customer_id")
+            .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
             .paymentMethodId("payment_method_id")
             .build()
     }
@@ -19,11 +19,11 @@ internal class CustomerDeletePaymentMethodParamsTest {
     fun pathParams() {
         val params =
             CustomerDeletePaymentMethodParams.builder()
-                .customerId("customer_id")
+                .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                 .paymentMethodId("payment_method_id")
                 .build()
 
-        assertThat(params._pathParam(0)).isEqualTo("customer_id")
+        assertThat(params._pathParam(0)).isEqualTo("cus_TV52uJWWXt2yIoBBxpjaa")
         assertThat(params._pathParam(1)).isEqualTo("payment_method_id")
         // out-of-bound path param
         assertThat(params._pathParam(2)).isEqualTo("")

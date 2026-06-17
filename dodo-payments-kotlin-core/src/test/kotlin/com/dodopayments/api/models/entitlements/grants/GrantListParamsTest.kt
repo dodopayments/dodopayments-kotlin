@@ -11,7 +11,7 @@ internal class GrantListParamsTest {
     @Test
     fun create() {
         GrantListParams.builder()
-            .id("id")
+            .id("ent_jt7jcvI79Xh8eehqgWdcm")
             .customerId("customer_id")
             .pageNumber(0)
             .pageSize(0)
@@ -21,9 +21,9 @@ internal class GrantListParamsTest {
 
     @Test
     fun pathParams() {
-        val params = GrantListParams.builder().id("id").build()
+        val params = GrantListParams.builder().id("ent_jt7jcvI79Xh8eehqgWdcm").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("id")
+        assertThat(params._pathParam(0)).isEqualTo("ent_jt7jcvI79Xh8eehqgWdcm")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -32,7 +32,7 @@ internal class GrantListParamsTest {
     fun queryParams() {
         val params =
             GrantListParams.builder()
-                .id("id")
+                .id("ent_jt7jcvI79Xh8eehqgWdcm")
                 .customerId("customer_id")
                 .pageNumber(0)
                 .pageSize(0)
@@ -54,7 +54,7 @@ internal class GrantListParamsTest {
 
     @Test
     fun queryParamsWithoutOptionalFields() {
-        val params = GrantListParams.builder().id("id").build()
+        val params = GrantListParams.builder().id("ent_jt7jcvI79Xh8eehqgWdcm").build()
 
         val queryParams = params._queryParams()
 

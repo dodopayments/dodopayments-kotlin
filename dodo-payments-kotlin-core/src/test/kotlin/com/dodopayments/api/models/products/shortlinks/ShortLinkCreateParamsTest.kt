@@ -11,7 +11,7 @@ internal class ShortLinkCreateParamsTest {
     @Test
     fun create() {
         ShortLinkCreateParams.builder()
-            .id("id")
+            .id("pdt_R8AWMPiV8RyJElcCKvAID")
             .slug("slug")
             .staticCheckoutParams(
                 ShortLinkCreateParams.StaticCheckoutParams.builder()
@@ -23,9 +23,10 @@ internal class ShortLinkCreateParamsTest {
 
     @Test
     fun pathParams() {
-        val params = ShortLinkCreateParams.builder().id("id").slug("slug").build()
+        val params =
+            ShortLinkCreateParams.builder().id("pdt_R8AWMPiV8RyJElcCKvAID").slug("slug").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("id")
+        assertThat(params._pathParam(0)).isEqualTo("pdt_R8AWMPiV8RyJElcCKvAID")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -34,7 +35,7 @@ internal class ShortLinkCreateParamsTest {
     fun body() {
         val params =
             ShortLinkCreateParams.builder()
-                .id("id")
+                .id("pdt_R8AWMPiV8RyJElcCKvAID")
                 .slug("slug")
                 .staticCheckoutParams(
                     ShortLinkCreateParams.StaticCheckoutParams.builder()
@@ -56,7 +57,8 @@ internal class ShortLinkCreateParamsTest {
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = ShortLinkCreateParams.builder().id("id").slug("slug").build()
+        val params =
+            ShortLinkCreateParams.builder().id("pdt_R8AWMPiV8RyJElcCKvAID").slug("slug").build()
 
         val body = params._body()
 

@@ -12,7 +12,7 @@ internal class AddonUpdateParamsTest {
     @Test
     fun create() {
         AddonUpdateParams.builder()
-            .id("id")
+            .id("adn_NX1zdqW4Hbivsqz8vI9dc")
             .currency(Currency.AED)
             .description("description")
             .imageId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -24,9 +24,9 @@ internal class AddonUpdateParamsTest {
 
     @Test
     fun pathParams() {
-        val params = AddonUpdateParams.builder().id("id").build()
+        val params = AddonUpdateParams.builder().id("adn_NX1zdqW4Hbivsqz8vI9dc").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("id")
+        assertThat(params._pathParam(0)).isEqualTo("adn_NX1zdqW4Hbivsqz8vI9dc")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -35,7 +35,7 @@ internal class AddonUpdateParamsTest {
     fun body() {
         val params =
             AddonUpdateParams.builder()
-                .id("id")
+                .id("adn_NX1zdqW4Hbivsqz8vI9dc")
                 .currency(Currency.AED)
                 .description("description")
                 .imageId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -56,7 +56,7 @@ internal class AddonUpdateParamsTest {
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = AddonUpdateParams.builder().id("id").build()
+        val params = AddonUpdateParams.builder().id("adn_NX1zdqW4Hbivsqz8vI9dc").build()
 
         val body = params._body()
     }

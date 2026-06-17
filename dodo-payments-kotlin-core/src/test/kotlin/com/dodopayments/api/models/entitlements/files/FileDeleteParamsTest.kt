@@ -9,14 +9,15 @@ internal class FileDeleteParamsTest {
 
     @Test
     fun create() {
-        FileDeleteParams.builder().id("id").fileId("file_id").build()
+        FileDeleteParams.builder().id("ent_jt7jcvI79Xh8eehqgWdcm").fileId("file_id").build()
     }
 
     @Test
     fun pathParams() {
-        val params = FileDeleteParams.builder().id("id").fileId("file_id").build()
+        val params =
+            FileDeleteParams.builder().id("ent_jt7jcvI79Xh8eehqgWdcm").fileId("file_id").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("id")
+        assertThat(params._pathParam(0)).isEqualTo("ent_jt7jcvI79Xh8eehqgWdcm")
         assertThat(params._pathParam(1)).isEqualTo("file_id")
         // out-of-bound path param
         assertThat(params._pathParam(2)).isEqualTo("")

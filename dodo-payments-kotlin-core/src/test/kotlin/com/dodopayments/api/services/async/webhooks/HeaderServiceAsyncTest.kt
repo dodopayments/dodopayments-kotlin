@@ -21,7 +21,7 @@ internal class HeaderServiceAsyncTest {
                 .build()
         val headerServiceAsync = client.webhooks().headers()
 
-        val header = headerServiceAsync.retrieve("webhook_id")
+        val header = headerServiceAsync.retrieve("whk_YdWqVEGKmSYKbsIyDxEab")
 
         header.validate()
     }
@@ -37,7 +37,7 @@ internal class HeaderServiceAsyncTest {
 
         headerServiceAsync.update(
             HeaderUpdateParams.builder()
-                .webhookId("webhook_id")
+                .webhookId("whk_YdWqVEGKmSYKbsIyDxEab")
                 .headers(
                     HeaderUpdateParams.Headers.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))

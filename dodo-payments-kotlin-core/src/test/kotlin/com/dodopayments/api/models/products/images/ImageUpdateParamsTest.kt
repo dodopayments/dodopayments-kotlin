@@ -10,21 +10,22 @@ internal class ImageUpdateParamsTest {
 
     @Test
     fun create() {
-        ImageUpdateParams.builder().id("id").forceUpdate(true).build()
+        ImageUpdateParams.builder().id("pdt_R8AWMPiV8RyJElcCKvAID").forceUpdate(true).build()
     }
 
     @Test
     fun pathParams() {
-        val params = ImageUpdateParams.builder().id("id").build()
+        val params = ImageUpdateParams.builder().id("pdt_R8AWMPiV8RyJElcCKvAID").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("id")
+        assertThat(params._pathParam(0)).isEqualTo("pdt_R8AWMPiV8RyJElcCKvAID")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
 
     @Test
     fun queryParams() {
-        val params = ImageUpdateParams.builder().id("id").forceUpdate(true).build()
+        val params =
+            ImageUpdateParams.builder().id("pdt_R8AWMPiV8RyJElcCKvAID").forceUpdate(true).build()
 
         val queryParams = params._queryParams()
 
@@ -33,7 +34,7 @@ internal class ImageUpdateParamsTest {
 
     @Test
     fun queryParamsWithoutOptionalFields() {
-        val params = ImageUpdateParams.builder().id("id").build()
+        val params = ImageUpdateParams.builder().id("pdt_R8AWMPiV8RyJElcCKvAID").build()
 
         val queryParams = params._queryParams()
 

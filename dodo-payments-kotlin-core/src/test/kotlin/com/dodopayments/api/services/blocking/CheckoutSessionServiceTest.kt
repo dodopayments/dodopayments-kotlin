@@ -200,7 +200,7 @@ internal class CheckoutSessionServiceTest {
                 .build()
         val checkoutSessionService = client.checkoutSessions()
 
-        val checkoutSessionStatus = checkoutSessionService.retrieve("id")
+        val checkoutSessionStatus = checkoutSessionService.retrieve("cks_n010SZaY4NXc7F1ck3Tq1")
 
         checkoutSessionStatus.validate()
     }
