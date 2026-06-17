@@ -11,7 +11,7 @@ internal class LicenseKeyUpdateParamsTest {
     @Test
     fun create() {
         LicenseKeyUpdateParams.builder()
-            .id("lic_123")
+            .id("lic_7namTC0VcgrnzrF3GTSwB")
             .activationsLimit(0)
             .disabled(true)
             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -20,9 +20,9 @@ internal class LicenseKeyUpdateParamsTest {
 
     @Test
     fun pathParams() {
-        val params = LicenseKeyUpdateParams.builder().id("lic_123").build()
+        val params = LicenseKeyUpdateParams.builder().id("lic_7namTC0VcgrnzrF3GTSwB").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("lic_123")
+        assertThat(params._pathParam(0)).isEqualTo("lic_7namTC0VcgrnzrF3GTSwB")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -31,7 +31,7 @@ internal class LicenseKeyUpdateParamsTest {
     fun body() {
         val params =
             LicenseKeyUpdateParams.builder()
-                .id("lic_123")
+                .id("lic_7namTC0VcgrnzrF3GTSwB")
                 .activationsLimit(0)
                 .disabled(true)
                 .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -46,7 +46,7 @@ internal class LicenseKeyUpdateParamsTest {
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = LicenseKeyUpdateParams.builder().id("lic_123").build()
+        val params = LicenseKeyUpdateParams.builder().id("lic_7namTC0VcgrnzrF3GTSwB").build()
 
         val body = params._body()
     }

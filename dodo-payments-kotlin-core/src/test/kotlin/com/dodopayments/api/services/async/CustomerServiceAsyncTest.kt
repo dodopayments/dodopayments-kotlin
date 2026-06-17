@@ -49,7 +49,7 @@ internal class CustomerServiceAsyncTest {
                 .build()
         val customerServiceAsync = client.customers()
 
-        val customer = customerServiceAsync.retrieve("customer_id")
+        val customer = customerServiceAsync.retrieve("cus_TV52uJWWXt2yIoBBxpjaa")
 
         customer.validate()
     }
@@ -66,7 +66,7 @@ internal class CustomerServiceAsyncTest {
         val customer =
             customerServiceAsync.update(
                 CustomerUpdateParams.builder()
-                    .customerId("customer_id")
+                    .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                     .email("email")
                     .metadata(
                         CustomerUpdateParams.Metadata.builder()
@@ -106,7 +106,7 @@ internal class CustomerServiceAsyncTest {
 
         customerServiceAsync.deletePaymentMethod(
             CustomerDeletePaymentMethodParams.builder()
-                .customerId("customer_id")
+                .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                 .paymentMethodId("payment_method_id")
                 .build()
         )
@@ -121,7 +121,7 @@ internal class CustomerServiceAsyncTest {
                 .build()
         val customerServiceAsync = client.customers()
 
-        val response = customerServiceAsync.listCreditEntitlements("customer_id")
+        val response = customerServiceAsync.listCreditEntitlements("cus_TV52uJWWXt2yIoBBxpjaa")
 
         response.validate()
     }
@@ -135,7 +135,7 @@ internal class CustomerServiceAsyncTest {
                 .build()
         val customerServiceAsync = client.customers()
 
-        val response = customerServiceAsync.listEntitlements("customer_id")
+        val response = customerServiceAsync.listEntitlements("cus_TV52uJWWXt2yIoBBxpjaa")
 
         response.validate()
     }
@@ -149,7 +149,7 @@ internal class CustomerServiceAsyncTest {
                 .build()
         val customerServiceAsync = client.customers()
 
-        val response = customerServiceAsync.retrievePaymentMethods("customer_id")
+        val response = customerServiceAsync.retrievePaymentMethods("cus_TV52uJWWXt2yIoBBxpjaa")
 
         response.validate()
     }

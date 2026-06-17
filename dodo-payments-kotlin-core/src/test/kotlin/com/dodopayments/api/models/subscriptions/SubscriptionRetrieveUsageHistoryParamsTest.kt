@@ -12,7 +12,7 @@ internal class SubscriptionRetrieveUsageHistoryParamsTest {
     @Test
     fun create() {
         SubscriptionRetrieveUsageHistoryParams.builder()
-            .subscriptionId("subscription_id")
+            .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
             .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .meterId("meter_id")
             .pageNumber(0)
@@ -25,10 +25,10 @@ internal class SubscriptionRetrieveUsageHistoryParamsTest {
     fun pathParams() {
         val params =
             SubscriptionRetrieveUsageHistoryParams.builder()
-                .subscriptionId("subscription_id")
+                .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
                 .build()
 
-        assertThat(params._pathParam(0)).isEqualTo("subscription_id")
+        assertThat(params._pathParam(0)).isEqualTo("sub_Iuaq622bbmmfOGrVTqdXv")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -37,7 +37,7 @@ internal class SubscriptionRetrieveUsageHistoryParamsTest {
     fun queryParams() {
         val params =
             SubscriptionRetrieveUsageHistoryParams.builder()
-                .subscriptionId("subscription_id")
+                .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
                 .endDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .meterId("meter_id")
                 .pageNumber(0)
@@ -63,7 +63,7 @@ internal class SubscriptionRetrieveUsageHistoryParamsTest {
     fun queryParamsWithoutOptionalFields() {
         val params =
             SubscriptionRetrieveUsageHistoryParams.builder()
-                .subscriptionId("subscription_id")
+                .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
                 .build()
 
         val queryParams = params._queryParams()

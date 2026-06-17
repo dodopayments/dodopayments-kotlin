@@ -11,7 +11,7 @@ internal class SubscriptionPreviewChangePlanParamsTest {
     @Test
     fun create() {
         SubscriptionPreviewChangePlanParams.builder()
-            .subscriptionId("subscription_id")
+            .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
             .updateSubscriptionPlanReq(
                 UpdateSubscriptionPlanReq.builder()
                     .productId("product_id")
@@ -39,7 +39,7 @@ internal class SubscriptionPreviewChangePlanParamsTest {
     fun pathParams() {
         val params =
             SubscriptionPreviewChangePlanParams.builder()
-                .subscriptionId("subscription_id")
+                .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
                 .updateSubscriptionPlanReq(
                     UpdateSubscriptionPlanReq.builder()
                         .productId("product_id")
@@ -51,7 +51,7 @@ internal class SubscriptionPreviewChangePlanParamsTest {
                 )
                 .build()
 
-        assertThat(params._pathParam(0)).isEqualTo("subscription_id")
+        assertThat(params._pathParam(0)).isEqualTo("sub_Iuaq622bbmmfOGrVTqdXv")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -60,7 +60,7 @@ internal class SubscriptionPreviewChangePlanParamsTest {
     fun body() {
         val params =
             SubscriptionPreviewChangePlanParams.builder()
-                .subscriptionId("subscription_id")
+                .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
                 .updateSubscriptionPlanReq(
                     UpdateSubscriptionPlanReq.builder()
                         .productId("product_id")
@@ -112,7 +112,7 @@ internal class SubscriptionPreviewChangePlanParamsTest {
     fun bodyWithoutOptionalFields() {
         val params =
             SubscriptionPreviewChangePlanParams.builder()
-                .subscriptionId("subscription_id")
+                .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
                 .updateSubscriptionPlanReq(
                     UpdateSubscriptionPlanReq.builder()
                         .productId("product_id")

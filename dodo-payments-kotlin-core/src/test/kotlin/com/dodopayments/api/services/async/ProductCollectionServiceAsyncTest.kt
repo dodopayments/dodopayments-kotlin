@@ -69,7 +69,7 @@ internal class ProductCollectionServiceAsyncTest {
                 .build()
         val productCollectionServiceAsync = client.productCollections()
 
-        val productCollection = productCollectionServiceAsync.retrieve("id")
+        val productCollection = productCollectionServiceAsync.retrieve("pdc_8BWv0hojwUH7iCDabr0NI")
 
         productCollection.validate()
     }
@@ -85,7 +85,7 @@ internal class ProductCollectionServiceAsyncTest {
 
         productCollectionServiceAsync.update(
             ProductCollectionUpdateParams.builder()
-                .id("id")
+                .id("pdc_8BWv0hojwUH7iCDabr0NI")
                 .brandId("brand_id")
                 .description("description")
                 .effectiveAtOnDowngrade(
@@ -132,7 +132,7 @@ internal class ProductCollectionServiceAsyncTest {
                 .build()
         val productCollectionServiceAsync = client.productCollections()
 
-        productCollectionServiceAsync.delete("id")
+        productCollectionServiceAsync.delete("pdc_8BWv0hojwUH7iCDabr0NI")
     }
 
     @Test
@@ -144,7 +144,7 @@ internal class ProductCollectionServiceAsyncTest {
                 .build()
         val productCollectionServiceAsync = client.productCollections()
 
-        val response = productCollectionServiceAsync.unarchive("id")
+        val response = productCollectionServiceAsync.unarchive("pdc_8BWv0hojwUH7iCDabr0NI")
 
         response.validate()
     }
@@ -160,7 +160,10 @@ internal class ProductCollectionServiceAsyncTest {
 
         val response =
             productCollectionServiceAsync.updateImages(
-                ProductCollectionUpdateImagesParams.builder().id("id").forceUpdate(true).build()
+                ProductCollectionUpdateImagesParams.builder()
+                    .id("pdc_8BWv0hojwUH7iCDabr0NI")
+                    .forceUpdate(true)
+                    .build()
             )
 
         response.validate()

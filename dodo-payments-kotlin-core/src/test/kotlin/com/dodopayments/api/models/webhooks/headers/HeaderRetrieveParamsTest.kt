@@ -9,14 +9,14 @@ internal class HeaderRetrieveParamsTest {
 
     @Test
     fun create() {
-        HeaderRetrieveParams.builder().webhookId("webhook_id").build()
+        HeaderRetrieveParams.builder().webhookId("whk_YdWqVEGKmSYKbsIyDxEab").build()
     }
 
     @Test
     fun pathParams() {
-        val params = HeaderRetrieveParams.builder().webhookId("webhook_id").build()
+        val params = HeaderRetrieveParams.builder().webhookId("whk_YdWqVEGKmSYKbsIyDxEab").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("webhook_id")
+        assertThat(params._pathParam(0)).isEqualTo("whk_YdWqVEGKmSYKbsIyDxEab")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }

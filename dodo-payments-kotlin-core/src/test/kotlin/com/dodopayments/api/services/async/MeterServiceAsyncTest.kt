@@ -72,7 +72,7 @@ internal class MeterServiceAsyncTest {
                 .build()
         val meterServiceAsync = client.meters()
 
-        val meter = meterServiceAsync.retrieve("id")
+        val meter = meterServiceAsync.retrieve("mtr_h5tgTWL55OyMO0L2Q9w9v")
 
         meter.validate()
     }
@@ -100,7 +100,7 @@ internal class MeterServiceAsyncTest {
                 .build()
         val meterServiceAsync = client.meters()
 
-        meterServiceAsync.archive("id")
+        meterServiceAsync.archive("mtr_h5tgTWL55OyMO0L2Q9w9v")
     }
 
     @Test
@@ -112,6 +112,6 @@ internal class MeterServiceAsyncTest {
                 .build()
         val meterServiceAsync = client.meters()
 
-        meterServiceAsync.unarchive("id")
+        meterServiceAsync.unarchive("mtr_h5tgTWL55OyMO0L2Q9w9v")
     }
 }

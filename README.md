@@ -3,7 +3,7 @@
 <!-- x-release-please-start-version -->
 
 [![Maven Central](https://img.shields.io/maven-central/v/com.dodopayments.api/dodo-payments-kotlin)](https://central.sonatype.com/artifact/com.dodopayments.api/dodo-payments-kotlin/1.105.0)
-[![javadoc](https://javadoc.io/badge2/com.dodopayments.api/dodo-payments-kotlin/1.105.0/javadoc.svg)](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/1.104.0)
+[![javadoc](https://javadoc.io/badge2/com.dodopayments.api/dodo-payments-kotlin/1.105.0/javadoc.svg)](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/1.105.0)
 
 <!-- x-release-please-end -->
 
@@ -212,7 +212,7 @@ These methods return [`HttpResponse`](dodo-payments-kotlin-core/src/main/kotlin/
 import com.dodopayments.api.core.http.HttpResponse
 import com.dodopayments.api.models.invoices.payments.PaymentRetrieveParams
 
-val payment: HttpResponse = client.invoices().payments().retrieve("payment_id")
+val payment: HttpResponse = client.invoices().payments().retrieve("pay_gr4RizvMOXFJ6xca3y2tU")
 ```
 
 To save the response content to a file, use the [`Files.copy(...)`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#copy-java.io.InputStream-java.nio.file.Path-java.nio.file.CopyOption...-) method:

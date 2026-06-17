@@ -107,7 +107,7 @@ internal class SubscriptionServiceAsyncTest {
                 .build()
         val subscriptionServiceAsync = client.subscriptions()
 
-        val subscription = subscriptionServiceAsync.retrieve("subscription_id")
+        val subscription = subscriptionServiceAsync.retrieve("sub_Iuaq622bbmmfOGrVTqdXv")
 
         subscription.validate()
     }
@@ -124,7 +124,7 @@ internal class SubscriptionServiceAsyncTest {
         val subscription =
             subscriptionServiceAsync.update(
                 SubscriptionUpdateParams.builder()
-                    .subscriptionId("subscription_id")
+                    .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
                     .billing(
                         BillingAddress.builder()
                             .country(CountryCode.AF)
@@ -197,7 +197,7 @@ internal class SubscriptionServiceAsyncTest {
                 .build()
         val subscriptionServiceAsync = client.subscriptions()
 
-        subscriptionServiceAsync.cancelChangePlan("subscription_id")
+        subscriptionServiceAsync.cancelChangePlan("sub_Iuaq622bbmmfOGrVTqdXv")
     }
 
     @Test
@@ -211,7 +211,7 @@ internal class SubscriptionServiceAsyncTest {
 
         subscriptionServiceAsync.changePlan(
             SubscriptionChangePlanParams.builder()
-                .subscriptionId("subscription_id")
+                .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
                 .updateSubscriptionPlanReq(
                     UpdateSubscriptionPlanReq.builder()
                         .productId("product_id")
@@ -248,7 +248,7 @@ internal class SubscriptionServiceAsyncTest {
         val response =
             subscriptionServiceAsync.charge(
                 SubscriptionChargeParams.builder()
-                    .subscriptionId("subscription_id")
+                    .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
                     .productPrice(0)
                     .adaptiveCurrencyFeesInclusive(true)
                     .customerBalanceConfig(
@@ -282,7 +282,7 @@ internal class SubscriptionServiceAsyncTest {
         val response =
             subscriptionServiceAsync.previewChangePlan(
                 SubscriptionPreviewChangePlanParams.builder()
-                    .subscriptionId("subscription_id")
+                    .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
                     .updateSubscriptionPlanReq(
                         UpdateSubscriptionPlanReq.builder()
                             .productId("product_id")
@@ -320,7 +320,7 @@ internal class SubscriptionServiceAsyncTest {
                 .build()
         val subscriptionServiceAsync = client.subscriptions()
 
-        val response = subscriptionServiceAsync.retrieveCreditUsage("subscription_id")
+        val response = subscriptionServiceAsync.retrieveCreditUsage("sub_Iuaq622bbmmfOGrVTqdXv")
 
         response.validate()
     }
@@ -334,7 +334,7 @@ internal class SubscriptionServiceAsyncTest {
                 .build()
         val subscriptionServiceAsync = client.subscriptions()
 
-        val page = subscriptionServiceAsync.retrieveUsageHistory("subscription_id")
+        val page = subscriptionServiceAsync.retrieveUsageHistory("sub_Iuaq622bbmmfOGrVTqdXv")
 
         page.response().validate()
     }
@@ -351,7 +351,7 @@ internal class SubscriptionServiceAsyncTest {
         val response =
             subscriptionServiceAsync.updatePaymentMethod(
                 SubscriptionUpdatePaymentMethodParams.builder()
-                    .subscriptionId("subscription_id")
+                    .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
                     .paymentMethod(
                         SubscriptionUpdatePaymentMethodParams.PaymentMethod.New.builder()
                             .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)

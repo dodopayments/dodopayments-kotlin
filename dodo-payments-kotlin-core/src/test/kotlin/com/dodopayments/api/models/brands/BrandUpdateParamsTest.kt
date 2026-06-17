@@ -10,7 +10,7 @@ internal class BrandUpdateParamsTest {
     @Test
     fun create() {
         BrandUpdateParams.builder()
-            .id("id")
+            .id("brnd_8dFiAW42v28JzhlVSocjq")
             .description("description")
             .imageId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .name("name")
@@ -22,9 +22,9 @@ internal class BrandUpdateParamsTest {
 
     @Test
     fun pathParams() {
-        val params = BrandUpdateParams.builder().id("id").build()
+        val params = BrandUpdateParams.builder().id("brnd_8dFiAW42v28JzhlVSocjq").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("id")
+        assertThat(params._pathParam(0)).isEqualTo("brnd_8dFiAW42v28JzhlVSocjq")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -33,7 +33,7 @@ internal class BrandUpdateParamsTest {
     fun body() {
         val params =
             BrandUpdateParams.builder()
-                .id("id")
+                .id("brnd_8dFiAW42v28JzhlVSocjq")
                 .description("description")
                 .imageId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .name("name")
@@ -54,7 +54,7 @@ internal class BrandUpdateParamsTest {
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = BrandUpdateParams.builder().id("id").build()
+        val params = BrandUpdateParams.builder().id("brnd_8dFiAW42v28JzhlVSocjq").build()
 
         val body = params._body()
     }

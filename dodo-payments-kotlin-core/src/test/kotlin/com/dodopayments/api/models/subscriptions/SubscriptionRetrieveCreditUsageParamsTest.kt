@@ -9,17 +9,19 @@ internal class SubscriptionRetrieveCreditUsageParamsTest {
 
     @Test
     fun create() {
-        SubscriptionRetrieveCreditUsageParams.builder().subscriptionId("subscription_id").build()
+        SubscriptionRetrieveCreditUsageParams.builder()
+            .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
+            .build()
     }
 
     @Test
     fun pathParams() {
         val params =
             SubscriptionRetrieveCreditUsageParams.builder()
-                .subscriptionId("subscription_id")
+                .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
                 .build()
 
-        assertThat(params._pathParam(0)).isEqualTo("subscription_id")
+        assertThat(params._pathParam(0)).isEqualTo("sub_Iuaq622bbmmfOGrVTqdXv")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
