@@ -10,7 +10,7 @@ internal class ProductCollectionUpdateParamsTest {
     @Test
     fun create() {
         ProductCollectionUpdateParams.builder()
-            .id("id")
+            .id("pdc_8BWv0hojwUH7iCDabr0NI")
             .brandId("brand_id")
             .description("description")
             .effectiveAtOnDowngrade(
@@ -32,9 +32,9 @@ internal class ProductCollectionUpdateParamsTest {
 
     @Test
     fun pathParams() {
-        val params = ProductCollectionUpdateParams.builder().id("id").build()
+        val params = ProductCollectionUpdateParams.builder().id("pdc_8BWv0hojwUH7iCDabr0NI").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("id")
+        assertThat(params._pathParam(0)).isEqualTo("pdc_8BWv0hojwUH7iCDabr0NI")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -43,7 +43,7 @@ internal class ProductCollectionUpdateParamsTest {
     fun body() {
         val params =
             ProductCollectionUpdateParams.builder()
-                .id("id")
+                .id("pdc_8BWv0hojwUH7iCDabr0NI")
                 .brandId("brand_id")
                 .description("description")
                 .effectiveAtOnDowngrade(
@@ -90,7 +90,7 @@ internal class ProductCollectionUpdateParamsTest {
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = ProductCollectionUpdateParams.builder().id("id").build()
+        val params = ProductCollectionUpdateParams.builder().id("pdc_8BWv0hojwUH7iCDabr0NI").build()
 
         val body = params._body()
     }

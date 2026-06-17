@@ -11,7 +11,7 @@ internal class CustomerPortalCreateParamsTest {
     @Test
     fun create() {
         CustomerPortalCreateParams.builder()
-            .customerId("customer_id")
+            .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
             .returnUrl("return_url")
             .sendEmail(true)
             .build()
@@ -19,9 +19,10 @@ internal class CustomerPortalCreateParamsTest {
 
     @Test
     fun pathParams() {
-        val params = CustomerPortalCreateParams.builder().customerId("customer_id").build()
+        val params =
+            CustomerPortalCreateParams.builder().customerId("cus_TV52uJWWXt2yIoBBxpjaa").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("customer_id")
+        assertThat(params._pathParam(0)).isEqualTo("cus_TV52uJWWXt2yIoBBxpjaa")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -30,7 +31,7 @@ internal class CustomerPortalCreateParamsTest {
     fun queryParams() {
         val params =
             CustomerPortalCreateParams.builder()
-                .customerId("customer_id")
+                .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                 .returnUrl("return_url")
                 .sendEmail(true)
                 .build()
@@ -48,7 +49,8 @@ internal class CustomerPortalCreateParamsTest {
 
     @Test
     fun queryParamsWithoutOptionalFields() {
-        val params = CustomerPortalCreateParams.builder().customerId("customer_id").build()
+        val params =
+            CustomerPortalCreateParams.builder().customerId("cus_TV52uJWWXt2yIoBBxpjaa").build()
 
         val queryParams = params._queryParams()
 

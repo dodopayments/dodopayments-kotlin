@@ -10,7 +10,7 @@ internal class GroupUpdateParamsTest {
     @Test
     fun create() {
         GroupUpdateParams.builder()
-            .id("id")
+            .id("pdc_8BWv0hojwUH7iCDabr0NI")
             .groupId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .groupName("group_name")
             .addProductOrder("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -22,11 +22,11 @@ internal class GroupUpdateParamsTest {
     fun pathParams() {
         val params =
             GroupUpdateParams.builder()
-                .id("id")
+                .id("pdc_8BWv0hojwUH7iCDabr0NI")
                 .groupId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .build()
 
-        assertThat(params._pathParam(0)).isEqualTo("id")
+        assertThat(params._pathParam(0)).isEqualTo("pdc_8BWv0hojwUH7iCDabr0NI")
         assertThat(params._pathParam(1)).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         // out-of-bound path param
         assertThat(params._pathParam(2)).isEqualTo("")
@@ -36,7 +36,7 @@ internal class GroupUpdateParamsTest {
     fun body() {
         val params =
             GroupUpdateParams.builder()
-                .id("id")
+                .id("pdc_8BWv0hojwUH7iCDabr0NI")
                 .groupId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .groupName("group_name")
                 .addProductOrder("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -54,7 +54,7 @@ internal class GroupUpdateParamsTest {
     fun bodyWithoutOptionalFields() {
         val params =
             GroupUpdateParams.builder()
-                .id("id")
+                .id("pdc_8BWv0hojwUH7iCDabr0NI")
                 .groupId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .build()
 

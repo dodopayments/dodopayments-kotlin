@@ -9,14 +9,14 @@ internal class BrandUpdateImagesParamsTest {
 
     @Test
     fun create() {
-        BrandUpdateImagesParams.builder().id("id").build()
+        BrandUpdateImagesParams.builder().id("brnd_8dFiAW42v28JzhlVSocjq").build()
     }
 
     @Test
     fun pathParams() {
-        val params = BrandUpdateImagesParams.builder().id("id").build()
+        val params = BrandUpdateImagesParams.builder().id("brnd_8dFiAW42v28JzhlVSocjq").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("id")
+        assertThat(params._pathParam(0)).isEqualTo("brnd_8dFiAW42v28JzhlVSocjq")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }

@@ -11,7 +11,7 @@ internal class CustomerUpdateParamsTest {
     @Test
     fun create() {
         CustomerUpdateParams.builder()
-            .customerId("customer_id")
+            .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
             .email("email")
             .metadata(
                 CustomerUpdateParams.Metadata.builder()
@@ -25,9 +25,9 @@ internal class CustomerUpdateParamsTest {
 
     @Test
     fun pathParams() {
-        val params = CustomerUpdateParams.builder().customerId("customer_id").build()
+        val params = CustomerUpdateParams.builder().customerId("cus_TV52uJWWXt2yIoBBxpjaa").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("customer_id")
+        assertThat(params._pathParam(0)).isEqualTo("cus_TV52uJWWXt2yIoBBxpjaa")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -36,7 +36,7 @@ internal class CustomerUpdateParamsTest {
     fun body() {
         val params =
             CustomerUpdateParams.builder()
-                .customerId("customer_id")
+                .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                 .email("email")
                 .metadata(
                     CustomerUpdateParams.Metadata.builder()
@@ -62,7 +62,7 @@ internal class CustomerUpdateParamsTest {
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = CustomerUpdateParams.builder().customerId("customer_id").build()
+        val params = CustomerUpdateParams.builder().customerId("cus_TV52uJWWXt2yIoBBxpjaa").build()
 
         val body = params._body()
     }

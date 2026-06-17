@@ -26,7 +26,7 @@ internal class ItemServiceTest {
         val productCollectionProducts =
             itemService.create(
                 ItemCreateParams.builder()
-                    .id("id")
+                    .id("pdc_8BWv0hojwUH7iCDabr0NI")
                     .groupId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .addProduct(GroupProduct.builder().productId("product_id").status(true).build())
                     .build()
@@ -46,7 +46,7 @@ internal class ItemServiceTest {
 
         itemService.update(
             ItemUpdateParams.builder()
-                .id("id")
+                .id("pdc_8BWv0hojwUH7iCDabr0NI")
                 .groupId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .itemId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .status(true)
@@ -65,7 +65,7 @@ internal class ItemServiceTest {
 
         itemService.delete(
             ItemDeleteParams.builder()
-                .id("id")
+                .id("pdc_8BWv0hojwUH7iCDabr0NI")
                 .groupId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .itemId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .build()
