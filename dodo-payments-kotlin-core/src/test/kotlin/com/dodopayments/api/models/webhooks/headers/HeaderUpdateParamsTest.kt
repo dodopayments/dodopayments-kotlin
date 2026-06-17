@@ -11,7 +11,7 @@ internal class HeaderUpdateParamsTest {
     @Test
     fun create() {
         HeaderUpdateParams.builder()
-            .webhookId("webhook_id")
+            .webhookId("whk_YdWqVEGKmSYKbsIyDxEab")
             .headers(
                 HeaderUpdateParams.Headers.builder()
                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -24,7 +24,7 @@ internal class HeaderUpdateParamsTest {
     fun pathParams() {
         val params =
             HeaderUpdateParams.builder()
-                .webhookId("webhook_id")
+                .webhookId("whk_YdWqVEGKmSYKbsIyDxEab")
                 .headers(
                     HeaderUpdateParams.Headers.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -32,7 +32,7 @@ internal class HeaderUpdateParamsTest {
                 )
                 .build()
 
-        assertThat(params._pathParam(0)).isEqualTo("webhook_id")
+        assertThat(params._pathParam(0)).isEqualTo("whk_YdWqVEGKmSYKbsIyDxEab")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -41,7 +41,7 @@ internal class HeaderUpdateParamsTest {
     fun body() {
         val params =
             HeaderUpdateParams.builder()
-                .webhookId("webhook_id")
+                .webhookId("whk_YdWqVEGKmSYKbsIyDxEab")
                 .headers(
                     HeaderUpdateParams.Headers.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))

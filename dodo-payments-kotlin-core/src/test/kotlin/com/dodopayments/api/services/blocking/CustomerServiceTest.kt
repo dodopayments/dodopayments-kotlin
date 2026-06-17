@@ -49,7 +49,7 @@ internal class CustomerServiceTest {
                 .build()
         val customerService = client.customers()
 
-        val customer = customerService.retrieve("customer_id")
+        val customer = customerService.retrieve("cus_TV52uJWWXt2yIoBBxpjaa")
 
         customer.validate()
     }
@@ -66,7 +66,7 @@ internal class CustomerServiceTest {
         val customer =
             customerService.update(
                 CustomerUpdateParams.builder()
-                    .customerId("customer_id")
+                    .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                     .email("email")
                     .metadata(
                         CustomerUpdateParams.Metadata.builder()
@@ -106,7 +106,7 @@ internal class CustomerServiceTest {
 
         customerService.deletePaymentMethod(
             CustomerDeletePaymentMethodParams.builder()
-                .customerId("customer_id")
+                .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                 .paymentMethodId("payment_method_id")
                 .build()
         )
@@ -121,7 +121,7 @@ internal class CustomerServiceTest {
                 .build()
         val customerService = client.customers()
 
-        val response = customerService.listCreditEntitlements("customer_id")
+        val response = customerService.listCreditEntitlements("cus_TV52uJWWXt2yIoBBxpjaa")
 
         response.validate()
     }
@@ -135,7 +135,7 @@ internal class CustomerServiceTest {
                 .build()
         val customerService = client.customers()
 
-        val response = customerService.listEntitlements("customer_id")
+        val response = customerService.listEntitlements("cus_TV52uJWWXt2yIoBBxpjaa")
 
         response.validate()
     }
@@ -149,7 +149,7 @@ internal class CustomerServiceTest {
                 .build()
         val customerService = client.customers()
 
-        val response = customerService.retrievePaymentMethods("customer_id")
+        val response = customerService.retrievePaymentMethods("cus_TV52uJWWXt2yIoBBxpjaa")
 
         response.validate()
     }

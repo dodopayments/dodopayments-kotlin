@@ -9,14 +9,14 @@ internal class RefundRetrieveParamsTest {
 
     @Test
     fun create() {
-        RefundRetrieveParams.builder().refundId("refund_id").build()
+        RefundRetrieveParams.builder().refundId("ref_F0gZetLvTxxBrMU2CZcmy").build()
     }
 
     @Test
     fun pathParams() {
-        val params = RefundRetrieveParams.builder().refundId("refund_id").build()
+        val params = RefundRetrieveParams.builder().refundId("ref_F0gZetLvTxxBrMU2CZcmy").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("refund_id")
+        assertThat(params._pathParam(0)).isEqualTo("ref_F0gZetLvTxxBrMU2CZcmy")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }

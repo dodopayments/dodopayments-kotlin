@@ -10,8 +10,8 @@ internal class BalanceRetrieveParamsTest {
     @Test
     fun create() {
         BalanceRetrieveParams.builder()
-            .creditEntitlementId("credit_entitlement_id")
-            .customerId("customer_id")
+            .creditEntitlementId("cde_ztxm5XJsKxWucRWA3rjdM")
+            .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
             .build()
     }
 
@@ -19,12 +19,12 @@ internal class BalanceRetrieveParamsTest {
     fun pathParams() {
         val params =
             BalanceRetrieveParams.builder()
-                .creditEntitlementId("credit_entitlement_id")
-                .customerId("customer_id")
+                .creditEntitlementId("cde_ztxm5XJsKxWucRWA3rjdM")
+                .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                 .build()
 
-        assertThat(params._pathParam(0)).isEqualTo("credit_entitlement_id")
-        assertThat(params._pathParam(1)).isEqualTo("customer_id")
+        assertThat(params._pathParam(0)).isEqualTo("cde_ztxm5XJsKxWucRWA3rjdM")
+        assertThat(params._pathParam(1)).isEqualTo("cus_TV52uJWWXt2yIoBBxpjaa")
         // out-of-bound path param
         assertThat(params._pathParam(2)).isEqualTo("")
     }

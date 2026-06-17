@@ -20,7 +20,7 @@ internal class GrantServiceTest {
                 .build()
         val grantService = client.entitlements().grants()
 
-        val page = grantService.list("id")
+        val page = grantService.list("ent_jt7jcvI79Xh8eehqgWdcm")
 
         page.response().validate()
     }
@@ -35,7 +35,12 @@ internal class GrantServiceTest {
         val grantService = client.entitlements().grants()
 
         val entitlementGrant =
-            grantService.revoke(GrantRevokeParams.builder().id("id").grantId("grant_id").build())
+            grantService.revoke(
+                GrantRevokeParams.builder()
+                    .id("ent_jt7jcvI79Xh8eehqgWdcm")
+                    .grantId("entg_w0ZCJZgNXuNDdMVzvja6p")
+                    .build()
+            )
 
         entitlementGrant.validate()
     }

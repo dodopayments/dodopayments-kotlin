@@ -23,7 +23,7 @@ internal class CustomerPortalServiceTest {
         val customerPortalSession =
             customerPortalService.create(
                 CustomerPortalCreateParams.builder()
-                    .customerId("customer_id")
+                    .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                     .returnUrl("return_url")
                     .sendEmail(true)
                     .build()

@@ -82,7 +82,7 @@ internal class PaymentServiceTest {
                 .build()
         val paymentService = client.payments()
 
-        val payment = paymentService.retrieve("payment_id")
+        val payment = paymentService.retrieve("pay_gr4RizvMOXFJ6xca3y2tU")
 
         payment.validate()
     }
@@ -110,7 +110,7 @@ internal class PaymentServiceTest {
                 .build()
         val paymentService = client.payments()
 
-        val response = paymentService.retrieveLineItems("payment_id")
+        val response = paymentService.retrieveLineItems("pay_gr4RizvMOXFJ6xca3y2tU")
 
         response.validate()
     }
