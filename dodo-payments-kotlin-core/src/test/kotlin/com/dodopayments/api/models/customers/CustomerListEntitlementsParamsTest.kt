@@ -9,14 +9,15 @@ internal class CustomerListEntitlementsParamsTest {
 
     @Test
     fun create() {
-        CustomerListEntitlementsParams.builder().customerId("customer_id").build()
+        CustomerListEntitlementsParams.builder().customerId("cus_TV52uJWWXt2yIoBBxpjaa").build()
     }
 
     @Test
     fun pathParams() {
-        val params = CustomerListEntitlementsParams.builder().customerId("customer_id").build()
+        val params =
+            CustomerListEntitlementsParams.builder().customerId("cus_TV52uJWWXt2yIoBBxpjaa").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("customer_id")
+        assertThat(params._pathParam(0)).isEqualTo("cus_TV52uJWWXt2yIoBBxpjaa")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }

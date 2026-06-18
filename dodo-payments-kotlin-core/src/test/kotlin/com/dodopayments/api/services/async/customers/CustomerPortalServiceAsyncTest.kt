@@ -23,7 +23,7 @@ internal class CustomerPortalServiceAsyncTest {
         val customerPortalSession =
             customerPortalServiceAsync.create(
                 CustomerPortalCreateParams.builder()
-                    .customerId("customer_id")
+                    .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                     .returnUrl("return_url")
                     .sendEmail(true)
                     .build()

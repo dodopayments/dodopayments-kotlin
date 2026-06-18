@@ -63,7 +63,7 @@ internal class WebhookServiceAsyncTest {
                 .build()
         val webhookServiceAsync = client.webhooks()
 
-        val webhookDetails = webhookServiceAsync.retrieve("webhook_id")
+        val webhookDetails = webhookServiceAsync.retrieve("whk_YdWqVEGKmSYKbsIyDxEab")
 
         webhookDetails.validate()
     }
@@ -80,7 +80,7 @@ internal class WebhookServiceAsyncTest {
         val webhookDetails =
             webhookServiceAsync.update(
                 WebhookUpdateParams.builder()
-                    .webhookId("webhook_id")
+                    .webhookId("whk_YdWqVEGKmSYKbsIyDxEab")
                     .description("description")
                     .disabled(true)
                     .addFilterType(WebhookEventType.PAYMENT_SUCCEEDED)
@@ -120,7 +120,7 @@ internal class WebhookServiceAsyncTest {
                 .build()
         val webhookServiceAsync = client.webhooks()
 
-        webhookServiceAsync.delete("webhook_id")
+        webhookServiceAsync.delete("whk_YdWqVEGKmSYKbsIyDxEab")
     }
 
     @Test
@@ -132,7 +132,7 @@ internal class WebhookServiceAsyncTest {
                 .build()
         val webhookServiceAsync = client.webhooks()
 
-        val response = webhookServiceAsync.retrieveSecret("webhook_id")
+        val response = webhookServiceAsync.retrieveSecret("whk_YdWqVEGKmSYKbsIyDxEab")
 
         response.validate()
     }

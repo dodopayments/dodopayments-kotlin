@@ -9,21 +9,32 @@ internal class ProductUpdateFilesParamsTest {
 
     @Test
     fun create() {
-        ProductUpdateFilesParams.builder().id("id").fileName("file_name").build()
+        ProductUpdateFilesParams.builder()
+            .id("pdt_R8AWMPiV8RyJElcCKvAID")
+            .fileName("file_name")
+            .build()
     }
 
     @Test
     fun pathParams() {
-        val params = ProductUpdateFilesParams.builder().id("id").fileName("file_name").build()
+        val params =
+            ProductUpdateFilesParams.builder()
+                .id("pdt_R8AWMPiV8RyJElcCKvAID")
+                .fileName("file_name")
+                .build()
 
-        assertThat(params._pathParam(0)).isEqualTo("id")
+        assertThat(params._pathParam(0)).isEqualTo("pdt_R8AWMPiV8RyJElcCKvAID")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
 
     @Test
     fun body() {
-        val params = ProductUpdateFilesParams.builder().id("id").fileName("file_name").build()
+        val params =
+            ProductUpdateFilesParams.builder()
+                .id("pdt_R8AWMPiV8RyJElcCKvAID")
+                .fileName("file_name")
+                .build()
 
         val body = params._body()
 

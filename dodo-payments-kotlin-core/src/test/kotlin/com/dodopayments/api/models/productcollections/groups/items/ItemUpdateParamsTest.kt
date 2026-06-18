@@ -10,7 +10,7 @@ internal class ItemUpdateParamsTest {
     @Test
     fun create() {
         ItemUpdateParams.builder()
-            .id("id")
+            .id("pdc_8BWv0hojwUH7iCDabr0NI")
             .groupId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .itemId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .status(true)
@@ -21,13 +21,13 @@ internal class ItemUpdateParamsTest {
     fun pathParams() {
         val params =
             ItemUpdateParams.builder()
-                .id("id")
+                .id("pdc_8BWv0hojwUH7iCDabr0NI")
                 .groupId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .itemId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .status(true)
                 .build()
 
-        assertThat(params._pathParam(0)).isEqualTo("id")
+        assertThat(params._pathParam(0)).isEqualTo("pdc_8BWv0hojwUH7iCDabr0NI")
         assertThat(params._pathParam(1)).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         assertThat(params._pathParam(2)).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         // out-of-bound path param
@@ -38,7 +38,7 @@ internal class ItemUpdateParamsTest {
     fun body() {
         val params =
             ItemUpdateParams.builder()
-                .id("id")
+                .id("pdc_8BWv0hojwUH7iCDabr0NI")
                 .groupId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .itemId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .status(true)
