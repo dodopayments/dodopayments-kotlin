@@ -12,7 +12,7 @@ internal class SubscriptionChargeParamsTest {
     @Test
     fun create() {
         SubscriptionChargeParams.builder()
-            .subscriptionId("subscription_id")
+            .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
             .productPrice(0)
             .adaptiveCurrencyFeesInclusive(true)
             .customerBalanceConfig(
@@ -35,11 +35,11 @@ internal class SubscriptionChargeParamsTest {
     fun pathParams() {
         val params =
             SubscriptionChargeParams.builder()
-                .subscriptionId("subscription_id")
+                .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
                 .productPrice(0)
                 .build()
 
-        assertThat(params._pathParam(0)).isEqualTo("subscription_id")
+        assertThat(params._pathParam(0)).isEqualTo("sub_Iuaq622bbmmfOGrVTqdXv")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -48,7 +48,7 @@ internal class SubscriptionChargeParamsTest {
     fun body() {
         val params =
             SubscriptionChargeParams.builder()
-                .subscriptionId("subscription_id")
+                .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
                 .productPrice(0)
                 .adaptiveCurrencyFeesInclusive(true)
                 .customerBalanceConfig(
@@ -91,7 +91,7 @@ internal class SubscriptionChargeParamsTest {
     fun bodyWithoutOptionalFields() {
         val params =
             SubscriptionChargeParams.builder()
-                .subscriptionId("subscription_id")
+                .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
                 .productPrice(0)
                 .build()
 

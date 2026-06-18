@@ -72,7 +72,7 @@ internal class MeterServiceTest {
                 .build()
         val meterService = client.meters()
 
-        val meter = meterService.retrieve("id")
+        val meter = meterService.retrieve("mtr_h5tgTWL55OyMO0L2Q9w9v")
 
         meter.validate()
     }
@@ -100,7 +100,7 @@ internal class MeterServiceTest {
                 .build()
         val meterService = client.meters()
 
-        meterService.archive("id")
+        meterService.archive("mtr_h5tgTWL55OyMO0L2Q9w9v")
     }
 
     @Test
@@ -112,6 +112,6 @@ internal class MeterServiceTest {
                 .build()
         val meterService = client.meters()
 
-        meterService.unarchive("id")
+        meterService.unarchive("mtr_h5tgTWL55OyMO0L2Q9w9v")
     }
 }

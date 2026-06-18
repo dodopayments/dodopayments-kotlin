@@ -11,7 +11,7 @@ internal class SubscriptionChangePlanParamsTest {
     @Test
     fun create() {
         SubscriptionChangePlanParams.builder()
-            .subscriptionId("subscription_id")
+            .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
             .updateSubscriptionPlanReq(
                 UpdateSubscriptionPlanReq.builder()
                     .productId("product_id")
@@ -39,7 +39,7 @@ internal class SubscriptionChangePlanParamsTest {
     fun pathParams() {
         val params =
             SubscriptionChangePlanParams.builder()
-                .subscriptionId("subscription_id")
+                .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
                 .updateSubscriptionPlanReq(
                     UpdateSubscriptionPlanReq.builder()
                         .productId("product_id")
@@ -51,7 +51,7 @@ internal class SubscriptionChangePlanParamsTest {
                 )
                 .build()
 
-        assertThat(params._pathParam(0)).isEqualTo("subscription_id")
+        assertThat(params._pathParam(0)).isEqualTo("sub_Iuaq622bbmmfOGrVTqdXv")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -60,7 +60,7 @@ internal class SubscriptionChangePlanParamsTest {
     fun body() {
         val params =
             SubscriptionChangePlanParams.builder()
-                .subscriptionId("subscription_id")
+                .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
                 .updateSubscriptionPlanReq(
                     UpdateSubscriptionPlanReq.builder()
                         .productId("product_id")
@@ -112,7 +112,7 @@ internal class SubscriptionChangePlanParamsTest {
     fun bodyWithoutOptionalFields() {
         val params =
             SubscriptionChangePlanParams.builder()
-                .subscriptionId("subscription_id")
+                .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
                 .updateSubscriptionPlanReq(
                     UpdateSubscriptionPlanReq.builder()
                         .productId("product_id")

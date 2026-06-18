@@ -12,8 +12,8 @@ internal class BalanceCreateLedgerEntryParamsTest {
     @Test
     fun create() {
         BalanceCreateLedgerEntryParams.builder()
-            .creditEntitlementId("credit_entitlement_id")
-            .customerId("customer_id")
+            .creditEntitlementId("cde_ztxm5XJsKxWucRWA3rjdM")
+            .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
             .amount("amount")
             .entryType(LedgerEntryType.CREDIT)
             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -31,14 +31,14 @@ internal class BalanceCreateLedgerEntryParamsTest {
     fun pathParams() {
         val params =
             BalanceCreateLedgerEntryParams.builder()
-                .creditEntitlementId("credit_entitlement_id")
-                .customerId("customer_id")
+                .creditEntitlementId("cde_ztxm5XJsKxWucRWA3rjdM")
+                .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                 .amount("amount")
                 .entryType(LedgerEntryType.CREDIT)
                 .build()
 
-        assertThat(params._pathParam(0)).isEqualTo("credit_entitlement_id")
-        assertThat(params._pathParam(1)).isEqualTo("customer_id")
+        assertThat(params._pathParam(0)).isEqualTo("cde_ztxm5XJsKxWucRWA3rjdM")
+        assertThat(params._pathParam(1)).isEqualTo("cus_TV52uJWWXt2yIoBBxpjaa")
         // out-of-bound path param
         assertThat(params._pathParam(2)).isEqualTo("")
     }
@@ -47,8 +47,8 @@ internal class BalanceCreateLedgerEntryParamsTest {
     fun body() {
         val params =
             BalanceCreateLedgerEntryParams.builder()
-                .creditEntitlementId("credit_entitlement_id")
-                .customerId("customer_id")
+                .creditEntitlementId("cde_ztxm5XJsKxWucRWA3rjdM")
+                .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                 .amount("amount")
                 .entryType(LedgerEntryType.CREDIT)
                 .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -80,8 +80,8 @@ internal class BalanceCreateLedgerEntryParamsTest {
     fun bodyWithoutOptionalFields() {
         val params =
             BalanceCreateLedgerEntryParams.builder()
-                .creditEntitlementId("credit_entitlement_id")
-                .customerId("customer_id")
+                .creditEntitlementId("cde_ztxm5XJsKxWucRWA3rjdM")
+                .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                 .amount("amount")
                 .entryType(LedgerEntryType.CREDIT)
                 .build()

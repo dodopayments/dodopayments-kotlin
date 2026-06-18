@@ -12,7 +12,7 @@ internal class WebhookUpdateParamsTest {
     @Test
     fun create() {
         WebhookUpdateParams.builder()
-            .webhookId("webhook_id")
+            .webhookId("whk_YdWqVEGKmSYKbsIyDxEab")
             .description("description")
             .disabled(true)
             .addFilterType(WebhookEventType.PAYMENT_SUCCEEDED)
@@ -28,9 +28,9 @@ internal class WebhookUpdateParamsTest {
 
     @Test
     fun pathParams() {
-        val params = WebhookUpdateParams.builder().webhookId("webhook_id").build()
+        val params = WebhookUpdateParams.builder().webhookId("whk_YdWqVEGKmSYKbsIyDxEab").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("webhook_id")
+        assertThat(params._pathParam(0)).isEqualTo("whk_YdWqVEGKmSYKbsIyDxEab")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -39,7 +39,7 @@ internal class WebhookUpdateParamsTest {
     fun body() {
         val params =
             WebhookUpdateParams.builder()
-                .webhookId("webhook_id")
+                .webhookId("whk_YdWqVEGKmSYKbsIyDxEab")
                 .description("description")
                 .disabled(true)
                 .addFilterType(WebhookEventType.PAYMENT_SUCCEEDED)
@@ -69,7 +69,7 @@ internal class WebhookUpdateParamsTest {
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = WebhookUpdateParams.builder().webhookId("webhook_id").build()
+        val params = WebhookUpdateParams.builder().webhookId("whk_YdWqVEGKmSYKbsIyDxEab").build()
 
         val body = params._body()
     }

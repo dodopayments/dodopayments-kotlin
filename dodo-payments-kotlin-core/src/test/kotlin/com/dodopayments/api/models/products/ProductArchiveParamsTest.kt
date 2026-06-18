@@ -9,14 +9,14 @@ internal class ProductArchiveParamsTest {
 
     @Test
     fun create() {
-        ProductArchiveParams.builder().id("id").build()
+        ProductArchiveParams.builder().id("pdt_R8AWMPiV8RyJElcCKvAID").build()
     }
 
     @Test
     fun pathParams() {
-        val params = ProductArchiveParams.builder().id("id").build()
+        val params = ProductArchiveParams.builder().id("pdt_R8AWMPiV8RyJElcCKvAID").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("id")
+        assertThat(params._pathParam(0)).isEqualTo("pdt_R8AWMPiV8RyJElcCKvAID")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }

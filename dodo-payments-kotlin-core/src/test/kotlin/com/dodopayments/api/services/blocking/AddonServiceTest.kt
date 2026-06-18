@@ -46,7 +46,7 @@ internal class AddonServiceTest {
                 .build()
         val addonService = client.addons()
 
-        val addonResponse = addonService.retrieve("id")
+        val addonResponse = addonService.retrieve("adn_NX1zdqW4Hbivsqz8vI9dc")
 
         addonResponse.validate()
     }
@@ -63,7 +63,7 @@ internal class AddonServiceTest {
         val addonResponse =
             addonService.update(
                 AddonUpdateParams.builder()
-                    .id("id")
+                    .id("adn_NX1zdqW4Hbivsqz8vI9dc")
                     .currency(Currency.AED)
                     .description("description")
                     .imageId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -99,7 +99,7 @@ internal class AddonServiceTest {
                 .build()
         val addonService = client.addons()
 
-        val response = addonService.updateImages("id")
+        val response = addonService.updateImages("adn_NX1zdqW4Hbivsqz8vI9dc")
 
         response.validate()
     }
