@@ -56,7 +56,7 @@ internal class DiscountServiceTest {
                 .build()
         val discountService = client.discounts()
 
-        val discount = discountService.retrieve("discount_id")
+        val discount = discountService.retrieve("dsc_qxxEmg5PuM1uNTE0LgkP9")
 
         discount.validate()
     }
@@ -73,7 +73,7 @@ internal class DiscountServiceTest {
         val discount =
             discountService.update(
                 DiscountUpdateParams.builder()
-                    .discountId("discount_id")
+                    .discountId("dsc_qxxEmg5PuM1uNTE0LgkP9")
                     .amount(0)
                     .code("code")
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -117,7 +117,7 @@ internal class DiscountServiceTest {
                 .build()
         val discountService = client.discounts()
 
-        discountService.delete("discount_id")
+        discountService.delete("dsc_qxxEmg5PuM1uNTE0LgkP9")
     }
 
     @Test

@@ -29,8 +29,8 @@ internal class BalanceServiceTest {
         val customerCreditBalance =
             balanceService.retrieve(
                 BalanceRetrieveParams.builder()
-                    .creditEntitlementId("credit_entitlement_id")
-                    .customerId("customer_id")
+                    .creditEntitlementId("cde_ztxm5XJsKxWucRWA3rjdM")
+                    .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                     .build()
             )
 
@@ -46,7 +46,7 @@ internal class BalanceServiceTest {
                 .build()
         val balanceService = client.creditEntitlements().balances()
 
-        val page = balanceService.list("credit_entitlement_id")
+        val page = balanceService.list("cde_ztxm5XJsKxWucRWA3rjdM")
 
         page.response().validate()
     }
@@ -63,8 +63,8 @@ internal class BalanceServiceTest {
         val response =
             balanceService.createLedgerEntry(
                 BalanceCreateLedgerEntryParams.builder()
-                    .creditEntitlementId("credit_entitlement_id")
-                    .customerId("customer_id")
+                    .creditEntitlementId("cde_ztxm5XJsKxWucRWA3rjdM")
+                    .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                     .amount("amount")
                     .entryType(LedgerEntryType.CREDIT)
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -93,8 +93,8 @@ internal class BalanceServiceTest {
         val page =
             balanceService.listGrants(
                 BalanceListGrantsParams.builder()
-                    .creditEntitlementId("credit_entitlement_id")
-                    .customerId("customer_id")
+                    .creditEntitlementId("cde_ztxm5XJsKxWucRWA3rjdM")
+                    .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                     .build()
             )
 
@@ -113,8 +113,8 @@ internal class BalanceServiceTest {
         val page =
             balanceService.listLedger(
                 BalanceListLedgerParams.builder()
-                    .creditEntitlementId("credit_entitlement_id")
-                    .customerId("customer_id")
+                    .creditEntitlementId("cde_ztxm5XJsKxWucRWA3rjdM")
+                    .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                     .build()
             )
 

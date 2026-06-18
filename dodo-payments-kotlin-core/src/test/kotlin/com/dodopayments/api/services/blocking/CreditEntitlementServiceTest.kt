@@ -57,7 +57,7 @@ internal class CreditEntitlementServiceTest {
                 .build()
         val creditEntitlementService = client.creditEntitlements()
 
-        val creditEntitlement = creditEntitlementService.retrieve("id")
+        val creditEntitlement = creditEntitlementService.retrieve("cde_ztxm5XJsKxWucRWA3rjdM")
 
         creditEntitlement.validate()
     }
@@ -73,7 +73,7 @@ internal class CreditEntitlementServiceTest {
 
         creditEntitlementService.update(
             CreditEntitlementUpdateParams.builder()
-                .id("id")
+                .id("cde_ztxm5XJsKxWucRWA3rjdM")
                 .currency(Currency.AED)
                 .description("description")
                 .expiresAfterDays(0)
@@ -115,7 +115,7 @@ internal class CreditEntitlementServiceTest {
                 .build()
         val creditEntitlementService = client.creditEntitlements()
 
-        creditEntitlementService.delete("id")
+        creditEntitlementService.delete("cde_ztxm5XJsKxWucRWA3rjdM")
     }
 
     @Test
@@ -127,6 +127,6 @@ internal class CreditEntitlementServiceTest {
                 .build()
         val creditEntitlementService = client.creditEntitlements()
 
-        creditEntitlementService.undelete("id")
+        creditEntitlementService.undelete("cde_ztxm5XJsKxWucRWA3rjdM")
     }
 }

@@ -9,14 +9,15 @@ internal class CreditEntitlementRetrieveParamsTest {
 
     @Test
     fun create() {
-        CreditEntitlementRetrieveParams.builder().id("id").build()
+        CreditEntitlementRetrieveParams.builder().id("cde_ztxm5XJsKxWucRWA3rjdM").build()
     }
 
     @Test
     fun pathParams() {
-        val params = CreditEntitlementRetrieveParams.builder().id("id").build()
+        val params =
+            CreditEntitlementRetrieveParams.builder().id("cde_ztxm5XJsKxWucRWA3rjdM").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("id")
+        assertThat(params._pathParam(0)).isEqualTo("cde_ztxm5XJsKxWucRWA3rjdM")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }

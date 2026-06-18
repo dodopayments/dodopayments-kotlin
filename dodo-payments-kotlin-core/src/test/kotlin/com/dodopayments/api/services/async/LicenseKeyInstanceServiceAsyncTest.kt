@@ -20,7 +20,8 @@ internal class LicenseKeyInstanceServiceAsyncTest {
                 .build()
         val licenseKeyInstanceServiceAsync = client.licenseKeyInstances()
 
-        val licenseKeyInstance = licenseKeyInstanceServiceAsync.retrieve("lki_123")
+        val licenseKeyInstance =
+            licenseKeyInstanceServiceAsync.retrieve("lki_EeWORStkMc7z0KycI31VS")
 
         licenseKeyInstance.validate()
     }
@@ -36,7 +37,10 @@ internal class LicenseKeyInstanceServiceAsyncTest {
 
         val licenseKeyInstance =
             licenseKeyInstanceServiceAsync.update(
-                LicenseKeyInstanceUpdateParams.builder().id("lki_123").name("name").build()
+                LicenseKeyInstanceUpdateParams.builder()
+                    .id("lki_EeWORStkMc7z0KycI31VS")
+                    .name("name")
+                    .build()
             )
 
         licenseKeyInstance.validate()

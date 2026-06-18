@@ -19,7 +19,7 @@ internal class DetailServiceTest {
                 .build()
         val detailService = client.payouts().breakup().details()
 
-        val page = detailService.list("payout_id")
+        val page = detailService.list("pyt_zFTrrn4sk3x3y2vjDBW3T")
 
         page.response().validate()
     }
@@ -33,6 +33,6 @@ internal class DetailServiceTest {
                 .build()
         val detailService = client.payouts().breakup().details()
 
-        detailService.downloadCsv("payout_id")
+        detailService.downloadCsv("pyt_zFTrrn4sk3x3y2vjDBW3T")
     }
 }

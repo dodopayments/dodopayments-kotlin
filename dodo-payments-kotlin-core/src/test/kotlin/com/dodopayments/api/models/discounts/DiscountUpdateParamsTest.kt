@@ -12,7 +12,7 @@ internal class DiscountUpdateParamsTest {
     @Test
     fun create() {
         DiscountUpdateParams.builder()
-            .discountId("discount_id")
+            .discountId("dsc_qxxEmg5PuM1uNTE0LgkP9")
             .amount(0)
             .code("code")
             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -32,9 +32,9 @@ internal class DiscountUpdateParamsTest {
 
     @Test
     fun pathParams() {
-        val params = DiscountUpdateParams.builder().discountId("discount_id").build()
+        val params = DiscountUpdateParams.builder().discountId("dsc_qxxEmg5PuM1uNTE0LgkP9").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("discount_id")
+        assertThat(params._pathParam(0)).isEqualTo("dsc_qxxEmg5PuM1uNTE0LgkP9")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -43,7 +43,7 @@ internal class DiscountUpdateParamsTest {
     fun body() {
         val params =
             DiscountUpdateParams.builder()
-                .discountId("discount_id")
+                .discountId("dsc_qxxEmg5PuM1uNTE0LgkP9")
                 .amount(0)
                 .code("code")
                 .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -81,7 +81,7 @@ internal class DiscountUpdateParamsTest {
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = DiscountUpdateParams.builder().discountId("discount_id").build()
+        val params = DiscountUpdateParams.builder().discountId("dsc_qxxEmg5PuM1uNTE0LgkP9").build()
 
         val body = params._body()
     }

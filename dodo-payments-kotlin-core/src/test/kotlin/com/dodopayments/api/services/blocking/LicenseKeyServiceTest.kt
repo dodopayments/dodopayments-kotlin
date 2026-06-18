@@ -45,7 +45,7 @@ internal class LicenseKeyServiceTest {
                 .build()
         val licenseKeyService = client.licenseKeys()
 
-        val licenseKey = licenseKeyService.retrieve("lic_123")
+        val licenseKey = licenseKeyService.retrieve("lic_7namTC0VcgrnzrF3GTSwB")
 
         licenseKey.validate()
     }
@@ -62,7 +62,7 @@ internal class LicenseKeyServiceTest {
         val licenseKey =
             licenseKeyService.update(
                 LicenseKeyUpdateParams.builder()
-                    .id("lic_123")
+                    .id("lic_7namTC0VcgrnzrF3GTSwB")
                     .activationsLimit(0)
                     .disabled(true)
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

@@ -10,14 +10,18 @@ internal class ProductCollectionUpdateImagesParamsTest {
 
     @Test
     fun create() {
-        ProductCollectionUpdateImagesParams.builder().id("id").forceUpdate(true).build()
+        ProductCollectionUpdateImagesParams.builder()
+            .id("pdc_8BWv0hojwUH7iCDabr0NI")
+            .forceUpdate(true)
+            .build()
     }
 
     @Test
     fun pathParams() {
-        val params = ProductCollectionUpdateImagesParams.builder().id("id").build()
+        val params =
+            ProductCollectionUpdateImagesParams.builder().id("pdc_8BWv0hojwUH7iCDabr0NI").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("id")
+        assertThat(params._pathParam(0)).isEqualTo("pdc_8BWv0hojwUH7iCDabr0NI")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -25,7 +29,10 @@ internal class ProductCollectionUpdateImagesParamsTest {
     @Test
     fun queryParams() {
         val params =
-            ProductCollectionUpdateImagesParams.builder().id("id").forceUpdate(true).build()
+            ProductCollectionUpdateImagesParams.builder()
+                .id("pdc_8BWv0hojwUH7iCDabr0NI")
+                .forceUpdate(true)
+                .build()
 
         val queryParams = params._queryParams()
 
@@ -34,7 +41,8 @@ internal class ProductCollectionUpdateImagesParamsTest {
 
     @Test
     fun queryParamsWithoutOptionalFields() {
-        val params = ProductCollectionUpdateImagesParams.builder().id("id").build()
+        val params =
+            ProductCollectionUpdateImagesParams.builder().id("pdc_8BWv0hojwUH7iCDabr0NI").build()
 
         val queryParams = params._queryParams()
 

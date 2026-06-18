@@ -20,7 +20,9 @@ internal class FileServiceTest {
                 .build()
         val fileService = client.entitlements().files()
 
-        fileService.delete(FileDeleteParams.builder().id("id").fileId("file_id").build())
+        fileService.delete(
+            FileDeleteParams.builder().id("ent_jt7jcvI79Xh8eehqgWdcm").fileId("file_id").build()
+        )
     }
 
     @Test
@@ -32,7 +34,7 @@ internal class FileServiceTest {
                 .build()
         val fileService = client.entitlements().files()
 
-        val response = fileService.upload("id")
+        val response = fileService.upload("ent_jt7jcvI79Xh8eehqgWdcm")
 
         response.validate()
     }
