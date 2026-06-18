@@ -12,7 +12,7 @@ internal class CreditEntitlementUpdateParamsTest {
     @Test
     fun create() {
         CreditEntitlementUpdateParams.builder()
-            .id("id")
+            .id("cde_ztxm5XJsKxWucRWA3rjdM")
             .currency(Currency.AED)
             .description("description")
             .expiresAfterDays(0)
@@ -32,9 +32,9 @@ internal class CreditEntitlementUpdateParamsTest {
 
     @Test
     fun pathParams() {
-        val params = CreditEntitlementUpdateParams.builder().id("id").build()
+        val params = CreditEntitlementUpdateParams.builder().id("cde_ztxm5XJsKxWucRWA3rjdM").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("id")
+        assertThat(params._pathParam(0)).isEqualTo("cde_ztxm5XJsKxWucRWA3rjdM")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -43,7 +43,7 @@ internal class CreditEntitlementUpdateParamsTest {
     fun body() {
         val params =
             CreditEntitlementUpdateParams.builder()
-                .id("id")
+                .id("cde_ztxm5XJsKxWucRWA3rjdM")
                 .currency(Currency.AED)
                 .description("description")
                 .expiresAfterDays(0)
@@ -80,7 +80,7 @@ internal class CreditEntitlementUpdateParamsTest {
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = CreditEntitlementUpdateParams.builder().id("id").build()
+        val params = CreditEntitlementUpdateParams.builder().id("cde_ztxm5XJsKxWucRWA3rjdM").build()
 
         val body = params._body()
     }

@@ -11,7 +11,7 @@ internal class EntitlementUpdateParamsTest {
     @Test
     fun create() {
         EntitlementUpdateParams.builder()
-            .id("id")
+            .id("ent_jt7jcvI79Xh8eehqgWdcm")
             .description("description")
             .integrationConfig(
                 IntegrationConfig.GitHubConfig.builder()
@@ -30,9 +30,9 @@ internal class EntitlementUpdateParamsTest {
 
     @Test
     fun pathParams() {
-        val params = EntitlementUpdateParams.builder().id("id").build()
+        val params = EntitlementUpdateParams.builder().id("ent_jt7jcvI79Xh8eehqgWdcm").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("id")
+        assertThat(params._pathParam(0)).isEqualTo("ent_jt7jcvI79Xh8eehqgWdcm")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -41,7 +41,7 @@ internal class EntitlementUpdateParamsTest {
     fun body() {
         val params =
             EntitlementUpdateParams.builder()
-                .id("id")
+                .id("ent_jt7jcvI79Xh8eehqgWdcm")
                 .description("description")
                 .integrationConfig(
                     IntegrationConfig.GitHubConfig.builder()
@@ -80,7 +80,7 @@ internal class EntitlementUpdateParamsTest {
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = EntitlementUpdateParams.builder().id("id").build()
+        val params = EntitlementUpdateParams.builder().id("ent_jt7jcvI79Xh8eehqgWdcm").build()
 
         val body = params._body()
     }

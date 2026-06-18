@@ -20,7 +20,7 @@ internal class GrantServiceAsyncTest {
                 .build()
         val grantServiceAsync = client.entitlements().grants()
 
-        val page = grantServiceAsync.list("id")
+        val page = grantServiceAsync.list("ent_jt7jcvI79Xh8eehqgWdcm")
 
         page.response().validate()
     }
@@ -36,7 +36,10 @@ internal class GrantServiceAsyncTest {
 
         val entitlementGrant =
             grantServiceAsync.revoke(
-                GrantRevokeParams.builder().id("id").grantId("grant_id").build()
+                GrantRevokeParams.builder()
+                    .id("ent_jt7jcvI79Xh8eehqgWdcm")
+                    .grantId("entg_w0ZCJZgNXuNDdMVzvja6p")
+                    .build()
             )
 
         entitlementGrant.validate()

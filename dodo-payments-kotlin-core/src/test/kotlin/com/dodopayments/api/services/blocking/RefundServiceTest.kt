@@ -53,7 +53,7 @@ internal class RefundServiceTest {
                 .build()
         val refundService = client.refunds()
 
-        val refund = refundService.retrieve("refund_id")
+        val refund = refundService.retrieve("ref_F0gZetLvTxxBrMU2CZcmy")
 
         refund.validate()
     }

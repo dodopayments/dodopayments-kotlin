@@ -9,14 +9,14 @@ internal class LicenseKeyRetrieveParamsTest {
 
     @Test
     fun create() {
-        LicenseKeyRetrieveParams.builder().id("lic_123").build()
+        LicenseKeyRetrieveParams.builder().id("lic_7namTC0VcgrnzrF3GTSwB").build()
     }
 
     @Test
     fun pathParams() {
-        val params = LicenseKeyRetrieveParams.builder().id("lic_123").build()
+        val params = LicenseKeyRetrieveParams.builder().id("lic_7namTC0VcgrnzrF3GTSwB").build()
 
-        assertThat(params._pathParam(0)).isEqualTo("lic_123")
+        assertThat(params._pathParam(0)).isEqualTo("lic_7namTC0VcgrnzrF3GTSwB")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }

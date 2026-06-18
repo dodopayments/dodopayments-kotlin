@@ -19,7 +19,7 @@ internal class WalletServiceTest {
                 .build()
         val walletService = client.customers().wallets()
 
-        val wallets = walletService.list("customer_id")
+        val wallets = walletService.list("cus_TV52uJWWXt2yIoBBxpjaa")
 
         wallets.validate()
     }

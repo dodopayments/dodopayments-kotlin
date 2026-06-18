@@ -11,7 +11,7 @@ internal class LedgerEntryCreateParamsTest {
     @Test
     fun create() {
         LedgerEntryCreateParams.builder()
-            .customerId("customer_id")
+            .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
             .amount(0L)
             .currency(Currency.AED)
             .entryType(LedgerEntryCreateParams.EntryType.CREDIT)
@@ -24,13 +24,13 @@ internal class LedgerEntryCreateParamsTest {
     fun pathParams() {
         val params =
             LedgerEntryCreateParams.builder()
-                .customerId("customer_id")
+                .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                 .amount(0L)
                 .currency(Currency.AED)
                 .entryType(LedgerEntryCreateParams.EntryType.CREDIT)
                 .build()
 
-        assertThat(params._pathParam(0)).isEqualTo("customer_id")
+        assertThat(params._pathParam(0)).isEqualTo("cus_TV52uJWWXt2yIoBBxpjaa")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
     }
@@ -39,7 +39,7 @@ internal class LedgerEntryCreateParamsTest {
     fun body() {
         val params =
             LedgerEntryCreateParams.builder()
-                .customerId("customer_id")
+                .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                 .amount(0L)
                 .currency(Currency.AED)
                 .entryType(LedgerEntryCreateParams.EntryType.CREDIT)
@@ -60,7 +60,7 @@ internal class LedgerEntryCreateParamsTest {
     fun bodyWithoutOptionalFields() {
         val params =
             LedgerEntryCreateParams.builder()
-                .customerId("customer_id")
+                .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                 .amount(0L)
                 .currency(Currency.AED)
                 .entryType(LedgerEntryCreateParams.EntryType.CREDIT)
