@@ -8,6 +8,7 @@ import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.checkRequired
+import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -31,6 +32,7 @@ private constructor(
     private val creditEntitlementId: JsonField<String>,
     private val customerId: JsonField<String>,
     private val isCredit: JsonField<Boolean>,
+    private val metadata: JsonField<Metadata>,
     private val overageAfter: JsonField<String>,
     private val overageBefore: JsonField<String>,
     private val transactionType: JsonField<TransactionType>,
@@ -65,6 +67,7 @@ private constructor(
         @ExcludeMissing
         customerId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("is_credit") @ExcludeMissing isCredit: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("metadata") @ExcludeMissing metadata: JsonField<Metadata> = JsonMissing.of(),
         @JsonProperty("overage_after")
         @ExcludeMissing
         overageAfter: JsonField<String> = JsonMissing.of(),
@@ -95,6 +98,7 @@ private constructor(
         creditEntitlementId,
         customerId,
         isCredit,
+        metadata,
         overageAfter,
         overageBefore,
         transactionType,
@@ -166,6 +170,16 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun isCredit(): Boolean = isCredit.getRequired("is_credit")
+
+    /**
+     * Metadata associated with the credit grant's source (the subscription or payment created at
+     * checkout). Empty when the grant has no resolvable source (e.g. credits granted directly via
+     * the API).
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun metadata(): Metadata = metadata.getRequired("metadata")
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
@@ -289,6 +303,13 @@ private constructor(
     @JsonProperty("is_credit") @ExcludeMissing fun _isCredit(): JsonField<Boolean> = isCredit
 
     /**
+     * Returns the raw JSON value of [metadata].
+     *
+     * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
+
+    /**
      * Returns the raw JSON value of [overageAfter].
      *
      * Unlike [overageAfter], this method doesn't throw if the JSON field has an unexpected type.
@@ -376,6 +397,7 @@ private constructor(
          * .creditEntitlementId()
          * .customerId()
          * .isCredit()
+         * .metadata()
          * .overageAfter()
          * .overageBefore()
          * .transactionType()
@@ -397,6 +419,7 @@ private constructor(
         private var creditEntitlementId: JsonField<String>? = null
         private var customerId: JsonField<String>? = null
         private var isCredit: JsonField<Boolean>? = null
+        private var metadata: JsonField<Metadata>? = null
         private var overageAfter: JsonField<String>? = null
         private var overageBefore: JsonField<String>? = null
         private var transactionType: JsonField<TransactionType>? = null
@@ -417,6 +440,7 @@ private constructor(
             creditEntitlementId = creditLedgerEntry.creditEntitlementId
             customerId = creditLedgerEntry.customerId
             isCredit = creditLedgerEntry.isCredit
+            metadata = creditLedgerEntry.metadata
             overageAfter = creditLedgerEntry.overageAfter
             overageBefore = creditLedgerEntry.overageBefore
             transactionType = creditLedgerEntry.transactionType
@@ -542,6 +566,22 @@ private constructor(
          */
         fun isCredit(isCredit: JsonField<Boolean>) = apply { this.isCredit = isCredit }
 
+        /**
+         * Metadata associated with the credit grant's source (the subscription or payment created
+         * at checkout). Empty when the grant has no resolvable source (e.g. credits granted
+         * directly via the API).
+         */
+        fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
+
+        /**
+         * Sets [Builder.metadata] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.metadata] with a well-typed [Metadata] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
+
         fun overageAfter(overageAfter: String) = overageAfter(JsonField.of(overageAfter))
 
         /**
@@ -664,6 +704,7 @@ private constructor(
          * .creditEntitlementId()
          * .customerId()
          * .isCredit()
+         * .metadata()
          * .overageAfter()
          * .overageBefore()
          * .transactionType()
@@ -683,6 +724,7 @@ private constructor(
                 checkRequired("creditEntitlementId", creditEntitlementId),
                 checkRequired("customerId", customerId),
                 checkRequired("isCredit", isCredit),
+                checkRequired("metadata", metadata),
                 checkRequired("overageAfter", overageAfter),
                 checkRequired("overageBefore", overageBefore),
                 checkRequired("transactionType", transactionType),
@@ -719,6 +761,7 @@ private constructor(
         creditEntitlementId()
         customerId()
         isCredit()
+        metadata().validate()
         overageAfter()
         overageBefore()
         transactionType().validate()
@@ -753,6 +796,7 @@ private constructor(
             (if (creditEntitlementId.asKnown() == null) 0 else 1) +
             (if (customerId.asKnown() == null) 0 else 1) +
             (if (isCredit.asKnown() == null) 0 else 1) +
+            (metadata.asKnown()?.validity() ?: 0) +
             (if (overageAfter.asKnown() == null) 0 else 1) +
             (if (overageBefore.asKnown() == null) 0 else 1) +
             (transactionType.asKnown()?.validity() ?: 0) +
@@ -760,6 +804,117 @@ private constructor(
             (if (grantId.asKnown() == null) 0 else 1) +
             (if (referenceId.asKnown() == null) 0 else 1) +
             (if (referenceType.asKnown() == null) 0 else 1)
+
+    /**
+     * Metadata associated with the credit grant's source (the subscription or payment created at
+     * checkout). Empty when the grant has no resolvable source (e.g. credits granted directly via
+     * the API).
+     */
+    class Metadata
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Metadata]. */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [Metadata]. */
+        class Builder internal constructor() {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(metadata: Metadata) = apply {
+                additionalProperties = metadata.additionalProperties.toMutableMap()
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Metadata].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Metadata = Metadata(additionalProperties.toImmutable())
+        }
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't match
+         *   its expected type.
+         */
+        fun validate(): Metadata = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is Metadata && additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
+    }
 
     class TransactionType @JsonCreator private constructor(private val value: JsonField<String>) :
         Enum {
@@ -963,6 +1118,7 @@ private constructor(
             creditEntitlementId == other.creditEntitlementId &&
             customerId == other.customerId &&
             isCredit == other.isCredit &&
+            metadata == other.metadata &&
             overageAfter == other.overageAfter &&
             overageBefore == other.overageBefore &&
             transactionType == other.transactionType &&
@@ -985,6 +1141,7 @@ private constructor(
             creditEntitlementId,
             customerId,
             isCredit,
+            metadata,
             overageAfter,
             overageBefore,
             transactionType,
@@ -999,5 +1156,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CreditLedgerEntry{id=$id, amount=$amount, balanceAfter=$balanceAfter, balanceBefore=$balanceBefore, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, creditEntitlementId=$creditEntitlementId, customerId=$customerId, isCredit=$isCredit, overageAfter=$overageAfter, overageBefore=$overageBefore, transactionType=$transactionType, description=$description, grantId=$grantId, referenceId=$referenceId, referenceType=$referenceType, additionalProperties=$additionalProperties}"
+        "CreditLedgerEntry{id=$id, amount=$amount, balanceAfter=$balanceAfter, balanceBefore=$balanceBefore, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, creditEntitlementId=$creditEntitlementId, customerId=$customerId, isCredit=$isCredit, metadata=$metadata, overageAfter=$overageAfter, overageBefore=$overageBefore, transactionType=$transactionType, description=$description, grantId=$grantId, referenceId=$referenceId, referenceType=$referenceType, additionalProperties=$additionalProperties}"
 }
