@@ -3,6 +3,7 @@
 package com.dodopayments.api.models.customers
 
 import com.dodopayments.api.core.JsonValue
+import com.dodopayments.api.models.misc.Metadata
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -14,9 +15,7 @@ internal class CustomerUpdateParamsTest {
             .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
             .email("email")
             .metadata(
-                CustomerUpdateParams.Metadata.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
+                Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
             )
             .name("name")
             .phoneNumber("phone_number")
@@ -39,7 +38,7 @@ internal class CustomerUpdateParamsTest {
                 .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
                 .email("email")
                 .metadata(
-                    CustomerUpdateParams.Metadata.builder()
+                    Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
@@ -52,9 +51,7 @@ internal class CustomerUpdateParamsTest {
         assertThat(body.email()).isEqualTo("email")
         assertThat(body.metadata())
             .isEqualTo(
-                CustomerUpdateParams.Metadata.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
+                Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
             )
         assertThat(body.name()).isEqualTo("name")
         assertThat(body.phoneNumber()).isEqualTo("phone_number")

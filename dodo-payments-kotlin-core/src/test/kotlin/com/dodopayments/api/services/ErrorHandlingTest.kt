@@ -27,6 +27,7 @@ import com.dodopayments.api.models.checkoutsessions.ThemeConfig
 import com.dodopayments.api.models.checkoutsessions.ThemeModeConfig
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.PaymentMethodTypes
 import com.dodopayments.api.models.subscriptions.AttachAddon
@@ -212,7 +213,7 @@ internal class ErrorHandlingTest {
                         .force3ds(true)
                         .mandateMinAmountInrPaise(0)
                         .metadata(
-                            CheckoutSessionRequest.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -386,7 +387,7 @@ internal class ErrorHandlingTest {
                         .force3ds(true)
                         .mandateMinAmountInrPaise(0)
                         .metadata(
-                            CheckoutSessionRequest.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -560,7 +561,7 @@ internal class ErrorHandlingTest {
                         .force3ds(true)
                         .mandateMinAmountInrPaise(0)
                         .metadata(
-                            CheckoutSessionRequest.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -734,7 +735,7 @@ internal class ErrorHandlingTest {
                         .force3ds(true)
                         .mandateMinAmountInrPaise(0)
                         .metadata(
-                            CheckoutSessionRequest.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -908,7 +909,7 @@ internal class ErrorHandlingTest {
                         .force3ds(true)
                         .mandateMinAmountInrPaise(0)
                         .metadata(
-                            CheckoutSessionRequest.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -1082,7 +1083,7 @@ internal class ErrorHandlingTest {
                         .force3ds(true)
                         .mandateMinAmountInrPaise(0)
                         .metadata(
-                            CheckoutSessionRequest.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -1256,7 +1257,7 @@ internal class ErrorHandlingTest {
                         .force3ds(true)
                         .mandateMinAmountInrPaise(0)
                         .metadata(
-                            CheckoutSessionRequest.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -1430,7 +1431,7 @@ internal class ErrorHandlingTest {
                         .force3ds(true)
                         .mandateMinAmountInrPaise(0)
                         .metadata(
-                            CheckoutSessionRequest.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -1604,7 +1605,7 @@ internal class ErrorHandlingTest {
                         .force3ds(true)
                         .mandateMinAmountInrPaise(0)
                         .metadata(
-                            CheckoutSessionRequest.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -1778,7 +1779,7 @@ internal class ErrorHandlingTest {
                         .force3ds(true)
                         .mandateMinAmountInrPaise(0)
                         .metadata(
-                            CheckoutSessionRequest.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -1952,7 +1953,7 @@ internal class ErrorHandlingTest {
                         .force3ds(true)
                         .mandateMinAmountInrPaise(0)
                         .metadata(
-                            CheckoutSessionRequest.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -2126,7 +2127,7 @@ internal class ErrorHandlingTest {
                         .force3ds(true)
                         .mandateMinAmountInrPaise(0)
                         .metadata(
-                            CheckoutSessionRequest.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -2300,7 +2301,7 @@ internal class ErrorHandlingTest {
                         .force3ds(true)
                         .mandateMinAmountInrPaise(0)
                         .metadata(
-                            CheckoutSessionRequest.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -2474,7 +2475,7 @@ internal class ErrorHandlingTest {
                         .force3ds(true)
                         .mandateMinAmountInrPaise(0)
                         .metadata(
-                            CheckoutSessionRequest.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -2648,7 +2649,7 @@ internal class ErrorHandlingTest {
                         .force3ds(true)
                         .mandateMinAmountInrPaise(0)
                         .metadata(
-                            CheckoutSessionRequest.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -2822,7 +2823,7 @@ internal class ErrorHandlingTest {
                         .force3ds(true)
                         .mandateMinAmountInrPaise(0)
                         .metadata(
-                            CheckoutSessionRequest.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -2994,7 +2995,7 @@ internal class ErrorHandlingTest {
                         .force3ds(true)
                         .mandateMinAmountInrPaise(0)
                         .metadata(
-                            CheckoutSessionRequest.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )

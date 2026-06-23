@@ -6,6 +6,7 @@ import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.models.entitlements.grants.EntitlementGrant
+import com.dodopayments.api.models.entitlements.grants.GrantFulfillLicenseKeyParams
 import com.dodopayments.api.models.entitlements.grants.GrantListPageAsync
 import com.dodopayments.api.models.entitlements.grants.GrantListParams
 import com.dodopayments.api.models.entitlements.grants.GrantRevokeParams
@@ -41,6 +42,25 @@ interface GrantServiceAsync {
     /** @see list */
     suspend fun list(id: String, requestOptions: RequestOptions): GrantListPageAsync =
         list(id, GrantListParams.none(), requestOptions)
+
+    /**
+     * For entitlements whose license-key config uses `manual` fulfillment, grants are created in
+     * the `pending` state without a key. Call this endpoint to deliver the key: the grant moves to
+     * `delivered`, the customer is emailed the key, and the `license_key.created` and
+     * `entitlement_grant.delivered` webhook events are sent.
+     */
+    suspend fun fulfillLicenseKey(
+        grantId: String,
+        params: GrantFulfillLicenseKeyParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): EntitlementGrant =
+        fulfillLicenseKey(params.toBuilder().grantId(grantId).build(), requestOptions)
+
+    /** @see fulfillLicenseKey */
+    suspend fun fulfillLicenseKey(
+        params: GrantFulfillLicenseKeyParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): EntitlementGrant
 
     /**
      * Revoke a single grant. Idempotent: re-revoking an already-revoked grant returns the grant in
@@ -95,6 +115,25 @@ interface GrantServiceAsync {
             id: String,
             requestOptions: RequestOptions,
         ): HttpResponseFor<GrantListPageAsync> = list(id, GrantListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /grants/{grant_id}/license-key`, but is otherwise
+         * the same as [GrantServiceAsync.fulfillLicenseKey].
+         */
+        @MustBeClosed
+        suspend fun fulfillLicenseKey(
+            grantId: String,
+            params: GrantFulfillLicenseKeyParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<EntitlementGrant> =
+            fulfillLicenseKey(params.toBuilder().grantId(grantId).build(), requestOptions)
+
+        /** @see fulfillLicenseKey */
+        @MustBeClosed
+        suspend fun fulfillLicenseKey(
+            params: GrantFulfillLicenseKeyParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<EntitlementGrant>
 
         /**
          * Returns a raw HTTP response for `delete /entitlements/{id}/grants/{grant_id}`, but is

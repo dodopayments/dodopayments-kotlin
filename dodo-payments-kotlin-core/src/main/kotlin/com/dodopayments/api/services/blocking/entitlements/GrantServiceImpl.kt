@@ -17,6 +17,7 @@ import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepare
 import com.dodopayments.api.models.entitlements.grants.EntitlementGrant
+import com.dodopayments.api.models.entitlements.grants.GrantFulfillLicenseKeyParams
 import com.dodopayments.api.models.entitlements.grants.GrantListPage
 import com.dodopayments.api.models.entitlements.grants.GrantListPageResponse
 import com.dodopayments.api.models.entitlements.grants.GrantListParams
@@ -37,6 +38,13 @@ class GrantServiceImpl internal constructor(private val clientOptions: ClientOpt
     override fun list(params: GrantListParams, requestOptions: RequestOptions): GrantListPage =
         // get /entitlements/{id}/grants
         withRawResponse().list(params, requestOptions).parse()
+
+    override fun fulfillLicenseKey(
+        params: GrantFulfillLicenseKeyParams,
+        requestOptions: RequestOptions,
+    ): EntitlementGrant =
+        // post /grants/{grant_id}/license-key
+        withRawResponse().fulfillLicenseKey(params, requestOptions).parse()
 
     override fun revoke(
         params: GrantRevokeParams,
@@ -89,6 +97,37 @@ class GrantServiceImpl internal constructor(private val clientOptions: ClientOpt
                             .params(params)
                             .response(it)
                             .build()
+                    }
+            }
+        }
+
+        private val fulfillLicenseKeyHandler: Handler<EntitlementGrant> =
+            jsonHandler<EntitlementGrant>(clientOptions.jsonMapper)
+
+        override fun fulfillLicenseKey(
+            params: GrantFulfillLicenseKeyParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<EntitlementGrant> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("grantId", params.grantId())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("grants", params._pathParam(0), "license-key")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { fulfillLicenseKeyHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
                     }
             }
         }
