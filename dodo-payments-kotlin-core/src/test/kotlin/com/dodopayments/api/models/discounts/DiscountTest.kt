@@ -4,6 +4,7 @@ package com.dodopayments.api.models.discounts
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.misc.Metadata
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -21,7 +22,7 @@ internal class DiscountTest {
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .discountId("discount_id")
                 .metadata(
-                    Discount.Metadata.builder()
+                    Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
@@ -42,9 +43,7 @@ internal class DiscountTest {
         assertThat(discount.discountId()).isEqualTo("discount_id")
         assertThat(discount.metadata())
             .isEqualTo(
-                Discount.Metadata.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
+                Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
             )
         assertThat(discount.preserveOnPlanChange()).isEqualTo(true)
         assertThat(discount.restrictedTo()).containsExactly("string")
@@ -67,7 +66,7 @@ internal class DiscountTest {
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .discountId("discount_id")
                 .metadata(
-                    Discount.Metadata.builder()
+                    Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )

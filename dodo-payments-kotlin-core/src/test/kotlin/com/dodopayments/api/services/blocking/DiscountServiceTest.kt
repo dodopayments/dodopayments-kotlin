@@ -8,6 +8,7 @@ import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.discounts.DiscountCreateParams
 import com.dodopayments.api.models.discounts.DiscountType
 import com.dodopayments.api.models.discounts.DiscountUpdateParams
+import com.dodopayments.api.models.misc.Metadata
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -32,7 +33,7 @@ internal class DiscountServiceTest {
                     .code("code")
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .metadata(
-                        DiscountCreateParams.Metadata.builder()
+                        Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -78,7 +79,7 @@ internal class DiscountServiceTest {
                     .code("code")
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .metadata(
-                        DiscountUpdateParams.Metadata.builder()
+                        Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )

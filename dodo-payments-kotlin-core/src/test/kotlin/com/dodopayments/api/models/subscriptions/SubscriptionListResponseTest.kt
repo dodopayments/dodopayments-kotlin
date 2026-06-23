@@ -6,6 +6,7 @@ import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.CustomerLimitedDetails
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
@@ -37,7 +38,7 @@ internal class SubscriptionListResponseTest {
                         .email("email")
                         .name("name")
                         .metadata(
-                            CustomerLimitedDetails.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -51,7 +52,7 @@ internal class SubscriptionListResponseTest {
                         .build()
                 )
                 .metadata(
-                    SubscriptionListResponse.Metadata.builder()
+                    Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
@@ -117,7 +118,7 @@ internal class SubscriptionListResponseTest {
                     .email("email")
                     .name("name")
                     .metadata(
-                        CustomerLimitedDetails.Metadata.builder()
+                        Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -133,9 +134,7 @@ internal class SubscriptionListResponseTest {
             )
         assertThat(subscriptionListResponse.metadata())
             .isEqualTo(
-                SubscriptionListResponse.Metadata.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
+                Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
             )
         assertThat(subscriptionListResponse.nextBillingDate())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -207,7 +206,7 @@ internal class SubscriptionListResponseTest {
                         .email("email")
                         .name("name")
                         .metadata(
-                            CustomerLimitedDetails.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -221,7 +220,7 @@ internal class SubscriptionListResponseTest {
                         .build()
                 )
                 .metadata(
-                    SubscriptionListResponse.Metadata.builder()
+                    Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
