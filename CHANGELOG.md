@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.106.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.105.1...v1.106.0) (2026-06-23)
+
+
+### Features
+
+* **api:** regenerate SDK from latest OpenAPI spec ([1a4918d](https://github.com/dodopayments/dodopayments-kotlin/commit/1a4918d2190ddeb1b263f3af0add5af3f52af8fb))
+* **api:** regenerate SDK from latest OpenAPI spec ([22a36de](https://github.com/dodopayments/dodopayments-kotlin/commit/22a36de46136dca63557b472d9cbefbaa0ffcd90))
+
 ## [1.105.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.105.0...v1.105.1) (2026-06-17)
 
 
