@@ -11,6 +11,7 @@ import com.dodopayments.api.models.disputes.DisputeStage
 import com.dodopayments.api.models.disputes.DisputeStatus
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.CustomFieldResponse
 import com.dodopayments.api.models.payments.CustomerLimitedDetails
@@ -52,7 +53,7 @@ internal class WebhookPayloadTest {
                                 .email("email")
                                 .name("name")
                                 .metadata(
-                                    CustomerLimitedDetails.Metadata.builder()
+                                    Metadata.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
@@ -75,7 +76,7 @@ internal class WebhookPayloadTest {
                                 .build()
                         )
                         .metadata(
-                            Payment.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -116,7 +117,7 @@ internal class WebhookPayloadTest {
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .discountId("discount_id")
                                 .metadata(
-                                    DiscountDetail.Metadata.builder()
+                                    Metadata.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
@@ -181,7 +182,7 @@ internal class WebhookPayloadTest {
                                 .email("email")
                                 .name("name")
                                 .metadata(
-                                    CustomerLimitedDetails.Metadata.builder()
+                                    Metadata.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
@@ -204,7 +205,7 @@ internal class WebhookPayloadTest {
                                 .build()
                         )
                         .metadata(
-                            Payment.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -245,7 +246,7 @@ internal class WebhookPayloadTest {
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .discountId("discount_id")
                                 .metadata(
-                                    DiscountDetail.Metadata.builder()
+                                    Metadata.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
@@ -315,7 +316,7 @@ internal class WebhookPayloadTest {
                                 .email("email")
                                 .name("name")
                                 .metadata(
-                                    CustomerLimitedDetails.Metadata.builder()
+                                    Metadata.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
@@ -338,7 +339,7 @@ internal class WebhookPayloadTest {
                                 .build()
                         )
                         .metadata(
-                            Payment.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -379,7 +380,7 @@ internal class WebhookPayloadTest {
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .discountId("discount_id")
                                 .metadata(
-                                    DiscountDetail.Metadata.builder()
+                                    Metadata.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )

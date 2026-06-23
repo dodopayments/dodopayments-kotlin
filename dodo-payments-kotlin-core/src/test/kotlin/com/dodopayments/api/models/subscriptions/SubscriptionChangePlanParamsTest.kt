@@ -3,6 +3,7 @@
 package com.dodopayments.api.models.subscriptions
 
 import com.dodopayments.api.core.JsonValue
+import com.dodopayments.api.models.misc.Metadata
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -25,7 +26,7 @@ internal class SubscriptionChangePlanParamsTest {
                     .addDiscountCode("string")
                     .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
                     .metadata(
-                        UpdateSubscriptionPlanReq.Metadata.builder()
+                        Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -74,7 +75,7 @@ internal class SubscriptionChangePlanParamsTest {
                         .addDiscountCode("string")
                         .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
                         .metadata(
-                            UpdateSubscriptionPlanReq.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -99,7 +100,7 @@ internal class SubscriptionChangePlanParamsTest {
                     .addDiscountCode("string")
                     .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
                     .metadata(
-                        UpdateSubscriptionPlanReq.Metadata.builder()
+                        Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )

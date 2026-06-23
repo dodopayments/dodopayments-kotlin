@@ -3,6 +3,7 @@
 package com.dodopayments.api.models.creditentitlements.balances
 
 import com.dodopayments.api.core.JsonValue
+import com.dodopayments.api.models.misc.Metadata
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -19,9 +20,7 @@ internal class BalanceCreateLedgerEntryParamsTest {
             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .idempotencyKey("idempotency_key")
             .metadata(
-                BalanceCreateLedgerEntryParams.Metadata.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
+                Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
             )
             .reason("reason")
             .build()
@@ -54,7 +53,7 @@ internal class BalanceCreateLedgerEntryParamsTest {
                 .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .idempotencyKey("idempotency_key")
                 .metadata(
-                    BalanceCreateLedgerEntryParams.Metadata.builder()
+                    Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
@@ -69,9 +68,7 @@ internal class BalanceCreateLedgerEntryParamsTest {
         assertThat(body.idempotencyKey()).isEqualTo("idempotency_key")
         assertThat(body.metadata())
             .isEqualTo(
-                BalanceCreateLedgerEntryParams.Metadata.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
+                Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
             )
         assertThat(body.reason()).isEqualTo("reason")
     }

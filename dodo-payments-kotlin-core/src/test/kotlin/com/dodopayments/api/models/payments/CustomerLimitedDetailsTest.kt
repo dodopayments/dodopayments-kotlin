@@ -4,6 +4,7 @@ package com.dodopayments.api.models.payments
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.misc.Metadata
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -18,7 +19,7 @@ internal class CustomerLimitedDetailsTest {
                 .email("email")
                 .name("name")
                 .metadata(
-                    CustomerLimitedDetails.Metadata.builder()
+                    Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
@@ -30,9 +31,7 @@ internal class CustomerLimitedDetailsTest {
         assertThat(customerLimitedDetails.name()).isEqualTo("name")
         assertThat(customerLimitedDetails.metadata())
             .isEqualTo(
-                CustomerLimitedDetails.Metadata.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
+                Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
             )
         assertThat(customerLimitedDetails.phoneNumber()).isEqualTo("phone_number")
     }
@@ -46,7 +45,7 @@ internal class CustomerLimitedDetailsTest {
                 .email("email")
                 .name("name")
                 .metadata(
-                    CustomerLimitedDetails.Metadata.builder()
+                    Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )

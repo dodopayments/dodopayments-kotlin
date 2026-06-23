@@ -4,6 +4,7 @@ package com.dodopayments.api.models.subscriptions
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.misc.Metadata
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -22,9 +23,7 @@ internal class SubscriptionChargeParamsTest {
                     .build()
             )
             .metadata(
-                SubscriptionChargeParams.Metadata.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
+                Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
             )
             .productCurrency(Currency.AED)
             .productDescription("product_description")
@@ -58,7 +57,7 @@ internal class SubscriptionChargeParamsTest {
                         .build()
                 )
                 .metadata(
-                    SubscriptionChargeParams.Metadata.builder()
+                    Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
@@ -79,9 +78,7 @@ internal class SubscriptionChargeParamsTest {
             )
         assertThat(body.metadata())
             .isEqualTo(
-                SubscriptionChargeParams.Metadata.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
+                Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
             )
         assertThat(body.productCurrency()).isEqualTo(Currency.AED)
         assertThat(body.productDescription()).isEqualTo("product_description")
