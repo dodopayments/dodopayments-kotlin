@@ -6,6 +6,7 @@ import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.CustomerRequest
 import com.dodopayments.api.models.payments.PaymentMethodTypes
@@ -143,7 +144,7 @@ internal class CheckoutSessionRequestTest {
                 .force3ds(true)
                 .mandateMinAmountInrPaise(0)
                 .metadata(
-                    CheckoutSessionRequest.Metadata.builder()
+                    Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
@@ -305,9 +306,7 @@ internal class CheckoutSessionRequestTest {
         assertThat(checkoutSessionRequest.mandateMinAmountInrPaise()).isEqualTo(0)
         assertThat(checkoutSessionRequest.metadata())
             .isEqualTo(
-                CheckoutSessionRequest.Metadata.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
+                Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
             )
         assertThat(checkoutSessionRequest.minimalAddress()).isEqualTo(true)
         assertThat(checkoutSessionRequest.paymentMethodId()).isEqualTo("payment_method_id")
@@ -460,7 +459,7 @@ internal class CheckoutSessionRequestTest {
                 .force3ds(true)
                 .mandateMinAmountInrPaise(0)
                 .metadata(
-                    CheckoutSessionRequest.Metadata.builder()
+                    Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )

@@ -7,6 +7,7 @@ import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.creditentitlements.CbbOverageBehavior
 import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.misc.TaxCategory
 import com.dodopayments.api.models.products.AttachCreditEntitlement
 import com.dodopayments.api.models.products.AttachProductEntitlement
@@ -16,6 +17,7 @@ import com.dodopayments.api.models.products.Price
 import com.dodopayments.api.models.products.ProductCreateParams
 import com.dodopayments.api.models.products.ProductUpdateFilesParams
 import com.dodopayments.api.models.products.ProductUpdateParams
+import com.dodopayments.api.models.products.localizedprices.PricingMode
 import com.dodopayments.api.models.subscriptions.TimeInterval
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -88,11 +90,11 @@ internal class ProductServiceTest {
                     )
                     .licenseKeyEnabled(true)
                     .metadata(
-                        ProductCreateParams.Metadata.builder()
+                        Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
-                    .pricingMode(ProductCreateParams.PricingMode.BY_CURRENCY)
+                    .pricingMode(PricingMode.BY_CURRENCY)
                     .build()
             )
 
@@ -167,7 +169,7 @@ internal class ProductServiceTest {
                 )
                 .licenseKeyEnabled(true)
                 .metadata(
-                    ProductUpdateParams.Metadata.builder()
+                    Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
@@ -183,7 +185,7 @@ internal class ProductServiceTest {
                         .taxInclusive(true)
                         .build()
                 )
-                .pricingMode(ProductUpdateParams.PricingMode.BY_CURRENCY)
+                .pricingMode(PricingMode.BY_CURRENCY)
                 .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
                 .build()
         )

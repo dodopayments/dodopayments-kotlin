@@ -4,6 +4,7 @@ package com.dodopayments.api.models.disputes
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.payments.CustomerLimitedDetails
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
@@ -27,7 +28,7 @@ internal class GetDisputeTest {
                         .email("email")
                         .name("name")
                         .metadata(
-                            CustomerLimitedDetails.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -57,7 +58,7 @@ internal class GetDisputeTest {
                     .email("email")
                     .name("name")
                     .metadata(
-                        CustomerLimitedDetails.Metadata.builder()
+                        Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -90,7 +91,7 @@ internal class GetDisputeTest {
                         .email("email")
                         .name("name")
                         .metadata(
-                            CustomerLimitedDetails.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )

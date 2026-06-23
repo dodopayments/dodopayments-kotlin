@@ -6,6 +6,7 @@ import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.disputes.DisputeStatus
 import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.misc.Metadata
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -28,7 +29,7 @@ internal class PaymentListPageResponseTest {
                                 .email("email")
                                 .name("name")
                                 .metadata(
-                                    CustomerLimitedDetails.Metadata.builder()
+                                    Metadata.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
@@ -38,7 +39,7 @@ internal class PaymentListPageResponseTest {
                         .digitalProductsDelivered(true)
                         .hasLicenseKey(true)
                         .metadata(
-                            PaymentListResponse.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -71,7 +72,7 @@ internal class PaymentListPageResponseTest {
                             .email("email")
                             .name("name")
                             .metadata(
-                                CustomerLimitedDetails.Metadata.builder()
+                                Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
@@ -81,7 +82,7 @@ internal class PaymentListPageResponseTest {
                     .digitalProductsDelivered(true)
                     .hasLicenseKey(true)
                     .metadata(
-                        PaymentListResponse.Metadata.builder()
+                        Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -118,7 +119,7 @@ internal class PaymentListPageResponseTest {
                                 .email("email")
                                 .name("name")
                                 .metadata(
-                                    CustomerLimitedDetails.Metadata.builder()
+                                    Metadata.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
@@ -128,7 +129,7 @@ internal class PaymentListPageResponseTest {
                         .digitalProductsDelivered(true)
                         .hasLicenseKey(true)
                         .metadata(
-                            PaymentListResponse.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )

@@ -11,6 +11,7 @@ import com.dodopayments.api.models.disputes.DisputeStage
 import com.dodopayments.api.models.disputes.DisputeStatus
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.refunds.RefundStatus
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
@@ -42,7 +43,7 @@ internal class PaymentTest {
                         .email("email")
                         .name("name")
                         .metadata(
-                            CustomerLimitedDetails.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -65,7 +66,7 @@ internal class PaymentTest {
                         .build()
                 )
                 .metadata(
-                    Payment.Metadata.builder()
+                    Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
@@ -106,7 +107,7 @@ internal class PaymentTest {
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .discountId("discount_id")
                         .metadata(
-                            DiscountDetail.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -161,7 +162,7 @@ internal class PaymentTest {
                     .email("email")
                     .name("name")
                     .metadata(
-                        CustomerLimitedDetails.Metadata.builder()
+                        Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -186,9 +187,7 @@ internal class PaymentTest {
             )
         assertThat(payment.metadata())
             .isEqualTo(
-                Payment.Metadata.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
+                Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
             )
         assertThat(payment.paymentId()).isEqualTo("payment_id")
         assertThat(payment.paymentProvider()).isEqualTo(Payment.PaymentProvider.STRIPE)
@@ -228,7 +227,7 @@ internal class PaymentTest {
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .discountId("discount_id")
                     .metadata(
-                        DiscountDetail.Metadata.builder()
+                        Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -287,7 +286,7 @@ internal class PaymentTest {
                         .email("email")
                         .name("name")
                         .metadata(
-                            CustomerLimitedDetails.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -310,7 +309,7 @@ internal class PaymentTest {
                         .build()
                 )
                 .metadata(
-                    Payment.Metadata.builder()
+                    Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
@@ -351,7 +350,7 @@ internal class PaymentTest {
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .discountId("discount_id")
                         .metadata(
-                            DiscountDetail.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )

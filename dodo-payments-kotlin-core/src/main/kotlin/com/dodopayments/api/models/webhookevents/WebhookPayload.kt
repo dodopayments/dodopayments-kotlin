@@ -27,6 +27,7 @@ import com.dodopayments.api.models.licensekeys.LicenseKey
 import com.dodopayments.api.models.licensekeys.LicenseKeyStatus
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.CustomFieldResponse
 import com.dodopayments.api.models.payments.CustomerLimitedDetails
@@ -823,7 +824,7 @@ private constructor(
             private val customer: JsonField<CustomerLimitedDetails>,
             private val digitalProductsDelivered: JsonField<Boolean>,
             private val disputes: JsonField<List<Dispute>>,
-            private val metadata: JsonField<Payment.Metadata>,
+            private val metadata: JsonField<Metadata>,
             private val paymentId: JsonField<String>,
             private val paymentProvider: JsonField<Payment.PaymentProvider>,
             private val refunds: JsonField<List<RefundListItem>>,
@@ -886,7 +887,7 @@ private constructor(
                 disputes: JsonField<List<Dispute>> = JsonMissing.of(),
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                metadata: JsonField<Payment.Metadata> = JsonMissing.of(),
+                metadata: JsonField<Metadata> = JsonMissing.of(),
                 @JsonProperty("payment_id")
                 @ExcludeMissing
                 paymentId: JsonField<String> = JsonMissing.of(),
@@ -1145,7 +1146,7 @@ private constructor(
              *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
-            fun metadata(): Payment.Metadata = metadata.getRequired("metadata")
+            fun metadata(): Metadata = metadata.getRequired("metadata")
 
             /**
              * Unique identifier for the payment
@@ -1507,7 +1508,7 @@ private constructor(
              */
             @JsonProperty("metadata")
             @ExcludeMissing
-            fun _metadata(): JsonField<Payment.Metadata> = metadata
+            fun _metadata(): JsonField<Metadata> = metadata
 
             /**
              * Returns the raw JSON value of [paymentId].
@@ -1852,7 +1853,7 @@ private constructor(
                 private var customer: JsonField<CustomerLimitedDetails>? = null
                 private var digitalProductsDelivered: JsonField<Boolean>? = null
                 private var disputes: JsonField<MutableList<Dispute>>? = null
-                private var metadata: JsonField<Payment.Metadata>? = null
+                private var metadata: JsonField<Metadata>? = null
                 private var paymentId: JsonField<String>? = null
                 private var paymentProvider: JsonField<Payment.PaymentProvider>? = null
                 private var refunds: JsonField<MutableList<RefundListItem>>? = null
@@ -2051,18 +2052,16 @@ private constructor(
                 }
 
                 /** Additional custom data associated with the payment */
-                fun metadata(metadata: Payment.Metadata) = metadata(JsonField.of(metadata))
+                fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
                 /**
                  * Sets [Builder.metadata] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.metadata] with a well-typed [Payment.Metadata]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
                  */
-                fun metadata(metadata: JsonField<Payment.Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 /** Unique identifier for the payment */
                 fun paymentId(paymentId: String) = paymentId(JsonField.of(paymentId))
@@ -2935,7 +2934,7 @@ private constructor(
             private val creditEntitlementCart: JsonField<List<CreditEntitlementCartResponse>>,
             private val currency: JsonField<Currency>,
             private val customer: JsonField<CustomerLimitedDetails>,
-            private val metadata: JsonField<Subscription.Metadata>,
+            private val metadata: JsonField<Metadata>,
             private val meterCreditEntitlementCart:
                 JsonField<List<MeterCreditEntitlementCartResponse>>,
             private val meters: JsonField<List<MeterCartResponseItem>>,
@@ -2998,7 +2997,7 @@ private constructor(
                 customer: JsonField<CustomerLimitedDetails> = JsonMissing.of(),
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                metadata: JsonField<Subscription.Metadata> = JsonMissing.of(),
+                metadata: JsonField<Metadata> = JsonMissing.of(),
                 @JsonProperty("meter_credit_entitlement_cart")
                 @ExcludeMissing
                 meterCreditEntitlementCart: JsonField<List<MeterCreditEntitlementCartResponse>> =
@@ -3249,7 +3248,7 @@ private constructor(
              *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
-            fun metadata(): Subscription.Metadata = metadata.getRequired("metadata")
+            fun metadata(): Metadata = metadata.getRequired("metadata")
 
             /**
              * Meter credit entitlement cart settings for this subscription
@@ -3603,7 +3602,7 @@ private constructor(
              */
             @JsonProperty("metadata")
             @ExcludeMissing
-            fun _metadata(): JsonField<Subscription.Metadata> = metadata
+            fun _metadata(): JsonField<Metadata> = metadata
 
             /**
              * Returns the raw JSON value of [meterCreditEntitlementCart].
@@ -3941,7 +3940,7 @@ private constructor(
                     null
                 private var currency: JsonField<Currency>? = null
                 private var customer: JsonField<CustomerLimitedDetails>? = null
-                private var metadata: JsonField<Subscription.Metadata>? = null
+                private var metadata: JsonField<Metadata>? = null
                 private var meterCreditEntitlementCart:
                     JsonField<MutableList<MeterCreditEntitlementCartResponse>>? =
                     null
@@ -4158,18 +4157,16 @@ private constructor(
                 }
 
                 /** Additional custom data associated with the subscription */
-                fun metadata(metadata: Subscription.Metadata) = metadata(JsonField.of(metadata))
+                fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
                 /**
                  * Sets [Builder.metadata] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.metadata] with a well-typed
-                 * [Subscription.Metadata] value instead. This method is primarily for setting the
-                 * field to an undocumented or not yet supported value.
+                 * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
                  */
-                fun metadata(metadata: JsonField<Subscription.Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 /** Meter credit entitlement cart settings for this subscription */
                 fun meterCreditEntitlementCart(
@@ -4186,8 +4183,9 @@ private constructor(
                 fun meterCreditEntitlementCart(
                     meterCreditEntitlementCart: JsonField<List<MeterCreditEntitlementCartResponse>>
                 ) = apply {
-                    this.meterCreditEntitlementCart =
-                        meterCreditEntitlementCart.map { it.toMutableList() }
+                    this.meterCreditEntitlementCart = meterCreditEntitlementCart.map {
+                        it.toMutableList()
+                    }
                 }
 
                 /**
@@ -4994,7 +4992,7 @@ private constructor(
             private val createdAt: JsonField<OffsetDateTime>,
             private val customer: JsonField<CustomerLimitedDetails>,
             private val isPartial: JsonField<Boolean>,
-            private val metadata: JsonField<Refund.Metadata>,
+            private val metadata: JsonField<Metadata>,
             private val paymentId: JsonField<String>,
             private val refundId: JsonField<String>,
             private val status: JsonField<RefundStatus>,
@@ -5024,7 +5022,7 @@ private constructor(
                 isPartial: JsonField<Boolean> = JsonMissing.of(),
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                metadata: JsonField<Refund.Metadata> = JsonMissing.of(),
+                metadata: JsonField<Metadata> = JsonMissing.of(),
                 @JsonProperty("payment_id")
                 @ExcludeMissing
                 paymentId: JsonField<String> = JsonMissing.of(),
@@ -5129,7 +5127,7 @@ private constructor(
              *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
-            fun metadata(): Refund.Metadata = metadata.getRequired("metadata")
+            fun metadata(): Metadata = metadata.getRequired("metadata")
 
             /**
              * The unique identifier of the payment associated with the refund.
@@ -5250,7 +5248,7 @@ private constructor(
              */
             @JsonProperty("metadata")
             @ExcludeMissing
-            fun _metadata(): JsonField<Refund.Metadata> = metadata
+            fun _metadata(): JsonField<Metadata> = metadata
 
             /**
              * Returns the raw JSON value of [paymentId].
@@ -5342,7 +5340,7 @@ private constructor(
                 private var createdAt: JsonField<OffsetDateTime>? = null
                 private var customer: JsonField<CustomerLimitedDetails>? = null
                 private var isPartial: JsonField<Boolean>? = null
-                private var metadata: JsonField<Refund.Metadata>? = null
+                private var metadata: JsonField<Metadata>? = null
                 private var paymentId: JsonField<String>? = null
                 private var refundId: JsonField<String>? = null
                 private var status: JsonField<RefundStatus>? = null
@@ -5436,18 +5434,16 @@ private constructor(
                 fun isPartial(isPartial: JsonField<Boolean>) = apply { this.isPartial = isPartial }
 
                 /** Additional metadata stored with the refund. */
-                fun metadata(metadata: Refund.Metadata) = metadata(JsonField.of(metadata))
+                fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
                 /**
                  * Sets [Builder.metadata] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.metadata] with a well-typed [Refund.Metadata]
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
+                 * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
                  */
-                fun metadata(metadata: JsonField<Refund.Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 /** The unique identifier of the payment associated with the refund. */
                 fun paymentId(paymentId: String) = paymentId(JsonField.of(paymentId))
@@ -7421,6 +7417,7 @@ private constructor(
             private val creditEntitlementId: JsonField<String>,
             private val customerId: JsonField<String>,
             private val isCredit: JsonField<Boolean>,
+            private val metadata: JsonField<Metadata>,
             private val overageAfter: JsonField<String>,
             private val overageBefore: JsonField<String>,
             private val transactionType: JsonField<CreditLedgerEntry.TransactionType>,
@@ -7462,6 +7459,9 @@ private constructor(
                 @JsonProperty("is_credit")
                 @ExcludeMissing
                 isCredit: JsonField<Boolean> = JsonMissing.of(),
+                @JsonProperty("metadata")
+                @ExcludeMissing
+                metadata: JsonField<Metadata> = JsonMissing.of(),
                 @JsonProperty("overage_after")
                 @ExcludeMissing
                 overageAfter: JsonField<String> = JsonMissing.of(),
@@ -7497,6 +7497,7 @@ private constructor(
                 creditEntitlementId,
                 customerId,
                 isCredit,
+                metadata,
                 overageAfter,
                 overageBefore,
                 transactionType,
@@ -7520,6 +7521,7 @@ private constructor(
                     .creditEntitlementId(creditEntitlementId)
                     .customerId(customerId)
                     .isCredit(isCredit)
+                    .metadata(metadata)
                     .overageAfter(overageAfter)
                     .overageBefore(overageBefore)
                     .transactionType(transactionType)
@@ -7601,6 +7603,17 @@ private constructor(
              *   value).
              */
             fun isCredit(): Boolean = isCredit.getRequired("is_credit")
+
+            /**
+             * Metadata associated with the credit grant's source (the subscription or payment
+             * created at checkout). Empty when the grant has no resolvable source (e.g. credits
+             * granted directly via the API).
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun metadata(): Metadata = metadata.getRequired("metadata")
 
             /**
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
@@ -7753,6 +7766,16 @@ private constructor(
             fun _isCredit(): JsonField<Boolean> = isCredit
 
             /**
+             * Returns the raw JSON value of [metadata].
+             *
+             * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("metadata")
+            @ExcludeMissing
+            fun _metadata(): JsonField<Metadata> = metadata
+
+            /**
              * Returns the raw JSON value of [overageAfter].
              *
              * Unlike [overageAfter], this method doesn't throw if the JSON field has an unexpected
@@ -7848,6 +7871,7 @@ private constructor(
                  * .creditEntitlementId()
                  * .customerId()
                  * .isCredit()
+                 * .metadata()
                  * .overageAfter()
                  * .overageBefore()
                  * .transactionType()
@@ -7869,6 +7893,7 @@ private constructor(
                 private var creditEntitlementId: JsonField<String>? = null
                 private var customerId: JsonField<String>? = null
                 private var isCredit: JsonField<Boolean>? = null
+                private var metadata: JsonField<Metadata>? = null
                 private var overageAfter: JsonField<String>? = null
                 private var overageBefore: JsonField<String>? = null
                 private var transactionType: JsonField<CreditLedgerEntry.TransactionType>? = null
@@ -7890,6 +7915,7 @@ private constructor(
                     creditEntitlementId = creditLedgerEntry.creditEntitlementId
                     customerId = creditLedgerEntry.customerId
                     isCredit = creditLedgerEntry.isCredit
+                    metadata = creditLedgerEntry.metadata
                     overageAfter = creditLedgerEntry.overageAfter
                     overageBefore = creditLedgerEntry.overageBefore
                     transactionType = creditLedgerEntry.transactionType
@@ -8025,6 +8051,22 @@ private constructor(
                  * yet supported value.
                  */
                 fun isCredit(isCredit: JsonField<Boolean>) = apply { this.isCredit = isCredit }
+
+                /**
+                 * Metadata associated with the credit grant's source (the subscription or payment
+                 * created at checkout). Empty when the grant has no resolvable source (e.g. credits
+                 * granted directly via the API).
+                 */
+                fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
+
+                /**
+                 * Sets [Builder.metadata] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 fun overageAfter(overageAfter: String) = overageAfter(JsonField.of(overageAfter))
 
@@ -8174,6 +8216,7 @@ private constructor(
                  * .creditEntitlementId()
                  * .customerId()
                  * .isCredit()
+                 * .metadata()
                  * .overageAfter()
                  * .overageBefore()
                  * .transactionType()
@@ -8193,6 +8236,7 @@ private constructor(
                         checkRequired("creditEntitlementId", creditEntitlementId),
                         checkRequired("customerId", customerId),
                         checkRequired("isCredit", isCredit),
+                        checkRequired("metadata", metadata),
                         checkRequired("overageAfter", overageAfter),
                         checkRequired("overageBefore", overageBefore),
                         checkRequired("transactionType", transactionType),
@@ -8232,6 +8276,7 @@ private constructor(
                 creditEntitlementId()
                 customerId()
                 isCredit()
+                metadata().validate()
                 overageAfter()
                 overageBefore()
                 transactionType().validate()
@@ -8274,6 +8319,7 @@ private constructor(
                     (if (creditEntitlementId.asKnown() == null) 0 else 1) +
                     (if (customerId.asKnown() == null) 0 else 1) +
                     (if (isCredit.asKnown() == null) 0 else 1) +
+                    (metadata.asKnown()?.validity() ?: 0) +
                     (if (overageAfter.asKnown() == null) 0 else 1) +
                     (if (overageBefore.asKnown() == null) 0 else 1) +
                     (transactionType.asKnown()?.validity() ?: 0) +
@@ -8299,6 +8345,7 @@ private constructor(
                     creditEntitlementId == other.creditEntitlementId &&
                     customerId == other.customerId &&
                     isCredit == other.isCredit &&
+                    metadata == other.metadata &&
                     overageAfter == other.overageAfter &&
                     overageBefore == other.overageBefore &&
                     transactionType == other.transactionType &&
@@ -8322,6 +8369,7 @@ private constructor(
                     creditEntitlementId,
                     customerId,
                     isCredit,
+                    metadata,
                     overageAfter,
                     overageBefore,
                     transactionType,
@@ -8337,7 +8385,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "CreditLedgerEntry{id=$id, amount=$amount, balanceAfter=$balanceAfter, balanceBefore=$balanceBefore, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, creditEntitlementId=$creditEntitlementId, customerId=$customerId, isCredit=$isCredit, overageAfter=$overageAfter, overageBefore=$overageBefore, transactionType=$transactionType, description=$description, grantId=$grantId, referenceId=$referenceId, referenceType=$referenceType, payloadType=$payloadType, additionalProperties=$additionalProperties}"
+                "CreditLedgerEntry{id=$id, amount=$amount, balanceAfter=$balanceAfter, balanceBefore=$balanceBefore, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, creditEntitlementId=$creditEntitlementId, customerId=$customerId, isCredit=$isCredit, metadata=$metadata, overageAfter=$overageAfter, overageBefore=$overageBefore, transactionType=$transactionType, description=$description, grantId=$grantId, referenceId=$referenceId, referenceType=$referenceType, payloadType=$payloadType, additionalProperties=$additionalProperties}"
         }
 
         class CreditBalanceLow
@@ -9416,9 +9464,11 @@ private constructor(
                  *
                  * An instance of [AbandonmentReason] can contain an unknown value in a couple of
                  * cases:
+                 *
                  * - It was deserialized from data that doesn't match any known member. For example,
                  *   if the SDK is on an older version than the API, then the API may respond with
                  *   new members that the SDK is unaware of.
+                 *
                  * - It was constructed with an arbitrary value using the [of] method.
                  */
                 enum class Value {
@@ -9568,9 +9618,11 @@ private constructor(
                  * An enum containing [Status]'s known values, as well as an [_UNKNOWN] member.
                  *
                  * An instance of [Status] can contain an unknown value in a couple of cases:
+                 *
                  * - It was deserialized from data that doesn't match any known member. For example,
                  *   if the SDK is on an older version than the API, then the API may respond with
                  *   new members that the SDK is unaware of.
+                 *
                  * - It was constructed with an arbitrary value using the [of] method.
                  */
                 enum class Value {
@@ -10204,9 +10256,11 @@ private constructor(
                  * An enum containing [Status]'s known values, as well as an [_UNKNOWN] member.
                  *
                  * An instance of [Status] can contain an unknown value in a couple of cases:
+                 *
                  * - It was deserialized from data that doesn't match any known member. For example,
                  *   if the SDK is on an older version than the API, then the API may respond with
                  *   new members that the SDK is unaware of.
+                 *
                  * - It was constructed with an arbitrary value using the [of] method.
                  */
                 enum class Value {
@@ -10349,9 +10403,11 @@ private constructor(
                  * member.
                  *
                  * An instance of [TriggerState] can contain an unknown value in a couple of cases:
+                 *
                  * - It was deserialized from data that doesn't match any known member. For example,
                  *   if the SDK is on an older version than the API, then the API may respond with
                  *   new members that the SDK is unaware of.
+                 *
                  * - It was constructed with an arbitrary value using the [of] method.
                  */
                 enum class Value {
@@ -10509,7 +10565,7 @@ private constructor(
             private val customerId: JsonField<String>,
             private val entitlementId: JsonField<String>,
             private val integrationType: JsonField<EntitlementIntegrationType>,
-            private val metadata: JsonField<EntitlementGrant.Metadata>,
+            private val metadata: JsonField<Metadata>,
             private val status: JsonField<EntitlementGrant.Status>,
             private val updatedAt: JsonField<OffsetDateTime>,
             private val deliveredAt: JsonField<OffsetDateTime>,
@@ -10550,7 +10606,7 @@ private constructor(
                 integrationType: JsonField<EntitlementIntegrationType> = JsonMissing.of(),
                 @JsonProperty("metadata")
                 @ExcludeMissing
-                metadata: JsonField<EntitlementGrant.Metadata> = JsonMissing.of(),
+                metadata: JsonField<Metadata> = JsonMissing.of(),
                 @JsonProperty("status")
                 @ExcludeMissing
                 status: JsonField<EntitlementGrant.Status> = JsonMissing.of(),
@@ -10715,7 +10771,7 @@ private constructor(
              *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
-            fun metadata(): EntitlementGrant.Metadata = metadata.getRequired("metadata")
+            fun metadata(): Metadata = metadata.getRequired("metadata")
 
             /**
              * Lifecycle status of the grant.
@@ -10913,7 +10969,7 @@ private constructor(
              */
             @JsonProperty("metadata")
             @ExcludeMissing
-            fun _metadata(): JsonField<EntitlementGrant.Metadata> = metadata
+            fun _metadata(): JsonField<Metadata> = metadata
 
             /**
              * Returns the raw JSON value of [status].
@@ -11087,7 +11143,7 @@ private constructor(
                 private var customerId: JsonField<String>? = null
                 private var entitlementId: JsonField<String>? = null
                 private var integrationType: JsonField<EntitlementIntegrationType>? = null
-                private var metadata: JsonField<EntitlementGrant.Metadata>? = null
+                private var metadata: JsonField<Metadata>? = null
                 private var status: JsonField<EntitlementGrant.Status>? = null
                 private var updatedAt: JsonField<OffsetDateTime>? = null
                 private var deliveredAt: JsonField<OffsetDateTime> = JsonMissing.of()
@@ -11229,18 +11285,16 @@ private constructor(
                     }
 
                 /** Arbitrary key-value metadata recorded on the grant. */
-                fun metadata(metadata: EntitlementGrant.Metadata) = metadata(JsonField.of(metadata))
+                fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
                 /**
                  * Sets [Builder.metadata] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.metadata] with a well-typed
-                 * [EntitlementGrant.Metadata] value instead. This method is primarily for setting
-                 * the field to an undocumented or not yet supported value.
+                 * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
                  */
-                fun metadata(metadata: JsonField<EntitlementGrant.Metadata>) = apply {
-                    this.metadata = metadata
-                }
+                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 /** Lifecycle status of the grant. */
                 fun status(status: EntitlementGrant.Status) = status(JsonField.of(status))

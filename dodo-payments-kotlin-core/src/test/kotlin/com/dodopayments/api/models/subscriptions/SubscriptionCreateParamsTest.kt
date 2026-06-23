@@ -5,6 +5,7 @@ package com.dodopayments.api.models.subscriptions
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.CustomerRequest
@@ -39,9 +40,7 @@ internal class SubscriptionCreateParamsTest {
             .force3ds(true)
             .mandateMinAmountInrPaise(0)
             .metadata(
-                SubscriptionCreateParams.Metadata.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
+                Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
             )
             .onDemand(
                 OnDemandSubscription.builder()
@@ -96,7 +95,7 @@ internal class SubscriptionCreateParamsTest {
                 .force3ds(true)
                 .mandateMinAmountInrPaise(0)
                 .metadata(
-                    SubscriptionCreateParams.Metadata.builder()
+                    Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
@@ -158,9 +157,7 @@ internal class SubscriptionCreateParamsTest {
         assertThat(body.mandateMinAmountInrPaise()).isEqualTo(0)
         assertThat(body.metadata())
             .isEqualTo(
-                SubscriptionCreateParams.Metadata.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
+                Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
             )
         assertThat(body.onDemand())
             .isEqualTo(

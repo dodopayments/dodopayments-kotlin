@@ -5,6 +5,7 @@ package com.dodopayments.api.models.webhooks
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.payments.CustomerLimitedDetails
 import com.dodopayments.api.models.refunds.Refund
 import com.dodopayments.api.models.refunds.RefundStatus
@@ -31,7 +32,7 @@ internal class RefundSucceededWebhookEventTest {
                                 .email("email")
                                 .name("name")
                                 .metadata(
-                                    CustomerLimitedDetails.Metadata.builder()
+                                    Metadata.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
@@ -40,7 +41,7 @@ internal class RefundSucceededWebhookEventTest {
                         )
                         .isPartial(true)
                         .metadata(
-                            Refund.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -68,7 +69,7 @@ internal class RefundSucceededWebhookEventTest {
                             .email("email")
                             .name("name")
                             .metadata(
-                                CustomerLimitedDetails.Metadata.builder()
+                                Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
@@ -77,7 +78,7 @@ internal class RefundSucceededWebhookEventTest {
                     )
                     .isPartial(true)
                     .metadata(
-                        Refund.Metadata.builder()
+                        Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -110,7 +111,7 @@ internal class RefundSucceededWebhookEventTest {
                                 .email("email")
                                 .name("name")
                                 .metadata(
-                                    CustomerLimitedDetails.Metadata.builder()
+                                    Metadata.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
@@ -119,7 +120,7 @@ internal class RefundSucceededWebhookEventTest {
                         )
                         .isPartial(true)
                         .metadata(
-                            Refund.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )

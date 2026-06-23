@@ -7,6 +7,7 @@ import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.entitlements.EntitlementIntegrationType
 import com.dodopayments.api.models.entitlements.grants.EntitlementGrant
 import com.dodopayments.api.models.entitlements.grants.LicenseKeyGrant
+import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.products.DigitalProductDelivery
 import com.dodopayments.api.models.products.DigitalProductDeliveryFile
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
@@ -31,7 +32,7 @@ internal class EntitlementGrantDeliveredWebhookEventTest {
                         .entitlementId("entitlement_id")
                         .integrationType(EntitlementIntegrationType.DISCORD)
                         .metadata(
-                            EntitlementGrant.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -87,7 +88,7 @@ internal class EntitlementGrantDeliveredWebhookEventTest {
                     .entitlementId("entitlement_id")
                     .integrationType(EntitlementIntegrationType.DISCORD)
                     .metadata(
-                        EntitlementGrant.Metadata.builder()
+                        Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -148,7 +149,7 @@ internal class EntitlementGrantDeliveredWebhookEventTest {
                         .entitlementId("entitlement_id")
                         .integrationType(EntitlementIntegrationType.DISCORD)
                         .metadata(
-                            EntitlementGrant.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
