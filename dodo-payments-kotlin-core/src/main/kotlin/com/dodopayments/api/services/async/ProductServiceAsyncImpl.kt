@@ -30,6 +30,8 @@ import com.dodopayments.api.models.products.ProductUpdateFilesResponse
 import com.dodopayments.api.models.products.ProductUpdateParams
 import com.dodopayments.api.services.async.products.ImageServiceAsync
 import com.dodopayments.api.services.async.products.ImageServiceAsyncImpl
+import com.dodopayments.api.services.async.products.LocalizedPriceServiceAsync
+import com.dodopayments.api.services.async.products.LocalizedPriceServiceAsyncImpl
 import com.dodopayments.api.services.async.products.ShortLinkServiceAsync
 import com.dodopayments.api.services.async.products.ShortLinkServiceAsyncImpl
 
@@ -46,6 +48,10 @@ class ProductServiceAsyncImpl internal constructor(private val clientOptions: Cl
         ShortLinkServiceAsyncImpl(clientOptions)
     }
 
+    private val localizedPrices: LocalizedPriceServiceAsync by lazy {
+        LocalizedPriceServiceAsyncImpl(clientOptions)
+    }
+
     override fun withRawResponse(): ProductServiceAsync.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ProductServiceAsync =
@@ -54,6 +60,8 @@ class ProductServiceAsyncImpl internal constructor(private val clientOptions: Cl
     override fun images(): ImageServiceAsync = images
 
     override fun shortLinks(): ShortLinkServiceAsync = shortLinks
+
+    override fun localizedPrices(): LocalizedPriceServiceAsync = localizedPrices
 
     override suspend fun create(
         params: ProductCreateParams,
@@ -112,6 +120,10 @@ class ProductServiceAsyncImpl internal constructor(private val clientOptions: Cl
             ShortLinkServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val localizedPrices: LocalizedPriceServiceAsync.WithRawResponse by lazy {
+            LocalizedPriceServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): ProductServiceAsync.WithRawResponse =
@@ -122,6 +134,8 @@ class ProductServiceAsyncImpl internal constructor(private val clientOptions: Cl
         override fun images(): ImageServiceAsync.WithRawResponse = images
 
         override fun shortLinks(): ShortLinkServiceAsync.WithRawResponse = shortLinks
+
+        override fun localizedPrices(): LocalizedPriceServiceAsync.WithRawResponse = localizedPrices
 
         private val createHandler: Handler<Product> = jsonHandler<Product>(clientOptions.jsonMapper)
 

@@ -6,6 +6,7 @@ import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.CustomerLimitedDetails
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
@@ -39,7 +40,7 @@ internal class SubscriptionListPageResponseTest {
                                 .email("email")
                                 .name("name")
                                 .metadata(
-                                    CustomerLimitedDetails.Metadata.builder()
+                                    Metadata.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
@@ -53,7 +54,7 @@ internal class SubscriptionListPageResponseTest {
                                 .build()
                         )
                         .metadata(
-                            SubscriptionListResponse.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -121,7 +122,7 @@ internal class SubscriptionListPageResponseTest {
                             .email("email")
                             .name("name")
                             .metadata(
-                                CustomerLimitedDetails.Metadata.builder()
+                                Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )
@@ -135,7 +136,7 @@ internal class SubscriptionListPageResponseTest {
                             .build()
                     )
                     .metadata(
-                        SubscriptionListResponse.Metadata.builder()
+                        Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -207,7 +208,7 @@ internal class SubscriptionListPageResponseTest {
                                 .email("email")
                                 .name("name")
                                 .metadata(
-                                    CustomerLimitedDetails.Metadata.builder()
+                                    Metadata.builder()
                                         .putAdditionalProperty("foo", JsonValue.from("string"))
                                         .build()
                                 )
@@ -221,7 +222,7 @@ internal class SubscriptionListPageResponseTest {
                                 .build()
                         )
                         .metadata(
-                            SubscriptionListResponse.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
