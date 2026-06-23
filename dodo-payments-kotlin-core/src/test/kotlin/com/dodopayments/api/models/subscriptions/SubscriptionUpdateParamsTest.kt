@@ -4,6 +4,7 @@ package com.dodopayments.api.models.subscriptions
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.misc.CountryCode
+import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.payments.BillingAddress
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -51,9 +52,7 @@ internal class SubscriptionUpdateParamsTest {
                     .build()
             )
             .metadata(
-                SubscriptionUpdateParams.Metadata.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
+                Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
             )
             .nextBillingDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .status(SubscriptionStatus.PENDING)
@@ -112,7 +111,7 @@ internal class SubscriptionUpdateParamsTest {
                         .build()
                 )
                 .metadata(
-                    SubscriptionUpdateParams.Metadata.builder()
+                    Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
@@ -164,9 +163,7 @@ internal class SubscriptionUpdateParamsTest {
             )
         assertThat(body.metadata())
             .isEqualTo(
-                SubscriptionUpdateParams.Metadata.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
+                Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
             )
         assertThat(body.nextBillingDate())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

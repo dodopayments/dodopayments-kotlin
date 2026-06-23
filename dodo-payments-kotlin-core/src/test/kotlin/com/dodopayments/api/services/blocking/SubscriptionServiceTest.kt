@@ -7,6 +7,7 @@ import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.payments.AttachExistingCustomer
 import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.OneTimeProductCartItem
@@ -63,7 +64,7 @@ internal class SubscriptionServiceTest {
                     .force3ds(true)
                     .mandateMinAmountInrPaise(0)
                     .metadata(
-                        SubscriptionCreateParams.Metadata.builder()
+                        Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -161,7 +162,7 @@ internal class SubscriptionServiceTest {
                             .build()
                     )
                     .metadata(
-                        SubscriptionUpdateParams.Metadata.builder()
+                        Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -225,7 +226,7 @@ internal class SubscriptionServiceTest {
                         .addDiscountCode("string")
                         .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
                         .metadata(
-                            UpdateSubscriptionPlanReq.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -258,7 +259,7 @@ internal class SubscriptionServiceTest {
                             .build()
                     )
                     .metadata(
-                        SubscriptionChargeParams.Metadata.builder()
+                        Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -296,7 +297,7 @@ internal class SubscriptionServiceTest {
                             .addDiscountCode("string")
                             .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
                             .metadata(
-                                UpdateSubscriptionPlanReq.Metadata.builder()
+                                Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
                                     .build()
                             )

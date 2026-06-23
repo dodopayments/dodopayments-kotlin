@@ -3,6 +3,7 @@
 package com.dodopayments.api.models.entitlements
 
 import com.dodopayments.api.core.JsonValue
+import com.dodopayments.api.models.misc.Metadata
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -20,9 +21,7 @@ internal class EntitlementUpdateParamsTest {
                     .build()
             )
             .metadata(
-                EntitlementUpdateParams.Metadata.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
+                Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
             )
             .name("name")
             .build()
@@ -50,7 +49,7 @@ internal class EntitlementUpdateParamsTest {
                         .build()
                 )
                 .metadata(
-                    EntitlementUpdateParams.Metadata.builder()
+                    Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
@@ -71,9 +70,7 @@ internal class EntitlementUpdateParamsTest {
             )
         assertThat(body.metadata())
             .isEqualTo(
-                EntitlementUpdateParams.Metadata.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
+                Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
             )
         assertThat(body.name()).isEqualTo("name")
     }

@@ -5,6 +5,7 @@ package com.dodopayments.api.models.refunds
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.payments.CustomerLimitedDetails
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
@@ -26,7 +27,7 @@ internal class RefundTest {
                         .email("email")
                         .name("name")
                         .metadata(
-                            CustomerLimitedDetails.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -35,7 +36,7 @@ internal class RefundTest {
                 )
                 .isPartial(true)
                 .metadata(
-                    Refund.Metadata.builder()
+                    Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
@@ -57,7 +58,7 @@ internal class RefundTest {
                     .email("email")
                     .name("name")
                     .metadata(
-                        CustomerLimitedDetails.Metadata.builder()
+                        Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -67,9 +68,7 @@ internal class RefundTest {
         assertThat(refund.isPartial()).isEqualTo(true)
         assertThat(refund.metadata())
             .isEqualTo(
-                Refund.Metadata.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
+                Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
             )
         assertThat(refund.paymentId()).isEqualTo("payment_id")
         assertThat(refund.refundId()).isEqualTo("refund_id")
@@ -93,7 +92,7 @@ internal class RefundTest {
                         .email("email")
                         .name("name")
                         .metadata(
-                            CustomerLimitedDetails.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -102,7 +101,7 @@ internal class RefundTest {
                 )
                 .isPartial(true)
                 .metadata(
-                    Refund.Metadata.builder()
+                    Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
