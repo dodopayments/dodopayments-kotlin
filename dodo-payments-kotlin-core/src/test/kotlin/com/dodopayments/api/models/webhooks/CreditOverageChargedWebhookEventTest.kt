@@ -2,8 +2,10 @@
 
 package com.dodopayments.api.models.webhooks
 
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry
+import com.dodopayments.api.models.misc.Metadata
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -28,6 +30,11 @@ internal class CreditOverageChargedWebhookEventTest {
                         .creditEntitlementId("credit_entitlement_id")
                         .customerId("customer_id")
                         .isCredit(true)
+                        .metadata(
+                            Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .overageAfter("overage_after")
                         .overageBefore("overage_before")
                         .transactionType(CreditLedgerEntry.TransactionType.CREDIT_ADDED)
@@ -54,6 +61,11 @@ internal class CreditOverageChargedWebhookEventTest {
                     .creditEntitlementId("credit_entitlement_id")
                     .customerId("customer_id")
                     .isCredit(true)
+                    .metadata(
+                        Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
                     .overageAfter("overage_after")
                     .overageBefore("overage_before")
                     .transactionType(CreditLedgerEntry.TransactionType.CREDIT_ADDED)
@@ -85,6 +97,11 @@ internal class CreditOverageChargedWebhookEventTest {
                         .creditEntitlementId("credit_entitlement_id")
                         .customerId("customer_id")
                         .isCredit(true)
+                        .metadata(
+                            Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
                         .overageAfter("overage_after")
                         .overageBefore("overage_before")
                         .transactionType(CreditLedgerEntry.TransactionType.CREDIT_ADDED)

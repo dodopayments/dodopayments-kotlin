@@ -17,6 +17,7 @@ import com.dodopayments.api.models.products.ProductUpdateFilesParams
 import com.dodopayments.api.models.products.ProductUpdateFilesResponse
 import com.dodopayments.api.models.products.ProductUpdateParams
 import com.dodopayments.api.services.async.products.ImageServiceAsync
+import com.dodopayments.api.services.async.products.LocalizedPriceServiceAsync
 import com.dodopayments.api.services.async.products.ShortLinkServiceAsync
 import com.google.errorprone.annotations.MustBeClosed
 
@@ -37,6 +38,8 @@ interface ProductServiceAsync {
     fun images(): ImageServiceAsync
 
     fun shortLinks(): ShortLinkServiceAsync
+
+    fun localizedPrices(): LocalizedPriceServiceAsync
 
     suspend fun create(
         params: ProductCreateParams,
@@ -145,6 +148,8 @@ interface ProductServiceAsync {
         fun images(): ImageServiceAsync.WithRawResponse
 
         fun shortLinks(): ShortLinkServiceAsync.WithRawResponse
+
+        fun localizedPrices(): LocalizedPriceServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /products`, but is otherwise the same as
