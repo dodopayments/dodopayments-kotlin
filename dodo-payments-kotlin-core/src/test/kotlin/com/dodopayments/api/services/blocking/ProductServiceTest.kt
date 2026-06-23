@@ -16,6 +16,7 @@ import com.dodopayments.api.models.products.Price
 import com.dodopayments.api.models.products.ProductCreateParams
 import com.dodopayments.api.models.products.ProductUpdateFilesParams
 import com.dodopayments.api.models.products.ProductUpdateParams
+import com.dodopayments.api.models.products.localizedprices.PricingMode
 import com.dodopayments.api.models.subscriptions.TimeInterval
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -92,7 +93,7 @@ internal class ProductServiceTest {
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
-                    .pricingMode(ProductCreateParams.PricingMode.BY_CURRENCY)
+                    .pricingMode(PricingMode.BY_CURRENCY)
                     .build()
             )
 
@@ -183,7 +184,7 @@ internal class ProductServiceTest {
                         .taxInclusive(true)
                         .build()
                 )
-                .pricingMode(ProductUpdateParams.PricingMode.BY_CURRENCY)
+                .pricingMode(PricingMode.BY_CURRENCY)
                 .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
                 .build()
         )

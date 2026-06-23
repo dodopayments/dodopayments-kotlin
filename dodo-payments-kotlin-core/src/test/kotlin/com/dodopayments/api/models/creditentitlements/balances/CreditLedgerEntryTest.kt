@@ -2,6 +2,7 @@
 
 package com.dodopayments.api.models.creditentitlements.balances
 
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
@@ -24,6 +25,11 @@ internal class CreditLedgerEntryTest {
                 .creditEntitlementId("credit_entitlement_id")
                 .customerId("customer_id")
                 .isCredit(true)
+                .metadata(
+                    CreditLedgerEntry.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .overageAfter("overage_after")
                 .overageBefore("overage_before")
                 .transactionType(CreditLedgerEntry.TransactionType.CREDIT_ADDED)
@@ -44,6 +50,12 @@ internal class CreditLedgerEntryTest {
         assertThat(creditLedgerEntry.creditEntitlementId()).isEqualTo("credit_entitlement_id")
         assertThat(creditLedgerEntry.customerId()).isEqualTo("customer_id")
         assertThat(creditLedgerEntry.isCredit()).isEqualTo(true)
+        assertThat(creditLedgerEntry.metadata())
+            .isEqualTo(
+                CreditLedgerEntry.Metadata.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                    .build()
+            )
         assertThat(creditLedgerEntry.overageAfter()).isEqualTo("overage_after")
         assertThat(creditLedgerEntry.overageBefore()).isEqualTo("overage_before")
         assertThat(creditLedgerEntry.transactionType())
@@ -69,6 +81,11 @@ internal class CreditLedgerEntryTest {
                 .creditEntitlementId("credit_entitlement_id")
                 .customerId("customer_id")
                 .isCredit(true)
+                .metadata(
+                    CreditLedgerEntry.Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .overageAfter("overage_after")
                 .overageBefore("overage_before")
                 .transactionType(CreditLedgerEntry.TransactionType.CREDIT_ADDED)
