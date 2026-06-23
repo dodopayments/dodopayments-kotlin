@@ -9,7 +9,9 @@ import com.dodopayments.api.models.entitlements.EntitlementIntegrationType
 import com.dodopayments.api.models.entitlements.GitHubPermission
 import com.dodopayments.api.models.entitlements.IntegrationConfigResponse
 import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.misc.TaxCategory
+import com.dodopayments.api.models.products.localizedprices.PricingMode
 import com.dodopayments.api.models.subscriptions.TimeInterval
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
@@ -66,7 +68,7 @@ internal class ProductTest {
                 .isRecurring(true)
                 .licenseKeyEnabled(true)
                 .metadata(
-                    Product.Metadata.builder()
+                    Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
@@ -109,7 +111,7 @@ internal class ProductTest {
                     LicenseKeyDuration.builder().count(0).interval(TimeInterval.DAY).build()
                 )
                 .name("name")
-                .pricingMode(Product.PricingMode.BY_CURRENCY)
+                .pricingMode(PricingMode.BY_CURRENCY)
                 .productCollectionId("product_collection_id")
                 .build()
 
@@ -160,9 +162,7 @@ internal class ProductTest {
         assertThat(product.licenseKeyEnabled()).isEqualTo(true)
         assertThat(product.metadata())
             .isEqualTo(
-                Product.Metadata.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("string"))
-                    .build()
+                Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
             )
         assertThat(product.price())
             .isEqualTo(
@@ -207,7 +207,7 @@ internal class ProductTest {
         assertThat(product.licenseKeyDuration())
             .isEqualTo(LicenseKeyDuration.builder().count(0).interval(TimeInterval.DAY).build())
         assertThat(product.name()).isEqualTo("name")
-        assertThat(product.pricingMode()).isEqualTo(Product.PricingMode.BY_CURRENCY)
+        assertThat(product.pricingMode()).isEqualTo(PricingMode.BY_CURRENCY)
         assertThat(product.productCollectionId()).isEqualTo("product_collection_id")
     }
 
@@ -260,7 +260,7 @@ internal class ProductTest {
                 .isRecurring(true)
                 .licenseKeyEnabled(true)
                 .metadata(
-                    Product.Metadata.builder()
+                    Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
                         .build()
                 )
@@ -303,7 +303,7 @@ internal class ProductTest {
                     LicenseKeyDuration.builder().count(0).interval(TimeInterval.DAY).build()
                 )
                 .name("name")
-                .pricingMode(Product.PricingMode.BY_CURRENCY)
+                .pricingMode(PricingMode.BY_CURRENCY)
                 .productCollectionId("product_collection_id")
                 .build()
 

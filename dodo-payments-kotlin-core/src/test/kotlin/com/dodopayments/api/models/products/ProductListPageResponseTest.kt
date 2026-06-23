@@ -8,7 +8,9 @@ import com.dodopayments.api.models.entitlements.EntitlementIntegrationType
 import com.dodopayments.api.models.entitlements.GitHubPermission
 import com.dodopayments.api.models.entitlements.IntegrationConfigResponse
 import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.misc.TaxCategory
+import com.dodopayments.api.models.products.localizedprices.PricingMode
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -40,7 +42,7 @@ internal class ProductListPageResponseTest {
                         )
                         .isRecurring(true)
                         .metadata(
-                            ProductListResponse.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -63,7 +65,7 @@ internal class ProductListPageResponseTest {
                                 .taxInclusive(true)
                                 .build()
                         )
-                        .pricingMode(ProductListResponse.PricingMode.BY_CURRENCY)
+                        .pricingMode(PricingMode.BY_CURRENCY)
                         .taxInclusive(true)
                         .build()
                 )
@@ -90,7 +92,7 @@ internal class ProductListPageResponseTest {
                     )
                     .isRecurring(true)
                     .metadata(
-                        ProductListResponse.Metadata.builder()
+                        Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -113,7 +115,7 @@ internal class ProductListPageResponseTest {
                             .taxInclusive(true)
                             .build()
                     )
-                    .pricingMode(ProductListResponse.PricingMode.BY_CURRENCY)
+                    .pricingMode(PricingMode.BY_CURRENCY)
                     .taxInclusive(true)
                     .build()
             )
@@ -144,7 +146,7 @@ internal class ProductListPageResponseTest {
                         )
                         .isRecurring(true)
                         .metadata(
-                            ProductListResponse.Metadata.builder()
+                            Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
                                 .build()
                         )
@@ -167,7 +169,7 @@ internal class ProductListPageResponseTest {
                                 .taxInclusive(true)
                                 .build()
                         )
-                        .pricingMode(ProductListResponse.PricingMode.BY_CURRENCY)
+                        .pricingMode(PricingMode.BY_CURRENCY)
                         .taxInclusive(true)
                         .build()
                 )

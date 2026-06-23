@@ -10,6 +10,7 @@ import com.dodopayments.api.models.creditentitlements.balances.BalanceListGrants
 import com.dodopayments.api.models.creditentitlements.balances.BalanceListLedgerParams
 import com.dodopayments.api.models.creditentitlements.balances.BalanceRetrieveParams
 import com.dodopayments.api.models.creditentitlements.balances.LedgerEntryType
+import com.dodopayments.api.models.misc.Metadata
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -70,7 +71,7 @@ internal class BalanceServiceTest {
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .idempotencyKey("idempotency_key")
                     .metadata(
-                        BalanceCreateLedgerEntryParams.Metadata.builder()
+                        Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )

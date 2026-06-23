@@ -10,6 +10,7 @@ import com.dodopayments.api.models.entitlements.EntitlementIntegrationType
 import com.dodopayments.api.models.entitlements.EntitlementUpdateParams
 import com.dodopayments.api.models.entitlements.GitHubPermission
 import com.dodopayments.api.models.entitlements.IntegrationConfig
+import com.dodopayments.api.models.misc.Metadata
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -38,7 +39,7 @@ internal class EntitlementServiceTest {
                     .name("name")
                     .description("description")
                     .metadata(
-                        EntitlementCreateParams.Metadata.builder()
+                        Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )
@@ -83,7 +84,7 @@ internal class EntitlementServiceTest {
                             .build()
                     )
                     .metadata(
-                        EntitlementUpdateParams.Metadata.builder()
+                        Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
                             .build()
                     )

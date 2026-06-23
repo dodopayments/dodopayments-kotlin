@@ -236,6 +236,8 @@ class PaymentMethodTypes @JsonCreator private constructor(private val value: Jso
 
         val PAYCO = of("payco")
 
+        val SATISPAY = of("satispay")
+
         fun of(value: String) = PaymentMethodTypes(JsonField.of(value))
     }
 
@@ -346,6 +348,7 @@ class PaymentMethodTypes @JsonCreator private constructor(private val value: Jso
         REVOLUT_PAY,
         NAVER_PAY,
         PAYCO,
+        SATISPAY,
     }
 
     /**
@@ -463,6 +466,7 @@ class PaymentMethodTypes @JsonCreator private constructor(private val value: Jso
         REVOLUT_PAY,
         NAVER_PAY,
         PAYCO,
+        SATISPAY,
         /**
          * An enum member indicating that [PaymentMethodTypes] was instantiated with an unknown
          * value.
@@ -584,6 +588,7 @@ class PaymentMethodTypes @JsonCreator private constructor(private val value: Jso
             REVOLUT_PAY -> Value.REVOLUT_PAY
             NAVER_PAY -> Value.NAVER_PAY
             PAYCO -> Value.PAYCO
+            SATISPAY -> Value.SATISPAY
             else -> Value._UNKNOWN
         }
 
@@ -703,6 +708,7 @@ class PaymentMethodTypes @JsonCreator private constructor(private val value: Jso
             REVOLUT_PAY -> Known.REVOLUT_PAY
             NAVER_PAY -> Known.NAVER_PAY
             PAYCO -> Known.PAYCO
+            SATISPAY -> Known.SATISPAY
             else -> throw DodoPaymentsInvalidDataException("Unknown PaymentMethodTypes: $value")
         }
 
