@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.106.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.106.0...v1.106.1) (2026-06-27)
+
+
+### Bug Fixes
+
+* **api:** add allow_editing_addons checkout flag and refine schema descriptions ([5441eec](https://github.com/dodopayments/dodopayments-kotlin/commit/5441eecd534d4e7cb3abf7039f6b5e5176698ccb))
+* **api:** add allow_editing_addons checkout flag and refine schema descriptions ([4ffc351](https://github.com/dodopayments/dodopayments-kotlin/commit/4ffc351f15a83168f7656ee0c09d942d7c478464))
+
 ## [1.106.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.105.1...v1.106.0) (2026-06-23)
 
 
