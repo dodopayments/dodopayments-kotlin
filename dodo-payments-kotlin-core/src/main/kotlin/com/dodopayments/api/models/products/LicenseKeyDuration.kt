@@ -39,6 +39,8 @@ private constructor(
     fun count(): Int = count.getRequired("count")
 
     /**
+     * Unit of a duration count (e.g. license-key validity period).
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -107,6 +109,7 @@ private constructor(
          */
         fun count(count: JsonField<Int>) = apply { this.count = count }
 
+        /** Unit of a duration count (e.g. license-key validity period). */
         fun interval(interval: TimeInterval) = interval(JsonField.of(interval))
 
         /**

@@ -36,6 +36,8 @@ private constructor(
     fun addonId(): String = addonId.getRequired("addon_id")
 
     /**
+     * Number of units of this addon.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -104,6 +106,7 @@ private constructor(
          */
         fun addonId(addonId: JsonField<String>) = apply { this.addonId = addonId }
 
+        /** Number of units of this addon. */
         fun quantity(quantity: Int) = quantity(JsonField.of(quantity))
 
         /**
