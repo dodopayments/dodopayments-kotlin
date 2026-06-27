@@ -175,6 +175,7 @@ internal class ServiceParamsTest {
                                 .allowCustomerEditingTaxId(true)
                                 .allowCustomerEditingZipcode(true)
                                 .allowDiscountCode(true)
+                                .allowEditingAddons(true)
                                 .allowPhoneNumberCollection(true)
                                 .allowTaxId(true)
                                 .alwaysCreateNewCustomer(true)

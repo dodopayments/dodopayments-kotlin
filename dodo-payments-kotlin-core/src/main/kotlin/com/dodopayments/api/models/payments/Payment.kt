@@ -262,7 +262,7 @@ private constructor(
     fun customer(): CustomerLimitedDetails = customer.getRequired("customer")
 
     /**
-     * brand id this payment belongs to
+     * Whether the digital products purchased in this payment have been delivered.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -1069,7 +1069,7 @@ private constructor(
             this.customer = customer
         }
 
-        /** brand id this payment belongs to */
+        /** Whether the digital products purchased in this payment have been delivered. */
         fun digitalProductsDelivered(digitalProductsDelivered: Boolean) =
             digitalProductsDelivered(JsonField.of(digitalProductsDelivered))
 

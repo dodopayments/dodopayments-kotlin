@@ -229,6 +229,8 @@ private constructor(
         rolloverTimeframeCount.getNullable("rollover_timeframe_count")
 
     /**
+     * Unit of a duration count (e.g. license-key validity period).
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
@@ -733,6 +735,7 @@ private constructor(
             this.rolloverTimeframeCount = rolloverTimeframeCount
         }
 
+        /** Unit of a duration count (e.g. license-key validity period). */
         fun rolloverTimeframeInterval(rolloverTimeframeInterval: TimeInterval?) =
             rolloverTimeframeInterval(JsonField.ofNullable(rolloverTimeframeInterval))
 
