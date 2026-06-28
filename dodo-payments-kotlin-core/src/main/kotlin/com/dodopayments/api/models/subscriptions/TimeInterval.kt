@@ -7,6 +7,7 @@ import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.fasterxml.jackson.annotation.JsonCreator
 
+/** Unit of a duration count (e.g. license-key validity period). */
 class TimeInterval @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
     /**
