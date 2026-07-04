@@ -15,9 +15,9 @@ internal class EntitlementUpdateParamsTest {
             .id("ent_jt7jcvI79Xh8eehqgWdcm")
             .description("description")
             .integrationConfig(
-                IntegrationConfig.GitHubConfig.builder()
-                    .permission(GitHubPermission.PULL)
-                    .targetId("target_id")
+                IntegrationConfig.FeatureFlagConfig.builder()
+                    .featureId("feature_id")
+                    .featureType(FeatureType.BOOLEAN)
                     .build()
             )
             .metadata(
@@ -43,9 +43,9 @@ internal class EntitlementUpdateParamsTest {
                 .id("ent_jt7jcvI79Xh8eehqgWdcm")
                 .description("description")
                 .integrationConfig(
-                    IntegrationConfig.GitHubConfig.builder()
-                        .permission(GitHubPermission.PULL)
-                        .targetId("target_id")
+                    IntegrationConfig.FeatureFlagConfig.builder()
+                        .featureId("feature_id")
+                        .featureType(FeatureType.BOOLEAN)
                         .build()
                 )
                 .metadata(
@@ -61,10 +61,10 @@ internal class EntitlementUpdateParamsTest {
         assertThat(body.description()).isEqualTo("description")
         assertThat(body.integrationConfig())
             .isEqualTo(
-                IntegrationConfig.ofGitHub(
-                    IntegrationConfig.GitHubConfig.builder()
-                        .permission(GitHubPermission.PULL)
-                        .targetId("target_id")
+                IntegrationConfig.ofFeatureFlag(
+                    IntegrationConfig.FeatureFlagConfig.builder()
+                        .featureId("feature_id")
+                        .featureType(FeatureType.BOOLEAN)
                         .build()
                 )
             )

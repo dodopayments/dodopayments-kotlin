@@ -1,13 +1,14 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.dodopayments.api.models.refunds
+package com.dodopayments.api.models.entitlements
 
 import com.dodopayments.api.core.Enum
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.fasterxml.jackson.annotation.JsonCreator
 
-class RefundStatus @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+/** Type of capability a `feature_flag` entitlement confers. */
+class FeatureType @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
     /**
      * Returns this class instance's raw value.
@@ -20,29 +21,20 @@ class RefundStatus @JsonCreator private constructor(private val value: JsonField
 
     companion object {
 
-        val SUCCEEDED = of("succeeded")
+        val BOOLEAN = of("boolean")
 
-        val FAILED = of("failed")
-
-        val PENDING = of("pending")
-
-        val REVIEW = of("review")
-
-        fun of(value: String) = RefundStatus(JsonField.of(value))
+        fun of(value: String) = FeatureType(JsonField.of(value))
     }
 
-    /** An enum containing [RefundStatus]'s known values. */
+    /** An enum containing [FeatureType]'s known values. */
     enum class Known {
-        SUCCEEDED,
-        FAILED,
-        PENDING,
-        REVIEW,
+        BOOLEAN
     }
 
     /**
-     * An enum containing [RefundStatus]'s known values, as well as an [_UNKNOWN] member.
+     * An enum containing [FeatureType]'s known values, as well as an [_UNKNOWN] member.
      *
-     * An instance of [RefundStatus] can contain an unknown value in a couple of cases:
+     * An instance of [FeatureType] can contain an unknown value in a couple of cases:
      *
      * - It was deserialized from data that doesn't match any known member. For example, if the SDK
      *   is on an older version than the API, then the API may respond with new members that the SDK
@@ -51,11 +43,8 @@ class RefundStatus @JsonCreator private constructor(private val value: JsonField
      * - It was constructed with an arbitrary value using the [of] method.
      */
     enum class Value {
-        SUCCEEDED,
-        FAILED,
-        PENDING,
-        REVIEW,
-        /** An enum member indicating that [RefundStatus] was instantiated with an unknown value. */
+        BOOLEAN,
+        /** An enum member indicating that [FeatureType] was instantiated with an unknown value. */
         _UNKNOWN,
     }
 
@@ -68,10 +57,7 @@ class RefundStatus @JsonCreator private constructor(private val value: JsonField
      */
     fun value(): Value =
         when (this) {
-            SUCCEEDED -> Value.SUCCEEDED
-            FAILED -> Value.FAILED
-            PENDING -> Value.PENDING
-            REVIEW -> Value.REVIEW
+            BOOLEAN -> Value.BOOLEAN
             else -> Value._UNKNOWN
         }
 
@@ -86,11 +72,8 @@ class RefundStatus @JsonCreator private constructor(private val value: JsonField
      */
     fun known(): Known =
         when (this) {
-            SUCCEEDED -> Known.SUCCEEDED
-            FAILED -> Known.FAILED
-            PENDING -> Known.PENDING
-            REVIEW -> Known.REVIEW
-            else -> throw DodoPaymentsInvalidDataException("Unknown RefundStatus: $value")
+            BOOLEAN -> Known.BOOLEAN
+            else -> throw DodoPaymentsInvalidDataException("Unknown FeatureType: $value")
         }
 
     /**
@@ -115,7 +98,7 @@ class RefundStatus @JsonCreator private constructor(private val value: JsonField
      * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't match its
      *   expected type.
      */
-    fun validate(): RefundStatus = apply {
+    fun validate(): FeatureType = apply {
         if (validated) {
             return@apply
         }
@@ -144,7 +127,7 @@ class RefundStatus @JsonCreator private constructor(private val value: JsonField
             return true
         }
 
-        return other is RefundStatus && value == other.value
+        return other is FeatureType && value == other.value
     }
 
     override fun hashCode() = value.hashCode()
