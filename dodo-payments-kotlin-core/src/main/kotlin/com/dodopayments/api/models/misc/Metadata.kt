@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import java.util.Objects
 
+/** Arbitrary key-value metadata. Values can be string, integer, number, or boolean. */
 class Metadata
 @JsonCreator
 private constructor(
@@ -96,8 +97,9 @@ private constructor(
      *
      * Used for best match union deserialization.
      */
-    internal fun validity(): Int =
-        additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+    internal fun validity(): Int = additionalProperties.count { (_, value) ->
+        !value.isNull() && !value.isMissing()
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

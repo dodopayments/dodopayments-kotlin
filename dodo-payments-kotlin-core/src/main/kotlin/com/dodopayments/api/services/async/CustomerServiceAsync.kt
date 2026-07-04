@@ -11,6 +11,8 @@ import com.dodopayments.api.models.customers.CustomerCreateParams
 import com.dodopayments.api.models.customers.CustomerDeletePaymentMethodParams
 import com.dodopayments.api.models.customers.CustomerListCreditEntitlementsParams
 import com.dodopayments.api.models.customers.CustomerListCreditEntitlementsResponse
+import com.dodopayments.api.models.customers.CustomerListEntitlementGrantsPageAsync
+import com.dodopayments.api.models.customers.CustomerListEntitlementGrantsParams
 import com.dodopayments.api.models.customers.CustomerListEntitlementsParams
 import com.dodopayments.api.models.customers.CustomerListEntitlementsResponse
 import com.dodopayments.api.models.customers.CustomerListPageAsync
@@ -125,6 +127,31 @@ interface CustomerServiceAsync {
         listCreditEntitlements(
             customerId,
             CustomerListCreditEntitlementsParams.none(),
+            requestOptions,
+        )
+
+    /** List all of a customer's entitlement grants across every entitlement. One row per grant. */
+    suspend fun listEntitlementGrants(
+        customerId: String,
+        params: CustomerListEntitlementGrantsParams = CustomerListEntitlementGrantsParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CustomerListEntitlementGrantsPageAsync =
+        listEntitlementGrants(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+    /** @see listEntitlementGrants */
+    suspend fun listEntitlementGrants(
+        params: CustomerListEntitlementGrantsParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CustomerListEntitlementGrantsPageAsync
+
+    /** @see listEntitlementGrants */
+    suspend fun listEntitlementGrants(
+        customerId: String,
+        requestOptions: RequestOptions,
+    ): CustomerListEntitlementGrantsPageAsync =
+        listEntitlementGrants(
+            customerId,
+            CustomerListEntitlementGrantsParams.none(),
             requestOptions,
         )
 
@@ -325,6 +352,38 @@ interface CustomerServiceAsync {
             listCreditEntitlements(
                 customerId,
                 CustomerListCreditEntitlementsParams.none(),
+                requestOptions,
+            )
+
+        /**
+         * Returns a raw HTTP response for `get /customers/{customer_id}/entitlement-grants`, but is
+         * otherwise the same as [CustomerServiceAsync.listEntitlementGrants].
+         */
+        @MustBeClosed
+        suspend fun listEntitlementGrants(
+            customerId: String,
+            params: CustomerListEntitlementGrantsParams =
+                CustomerListEntitlementGrantsParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CustomerListEntitlementGrantsPageAsync> =
+            listEntitlementGrants(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+        /** @see listEntitlementGrants */
+        @MustBeClosed
+        suspend fun listEntitlementGrants(
+            params: CustomerListEntitlementGrantsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CustomerListEntitlementGrantsPageAsync>
+
+        /** @see listEntitlementGrants */
+        @MustBeClosed
+        suspend fun listEntitlementGrants(
+            customerId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<CustomerListEntitlementGrantsPageAsync> =
+            listEntitlementGrants(
+                customerId,
+                CustomerListEntitlementGrantsParams.none(),
                 requestOptions,
             )
 

@@ -8,7 +8,7 @@ import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.entitlements.EntitlementCreateParams
 import com.dodopayments.api.models.entitlements.EntitlementIntegrationType
 import com.dodopayments.api.models.entitlements.EntitlementUpdateParams
-import com.dodopayments.api.models.entitlements.GitHubPermission
+import com.dodopayments.api.models.entitlements.FeatureType
 import com.dodopayments.api.models.entitlements.IntegrationConfig
 import com.dodopayments.api.models.misc.Metadata
 import org.junit.jupiter.api.Test
@@ -30,9 +30,9 @@ internal class EntitlementServiceAsyncTest {
             entitlementServiceAsync.create(
                 EntitlementCreateParams.builder()
                     .integrationConfig(
-                        IntegrationConfig.GitHubConfig.builder()
-                            .permission(GitHubPermission.PULL)
-                            .targetId("target_id")
+                        IntegrationConfig.FeatureFlagConfig.builder()
+                            .featureId("feature_id")
+                            .featureType(FeatureType.BOOLEAN)
                             .build()
                     )
                     .integrationType(EntitlementIntegrationType.DISCORD)
@@ -78,9 +78,9 @@ internal class EntitlementServiceAsyncTest {
                     .id("ent_jt7jcvI79Xh8eehqgWdcm")
                     .description("description")
                     .integrationConfig(
-                        IntegrationConfig.GitHubConfig.builder()
-                            .permission(GitHubPermission.PULL)
-                            .targetId("target_id")
+                        IntegrationConfig.FeatureFlagConfig.builder()
+                            .featureId("feature_id")
+                            .featureType(FeatureType.BOOLEAN)
                             .build()
                     )
                     .metadata(

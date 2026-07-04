@@ -145,7 +145,9 @@ private constructor(
                 ) = meterFilterConditionList.sumOf { it.validity().toInt() }
 
                 override fun visitNestedMeterFilterList(nestedMeterFilterList: List<MeterFilter>) =
-                    nestedMeterFilterList.sumOf { it.validity().toInt() }
+                    nestedMeterFilterList.sumOf {
+                        it.validity().toInt()
+                    }
 
                 override fun unknown(json: JsonValue?) = 0
             }
