@@ -206,6 +206,13 @@ private constructor(
 
         /**
          * Alias for calling [integrationConfig] with
+         * `IntegrationConfigResponse.ofFeatureFlagConfig(featureFlagConfig)`.
+         */
+        fun integrationConfig(featureFlagConfig: IntegrationConfigResponse.FeatureFlagConfig) =
+            integrationConfig(IntegrationConfigResponse.ofFeatureFlagConfig(featureFlagConfig))
+
+        /**
+         * Alias for calling [integrationConfig] with
          * `IntegrationConfigResponse.ofGitHubConfig(githubConfig)`.
          */
         fun integrationConfig(githubConfig: IntegrationConfigResponse.GitHubConfig) =
