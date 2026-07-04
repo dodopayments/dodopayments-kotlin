@@ -13,10 +13,7 @@ internal class EntitlementCreateParamsTest {
     fun create() {
         EntitlementCreateParams.builder()
             .integrationConfig(
-                IntegrationConfig.GitHubConfig.builder()
-                    .permission(GitHubPermission.PULL)
-                    .targetId("target_id")
-                    .build()
+                IntegrationConfig.FeatureFlagConfig.builder().featureId("feature_id").build()
             )
             .integrationType(EntitlementIntegrationType.DISCORD)
             .name("name")
@@ -32,10 +29,7 @@ internal class EntitlementCreateParamsTest {
         val params =
             EntitlementCreateParams.builder()
                 .integrationConfig(
-                    IntegrationConfig.GitHubConfig.builder()
-                        .permission(GitHubPermission.PULL)
-                        .targetId("target_id")
-                        .build()
+                    IntegrationConfig.FeatureFlagConfig.builder().featureId("feature_id").build()
                 )
                 .integrationType(EntitlementIntegrationType.DISCORD)
                 .name("name")
@@ -51,11 +45,8 @@ internal class EntitlementCreateParamsTest {
 
         assertThat(body.integrationConfig())
             .isEqualTo(
-                IntegrationConfig.ofGitHub(
-                    IntegrationConfig.GitHubConfig.builder()
-                        .permission(GitHubPermission.PULL)
-                        .targetId("target_id")
-                        .build()
+                IntegrationConfig.ofFeatureFlag(
+                    IntegrationConfig.FeatureFlagConfig.builder().featureId("feature_id").build()
                 )
             )
         assertThat(body.integrationType()).isEqualTo(EntitlementIntegrationType.DISCORD)
@@ -72,10 +63,7 @@ internal class EntitlementCreateParamsTest {
         val params =
             EntitlementCreateParams.builder()
                 .integrationConfig(
-                    IntegrationConfig.GitHubConfig.builder()
-                        .permission(GitHubPermission.PULL)
-                        .targetId("target_id")
-                        .build()
+                    IntegrationConfig.FeatureFlagConfig.builder().featureId("feature_id").build()
                 )
                 .integrationType(EntitlementIntegrationType.DISCORD)
                 .name("name")
@@ -85,11 +73,8 @@ internal class EntitlementCreateParamsTest {
 
         assertThat(body.integrationConfig())
             .isEqualTo(
-                IntegrationConfig.ofGitHub(
-                    IntegrationConfig.GitHubConfig.builder()
-                        .permission(GitHubPermission.PULL)
-                        .targetId("target_id")
-                        .build()
+                IntegrationConfig.ofFeatureFlag(
+                    IntegrationConfig.FeatureFlagConfig.builder().featureId("feature_id").build()
                 )
             )
         assertThat(body.integrationType()).isEqualTo(EntitlementIntegrationType.DISCORD)

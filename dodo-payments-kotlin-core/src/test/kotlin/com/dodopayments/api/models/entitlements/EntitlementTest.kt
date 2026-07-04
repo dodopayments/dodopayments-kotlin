@@ -20,9 +20,8 @@ internal class EntitlementTest {
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .integrationConfig(
-                    IntegrationConfigResponse.GitHubConfig.builder()
-                        .permission(GitHubPermission.PULL)
-                        .targetId("target_id")
+                    IntegrationConfigResponse.FeatureFlagConfig.builder()
+                        .featureId("feature_id")
                         .build()
                 )
                 .integrationType(EntitlementIntegrationType.DISCORD)
@@ -43,10 +42,9 @@ internal class EntitlementTest {
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(entitlement.integrationConfig())
             .isEqualTo(
-                IntegrationConfigResponse.ofGitHubConfig(
-                    IntegrationConfigResponse.GitHubConfig.builder()
-                        .permission(GitHubPermission.PULL)
-                        .targetId("target_id")
+                IntegrationConfigResponse.ofFeatureFlagConfig(
+                    IntegrationConfigResponse.FeatureFlagConfig.builder()
+                        .featureId("feature_id")
                         .build()
                 )
             )
@@ -71,9 +69,8 @@ internal class EntitlementTest {
                 .businessId("business_id")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .integrationConfig(
-                    IntegrationConfigResponse.GitHubConfig.builder()
-                        .permission(GitHubPermission.PULL)
-                        .targetId("target_id")
+                    IntegrationConfigResponse.FeatureFlagConfig.builder()
+                        .featureId("feature_id")
                         .build()
                 )
                 .integrationType(EntitlementIntegrationType.DISCORD)

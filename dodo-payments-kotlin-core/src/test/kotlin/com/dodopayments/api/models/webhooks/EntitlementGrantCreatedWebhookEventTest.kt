@@ -57,6 +57,7 @@ internal class EntitlementGrantCreatedWebhookEventTest {
                         )
                         .errorCode("error_code")
                         .errorMessage("error_message")
+                        .feature(EntitlementGrant.Feature.builder().featureId("feature_id").build())
                         .licenseKey(
                             LicenseKeyGrant.builder()
                                 .activationsUsed(0)
@@ -113,6 +114,7 @@ internal class EntitlementGrantCreatedWebhookEventTest {
                     )
                     .errorCode("error_code")
                     .errorMessage("error_message")
+                    .feature(EntitlementGrant.Feature.builder().featureId("feature_id").build())
                     .licenseKey(
                         LicenseKeyGrant.builder()
                             .activationsUsed(0)
@@ -174,6 +176,7 @@ internal class EntitlementGrantCreatedWebhookEventTest {
                         )
                         .errorCode("error_code")
                         .errorMessage("error_message")
+                        .feature(EntitlementGrant.Feature.builder().featureId("feature_id").build())
                         .licenseKey(
                             LicenseKeyGrant.builder()
                                 .activationsUsed(0)
