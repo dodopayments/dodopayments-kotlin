@@ -11,6 +11,8 @@ import com.dodopayments.api.models.customers.CustomerCreateParams
 import com.dodopayments.api.models.customers.CustomerDeletePaymentMethodParams
 import com.dodopayments.api.models.customers.CustomerListCreditEntitlementsParams
 import com.dodopayments.api.models.customers.CustomerListCreditEntitlementsResponse
+import com.dodopayments.api.models.customers.CustomerListEntitlementGrantsPage
+import com.dodopayments.api.models.customers.CustomerListEntitlementGrantsParams
 import com.dodopayments.api.models.customers.CustomerListEntitlementsParams
 import com.dodopayments.api.models.customers.CustomerListEntitlementsResponse
 import com.dodopayments.api.models.customers.CustomerListPage
@@ -125,6 +127,31 @@ interface CustomerService {
         listCreditEntitlements(
             customerId,
             CustomerListCreditEntitlementsParams.none(),
+            requestOptions,
+        )
+
+    /** List all of a customer's entitlement grants across every entitlement. One row per grant. */
+    fun listEntitlementGrants(
+        customerId: String,
+        params: CustomerListEntitlementGrantsParams = CustomerListEntitlementGrantsParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CustomerListEntitlementGrantsPage =
+        listEntitlementGrants(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+    /** @see listEntitlementGrants */
+    fun listEntitlementGrants(
+        params: CustomerListEntitlementGrantsParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CustomerListEntitlementGrantsPage
+
+    /** @see listEntitlementGrants */
+    fun listEntitlementGrants(
+        customerId: String,
+        requestOptions: RequestOptions,
+    ): CustomerListEntitlementGrantsPage =
+        listEntitlementGrants(
+            customerId,
+            CustomerListEntitlementGrantsParams.none(),
             requestOptions,
         )
 
@@ -318,6 +345,38 @@ interface CustomerService {
             listCreditEntitlements(
                 customerId,
                 CustomerListCreditEntitlementsParams.none(),
+                requestOptions,
+            )
+
+        /**
+         * Returns a raw HTTP response for `get /customers/{customer_id}/entitlement-grants`, but is
+         * otherwise the same as [CustomerService.listEntitlementGrants].
+         */
+        @MustBeClosed
+        fun listEntitlementGrants(
+            customerId: String,
+            params: CustomerListEntitlementGrantsParams =
+                CustomerListEntitlementGrantsParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CustomerListEntitlementGrantsPage> =
+            listEntitlementGrants(params.toBuilder().customerId(customerId).build(), requestOptions)
+
+        /** @see listEntitlementGrants */
+        @MustBeClosed
+        fun listEntitlementGrants(
+            params: CustomerListEntitlementGrantsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<CustomerListEntitlementGrantsPage>
+
+        /** @see listEntitlementGrants */
+        @MustBeClosed
+        fun listEntitlementGrants(
+            customerId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<CustomerListEntitlementGrantsPage> =
+            listEntitlementGrants(
+                customerId,
+                CustomerListEntitlementGrantsParams.none(),
                 requestOptions,
             )
 

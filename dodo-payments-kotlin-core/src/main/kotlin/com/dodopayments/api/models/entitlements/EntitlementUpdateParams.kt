@@ -39,12 +39,17 @@ private constructor(
      * Integration-specific configuration supplied when creating or updating an entitlement. The
      * shape required matches the entitlement's `integration_type`.
      *
+     * Untagged enum: variants are matched in order. `FeatureFlag` must precede `LicenseKey`, whose
+     * fields are all optional and would otherwise match a `feature_flag` config.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
     fun integrationConfig(): IntegrationConfig? = body.integrationConfig()
 
     /**
+     * Arbitrary key-value metadata. Values can be string, integer, number, or boolean.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
@@ -146,6 +151,9 @@ private constructor(
         /**
          * Integration-specific configuration supplied when creating or updating an entitlement. The
          * shape required matches the entitlement's `integration_type`.
+         *
+         * Untagged enum: variants are matched in order. `FeatureFlag` must precede `LicenseKey`,
+         * whose fields are all optional and would otherwise match a `feature_flag` config.
          */
         fun integrationConfig(integrationConfig: IntegrationConfig?) = apply {
             body.integrationConfig(integrationConfig)
@@ -160,6 +168,14 @@ private constructor(
          */
         fun integrationConfig(integrationConfig: JsonField<IntegrationConfig>) = apply {
             body.integrationConfig(integrationConfig)
+        }
+
+        /**
+         * Alias for calling [integrationConfig] with
+         * `IntegrationConfig.ofFeatureFlag(featureFlag)`.
+         */
+        fun integrationConfig(featureFlag: IntegrationConfig.FeatureFlagConfig) = apply {
+            body.integrationConfig(featureFlag)
         }
 
         /** Alias for calling [integrationConfig] with `IntegrationConfig.ofGitHub(github)`. */
@@ -207,6 +223,7 @@ private constructor(
             body.integrationConfig(licenseKey)
         }
 
+        /** Arbitrary key-value metadata. Values can be string, integer, number, or boolean. */
         fun metadata(metadata: Metadata?) = apply { body.metadata(metadata) }
 
         /**
@@ -405,6 +422,9 @@ private constructor(
          * Integration-specific configuration supplied when creating or updating an entitlement. The
          * shape required matches the entitlement's `integration_type`.
          *
+         * Untagged enum: variants are matched in order. `FeatureFlag` must precede `LicenseKey`,
+         * whose fields are all optional and would otherwise match a `feature_flag` config.
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
@@ -412,6 +432,8 @@ private constructor(
             integrationConfig.getNullable("integration_config")
 
         /**
+         * Arbitrary key-value metadata. Values can be string, integer, number, or boolean.
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
@@ -507,6 +529,10 @@ private constructor(
             /**
              * Integration-specific configuration supplied when creating or updating an entitlement.
              * The shape required matches the entitlement's `integration_type`.
+             *
+             * Untagged enum: variants are matched in order. `FeatureFlag` must precede
+             * `LicenseKey`, whose fields are all optional and would otherwise match a
+             * `feature_flag` config.
              */
             fun integrationConfig(integrationConfig: IntegrationConfig?) =
                 integrationConfig(JsonField.ofNullable(integrationConfig))
@@ -521,6 +547,13 @@ private constructor(
             fun integrationConfig(integrationConfig: JsonField<IntegrationConfig>) = apply {
                 this.integrationConfig = integrationConfig
             }
+
+            /**
+             * Alias for calling [integrationConfig] with
+             * `IntegrationConfig.ofFeatureFlag(featureFlag)`.
+             */
+            fun integrationConfig(featureFlag: IntegrationConfig.FeatureFlagConfig) =
+                integrationConfig(IntegrationConfig.ofFeatureFlag(featureFlag))
 
             /** Alias for calling [integrationConfig] with `IntegrationConfig.ofGitHub(github)`. */
             fun integrationConfig(github: IntegrationConfig.GitHubConfig) =
@@ -564,6 +597,7 @@ private constructor(
             fun integrationConfig(licenseKey: IntegrationConfig.LicenseKeyConfig) =
                 integrationConfig(IntegrationConfig.ofLicenseKey(licenseKey))
 
+            /** Arbitrary key-value metadata. Values can be string, integer, number, or boolean. */
             fun metadata(metadata: Metadata?) = metadata(JsonField.ofNullable(metadata))
 
             /**

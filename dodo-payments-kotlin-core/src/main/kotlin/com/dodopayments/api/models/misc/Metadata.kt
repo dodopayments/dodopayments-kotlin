@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import java.util.Objects
 
+/** Arbitrary key-value metadata. Values can be string, integer, number, or boolean. */
 class Metadata
 @JsonCreator
 private constructor(
