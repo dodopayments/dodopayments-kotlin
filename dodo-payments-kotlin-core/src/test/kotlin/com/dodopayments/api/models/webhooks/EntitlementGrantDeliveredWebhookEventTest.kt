@@ -5,6 +5,8 @@ package com.dodopayments.api.models.webhooks
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.entitlements.EntitlementIntegrationType
+import com.dodopayments.api.models.entitlements.Feature
+import com.dodopayments.api.models.entitlements.FeatureType
 import com.dodopayments.api.models.entitlements.grants.EntitlementGrant
 import com.dodopayments.api.models.entitlements.grants.LicenseKeyGrant
 import com.dodopayments.api.models.misc.Metadata
@@ -57,6 +59,12 @@ internal class EntitlementGrantDeliveredWebhookEventTest {
                         )
                         .errorCode("error_code")
                         .errorMessage("error_message")
+                        .feature(
+                            Feature.builder()
+                                .featureId("feature_id")
+                                .featureType(FeatureType.BOOLEAN)
+                                .build()
+                        )
                         .licenseKey(
                             LicenseKeyGrant.builder()
                                 .activationsUsed(0)
@@ -113,6 +121,12 @@ internal class EntitlementGrantDeliveredWebhookEventTest {
                     )
                     .errorCode("error_code")
                     .errorMessage("error_message")
+                    .feature(
+                        Feature.builder()
+                            .featureId("feature_id")
+                            .featureType(FeatureType.BOOLEAN)
+                            .build()
+                    )
                     .licenseKey(
                         LicenseKeyGrant.builder()
                             .activationsUsed(0)
@@ -174,6 +188,12 @@ internal class EntitlementGrantDeliveredWebhookEventTest {
                         )
                         .errorCode("error_code")
                         .errorMessage("error_message")
+                        .feature(
+                            Feature.builder()
+                                .featureId("feature_id")
+                                .featureType(FeatureType.BOOLEAN)
+                                .build()
+                        )
                         .licenseKey(
                             LicenseKeyGrant.builder()
                                 .activationsUsed(0)

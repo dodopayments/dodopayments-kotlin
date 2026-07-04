@@ -38,6 +38,8 @@ private constructor(private val value: JsonField<String>) : Enum {
 
         val LICENSE_KEY = of("license_key")
 
+        val FEATURE_FLAG = of("feature_flag")
+
         fun of(value: String) = EntitlementIntegrationType(JsonField.of(value))
     }
 
@@ -51,6 +53,7 @@ private constructor(private val value: JsonField<String>) : Enum {
         NOTION,
         DIGITAL_FILES,
         LICENSE_KEY,
+        FEATURE_FLAG,
     }
 
     /**
@@ -59,9 +62,11 @@ private constructor(private val value: JsonField<String>) : Enum {
      *
      * An instance of [EntitlementIntegrationType] can contain an unknown value in a couple of
      * cases:
+     *
      * - It was deserialized from data that doesn't match any known member. For example, if the SDK
      *   is on an older version than the API, then the API may respond with new members that the SDK
      *   is unaware of.
+     *
      * - It was constructed with an arbitrary value using the [of] method.
      */
     enum class Value {
@@ -73,6 +78,7 @@ private constructor(private val value: JsonField<String>) : Enum {
         NOTION,
         DIGITAL_FILES,
         LICENSE_KEY,
+        FEATURE_FLAG,
         /**
          * An enum member indicating that [EntitlementIntegrationType] was instantiated with an
          * unknown value.
@@ -97,6 +103,7 @@ private constructor(private val value: JsonField<String>) : Enum {
             NOTION -> Value.NOTION
             DIGITAL_FILES -> Value.DIGITAL_FILES
             LICENSE_KEY -> Value.LICENSE_KEY
+            FEATURE_FLAG -> Value.FEATURE_FLAG
             else -> Value._UNKNOWN
         }
 
@@ -119,6 +126,7 @@ private constructor(private val value: JsonField<String>) : Enum {
             NOTION -> Known.NOTION
             DIGITAL_FILES -> Known.DIGITAL_FILES
             LICENSE_KEY -> Known.LICENSE_KEY
+            FEATURE_FLAG -> Known.FEATURE_FLAG
             else ->
                 throw DodoPaymentsInvalidDataException("Unknown EntitlementIntegrationType: $value")
         }
