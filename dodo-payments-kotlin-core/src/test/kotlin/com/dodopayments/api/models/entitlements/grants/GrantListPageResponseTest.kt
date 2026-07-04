@@ -5,6 +5,8 @@ package com.dodopayments.api.models.entitlements.grants
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.entitlements.EntitlementIntegrationType
+import com.dodopayments.api.models.entitlements.Feature
+import com.dodopayments.api.models.entitlements.FeatureType
 import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.products.DigitalProductDelivery
 import com.dodopayments.api.models.products.DigitalProductDeliveryFile
@@ -54,6 +56,12 @@ internal class GrantListPageResponseTest {
                         )
                         .errorCode("error_code")
                         .errorMessage("error_message")
+                        .feature(
+                            Feature.builder()
+                                .featureId("feature_id")
+                                .featureType(FeatureType.BOOLEAN)
+                                .build()
+                        )
                         .licenseKey(
                             LicenseKeyGrant.builder()
                                 .activationsUsed(0)
@@ -108,6 +116,12 @@ internal class GrantListPageResponseTest {
                     )
                     .errorCode("error_code")
                     .errorMessage("error_message")
+                    .feature(
+                        Feature.builder()
+                            .featureId("feature_id")
+                            .featureType(FeatureType.BOOLEAN)
+                            .build()
+                    )
                     .licenseKey(
                         LicenseKeyGrant.builder()
                             .activationsUsed(0)
@@ -166,6 +180,12 @@ internal class GrantListPageResponseTest {
                         )
                         .errorCode("error_code")
                         .errorMessage("error_message")
+                        .feature(
+                            Feature.builder()
+                                .featureId("feature_id")
+                                .featureType(FeatureType.BOOLEAN)
+                                .build()
+                        )
                         .licenseKey(
                             LicenseKeyGrant.builder()
                                 .activationsUsed(0)

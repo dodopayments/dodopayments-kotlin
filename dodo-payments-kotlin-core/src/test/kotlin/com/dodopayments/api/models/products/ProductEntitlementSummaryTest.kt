@@ -4,7 +4,7 @@ package com.dodopayments.api.models.products
 
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.entitlements.EntitlementIntegrationType
-import com.dodopayments.api.models.entitlements.GitHubPermission
+import com.dodopayments.api.models.entitlements.FeatureType
 import com.dodopayments.api.models.entitlements.IntegrationConfigResponse
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
@@ -18,9 +18,9 @@ internal class ProductEntitlementSummaryTest {
             ProductEntitlementSummary.builder()
                 .id("id")
                 .integrationConfig(
-                    IntegrationConfigResponse.GitHubConfig.builder()
-                        .permission(GitHubPermission.PULL)
-                        .targetId("target_id")
+                    IntegrationConfigResponse.FeatureFlagConfig.builder()
+                        .featureId("feature_id")
+                        .featureType(FeatureType.BOOLEAN)
                         .build()
                 )
                 .integrationType(EntitlementIntegrationType.DISCORD)
@@ -31,10 +31,10 @@ internal class ProductEntitlementSummaryTest {
         assertThat(productEntitlementSummary.id()).isEqualTo("id")
         assertThat(productEntitlementSummary.integrationConfig())
             .isEqualTo(
-                IntegrationConfigResponse.ofGitHubConfig(
-                    IntegrationConfigResponse.GitHubConfig.builder()
-                        .permission(GitHubPermission.PULL)
-                        .targetId("target_id")
+                IntegrationConfigResponse.ofFeatureFlagConfig(
+                    IntegrationConfigResponse.FeatureFlagConfig.builder()
+                        .featureId("feature_id")
+                        .featureType(FeatureType.BOOLEAN)
                         .build()
                 )
             )
@@ -51,9 +51,9 @@ internal class ProductEntitlementSummaryTest {
             ProductEntitlementSummary.builder()
                 .id("id")
                 .integrationConfig(
-                    IntegrationConfigResponse.GitHubConfig.builder()
-                        .permission(GitHubPermission.PULL)
-                        .targetId("target_id")
+                    IntegrationConfigResponse.FeatureFlagConfig.builder()
+                        .featureId("feature_id")
+                        .featureType(FeatureType.BOOLEAN)
                         .build()
                 )
                 .integrationType(EntitlementIntegrationType.DISCORD)
