@@ -101,6 +101,8 @@ private constructor(
     fun disableOnDemand(): DisableOnDemand? = body.disableOnDemand()
 
     /**
+     * Arbitrary key-value metadata. Values can be string, integer, number, or boolean.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
@@ -428,6 +430,7 @@ private constructor(
             body.disableOnDemand(disableOnDemand)
         }
 
+        /** Arbitrary key-value metadata. Values can be string, integer, number, or boolean. */
         fun metadata(metadata: Metadata?) = apply { body.metadata(metadata) }
 
         /**
@@ -764,6 +767,8 @@ private constructor(
         fun disableOnDemand(): DisableOnDemand? = disableOnDemand.getNullable("disable_on_demand")
 
         /**
+         * Arbitrary key-value metadata. Values can be string, integer, number, or boolean.
+         *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
          */
@@ -1122,6 +1127,7 @@ private constructor(
                 this.disableOnDemand = disableOnDemand
             }
 
+            /** Arbitrary key-value metadata. Values can be string, integer, number, or boolean. */
             fun metadata(metadata: Metadata?) = metadata(JsonField.ofNullable(metadata))
 
             /**
@@ -1358,9 +1364,11 @@ private constructor(
          * An enum containing [CancelReason]'s known values, as well as an [_UNKNOWN] member.
          *
          * An instance of [CancelReason] can contain an unknown value in a couple of cases:
+         *
          * - It was deserialized from data that doesn't match any known member. For example, if the
          *   SDK is on an older version than the API, then the API may respond with new members that
          *   the SDK is unaware of.
+         *
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
