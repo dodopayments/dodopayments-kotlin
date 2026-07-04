@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.107.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.106.1...v1.107.0) (2026-07-04)
+
+
+### Features
+
+* **api:** register Feature/FeatureType models and expose customer entitlement-grants list endpoint ([56a28e2](https://github.com/dodopayments/dodopayments-kotlin/commit/56a28e2254a67e91551d040d23dafe8be0f31af2))
+* **api:** register Feature/FeatureType models and expose customer entitlement-grants list endpoint ([c8fbdda](https://github.com/dodopayments/dodopayments-kotlin/commit/c8fbddac3d47c3b162ae97886a181aecef2ecffb))
+
 ## [1.106.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.106.0...v1.106.1) (2026-06-27)
 
 
