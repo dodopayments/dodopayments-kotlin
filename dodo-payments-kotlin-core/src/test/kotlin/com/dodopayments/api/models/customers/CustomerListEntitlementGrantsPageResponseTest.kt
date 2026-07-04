@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package com.dodopayments.api.models.webhooks
+package com.dodopayments.api.models.customers
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
@@ -17,14 +17,13 @@ import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class EntitlementGrantCreatedWebhookEventTest {
+internal class CustomerListEntitlementGrantsPageResponseTest {
 
     @Test
     fun create() {
-        val entitlementGrantCreatedWebhookEvent =
-            EntitlementGrantCreatedWebhookEvent.builder()
-                .businessId("business_id")
-                .data(
+        val customerListEntitlementGrantsPageResponse =
+            CustomerListEntitlementGrantsPageResponse.builder()
+                .addItem(
                     EntitlementGrant.builder()
                         .id("id")
                         .brandId("brand_id")
@@ -81,12 +80,10 @@ internal class EntitlementGrantCreatedWebhookEventTest {
                         .subscriptionId("subscription_id")
                         .build()
                 )
-                .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
 
-        assertThat(entitlementGrantCreatedWebhookEvent.businessId()).isEqualTo("business_id")
-        assertThat(entitlementGrantCreatedWebhookEvent.data())
-            .isEqualTo(
+        assertThat(customerListEntitlementGrantsPageResponse.items())
+            .containsExactly(
                 EntitlementGrant.builder()
                     .id("id")
                     .brandId("brand_id")
@@ -143,17 +140,14 @@ internal class EntitlementGrantCreatedWebhookEventTest {
                     .subscriptionId("subscription_id")
                     .build()
             )
-        assertThat(entitlementGrantCreatedWebhookEvent.timestamp())
-            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val entitlementGrantCreatedWebhookEvent =
-            EntitlementGrantCreatedWebhookEvent.builder()
-                .businessId("business_id")
-                .data(
+        val customerListEntitlementGrantsPageResponse =
+            CustomerListEntitlementGrantsPageResponse.builder()
+                .addItem(
                     EntitlementGrant.builder()
                         .id("id")
                         .brandId("brand_id")
@@ -210,16 +204,15 @@ internal class EntitlementGrantCreatedWebhookEventTest {
                         .subscriptionId("subscription_id")
                         .build()
                 )
-                .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
 
-        val roundtrippedEntitlementGrantCreatedWebhookEvent =
+        val roundtrippedCustomerListEntitlementGrantsPageResponse =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(entitlementGrantCreatedWebhookEvent),
-                jacksonTypeRef<EntitlementGrantCreatedWebhookEvent>(),
+                jsonMapper.writeValueAsString(customerListEntitlementGrantsPageResponse),
+                jacksonTypeRef<CustomerListEntitlementGrantsPageResponse>(),
             )
 
-        assertThat(roundtrippedEntitlementGrantCreatedWebhookEvent)
-            .isEqualTo(entitlementGrantCreatedWebhookEvent)
+        assertThat(roundtrippedCustomerListEntitlementGrantsPageResponse)
+            .isEqualTo(customerListEntitlementGrantsPageResponse)
     }
 }
