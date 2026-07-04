@@ -6,7 +6,6 @@ import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.creditentitlements.CbbOverageBehavior
 import com.dodopayments.api.models.entitlements.EntitlementIntegrationType
-import com.dodopayments.api.models.entitlements.GitHubPermission
 import com.dodopayments.api.models.entitlements.IntegrationConfigResponse
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.Metadata
@@ -55,9 +54,8 @@ internal class ProductTest {
                     ProductEntitlementSummary.builder()
                         .id("id")
                         .integrationConfig(
-                            IntegrationConfigResponse.GitHubConfig.builder()
-                                .permission(GitHubPermission.PULL)
-                                .targetId("target_id")
+                            IntegrationConfigResponse.FeatureFlagConfig.builder()
+                                .featureId("feature_id")
                                 .build()
                         )
                         .integrationType(EntitlementIntegrationType.DISCORD)
@@ -148,9 +146,8 @@ internal class ProductTest {
                 ProductEntitlementSummary.builder()
                     .id("id")
                     .integrationConfig(
-                        IntegrationConfigResponse.GitHubConfig.builder()
-                            .permission(GitHubPermission.PULL)
-                            .targetId("target_id")
+                        IntegrationConfigResponse.FeatureFlagConfig.builder()
+                            .featureId("feature_id")
                             .build()
                     )
                     .integrationType(EntitlementIntegrationType.DISCORD)
@@ -247,9 +244,8 @@ internal class ProductTest {
                     ProductEntitlementSummary.builder()
                         .id("id")
                         .integrationConfig(
-                            IntegrationConfigResponse.GitHubConfig.builder()
-                                .permission(GitHubPermission.PULL)
-                                .targetId("target_id")
+                            IntegrationConfigResponse.FeatureFlagConfig.builder()
+                                .featureId("feature_id")
                                 .build()
                         )
                         .integrationType(EntitlementIntegrationType.DISCORD)

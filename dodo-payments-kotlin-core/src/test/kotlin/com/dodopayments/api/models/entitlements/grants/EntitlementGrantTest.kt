@@ -52,6 +52,7 @@ internal class EntitlementGrantTest {
                 )
                 .errorCode("error_code")
                 .errorMessage("error_message")
+                .feature(EntitlementGrant.Feature.builder().featureId("feature_id").build())
                 .licenseKey(
                     LicenseKeyGrant.builder()
                         .activationsUsed(0)
@@ -104,6 +105,8 @@ internal class EntitlementGrantTest {
             )
         assertThat(entitlementGrant.errorCode()).isEqualTo("error_code")
         assertThat(entitlementGrant.errorMessage()).isEqualTo("error_message")
+        assertThat(entitlementGrant.feature())
+            .isEqualTo(EntitlementGrant.Feature.builder().featureId("feature_id").build())
         assertThat(entitlementGrant.licenseKey())
             .isEqualTo(
                 LicenseKeyGrant.builder()
@@ -161,6 +164,7 @@ internal class EntitlementGrantTest {
                 )
                 .errorCode("error_code")
                 .errorMessage("error_message")
+                .feature(EntitlementGrant.Feature.builder().featureId("feature_id").build())
                 .licenseKey(
                     LicenseKeyGrant.builder()
                         .activationsUsed(0)

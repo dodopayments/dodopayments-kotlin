@@ -33,11 +33,15 @@ import java.util.Objects
 /**
  * Integration-specific configuration supplied when creating or updating an entitlement. The shape
  * required matches the entitlement's `integration_type`.
+ *
+ * Untagged enum: variants are matched in order. `FeatureFlag` must precede `LicenseKey`, whose
+ * fields are all optional and would otherwise match a `feature_flag` config.
  */
 @JsonDeserialize(using = IntegrationConfig.Deserializer::class)
 @JsonSerialize(using = IntegrationConfig.Serializer::class)
 class IntegrationConfig
 private constructor(
+    private val featureFlag: FeatureFlagConfig? = null,
     private val github: GitHubConfig? = null,
     private val discord: DiscordConfig? = null,
     private val telegram: TelegramConfig? = null,
@@ -48,6 +52,8 @@ private constructor(
     private val licenseKey: LicenseKeyConfig? = null,
     private val _json: JsonValue? = null,
 ) {
+
+    fun featureFlag(): FeatureFlagConfig? = featureFlag
 
     fun github(): GitHubConfig? = github
 
@@ -65,6 +71,8 @@ private constructor(
 
     fun licenseKey(): LicenseKeyConfig? = licenseKey
 
+    fun isFeatureFlag(): Boolean = featureFlag != null
+
     fun isGitHub(): Boolean = github != null
 
     fun isDiscord(): Boolean = discord != null
@@ -80,6 +88,8 @@ private constructor(
     fun isDigitalFiles(): Boolean = digitalFiles != null
 
     fun isLicenseKey(): Boolean = licenseKey != null
+
+    fun asFeatureFlag(): FeatureFlagConfig = featureFlag.getOrThrow("featureFlag")
 
     fun asGitHub(): GitHubConfig = github.getOrThrow("github")
 
@@ -109,7 +119,7 @@ private constructor(
      * import com.dodopayments.api.core.JsonValue
      *
      * val result: String? = integrationConfig.accept(object : IntegrationConfig.Visitor<String?> {
-     *     override fun visitGitHub(github: GitHubConfig): String? = github.toString()
+     *     override fun visitFeatureFlag(featureFlag: FeatureFlagConfig): String? = featureFlag.toString()
      *
      *     // ...
      *
@@ -125,6 +135,7 @@ private constructor(
      */
     fun <T> accept(visitor: Visitor<T>): T =
         when {
+            featureFlag != null -> visitor.visitFeatureFlag(featureFlag)
             github != null -> visitor.visitGitHub(github)
             discord != null -> visitor.visitDiscord(discord)
             telegram != null -> visitor.visitTelegram(telegram)
@@ -153,6 +164,10 @@ private constructor(
 
         accept(
             object : Visitor<Unit> {
+                override fun visitFeatureFlag(featureFlag: FeatureFlagConfig) {
+                    featureFlag.validate()
+                }
+
                 override fun visitGitHub(github: GitHubConfig) {
                     github.validate()
                 }
@@ -205,6 +220,9 @@ private constructor(
     internal fun validity(): Int =
         accept(
             object : Visitor<Int> {
+                override fun visitFeatureFlag(featureFlag: FeatureFlagConfig) =
+                    featureFlag.validity()
+
                 override fun visitGitHub(github: GitHubConfig) = github.validity()
 
                 override fun visitDiscord(discord: DiscordConfig) = discord.validity()
@@ -232,6 +250,7 @@ private constructor(
         }
 
         return other is IntegrationConfig &&
+            featureFlag == other.featureFlag &&
             github == other.github &&
             discord == other.discord &&
             telegram == other.telegram &&
@@ -243,10 +262,21 @@ private constructor(
     }
 
     override fun hashCode(): Int =
-        Objects.hash(github, discord, telegram, figma, framer, notion, digitalFiles, licenseKey)
+        Objects.hash(
+            featureFlag,
+            github,
+            discord,
+            telegram,
+            figma,
+            framer,
+            notion,
+            digitalFiles,
+            licenseKey,
+        )
 
     override fun toString(): String =
         when {
+            featureFlag != null -> "IntegrationConfig{featureFlag=$featureFlag}"
             github != null -> "IntegrationConfig{github=$github}"
             discord != null -> "IntegrationConfig{discord=$discord}"
             telegram != null -> "IntegrationConfig{telegram=$telegram}"
@@ -260,6 +290,9 @@ private constructor(
         }
 
     companion object {
+
+        fun ofFeatureFlag(featureFlag: FeatureFlagConfig) =
+            IntegrationConfig(featureFlag = featureFlag)
 
         fun ofGitHub(github: GitHubConfig) = IntegrationConfig(github = github)
 
@@ -284,6 +317,8 @@ private constructor(
      * [T].
      */
     interface Visitor<out T> {
+
+        fun visitFeatureFlag(featureFlag: FeatureFlagConfig): T
 
         fun visitGitHub(github: GitHubConfig): T
 
@@ -323,6 +358,9 @@ private constructor(
 
             val bestMatches =
                 sequenceOf(
+                        tryDeserialize(node, jacksonTypeRef<FeatureFlagConfig>())?.let {
+                            IntegrationConfig(featureFlag = it, _json = json)
+                        },
                         tryDeserialize(node, jacksonTypeRef<GitHubConfig>())?.let {
                             IntegrationConfig(github = it, _json = json)
                         },
@@ -371,6 +409,7 @@ private constructor(
             provider: SerializerProvider,
         ) {
             when {
+                value.featureFlag != null -> generator.writeObject(value.featureFlag)
                 value.github != null -> generator.writeObject(value.github)
                 value.discord != null -> generator.writeObject(value.discord)
                 value.telegram != null -> generator.writeObject(value.telegram)
@@ -383,6 +422,221 @@ private constructor(
                 else -> throw IllegalStateException("Invalid IntegrationConfig")
             }
         }
+    }
+
+    class FeatureFlagConfig
+    @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+    private constructor(
+        private val featureId: JsonField<String>,
+        private val featureType: JsonValue,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("feature_id")
+            @ExcludeMissing
+            featureId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("feature_type") @ExcludeMissing featureType: JsonValue = JsonMissing.of(),
+        ) : this(featureId, featureType, mutableMapOf())
+
+        /**
+         * Merchant-chosen identifier for the capability this entitlement unlocks. Not unique across
+         * entitlements.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun featureId(): String = featureId.getRequired("feature_id")
+
+        /**
+         * Type of capability conferred.
+         *
+         * Expected to always return the following:
+         * ```kotlin
+         * JsonValue.from("boolean")
+         * ```
+         *
+         * However, this method can be useful for debugging and logging (e.g. if the server
+         * responded with an unexpected value).
+         */
+        @JsonProperty("feature_type") @ExcludeMissing fun _featureType(): JsonValue = featureType
+
+        /**
+         * Returns the raw JSON value of [featureId].
+         *
+         * Unlike [featureId], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("feature_id") @ExcludeMissing fun _featureId(): JsonField<String> = featureId
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [FeatureFlagConfig].
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .featureId()
+             * ```
+             */
+            fun builder() = Builder()
+        }
+
+        /** A builder for [FeatureFlagConfig]. */
+        class Builder internal constructor() {
+
+            private var featureId: JsonField<String>? = null
+            private var featureType: JsonValue = JsonValue.from("boolean")
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            internal fun from(featureFlagConfig: FeatureFlagConfig) = apply {
+                featureId = featureFlagConfig.featureId
+                featureType = featureFlagConfig.featureType
+                additionalProperties = featureFlagConfig.additionalProperties.toMutableMap()
+            }
+
+            /**
+             * Merchant-chosen identifier for the capability this entitlement unlocks. Not unique
+             * across entitlements.
+             */
+            fun featureId(featureId: String) = featureId(JsonField.of(featureId))
+
+            /**
+             * Sets [Builder.featureId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.featureId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun featureId(featureId: JsonField<String>) = apply { this.featureId = featureId }
+
+            /**
+             * Sets the field to an arbitrary JSON value.
+             *
+             * It is usually unnecessary to call this method because the field defaults to the
+             * following:
+             * ```kotlin
+             * JsonValue.from("boolean")
+             * ```
+             *
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun featureType(featureType: JsonValue) = apply { this.featureType = featureType }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [FeatureFlagConfig].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```kotlin
+             * .featureId()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): FeatureFlagConfig =
+                FeatureFlagConfig(
+                    checkRequired("featureId", featureId),
+                    featureType,
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't match
+         *   its expected type.
+         */
+        fun validate(): FeatureFlagConfig = apply {
+            if (validated) {
+                return@apply
+            }
+
+            featureId()
+            _featureType().let {
+                if (it != JsonValue.from("boolean")) {
+                    throw DodoPaymentsInvalidDataException("'featureType' is invalid, received $it")
+                }
+            }
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int =
+            (if (featureId.asKnown() == null) 0 else 1) +
+                featureType.let { if (it == JsonValue.from("boolean")) 1 else 0 }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is FeatureFlagConfig &&
+                featureId == other.featureId &&
+                featureType == other.featureType &&
+                additionalProperties == other.additionalProperties
+        }
+
+        private val hashCode: Int by lazy {
+            Objects.hash(featureId, featureType, additionalProperties)
+        }
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "FeatureFlagConfig{featureId=$featureId, featureType=$featureType, additionalProperties=$additionalProperties}"
     }
 
     class GitHubConfig

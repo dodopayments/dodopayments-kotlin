@@ -173,6 +173,8 @@ private constructor(
     fun expiresAt(): OffsetDateTime? = expiresAt.getNullable("expires_at")
 
     /**
+     * Arbitrary key-value metadata. Values can be string, integer, number, or boolean.
+     *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
      */
@@ -533,6 +535,7 @@ private constructor(
          */
         fun expiresAt(expiresAt: JsonField<OffsetDateTime>) = apply { this.expiresAt = expiresAt }
 
+        /** Arbitrary key-value metadata. Values can be string, integer, number, or boolean. */
         fun metadata(metadata: Metadata?) = metadata(JsonField.ofNullable(metadata))
 
         /**
