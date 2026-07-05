@@ -1824,9 +1824,8 @@ private constructor(
             fun allowedPaymentMethodTypes(
                 allowedPaymentMethodTypes: JsonField<List<PaymentMethodTypes>>
             ) = apply {
-                this.allowedPaymentMethodTypes = allowedPaymentMethodTypes.map {
-                    it.toMutableList()
-                }
+                this.allowedPaymentMethodTypes =
+                    allowedPaymentMethodTypes.map { it.toMutableList() }
             }
 
             /**
