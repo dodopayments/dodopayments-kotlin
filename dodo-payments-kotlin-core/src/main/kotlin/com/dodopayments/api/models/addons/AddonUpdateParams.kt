@@ -46,7 +46,8 @@ private constructor(
     fun description(): String? = body.description()
 
     /**
-     * Addon image id after its uploaded to S3
+     * Addon image id after its uploaded to S3. Pass `null` to remove the existing image, omit to
+     * keep it unchanged.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
@@ -192,7 +193,10 @@ private constructor(
          */
         fun description(description: JsonField<String>) = apply { body.description(description) }
 
-        /** Addon image id after its uploaded to S3 */
+        /**
+         * Addon image id after its uploaded to S3. Pass `null` to remove the existing image, omit
+         * to keep it unchanged.
+         */
         fun imageId(imageId: String?) = apply { body.imageId(imageId) }
 
         /**
@@ -434,7 +438,8 @@ private constructor(
         fun description(): String? = description.getNullable("description")
 
         /**
-         * Addon image id after its uploaded to S3
+         * Addon image id after its uploaded to S3. Pass `null` to remove the existing image, omit
+         * to keep it unchanged.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
@@ -576,7 +581,10 @@ private constructor(
                 this.description = description
             }
 
-            /** Addon image id after its uploaded to S3 */
+            /**
+             * Addon image id after its uploaded to S3. Pass `null` to remove the existing image,
+             * omit to keep it unchanged.
+             */
             fun imageId(imageId: String?) = imageId(JsonField.ofNullable(imageId))
 
             /**
