@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.108.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.107.0...v1.108.0) (2026-07-06)
+
+
+### Features
+
+* **api:** add subscription period override fields to subscription update ([36e06cb](https://github.com/dodopayments/dodopayments-kotlin/commit/36e06cb18e2bfb1a827b60622232d80329633130))
+* **api:** add subscription period override fields to subscription update ([ee2b295](https://github.com/dodopayments/dodopayments-kotlin/commit/ee2b2959eb53946cd9ac4ce8c47ed23821e846d0))
+
 ## [1.107.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.106.1...v1.107.0) (2026-07-04)
 
 
