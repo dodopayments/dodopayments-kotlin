@@ -56,6 +56,8 @@ internal class SubscriptionUpdateParamsTest {
             )
             .nextBillingDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
             .status(SubscriptionStatus.PENDING)
+            .subscriptionPeriodCount(0)
+            .subscriptionPeriodInterval(TimeInterval.DAY)
             .taxId("tax_id")
             .build()
     }
@@ -117,6 +119,8 @@ internal class SubscriptionUpdateParamsTest {
                 )
                 .nextBillingDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .status(SubscriptionStatus.PENDING)
+                .subscriptionPeriodCount(0)
+                .subscriptionPeriodInterval(TimeInterval.DAY)
                 .taxId("tax_id")
                 .build()
 
@@ -168,6 +172,8 @@ internal class SubscriptionUpdateParamsTest {
         assertThat(body.nextBillingDate())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(body.status()).isEqualTo(SubscriptionStatus.PENDING)
+        assertThat(body.subscriptionPeriodCount()).isEqualTo(0)
+        assertThat(body.subscriptionPeriodInterval()).isEqualTo(TimeInterval.DAY)
         assertThat(body.taxId()).isEqualTo("tax_id")
     }
 
