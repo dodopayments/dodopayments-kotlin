@@ -75,6 +75,7 @@ internal class WebhookPayloadTest {
                                 .remarks("remarks")
                                 .build()
                         )
+                        .isUpdatePaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -139,6 +140,7 @@ internal class WebhookPayloadTest {
                         .invoiceUrl("invoice_url")
                         .paymentLink("payment_link")
                         .paymentMethod("payment_method")
+                        .paymentMethodId("payment_method_id")
                         .paymentMethodType("payment_method_type")
                         .addProductCart(
                             Payment.ProductCart.builder()
@@ -204,6 +206,7 @@ internal class WebhookPayloadTest {
                                 .remarks("remarks")
                                 .build()
                         )
+                        .isUpdatePaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -268,6 +271,7 @@ internal class WebhookPayloadTest {
                         .invoiceUrl("invoice_url")
                         .paymentLink("payment_link")
                         .paymentMethod("payment_method")
+                        .paymentMethodId("payment_method_id")
                         .paymentMethodType("payment_method_type")
                         .addProductCart(
                             Payment.ProductCart.builder()
@@ -338,6 +342,7 @@ internal class WebhookPayloadTest {
                                 .remarks("remarks")
                                 .build()
                         )
+                        .isUpdatePaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -402,6 +407,7 @@ internal class WebhookPayloadTest {
                         .invoiceUrl("invoice_url")
                         .paymentLink("payment_link")
                         .paymentMethod("payment_method")
+                        .paymentMethodId("payment_method_id")
                         .paymentMethodType("payment_method_type")
                         .addProductCart(
                             Payment.ProductCart.builder()
