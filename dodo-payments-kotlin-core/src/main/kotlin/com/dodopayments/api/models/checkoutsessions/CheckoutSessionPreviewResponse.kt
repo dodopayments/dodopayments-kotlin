@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
@@ -30,6 +31,7 @@ private constructor(
     private val isByop: JsonField<Boolean>,
     private val productCart: JsonField<List<ProductCart>>,
     private val totalPrice: JsonField<Int>,
+    private val nextBillingDate: JsonField<OffsetDateTime>,
     private val recurringBreakup: JsonField<RecurringBreakup>,
     private val taxIdBusinessName: JsonField<String>,
     private val taxIdErrMsg: JsonField<String>,
@@ -52,6 +54,9 @@ private constructor(
         @ExcludeMissing
         productCart: JsonField<List<ProductCart>> = JsonMissing.of(),
         @JsonProperty("total_price") @ExcludeMissing totalPrice: JsonField<Int> = JsonMissing.of(),
+        @JsonProperty("next_billing_date")
+        @ExcludeMissing
+        nextBillingDate: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("recurring_breakup")
         @ExcludeMissing
         recurringBreakup: JsonField<RecurringBreakup> = JsonMissing.of(),
@@ -72,6 +77,7 @@ private constructor(
         isByop,
         productCart,
         totalPrice,
+        nextBillingDate,
         recurringBreakup,
         taxIdBusinessName,
         taxIdErrMsg,
@@ -129,6 +135,17 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun totalPrice(): Int = totalPrice.getRequired("total_price")
+
+    /**
+     * The upcoming billing date for subscriptions, computed relative to now: with a trial it is
+     * `now + trial_period_days`, otherwise `now + payment frequency`. `None` for one-time-only
+     * carts. This is a preview estimate; the authoritative value is set when the subscription
+     * activates.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun nextBillingDate(): OffsetDateTime? = nextBillingDate.getNullable("next_billing_date")
 
     /**
      * Breakup of recurring payments (None for one-time only)
@@ -219,6 +236,15 @@ private constructor(
     @JsonProperty("total_price") @ExcludeMissing fun _totalPrice(): JsonField<Int> = totalPrice
 
     /**
+     * Returns the raw JSON value of [nextBillingDate].
+     *
+     * Unlike [nextBillingDate], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("next_billing_date")
+    @ExcludeMissing
+    fun _nextBillingDate(): JsonField<OffsetDateTime> = nextBillingDate
+
+    /**
      * Returns the raw JSON value of [recurringBreakup].
      *
      * Unlike [recurringBreakup], this method doesn't throw if the JSON field has an unexpected
@@ -303,6 +329,7 @@ private constructor(
         private var isByop: JsonField<Boolean>? = null
         private var productCart: JsonField<MutableList<ProductCart>>? = null
         private var totalPrice: JsonField<Int>? = null
+        private var nextBillingDate: JsonField<OffsetDateTime> = JsonMissing.of()
         private var recurringBreakup: JsonField<RecurringBreakup> = JsonMissing.of()
         private var taxIdBusinessName: JsonField<String> = JsonMissing.of()
         private var taxIdErrMsg: JsonField<String> = JsonMissing.of()
@@ -317,6 +344,7 @@ private constructor(
             isByop = checkoutSessionPreviewResponse.isByop
             productCart = checkoutSessionPreviewResponse.productCart.map { it.toMutableList() }
             totalPrice = checkoutSessionPreviewResponse.totalPrice
+            nextBillingDate = checkoutSessionPreviewResponse.nextBillingDate
             recurringBreakup = checkoutSessionPreviewResponse.recurringBreakup
             taxIdBusinessName = checkoutSessionPreviewResponse.taxIdBusinessName
             taxIdErrMsg = checkoutSessionPreviewResponse.taxIdErrMsg
@@ -419,6 +447,26 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun totalPrice(totalPrice: JsonField<Int>) = apply { this.totalPrice = totalPrice }
+
+        /**
+         * The upcoming billing date for subscriptions, computed relative to now: with a trial it is
+         * `now + trial_period_days`, otherwise `now + payment frequency`. `None` for one-time-only
+         * carts. This is a preview estimate; the authoritative value is set when the subscription
+         * activates.
+         */
+        fun nextBillingDate(nextBillingDate: OffsetDateTime?) =
+            nextBillingDate(JsonField.ofNullable(nextBillingDate))
+
+        /**
+         * Sets [Builder.nextBillingDate] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.nextBillingDate] with a well-typed [OffsetDateTime]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
+        fun nextBillingDate(nextBillingDate: JsonField<OffsetDateTime>) = apply {
+            this.nextBillingDate = nextBillingDate
+        }
 
         /** Breakup of recurring payments (None for one-time only) */
         fun recurringBreakup(recurringBreakup: RecurringBreakup?) =
@@ -539,6 +587,7 @@ private constructor(
                 checkRequired("isByop", isByop),
                 checkRequired("productCart", productCart).map { it.toImmutable() },
                 checkRequired("totalPrice", totalPrice),
+                nextBillingDate,
                 recurringBreakup,
                 taxIdBusinessName,
                 taxIdErrMsg,
@@ -569,6 +618,7 @@ private constructor(
         isByop()
         productCart().forEach { it.validate() }
         totalPrice()
+        nextBillingDate()
         recurringBreakup()?.validate()
         taxIdBusinessName()
         taxIdErrMsg()
@@ -597,6 +647,7 @@ private constructor(
             (if (isByop.asKnown() == null) 0 else 1) +
             (productCart.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
             (if (totalPrice.asKnown() == null) 0 else 1) +
+            (if (nextBillingDate.asKnown() == null) 0 else 1) +
             (recurringBreakup.asKnown()?.validity() ?: 0) +
             (if (taxIdBusinessName.asKnown() == null) 0 else 1) +
             (if (taxIdErrMsg.asKnown() == null) 0 else 1) +
@@ -3584,6 +3635,7 @@ private constructor(
             isByop == other.isByop &&
             productCart == other.productCart &&
             totalPrice == other.totalPrice &&
+            nextBillingDate == other.nextBillingDate &&
             recurringBreakup == other.recurringBreakup &&
             taxIdBusinessName == other.taxIdBusinessName &&
             taxIdErrMsg == other.taxIdErrMsg &&
@@ -3600,6 +3652,7 @@ private constructor(
             isByop,
             productCart,
             totalPrice,
+            nextBillingDate,
             recurringBreakup,
             taxIdBusinessName,
             taxIdErrMsg,
@@ -3612,5 +3665,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CheckoutSessionPreviewResponse{billingCountry=$billingCountry, currency=$currency, currentBreakup=$currentBreakup, isByop=$isByop, productCart=$productCart, totalPrice=$totalPrice, recurringBreakup=$recurringBreakup, taxIdBusinessName=$taxIdBusinessName, taxIdErrMsg=$taxIdErrMsg, taxIdFormatName=$taxIdFormatName, totalTax=$totalTax, additionalProperties=$additionalProperties}"
+        "CheckoutSessionPreviewResponse{billingCountry=$billingCountry, currency=$currency, currentBreakup=$currentBreakup, isByop=$isByop, productCart=$productCart, totalPrice=$totalPrice, nextBillingDate=$nextBillingDate, recurringBreakup=$recurringBreakup, taxIdBusinessName=$taxIdBusinessName, taxIdErrMsg=$taxIdErrMsg, taxIdFormatName=$taxIdFormatName, totalTax=$totalTax, additionalProperties=$additionalProperties}"
 }

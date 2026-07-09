@@ -16,6 +16,7 @@ import java.util.Objects
 class SubscriptionListParams
 private constructor(
     private val brandId: String?,
+    private val cancelAtNextBillingDate: Boolean?,
     private val createdAtGte: OffsetDateTime?,
     private val createdAtLte: OffsetDateTime?,
     private val customerId: String?,
@@ -29,6 +30,9 @@ private constructor(
 
     /** filter by Brand id */
     fun brandId(): String? = brandId
+
+    /** Filter by cancel_at_next_billing_date (subscriptions scheduled for cancellation) */
+    fun cancelAtNextBillingDate(): Boolean? = cancelAtNextBillingDate
 
     /** Get events after this created time */
     fun createdAtGte(): OffsetDateTime? = createdAtGte
@@ -71,6 +75,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var brandId: String? = null
+        private var cancelAtNextBillingDate: Boolean? = null
         private var createdAtGte: OffsetDateTime? = null
         private var createdAtLte: OffsetDateTime? = null
         private var customerId: String? = null
@@ -83,6 +88,7 @@ private constructor(
 
         internal fun from(subscriptionListParams: SubscriptionListParams) = apply {
             brandId = subscriptionListParams.brandId
+            cancelAtNextBillingDate = subscriptionListParams.cancelAtNextBillingDate
             createdAtGte = subscriptionListParams.createdAtGte
             createdAtLte = subscriptionListParams.createdAtLte
             customerId = subscriptionListParams.customerId
@@ -96,6 +102,19 @@ private constructor(
 
         /** filter by Brand id */
         fun brandId(brandId: String?) = apply { this.brandId = brandId }
+
+        /** Filter by cancel_at_next_billing_date (subscriptions scheduled for cancellation) */
+        fun cancelAtNextBillingDate(cancelAtNextBillingDate: Boolean?) = apply {
+            this.cancelAtNextBillingDate = cancelAtNextBillingDate
+        }
+
+        /**
+         * Alias for [Builder.cancelAtNextBillingDate].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun cancelAtNextBillingDate(cancelAtNextBillingDate: Boolean) =
+            cancelAtNextBillingDate(cancelAtNextBillingDate as Boolean?)
 
         /** Get events after this created time */
         fun createdAtGte(createdAtGte: OffsetDateTime?) = apply { this.createdAtGte = createdAtGte }
@@ -238,6 +257,7 @@ private constructor(
         fun build(): SubscriptionListParams =
             SubscriptionListParams(
                 brandId,
+                cancelAtNextBillingDate,
                 createdAtGte,
                 createdAtLte,
                 customerId,
@@ -256,6 +276,7 @@ private constructor(
         QueryParams.builder()
             .apply {
                 brandId?.let { put("brand_id", it) }
+                cancelAtNextBillingDate?.let { put("cancel_at_next_billing_date", it.toString()) }
                 createdAtGte?.let {
                     put("created_at_gte", DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(it))
                 }
@@ -437,6 +458,7 @@ private constructor(
 
         return other is SubscriptionListParams &&
             brandId == other.brandId &&
+            cancelAtNextBillingDate == other.cancelAtNextBillingDate &&
             createdAtGte == other.createdAtGte &&
             createdAtLte == other.createdAtLte &&
             customerId == other.customerId &&
@@ -451,6 +473,7 @@ private constructor(
     override fun hashCode(): Int =
         Objects.hash(
             brandId,
+            cancelAtNextBillingDate,
             createdAtGte,
             createdAtLte,
             customerId,
@@ -463,5 +486,5 @@ private constructor(
         )
 
     override fun toString() =
-        "SubscriptionListParams{brandId=$brandId, createdAtGte=$createdAtGte, createdAtLte=$createdAtLte, customerId=$customerId, pageNumber=$pageNumber, pageSize=$pageSize, productId=$productId, status=$status, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "SubscriptionListParams{brandId=$brandId, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAtGte=$createdAtGte, createdAtLte=$createdAtLte, customerId=$customerId, pageNumber=$pageNumber, pageSize=$pageSize, productId=$productId, status=$status, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
