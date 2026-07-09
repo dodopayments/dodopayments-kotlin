@@ -825,6 +825,7 @@ private constructor(
             private val customer: JsonField<CustomerLimitedDetails>,
             private val digitalProductsDelivered: JsonField<Boolean>,
             private val disputes: JsonField<List<Dispute>>,
+            private val isUpdatePaymentMethod: JsonField<Boolean>,
             private val metadata: JsonField<Metadata>,
             private val paymentId: JsonField<String>,
             private val paymentProvider: JsonField<Payment.PaymentProvider>,
@@ -848,6 +849,7 @@ private constructor(
             private val invoiceUrl: JsonField<String>,
             private val paymentLink: JsonField<String>,
             private val paymentMethod: JsonField<String>,
+            private val paymentMethodId: JsonField<String>,
             private val paymentMethodType: JsonField<String>,
             private val productCart: JsonField<List<Payment.ProductCart>>,
             private val refundStatus: JsonField<PaymentRefundStatus>,
@@ -886,6 +888,9 @@ private constructor(
                 @JsonProperty("disputes")
                 @ExcludeMissing
                 disputes: JsonField<List<Dispute>> = JsonMissing.of(),
+                @JsonProperty("is_update_payment_method")
+                @ExcludeMissing
+                isUpdatePaymentMethod: JsonField<Boolean> = JsonMissing.of(),
                 @JsonProperty("metadata")
                 @ExcludeMissing
                 metadata: JsonField<Metadata> = JsonMissing.of(),
@@ -955,6 +960,9 @@ private constructor(
                 @JsonProperty("payment_method")
                 @ExcludeMissing
                 paymentMethod: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("payment_method_id")
+                @ExcludeMissing
+                paymentMethodId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("payment_method_type")
                 @ExcludeMissing
                 paymentMethodType: JsonField<String> = JsonMissing.of(),
@@ -989,6 +997,7 @@ private constructor(
                 customer,
                 digitalProductsDelivered,
                 disputes,
+                isUpdatePaymentMethod,
                 metadata,
                 paymentId,
                 paymentProvider,
@@ -1012,6 +1021,7 @@ private constructor(
                 invoiceUrl,
                 paymentLink,
                 paymentMethod,
+                paymentMethodId,
                 paymentMethodType,
                 productCart,
                 refundStatus,
@@ -1034,6 +1044,7 @@ private constructor(
                     .customer(customer)
                     .digitalProductsDelivered(digitalProductsDelivered)
                     .disputes(disputes)
+                    .isUpdatePaymentMethod(isUpdatePaymentMethod)
                     .metadata(metadata)
                     .paymentId(paymentId)
                     .paymentProvider(paymentProvider)
@@ -1057,6 +1068,7 @@ private constructor(
                     .invoiceUrl(invoiceUrl)
                     .paymentLink(paymentLink)
                     .paymentMethod(paymentMethod)
+                    .paymentMethodId(paymentMethodId)
                     .paymentMethodType(paymentMethodType)
                     .productCart(productCart)
                     .refundStatus(refundStatus)
@@ -1139,6 +1151,17 @@ private constructor(
              *   value).
              */
             fun disputes(): List<Dispute> = disputes.getRequired("disputes")
+
+            /**
+             * Whether this payment was created solely to update a subscription's payment method (a
+             * zero-/setup-amount charge). `false` for normal charges.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun isUpdatePaymentMethod(): Boolean =
+                isUpdatePaymentMethod.getRequired("is_update_payment_method")
 
             /**
              * Additional custom data associated with the payment
@@ -1346,6 +1369,14 @@ private constructor(
             fun paymentMethod(): String? = paymentMethod.getNullable("payment_method")
 
             /**
+             * Identifier of the saved payment method used for this payment, if any.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun paymentMethodId(): String? = paymentMethodId.getNullable("payment_method_id")
+
+            /**
              * Specific type of payment method (e.g. "visa", "mastercard")
              *
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
@@ -1500,6 +1531,16 @@ private constructor(
             @JsonProperty("disputes")
             @ExcludeMissing
             fun _disputes(): JsonField<List<Dispute>> = disputes
+
+            /**
+             * Returns the raw JSON value of [isUpdatePaymentMethod].
+             *
+             * Unlike [isUpdatePaymentMethod], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("is_update_payment_method")
+            @ExcludeMissing
+            fun _isUpdatePaymentMethod(): JsonField<Boolean> = isUpdatePaymentMethod
 
             /**
              * Returns the raw JSON value of [metadata].
@@ -1730,6 +1771,16 @@ private constructor(
             fun _paymentMethod(): JsonField<String> = paymentMethod
 
             /**
+             * Returns the raw JSON value of [paymentMethodId].
+             *
+             * Unlike [paymentMethodId], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("payment_method_id")
+            @ExcludeMissing
+            fun _paymentMethodId(): JsonField<String> = paymentMethodId
+
+            /**
              * Returns the raw JSON value of [paymentMethodType].
              *
              * Unlike [paymentMethodType], this method doesn't throw if the JSON field has an
@@ -1830,6 +1881,7 @@ private constructor(
                  * .customer()
                  * .digitalProductsDelivered()
                  * .disputes()
+                 * .isUpdatePaymentMethod()
                  * .metadata()
                  * .paymentId()
                  * .paymentProvider()
@@ -1854,6 +1906,7 @@ private constructor(
                 private var customer: JsonField<CustomerLimitedDetails>? = null
                 private var digitalProductsDelivered: JsonField<Boolean>? = null
                 private var disputes: JsonField<MutableList<Dispute>>? = null
+                private var isUpdatePaymentMethod: JsonField<Boolean>? = null
                 private var metadata: JsonField<Metadata>? = null
                 private var paymentId: JsonField<String>? = null
                 private var paymentProvider: JsonField<Payment.PaymentProvider>? = null
@@ -1878,6 +1931,7 @@ private constructor(
                 private var invoiceUrl: JsonField<String> = JsonMissing.of()
                 private var paymentLink: JsonField<String> = JsonMissing.of()
                 private var paymentMethod: JsonField<String> = JsonMissing.of()
+                private var paymentMethodId: JsonField<String> = JsonMissing.of()
                 private var paymentMethodType: JsonField<String> = JsonMissing.of()
                 private var productCart: JsonField<MutableList<Payment.ProductCart>>? = null
                 private var refundStatus: JsonField<PaymentRefundStatus> = JsonMissing.of()
@@ -1898,6 +1952,7 @@ private constructor(
                     customer = payment.customer
                     digitalProductsDelivered = payment.digitalProductsDelivered
                     disputes = payment.disputes.map { it.toMutableList() }
+                    isUpdatePaymentMethod = payment.isUpdatePaymentMethod
                     metadata = payment.metadata
                     paymentId = payment.paymentId
                     paymentProvider = payment.paymentProvider
@@ -1921,6 +1976,7 @@ private constructor(
                     invoiceUrl = payment.invoiceUrl
                     paymentLink = payment.paymentLink
                     paymentMethod = payment.paymentMethod
+                    paymentMethodId = payment.paymentMethodId
                     paymentMethodType = payment.paymentMethodType
                     productCart = payment.productCart.map { it.toMutableList() }
                     refundStatus = payment.refundStatus
@@ -2050,6 +2106,24 @@ private constructor(
                         (disputes ?: JsonField.of(mutableListOf())).also {
                             checkKnown("disputes", it).add(dispute)
                         }
+                }
+
+                /**
+                 * Whether this payment was created solely to update a subscription's payment method
+                 * (a zero-/setup-amount charge). `false` for normal charges.
+                 */
+                fun isUpdatePaymentMethod(isUpdatePaymentMethod: Boolean) =
+                    isUpdatePaymentMethod(JsonField.of(isUpdatePaymentMethod))
+
+                /**
+                 * Sets [Builder.isUpdatePaymentMethod] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.isUpdatePaymentMethod] with a well-typed
+                 * [Boolean] value instead. This method is primarily for setting the field to an
+                 * undocumented or not yet supported value.
+                 */
+                fun isUpdatePaymentMethod(isUpdatePaymentMethod: JsonField<Boolean>) = apply {
+                    this.isUpdatePaymentMethod = isUpdatePaymentMethod
                 }
 
                 /** Additional custom data associated with the payment */
@@ -2441,6 +2515,21 @@ private constructor(
                     this.paymentMethod = paymentMethod
                 }
 
+                /** Identifier of the saved payment method used for this payment, if any. */
+                fun paymentMethodId(paymentMethodId: String?) =
+                    paymentMethodId(JsonField.ofNullable(paymentMethodId))
+
+                /**
+                 * Sets [Builder.paymentMethodId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.paymentMethodId] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun paymentMethodId(paymentMethodId: JsonField<String>) = apply {
+                    this.paymentMethodId = paymentMethodId
+                }
+
                 /** Specific type of payment method (e.g. "visa", "mastercard") */
                 fun paymentMethodType(paymentMethodType: String?) =
                     paymentMethodType(JsonField.ofNullable(paymentMethodType))
@@ -2642,6 +2731,7 @@ private constructor(
                  * .customer()
                  * .digitalProductsDelivered()
                  * .disputes()
+                 * .isUpdatePaymentMethod()
                  * .metadata()
                  * .paymentId()
                  * .paymentProvider()
@@ -2664,6 +2754,7 @@ private constructor(
                         checkRequired("customer", customer),
                         checkRequired("digitalProductsDelivered", digitalProductsDelivered),
                         checkRequired("disputes", disputes).map { it.toImmutable() },
+                        checkRequired("isUpdatePaymentMethod", isUpdatePaymentMethod),
                         checkRequired("metadata", metadata),
                         checkRequired("paymentId", paymentId),
                         checkRequired("paymentProvider", paymentProvider),
@@ -2687,6 +2778,7 @@ private constructor(
                         invoiceUrl,
                         paymentLink,
                         paymentMethod,
+                        paymentMethodId,
                         paymentMethodType,
                         (productCart ?: JsonMissing.of()).map { it.toImmutable() },
                         refundStatus,
@@ -2725,6 +2817,7 @@ private constructor(
                 customer().validate()
                 digitalProductsDelivered()
                 disputes().forEach { it.validate() }
+                isUpdatePaymentMethod()
                 metadata().validate()
                 paymentId()
                 paymentProvider().validate()
@@ -2748,6 +2841,7 @@ private constructor(
                 invoiceUrl()
                 paymentLink()
                 paymentMethod()
+                paymentMethodId()
                 paymentMethodType()
                 productCart()?.forEach { it.validate() }
                 refundStatus()?.validate()
@@ -2789,6 +2883,7 @@ private constructor(
                     (customer.asKnown()?.validity() ?: 0) +
                     (if (digitalProductsDelivered.asKnown() == null) 0 else 1) +
                     (disputes.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                    (if (isUpdatePaymentMethod.asKnown() == null) 0 else 1) +
                     (metadata.asKnown()?.validity() ?: 0) +
                     (if (paymentId.asKnown() == null) 0 else 1) +
                     (paymentProvider.asKnown()?.validity() ?: 0) +
@@ -2812,6 +2907,7 @@ private constructor(
                     (if (invoiceUrl.asKnown() == null) 0 else 1) +
                     (if (paymentLink.asKnown() == null) 0 else 1) +
                     (if (paymentMethod.asKnown() == null) 0 else 1) +
+                    (if (paymentMethodId.asKnown() == null) 0 else 1) +
                     (if (paymentMethodType.asKnown() == null) 0 else 1) +
                     (productCart.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
                     (refundStatus.asKnown()?.validity() ?: 0) +
@@ -2836,6 +2932,7 @@ private constructor(
                     customer == other.customer &&
                     digitalProductsDelivered == other.digitalProductsDelivered &&
                     disputes == other.disputes &&
+                    isUpdatePaymentMethod == other.isUpdatePaymentMethod &&
                     metadata == other.metadata &&
                     paymentId == other.paymentId &&
                     paymentProvider == other.paymentProvider &&
@@ -2859,6 +2956,7 @@ private constructor(
                     invoiceUrl == other.invoiceUrl &&
                     paymentLink == other.paymentLink &&
                     paymentMethod == other.paymentMethod &&
+                    paymentMethodId == other.paymentMethodId &&
                     paymentMethodType == other.paymentMethodType &&
                     productCart == other.productCart &&
                     refundStatus == other.refundStatus &&
@@ -2881,6 +2979,7 @@ private constructor(
                     customer,
                     digitalProductsDelivered,
                     disputes,
+                    isUpdatePaymentMethod,
                     metadata,
                     paymentId,
                     paymentProvider,
@@ -2904,6 +3003,7 @@ private constructor(
                     invoiceUrl,
                     paymentLink,
                     paymentMethod,
+                    paymentMethodId,
                     paymentMethodType,
                     productCart,
                     refundStatus,
@@ -2920,7 +3020,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Payment{billing=$billing, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, digitalProductsDelivered=$digitalProductsDelivered, disputes=$disputes, metadata=$metadata, paymentId=$paymentId, paymentProvider=$paymentProvider, refunds=$refunds, retryAttempt=$retryAttempt, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, totalAmount=$totalAmount, cardHolderName=$cardHolderName, cardIssuingCountry=$cardIssuingCountry, cardLastFour=$cardLastFour, cardNetwork=$cardNetwork, cardType=$cardType, checkoutSessionId=$checkoutSessionId, customFieldResponses=$customFieldResponses, discountId=$discountId, discounts=$discounts, errorCode=$errorCode, errorMessage=$errorMessage, invoiceId=$invoiceId, invoiceUrl=$invoiceUrl, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, productCart=$productCart, refundStatus=$refundStatus, settlementTax=$settlementTax, status=$status, subscriptionId=$subscriptionId, tax=$tax, updatedAt=$updatedAt, payloadType=$payloadType, additionalProperties=$additionalProperties}"
+                "Payment{billing=$billing, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, digitalProductsDelivered=$digitalProductsDelivered, disputes=$disputes, isUpdatePaymentMethod=$isUpdatePaymentMethod, metadata=$metadata, paymentId=$paymentId, paymentProvider=$paymentProvider, refunds=$refunds, retryAttempt=$retryAttempt, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, totalAmount=$totalAmount, cardHolderName=$cardHolderName, cardIssuingCountry=$cardIssuingCountry, cardLastFour=$cardLastFour, cardNetwork=$cardNetwork, cardType=$cardType, checkoutSessionId=$checkoutSessionId, customFieldResponses=$customFieldResponses, discountId=$discountId, discounts=$discounts, errorCode=$errorCode, errorMessage=$errorMessage, invoiceId=$invoiceId, invoiceUrl=$invoiceUrl, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodId=$paymentMethodId, paymentMethodType=$paymentMethodType, productCart=$productCart, refundStatus=$refundStatus, settlementTax=$settlementTax, status=$status, subscriptionId=$subscriptionId, tax=$tax, updatedAt=$updatedAt, payloadType=$payloadType, additionalProperties=$additionalProperties}"
         }
 
         /** Response struct representing subscription details */
