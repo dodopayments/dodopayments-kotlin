@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.108.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.108.0...v1.108.1) (2026-07-09)
+
+
+### Bug Fixes
+
+* **api:** add subscription.update_payment_method webhook and payment-method fields ([548b503](https://github.com/dodopayments/dodopayments-kotlin/commit/548b503ff14f56337f1a7c858fb429de18f53847))
+* **api:** add subscription.update_payment_method webhook and payment-method fields ([35f4968](https://github.com/dodopayments/dodopayments-kotlin/commit/35f49685c6127b1a34cf3d92c68ae37957911b6d))
+
 ## [1.108.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.107.0...v1.108.0) (2026-07-06)
 
 
