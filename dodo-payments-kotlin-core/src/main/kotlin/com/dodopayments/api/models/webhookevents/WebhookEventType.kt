@@ -66,6 +66,8 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
 
         val SUBSCRIPTION_UPDATED = of("subscription.updated")
 
+        val SUBSCRIPTION_UPDATE_PAYMENT_METHOD = of("subscription.update_payment_method")
+
         val LICENSE_KEY_CREATED = of("license_key.created")
 
         val PAYOUT_NOT_INITIATED = of("payout.not_initiated")
@@ -139,6 +141,7 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         SUBSCRIPTION_EXPIRED,
         SUBSCRIPTION_PLAN_CHANGED,
         SUBSCRIPTION_UPDATED,
+        SUBSCRIPTION_UPDATE_PAYMENT_METHOD,
         LICENSE_KEY_CREATED,
         PAYOUT_NOT_INITIATED,
         PAYOUT_ON_HOLD,
@@ -196,6 +199,7 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         SUBSCRIPTION_EXPIRED,
         SUBSCRIPTION_PLAN_CHANGED,
         SUBSCRIPTION_UPDATED,
+        SUBSCRIPTION_UPDATE_PAYMENT_METHOD,
         LICENSE_KEY_CREATED,
         PAYOUT_NOT_INITIATED,
         PAYOUT_ON_HOLD,
@@ -256,6 +260,7 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             SUBSCRIPTION_EXPIRED -> Value.SUBSCRIPTION_EXPIRED
             SUBSCRIPTION_PLAN_CHANGED -> Value.SUBSCRIPTION_PLAN_CHANGED
             SUBSCRIPTION_UPDATED -> Value.SUBSCRIPTION_UPDATED
+            SUBSCRIPTION_UPDATE_PAYMENT_METHOD -> Value.SUBSCRIPTION_UPDATE_PAYMENT_METHOD
             LICENSE_KEY_CREATED -> Value.LICENSE_KEY_CREATED
             PAYOUT_NOT_INITIATED -> Value.PAYOUT_NOT_INITIATED
             PAYOUT_ON_HOLD -> Value.PAYOUT_ON_HOLD
@@ -315,6 +320,7 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             SUBSCRIPTION_EXPIRED -> Known.SUBSCRIPTION_EXPIRED
             SUBSCRIPTION_PLAN_CHANGED -> Known.SUBSCRIPTION_PLAN_CHANGED
             SUBSCRIPTION_UPDATED -> Known.SUBSCRIPTION_UPDATED
+            SUBSCRIPTION_UPDATE_PAYMENT_METHOD -> Known.SUBSCRIPTION_UPDATE_PAYMENT_METHOD
             LICENSE_KEY_CREATED -> Known.LICENSE_KEY_CREATED
             PAYOUT_NOT_INITIATED -> Known.PAYOUT_NOT_INITIATED
             PAYOUT_ON_HOLD -> Known.PAYOUT_ON_HOLD

@@ -7,6 +7,7 @@ import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.TaxCategory
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -82,6 +83,7 @@ internal class CheckoutSessionPreviewResponseTest {
                         .build()
                 )
                 .totalPrice(0)
+                .nextBillingDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .recurringBreakup(
                     CheckoutSessionPreviewResponse.RecurringBreakup.builder()
                         .discount(0)
@@ -164,6 +166,8 @@ internal class CheckoutSessionPreviewResponseTest {
                     .build()
             )
         assertThat(checkoutSessionPreviewResponse.totalPrice()).isEqualTo(0)
+        assertThat(checkoutSessionPreviewResponse.nextBillingDate())
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(checkoutSessionPreviewResponse.recurringBreakup())
             .isEqualTo(
                 CheckoutSessionPreviewResponse.RecurringBreakup.builder()
@@ -251,6 +255,7 @@ internal class CheckoutSessionPreviewResponseTest {
                         .build()
                 )
                 .totalPrice(0)
+                .nextBillingDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .recurringBreakup(
                     CheckoutSessionPreviewResponse.RecurringBreakup.builder()
                         .discount(0)
