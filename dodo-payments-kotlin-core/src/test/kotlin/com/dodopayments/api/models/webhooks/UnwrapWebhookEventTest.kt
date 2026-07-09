@@ -116,6 +116,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -217,6 +218,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -328,6 +330,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -438,6 +441,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -548,6 +552,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -671,6 +676,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -794,6 +800,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -917,6 +924,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -1040,6 +1048,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -1163,6 +1172,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -1287,6 +1297,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -1398,6 +1409,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -1497,6 +1509,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -1596,6 +1609,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -1695,6 +1709,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -1794,6 +1809,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -1893,6 +1909,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -1992,6 +2009,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -2088,6 +2106,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -2181,6 +2200,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -2321,6 +2341,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -2508,6 +2529,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -2693,6 +2715,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -2879,6 +2902,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -3025,6 +3049,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -3114,6 +3139,7 @@ internal class UnwrapWebhookEventTest {
                                 .remarks("remarks")
                                 .build()
                         )
+                        .isUpdatePaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -3178,6 +3204,7 @@ internal class UnwrapWebhookEventTest {
                         .invoiceUrl("invoice_url")
                         .paymentLink("payment_link")
                         .paymentMethod("payment_method")
+                        .paymentMethodId("payment_method_id")
                         .paymentMethodType("payment_method_type")
                         .addProductCart(
                             Payment.ProductCart.builder()
@@ -3236,6 +3263,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -3289,6 +3317,7 @@ internal class UnwrapWebhookEventTest {
                                     .remarks("remarks")
                                     .build()
                             )
+                            .isUpdatePaymentMethod(true)
                             .metadata(
                                 Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -3353,6 +3382,7 @@ internal class UnwrapWebhookEventTest {
                             .invoiceUrl("invoice_url")
                             .paymentLink("payment_link")
                             .paymentMethod("payment_method")
+                            .paymentMethodId("payment_method_id")
                             .paymentMethodType("payment_method_type")
                             .addProductCart(
                                 Payment.ProductCart.builder()
@@ -3429,6 +3459,7 @@ internal class UnwrapWebhookEventTest {
                                 .remarks("remarks")
                                 .build()
                         )
+                        .isUpdatePaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -3493,6 +3524,7 @@ internal class UnwrapWebhookEventTest {
                         .invoiceUrl("invoice_url")
                         .paymentLink("payment_link")
                         .paymentMethod("payment_method")
+                        .paymentMethodId("payment_method_id")
                         .paymentMethodType("payment_method_type")
                         .addProductCart(
                             Payment.ProductCart.builder()
@@ -3551,6 +3583,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -3604,6 +3637,7 @@ internal class UnwrapWebhookEventTest {
                                     .remarks("remarks")
                                     .build()
                             )
+                            .isUpdatePaymentMethod(true)
                             .metadata(
                                 Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -3668,6 +3702,7 @@ internal class UnwrapWebhookEventTest {
                             .invoiceUrl("invoice_url")
                             .paymentLink("payment_link")
                             .paymentMethod("payment_method")
+                            .paymentMethodId("payment_method_id")
                             .paymentMethodType("payment_method_type")
                             .addProductCart(
                                 Payment.ProductCart.builder()
@@ -3744,6 +3779,7 @@ internal class UnwrapWebhookEventTest {
                                 .remarks("remarks")
                                 .build()
                         )
+                        .isUpdatePaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -3808,6 +3844,7 @@ internal class UnwrapWebhookEventTest {
                         .invoiceUrl("invoice_url")
                         .paymentLink("payment_link")
                         .paymentMethod("payment_method")
+                        .paymentMethodId("payment_method_id")
                         .paymentMethodType("payment_method_type")
                         .addProductCart(
                             Payment.ProductCart.builder()
@@ -3866,6 +3903,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -3919,6 +3957,7 @@ internal class UnwrapWebhookEventTest {
                                     .remarks("remarks")
                                     .build()
                             )
+                            .isUpdatePaymentMethod(true)
                             .metadata(
                                 Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -3983,6 +4022,7 @@ internal class UnwrapWebhookEventTest {
                             .invoiceUrl("invoice_url")
                             .paymentLink("payment_link")
                             .paymentMethod("payment_method")
+                            .paymentMethodId("payment_method_id")
                             .paymentMethodType("payment_method_type")
                             .addProductCart(
                                 Payment.ProductCart.builder()
@@ -4059,6 +4099,7 @@ internal class UnwrapWebhookEventTest {
                                 .remarks("remarks")
                                 .build()
                         )
+                        .isUpdatePaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -4123,6 +4164,7 @@ internal class UnwrapWebhookEventTest {
                         .invoiceUrl("invoice_url")
                         .paymentLink("payment_link")
                         .paymentMethod("payment_method")
+                        .paymentMethodId("payment_method_id")
                         .paymentMethodType("payment_method_type")
                         .addProductCart(
                             Payment.ProductCart.builder()
@@ -4181,6 +4223,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -4234,6 +4277,7 @@ internal class UnwrapWebhookEventTest {
                                     .remarks("remarks")
                                     .build()
                             )
+                            .isUpdatePaymentMethod(true)
                             .metadata(
                                 Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -4298,6 +4342,7 @@ internal class UnwrapWebhookEventTest {
                             .invoiceUrl("invoice_url")
                             .paymentLink("payment_link")
                             .paymentMethod("payment_method")
+                            .paymentMethodId("payment_method_id")
                             .paymentMethodType("payment_method_type")
                             .addProductCart(
                                 Payment.ProductCart.builder()
@@ -4406,6 +4451,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -4541,6 +4587,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -4791,6 +4838,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -5159,6 +5207,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -5527,6 +5576,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -5895,6 +5945,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -6263,6 +6314,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isEqualTo(subscriptionOnHold)
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -6632,6 +6684,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isEqualTo(subscriptionPlanChanged)
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -7000,6 +7053,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isEqualTo(subscriptionRenewed)
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
     }
 
@@ -7009,6 +7063,377 @@ internal class UnwrapWebhookEventTest {
         val unwrapWebhookEvent =
             UnwrapWebhookEvent.ofSubscriptionRenewed(
                 SubscriptionRenewedWebhookEvent.builder()
+                    .businessId("business_id")
+                    .data(
+                        Subscription.builder()
+                            .addAddon(
+                                AddonCartResponseItem.builder()
+                                    .addonId("addon_id")
+                                    .quantity(0)
+                                    .build()
+                            )
+                            .billing(
+                                BillingAddress.builder()
+                                    .country(CountryCode.AF)
+                                    .city("city")
+                                    .state("state")
+                                    .street("street")
+                                    .zipcode("zipcode")
+                                    .build()
+                            )
+                            .brandId("brand_id")
+                            .cancelAtNextBillingDate(true)
+                            .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .addCreditEntitlementCart(
+                                CreditEntitlementCartResponse.builder()
+                                    .creditEntitlementId("credit_entitlement_id")
+                                    .creditEntitlementName("credit_entitlement_name")
+                                    .creditsAmount("credits_amount")
+                                    .overageBalance("overage_balance")
+                                    .overageBehavior(CbbOverageBehavior.FORGIVE_AT_RESET)
+                                    .overageEnabled(true)
+                                    .productId("product_id")
+                                    .remainingBalance("remaining_balance")
+                                    .rolloverEnabled(true)
+                                    .unit("unit")
+                                    .expiresAfterDays(0)
+                                    .lowBalanceThresholdPercent(0)
+                                    .maxRolloverCount(0)
+                                    .overageLimit("overage_limit")
+                                    .rolloverPercentage(0)
+                                    .rolloverTimeframeCount(0)
+                                    .rolloverTimeframeInterval(TimeInterval.DAY)
+                                    .build()
+                            )
+                            .currency(Currency.AED)
+                            .customer(
+                                CustomerLimitedDetails.builder()
+                                    .customerId("customer_id")
+                                    .email("email")
+                                    .name("name")
+                                    .metadata(
+                                        Metadata.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                                            .build()
+                                    )
+                                    .phoneNumber("phone_number")
+                                    .build()
+                            )
+                            .metadata(
+                                Metadata.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
+                            .addMeterCreditEntitlementCart(
+                                MeterCreditEntitlementCartResponse.builder()
+                                    .creditEntitlementId("credit_entitlement_id")
+                                    .meterId("meter_id")
+                                    .meterName("meter_name")
+                                    .meterUnitsPerCredit("meter_units_per_credit")
+                                    .productId("product_id")
+                                    .build()
+                            )
+                            .addMeter(
+                                MeterCartResponseItem.builder()
+                                    .currency(Currency.AED)
+                                    .freeThreshold(0L)
+                                    .measurementUnit("measurement_unit")
+                                    .meterId("meter_id")
+                                    .name("name")
+                                    .description("description")
+                                    .pricePerUnit("10.50")
+                                    .build()
+                            )
+                            .nextBillingDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .onDemand(true)
+                            .paymentFrequencyCount(0)
+                            .paymentFrequencyInterval(TimeInterval.DAY)
+                            .previousBillingDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .productId("product_id")
+                            .quantity(0)
+                            .recurringPreTaxAmount(0)
+                            .status(SubscriptionStatus.PENDING)
+                            .subscriptionId("subscription_id")
+                            .subscriptionPeriodCount(0)
+                            .subscriptionPeriodInterval(TimeInterval.DAY)
+                            .taxInclusive(true)
+                            .trialPeriodDays(0)
+                            .cancellationComment("cancellation_comment")
+                            .cancellationFeedback(CancellationFeedback.TOO_EXPENSIVE)
+                            .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .addCustomFieldResponse(
+                                CustomFieldResponse.builder().key("key").value("value").build()
+                            )
+                            .customerBusinessName("customer_business_name")
+                            .discountCyclesRemaining(0)
+                            .discountId("discount_id")
+                            .addDiscount(
+                                DiscountDetail.builder()
+                                    .amount(0)
+                                    .businessId("business_id")
+                                    .code("code")
+                                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .discountId("discount_id")
+                                    .metadata(
+                                        Metadata.builder()
+                                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                                            .build()
+                                    )
+                                    .position(0)
+                                    .preserveOnPlanChange(true)
+                                    .addRestrictedTo("string")
+                                    .timesUsed(0)
+                                    .type(DiscountType.PERCENTAGE)
+                                    .cyclesRemaining(0)
+                                    .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .name("name")
+                                    .subscriptionCycles(0)
+                                    .usageLimit(0)
+                                    .build()
+                            )
+                            .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .paymentMethodId("payment_method_id")
+                            .scheduledChange(
+                                ScheduledPlanChange.builder()
+                                    .id("id")
+                                    .addAddon(
+                                        ScheduledPlanChange.Addon.builder()
+                                            .addonId("addon_id")
+                                            .name("name")
+                                            .quantity(0)
+                                            .build()
+                                    )
+                                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .productId("product_id")
+                                    .quantity(0)
+                                    .productDescription("product_description")
+                                    .productName("product_name")
+                                    .build()
+                            )
+                            .taxId("tax_id")
+                            .build()
+                    )
+                    .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .build()
+            )
+
+        val roundtrippedUnwrapWebhookEvent =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(unwrapWebhookEvent),
+                jacksonTypeRef<UnwrapWebhookEvent>(),
+            )
+
+        assertThat(roundtrippedUnwrapWebhookEvent).isEqualTo(unwrapWebhookEvent)
+    }
+
+    @Test
+    fun ofSubscriptionUpdatePaymentMethod() {
+        val subscriptionUpdatePaymentMethod =
+            SubscriptionUpdatePaymentMethodWebhookEvent.builder()
+                .businessId("business_id")
+                .data(
+                    Subscription.builder()
+                        .addAddon(
+                            AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build()
+                        )
+                        .billing(
+                            BillingAddress.builder()
+                                .country(CountryCode.AF)
+                                .city("city")
+                                .state("state")
+                                .street("street")
+                                .zipcode("zipcode")
+                                .build()
+                        )
+                        .brandId("brand_id")
+                        .cancelAtNextBillingDate(true)
+                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .addCreditEntitlementCart(
+                            CreditEntitlementCartResponse.builder()
+                                .creditEntitlementId("credit_entitlement_id")
+                                .creditEntitlementName("credit_entitlement_name")
+                                .creditsAmount("credits_amount")
+                                .overageBalance("overage_balance")
+                                .overageBehavior(CbbOverageBehavior.FORGIVE_AT_RESET)
+                                .overageEnabled(true)
+                                .productId("product_id")
+                                .remainingBalance("remaining_balance")
+                                .rolloverEnabled(true)
+                                .unit("unit")
+                                .expiresAfterDays(0)
+                                .lowBalanceThresholdPercent(0)
+                                .maxRolloverCount(0)
+                                .overageLimit("overage_limit")
+                                .rolloverPercentage(0)
+                                .rolloverTimeframeCount(0)
+                                .rolloverTimeframeInterval(TimeInterval.DAY)
+                                .build()
+                        )
+                        .currency(Currency.AED)
+                        .customer(
+                            CustomerLimitedDetails.builder()
+                                .customerId("customer_id")
+                                .email("email")
+                                .name("name")
+                                .metadata(
+                                    Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .phoneNumber("phone_number")
+                                .build()
+                        )
+                        .metadata(
+                            Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .addMeterCreditEntitlementCart(
+                            MeterCreditEntitlementCartResponse.builder()
+                                .creditEntitlementId("credit_entitlement_id")
+                                .meterId("meter_id")
+                                .meterName("meter_name")
+                                .meterUnitsPerCredit("meter_units_per_credit")
+                                .productId("product_id")
+                                .build()
+                        )
+                        .addMeter(
+                            MeterCartResponseItem.builder()
+                                .currency(Currency.AED)
+                                .freeThreshold(0L)
+                                .measurementUnit("measurement_unit")
+                                .meterId("meter_id")
+                                .name("name")
+                                .description("description")
+                                .pricePerUnit("10.50")
+                                .build()
+                        )
+                        .nextBillingDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .onDemand(true)
+                        .paymentFrequencyCount(0)
+                        .paymentFrequencyInterval(TimeInterval.DAY)
+                        .previousBillingDate(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .productId("product_id")
+                        .quantity(0)
+                        .recurringPreTaxAmount(0)
+                        .status(SubscriptionStatus.PENDING)
+                        .subscriptionId("subscription_id")
+                        .subscriptionPeriodCount(0)
+                        .subscriptionPeriodInterval(TimeInterval.DAY)
+                        .taxInclusive(true)
+                        .trialPeriodDays(0)
+                        .cancellationComment("cancellation_comment")
+                        .cancellationFeedback(CancellationFeedback.TOO_EXPENSIVE)
+                        .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .addCustomFieldResponse(
+                            CustomFieldResponse.builder().key("key").value("value").build()
+                        )
+                        .customerBusinessName("customer_business_name")
+                        .discountCyclesRemaining(0)
+                        .discountId("discount_id")
+                        .addDiscount(
+                            DiscountDetail.builder()
+                                .amount(0)
+                                .businessId("business_id")
+                                .code("code")
+                                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .discountId("discount_id")
+                                .metadata(
+                                    Metadata.builder()
+                                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                                        .build()
+                                )
+                                .position(0)
+                                .preserveOnPlanChange(true)
+                                .addRestrictedTo("string")
+                                .timesUsed(0)
+                                .type(DiscountType.PERCENTAGE)
+                                .cyclesRemaining(0)
+                                .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .name("name")
+                                .subscriptionCycles(0)
+                                .usageLimit(0)
+                                .build()
+                        )
+                        .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentMethodId("payment_method_id")
+                        .scheduledChange(
+                            ScheduledPlanChange.builder()
+                                .id("id")
+                                .addAddon(
+                                    ScheduledPlanChange.Addon.builder()
+                                        .addonId("addon_id")
+                                        .name("name")
+                                        .quantity(0)
+                                        .build()
+                                )
+                                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .effectiveAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .productId("product_id")
+                                .quantity(0)
+                                .productDescription("product_description")
+                                .productName("product_name")
+                                .build()
+                        )
+                        .taxId("tax_id")
+                        .build()
+                )
+                .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .build()
+
+        val unwrapWebhookEvent =
+            UnwrapWebhookEvent.ofSubscriptionUpdatePaymentMethod(subscriptionUpdatePaymentMethod)
+
+        assertThat(unwrapWebhookEvent.abandonedCheckoutDetected()).isNull()
+        assertThat(unwrapWebhookEvent.abandonedCheckoutRecovered()).isNull()
+        assertThat(unwrapWebhookEvent.creditAdded()).isNull()
+        assertThat(unwrapWebhookEvent.creditBalanceLow()).isNull()
+        assertThat(unwrapWebhookEvent.creditDeducted()).isNull()
+        assertThat(unwrapWebhookEvent.creditExpired()).isNull()
+        assertThat(unwrapWebhookEvent.creditManualAdjustment()).isNull()
+        assertThat(unwrapWebhookEvent.creditOverageCharged()).isNull()
+        assertThat(unwrapWebhookEvent.creditOverageReset()).isNull()
+        assertThat(unwrapWebhookEvent.creditRolledOver()).isNull()
+        assertThat(unwrapWebhookEvent.creditRolloverForfeited()).isNull()
+        assertThat(unwrapWebhookEvent.disputeAccepted()).isNull()
+        assertThat(unwrapWebhookEvent.disputeCancelled()).isNull()
+        assertThat(unwrapWebhookEvent.disputeChallenged()).isNull()
+        assertThat(unwrapWebhookEvent.disputeExpired()).isNull()
+        assertThat(unwrapWebhookEvent.disputeLost()).isNull()
+        assertThat(unwrapWebhookEvent.disputeOpened()).isNull()
+        assertThat(unwrapWebhookEvent.disputeWon()).isNull()
+        assertThat(unwrapWebhookEvent.dunningRecovered()).isNull()
+        assertThat(unwrapWebhookEvent.dunningStarted()).isNull()
+        assertThat(unwrapWebhookEvent.entitlementGrantCreated()).isNull()
+        assertThat(unwrapWebhookEvent.entitlementGrantDelivered()).isNull()
+        assertThat(unwrapWebhookEvent.entitlementGrantFailed()).isNull()
+        assertThat(unwrapWebhookEvent.entitlementGrantRevoked()).isNull()
+        assertThat(unwrapWebhookEvent.licenseKeyCreated()).isNull()
+        assertThat(unwrapWebhookEvent.paymentCancelled()).isNull()
+        assertThat(unwrapWebhookEvent.paymentFailed()).isNull()
+        assertThat(unwrapWebhookEvent.paymentProcessing()).isNull()
+        assertThat(unwrapWebhookEvent.paymentSucceeded()).isNull()
+        assertThat(unwrapWebhookEvent.refundFailed()).isNull()
+        assertThat(unwrapWebhookEvent.refundSucceeded()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionActive()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionCancelled()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionExpired()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionFailed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod())
+            .isEqualTo(subscriptionUpdatePaymentMethod)
+        assertThat(unwrapWebhookEvent.subscriptionUpdated()).isNull()
+    }
+
+    @Test
+    fun ofSubscriptionUpdatePaymentMethodRoundtrip() {
+        val jsonMapper = jsonMapper()
+        val unwrapWebhookEvent =
+            UnwrapWebhookEvent.ofSubscriptionUpdatePaymentMethod(
+                SubscriptionUpdatePaymentMethodWebhookEvent.builder()
                     .businessId("business_id")
                     .data(
                         Subscription.builder()
@@ -7368,6 +7793,7 @@ internal class UnwrapWebhookEventTest {
         assertThat(unwrapWebhookEvent.subscriptionOnHold()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionPlanChanged()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionRenewed()).isNull()
+        assertThat(unwrapWebhookEvent.subscriptionUpdatePaymentMethod()).isNull()
         assertThat(unwrapWebhookEvent.subscriptionUpdated()).isEqualTo(subscriptionUpdated)
     }
 

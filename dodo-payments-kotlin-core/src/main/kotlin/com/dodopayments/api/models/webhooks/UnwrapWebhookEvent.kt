@@ -58,6 +58,8 @@ private constructor(
     private val subscriptionOnHold: SubscriptionOnHoldWebhookEvent? = null,
     private val subscriptionPlanChanged: SubscriptionPlanChangedWebhookEvent? = null,
     private val subscriptionRenewed: SubscriptionRenewedWebhookEvent? = null,
+    private val subscriptionUpdatePaymentMethod: SubscriptionUpdatePaymentMethodWebhookEvent? =
+        null,
     private val subscriptionUpdated: SubscriptionUpdatedWebhookEvent? = null,
     private val _json: JsonValue? = null,
 ) {
@@ -141,6 +143,9 @@ private constructor(
 
     fun subscriptionRenewed(): SubscriptionRenewedWebhookEvent? = subscriptionRenewed
 
+    fun subscriptionUpdatePaymentMethod(): SubscriptionUpdatePaymentMethodWebhookEvent? =
+        subscriptionUpdatePaymentMethod
+
     fun subscriptionUpdated(): SubscriptionUpdatedWebhookEvent? = subscriptionUpdated
 
     fun isAbandonedCheckoutDetected(): Boolean = abandonedCheckoutDetected != null
@@ -218,6 +223,8 @@ private constructor(
     fun isSubscriptionPlanChanged(): Boolean = subscriptionPlanChanged != null
 
     fun isSubscriptionRenewed(): Boolean = subscriptionRenewed != null
+
+    fun isSubscriptionUpdatePaymentMethod(): Boolean = subscriptionUpdatePaymentMethod != null
 
     fun isSubscriptionUpdated(): Boolean = subscriptionUpdated != null
 
@@ -325,6 +332,9 @@ private constructor(
     fun asSubscriptionRenewed(): SubscriptionRenewedWebhookEvent =
         subscriptionRenewed.getOrThrow("subscriptionRenewed")
 
+    fun asSubscriptionUpdatePaymentMethod(): SubscriptionUpdatePaymentMethodWebhookEvent =
+        subscriptionUpdatePaymentMethod.getOrThrow("subscriptionUpdatePaymentMethod")
+
     fun asSubscriptionUpdated(): SubscriptionUpdatedWebhookEvent =
         subscriptionUpdated.getOrThrow("subscriptionUpdated")
 
@@ -404,6 +414,8 @@ private constructor(
             subscriptionPlanChanged != null ->
                 visitor.visitSubscriptionPlanChanged(subscriptionPlanChanged)
             subscriptionRenewed != null -> visitor.visitSubscriptionRenewed(subscriptionRenewed)
+            subscriptionUpdatePaymentMethod != null ->
+                visitor.visitSubscriptionUpdatePaymentMethod(subscriptionUpdatePaymentMethod)
             subscriptionUpdated != null -> visitor.visitSubscriptionUpdated(subscriptionUpdated)
             else -> visitor.unknown(_json)
         }
@@ -617,6 +629,12 @@ private constructor(
                     subscriptionRenewed.validate()
                 }
 
+                override fun visitSubscriptionUpdatePaymentMethod(
+                    subscriptionUpdatePaymentMethod: SubscriptionUpdatePaymentMethodWebhookEvent
+                ) {
+                    subscriptionUpdatePaymentMethod.validate()
+                }
+
                 override fun visitSubscriptionUpdated(
                     subscriptionUpdated: SubscriptionUpdatedWebhookEvent
                 ) {
@@ -777,6 +795,10 @@ private constructor(
                     subscriptionRenewed: SubscriptionRenewedWebhookEvent
                 ) = subscriptionRenewed.validity()
 
+                override fun visitSubscriptionUpdatePaymentMethod(
+                    subscriptionUpdatePaymentMethod: SubscriptionUpdatePaymentMethodWebhookEvent
+                ) = subscriptionUpdatePaymentMethod.validity()
+
                 override fun visitSubscriptionUpdated(
                     subscriptionUpdated: SubscriptionUpdatedWebhookEvent
                 ) = subscriptionUpdated.validity()
@@ -829,6 +851,7 @@ private constructor(
             subscriptionOnHold == other.subscriptionOnHold &&
             subscriptionPlanChanged == other.subscriptionPlanChanged &&
             subscriptionRenewed == other.subscriptionRenewed &&
+            subscriptionUpdatePaymentMethod == other.subscriptionUpdatePaymentMethod &&
             subscriptionUpdated == other.subscriptionUpdated
     }
 
@@ -872,6 +895,7 @@ private constructor(
             subscriptionOnHold,
             subscriptionPlanChanged,
             subscriptionRenewed,
+            subscriptionUpdatePaymentMethod,
             subscriptionUpdated,
         )
 
@@ -932,6 +956,8 @@ private constructor(
                 "UnwrapWebhookEvent{subscriptionPlanChanged=$subscriptionPlanChanged}"
             subscriptionRenewed != null ->
                 "UnwrapWebhookEvent{subscriptionRenewed=$subscriptionRenewed}"
+            subscriptionUpdatePaymentMethod != null ->
+                "UnwrapWebhookEvent{subscriptionUpdatePaymentMethod=$subscriptionUpdatePaymentMethod}"
             subscriptionUpdated != null ->
                 "UnwrapWebhookEvent{subscriptionUpdated=$subscriptionUpdated}"
             _json != null -> "UnwrapWebhookEvent{_unknown=$_json}"
@@ -1061,6 +1087,10 @@ private constructor(
         fun ofSubscriptionRenewed(subscriptionRenewed: SubscriptionRenewedWebhookEvent) =
             UnwrapWebhookEvent(subscriptionRenewed = subscriptionRenewed)
 
+        fun ofSubscriptionUpdatePaymentMethod(
+            subscriptionUpdatePaymentMethod: SubscriptionUpdatePaymentMethodWebhookEvent
+        ) = UnwrapWebhookEvent(subscriptionUpdatePaymentMethod = subscriptionUpdatePaymentMethod)
+
         fun ofSubscriptionUpdated(subscriptionUpdated: SubscriptionUpdatedWebhookEvent) =
             UnwrapWebhookEvent(subscriptionUpdated = subscriptionUpdated)
     }
@@ -1164,6 +1194,10 @@ private constructor(
         ): T
 
         fun visitSubscriptionRenewed(subscriptionRenewed: SubscriptionRenewedWebhookEvent): T
+
+        fun visitSubscriptionUpdatePaymentMethod(
+            subscriptionUpdatePaymentMethod: SubscriptionUpdatePaymentMethodWebhookEvent
+        ): T
 
         fun visitSubscriptionUpdated(subscriptionUpdated: SubscriptionUpdatedWebhookEvent): T
 
@@ -1406,6 +1440,15 @@ private constructor(
                         ?.let { UnwrapWebhookEvent(subscriptionRenewed = it, _json = json) }
                         ?: UnwrapWebhookEvent(_json = json)
                 }
+                "subscription.update_payment_method" -> {
+                    return tryDeserialize(
+                            node,
+                            jacksonTypeRef<SubscriptionUpdatePaymentMethodWebhookEvent>(),
+                        )
+                        ?.let {
+                            UnwrapWebhookEvent(subscriptionUpdatePaymentMethod = it, _json = json)
+                        } ?: UnwrapWebhookEvent(_json = json)
+                }
                 "subscription.updated" -> {
                     return tryDeserialize(node, jacksonTypeRef<SubscriptionUpdatedWebhookEvent>())
                         ?.let { UnwrapWebhookEvent(subscriptionUpdated = it, _json = json) }
@@ -1476,6 +1519,8 @@ private constructor(
                     generator.writeObject(value.subscriptionPlanChanged)
                 value.subscriptionRenewed != null ->
                     generator.writeObject(value.subscriptionRenewed)
+                value.subscriptionUpdatePaymentMethod != null ->
+                    generator.writeObject(value.subscriptionUpdatePaymentMethod)
                 value.subscriptionUpdated != null ->
                     generator.writeObject(value.subscriptionUpdated)
                 value._json != null -> generator.writeObject(value._json)
