@@ -4,6 +4,7 @@ package com.dodopayments.api.models.discounts
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.Metadata
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
@@ -22,6 +23,7 @@ internal class DiscountListPageResponseTest {
                         .businessId("business_id")
                         .code("code")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .customerEligibility(Discount.CustomerEligibility.ANY)
                         .discountId("discount_id")
                         .metadata(
                             Metadata.builder()
@@ -31,9 +33,19 @@ internal class DiscountListPageResponseTest {
                         .preserveOnPlanChange(true)
                         .addRestrictedTo("string")
                         .timesUsed(0)
-                        .type(DiscountType.PERCENTAGE)
+                        .type(DiscountType.FLAT)
+                        .addCurrencyOption(
+                            Discount.CurrencyOption.builder()
+                                .currency(Currency.AED)
+                                .isDefault(true)
+                                .minimumSubtotal(0)
+                                .maxAmountPossible(0)
+                                .build()
+                        )
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .name("name")
+                        .perCustomerUsageLimit(0)
+                        .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .subscriptionCycles(0)
                         .usageLimit(0)
                         .build()
@@ -47,6 +59,7 @@ internal class DiscountListPageResponseTest {
                     .businessId("business_id")
                     .code("code")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .customerEligibility(Discount.CustomerEligibility.ANY)
                     .discountId("discount_id")
                     .metadata(
                         Metadata.builder()
@@ -56,9 +69,19 @@ internal class DiscountListPageResponseTest {
                     .preserveOnPlanChange(true)
                     .addRestrictedTo("string")
                     .timesUsed(0)
-                    .type(DiscountType.PERCENTAGE)
+                    .type(DiscountType.FLAT)
+                    .addCurrencyOption(
+                        Discount.CurrencyOption.builder()
+                            .currency(Currency.AED)
+                            .isDefault(true)
+                            .minimumSubtotal(0)
+                            .maxAmountPossible(0)
+                            .build()
+                    )
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .name("name")
+                    .perCustomerUsageLimit(0)
+                    .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .subscriptionCycles(0)
                     .usageLimit(0)
                     .build()
@@ -76,6 +99,7 @@ internal class DiscountListPageResponseTest {
                         .businessId("business_id")
                         .code("code")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .customerEligibility(Discount.CustomerEligibility.ANY)
                         .discountId("discount_id")
                         .metadata(
                             Metadata.builder()
@@ -85,9 +109,19 @@ internal class DiscountListPageResponseTest {
                         .preserveOnPlanChange(true)
                         .addRestrictedTo("string")
                         .timesUsed(0)
-                        .type(DiscountType.PERCENTAGE)
+                        .type(DiscountType.FLAT)
+                        .addCurrencyOption(
+                            Discount.CurrencyOption.builder()
+                                .currency(Currency.AED)
+                                .isDefault(true)
+                                .minimumSubtotal(0)
+                                .maxAmountPossible(0)
+                                .build()
+                        )
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .name("name")
+                        .perCustomerUsageLimit(0)
+                        .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .subscriptionCycles(0)
                         .usageLimit(0)
                         .build()
