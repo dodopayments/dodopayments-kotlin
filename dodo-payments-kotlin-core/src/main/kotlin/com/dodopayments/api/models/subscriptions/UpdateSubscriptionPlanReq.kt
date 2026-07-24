@@ -645,11 +645,9 @@ private constructor(
          * member.
          *
          * An instance of [ProrationBillingMode] can contain an unknown value in a couple of cases:
-         *
          * - It was deserialized from data that doesn't match any known member. For example, if the
          *   SDK is on an older version than the API, then the API may respond with new members that
          *   the SDK is unaware of.
-         *
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
@@ -797,11 +795,9 @@ private constructor(
          * An enum containing [EffectiveAt]'s known values, as well as an [_UNKNOWN] member.
          *
          * An instance of [EffectiveAt] can contain an unknown value in a couple of cases:
-         *
          * - It was deserialized from data that doesn't match any known member. For example, if the
          *   SDK is on an older version than the API, then the API may respond with new members that
          *   the SDK is unaware of.
-         *
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
@@ -943,11 +939,9 @@ private constructor(
          * An enum containing [OnPaymentFailure]'s known values, as well as an [_UNKNOWN] member.
          *
          * An instance of [OnPaymentFailure] can contain an unknown value in a couple of cases:
-         *
          * - It was deserialized from data that doesn't match any known member. For example, if the
          *   SDK is on an older version than the API, then the API may respond with new members that
          *   the SDK is unaware of.
-         *
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
