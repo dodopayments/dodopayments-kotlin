@@ -20,7 +20,11 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** Filter by active status (true = not expired, false = expired) */
+    /**
+     * Filter by active status. `true` = currently redeemable (started, not expired, not
+     * usage-exhausted). `false` = not currently redeemable (expired, usage-exhausted, or pending a
+     * future `starts_at`).
+     */
     fun active(): Boolean? = active
 
     /** Filter by discount code (partial match, case-insensitive) */
@@ -77,7 +81,11 @@ private constructor(
             additionalQueryParams = discountListParams.additionalQueryParams.toBuilder()
         }
 
-        /** Filter by active status (true = not expired, false = expired) */
+        /**
+         * Filter by active status. `true` = currently redeemable (started, not expired, not
+         * usage-exhausted). `false` = not currently redeemable (expired, usage-exhausted, or
+         * pending a future `starts_at`).
+         */
         fun active(active: Boolean?) = apply { this.active = active }
 
         /**
