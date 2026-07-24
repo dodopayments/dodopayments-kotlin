@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.109.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.108.1...v1.109.0) (2026-07-24)
+
+
+### Features
+
+* **api:** add discount customers endpoints, trial support, currency options, and failure details ([9b2017d](https://github.com/dodopayments/dodopayments-kotlin/commit/9b2017d65cd096e38671060792b4b872f105ddd6))
+* **api:** add discount customers endpoints, trial support, currency options, and failure details ([c96b2e7](https://github.com/dodopayments/dodopayments-kotlin/commit/c96b2e77eb1ca00fb3f9d4ec0cfaf2055d1c4d23))
+* **api:** add discount customers endpoints, trial support, currency options, and failure details ([04757b9](https://github.com/dodopayments/dodopayments-kotlin/commit/04757b9ed49099b74223939db41e49f97b841631))
+
 ## [1.108.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.108.0...v1.108.1) (2026-07-09)
 
 
