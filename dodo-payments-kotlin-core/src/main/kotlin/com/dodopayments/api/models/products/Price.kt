@@ -791,6 +791,8 @@ private constructor(
         private val subscriptionPeriodInterval: JsonField<TimeInterval>,
         private val type: JsonValue,
         private val taxInclusive: JsonField<Boolean>,
+        private val trialAmount: JsonField<Int>,
+        private val trialApplyDiscounts: JsonField<Boolean>,
         private val trialPeriodDays: JsonField<Int>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -821,6 +823,12 @@ private constructor(
             @JsonProperty("tax_inclusive")
             @ExcludeMissing
             taxInclusive: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("trial_amount")
+            @ExcludeMissing
+            trialAmount: JsonField<Int> = JsonMissing.of(),
+            @JsonProperty("trial_apply_discounts")
+            @ExcludeMissing
+            trialApplyDiscounts: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("trial_period_days")
             @ExcludeMissing
             trialPeriodDays: JsonField<Int> = JsonMissing.of(),
@@ -835,6 +843,8 @@ private constructor(
             subscriptionPeriodInterval,
             type,
             taxInclusive,
+            trialAmount,
+            trialApplyDiscounts,
             trialPeriodDays,
             mutableMapOf(),
         )
@@ -932,6 +942,25 @@ private constructor(
         fun taxInclusive(): Boolean? = taxInclusive.getNullable("tax_inclusive")
 
         /**
+         * Amount charged today for a paid trial, in the price currency's minor units. Requires
+         * `trial_period_days > 0`. Omit or null for a free trial (the default).
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun trialAmount(): Int? = trialAmount.getNullable("trial_amount")
+
+        /**
+         * Whether discount codes reduce the trial charge. Defaults to false. Only meaningful when a
+         * paid trial is configured.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun trialApplyDiscounts(): Boolean? =
+            trialApplyDiscounts.getNullable("trial_apply_discounts")
+
+        /**
          * Number of days for the trial period. A value of `0` indicates no trial period.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
@@ -1021,6 +1050,25 @@ private constructor(
         fun _taxInclusive(): JsonField<Boolean> = taxInclusive
 
         /**
+         * Returns the raw JSON value of [trialAmount].
+         *
+         * Unlike [trialAmount], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("trial_amount")
+        @ExcludeMissing
+        fun _trialAmount(): JsonField<Int> = trialAmount
+
+        /**
+         * Returns the raw JSON value of [trialApplyDiscounts].
+         *
+         * Unlike [trialApplyDiscounts], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("trial_apply_discounts")
+        @ExcludeMissing
+        fun _trialApplyDiscounts(): JsonField<Boolean> = trialApplyDiscounts
+
+        /**
          * Returns the raw JSON value of [trialPeriodDays].
          *
          * Unlike [trialPeriodDays], this method doesn't throw if the JSON field has an unexpected
@@ -1075,6 +1123,8 @@ private constructor(
             private var subscriptionPeriodInterval: JsonField<TimeInterval>? = null
             private var type: JsonValue = JsonValue.from("recurring_price")
             private var taxInclusive: JsonField<Boolean> = JsonMissing.of()
+            private var trialAmount: JsonField<Int> = JsonMissing.of()
+            private var trialApplyDiscounts: JsonField<Boolean> = JsonMissing.of()
             private var trialPeriodDays: JsonField<Int> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -1089,6 +1139,8 @@ private constructor(
                 subscriptionPeriodInterval = recurringPrice.subscriptionPeriodInterval
                 type = recurringPrice.type
                 taxInclusive = recurringPrice.taxInclusive
+                trialAmount = recurringPrice.trialAmount
+                trialApplyDiscounts = recurringPrice.trialApplyDiscounts
                 trialPeriodDays = recurringPrice.trialPeriodDays
                 additionalProperties = recurringPrice.additionalProperties.toMutableMap()
             }
@@ -1254,6 +1306,54 @@ private constructor(
                 this.taxInclusive = taxInclusive
             }
 
+            /**
+             * Amount charged today for a paid trial, in the price currency's minor units. Requires
+             * `trial_period_days > 0`. Omit or null for a free trial (the default).
+             */
+            fun trialAmount(trialAmount: Int?) = trialAmount(JsonField.ofNullable(trialAmount))
+
+            /**
+             * Alias for [Builder.trialAmount].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun trialAmount(trialAmount: Int) = trialAmount(trialAmount as Int?)
+
+            /**
+             * Sets [Builder.trialAmount] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.trialAmount] with a well-typed [Int] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun trialAmount(trialAmount: JsonField<Int>) = apply { this.trialAmount = trialAmount }
+
+            /**
+             * Whether discount codes reduce the trial charge. Defaults to false. Only meaningful
+             * when a paid trial is configured.
+             */
+            fun trialApplyDiscounts(trialApplyDiscounts: Boolean?) =
+                trialApplyDiscounts(JsonField.ofNullable(trialApplyDiscounts))
+
+            /**
+             * Alias for [Builder.trialApplyDiscounts].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun trialApplyDiscounts(trialApplyDiscounts: Boolean) =
+                trialApplyDiscounts(trialApplyDiscounts as Boolean?)
+
+            /**
+             * Sets [Builder.trialApplyDiscounts] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.trialApplyDiscounts] with a well-typed [Boolean]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun trialApplyDiscounts(trialApplyDiscounts: JsonField<Boolean>) = apply {
+                this.trialApplyDiscounts = trialApplyDiscounts
+            }
+
             /** Number of days for the trial period. A value of `0` indicates no trial period. */
             fun trialPeriodDays(trialPeriodDays: Int) =
                 trialPeriodDays(JsonField.of(trialPeriodDays))
@@ -1319,6 +1419,8 @@ private constructor(
                     checkRequired("subscriptionPeriodInterval", subscriptionPeriodInterval),
                     type,
                     taxInclusive,
+                    trialAmount,
+                    trialApplyDiscounts,
                     trialPeriodDays,
                     additionalProperties.toMutableMap(),
                 )
@@ -1354,6 +1456,8 @@ private constructor(
                 }
             }
             taxInclusive()
+            trialAmount()
+            trialApplyDiscounts()
             trialPeriodDays()
             validated = true
         }
@@ -1383,6 +1487,8 @@ private constructor(
                 (subscriptionPeriodInterval.asKnown()?.validity() ?: 0) +
                 type.let { if (it == JsonValue.from("recurring_price")) 1 else 0 } +
                 (if (taxInclusive.asKnown() == null) 0 else 1) +
+                (if (trialAmount.asKnown() == null) 0 else 1) +
+                (if (trialApplyDiscounts.asKnown() == null) 0 else 1) +
                 (if (trialPeriodDays.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
@@ -1401,6 +1507,8 @@ private constructor(
                 subscriptionPeriodInterval == other.subscriptionPeriodInterval &&
                 type == other.type &&
                 taxInclusive == other.taxInclusive &&
+                trialAmount == other.trialAmount &&
+                trialApplyDiscounts == other.trialApplyDiscounts &&
                 trialPeriodDays == other.trialPeriodDays &&
                 additionalProperties == other.additionalProperties
         }
@@ -1417,6 +1525,8 @@ private constructor(
                 subscriptionPeriodInterval,
                 type,
                 taxInclusive,
+                trialAmount,
+                trialApplyDiscounts,
                 trialPeriodDays,
                 additionalProperties,
             )
@@ -1425,7 +1535,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "RecurringPrice{currency=$currency, discount=$discount, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, price=$price, purchasingPowerParity=$purchasingPowerParity, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, type=$type, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, additionalProperties=$additionalProperties}"
+            "RecurringPrice{currency=$currency, discount=$discount, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, price=$price, purchasingPowerParity=$purchasingPowerParity, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, type=$type, taxInclusive=$taxInclusive, trialAmount=$trialAmount, trialApplyDiscounts=$trialApplyDiscounts, trialPeriodDays=$trialPeriodDays, additionalProperties=$additionalProperties}"
     }
 
     /** Usage Based price details. */

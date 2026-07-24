@@ -97,6 +97,7 @@ internal class SubscriptionListPageResponseTest {
                                 .build()
                         )
                         .taxId("tax_id")
+                        .trialAmount(0)
                         .build()
                 )
                 .build()
@@ -179,6 +180,7 @@ internal class SubscriptionListPageResponseTest {
                             .build()
                     )
                     .taxId("tax_id")
+                    .trialAmount(0)
                     .build()
             )
     }
@@ -265,6 +267,7 @@ internal class SubscriptionListPageResponseTest {
                                 .build()
                         )
                         .taxId("tax_id")
+                        .trialAmount(0)
                         .build()
                 )
                 .build()
