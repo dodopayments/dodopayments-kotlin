@@ -37,6 +37,8 @@ private constructor(
     private val taxIdErrMsg: JsonField<String>,
     private val taxIdFormatName: JsonField<String>,
     private val totalTax: JsonField<Int>,
+    private val trialAmount: JsonField<Int>,
+    private val trialPeriodDays: JsonField<Int>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -70,6 +72,12 @@ private constructor(
         @ExcludeMissing
         taxIdFormatName: JsonField<String> = JsonMissing.of(),
         @JsonProperty("total_tax") @ExcludeMissing totalTax: JsonField<Int> = JsonMissing.of(),
+        @JsonProperty("trial_amount")
+        @ExcludeMissing
+        trialAmount: JsonField<Int> = JsonMissing.of(),
+        @JsonProperty("trial_period_days")
+        @ExcludeMissing
+        trialPeriodDays: JsonField<Int> = JsonMissing.of(),
     ) : this(
         billingCountry,
         currency,
@@ -83,6 +91,8 @@ private constructor(
         taxIdErrMsg,
         taxIdFormatName,
         totalTax,
+        trialAmount,
+        trialPeriodDays,
         mutableMapOf(),
     )
 
@@ -188,6 +198,25 @@ private constructor(
     fun totalTax(): Int? = totalTax.getNullable("total_tax")
 
     /**
+     * Per-unit trial amount after discounts, in the price currency's minor units (pre-quantity,
+     * pre-tax; see `current_breakup` for the taxed total due today). Only present for a paid trial;
+     * `None` for a free trial or no trial.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun trialAmount(): Int? = trialAmount.getNullable("trial_amount")
+
+    /**
+     * Effective trial duration in days for the subscription line, when there's a trial (free or
+     * paid). `None` if no subscription or no trial.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun trialPeriodDays(): Int? = trialPeriodDays.getNullable("trial_period_days")
+
+    /**
      * Returns the raw JSON value of [billingCountry].
      *
      * Unlike [billingCountry], this method doesn't throw if the JSON field has an unexpected type.
@@ -289,6 +318,22 @@ private constructor(
      */
     @JsonProperty("total_tax") @ExcludeMissing fun _totalTax(): JsonField<Int> = totalTax
 
+    /**
+     * Returns the raw JSON value of [trialAmount].
+     *
+     * Unlike [trialAmount], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("trial_amount") @ExcludeMissing fun _trialAmount(): JsonField<Int> = trialAmount
+
+    /**
+     * Returns the raw JSON value of [trialPeriodDays].
+     *
+     * Unlike [trialPeriodDays], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("trial_period_days")
+    @ExcludeMissing
+    fun _trialPeriodDays(): JsonField<Int> = trialPeriodDays
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -335,6 +380,8 @@ private constructor(
         private var taxIdErrMsg: JsonField<String> = JsonMissing.of()
         private var taxIdFormatName: JsonField<String> = JsonMissing.of()
         private var totalTax: JsonField<Int> = JsonMissing.of()
+        private var trialAmount: JsonField<Int> = JsonMissing.of()
+        private var trialPeriodDays: JsonField<Int> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(checkoutSessionPreviewResponse: CheckoutSessionPreviewResponse) = apply {
@@ -350,6 +397,8 @@ private constructor(
             taxIdErrMsg = checkoutSessionPreviewResponse.taxIdErrMsg
             taxIdFormatName = checkoutSessionPreviewResponse.taxIdFormatName
             totalTax = checkoutSessionPreviewResponse.totalTax
+            trialAmount = checkoutSessionPreviewResponse.trialAmount
+            trialPeriodDays = checkoutSessionPreviewResponse.trialPeriodDays
             additionalProperties =
                 checkoutSessionPreviewResponse.additionalProperties.toMutableMap()
         }
@@ -543,6 +592,53 @@ private constructor(
          */
         fun totalTax(totalTax: JsonField<Int>) = apply { this.totalTax = totalTax }
 
+        /**
+         * Per-unit trial amount after discounts, in the price currency's minor units (pre-quantity,
+         * pre-tax; see `current_breakup` for the taxed total due today). Only present for a paid
+         * trial; `None` for a free trial or no trial.
+         */
+        fun trialAmount(trialAmount: Int?) = trialAmount(JsonField.ofNullable(trialAmount))
+
+        /**
+         * Alias for [Builder.trialAmount].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun trialAmount(trialAmount: Int) = trialAmount(trialAmount as Int?)
+
+        /**
+         * Sets [Builder.trialAmount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.trialAmount] with a well-typed [Int] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun trialAmount(trialAmount: JsonField<Int>) = apply { this.trialAmount = trialAmount }
+
+        /**
+         * Effective trial duration in days for the subscription line, when there's a trial (free or
+         * paid). `None` if no subscription or no trial.
+         */
+        fun trialPeriodDays(trialPeriodDays: Int?) =
+            trialPeriodDays(JsonField.ofNullable(trialPeriodDays))
+
+        /**
+         * Alias for [Builder.trialPeriodDays].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun trialPeriodDays(trialPeriodDays: Int) = trialPeriodDays(trialPeriodDays as Int?)
+
+        /**
+         * Sets [Builder.trialPeriodDays] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.trialPeriodDays] with a well-typed [Int] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun trialPeriodDays(trialPeriodDays: JsonField<Int>) = apply {
+            this.trialPeriodDays = trialPeriodDays
+        }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -593,6 +689,8 @@ private constructor(
                 taxIdErrMsg,
                 taxIdFormatName,
                 totalTax,
+                trialAmount,
+                trialPeriodDays,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -624,6 +722,8 @@ private constructor(
         taxIdErrMsg()
         taxIdFormatName()
         totalTax()
+        trialAmount()
+        trialPeriodDays()
         validated = true
     }
 
@@ -652,7 +752,9 @@ private constructor(
             (if (taxIdBusinessName.asKnown() == null) 0 else 1) +
             (if (taxIdErrMsg.asKnown() == null) 0 else 1) +
             (if (taxIdFormatName.asKnown() == null) 0 else 1) +
-            (if (totalTax.asKnown() == null) 0 else 1)
+            (if (totalTax.asKnown() == null) 0 else 1) +
+            (if (trialAmount.asKnown() == null) 0 else 1) +
+            (if (trialPeriodDays.asKnown() == null) 0 else 1)
 
     /** Breakup of the current payment */
     class CurrentBreakup
@@ -1156,7 +1258,8 @@ private constructor(
         fun description(): String? = description.getNullable("description")
 
         /**
-         * discount percentage
+         * Percentage rate (basis points) of the applicable percentage code; null for flat codes
+         * (their deduction is `og_price - discounted_price`).
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
@@ -1664,7 +1767,10 @@ private constructor(
                 this.description = description
             }
 
-            /** discount percentage */
+            /**
+             * Percentage rate (basis points) of the applicable percentage code; null for flat codes
+             * (their deduction is `og_price - discounted_price`).
+             */
             fun discountAmount(discountAmount: Int?) =
                 discountAmount(JsonField.ofNullable(discountAmount))
 
@@ -2733,6 +2839,9 @@ private constructor(
             fun description(): String? = description.getNullable("description")
 
             /**
+             * Percentage rate (basis points) of the applicable percentage code; null for flat codes
+             * (their deduction is `og_price - discounted_price`).
+             *
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
              */
@@ -3063,6 +3172,10 @@ private constructor(
                     this.description = description
                 }
 
+                /**
+                 * Percentage rate (basis points) of the applicable percentage code; null for flat
+                 * codes (their deduction is `og_price - discounted_price`).
+                 */
                 fun discountAmount(discountAmount: Int?) =
                     discountAmount(JsonField.ofNullable(discountAmount))
 
@@ -3641,6 +3754,8 @@ private constructor(
             taxIdErrMsg == other.taxIdErrMsg &&
             taxIdFormatName == other.taxIdFormatName &&
             totalTax == other.totalTax &&
+            trialAmount == other.trialAmount &&
+            trialPeriodDays == other.trialPeriodDays &&
             additionalProperties == other.additionalProperties
     }
 
@@ -3658,6 +3773,8 @@ private constructor(
             taxIdErrMsg,
             taxIdFormatName,
             totalTax,
+            trialAmount,
+            trialPeriodDays,
             additionalProperties,
         )
     }
@@ -3665,5 +3782,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CheckoutSessionPreviewResponse{billingCountry=$billingCountry, currency=$currency, currentBreakup=$currentBreakup, isByop=$isByop, productCart=$productCart, totalPrice=$totalPrice, nextBillingDate=$nextBillingDate, recurringBreakup=$recurringBreakup, taxIdBusinessName=$taxIdBusinessName, taxIdErrMsg=$taxIdErrMsg, taxIdFormatName=$taxIdFormatName, totalTax=$totalTax, additionalProperties=$additionalProperties}"
+        "CheckoutSessionPreviewResponse{billingCountry=$billingCountry, currency=$currency, currentBreakup=$currentBreakup, isByop=$isByop, productCart=$productCart, totalPrice=$totalPrice, nextBillingDate=$nextBillingDate, recurringBreakup=$recurringBreakup, taxIdBusinessName=$taxIdBusinessName, taxIdErrMsg=$taxIdErrMsg, taxIdFormatName=$taxIdFormatName, totalTax=$totalTax, trialAmount=$trialAmount, trialPeriodDays=$trialPeriodDays, additionalProperties=$additionalProperties}"
 }

@@ -65,6 +65,7 @@ private constructor(
     private val paymentMethodId: JsonField<String>,
     private val scheduledChange: JsonField<ScheduledPlanChange>,
     private val taxId: JsonField<String>,
+    private val trialAmount: JsonField<Int>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -168,6 +169,7 @@ private constructor(
         @ExcludeMissing
         scheduledChange: JsonField<ScheduledPlanChange> = JsonMissing.of(),
         @JsonProperty("tax_id") @ExcludeMissing taxId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("trial_amount") @ExcludeMissing trialAmount: JsonField<Int> = JsonMissing.of(),
     ) : this(
         addons,
         billing,
@@ -206,6 +208,7 @@ private constructor(
         paymentMethodId,
         scheduledChange,
         taxId,
+        trialAmount,
         mutableMapOf(),
     )
 
@@ -516,6 +519,15 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun taxId(): String? = taxId.getNullable("tax_id")
+
+    /**
+     * Per-unit trial amount after discounts, snapshotted at subscription creation (price currency
+     * minor units, pre-quantity, pre-tax). Null for a free trial or no trial.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun trialAmount(): Int? = trialAmount.getNullable("trial_amount")
 
     /**
      * Returns the raw JSON value of [addons].
@@ -846,6 +858,13 @@ private constructor(
      */
     @JsonProperty("tax_id") @ExcludeMissing fun _taxId(): JsonField<String> = taxId
 
+    /**
+     * Returns the raw JSON value of [trialAmount].
+     *
+     * Unlike [trialAmount], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("trial_amount") @ExcludeMissing fun _trialAmount(): JsonField<Int> = trialAmount
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -938,6 +957,7 @@ private constructor(
         private var paymentMethodId: JsonField<String> = JsonMissing.of()
         private var scheduledChange: JsonField<ScheduledPlanChange> = JsonMissing.of()
         private var taxId: JsonField<String> = JsonMissing.of()
+        private var trialAmount: JsonField<Int> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(subscription: Subscription) = apply {
@@ -979,6 +999,7 @@ private constructor(
             paymentMethodId = subscription.paymentMethodId
             scheduledChange = subscription.scheduledChange
             taxId = subscription.taxId
+            trialAmount = subscription.trialAmount
             additionalProperties = subscription.additionalProperties.toMutableMap()
         }
 
@@ -1585,6 +1606,27 @@ private constructor(
          */
         fun taxId(taxId: JsonField<String>) = apply { this.taxId = taxId }
 
+        /**
+         * Per-unit trial amount after discounts, snapshotted at subscription creation (price
+         * currency minor units, pre-quantity, pre-tax). Null for a free trial or no trial.
+         */
+        fun trialAmount(trialAmount: Int?) = trialAmount(JsonField.ofNullable(trialAmount))
+
+        /**
+         * Alias for [Builder.trialAmount].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun trialAmount(trialAmount: Int) = trialAmount(trialAmount as Int?)
+
+        /**
+         * Sets [Builder.trialAmount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.trialAmount] with a well-typed [Int] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun trialAmount(trialAmount: JsonField<Int>) = apply { this.trialAmount = trialAmount }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -1683,6 +1725,7 @@ private constructor(
                 paymentMethodId,
                 scheduledChange,
                 taxId,
+                trialAmount,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -1739,6 +1782,7 @@ private constructor(
         paymentMethodId()
         scheduledChange()?.validate()
         taxId()
+        trialAmount()
         validated = true
     }
 
@@ -1792,7 +1836,8 @@ private constructor(
             (if (expiresAt.asKnown() == null) 0 else 1) +
             (if (paymentMethodId.asKnown() == null) 0 else 1) +
             (scheduledChange.asKnown()?.validity() ?: 0) +
-            (if (taxId.asKnown() == null) 0 else 1)
+            (if (taxId.asKnown() == null) 0 else 1) +
+            (if (trialAmount.asKnown() == null) 0 else 1)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -1837,6 +1882,7 @@ private constructor(
             paymentMethodId == other.paymentMethodId &&
             scheduledChange == other.scheduledChange &&
             taxId == other.taxId &&
+            trialAmount == other.trialAmount &&
             additionalProperties == other.additionalProperties
     }
 
@@ -1879,6 +1925,7 @@ private constructor(
             paymentMethodId,
             scheduledChange,
             taxId,
+            trialAmount,
             additionalProperties,
         )
     }
@@ -1886,5 +1933,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Subscription{addons=$addons, billing=$billing, brandId=$brandId, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, creditEntitlementCart=$creditEntitlementCart, currency=$currency, customer=$customer, metadata=$metadata, meterCreditEntitlementCart=$meterCreditEntitlementCart, meters=$meters, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancellationComment=$cancellationComment, cancellationFeedback=$cancellationFeedback, cancelledAt=$cancelledAt, customFieldResponses=$customFieldResponses, customerBusinessName=$customerBusinessName, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, discounts=$discounts, expiresAt=$expiresAt, paymentMethodId=$paymentMethodId, scheduledChange=$scheduledChange, taxId=$taxId, additionalProperties=$additionalProperties}"
+        "Subscription{addons=$addons, billing=$billing, brandId=$brandId, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, creditEntitlementCart=$creditEntitlementCart, currency=$currency, customer=$customer, metadata=$metadata, meterCreditEntitlementCart=$meterCreditEntitlementCart, meters=$meters, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancellationComment=$cancellationComment, cancellationFeedback=$cancellationFeedback, cancelledAt=$cancelledAt, customFieldResponses=$customFieldResponses, customerBusinessName=$customerBusinessName, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, discounts=$discounts, expiresAt=$expiresAt, paymentMethodId=$paymentMethodId, scheduledChange=$scheduledChange, taxId=$taxId, trialAmount=$trialAmount, additionalProperties=$additionalProperties}"
 }

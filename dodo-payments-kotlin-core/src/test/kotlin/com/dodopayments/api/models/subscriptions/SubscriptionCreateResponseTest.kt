@@ -50,6 +50,7 @@ internal class SubscriptionCreateResponseTest {
                         .build()
                 )
                 .paymentLink("payment_link")
+                .trialAmount(0)
                 .build()
 
         assertThat(subscriptionCreateResponse.addons())
@@ -90,6 +91,7 @@ internal class SubscriptionCreateResponseTest {
                     .build()
             )
         assertThat(subscriptionCreateResponse.paymentLink()).isEqualTo("payment_link")
+        assertThat(subscriptionCreateResponse.trialAmount()).isEqualTo(0)
     }
 
     @Test
@@ -130,6 +132,7 @@ internal class SubscriptionCreateResponseTest {
                         .build()
                 )
                 .paymentLink("payment_link")
+                .trialAmount(0)
                 .build()
 
         val roundtrippedSubscriptionCreateResponse =
