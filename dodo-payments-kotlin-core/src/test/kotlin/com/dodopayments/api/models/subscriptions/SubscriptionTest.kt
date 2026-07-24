@@ -136,7 +136,7 @@ internal class SubscriptionTest {
                         .preserveOnPlanChange(true)
                         .addRestrictedTo("string")
                         .timesUsed(0)
-                        .type(DiscountType.PERCENTAGE)
+                        .type(DiscountType.FLAT)
                         .cyclesRemaining(0)
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .name("name")
@@ -165,6 +165,7 @@ internal class SubscriptionTest {
                         .build()
                 )
                 .taxId("tax_id")
+                .trialAmount(0)
                 .build()
 
         assertThat(subscription.addons())
@@ -291,7 +292,7 @@ internal class SubscriptionTest {
                     .preserveOnPlanChange(true)
                     .addRestrictedTo("string")
                     .timesUsed(0)
-                    .type(DiscountType.PERCENTAGE)
+                    .type(DiscountType.FLAT)
                     .cyclesRemaining(0)
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .name("name")
@@ -322,6 +323,7 @@ internal class SubscriptionTest {
                     .build()
             )
         assertThat(subscription.taxId()).isEqualTo("tax_id")
+        assertThat(subscription.trialAmount()).isEqualTo(0)
     }
 
     @Test
@@ -441,7 +443,7 @@ internal class SubscriptionTest {
                         .preserveOnPlanChange(true)
                         .addRestrictedTo("string")
                         .timesUsed(0)
-                        .type(DiscountType.PERCENTAGE)
+                        .type(DiscountType.FLAT)
                         .cyclesRemaining(0)
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .name("name")
@@ -470,6 +472,7 @@ internal class SubscriptionTest {
                         .build()
                 )
                 .taxId("tax_id")
+                .trialAmount(0)
                 .build()
 
         val roundtrippedSubscription =

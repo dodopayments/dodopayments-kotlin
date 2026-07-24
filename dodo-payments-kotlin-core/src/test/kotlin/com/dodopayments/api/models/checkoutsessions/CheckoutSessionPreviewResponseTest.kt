@@ -96,6 +96,8 @@ internal class CheckoutSessionPreviewResponseTest {
                 .taxIdErrMsg("tax_id_err_msg")
                 .taxIdFormatName("tax_id_format_name")
                 .totalTax(0)
+                .trialAmount(0)
+                .trialPeriodDays(0)
                 .build()
 
         assertThat(checkoutSessionPreviewResponse.billingCountry()).isEqualTo(CountryCode.AF)
@@ -182,6 +184,8 @@ internal class CheckoutSessionPreviewResponseTest {
         assertThat(checkoutSessionPreviewResponse.taxIdErrMsg()).isEqualTo("tax_id_err_msg")
         assertThat(checkoutSessionPreviewResponse.taxIdFormatName()).isEqualTo("tax_id_format_name")
         assertThat(checkoutSessionPreviewResponse.totalTax()).isEqualTo(0)
+        assertThat(checkoutSessionPreviewResponse.trialAmount()).isEqualTo(0)
+        assertThat(checkoutSessionPreviewResponse.trialPeriodDays()).isEqualTo(0)
     }
 
     @Test
@@ -268,6 +272,8 @@ internal class CheckoutSessionPreviewResponseTest {
                 .taxIdErrMsg("tax_id_err_msg")
                 .taxIdFormatName("tax_id_format_name")
                 .totalTax(0)
+                .trialAmount(0)
+                .trialPeriodDays(0)
                 .build()
 
         val roundtrippedCheckoutSessionPreviewResponse =

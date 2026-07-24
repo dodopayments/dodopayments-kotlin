@@ -846,6 +846,7 @@ private constructor(
             private val discounts: JsonField<List<DiscountDetail>>,
             private val errorCode: JsonField<String>,
             private val errorMessage: JsonField<String>,
+            private val failureDetails: JsonField<Payment.FailureDetails>,
             private val invoiceId: JsonField<String>,
             private val invoiceUrl: JsonField<String>,
             private val paymentLink: JsonField<String>,
@@ -952,6 +953,9 @@ private constructor(
                 @JsonProperty("error_message")
                 @ExcludeMissing
                 errorMessage: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("failure_details")
+                @ExcludeMissing
+                failureDetails: JsonField<Payment.FailureDetails> = JsonMissing.of(),
                 @JsonProperty("invoice_id")
                 @ExcludeMissing
                 invoiceId: JsonField<String> = JsonMissing.of(),
@@ -1023,6 +1027,7 @@ private constructor(
                 discounts,
                 errorCode,
                 errorMessage,
+                failureDetails,
                 invoiceId,
                 invoiceUrl,
                 paymentLink,
@@ -1070,6 +1075,7 @@ private constructor(
                     .discounts(discounts)
                     .errorCode(errorCode)
                     .errorMessage(errorMessage)
+                    .failureDetails(failureDetails)
                     .invoiceId(invoiceId)
                     .invoiceUrl(invoiceUrl)
                     .paymentLink(paymentLink)
@@ -1341,6 +1347,19 @@ private constructor(
              *   (e.g. if the server responded with an unexpected value).
              */
             fun errorMessage(): String? = errorMessage.getNullable("error_message")
+
+            /**
+             * Purpose-built failure messaging for the merchant and the customer, derived from
+             * `error_code`. Present whenever `error_code` is set, regardless of payment status;
+             * unrecognised codes still resolve via a generic fallback rather than being omitted.
+             * The customer copy is always generic for fraud-sensitive declines
+             * (lost/stolen/pickup/fraudulent) so the true reason is never leaked.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun failureDetails(): Payment.FailureDetails? =
+                failureDetails.getNullable("failure_details")
 
             /**
              * Invoice ID for this payment. Uses India-specific invoice ID if available.
@@ -1740,6 +1759,16 @@ private constructor(
             fun _errorMessage(): JsonField<String> = errorMessage
 
             /**
+             * Returns the raw JSON value of [failureDetails].
+             *
+             * Unlike [failureDetails], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("failure_details")
+            @ExcludeMissing
+            fun _failureDetails(): JsonField<Payment.FailureDetails> = failureDetails
+
+            /**
              * Returns the raw JSON value of [invoiceId].
              *
              * Unlike [invoiceId], this method doesn't throw if the JSON field has an unexpected
@@ -1940,6 +1969,7 @@ private constructor(
                 private var discounts: JsonField<MutableList<DiscountDetail>>? = null
                 private var errorCode: JsonField<String> = JsonMissing.of()
                 private var errorMessage: JsonField<String> = JsonMissing.of()
+                private var failureDetails: JsonField<Payment.FailureDetails> = JsonMissing.of()
                 private var invoiceId: JsonField<String> = JsonMissing.of()
                 private var invoiceUrl: JsonField<String> = JsonMissing.of()
                 private var paymentLink: JsonField<String> = JsonMissing.of()
@@ -1989,6 +2019,7 @@ private constructor(
                     discounts = payment.discounts.map { it.toMutableList() }
                     errorCode = payment.errorCode
                     errorMessage = payment.errorMessage
+                    failureDetails = payment.failureDetails
                     invoiceId = payment.invoiceId
                     invoiceUrl = payment.invoiceUrl
                     paymentLink = payment.paymentLink
@@ -2478,6 +2509,27 @@ private constructor(
                     this.errorMessage = errorMessage
                 }
 
+                /**
+                 * Purpose-built failure messaging for the merchant and the customer, derived from
+                 * `error_code`. Present whenever `error_code` is set, regardless of payment status;
+                 * unrecognised codes still resolve via a generic fallback rather than being
+                 * omitted. The customer copy is always generic for fraud-sensitive declines
+                 * (lost/stolen/pickup/fraudulent) so the true reason is never leaked.
+                 */
+                fun failureDetails(failureDetails: Payment.FailureDetails?) =
+                    failureDetails(JsonField.ofNullable(failureDetails))
+
+                /**
+                 * Sets [Builder.failureDetails] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.failureDetails] with a well-typed
+                 * [Payment.FailureDetails] value instead. This method is primarily for setting the
+                 * field to an undocumented or not yet supported value.
+                 */
+                fun failureDetails(failureDetails: JsonField<Payment.FailureDetails>) = apply {
+                    this.failureDetails = failureDetails
+                }
+
                 /** Invoice ID for this payment. Uses India-specific invoice ID if available. */
                 fun invoiceId(invoiceId: String?) = invoiceId(JsonField.ofNullable(invoiceId))
 
@@ -2797,6 +2849,7 @@ private constructor(
                         (discounts ?: JsonMissing.of()).map { it.toImmutable() },
                         errorCode,
                         errorMessage,
+                        failureDetails,
                         invoiceId,
                         invoiceUrl,
                         paymentLink,
@@ -2860,6 +2913,7 @@ private constructor(
                 discounts()?.forEach { it.validate() }
                 errorCode()
                 errorMessage()
+                failureDetails()?.validate()
                 invoiceId()
                 invoiceUrl()
                 paymentLink()
@@ -2926,6 +2980,7 @@ private constructor(
                     (discounts.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
                     (if (errorCode.asKnown() == null) 0 else 1) +
                     (if (errorMessage.asKnown() == null) 0 else 1) +
+                    (failureDetails.asKnown()?.validity() ?: 0) +
                     (if (invoiceId.asKnown() == null) 0 else 1) +
                     (if (invoiceUrl.asKnown() == null) 0 else 1) +
                     (if (paymentLink.asKnown() == null) 0 else 1) +
@@ -2975,6 +3030,7 @@ private constructor(
                     discounts == other.discounts &&
                     errorCode == other.errorCode &&
                     errorMessage == other.errorMessage &&
+                    failureDetails == other.failureDetails &&
                     invoiceId == other.invoiceId &&
                     invoiceUrl == other.invoiceUrl &&
                     paymentLink == other.paymentLink &&
@@ -3022,6 +3078,7 @@ private constructor(
                     discounts,
                     errorCode,
                     errorMessage,
+                    failureDetails,
                     invoiceId,
                     invoiceUrl,
                     paymentLink,
@@ -3043,7 +3100,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Payment{billing=$billing, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, digitalProductsDelivered=$digitalProductsDelivered, disputes=$disputes, isUpdatePaymentMethod=$isUpdatePaymentMethod, metadata=$metadata, paymentId=$paymentId, paymentProvider=$paymentProvider, refunds=$refunds, retryAttempt=$retryAttempt, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, totalAmount=$totalAmount, cardHolderName=$cardHolderName, cardIssuingCountry=$cardIssuingCountry, cardLastFour=$cardLastFour, cardNetwork=$cardNetwork, cardType=$cardType, checkoutSessionId=$checkoutSessionId, customFieldResponses=$customFieldResponses, discountId=$discountId, discounts=$discounts, errorCode=$errorCode, errorMessage=$errorMessage, invoiceId=$invoiceId, invoiceUrl=$invoiceUrl, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodId=$paymentMethodId, paymentMethodType=$paymentMethodType, productCart=$productCart, refundStatus=$refundStatus, settlementTax=$settlementTax, status=$status, subscriptionId=$subscriptionId, tax=$tax, updatedAt=$updatedAt, payloadType=$payloadType, additionalProperties=$additionalProperties}"
+                "Payment{billing=$billing, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, digitalProductsDelivered=$digitalProductsDelivered, disputes=$disputes, isUpdatePaymentMethod=$isUpdatePaymentMethod, metadata=$metadata, paymentId=$paymentId, paymentProvider=$paymentProvider, refunds=$refunds, retryAttempt=$retryAttempt, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, totalAmount=$totalAmount, cardHolderName=$cardHolderName, cardIssuingCountry=$cardIssuingCountry, cardLastFour=$cardLastFour, cardNetwork=$cardNetwork, cardType=$cardType, checkoutSessionId=$checkoutSessionId, customFieldResponses=$customFieldResponses, discountId=$discountId, discounts=$discounts, errorCode=$errorCode, errorMessage=$errorMessage, failureDetails=$failureDetails, invoiceId=$invoiceId, invoiceUrl=$invoiceUrl, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodId=$paymentMethodId, paymentMethodType=$paymentMethodType, productCart=$productCart, refundStatus=$refundStatus, settlementTax=$settlementTax, status=$status, subscriptionId=$subscriptionId, tax=$tax, updatedAt=$updatedAt, payloadType=$payloadType, additionalProperties=$additionalProperties}"
         }
 
         /** Response struct representing subscription details */
@@ -3088,6 +3145,7 @@ private constructor(
             private val paymentMethodId: JsonField<String>,
             private val scheduledChange: JsonField<ScheduledPlanChange>,
             private val taxId: JsonField<String>,
+            private val trialAmount: JsonField<Int>,
             private val payloadType: JsonValue,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
@@ -3205,6 +3263,9 @@ private constructor(
                 @ExcludeMissing
                 scheduledChange: JsonField<ScheduledPlanChange> = JsonMissing.of(),
                 @JsonProperty("tax_id") @ExcludeMissing taxId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("trial_amount")
+                @ExcludeMissing
+                trialAmount: JsonField<Int> = JsonMissing.of(),
                 @JsonProperty("payload_type")
                 @ExcludeMissing
                 payloadType: JsonValue = JsonMissing.of(),
@@ -3246,6 +3307,7 @@ private constructor(
                 paymentMethodId,
                 scheduledChange,
                 taxId,
+                trialAmount,
                 payloadType,
                 mutableMapOf(),
             )
@@ -3289,6 +3351,7 @@ private constructor(
                     .paymentMethodId(paymentMethodId)
                     .scheduledChange(scheduledChange)
                     .taxId(taxId)
+                    .trialAmount(trialAmount)
                     .build()
 
             /**
@@ -3628,6 +3691,15 @@ private constructor(
              *   (e.g. if the server responded with an unexpected value).
              */
             fun taxId(): String? = taxId.getNullable("tax_id")
+
+            /**
+             * Per-unit trial amount after discounts, snapshotted at subscription creation (price
+             * currency minor units, pre-quantity, pre-tax). Null for a free trial or no trial.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun trialAmount(): Int? = trialAmount.getNullable("trial_amount")
 
             /**
              * Expected to always return the following:
@@ -4002,6 +4074,16 @@ private constructor(
              */
             @JsonProperty("tax_id") @ExcludeMissing fun _taxId(): JsonField<String> = taxId
 
+            /**
+             * Returns the raw JSON value of [trialAmount].
+             *
+             * Unlike [trialAmount], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("trial_amount")
+            @ExcludeMissing
+            fun _trialAmount(): JsonField<Int> = trialAmount
+
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
                 additionalProperties.put(key, value)
@@ -4096,6 +4178,7 @@ private constructor(
                 private var paymentMethodId: JsonField<String> = JsonMissing.of()
                 private var scheduledChange: JsonField<ScheduledPlanChange> = JsonMissing.of()
                 private var taxId: JsonField<String> = JsonMissing.of()
+                private var trialAmount: JsonField<Int> = JsonMissing.of()
                 private var payloadType: JsonValue = JsonValue.from("Subscription")
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -4140,6 +4223,7 @@ private constructor(
                     paymentMethodId = subscription.paymentMethodId
                     scheduledChange = subscription.scheduledChange
                     taxId = subscription.taxId
+                    trialAmount = subscription.trialAmount
                     payloadType = subscription.payloadType
                     additionalProperties = subscription.additionalProperties.toMutableMap()
                 }
@@ -4307,8 +4391,9 @@ private constructor(
                 fun meterCreditEntitlementCart(
                     meterCreditEntitlementCart: JsonField<List<MeterCreditEntitlementCartResponse>>
                 ) = apply {
-                    this.meterCreditEntitlementCart =
-                        meterCreditEntitlementCart.map { it.toMutableList() }
+                    this.meterCreditEntitlementCart = meterCreditEntitlementCart.map {
+                        it.toMutableList()
+                    }
                 }
 
                 /**
@@ -4774,6 +4859,31 @@ private constructor(
                 fun taxId(taxId: JsonField<String>) = apply { this.taxId = taxId }
 
                 /**
+                 * Per-unit trial amount after discounts, snapshotted at subscription creation
+                 * (price currency minor units, pre-quantity, pre-tax). Null for a free trial or no
+                 * trial.
+                 */
+                fun trialAmount(trialAmount: Int?) = trialAmount(JsonField.ofNullable(trialAmount))
+
+                /**
+                 * Alias for [Builder.trialAmount].
+                 *
+                 * This unboxed primitive overload exists for backwards compatibility.
+                 */
+                fun trialAmount(trialAmount: Int) = trialAmount(trialAmount as Int?)
+
+                /**
+                 * Sets [Builder.trialAmount] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.trialAmount] with a well-typed [Int] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun trialAmount(trialAmount: JsonField<Int>) = apply {
+                    this.trialAmount = trialAmount
+                }
+
+                /**
                  * Sets the field to an arbitrary JSON value.
                  *
                  * It is usually unnecessary to call this method because the field defaults to the
@@ -4887,6 +4997,7 @@ private constructor(
                         paymentMethodId,
                         scheduledChange,
                         taxId,
+                        trialAmount,
                         payloadType,
                         additionalProperties.toMutableMap(),
                     )
@@ -4946,6 +5057,7 @@ private constructor(
                 paymentMethodId()
                 scheduledChange()?.validate()
                 taxId()
+                trialAmount()
                 _payloadType().let {
                     if (it != JsonValue.from("Subscription")) {
                         throw DodoPaymentsInvalidDataException(
@@ -5008,6 +5120,7 @@ private constructor(
                     (if (paymentMethodId.asKnown() == null) 0 else 1) +
                     (scheduledChange.asKnown()?.validity() ?: 0) +
                     (if (taxId.asKnown() == null) 0 else 1) +
+                    (if (trialAmount.asKnown() == null) 0 else 1) +
                     payloadType.let { if (it == JsonValue.from("Subscription")) 1 else 0 }
 
             override fun equals(other: Any?): Boolean {
@@ -5053,6 +5166,7 @@ private constructor(
                     paymentMethodId == other.paymentMethodId &&
                     scheduledChange == other.scheduledChange &&
                     taxId == other.taxId &&
+                    trialAmount == other.trialAmount &&
                     payloadType == other.payloadType &&
                     additionalProperties == other.additionalProperties
             }
@@ -5096,6 +5210,7 @@ private constructor(
                     paymentMethodId,
                     scheduledChange,
                     taxId,
+                    trialAmount,
                     payloadType,
                     additionalProperties,
                 )
@@ -5104,7 +5219,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Subscription{addons=$addons, billing=$billing, brandId=$brandId, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, creditEntitlementCart=$creditEntitlementCart, currency=$currency, customer=$customer, metadata=$metadata, meterCreditEntitlementCart=$meterCreditEntitlementCart, meters=$meters, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancellationComment=$cancellationComment, cancellationFeedback=$cancellationFeedback, cancelledAt=$cancelledAt, customFieldResponses=$customFieldResponses, customerBusinessName=$customerBusinessName, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, discounts=$discounts, expiresAt=$expiresAt, paymentMethodId=$paymentMethodId, scheduledChange=$scheduledChange, taxId=$taxId, payloadType=$payloadType, additionalProperties=$additionalProperties}"
+                "Subscription{addons=$addons, billing=$billing, brandId=$brandId, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, creditEntitlementCart=$creditEntitlementCart, currency=$currency, customer=$customer, metadata=$metadata, meterCreditEntitlementCart=$meterCreditEntitlementCart, meters=$meters, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancellationComment=$cancellationComment, cancellationFeedback=$cancellationFeedback, cancelledAt=$cancelledAt, customFieldResponses=$customFieldResponses, customerBusinessName=$customerBusinessName, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, discounts=$discounts, expiresAt=$expiresAt, paymentMethodId=$paymentMethodId, scheduledChange=$scheduledChange, taxId=$taxId, trialAmount=$trialAmount, payloadType=$payloadType, additionalProperties=$additionalProperties}"
         }
 
         class Refund
@@ -9615,9 +9730,11 @@ private constructor(
                  *
                  * An instance of [AbandonmentReason] can contain an unknown value in a couple of
                  * cases:
+                 *
                  * - It was deserialized from data that doesn't match any known member. For example,
                  *   if the SDK is on an older version than the API, then the API may respond with
                  *   new members that the SDK is unaware of.
+                 *
                  * - It was constructed with an arbitrary value using the [of] method.
                  */
                 enum class Value {
@@ -9767,9 +9884,11 @@ private constructor(
                  * An enum containing [Status]'s known values, as well as an [_UNKNOWN] member.
                  *
                  * An instance of [Status] can contain an unknown value in a couple of cases:
+                 *
                  * - It was deserialized from data that doesn't match any known member. For example,
                  *   if the SDK is on an older version than the API, then the API may respond with
                  *   new members that the SDK is unaware of.
+                 *
                  * - It was constructed with an arbitrary value using the [of] method.
                  */
                 enum class Value {
@@ -10403,9 +10522,11 @@ private constructor(
                  * An enum containing [Status]'s known values, as well as an [_UNKNOWN] member.
                  *
                  * An instance of [Status] can contain an unknown value in a couple of cases:
+                 *
                  * - It was deserialized from data that doesn't match any known member. For example,
                  *   if the SDK is on an older version than the API, then the API may respond with
                  *   new members that the SDK is unaware of.
+                 *
                  * - It was constructed with an arbitrary value using the [of] method.
                  */
                 enum class Value {
@@ -10548,9 +10669,11 @@ private constructor(
                  * member.
                  *
                  * An instance of [TriggerState] can contain an unknown value in a couple of cases:
+                 *
                  * - It was deserialized from data that doesn't match any known member. For example,
                  *   if the SDK is on an older version than the API, then the API may respond with
                  *   new members that the SDK is unaware of.
+                 *
                  * - It was constructed with an arbitrary value using the [of] method.
                  */
                 enum class Value {

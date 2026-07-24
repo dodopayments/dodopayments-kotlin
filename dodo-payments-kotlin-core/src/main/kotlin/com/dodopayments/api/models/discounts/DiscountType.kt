@@ -20,6 +20,8 @@ class DiscountType @JsonCreator private constructor(private val value: JsonField
 
     companion object {
 
+        val FLAT = of("flat")
+
         val PERCENTAGE = of("percentage")
 
         fun of(value: String) = DiscountType(JsonField.of(value))
@@ -27,19 +29,23 @@ class DiscountType @JsonCreator private constructor(private val value: JsonField
 
     /** An enum containing [DiscountType]'s known values. */
     enum class Known {
-        PERCENTAGE
+        FLAT,
+        PERCENTAGE,
     }
 
     /**
      * An enum containing [DiscountType]'s known values, as well as an [_UNKNOWN] member.
      *
      * An instance of [DiscountType] can contain an unknown value in a couple of cases:
+     *
      * - It was deserialized from data that doesn't match any known member. For example, if the SDK
      *   is on an older version than the API, then the API may respond with new members that the SDK
      *   is unaware of.
+     *
      * - It was constructed with an arbitrary value using the [of] method.
      */
     enum class Value {
+        FLAT,
         PERCENTAGE,
         /** An enum member indicating that [DiscountType] was instantiated with an unknown value. */
         _UNKNOWN,
@@ -54,6 +60,7 @@ class DiscountType @JsonCreator private constructor(private val value: JsonField
      */
     fun value(): Value =
         when (this) {
+            FLAT -> Value.FLAT
             PERCENTAGE -> Value.PERCENTAGE
             else -> Value._UNKNOWN
         }
@@ -69,6 +76,7 @@ class DiscountType @JsonCreator private constructor(private val value: JsonField
      */
     fun known(): Known =
         when (this) {
+            FLAT -> Known.FLAT
             PERCENTAGE -> Known.PERCENTAGE
             else -> throw DodoPaymentsInvalidDataException("Unknown DiscountType: $value")
         }

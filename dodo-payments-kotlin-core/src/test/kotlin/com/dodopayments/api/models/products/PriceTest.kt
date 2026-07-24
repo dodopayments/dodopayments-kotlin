@@ -71,6 +71,8 @@ internal class PriceTest {
                 .subscriptionPeriodCount(0)
                 .subscriptionPeriodInterval(TimeInterval.DAY)
                 .taxInclusive(true)
+                .trialAmount(0)
+                .trialApplyDiscounts(true)
                 .trialPeriodDays(0)
                 .build()
 
@@ -96,6 +98,8 @@ internal class PriceTest {
                     .subscriptionPeriodCount(0)
                     .subscriptionPeriodInterval(TimeInterval.DAY)
                     .taxInclusive(true)
+                    .trialAmount(0)
+                    .trialApplyDiscounts(true)
                     .trialPeriodDays(0)
                     .build()
             )
