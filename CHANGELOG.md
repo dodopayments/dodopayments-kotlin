@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.110.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.109.0...v1.110.0) (2026-07-31)
+
+
+### Features
+
+* **api:** add payout webhook events and remove payment failure_details ([ac16d96](https://github.com/dodopayments/dodopayments-kotlin/commit/ac16d960b8b24eb1f4ffd186c0bdd0122037cd57))
+* **api:** add payout webhook events and remove payment failure_details ([019f876](https://github.com/dodopayments/dodopayments-kotlin/commit/019f876d4385f48fae1dce83c7a0abb810e0f733))
+
 ## [1.109.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.108.1...v1.109.0) (2026-07-24)
 
 
