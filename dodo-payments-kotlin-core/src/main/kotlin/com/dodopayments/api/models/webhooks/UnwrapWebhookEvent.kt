@@ -49,6 +49,11 @@ private constructor(
     private val paymentFailed: PaymentFailedWebhookEvent? = null,
     private val paymentProcessing: PaymentProcessingWebhookEvent? = null,
     private val paymentSucceeded: PaymentSucceededWebhookEvent? = null,
+    private val payoutCreated: PayoutCreatedWebhookEvent? = null,
+    private val payoutFailed: PayoutFailedWebhookEvent? = null,
+    private val payoutInProgress: PayoutInProgressWebhookEvent? = null,
+    private val payoutOnHold: PayoutOnHoldWebhookEvent? = null,
+    private val payoutSuccess: PayoutSuccessWebhookEvent? = null,
     private val refundFailed: RefundFailedWebhookEvent? = null,
     private val refundSucceeded: RefundSucceededWebhookEvent? = null,
     private val subscriptionActive: SubscriptionActiveWebhookEvent? = null,
@@ -124,6 +129,16 @@ private constructor(
     fun paymentProcessing(): PaymentProcessingWebhookEvent? = paymentProcessing
 
     fun paymentSucceeded(): PaymentSucceededWebhookEvent? = paymentSucceeded
+
+    fun payoutCreated(): PayoutCreatedWebhookEvent? = payoutCreated
+
+    fun payoutFailed(): PayoutFailedWebhookEvent? = payoutFailed
+
+    fun payoutInProgress(): PayoutInProgressWebhookEvent? = payoutInProgress
+
+    fun payoutOnHold(): PayoutOnHoldWebhookEvent? = payoutOnHold
+
+    fun payoutSuccess(): PayoutSuccessWebhookEvent? = payoutSuccess
 
     fun refundFailed(): RefundFailedWebhookEvent? = refundFailed
 
@@ -205,6 +220,16 @@ private constructor(
     fun isPaymentProcessing(): Boolean = paymentProcessing != null
 
     fun isPaymentSucceeded(): Boolean = paymentSucceeded != null
+
+    fun isPayoutCreated(): Boolean = payoutCreated != null
+
+    fun isPayoutFailed(): Boolean = payoutFailed != null
+
+    fun isPayoutInProgress(): Boolean = payoutInProgress != null
+
+    fun isPayoutOnHold(): Boolean = payoutOnHold != null
+
+    fun isPayoutSuccess(): Boolean = payoutSuccess != null
 
     fun isRefundFailed(): Boolean = refundFailed != null
 
@@ -306,6 +331,17 @@ private constructor(
     fun asPaymentSucceeded(): PaymentSucceededWebhookEvent =
         paymentSucceeded.getOrThrow("paymentSucceeded")
 
+    fun asPayoutCreated(): PayoutCreatedWebhookEvent = payoutCreated.getOrThrow("payoutCreated")
+
+    fun asPayoutFailed(): PayoutFailedWebhookEvent = payoutFailed.getOrThrow("payoutFailed")
+
+    fun asPayoutInProgress(): PayoutInProgressWebhookEvent =
+        payoutInProgress.getOrThrow("payoutInProgress")
+
+    fun asPayoutOnHold(): PayoutOnHoldWebhookEvent = payoutOnHold.getOrThrow("payoutOnHold")
+
+    fun asPayoutSuccess(): PayoutSuccessWebhookEvent = payoutSuccess.getOrThrow("payoutSuccess")
+
     fun asRefundFailed(): RefundFailedWebhookEvent = refundFailed.getOrThrow("refundFailed")
 
     fun asRefundSucceeded(): RefundSucceededWebhookEvent =
@@ -403,6 +439,11 @@ private constructor(
             paymentFailed != null -> visitor.visitPaymentFailed(paymentFailed)
             paymentProcessing != null -> visitor.visitPaymentProcessing(paymentProcessing)
             paymentSucceeded != null -> visitor.visitPaymentSucceeded(paymentSucceeded)
+            payoutCreated != null -> visitor.visitPayoutCreated(payoutCreated)
+            payoutFailed != null -> visitor.visitPayoutFailed(payoutFailed)
+            payoutInProgress != null -> visitor.visitPayoutInProgress(payoutInProgress)
+            payoutOnHold != null -> visitor.visitPayoutOnHold(payoutOnHold)
+            payoutSuccess != null -> visitor.visitPayoutSuccess(payoutSuccess)
             refundFailed != null -> visitor.visitRefundFailed(refundFailed)
             refundSucceeded != null -> visitor.visitRefundSucceeded(refundSucceeded)
             subscriptionActive != null -> visitor.visitSubscriptionActive(subscriptionActive)
@@ -577,6 +618,26 @@ private constructor(
 
                 override fun visitPaymentSucceeded(paymentSucceeded: PaymentSucceededWebhookEvent) {
                     paymentSucceeded.validate()
+                }
+
+                override fun visitPayoutCreated(payoutCreated: PayoutCreatedWebhookEvent) {
+                    payoutCreated.validate()
+                }
+
+                override fun visitPayoutFailed(payoutFailed: PayoutFailedWebhookEvent) {
+                    payoutFailed.validate()
+                }
+
+                override fun visitPayoutInProgress(payoutInProgress: PayoutInProgressWebhookEvent) {
+                    payoutInProgress.validate()
+                }
+
+                override fun visitPayoutOnHold(payoutOnHold: PayoutOnHoldWebhookEvent) {
+                    payoutOnHold.validate()
+                }
+
+                override fun visitPayoutSuccess(payoutSuccess: PayoutSuccessWebhookEvent) {
+                    payoutSuccess.validate()
                 }
 
                 override fun visitRefundFailed(refundFailed: RefundFailedWebhookEvent) {
@@ -761,6 +822,21 @@ private constructor(
                 override fun visitPaymentSucceeded(paymentSucceeded: PaymentSucceededWebhookEvent) =
                     paymentSucceeded.validity()
 
+                override fun visitPayoutCreated(payoutCreated: PayoutCreatedWebhookEvent) =
+                    payoutCreated.validity()
+
+                override fun visitPayoutFailed(payoutFailed: PayoutFailedWebhookEvent) =
+                    payoutFailed.validity()
+
+                override fun visitPayoutInProgress(payoutInProgress: PayoutInProgressWebhookEvent) =
+                    payoutInProgress.validity()
+
+                override fun visitPayoutOnHold(payoutOnHold: PayoutOnHoldWebhookEvent) =
+                    payoutOnHold.validity()
+
+                override fun visitPayoutSuccess(payoutSuccess: PayoutSuccessWebhookEvent) =
+                    payoutSuccess.validity()
+
                 override fun visitRefundFailed(refundFailed: RefundFailedWebhookEvent) =
                     refundFailed.validity()
 
@@ -842,6 +918,11 @@ private constructor(
             paymentFailed == other.paymentFailed &&
             paymentProcessing == other.paymentProcessing &&
             paymentSucceeded == other.paymentSucceeded &&
+            payoutCreated == other.payoutCreated &&
+            payoutFailed == other.payoutFailed &&
+            payoutInProgress == other.payoutInProgress &&
+            payoutOnHold == other.payoutOnHold &&
+            payoutSuccess == other.payoutSuccess &&
             refundFailed == other.refundFailed &&
             refundSucceeded == other.refundSucceeded &&
             subscriptionActive == other.subscriptionActive &&
@@ -886,6 +967,11 @@ private constructor(
             paymentFailed,
             paymentProcessing,
             paymentSucceeded,
+            payoutCreated,
+            payoutFailed,
+            payoutInProgress,
+            payoutOnHold,
+            payoutSuccess,
             refundFailed,
             refundSucceeded,
             subscriptionActive,
@@ -940,6 +1026,11 @@ private constructor(
             paymentFailed != null -> "UnwrapWebhookEvent{paymentFailed=$paymentFailed}"
             paymentProcessing != null -> "UnwrapWebhookEvent{paymentProcessing=$paymentProcessing}"
             paymentSucceeded != null -> "UnwrapWebhookEvent{paymentSucceeded=$paymentSucceeded}"
+            payoutCreated != null -> "UnwrapWebhookEvent{payoutCreated=$payoutCreated}"
+            payoutFailed != null -> "UnwrapWebhookEvent{payoutFailed=$payoutFailed}"
+            payoutInProgress != null -> "UnwrapWebhookEvent{payoutInProgress=$payoutInProgress}"
+            payoutOnHold != null -> "UnwrapWebhookEvent{payoutOnHold=$payoutOnHold}"
+            payoutSuccess != null -> "UnwrapWebhookEvent{payoutSuccess=$payoutSuccess}"
             refundFailed != null -> "UnwrapWebhookEvent{refundFailed=$refundFailed}"
             refundSucceeded != null -> "UnwrapWebhookEvent{refundSucceeded=$refundSucceeded}"
             subscriptionActive != null ->
@@ -1059,6 +1150,21 @@ private constructor(
         fun ofPaymentSucceeded(paymentSucceeded: PaymentSucceededWebhookEvent) =
             UnwrapWebhookEvent(paymentSucceeded = paymentSucceeded)
 
+        fun ofPayoutCreated(payoutCreated: PayoutCreatedWebhookEvent) =
+            UnwrapWebhookEvent(payoutCreated = payoutCreated)
+
+        fun ofPayoutFailed(payoutFailed: PayoutFailedWebhookEvent) =
+            UnwrapWebhookEvent(payoutFailed = payoutFailed)
+
+        fun ofPayoutInProgress(payoutInProgress: PayoutInProgressWebhookEvent) =
+            UnwrapWebhookEvent(payoutInProgress = payoutInProgress)
+
+        fun ofPayoutOnHold(payoutOnHold: PayoutOnHoldWebhookEvent) =
+            UnwrapWebhookEvent(payoutOnHold = payoutOnHold)
+
+        fun ofPayoutSuccess(payoutSuccess: PayoutSuccessWebhookEvent) =
+            UnwrapWebhookEvent(payoutSuccess = payoutSuccess)
+
         fun ofRefundFailed(refundFailed: RefundFailedWebhookEvent) =
             UnwrapWebhookEvent(refundFailed = refundFailed)
 
@@ -1174,6 +1280,16 @@ private constructor(
         fun visitPaymentProcessing(paymentProcessing: PaymentProcessingWebhookEvent): T
 
         fun visitPaymentSucceeded(paymentSucceeded: PaymentSucceededWebhookEvent): T
+
+        fun visitPayoutCreated(payoutCreated: PayoutCreatedWebhookEvent): T
+
+        fun visitPayoutFailed(payoutFailed: PayoutFailedWebhookEvent): T
+
+        fun visitPayoutInProgress(payoutInProgress: PayoutInProgressWebhookEvent): T
+
+        fun visitPayoutOnHold(payoutOnHold: PayoutOnHoldWebhookEvent): T
+
+        fun visitPayoutSuccess(payoutSuccess: PayoutSuccessWebhookEvent): T
 
         fun visitRefundFailed(refundFailed: RefundFailedWebhookEvent): T
 
@@ -1392,6 +1508,31 @@ private constructor(
                         ?.let { UnwrapWebhookEvent(paymentSucceeded = it, _json = json) }
                         ?: UnwrapWebhookEvent(_json = json)
                 }
+                "payout.created" -> {
+                    return tryDeserialize(node, jacksonTypeRef<PayoutCreatedWebhookEvent>())?.let {
+                        UnwrapWebhookEvent(payoutCreated = it, _json = json)
+                    } ?: UnwrapWebhookEvent(_json = json)
+                }
+                "payout.failed" -> {
+                    return tryDeserialize(node, jacksonTypeRef<PayoutFailedWebhookEvent>())?.let {
+                        UnwrapWebhookEvent(payoutFailed = it, _json = json)
+                    } ?: UnwrapWebhookEvent(_json = json)
+                }
+                "payout.in_progress" -> {
+                    return tryDeserialize(node, jacksonTypeRef<PayoutInProgressWebhookEvent>())
+                        ?.let { UnwrapWebhookEvent(payoutInProgress = it, _json = json) }
+                        ?: UnwrapWebhookEvent(_json = json)
+                }
+                "payout.on_hold" -> {
+                    return tryDeserialize(node, jacksonTypeRef<PayoutOnHoldWebhookEvent>())?.let {
+                        UnwrapWebhookEvent(payoutOnHold = it, _json = json)
+                    } ?: UnwrapWebhookEvent(_json = json)
+                }
+                "payout.success" -> {
+                    return tryDeserialize(node, jacksonTypeRef<PayoutSuccessWebhookEvent>())?.let {
+                        UnwrapWebhookEvent(payoutSuccess = it, _json = json)
+                    } ?: UnwrapWebhookEvent(_json = json)
+                }
                 "refund.failed" -> {
                     return tryDeserialize(node, jacksonTypeRef<RefundFailedWebhookEvent>())?.let {
                         UnwrapWebhookEvent(refundFailed = it, _json = json)
@@ -1506,6 +1647,11 @@ private constructor(
                 value.paymentFailed != null -> generator.writeObject(value.paymentFailed)
                 value.paymentProcessing != null -> generator.writeObject(value.paymentProcessing)
                 value.paymentSucceeded != null -> generator.writeObject(value.paymentSucceeded)
+                value.payoutCreated != null -> generator.writeObject(value.payoutCreated)
+                value.payoutFailed != null -> generator.writeObject(value.payoutFailed)
+                value.payoutInProgress != null -> generator.writeObject(value.payoutInProgress)
+                value.payoutOnHold != null -> generator.writeObject(value.payoutOnHold)
+                value.payoutSuccess != null -> generator.writeObject(value.payoutSuccess)
                 value.refundFailed != null -> generator.writeObject(value.refundFailed)
                 value.refundSucceeded != null -> generator.writeObject(value.refundSucceeded)
                 value.subscriptionActive != null -> generator.writeObject(value.subscriptionActive)
