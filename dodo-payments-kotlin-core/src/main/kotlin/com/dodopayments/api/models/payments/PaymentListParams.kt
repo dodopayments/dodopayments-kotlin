@@ -44,7 +44,10 @@ private constructor(
     /** Filter by customer id */
     fun customerId(): String? = customerId
 
-    /** Page number default is 0 */
+    /**
+     * Page number default is 0. Capped to bound OFFSET-based deep pagination, which forces Postgres
+     * to scan and discard every preceding row.
+     */
     fun pageNumber(): Int? = pageNumber
 
     /** Page size default is 10 max is 100 */
@@ -121,7 +124,10 @@ private constructor(
         /** Filter by customer id */
         fun customerId(customerId: String?) = apply { this.customerId = customerId }
 
-        /** Page number default is 0 */
+        /**
+         * Page number default is 0. Capped to bound OFFSET-based deep pagination, which forces
+         * Postgres to scan and discard every preceding row.
+         */
         fun pageNumber(pageNumber: Int?) = apply { this.pageNumber = pageNumber }
 
         /**
