@@ -70,7 +70,7 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
 
         val LICENSE_KEY_CREATED = of("license_key.created")
 
-        val PAYOUT_NOT_INITIATED = of("payout.not_initiated")
+        val PAYOUT_CREATED = of("payout.created")
 
         val PAYOUT_ON_HOLD = of("payout.on_hold")
 
@@ -143,7 +143,7 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         SUBSCRIPTION_UPDATED,
         SUBSCRIPTION_UPDATE_PAYMENT_METHOD,
         LICENSE_KEY_CREATED,
-        PAYOUT_NOT_INITIATED,
+        PAYOUT_CREATED,
         PAYOUT_ON_HOLD,
         PAYOUT_IN_PROGRESS,
         PAYOUT_FAILED,
@@ -171,9 +171,11 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
      * An enum containing [WebhookEventType]'s known values, as well as an [_UNKNOWN] member.
      *
      * An instance of [WebhookEventType] can contain an unknown value in a couple of cases:
+     *
      * - It was deserialized from data that doesn't match any known member. For example, if the SDK
      *   is on an older version than the API, then the API may respond with new members that the SDK
      *   is unaware of.
+     *
      * - It was constructed with an arbitrary value using the [of] method.
      */
     enum class Value {
@@ -201,7 +203,7 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         SUBSCRIPTION_UPDATED,
         SUBSCRIPTION_UPDATE_PAYMENT_METHOD,
         LICENSE_KEY_CREATED,
-        PAYOUT_NOT_INITIATED,
+        PAYOUT_CREATED,
         PAYOUT_ON_HOLD,
         PAYOUT_IN_PROGRESS,
         PAYOUT_FAILED,
@@ -262,7 +264,7 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             SUBSCRIPTION_UPDATED -> Value.SUBSCRIPTION_UPDATED
             SUBSCRIPTION_UPDATE_PAYMENT_METHOD -> Value.SUBSCRIPTION_UPDATE_PAYMENT_METHOD
             LICENSE_KEY_CREATED -> Value.LICENSE_KEY_CREATED
-            PAYOUT_NOT_INITIATED -> Value.PAYOUT_NOT_INITIATED
+            PAYOUT_CREATED -> Value.PAYOUT_CREATED
             PAYOUT_ON_HOLD -> Value.PAYOUT_ON_HOLD
             PAYOUT_IN_PROGRESS -> Value.PAYOUT_IN_PROGRESS
             PAYOUT_FAILED -> Value.PAYOUT_FAILED
@@ -322,7 +324,7 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             SUBSCRIPTION_UPDATED -> Known.SUBSCRIPTION_UPDATED
             SUBSCRIPTION_UPDATE_PAYMENT_METHOD -> Known.SUBSCRIPTION_UPDATE_PAYMENT_METHOD
             LICENSE_KEY_CREATED -> Known.LICENSE_KEY_CREATED
-            PAYOUT_NOT_INITIATED -> Known.PAYOUT_NOT_INITIATED
+            PAYOUT_CREATED -> Known.PAYOUT_CREATED
             PAYOUT_ON_HOLD -> Known.PAYOUT_ON_HOLD
             PAYOUT_IN_PROGRESS -> Known.PAYOUT_IN_PROGRESS
             PAYOUT_FAILED -> Known.PAYOUT_FAILED
