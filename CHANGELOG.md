@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.111.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.110.0...v1.111.0) (2026-08-05)
+
+
+### Features
+
+* **api:** add addon single_quantity_price and live_tutoring tax category ([7fb2f79](https://github.com/dodopayments/dodopayments-kotlin/commit/7fb2f79a0227af5a2e3f3d9cd79ad98075f60912))
+* **api:** add addon single_quantity_price and live_tutoring tax category ([6a58b63](https://github.com/dodopayments/dodopayments-kotlin/commit/6a58b63844d2397c389c5b4f35eeb3519cb68036))
+
 ## [1.110.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.109.0...v1.110.0) (2026-07-31)
 
 
