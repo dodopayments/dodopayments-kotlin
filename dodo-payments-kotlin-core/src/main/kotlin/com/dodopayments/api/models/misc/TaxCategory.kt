@@ -29,6 +29,8 @@ class TaxCategory @JsonCreator private constructor(private val value: JsonField<
 
         val EDTECH = of("edtech")
 
+        val LIVE_TUTORING = of("live_tutoring")
+
         fun of(value: String) = TaxCategory(JsonField.of(value))
     }
 
@@ -38,6 +40,7 @@ class TaxCategory @JsonCreator private constructor(private val value: JsonField<
         SAAS,
         E_BOOK,
         EDTECH,
+        LIVE_TUTORING,
     }
 
     /**
@@ -54,6 +57,7 @@ class TaxCategory @JsonCreator private constructor(private val value: JsonField<
         SAAS,
         E_BOOK,
         EDTECH,
+        LIVE_TUTORING,
         /** An enum member indicating that [TaxCategory] was instantiated with an unknown value. */
         _UNKNOWN,
     }
@@ -71,6 +75,7 @@ class TaxCategory @JsonCreator private constructor(private val value: JsonField<
             SAAS -> Value.SAAS
             E_BOOK -> Value.E_BOOK
             EDTECH -> Value.EDTECH
+            LIVE_TUTORING -> Value.LIVE_TUTORING
             else -> Value._UNKNOWN
         }
 
@@ -89,6 +94,7 @@ class TaxCategory @JsonCreator private constructor(private val value: JsonField<
             SAAS -> Known.SAAS
             E_BOOK -> Known.E_BOOK
             EDTECH -> Known.EDTECH
+            LIVE_TUTORING -> Known.LIVE_TUTORING
             else -> throw DodoPaymentsInvalidDataException("Unknown TaxCategory: $value")
         }
 
