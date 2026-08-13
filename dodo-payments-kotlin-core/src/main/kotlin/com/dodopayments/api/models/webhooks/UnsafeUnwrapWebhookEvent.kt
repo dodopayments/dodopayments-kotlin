@@ -61,8 +61,10 @@ private constructor(
     private val subscriptionExpired: SubscriptionExpiredWebhookEvent? = null,
     private val subscriptionFailed: SubscriptionFailedWebhookEvent? = null,
     private val subscriptionOnHold: SubscriptionOnHoldWebhookEvent? = null,
+    private val subscriptionPaused: SubscriptionPausedWebhookEvent? = null,
     private val subscriptionPlanChanged: SubscriptionPlanChangedWebhookEvent? = null,
     private val subscriptionRenewed: SubscriptionRenewedWebhookEvent? = null,
+    private val subscriptionUnpaused: SubscriptionUnpausedWebhookEvent? = null,
     private val subscriptionUpdatePaymentMethod: SubscriptionUpdatePaymentMethodWebhookEvent? =
         null,
     private val subscriptionUpdated: SubscriptionUpdatedWebhookEvent? = null,
@@ -154,9 +156,13 @@ private constructor(
 
     fun subscriptionOnHold(): SubscriptionOnHoldWebhookEvent? = subscriptionOnHold
 
+    fun subscriptionPaused(): SubscriptionPausedWebhookEvent? = subscriptionPaused
+
     fun subscriptionPlanChanged(): SubscriptionPlanChangedWebhookEvent? = subscriptionPlanChanged
 
     fun subscriptionRenewed(): SubscriptionRenewedWebhookEvent? = subscriptionRenewed
+
+    fun subscriptionUnpaused(): SubscriptionUnpausedWebhookEvent? = subscriptionUnpaused
 
     fun subscriptionUpdatePaymentMethod(): SubscriptionUpdatePaymentMethodWebhookEvent? =
         subscriptionUpdatePaymentMethod
@@ -245,9 +251,13 @@ private constructor(
 
     fun isSubscriptionOnHold(): Boolean = subscriptionOnHold != null
 
+    fun isSubscriptionPaused(): Boolean = subscriptionPaused != null
+
     fun isSubscriptionPlanChanged(): Boolean = subscriptionPlanChanged != null
 
     fun isSubscriptionRenewed(): Boolean = subscriptionRenewed != null
+
+    fun isSubscriptionUnpaused(): Boolean = subscriptionUnpaused != null
 
     fun isSubscriptionUpdatePaymentMethod(): Boolean = subscriptionUpdatePaymentMethod != null
 
@@ -362,11 +372,17 @@ private constructor(
     fun asSubscriptionOnHold(): SubscriptionOnHoldWebhookEvent =
         subscriptionOnHold.getOrThrow("subscriptionOnHold")
 
+    fun asSubscriptionPaused(): SubscriptionPausedWebhookEvent =
+        subscriptionPaused.getOrThrow("subscriptionPaused")
+
     fun asSubscriptionPlanChanged(): SubscriptionPlanChangedWebhookEvent =
         subscriptionPlanChanged.getOrThrow("subscriptionPlanChanged")
 
     fun asSubscriptionRenewed(): SubscriptionRenewedWebhookEvent =
         subscriptionRenewed.getOrThrow("subscriptionRenewed")
+
+    fun asSubscriptionUnpaused(): SubscriptionUnpausedWebhookEvent =
+        subscriptionUnpaused.getOrThrow("subscriptionUnpaused")
 
     fun asSubscriptionUpdatePaymentMethod(): SubscriptionUpdatePaymentMethodWebhookEvent =
         subscriptionUpdatePaymentMethod.getOrThrow("subscriptionUpdatePaymentMethod")
@@ -452,9 +468,11 @@ private constructor(
             subscriptionExpired != null -> visitor.visitSubscriptionExpired(subscriptionExpired)
             subscriptionFailed != null -> visitor.visitSubscriptionFailed(subscriptionFailed)
             subscriptionOnHold != null -> visitor.visitSubscriptionOnHold(subscriptionOnHold)
+            subscriptionPaused != null -> visitor.visitSubscriptionPaused(subscriptionPaused)
             subscriptionPlanChanged != null ->
                 visitor.visitSubscriptionPlanChanged(subscriptionPlanChanged)
             subscriptionRenewed != null -> visitor.visitSubscriptionRenewed(subscriptionRenewed)
+            subscriptionUnpaused != null -> visitor.visitSubscriptionUnpaused(subscriptionUnpaused)
             subscriptionUpdatePaymentMethod != null ->
                 visitor.visitSubscriptionUpdatePaymentMethod(subscriptionUpdatePaymentMethod)
             subscriptionUpdated != null -> visitor.visitSubscriptionUpdated(subscriptionUpdated)
@@ -678,6 +696,12 @@ private constructor(
                     subscriptionOnHold.validate()
                 }
 
+                override fun visitSubscriptionPaused(
+                    subscriptionPaused: SubscriptionPausedWebhookEvent
+                ) {
+                    subscriptionPaused.validate()
+                }
+
                 override fun visitSubscriptionPlanChanged(
                     subscriptionPlanChanged: SubscriptionPlanChangedWebhookEvent
                 ) {
@@ -688,6 +712,12 @@ private constructor(
                     subscriptionRenewed: SubscriptionRenewedWebhookEvent
                 ) {
                     subscriptionRenewed.validate()
+                }
+
+                override fun visitSubscriptionUnpaused(
+                    subscriptionUnpaused: SubscriptionUnpausedWebhookEvent
+                ) {
+                    subscriptionUnpaused.validate()
                 }
 
                 override fun visitSubscriptionUpdatePaymentMethod(
@@ -863,6 +893,10 @@ private constructor(
                     subscriptionOnHold: SubscriptionOnHoldWebhookEvent
                 ) = subscriptionOnHold.validity()
 
+                override fun visitSubscriptionPaused(
+                    subscriptionPaused: SubscriptionPausedWebhookEvent
+                ) = subscriptionPaused.validity()
+
                 override fun visitSubscriptionPlanChanged(
                     subscriptionPlanChanged: SubscriptionPlanChangedWebhookEvent
                 ) = subscriptionPlanChanged.validity()
@@ -870,6 +904,10 @@ private constructor(
                 override fun visitSubscriptionRenewed(
                     subscriptionRenewed: SubscriptionRenewedWebhookEvent
                 ) = subscriptionRenewed.validity()
+
+                override fun visitSubscriptionUnpaused(
+                    subscriptionUnpaused: SubscriptionUnpausedWebhookEvent
+                ) = subscriptionUnpaused.validity()
 
                 override fun visitSubscriptionUpdatePaymentMethod(
                     subscriptionUpdatePaymentMethod: SubscriptionUpdatePaymentMethodWebhookEvent
@@ -930,8 +968,10 @@ private constructor(
             subscriptionExpired == other.subscriptionExpired &&
             subscriptionFailed == other.subscriptionFailed &&
             subscriptionOnHold == other.subscriptionOnHold &&
+            subscriptionPaused == other.subscriptionPaused &&
             subscriptionPlanChanged == other.subscriptionPlanChanged &&
             subscriptionRenewed == other.subscriptionRenewed &&
+            subscriptionUnpaused == other.subscriptionUnpaused &&
             subscriptionUpdatePaymentMethod == other.subscriptionUpdatePaymentMethod &&
             subscriptionUpdated == other.subscriptionUpdated
     }
@@ -979,8 +1019,10 @@ private constructor(
             subscriptionExpired,
             subscriptionFailed,
             subscriptionOnHold,
+            subscriptionPaused,
             subscriptionPlanChanged,
             subscriptionRenewed,
+            subscriptionUnpaused,
             subscriptionUpdatePaymentMethod,
             subscriptionUpdated,
         )
@@ -1053,10 +1095,14 @@ private constructor(
                 "UnsafeUnwrapWebhookEvent{subscriptionFailed=$subscriptionFailed}"
             subscriptionOnHold != null ->
                 "UnsafeUnwrapWebhookEvent{subscriptionOnHold=$subscriptionOnHold}"
+            subscriptionPaused != null ->
+                "UnsafeUnwrapWebhookEvent{subscriptionPaused=$subscriptionPaused}"
             subscriptionPlanChanged != null ->
                 "UnsafeUnwrapWebhookEvent{subscriptionPlanChanged=$subscriptionPlanChanged}"
             subscriptionRenewed != null ->
                 "UnsafeUnwrapWebhookEvent{subscriptionRenewed=$subscriptionRenewed}"
+            subscriptionUnpaused != null ->
+                "UnsafeUnwrapWebhookEvent{subscriptionUnpaused=$subscriptionUnpaused}"
             subscriptionUpdatePaymentMethod != null ->
                 "UnsafeUnwrapWebhookEvent{subscriptionUpdatePaymentMethod=$subscriptionUpdatePaymentMethod}"
             subscriptionUpdated != null ->
@@ -1196,12 +1242,18 @@ private constructor(
         fun ofSubscriptionOnHold(subscriptionOnHold: SubscriptionOnHoldWebhookEvent) =
             UnsafeUnwrapWebhookEvent(subscriptionOnHold = subscriptionOnHold)
 
+        fun ofSubscriptionPaused(subscriptionPaused: SubscriptionPausedWebhookEvent) =
+            UnsafeUnwrapWebhookEvent(subscriptionPaused = subscriptionPaused)
+
         fun ofSubscriptionPlanChanged(
             subscriptionPlanChanged: SubscriptionPlanChangedWebhookEvent
         ) = UnsafeUnwrapWebhookEvent(subscriptionPlanChanged = subscriptionPlanChanged)
 
         fun ofSubscriptionRenewed(subscriptionRenewed: SubscriptionRenewedWebhookEvent) =
             UnsafeUnwrapWebhookEvent(subscriptionRenewed = subscriptionRenewed)
+
+        fun ofSubscriptionUnpaused(subscriptionUnpaused: SubscriptionUnpausedWebhookEvent) =
+            UnsafeUnwrapWebhookEvent(subscriptionUnpaused = subscriptionUnpaused)
 
         fun ofSubscriptionUpdatePaymentMethod(
             subscriptionUpdatePaymentMethod: SubscriptionUpdatePaymentMethodWebhookEvent
@@ -1318,11 +1370,15 @@ private constructor(
 
         fun visitSubscriptionOnHold(subscriptionOnHold: SubscriptionOnHoldWebhookEvent): T
 
+        fun visitSubscriptionPaused(subscriptionPaused: SubscriptionPausedWebhookEvent): T
+
         fun visitSubscriptionPlanChanged(
             subscriptionPlanChanged: SubscriptionPlanChangedWebhookEvent
         ): T
 
         fun visitSubscriptionRenewed(subscriptionRenewed: SubscriptionRenewedWebhookEvent): T
+
+        fun visitSubscriptionUnpaused(subscriptionUnpaused: SubscriptionUnpausedWebhookEvent): T
 
         fun visitSubscriptionUpdatePaymentMethod(
             subscriptionUpdatePaymentMethod: SubscriptionUpdatePaymentMethodWebhookEvent
@@ -1590,6 +1646,11 @@ private constructor(
                         ?.let { UnsafeUnwrapWebhookEvent(subscriptionOnHold = it, _json = json) }
                         ?: UnsafeUnwrapWebhookEvent(_json = json)
                 }
+                "subscription.paused" -> {
+                    return tryDeserialize(node, jacksonTypeRef<SubscriptionPausedWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(subscriptionPaused = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
                 "subscription.plan_changed" -> {
                     return tryDeserialize(
                             node,
@@ -1602,6 +1663,11 @@ private constructor(
                 "subscription.renewed" -> {
                     return tryDeserialize(node, jacksonTypeRef<SubscriptionRenewedWebhookEvent>())
                         ?.let { UnsafeUnwrapWebhookEvent(subscriptionRenewed = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "subscription.unpaused" -> {
+                    return tryDeserialize(node, jacksonTypeRef<SubscriptionUnpausedWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(subscriptionUnpaused = it, _json = json) }
                         ?: UnsafeUnwrapWebhookEvent(_json = json)
                 }
                 "subscription.update_payment_method" -> {
@@ -1688,10 +1754,13 @@ private constructor(
                     generator.writeObject(value.subscriptionExpired)
                 value.subscriptionFailed != null -> generator.writeObject(value.subscriptionFailed)
                 value.subscriptionOnHold != null -> generator.writeObject(value.subscriptionOnHold)
+                value.subscriptionPaused != null -> generator.writeObject(value.subscriptionPaused)
                 value.subscriptionPlanChanged != null ->
                     generator.writeObject(value.subscriptionPlanChanged)
                 value.subscriptionRenewed != null ->
                     generator.writeObject(value.subscriptionRenewed)
+                value.subscriptionUnpaused != null ->
+                    generator.writeObject(value.subscriptionUnpaused)
                 value.subscriptionUpdatePaymentMethod != null ->
                     generator.writeObject(value.subscriptionUpdatePaymentMethod)
                 value.subscriptionUpdated != null ->
