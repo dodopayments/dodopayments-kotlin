@@ -182,6 +182,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                                 .build()
                         )
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .pausedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
                         .scheduledChange(
                             ScheduledPlanChange.builder()
@@ -366,6 +367,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                             .build()
                     )
                     .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .pausedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .paymentMethodId("payment_method_id")
                     .scheduledChange(
                         ScheduledPlanChange.builder()
@@ -554,6 +556,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                                 .build()
                         )
                         .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .pausedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
                         .scheduledChange(
                             ScheduledPlanChange.builder()

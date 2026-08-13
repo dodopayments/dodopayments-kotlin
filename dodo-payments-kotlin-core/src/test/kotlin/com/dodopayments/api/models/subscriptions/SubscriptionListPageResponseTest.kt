@@ -76,6 +76,7 @@ internal class SubscriptionListPageResponseTest {
                         .customerBusinessName("customer_business_name")
                         .discountCyclesRemaining(0)
                         .discountId("discount_id")
+                        .pausedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
                         .productName("product_name")
                         .scheduledChange(
@@ -159,6 +160,7 @@ internal class SubscriptionListPageResponseTest {
                     .customerBusinessName("customer_business_name")
                     .discountCyclesRemaining(0)
                     .discountId("discount_id")
+                    .pausedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .paymentMethodId("payment_method_id")
                     .productName("product_name")
                     .scheduledChange(
@@ -246,6 +248,7 @@ internal class SubscriptionListPageResponseTest {
                         .customerBusinessName("customer_business_name")
                         .discountCyclesRemaining(0)
                         .discountId("discount_id")
+                        .pausedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
                         .productName("product_name")
                         .scheduledChange(
