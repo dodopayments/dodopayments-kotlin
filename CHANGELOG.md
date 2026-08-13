@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.112.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.111.0...v1.112.0) (2026-08-13)
+
+
+### Features
+
+* **api:** add subscription pause/unpause ([1c04edd](https://github.com/dodopayments/dodopayments-kotlin/commit/1c04edddfbce7c107928807b0f8ad4c5a2d07be3))
+* **api:** add subscription pause/unpause ([041ea55](https://github.com/dodopayments/dodopayments-kotlin/commit/041ea55cddc0c0b81488f95a82de6496999ddf88))
+
 ## [1.111.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.110.0...v1.111.0) (2026-08-05)
 
 
