@@ -27,6 +27,8 @@ class SubscriptionStatus @JsonCreator private constructor(private val value: Jso
 
         val ON_HOLD = of("on_hold")
 
+        val PAUSED = of("paused")
+
         val CANCELLED = of("cancelled")
 
         val FAILED = of("failed")
@@ -41,6 +43,7 @@ class SubscriptionStatus @JsonCreator private constructor(private val value: Jso
         PENDING,
         ACTIVE,
         ON_HOLD,
+        PAUSED,
         CANCELLED,
         FAILED,
         EXPIRED,
@@ -59,6 +62,7 @@ class SubscriptionStatus @JsonCreator private constructor(private val value: Jso
         PENDING,
         ACTIVE,
         ON_HOLD,
+        PAUSED,
         CANCELLED,
         FAILED,
         EXPIRED,
@@ -81,6 +85,7 @@ class SubscriptionStatus @JsonCreator private constructor(private val value: Jso
             PENDING -> Value.PENDING
             ACTIVE -> Value.ACTIVE
             ON_HOLD -> Value.ON_HOLD
+            PAUSED -> Value.PAUSED
             CANCELLED -> Value.CANCELLED
             FAILED -> Value.FAILED
             EXPIRED -> Value.EXPIRED
@@ -101,6 +106,7 @@ class SubscriptionStatus @JsonCreator private constructor(private val value: Jso
             PENDING -> Known.PENDING
             ACTIVE -> Known.ACTIVE
             ON_HOLD -> Known.ON_HOLD
+            PAUSED -> Known.PAUSED
             CANCELLED -> Known.CANCELLED
             FAILED -> Known.FAILED
             EXPIRED -> Known.EXPIRED

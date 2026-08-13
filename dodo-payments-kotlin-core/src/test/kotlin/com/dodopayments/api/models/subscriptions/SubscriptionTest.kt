@@ -145,6 +145,7 @@ internal class SubscriptionTest {
                         .build()
                 )
                 .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .pausedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .paymentMethodId("payment_method_id")
                 .scheduledChange(
                     ScheduledPlanChange.builder()
@@ -302,6 +303,8 @@ internal class SubscriptionTest {
             )
         assertThat(subscription.expiresAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(subscription.pausedAt())
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(subscription.paymentMethodId()).isEqualTo("payment_method_id")
         assertThat(subscription.scheduledChange())
             .isEqualTo(
@@ -452,6 +455,7 @@ internal class SubscriptionTest {
                         .build()
                 )
                 .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .pausedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .paymentMethodId("payment_method_id")
                 .scheduledChange(
                     ScheduledPlanChange.builder()

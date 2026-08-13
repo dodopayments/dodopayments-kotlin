@@ -27,12 +27,12 @@ import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class SubscriptionFailedWebhookEventTest {
+internal class SubscriptionPausedWebhookEventTest {
 
     @Test
     fun create() {
-        val subscriptionFailedWebhookEvent =
-            SubscriptionFailedWebhookEvent.builder()
+        val subscriptionPausedWebhookEvent =
+            SubscriptionPausedWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
                     Subscription.builder()
@@ -186,8 +186,8 @@ internal class SubscriptionFailedWebhookEventTest {
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
 
-        assertThat(subscriptionFailedWebhookEvent.businessId()).isEqualTo("business_id")
-        assertThat(subscriptionFailedWebhookEvent.data())
+        assertThat(subscriptionPausedWebhookEvent.businessId()).isEqualTo("business_id")
+        assertThat(subscriptionPausedWebhookEvent.data())
             .isEqualTo(
                 Subscription.builder()
                     .addAddon(
@@ -337,15 +337,15 @@ internal class SubscriptionFailedWebhookEventTest {
                     .trialAmount(0)
                     .build()
             )
-        assertThat(subscriptionFailedWebhookEvent.timestamp())
+        assertThat(subscriptionPausedWebhookEvent.timestamp())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val subscriptionFailedWebhookEvent =
-            SubscriptionFailedWebhookEvent.builder()
+        val subscriptionPausedWebhookEvent =
+            SubscriptionPausedWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
                     Subscription.builder()
@@ -499,13 +499,13 @@ internal class SubscriptionFailedWebhookEventTest {
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
 
-        val roundtrippedSubscriptionFailedWebhookEvent =
+        val roundtrippedSubscriptionPausedWebhookEvent =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(subscriptionFailedWebhookEvent),
-                jacksonTypeRef<SubscriptionFailedWebhookEvent>(),
+                jsonMapper.writeValueAsString(subscriptionPausedWebhookEvent),
+                jacksonTypeRef<SubscriptionPausedWebhookEvent>(),
             )
 
-        assertThat(roundtrippedSubscriptionFailedWebhookEvent)
-            .isEqualTo(subscriptionFailedWebhookEvent)
+        assertThat(roundtrippedSubscriptionPausedWebhookEvent)
+            .isEqualTo(subscriptionPausedWebhookEvent)
     }
 }
