@@ -74,6 +74,7 @@ internal class SubscriptionListResponseTest {
                 .customerBusinessName("customer_business_name")
                 .discountCyclesRemaining(0)
                 .discountId("discount_id")
+                .pausedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .paymentMethodId("payment_method_id")
                 .productName("product_name")
                 .scheduledChange(
@@ -160,6 +161,8 @@ internal class SubscriptionListResponseTest {
             .isEqualTo("customer_business_name")
         assertThat(subscriptionListResponse.discountCyclesRemaining()).isEqualTo(0)
         assertThat(subscriptionListResponse.discountId()).isEqualTo("discount_id")
+        assertThat(subscriptionListResponse.pausedAt())
+            .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(subscriptionListResponse.paymentMethodId()).isEqualTo("payment_method_id")
         assertThat(subscriptionListResponse.productName()).isEqualTo("product_name")
         assertThat(subscriptionListResponse.scheduledChange())
@@ -244,6 +247,7 @@ internal class SubscriptionListResponseTest {
                 .customerBusinessName("customer_business_name")
                 .discountCyclesRemaining(0)
                 .discountId("discount_id")
+                .pausedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .paymentMethodId("payment_method_id")
                 .productName("product_name")
                 .scheduledChange(
