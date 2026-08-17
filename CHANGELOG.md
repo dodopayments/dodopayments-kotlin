@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.113.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.112.0...v1.113.0) (2026-08-17)
+
+
+### Features
+
+* **api:** add brand archive endpoint ([adf0156](https://github.com/dodopayments/dodopayments-kotlin/commit/adf015639546e70c7d7ce10e3a2d4dfe8181cbbe))
+* **api:** add brand archive endpoint ([8defad4](https://github.com/dodopayments/dodopayments-kotlin/commit/8defad4834557a7f4cc3a8d8d1bcf984cc55d1d1))
+
 ## [1.112.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.111.0...v1.112.0) (2026-08-13)
 
 
