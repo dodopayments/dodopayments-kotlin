@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 
@@ -25,6 +26,7 @@ private constructor(
     private val statementDescriptor: JsonField<String>,
     private val verificationEnabled: JsonField<Boolean>,
     private val verificationStatus: JsonField<VerificationStatus>,
+    private val archivedAt: JsonField<OffsetDateTime>,
     private val description: JsonField<String>,
     private val image: JsonField<String>,
     private val name: JsonField<String>,
@@ -50,6 +52,9 @@ private constructor(
         @JsonProperty("verification_status")
         @ExcludeMissing
         verificationStatus: JsonField<VerificationStatus> = JsonMissing.of(),
+        @JsonProperty("archived_at")
+        @ExcludeMissing
+        archivedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("description")
         @ExcludeMissing
         description: JsonField<String> = JsonMissing.of(),
@@ -69,6 +74,7 @@ private constructor(
         statementDescriptor,
         verificationEnabled,
         verificationStatus,
+        archivedAt,
         description,
         image,
         name,
@@ -114,6 +120,14 @@ private constructor(
      */
     fun verificationStatus(): VerificationStatus =
         verificationStatus.getRequired("verification_status")
+
+    /**
+     * Time the brand was archived. Null for an active brand.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun archivedAt(): OffsetDateTime? = archivedAt.getNullable("archived_at")
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -205,6 +219,15 @@ private constructor(
     fun _verificationStatus(): JsonField<VerificationStatus> = verificationStatus
 
     /**
+     * Returns the raw JSON value of [archivedAt].
+     *
+     * Unlike [archivedAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("archived_at")
+    @ExcludeMissing
+    fun _archivedAt(): JsonField<OffsetDateTime> = archivedAt
+
+    /**
      * Returns the raw JSON value of [description].
      *
      * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
@@ -289,6 +312,7 @@ private constructor(
         private var statementDescriptor: JsonField<String>? = null
         private var verificationEnabled: JsonField<Boolean>? = null
         private var verificationStatus: JsonField<VerificationStatus>? = null
+        private var archivedAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var description: JsonField<String> = JsonMissing.of()
         private var image: JsonField<String> = JsonMissing.of()
         private var name: JsonField<String> = JsonMissing.of()
@@ -304,6 +328,7 @@ private constructor(
             statementDescriptor = brand.statementDescriptor
             verificationEnabled = brand.verificationEnabled
             verificationStatus = brand.verificationStatus
+            archivedAt = brand.archivedAt
             description = brand.description
             image = brand.image
             name = brand.name
@@ -384,6 +409,20 @@ private constructor(
          */
         fun verificationStatus(verificationStatus: JsonField<VerificationStatus>) = apply {
             this.verificationStatus = verificationStatus
+        }
+
+        /** Time the brand was archived. Null for an active brand. */
+        fun archivedAt(archivedAt: OffsetDateTime?) = archivedAt(JsonField.ofNullable(archivedAt))
+
+        /**
+         * Sets [Builder.archivedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.archivedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun archivedAt(archivedAt: JsonField<OffsetDateTime>) = apply {
+            this.archivedAt = archivedAt
         }
 
         fun description(description: String?) = description(JsonField.ofNullable(description))
@@ -499,6 +538,7 @@ private constructor(
                 checkRequired("statementDescriptor", statementDescriptor),
                 checkRequired("verificationEnabled", verificationEnabled),
                 checkRequired("verificationStatus", verificationStatus),
+                archivedAt,
                 description,
                 image,
                 name,
@@ -530,6 +570,7 @@ private constructor(
         statementDescriptor()
         verificationEnabled()
         verificationStatus().validate()
+        archivedAt()
         description()
         image()
         name()
@@ -559,6 +600,7 @@ private constructor(
             (if (statementDescriptor.asKnown() == null) 0 else 1) +
             (if (verificationEnabled.asKnown() == null) 0 else 1) +
             (verificationStatus.asKnown()?.validity() ?: 0) +
+            (if (archivedAt.asKnown() == null) 0 else 1) +
             (if (description.asKnown() == null) 0 else 1) +
             (if (image.asKnown() == null) 0 else 1) +
             (if (name.asKnown() == null) 0 else 1) +
@@ -729,6 +771,7 @@ private constructor(
             statementDescriptor == other.statementDescriptor &&
             verificationEnabled == other.verificationEnabled &&
             verificationStatus == other.verificationStatus &&
+            archivedAt == other.archivedAt &&
             description == other.description &&
             image == other.image &&
             name == other.name &&
@@ -746,6 +789,7 @@ private constructor(
             statementDescriptor,
             verificationEnabled,
             verificationStatus,
+            archivedAt,
             description,
             image,
             name,
@@ -759,5 +803,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Brand{brandId=$brandId, businessId=$businessId, enabled=$enabled, statementDescriptor=$statementDescriptor, verificationEnabled=$verificationEnabled, verificationStatus=$verificationStatus, description=$description, image=$image, name=$name, reasonForHold=$reasonForHold, supportEmail=$supportEmail, url=$url, additionalProperties=$additionalProperties}"
+        "Brand{brandId=$brandId, businessId=$businessId, enabled=$enabled, statementDescriptor=$statementDescriptor, verificationEnabled=$verificationEnabled, verificationStatus=$verificationStatus, archivedAt=$archivedAt, description=$description, image=$image, name=$name, reasonForHold=$reasonForHold, supportEmail=$supportEmail, url=$url, additionalProperties=$additionalProperties}"
 }

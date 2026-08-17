@@ -4,7 +4,9 @@ package com.dodopayments.api.services.blocking
 
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
+import com.dodopayments.api.models.brands.BrandArchiveParams
 import com.dodopayments.api.models.brands.BrandCreateParams
+import com.dodopayments.api.models.brands.BrandListParams
 import com.dodopayments.api.models.brands.BrandUpdateParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -83,9 +85,29 @@ internal class BrandServiceTest {
                 .build()
         val brandService = client.brands()
 
-        val brands = brandService.list()
+        val brands = brandService.list(BrandListParams.builder().includeArchived(true).build())
 
         brands.validate()
+    }
+
+    @Test
+    fun archive() {
+        val client =
+            DodoPaymentsOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val brandService = client.brands()
+
+        val response =
+            brandService.archive(
+                BrandArchiveParams.builder()
+                    .id("brnd_8dFiAW42v28JzhlVSocjq")
+                    .moveProductsTo("move_products_to")
+                    .build()
+            )
+
+        response.validate()
     }
 
     @Test

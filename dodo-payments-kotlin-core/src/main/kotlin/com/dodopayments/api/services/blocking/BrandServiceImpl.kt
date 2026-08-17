@@ -17,6 +17,8 @@ import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepare
 import com.dodopayments.api.models.brands.Brand
+import com.dodopayments.api.models.brands.BrandArchiveParams
+import com.dodopayments.api.models.brands.BrandArchiveResponse
 import com.dodopayments.api.models.brands.BrandCreateParams
 import com.dodopayments.api.models.brands.BrandListParams
 import com.dodopayments.api.models.brands.BrandListResponse
@@ -52,6 +54,13 @@ class BrandServiceImpl internal constructor(private val clientOptions: ClientOpt
     override fun list(params: BrandListParams, requestOptions: RequestOptions): BrandListResponse =
         // get /brands
         withRawResponse().list(params, requestOptions).parse()
+
+    override fun archive(
+        params: BrandArchiveParams,
+        requestOptions: RequestOptions,
+    ): BrandArchiveResponse =
+        // post /brands/{id}/archive
+        withRawResponse().archive(params, requestOptions).parse()
 
     override fun updateImages(
         params: BrandUpdateImagesParams,
@@ -176,6 +185,37 @@ class BrandServiceImpl internal constructor(private val clientOptions: ClientOpt
             return errorHandler.handle(response).parseable {
                 response
                     .use { listHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val archiveHandler: Handler<BrandArchiveResponse> =
+            jsonHandler<BrandArchiveResponse>(clientOptions.jsonMapper)
+
+        override fun archive(
+            params: BrandArchiveParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<BrandArchiveResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("brands", params._pathParam(0), "archive")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { archiveHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()
