@@ -181,6 +181,7 @@ internal class ServiceParamsTest {
                                 .alwaysCreateNewCustomer(true)
                                 .redirectImmediately(true)
                                 .requirePhoneNumber(true)
+                                .singlePage(true)
                                 .build()
                         )
                         .force3ds(true)
