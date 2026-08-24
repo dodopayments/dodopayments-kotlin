@@ -20,6 +20,7 @@ import com.dodopayments.api.core.prepare
 import com.dodopayments.api.models.subscriptions.Subscription
 import com.dodopayments.api.models.subscriptions.SubscriptionCancelChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChangePlanParams
+import com.dodopayments.api.models.subscriptions.SubscriptionChangePlanResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
@@ -88,10 +89,12 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
         withRawResponse().cancelChangePlan(params, requestOptions)
     }
 
-    override fun changePlan(params: SubscriptionChangePlanParams, requestOptions: RequestOptions) {
+    override fun changePlan(
+        params: SubscriptionChangePlanParams,
+        requestOptions: RequestOptions,
+    ): SubscriptionChangePlanResponse =
         // post /subscriptions/{subscription_id}/change-plan
-        withRawResponse().changePlan(params, requestOptions)
-    }
+        withRawResponse().changePlan(params, requestOptions).parse()
 
     override fun charge(
         params: SubscriptionChargeParams,
@@ -294,12 +297,13 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
             }
         }
 
-        private val changePlanHandler: Handler<Void?> = emptyHandler()
+        private val changePlanHandler: Handler<SubscriptionChangePlanResponse> =
+            jsonHandler<SubscriptionChangePlanResponse>(clientOptions.jsonMapper)
 
         override fun changePlan(
             params: SubscriptionChangePlanParams,
             requestOptions: RequestOptions,
-        ): HttpResponse {
+        ): HttpResponseFor<SubscriptionChangePlanResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("subscriptionId", params.subscriptionId())
@@ -314,7 +318,13 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
             return errorHandler.handle(response).parseable {
-                response.use { changePlanHandler.handle(it) }
+                response
+                    .use { changePlanHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
             }
         }
 
