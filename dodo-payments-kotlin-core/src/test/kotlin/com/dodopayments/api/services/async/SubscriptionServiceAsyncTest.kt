@@ -213,31 +213,38 @@ internal class SubscriptionServiceAsyncTest {
                 .build()
         val subscriptionServiceAsync = client.subscriptions()
 
-        subscriptionServiceAsync.changePlan(
-            SubscriptionChangePlanParams.builder()
-                .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
-                .updateSubscriptionPlanReq(
-                    UpdateSubscriptionPlanReq.builder()
-                        .productId("product_id")
-                        .prorationBillingMode(
-                            UpdateSubscriptionPlanReq.ProrationBillingMode.PRORATED_IMMEDIATELY
-                        )
-                        .quantity(0)
-                        .adaptiveCurrencyFeesInclusive(true)
-                        .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
-                        .discountCode("discount_code")
-                        .addDiscountCode("string")
-                        .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
-                        .metadata(
-                            Metadata.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("string"))
-                                .build()
-                        )
-                        .onPaymentFailure(UpdateSubscriptionPlanReq.OnPaymentFailure.PREVENT_CHANGE)
-                        .build()
-                )
-                .build()
-        )
+        val response =
+            subscriptionServiceAsync.changePlan(
+                SubscriptionChangePlanParams.builder()
+                    .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
+                    .updateSubscriptionPlanReq(
+                        UpdateSubscriptionPlanReq.builder()
+                            .productId("product_id")
+                            .prorationBillingMode(
+                                UpdateSubscriptionPlanReq.ProrationBillingMode.PRORATED_IMMEDIATELY
+                            )
+                            .quantity(0)
+                            .adaptiveCurrencyFeesInclusive(true)
+                            .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
+                            .cancelScheduledChangePlan(true)
+                            .collectViaPaymentLink(true)
+                            .discountCode("discount_code")
+                            .addDiscountCode("string")
+                            .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
+                            .metadata(
+                                Metadata.builder()
+                                    .putAdditionalProperty("foo", JsonValue.from("string"))
+                                    .build()
+                            )
+                            .onPaymentFailure(
+                                UpdateSubscriptionPlanReq.OnPaymentFailure.PREVENT_CHANGE
+                            )
+                            .build()
+                    )
+                    .build()
+            )
+
+        response.validate()
     }
 
     @Test
@@ -296,6 +303,8 @@ internal class SubscriptionServiceAsyncTest {
                             .quantity(0)
                             .adaptiveCurrencyFeesInclusive(true)
                             .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
+                            .cancelScheduledChangePlan(true)
+                            .collectViaPaymentLink(true)
                             .discountCode("discount_code")
                             .addDiscountCode("string")
                             .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)

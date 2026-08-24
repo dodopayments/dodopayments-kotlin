@@ -8,6 +8,7 @@ import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
+import com.dodopayments.api.models.licensekeys.LicenseKeyStatus
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -23,8 +24,10 @@ import java.util.Objects
 class LicenseKeyGrant
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
+    private val id: JsonField<String>,
     private val activationsUsed: JsonField<Int>,
     private val key: JsonField<String>,
+    private val status: JsonField<LicenseKeyStatus>,
     private val activationsLimit: JsonField<Int>,
     private val expiresAt: JsonField<OffsetDateTime>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -32,20 +35,33 @@ private constructor(
 
     @JsonCreator
     private constructor(
+        @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
         @JsonProperty("activations_used")
         @ExcludeMissing
         activationsUsed: JsonField<Int> = JsonMissing.of(),
         @JsonProperty("key") @ExcludeMissing key: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("status")
+        @ExcludeMissing
+        status: JsonField<LicenseKeyStatus> = JsonMissing.of(),
         @JsonProperty("activations_limit")
         @ExcludeMissing
         activationsLimit: JsonField<Int> = JsonMissing.of(),
         @JsonProperty("expires_at")
         @ExcludeMissing
         expiresAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    ) : this(activationsUsed, key, activationsLimit, expiresAt, mutableMapOf())
+    ) : this(id, activationsUsed, key, status, activationsLimit, expiresAt, mutableMapOf())
 
     /**
-     * Number of activations consumed so far.
+     * Identifier of the issued license key.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun id(): String = id.getRequired("id")
+
+    /**
+     * Number of instances currently active. Activation increments it and deactivation decrements
+     * it, so it is a live count and not a total.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -59,6 +75,15 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun key(): String = key.getRequired("key")
+
+    /**
+     * Current status of the license key. Activation fails unless it is `active`, so a client can
+     * warn before the customer tries.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun status(): LicenseKeyStatus = status.getRequired("status")
 
     /**
      * Maximum activations allowed by the entitlement, when set.
@@ -77,6 +102,13 @@ private constructor(
     fun expiresAt(): OffsetDateTime? = expiresAt.getNullable("expires_at")
 
     /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+    /**
      * Returns the raw JSON value of [activationsUsed].
      *
      * Unlike [activationsUsed], this method doesn't throw if the JSON field has an unexpected type.
@@ -91,6 +123,13 @@ private constructor(
      * Unlike [key], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<String> = key
+
+    /**
+     * Returns the raw JSON value of [status].
+     *
+     * Unlike [status], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("status") @ExcludeMissing fun _status(): JsonField<LicenseKeyStatus> = status
 
     /**
      * Returns the raw JSON value of [activationsLimit].
@@ -130,8 +169,10 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
+         * .id()
          * .activationsUsed()
          * .key()
+         * .status()
          * ```
          */
         fun builder() = Builder()
@@ -140,21 +181,39 @@ private constructor(
     /** A builder for [LicenseKeyGrant]. */
     class Builder internal constructor() {
 
+        private var id: JsonField<String>? = null
         private var activationsUsed: JsonField<Int>? = null
         private var key: JsonField<String>? = null
+        private var status: JsonField<LicenseKeyStatus>? = null
         private var activationsLimit: JsonField<Int> = JsonMissing.of()
         private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(licenseKeyGrant: LicenseKeyGrant) = apply {
+            id = licenseKeyGrant.id
             activationsUsed = licenseKeyGrant.activationsUsed
             key = licenseKeyGrant.key
+            status = licenseKeyGrant.status
             activationsLimit = licenseKeyGrant.activationsLimit
             expiresAt = licenseKeyGrant.expiresAt
             additionalProperties = licenseKeyGrant.additionalProperties.toMutableMap()
         }
 
-        /** Number of activations consumed so far. */
+        /** Identifier of the issued license key. */
+        fun id(id: String) = id(JsonField.of(id))
+
+        /**
+         * Sets [Builder.id] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.id] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun id(id: JsonField<String>) = apply { this.id = id }
+
+        /**
+         * Number of instances currently active. Activation increments it and deactivation
+         * decrements it, so it is a live count and not a total.
+         */
         fun activationsUsed(activationsUsed: Int) = activationsUsed(JsonField.of(activationsUsed))
 
         /**
@@ -178,6 +237,21 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun key(key: JsonField<String>) = apply { this.key = key }
+
+        /**
+         * Current status of the license key. Activation fails unless it is `active`, so a client
+         * can warn before the customer tries.
+         */
+        fun status(status: LicenseKeyStatus) = status(JsonField.of(status))
+
+        /**
+         * Sets [Builder.status] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.status] with a well-typed [LicenseKeyStatus] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun status(status: JsonField<LicenseKeyStatus>) = apply { this.status = status }
 
         /** Maximum activations allowed by the entitlement, when set. */
         fun activationsLimit(activationsLimit: Int?) =
@@ -239,16 +313,20 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
+         * .id()
          * .activationsUsed()
          * .key()
+         * .status()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
         fun build(): LicenseKeyGrant =
             LicenseKeyGrant(
+                checkRequired("id", id),
                 checkRequired("activationsUsed", activationsUsed),
                 checkRequired("key", key),
+                checkRequired("status", status),
                 activationsLimit,
                 expiresAt,
                 additionalProperties.toMutableMap(),
@@ -270,8 +348,10 @@ private constructor(
             return@apply
         }
 
+        id()
         activationsUsed()
         key()
+        status().validate()
         activationsLimit()
         expiresAt()
         validated = true
@@ -291,8 +371,10 @@ private constructor(
      * Used for best match union deserialization.
      */
     internal fun validity(): Int =
-        (if (activationsUsed.asKnown() == null) 0 else 1) +
+        (if (id.asKnown() == null) 0 else 1) +
+            (if (activationsUsed.asKnown() == null) 0 else 1) +
             (if (key.asKnown() == null) 0 else 1) +
+            (status.asKnown()?.validity() ?: 0) +
             (if (activationsLimit.asKnown() == null) 0 else 1) +
             (if (expiresAt.asKnown() == null) 0 else 1)
 
@@ -302,19 +384,29 @@ private constructor(
         }
 
         return other is LicenseKeyGrant &&
+            id == other.id &&
             activationsUsed == other.activationsUsed &&
             key == other.key &&
+            status == other.status &&
             activationsLimit == other.activationsLimit &&
             expiresAt == other.expiresAt &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(activationsUsed, key, activationsLimit, expiresAt, additionalProperties)
+        Objects.hash(
+            id,
+            activationsUsed,
+            key,
+            status,
+            activationsLimit,
+            expiresAt,
+            additionalProperties,
+        )
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "LicenseKeyGrant{activationsUsed=$activationsUsed, key=$key, activationsLimit=$activationsLimit, expiresAt=$expiresAt, additionalProperties=$additionalProperties}"
+        "LicenseKeyGrant{id=$id, activationsUsed=$activationsUsed, key=$key, status=$status, activationsLimit=$activationsLimit, expiresAt=$expiresAt, additionalProperties=$additionalProperties}"
 }
