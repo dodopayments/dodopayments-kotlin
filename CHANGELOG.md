@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.114.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.113.0...v1.114.0) (2026-08-24)
+
+
+### Features
+
+* **api:** return checkout handles from subscription change-plan ([f2640b8](https://github.com/dodopayments/dodopayments-kotlin/commit/f2640b8ecc727e4181e5c8aba5c15bab203704b9))
+* **api:** return checkout handles from subscription change-plan ([63b7441](https://github.com/dodopayments/dodopayments-kotlin/commit/63b744119556fb3233bbbef59efc62b94bd4c82d))
+
 ## [1.113.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.112.0...v1.113.0) (2026-08-17)
 
 
