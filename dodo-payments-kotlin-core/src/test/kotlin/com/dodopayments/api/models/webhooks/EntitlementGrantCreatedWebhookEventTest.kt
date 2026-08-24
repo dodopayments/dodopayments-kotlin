@@ -9,6 +9,7 @@ import com.dodopayments.api.models.entitlements.Feature
 import com.dodopayments.api.models.entitlements.FeatureType
 import com.dodopayments.api.models.entitlements.grants.EntitlementGrant
 import com.dodopayments.api.models.entitlements.grants.LicenseKeyGrant
+import com.dodopayments.api.models.licensekeys.LicenseKeyStatus
 import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.products.DigitalProductDelivery
 import com.dodopayments.api.models.products.DigitalProductDeliveryFile
@@ -67,8 +68,10 @@ internal class EntitlementGrantCreatedWebhookEventTest {
                         )
                         .licenseKey(
                             LicenseKeyGrant.builder()
+                                .id("id")
                                 .activationsUsed(0)
                                 .key("key")
+                                .status(LicenseKeyStatus.ACTIVE)
                                 .activationsLimit(0)
                                 .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .build()
@@ -129,8 +132,10 @@ internal class EntitlementGrantCreatedWebhookEventTest {
                     )
                     .licenseKey(
                         LicenseKeyGrant.builder()
+                            .id("id")
                             .activationsUsed(0)
                             .key("key")
+                            .status(LicenseKeyStatus.ACTIVE)
                             .activationsLimit(0)
                             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .build()
@@ -196,8 +201,10 @@ internal class EntitlementGrantCreatedWebhookEventTest {
                         )
                         .licenseKey(
                             LicenseKeyGrant.builder()
+                                .id("id")
                                 .activationsUsed(0)
                                 .key("key")
+                                .status(LicenseKeyStatus.ACTIVE)
                                 .activationsLimit(0)
                                 .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .build()

@@ -7,6 +7,7 @@ import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.entitlements.EntitlementIntegrationType
 import com.dodopayments.api.models.entitlements.Feature
 import com.dodopayments.api.models.entitlements.FeatureType
+import com.dodopayments.api.models.licensekeys.LicenseKeyStatus
 import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.products.DigitalProductDelivery
 import com.dodopayments.api.models.products.DigitalProductDeliveryFile
@@ -64,8 +65,10 @@ internal class GrantListPageResponseTest {
                         )
                         .licenseKey(
                             LicenseKeyGrant.builder()
+                                .id("id")
                                 .activationsUsed(0)
                                 .key("key")
+                                .status(LicenseKeyStatus.ACTIVE)
                                 .activationsLimit(0)
                                 .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .build()
@@ -124,8 +127,10 @@ internal class GrantListPageResponseTest {
                     )
                     .licenseKey(
                         LicenseKeyGrant.builder()
+                            .id("id")
                             .activationsUsed(0)
                             .key("key")
+                            .status(LicenseKeyStatus.ACTIVE)
                             .activationsLimit(0)
                             .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .build()
@@ -188,8 +193,10 @@ internal class GrantListPageResponseTest {
                         )
                         .licenseKey(
                             LicenseKeyGrant.builder()
+                                .id("id")
                                 .activationsUsed(0)
                                 .key("key")
+                                .status(LicenseKeyStatus.ACTIVE)
                                 .activationsLimit(0)
                                 .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .build()

@@ -9,6 +9,7 @@ import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.models.subscriptions.Subscription
 import com.dodopayments.api.models.subscriptions.SubscriptionCancelChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChangePlanParams
+import com.dodopayments.api.models.subscriptions.SubscriptionChangePlanResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
@@ -110,13 +111,14 @@ interface SubscriptionService {
         subscriptionId: String,
         params: SubscriptionChangePlanParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ) = changePlan(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
+    ): SubscriptionChangePlanResponse =
+        changePlan(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
 
     /** @see changePlan */
     fun changePlan(
         params: SubscriptionChangePlanParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    )
+    ): SubscriptionChangePlanResponse
 
     fun charge(
         subscriptionId: String,
@@ -385,7 +387,7 @@ interface SubscriptionService {
             subscriptionId: String,
             params: SubscriptionChangePlanParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse =
+        ): HttpResponseFor<SubscriptionChangePlanResponse> =
             changePlan(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
 
         /** @see changePlan */
@@ -393,7 +395,7 @@ interface SubscriptionService {
         fun changePlan(
             params: SubscriptionChangePlanParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse
+        ): HttpResponseFor<SubscriptionChangePlanResponse>
 
         /**
          * Returns a raw HTTP response for `post /subscriptions/{subscription_id}/charge`, but is
