@@ -27,6 +27,8 @@ private constructor(
     private val quantity: JsonField<Int>,
     private val adaptiveCurrencyFeesInclusive: JsonField<Boolean>,
     private val addons: JsonField<List<AttachAddon>>,
+    private val cancelScheduledChangePlan: JsonField<Boolean>,
+    private val collectViaPaymentLink: JsonField<Boolean>,
     private val discountCode: JsonField<String>,
     private val discountCodes: JsonField<List<String>>,
     private val effectiveAt: JsonField<EffectiveAt>,
@@ -48,6 +50,12 @@ private constructor(
         @JsonProperty("addons")
         @ExcludeMissing
         addons: JsonField<List<AttachAddon>> = JsonMissing.of(),
+        @JsonProperty("cancel_scheduled_change_plan")
+        @ExcludeMissing
+        cancelScheduledChangePlan: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("collect_via_payment_link")
+        @ExcludeMissing
+        collectViaPaymentLink: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("discount_code")
         @ExcludeMissing
         discountCode: JsonField<String> = JsonMissing.of(),
@@ -67,6 +75,8 @@ private constructor(
         quantity,
         adaptiveCurrencyFeesInclusive,
         addons,
+        cancelScheduledChangePlan,
+        collectViaPaymentLink,
         discountCode,
         discountCodes,
         effectiveAt,
@@ -117,6 +127,41 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun addons(): List<AttachAddon>? = addons.getNullable("addons")
+
+    /**
+     * Replace a scheduled plan change with this one.
+     *
+     * The scheduled change is cancelled by the transaction that applies this change. A change that
+     * never applies leaves the schedule in place.
+     *
+     * `effective_at: next_billing_date` is allowed. The new schedule then replaces the old one in
+     * the request transaction.
+     *
+     * A pending plan change still gets a `409`. This field does not affect it.
+     *
+     * The preview route shares this request body, so a preview that sets this field also passes the
+     * scheduled-change `409`.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun cancelScheduledChangePlan(): Boolean? =
+        cancelScheduledChangePlan.getNullable("cancel_scheduled_change_plan")
+
+    /**
+     * Collect the plan-change amount with a payment link. The customer then pays on a checkout
+     * page.
+     *
+     * The business needs the `allow_plan_change_via_payment_link` capability. The request needs
+     * `effective_at: immediately`. The request also needs `on_payment_failure: prevent_change`.
+     *
+     * The preview route shares this request body and ignores this field.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun collectViaPaymentLink(): Boolean? =
+        collectViaPaymentLink.getNullable("collect_via_payment_link")
 
     /**
      * DEPRECATED: Use discount_codes instead. Cannot be used together with discount_codes.
@@ -210,6 +255,26 @@ private constructor(
     @JsonProperty("addons") @ExcludeMissing fun _addons(): JsonField<List<AttachAddon>> = addons
 
     /**
+     * Returns the raw JSON value of [cancelScheduledChangePlan].
+     *
+     * Unlike [cancelScheduledChangePlan], this method doesn't throw if the JSON field has an
+     * unexpected type.
+     */
+    @JsonProperty("cancel_scheduled_change_plan")
+    @ExcludeMissing
+    fun _cancelScheduledChangePlan(): JsonField<Boolean> = cancelScheduledChangePlan
+
+    /**
+     * Returns the raw JSON value of [collectViaPaymentLink].
+     *
+     * Unlike [collectViaPaymentLink], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("collect_via_payment_link")
+    @ExcludeMissing
+    fun _collectViaPaymentLink(): JsonField<Boolean> = collectViaPaymentLink
+
+    /**
      * Returns the raw JSON value of [discountCode].
      *
      * Unlike [discountCode], this method doesn't throw if the JSON field has an unexpected type.
@@ -289,6 +354,8 @@ private constructor(
         private var quantity: JsonField<Int>? = null
         private var adaptiveCurrencyFeesInclusive: JsonField<Boolean> = JsonMissing.of()
         private var addons: JsonField<MutableList<AttachAddon>>? = null
+        private var cancelScheduledChangePlan: JsonField<Boolean> = JsonMissing.of()
+        private var collectViaPaymentLink: JsonField<Boolean> = JsonMissing.of()
         private var discountCode: JsonField<String> = JsonMissing.of()
         private var discountCodes: JsonField<MutableList<String>>? = null
         private var effectiveAt: JsonField<EffectiveAt> = JsonMissing.of()
@@ -302,6 +369,8 @@ private constructor(
             quantity = updateSubscriptionPlanReq.quantity
             adaptiveCurrencyFeesInclusive = updateSubscriptionPlanReq.adaptiveCurrencyFeesInclusive
             addons = updateSubscriptionPlanReq.addons.map { it.toMutableList() }
+            cancelScheduledChangePlan = updateSubscriptionPlanReq.cancelScheduledChangePlan
+            collectViaPaymentLink = updateSubscriptionPlanReq.collectViaPaymentLink
             discountCode = updateSubscriptionPlanReq.discountCode
             discountCodes = updateSubscriptionPlanReq.discountCodes.map { it.toMutableList() }
             effectiveAt = updateSubscriptionPlanReq.effectiveAt
@@ -399,6 +468,57 @@ private constructor(
                 (addons ?: JsonField.of(mutableListOf())).also {
                     checkKnown("addons", it).add(addon)
                 }
+        }
+
+        /**
+         * Replace a scheduled plan change with this one.
+         *
+         * The scheduled change is cancelled by the transaction that applies this change. A change
+         * that never applies leaves the schedule in place.
+         *
+         * `effective_at: next_billing_date` is allowed. The new schedule then replaces the old one
+         * in the request transaction.
+         *
+         * A pending plan change still gets a `409`. This field does not affect it.
+         *
+         * The preview route shares this request body, so a preview that sets this field also passes
+         * the scheduled-change `409`.
+         */
+        fun cancelScheduledChangePlan(cancelScheduledChangePlan: Boolean) =
+            cancelScheduledChangePlan(JsonField.of(cancelScheduledChangePlan))
+
+        /**
+         * Sets [Builder.cancelScheduledChangePlan] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cancelScheduledChangePlan] with a well-typed [Boolean]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
+        fun cancelScheduledChangePlan(cancelScheduledChangePlan: JsonField<Boolean>) = apply {
+            this.cancelScheduledChangePlan = cancelScheduledChangePlan
+        }
+
+        /**
+         * Collect the plan-change amount with a payment link. The customer then pays on a checkout
+         * page.
+         *
+         * The business needs the `allow_plan_change_via_payment_link` capability. The request needs
+         * `effective_at: immediately`. The request also needs `on_payment_failure: prevent_change`.
+         *
+         * The preview route shares this request body and ignores this field.
+         */
+        fun collectViaPaymentLink(collectViaPaymentLink: Boolean) =
+            collectViaPaymentLink(JsonField.of(collectViaPaymentLink))
+
+        /**
+         * Sets [Builder.collectViaPaymentLink] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.collectViaPaymentLink] with a well-typed [Boolean] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun collectViaPaymentLink(collectViaPaymentLink: JsonField<Boolean>) = apply {
+            this.collectViaPaymentLink = collectViaPaymentLink
         }
 
         /** DEPRECATED: Use discount_codes instead. Cannot be used together with discount_codes. */
@@ -542,6 +662,8 @@ private constructor(
                 checkRequired("quantity", quantity),
                 adaptiveCurrencyFeesInclusive,
                 (addons ?: JsonMissing.of()).map { it.toImmutable() },
+                cancelScheduledChangePlan,
+                collectViaPaymentLink,
                 discountCode,
                 (discountCodes ?: JsonMissing.of()).map { it.toImmutable() },
                 effectiveAt,
@@ -571,6 +693,8 @@ private constructor(
         quantity()
         adaptiveCurrencyFeesInclusive()
         addons()?.forEach { it.validate() }
+        cancelScheduledChangePlan()
+        collectViaPaymentLink()
         discountCode()
         discountCodes()
         effectiveAt()?.validate()
@@ -598,6 +722,8 @@ private constructor(
             (if (quantity.asKnown() == null) 0 else 1) +
             (if (adaptiveCurrencyFeesInclusive.asKnown() == null) 0 else 1) +
             (addons.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (cancelScheduledChangePlan.asKnown() == null) 0 else 1) +
+            (if (collectViaPaymentLink.asKnown() == null) 0 else 1) +
             (if (discountCode.asKnown() == null) 0 else 1) +
             (discountCodes.asKnown()?.size ?: 0) +
             (effectiveAt.asKnown()?.validity() ?: 0) +
@@ -1056,6 +1182,8 @@ private constructor(
             quantity == other.quantity &&
             adaptiveCurrencyFeesInclusive == other.adaptiveCurrencyFeesInclusive &&
             addons == other.addons &&
+            cancelScheduledChangePlan == other.cancelScheduledChangePlan &&
+            collectViaPaymentLink == other.collectViaPaymentLink &&
             discountCode == other.discountCode &&
             discountCodes == other.discountCodes &&
             effectiveAt == other.effectiveAt &&
@@ -1071,6 +1199,8 @@ private constructor(
             quantity,
             adaptiveCurrencyFeesInclusive,
             addons,
+            cancelScheduledChangePlan,
+            collectViaPaymentLink,
             discountCode,
             discountCodes,
             effectiveAt,
@@ -1083,5 +1213,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "UpdateSubscriptionPlanReq{productId=$productId, prorationBillingMode=$prorationBillingMode, quantity=$quantity, adaptiveCurrencyFeesInclusive=$adaptiveCurrencyFeesInclusive, addons=$addons, discountCode=$discountCode, discountCodes=$discountCodes, effectiveAt=$effectiveAt, metadata=$metadata, onPaymentFailure=$onPaymentFailure, additionalProperties=$additionalProperties}"
+        "UpdateSubscriptionPlanReq{productId=$productId, prorationBillingMode=$prorationBillingMode, quantity=$quantity, adaptiveCurrencyFeesInclusive=$adaptiveCurrencyFeesInclusive, addons=$addons, cancelScheduledChangePlan=$cancelScheduledChangePlan, collectViaPaymentLink=$collectViaPaymentLink, discountCode=$discountCode, discountCodes=$discountCodes, effectiveAt=$effectiveAt, metadata=$metadata, onPaymentFailure=$onPaymentFailure, additionalProperties=$additionalProperties}"
 }

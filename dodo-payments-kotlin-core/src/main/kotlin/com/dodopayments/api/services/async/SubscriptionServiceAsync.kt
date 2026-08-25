@@ -9,6 +9,7 @@ import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.models.subscriptions.Subscription
 import com.dodopayments.api.models.subscriptions.SubscriptionCancelChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChangePlanParams
+import com.dodopayments.api.models.subscriptions.SubscriptionChangePlanResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
@@ -110,13 +111,14 @@ interface SubscriptionServiceAsync {
         subscriptionId: String,
         params: SubscriptionChangePlanParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ) = changePlan(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
+    ): SubscriptionChangePlanResponse =
+        changePlan(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
 
     /** @see changePlan */
     suspend fun changePlan(
         params: SubscriptionChangePlanParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    )
+    ): SubscriptionChangePlanResponse
 
     suspend fun charge(
         subscriptionId: String,
@@ -391,7 +393,7 @@ interface SubscriptionServiceAsync {
             subscriptionId: String,
             params: SubscriptionChangePlanParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse =
+        ): HttpResponseFor<SubscriptionChangePlanResponse> =
             changePlan(params.toBuilder().subscriptionId(subscriptionId).build(), requestOptions)
 
         /** @see changePlan */
@@ -399,7 +401,7 @@ interface SubscriptionServiceAsync {
         suspend fun changePlan(
             params: SubscriptionChangePlanParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponse
+        ): HttpResponseFor<SubscriptionChangePlanResponse>
 
         /**
          * Returns a raw HTTP response for `post /subscriptions/{subscription_id}/charge`, but is
