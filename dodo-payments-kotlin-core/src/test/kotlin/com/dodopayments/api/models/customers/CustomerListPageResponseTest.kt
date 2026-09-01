@@ -23,6 +23,8 @@ internal class CustomerListPageResponseTest {
                         .customerId("customer_id")
                         .email("email")
                         .name("name")
+                        .blockedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .blocklistEntryId("blocklist_entry_id")
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -41,6 +43,8 @@ internal class CustomerListPageResponseTest {
                     .customerId("customer_id")
                     .email("email")
                     .name("name")
+                    .blockedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .blocklistEntryId("blocklist_entry_id")
                     .metadata(
                         Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -63,6 +67,8 @@ internal class CustomerListPageResponseTest {
                         .customerId("customer_id")
                         .email("email")
                         .name("name")
+                        .blockedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .blocklistEntryId("blocklist_entry_id")
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))

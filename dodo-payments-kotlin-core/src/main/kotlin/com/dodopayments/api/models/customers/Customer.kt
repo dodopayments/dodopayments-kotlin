@@ -25,6 +25,8 @@ private constructor(
     private val customerId: JsonField<String>,
     private val email: JsonField<String>,
     private val name: JsonField<String>,
+    private val blockedAt: JsonField<OffsetDateTime>,
+    private val blocklistEntryId: JsonField<String>,
     private val metadata: JsonField<Metadata>,
     private val phoneNumber: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -43,11 +45,28 @@ private constructor(
         customerId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("email") @ExcludeMissing email: JsonField<String> = JsonMissing.of(),
         @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("blocked_at")
+        @ExcludeMissing
+        blockedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("blocklist_entry_id")
+        @ExcludeMissing
+        blocklistEntryId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("metadata") @ExcludeMissing metadata: JsonField<Metadata> = JsonMissing.of(),
         @JsonProperty("phone_number")
         @ExcludeMissing
         phoneNumber: JsonField<String> = JsonMissing.of(),
-    ) : this(businessId, createdAt, customerId, email, name, metadata, phoneNumber, mutableMapOf())
+    ) : this(
+        businessId,
+        createdAt,
+        customerId,
+        email,
+        name,
+        blockedAt,
+        blocklistEntryId,
+        metadata,
+        phoneNumber,
+        mutableMapOf(),
+    )
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
@@ -78,6 +97,24 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun name(): String = name.getRequired("name")
+
+    /**
+     * When the merchant blocked this customer. The dashboard shows the "Blocked" badge and the
+     * unblock action from it. The list route leaves it empty; only the single-customer route
+     * resolves it.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun blockedAt(): OffsetDateTime? = blockedAt.getNullable("blocked_at")
+
+    /**
+     * Blocklist entry behind `blocked_at`, so the dashboard can link to it.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun blocklistEntryId(): String? = blocklistEntryId.getNullable("blocklist_entry_id")
 
     /**
      * Additional metadata for the customer
@@ -129,6 +166,25 @@ private constructor(
      * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+    /**
+     * Returns the raw JSON value of [blockedAt].
+     *
+     * Unlike [blockedAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("blocked_at")
+    @ExcludeMissing
+    fun _blockedAt(): JsonField<OffsetDateTime> = blockedAt
+
+    /**
+     * Returns the raw JSON value of [blocklistEntryId].
+     *
+     * Unlike [blocklistEntryId], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("blocklist_entry_id")
+    @ExcludeMissing
+    fun _blocklistEntryId(): JsonField<String> = blocklistEntryId
 
     /**
      * Returns the raw JSON value of [metadata].
@@ -183,6 +239,8 @@ private constructor(
         private var customerId: JsonField<String>? = null
         private var email: JsonField<String>? = null
         private var name: JsonField<String>? = null
+        private var blockedAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var blocklistEntryId: JsonField<String> = JsonMissing.of()
         private var metadata: JsonField<Metadata> = JsonMissing.of()
         private var phoneNumber: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -193,6 +251,8 @@ private constructor(
             customerId = customer.customerId
             email = customer.email
             name = customer.name
+            blockedAt = customer.blockedAt
+            blocklistEntryId = customer.blocklistEntryId
             metadata = customer.metadata
             phoneNumber = customer.phoneNumber
             additionalProperties = customer.additionalProperties.toMutableMap()
@@ -250,6 +310,37 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun name(name: JsonField<String>) = apply { this.name = name }
+
+        /**
+         * When the merchant blocked this customer. The dashboard shows the "Blocked" badge and the
+         * unblock action from it. The list route leaves it empty; only the single-customer route
+         * resolves it.
+         */
+        fun blockedAt(blockedAt: OffsetDateTime?) = blockedAt(JsonField.ofNullable(blockedAt))
+
+        /**
+         * Sets [Builder.blockedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.blockedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun blockedAt(blockedAt: JsonField<OffsetDateTime>) = apply { this.blockedAt = blockedAt }
+
+        /** Blocklist entry behind `blocked_at`, so the dashboard can link to it. */
+        fun blocklistEntryId(blocklistEntryId: String?) =
+            blocklistEntryId(JsonField.ofNullable(blocklistEntryId))
+
+        /**
+         * Sets [Builder.blocklistEntryId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.blocklistEntryId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun blocklistEntryId(blocklistEntryId: JsonField<String>) = apply {
+            this.blocklistEntryId = blocklistEntryId
+        }
 
         /** Additional metadata for the customer */
         fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
@@ -316,6 +407,8 @@ private constructor(
                 checkRequired("customerId", customerId),
                 checkRequired("email", email),
                 checkRequired("name", name),
+                blockedAt,
+                blocklistEntryId,
                 metadata,
                 phoneNumber,
                 additionalProperties.toMutableMap(),
@@ -342,6 +435,8 @@ private constructor(
         customerId()
         email()
         name()
+        blockedAt()
+        blocklistEntryId()
         metadata()?.validate()
         phoneNumber()
         validated = true
@@ -366,6 +461,8 @@ private constructor(
             (if (customerId.asKnown() == null) 0 else 1) +
             (if (email.asKnown() == null) 0 else 1) +
             (if (name.asKnown() == null) 0 else 1) +
+            (if (blockedAt.asKnown() == null) 0 else 1) +
+            (if (blocklistEntryId.asKnown() == null) 0 else 1) +
             (metadata.asKnown()?.validity() ?: 0) +
             (if (phoneNumber.asKnown() == null) 0 else 1)
 
@@ -380,6 +477,8 @@ private constructor(
             customerId == other.customerId &&
             email == other.email &&
             name == other.name &&
+            blockedAt == other.blockedAt &&
+            blocklistEntryId == other.blocklistEntryId &&
             metadata == other.metadata &&
             phoneNumber == other.phoneNumber &&
             additionalProperties == other.additionalProperties
@@ -392,6 +491,8 @@ private constructor(
             customerId,
             email,
             name,
+            blockedAt,
+            blocklistEntryId,
             metadata,
             phoneNumber,
             additionalProperties,
@@ -401,5 +502,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Customer{businessId=$businessId, createdAt=$createdAt, customerId=$customerId, email=$email, name=$name, metadata=$metadata, phoneNumber=$phoneNumber, additionalProperties=$additionalProperties}"
+        "Customer{businessId=$businessId, createdAt=$createdAt, customerId=$customerId, email=$email, name=$name, blockedAt=$blockedAt, blocklistEntryId=$blocklistEntryId, metadata=$metadata, phoneNumber=$phoneNumber, additionalProperties=$additionalProperties}"
 }

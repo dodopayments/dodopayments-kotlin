@@ -54,6 +54,8 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
 
         val SUBSCRIPTION_ON_HOLD = of("subscription.on_hold")
 
+        val SUBSCRIPTION_PAST_DUE = of("subscription.past_due")
+
         val SUBSCRIPTION_PAUSED = of("subscription.paused")
 
         val SUBSCRIPTION_UNPAUSED = of("subscription.unpaused")
@@ -137,6 +139,7 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         SUBSCRIPTION_ACTIVE,
         SUBSCRIPTION_RENEWED,
         SUBSCRIPTION_ON_HOLD,
+        SUBSCRIPTION_PAST_DUE,
         SUBSCRIPTION_PAUSED,
         SUBSCRIPTION_UNPAUSED,
         SUBSCRIPTION_CANCELLED,
@@ -196,6 +199,7 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         SUBSCRIPTION_ACTIVE,
         SUBSCRIPTION_RENEWED,
         SUBSCRIPTION_ON_HOLD,
+        SUBSCRIPTION_PAST_DUE,
         SUBSCRIPTION_PAUSED,
         SUBSCRIPTION_UNPAUSED,
         SUBSCRIPTION_CANCELLED,
@@ -258,6 +262,7 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             SUBSCRIPTION_ACTIVE -> Value.SUBSCRIPTION_ACTIVE
             SUBSCRIPTION_RENEWED -> Value.SUBSCRIPTION_RENEWED
             SUBSCRIPTION_ON_HOLD -> Value.SUBSCRIPTION_ON_HOLD
+            SUBSCRIPTION_PAST_DUE -> Value.SUBSCRIPTION_PAST_DUE
             SUBSCRIPTION_PAUSED -> Value.SUBSCRIPTION_PAUSED
             SUBSCRIPTION_UNPAUSED -> Value.SUBSCRIPTION_UNPAUSED
             SUBSCRIPTION_CANCELLED -> Value.SUBSCRIPTION_CANCELLED
@@ -319,6 +324,7 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             SUBSCRIPTION_ACTIVE -> Known.SUBSCRIPTION_ACTIVE
             SUBSCRIPTION_RENEWED -> Known.SUBSCRIPTION_RENEWED
             SUBSCRIPTION_ON_HOLD -> Known.SUBSCRIPTION_ON_HOLD
+            SUBSCRIPTION_PAST_DUE -> Known.SUBSCRIPTION_PAST_DUE
             SUBSCRIPTION_PAUSED -> Known.SUBSCRIPTION_PAUSED
             SUBSCRIPTION_UNPAUSED -> Known.SUBSCRIPTION_UNPAUSED
             SUBSCRIPTION_CANCELLED -> Known.SUBSCRIPTION_CANCELLED

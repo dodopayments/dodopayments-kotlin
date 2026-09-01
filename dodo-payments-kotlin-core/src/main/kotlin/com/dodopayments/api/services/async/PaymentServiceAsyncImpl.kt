@@ -16,6 +16,8 @@ import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepareAsync
+import com.dodopayments.api.models.payments.ManualRetry
+import com.dodopayments.api.models.payments.ManualRetryState
 import com.dodopayments.api.models.payments.Payment
 import com.dodopayments.api.models.payments.PaymentCreateParams
 import com.dodopayments.api.models.payments.PaymentCreateResponse
@@ -25,6 +27,8 @@ import com.dodopayments.api.models.payments.PaymentListParams
 import com.dodopayments.api.models.payments.PaymentRetrieveLineItemsParams
 import com.dodopayments.api.models.payments.PaymentRetrieveLineItemsResponse
 import com.dodopayments.api.models.payments.PaymentRetrieveParams
+import com.dodopayments.api.models.payments.PaymentRetrieveRetryStateParams
+import com.dodopayments.api.models.payments.PaymentRetryParams
 
 class PaymentServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     PaymentServiceAsync {
@@ -66,6 +70,20 @@ class PaymentServiceAsyncImpl internal constructor(private val clientOptions: Cl
     ): PaymentRetrieveLineItemsResponse =
         // get /payments/{payment_id}/line-items
         withRawResponse().retrieveLineItems(params, requestOptions).parse()
+
+    override suspend fun retrieveRetryState(
+        params: PaymentRetrieveRetryStateParams,
+        requestOptions: RequestOptions,
+    ): ManualRetryState =
+        // get /payments/{payment_id}/retry
+        withRawResponse().retrieveRetryState(params, requestOptions).parse()
+
+    override suspend fun retry(
+        params: PaymentRetryParams,
+        requestOptions: RequestOptions,
+    ): ManualRetry =
+        // post /payments/{payment_id}/retry
+        withRawResponse().retry(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         PaymentServiceAsync.WithRawResponse {
@@ -195,6 +213,67 @@ class PaymentServiceAsyncImpl internal constructor(private val clientOptions: Cl
             return errorHandler.handle(response).parseable {
                 response
                     .use { retrieveLineItemsHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val retrieveRetryStateHandler: Handler<ManualRetryState> =
+            jsonHandler<ManualRetryState>(clientOptions.jsonMapper)
+
+        override suspend fun retrieveRetryState(
+            params: PaymentRetrieveRetryStateParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<ManualRetryState> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("paymentId", params.paymentId())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("payments", params._pathParam(0), "retry")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { retrieveRetryStateHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val retryHandler: Handler<ManualRetry> =
+            jsonHandler<ManualRetry>(clientOptions.jsonMapper)
+
+        override suspend fun retry(
+            params: PaymentRetryParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<ManualRetry> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("paymentId", params.paymentId())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("payments", params._pathParam(0), "retry")
+                    .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { retryHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()
