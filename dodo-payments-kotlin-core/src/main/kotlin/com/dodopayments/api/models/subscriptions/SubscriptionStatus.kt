@@ -35,6 +35,8 @@ class SubscriptionStatus @JsonCreator private constructor(private val value: Jso
 
         val EXPIRED = of("expired")
 
+        val PAST_DUE = of("past_due")
+
         fun of(value: String) = SubscriptionStatus(JsonField.of(value))
     }
 
@@ -47,6 +49,7 @@ class SubscriptionStatus @JsonCreator private constructor(private val value: Jso
         CANCELLED,
         FAILED,
         EXPIRED,
+        PAST_DUE,
     }
 
     /**
@@ -66,6 +69,7 @@ class SubscriptionStatus @JsonCreator private constructor(private val value: Jso
         CANCELLED,
         FAILED,
         EXPIRED,
+        PAST_DUE,
         /**
          * An enum member indicating that [SubscriptionStatus] was instantiated with an unknown
          * value.
@@ -89,6 +93,7 @@ class SubscriptionStatus @JsonCreator private constructor(private val value: Jso
             CANCELLED -> Value.CANCELLED
             FAILED -> Value.FAILED
             EXPIRED -> Value.EXPIRED
+            PAST_DUE -> Value.PAST_DUE
             else -> Value._UNKNOWN
         }
 
@@ -110,6 +115,7 @@ class SubscriptionStatus @JsonCreator private constructor(private val value: Jso
             CANCELLED -> Known.CANCELLED
             FAILED -> Known.FAILED
             EXPIRED -> Known.EXPIRED
+            PAST_DUE -> Known.PAST_DUE
             else -> throw DodoPaymentsInvalidDataException("Unknown SubscriptionStatus: $value")
         }
 
