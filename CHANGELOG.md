@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.115.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.114.0...v1.115.0) (2026-09-01)
+
+
+### Features
+
+* **api:** add customer blocklist and manual payment retry ([c2d7977](https://github.com/dodopayments/dodopayments-kotlin/commit/c2d7977eace0ff0b269a1c1abccdf4cd5f790da9))
+* **api:** add customer blocklist and manual payment retry ([c3c4f49](https://github.com/dodopayments/dodopayments-kotlin/commit/c3c4f49f7f9c591e3b2ad05d350d1a7bb4d0260b))
+
 ## [1.114.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.113.0...v1.114.0) (2026-08-24)
 
 
