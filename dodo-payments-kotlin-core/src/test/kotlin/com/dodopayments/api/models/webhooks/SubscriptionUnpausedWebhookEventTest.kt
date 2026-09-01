@@ -19,7 +19,6 @@ import com.dodopayments.api.models.subscriptions.CreditEntitlementCartResponse
 import com.dodopayments.api.models.subscriptions.MeterCartResponseItem
 import com.dodopayments.api.models.subscriptions.MeterCreditEntitlementCartResponse
 import com.dodopayments.api.models.subscriptions.ScheduledPlanChange
-import com.dodopayments.api.models.subscriptions.Subscription
 import com.dodopayments.api.models.subscriptions.SubscriptionStatus
 import com.dodopayments.api.models.subscriptions.TimeInterval
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
@@ -35,7 +34,7 @@ internal class SubscriptionUnpausedWebhookEventTest {
             SubscriptionUnpausedWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    Subscription.builder()
+                    SubscriptionUnpausedWebhookEvent.Data.builder()
                         .addAddon(
                             AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build()
                         )
@@ -181,6 +180,7 @@ internal class SubscriptionUnpausedWebhookEventTest {
                         )
                         .taxId("tax_id")
                         .trialAmount(0)
+                        .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -189,7 +189,7 @@ internal class SubscriptionUnpausedWebhookEventTest {
         assertThat(subscriptionUnpausedWebhookEvent.businessId()).isEqualTo("business_id")
         assertThat(subscriptionUnpausedWebhookEvent.data())
             .isEqualTo(
-                Subscription.builder()
+                SubscriptionUnpausedWebhookEvent.Data.builder()
                     .addAddon(
                         AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build()
                     )
@@ -335,6 +335,7 @@ internal class SubscriptionUnpausedWebhookEventTest {
                     )
                     .taxId("tax_id")
                     .trialAmount(0)
+                    .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .build()
             )
         assertThat(subscriptionUnpausedWebhookEvent.timestamp())
@@ -348,7 +349,7 @@ internal class SubscriptionUnpausedWebhookEventTest {
             SubscriptionUnpausedWebhookEvent.builder()
                 .businessId("business_id")
                 .data(
-                    Subscription.builder()
+                    SubscriptionUnpausedWebhookEvent.Data.builder()
                         .addAddon(
                             AddonCartResponseItem.builder().addonId("addon_id").quantity(0).build()
                         )
@@ -494,6 +495,7 @@ internal class SubscriptionUnpausedWebhookEventTest {
                         )
                         .taxId("tax_id")
                         .trialAmount(0)
+                        .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

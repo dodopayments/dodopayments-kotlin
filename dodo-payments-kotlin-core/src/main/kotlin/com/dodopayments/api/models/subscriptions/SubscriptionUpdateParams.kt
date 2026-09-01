@@ -1681,6 +1681,9 @@ private constructor(
 
             val CANCELLED_BY_MERCHANT_SEND_DUNNING = of("cancelled_by_merchant_send_dunning")
 
+            val CANCELLED_BY_MERCHANT_GRACE_PERIOD_EXPIRED =
+                of("cancelled_by_merchant_grace_period_expired")
+
             val DODO_TEAM = of("dodo_team")
 
             fun of(value: String) = CancelReason(JsonField.of(value))
@@ -1691,6 +1694,7 @@ private constructor(
             CANCELLED_BY_CUSTOMER,
             CANCELLED_BY_MERCHANT,
             CANCELLED_BY_MERCHANT_SEND_DUNNING,
+            CANCELLED_BY_MERCHANT_GRACE_PERIOD_EXPIRED,
             DODO_TEAM,
         }
 
@@ -1707,6 +1711,7 @@ private constructor(
             CANCELLED_BY_CUSTOMER,
             CANCELLED_BY_MERCHANT,
             CANCELLED_BY_MERCHANT_SEND_DUNNING,
+            CANCELLED_BY_MERCHANT_GRACE_PERIOD_EXPIRED,
             DODO_TEAM,
             /**
              * An enum member indicating that [CancelReason] was instantiated with an unknown value.
@@ -1726,6 +1731,8 @@ private constructor(
                 CANCELLED_BY_CUSTOMER -> Value.CANCELLED_BY_CUSTOMER
                 CANCELLED_BY_MERCHANT -> Value.CANCELLED_BY_MERCHANT
                 CANCELLED_BY_MERCHANT_SEND_DUNNING -> Value.CANCELLED_BY_MERCHANT_SEND_DUNNING
+                CANCELLED_BY_MERCHANT_GRACE_PERIOD_EXPIRED ->
+                    Value.CANCELLED_BY_MERCHANT_GRACE_PERIOD_EXPIRED
                 DODO_TEAM -> Value.DODO_TEAM
                 else -> Value._UNKNOWN
             }
@@ -1744,6 +1751,8 @@ private constructor(
                 CANCELLED_BY_CUSTOMER -> Known.CANCELLED_BY_CUSTOMER
                 CANCELLED_BY_MERCHANT -> Known.CANCELLED_BY_MERCHANT
                 CANCELLED_BY_MERCHANT_SEND_DUNNING -> Known.CANCELLED_BY_MERCHANT_SEND_DUNNING
+                CANCELLED_BY_MERCHANT_GRACE_PERIOD_EXPIRED ->
+                    Known.CANCELLED_BY_MERCHANT_GRACE_PERIOD_EXPIRED
                 DODO_TEAM -> Known.DODO_TEAM
                 else -> throw DodoPaymentsInvalidDataException("Unknown CancelReason: $value")
             }

@@ -321,6 +321,8 @@ private constructor(
 
             val EXPIRED = of("expired")
 
+            val PAST_DUE = of("past_due")
+
             fun of(value: String) = Status(JsonField.of(value))
         }
 
@@ -333,6 +335,7 @@ private constructor(
             CANCELLED,
             FAILED,
             EXPIRED,
+            PAST_DUE,
         }
 
         /**
@@ -352,6 +355,7 @@ private constructor(
             CANCELLED,
             FAILED,
             EXPIRED,
+            PAST_DUE,
             /** An enum member indicating that [Status] was instantiated with an unknown value. */
             _UNKNOWN,
         }
@@ -372,6 +376,7 @@ private constructor(
                 CANCELLED -> Value.CANCELLED
                 FAILED -> Value.FAILED
                 EXPIRED -> Value.EXPIRED
+                PAST_DUE -> Value.PAST_DUE
                 else -> Value._UNKNOWN
             }
 
@@ -393,6 +398,7 @@ private constructor(
                 CANCELLED -> Known.CANCELLED
                 FAILED -> Known.FAILED
                 EXPIRED -> Known.EXPIRED
+                PAST_DUE -> Known.PAST_DUE
                 else -> throw DodoPaymentsInvalidDataException("Unknown Status: $value")
             }
 

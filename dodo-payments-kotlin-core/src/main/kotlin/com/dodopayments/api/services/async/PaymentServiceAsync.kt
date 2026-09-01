@@ -5,6 +5,8 @@ package com.dodopayments.api.services.async
 import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponseFor
+import com.dodopayments.api.models.payments.ManualRetry
+import com.dodopayments.api.models.payments.ManualRetryState
 import com.dodopayments.api.models.payments.Payment
 import com.dodopayments.api.models.payments.PaymentCreateParams
 import com.dodopayments.api.models.payments.PaymentCreateResponse
@@ -13,6 +15,8 @@ import com.dodopayments.api.models.payments.PaymentListParams
 import com.dodopayments.api.models.payments.PaymentRetrieveLineItemsParams
 import com.dodopayments.api.models.payments.PaymentRetrieveLineItemsResponse
 import com.dodopayments.api.models.payments.PaymentRetrieveParams
+import com.dodopayments.api.models.payments.PaymentRetrieveRetryStateParams
+import com.dodopayments.api.models.payments.PaymentRetryParams
 import com.google.errorprone.annotations.MustBeClosed
 
 interface PaymentServiceAsync {
@@ -79,6 +83,42 @@ interface PaymentServiceAsync {
         requestOptions: RequestOptions,
     ): PaymentRetrieveLineItemsResponse =
         retrieveLineItems(paymentId, PaymentRetrieveLineItemsParams.none(), requestOptions)
+
+    suspend fun retrieveRetryState(
+        paymentId: String,
+        params: PaymentRetrieveRetryStateParams = PaymentRetrieveRetryStateParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ManualRetryState =
+        retrieveRetryState(params.toBuilder().paymentId(paymentId).build(), requestOptions)
+
+    /** @see retrieveRetryState */
+    suspend fun retrieveRetryState(
+        params: PaymentRetrieveRetryStateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ManualRetryState
+
+    /** @see retrieveRetryState */
+    suspend fun retrieveRetryState(
+        paymentId: String,
+        requestOptions: RequestOptions,
+    ): ManualRetryState =
+        retrieveRetryState(paymentId, PaymentRetrieveRetryStateParams.none(), requestOptions)
+
+    suspend fun retry(
+        paymentId: String,
+        params: PaymentRetryParams = PaymentRetryParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ManualRetry = retry(params.toBuilder().paymentId(paymentId).build(), requestOptions)
+
+    /** @see retry */
+    suspend fun retry(
+        params: PaymentRetryParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ManualRetry
+
+    /** @see retry */
+    suspend fun retry(paymentId: String, requestOptions: RequestOptions): ManualRetry =
+        retry(paymentId, PaymentRetryParams.none(), requestOptions)
 
     /**
      * A view of [PaymentServiceAsync] that provides access to raw HTTP responses for each method.
@@ -173,5 +213,59 @@ interface PaymentServiceAsync {
             requestOptions: RequestOptions,
         ): HttpResponseFor<PaymentRetrieveLineItemsResponse> =
             retrieveLineItems(paymentId, PaymentRetrieveLineItemsParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /payments/{payment_id}/retry`, but is otherwise the
+         * same as [PaymentServiceAsync.retrieveRetryState].
+         */
+        @MustBeClosed
+        suspend fun retrieveRetryState(
+            paymentId: String,
+            params: PaymentRetrieveRetryStateParams = PaymentRetrieveRetryStateParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ManualRetryState> =
+            retrieveRetryState(params.toBuilder().paymentId(paymentId).build(), requestOptions)
+
+        /** @see retrieveRetryState */
+        @MustBeClosed
+        suspend fun retrieveRetryState(
+            params: PaymentRetrieveRetryStateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ManualRetryState>
+
+        /** @see retrieveRetryState */
+        @MustBeClosed
+        suspend fun retrieveRetryState(
+            paymentId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<ManualRetryState> =
+            retrieveRetryState(paymentId, PaymentRetrieveRetryStateParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /payments/{payment_id}/retry`, but is otherwise the
+         * same as [PaymentServiceAsync.retry].
+         */
+        @MustBeClosed
+        suspend fun retry(
+            paymentId: String,
+            params: PaymentRetryParams = PaymentRetryParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ManualRetry> =
+            retry(params.toBuilder().paymentId(paymentId).build(), requestOptions)
+
+        /** @see retry */
+        @MustBeClosed
+        suspend fun retry(
+            params: PaymentRetryParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ManualRetry>
+
+        /** @see retry */
+        @MustBeClosed
+        suspend fun retry(
+            paymentId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<ManualRetry> =
+            retry(paymentId, PaymentRetryParams.none(), requestOptions)
     }
 }

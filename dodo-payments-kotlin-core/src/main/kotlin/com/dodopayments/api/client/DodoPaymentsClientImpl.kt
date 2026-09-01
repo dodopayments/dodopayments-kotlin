@@ -8,6 +8,8 @@ import com.dodopayments.api.services.blocking.AddonService
 import com.dodopayments.api.services.blocking.AddonServiceImpl
 import com.dodopayments.api.services.blocking.BalanceService
 import com.dodopayments.api.services.blocking.BalanceServiceImpl
+import com.dodopayments.api.services.blocking.BlocklistService
+import com.dodopayments.api.services.blocking.BlocklistServiceImpl
 import com.dodopayments.api.services.blocking.BrandService
 import com.dodopayments.api.services.blocking.BrandServiceImpl
 import com.dodopayments.api.services.blocking.CheckoutSessionService
@@ -98,6 +100,10 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
         CustomerServiceImpl(clientOptionsWithUserAgent)
     }
 
+    private val blocklist: BlocklistService by lazy {
+        BlocklistServiceImpl(clientOptionsWithUserAgent)
+    }
+
     private val refunds: RefundService by lazy { RefundServiceImpl(clientOptionsWithUserAgent) }
 
     private val disputes: DisputeService by lazy { DisputeServiceImpl(clientOptionsWithUserAgent) }
@@ -164,6 +170,8 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
     override fun licenseKeyInstances(): LicenseKeyInstanceService = licenseKeyInstances
 
     override fun customers(): CustomerService = customers
+
+    override fun blocklist(): BlocklistService = blocklist
 
     override fun refunds(): RefundService = refunds
 
@@ -232,6 +240,10 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
 
         private val customers: CustomerService.WithRawResponse by lazy {
             CustomerServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val blocklist: BlocklistService.WithRawResponse by lazy {
+            BlocklistServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
         private val refunds: RefundService.WithRawResponse by lazy {
@@ -321,6 +333,8 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
             licenseKeyInstances
 
         override fun customers(): CustomerService.WithRawResponse = customers
+
+        override fun blocklist(): BlocklistService.WithRawResponse = blocklist
 
         override fun refunds(): RefundService.WithRawResponse = refunds
 
