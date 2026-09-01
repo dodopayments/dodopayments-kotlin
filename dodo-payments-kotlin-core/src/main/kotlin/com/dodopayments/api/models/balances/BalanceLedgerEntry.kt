@@ -32,6 +32,7 @@ private constructor(
     private val afterBalance: JsonField<Long>,
     private val beforeBalance: JsonField<Long>,
     private val description: JsonField<String>,
+    private val payoutId: JsonField<String>,
     private val referenceObjectId: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -63,6 +64,7 @@ private constructor(
         @JsonProperty("description")
         @ExcludeMissing
         description: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("payout_id") @ExcludeMissing payoutId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("reference_object_id")
         @ExcludeMissing
         referenceObjectId: JsonField<String> = JsonMissing.of(),
@@ -78,6 +80,7 @@ private constructor(
         afterBalance,
         beforeBalance,
         description,
+        payoutId,
         referenceObjectId,
         mutableMapOf(),
     )
@@ -147,6 +150,12 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun description(): String? = description.getNullable("description")
+
+    /**
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun payoutId(): String? = payoutId.getNullable("payout_id")
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -241,6 +250,13 @@ private constructor(
     @JsonProperty("description") @ExcludeMissing fun _description(): JsonField<String> = description
 
     /**
+     * Returns the raw JSON value of [payoutId].
+     *
+     * Unlike [payoutId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("payout_id") @ExcludeMissing fun _payoutId(): JsonField<String> = payoutId
+
+    /**
      * Returns the raw JSON value of [referenceObjectId].
      *
      * Unlike [referenceObjectId], this method doesn't throw if the JSON field has an unexpected
@@ -296,6 +312,7 @@ private constructor(
         private var afterBalance: JsonField<Long> = JsonMissing.of()
         private var beforeBalance: JsonField<Long> = JsonMissing.of()
         private var description: JsonField<String> = JsonMissing.of()
+        private var payoutId: JsonField<String> = JsonMissing.of()
         private var referenceObjectId: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -311,6 +328,7 @@ private constructor(
             afterBalance = balanceLedgerEntry.afterBalance
             beforeBalance = balanceLedgerEntry.beforeBalance
             description = balanceLedgerEntry.description
+            payoutId = balanceLedgerEntry.payoutId
             referenceObjectId = balanceLedgerEntry.referenceObjectId
             additionalProperties = balanceLedgerEntry.additionalProperties.toMutableMap()
         }
@@ -453,6 +471,16 @@ private constructor(
          */
         fun description(description: JsonField<String>) = apply { this.description = description }
 
+        fun payoutId(payoutId: String?) = payoutId(JsonField.ofNullable(payoutId))
+
+        /**
+         * Sets [Builder.payoutId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.payoutId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun payoutId(payoutId: JsonField<String>) = apply { this.payoutId = payoutId }
+
         fun referenceObjectId(referenceObjectId: String?) =
             referenceObjectId(JsonField.ofNullable(referenceObjectId))
 
@@ -518,6 +546,7 @@ private constructor(
                 afterBalance,
                 beforeBalance,
                 description,
+                payoutId,
                 referenceObjectId,
                 additionalProperties.toMutableMap(),
             )
@@ -549,6 +578,7 @@ private constructor(
         afterBalance()
         beforeBalance()
         description()
+        payoutId()
         referenceObjectId()
         validated = true
     }
@@ -578,6 +608,7 @@ private constructor(
             (if (afterBalance.asKnown() == null) 0 else 1) +
             (if (beforeBalance.asKnown() == null) 0 else 1) +
             (if (description.asKnown() == null) 0 else 1) +
+            (if (payoutId.asKnown() == null) 0 else 1) +
             (if (referenceObjectId.asKnown() == null) 0 else 1)
 
     class EventType @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
@@ -853,6 +884,7 @@ private constructor(
             afterBalance == other.afterBalance &&
             beforeBalance == other.beforeBalance &&
             description == other.description &&
+            payoutId == other.payoutId &&
             referenceObjectId == other.referenceObjectId &&
             additionalProperties == other.additionalProperties
     }
@@ -870,6 +902,7 @@ private constructor(
             afterBalance,
             beforeBalance,
             description,
+            payoutId,
             referenceObjectId,
             additionalProperties,
         )
@@ -878,5 +911,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "BalanceLedgerEntry{id=$id, amount=$amount, businessId=$businessId, createdAt=$createdAt, currency=$currency, eventType=$eventType, isCredit=$isCredit, usdEquivalentAmount=$usdEquivalentAmount, afterBalance=$afterBalance, beforeBalance=$beforeBalance, description=$description, referenceObjectId=$referenceObjectId, additionalProperties=$additionalProperties}"
+        "BalanceLedgerEntry{id=$id, amount=$amount, businessId=$businessId, createdAt=$createdAt, currency=$currency, eventType=$eventType, isCredit=$isCredit, usdEquivalentAmount=$usdEquivalentAmount, afterBalance=$afterBalance, beforeBalance=$beforeBalance, description=$description, payoutId=$payoutId, referenceObjectId=$referenceObjectId, additionalProperties=$additionalProperties}"
 }
