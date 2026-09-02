@@ -21,6 +21,8 @@ internal class CustomerTest {
                 .customerId("customer_id")
                 .email("email")
                 .name("name")
+                .blockedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .blocklistEntryId("blocklist_entry_id")
                 .metadata(
                     Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -34,6 +36,8 @@ internal class CustomerTest {
         assertThat(customer.customerId()).isEqualTo("customer_id")
         assertThat(customer.email()).isEqualTo("email")
         assertThat(customer.name()).isEqualTo("name")
+        assertThat(customer.blockedAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(customer.blocklistEntryId()).isEqualTo("blocklist_entry_id")
         assertThat(customer.metadata())
             .isEqualTo(
                 Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
@@ -51,6 +55,8 @@ internal class CustomerTest {
                 .customerId("customer_id")
                 .email("email")
                 .name("name")
+                .blockedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .blocklistEntryId("blocklist_entry_id")
                 .metadata(
                     Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))

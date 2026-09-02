@@ -61,6 +61,7 @@ internal class ProGuardCompatibilityTest {
         assertThat(client.licenseKeys()).isNotNull()
         assertThat(client.licenseKeyInstances()).isNotNull()
         assertThat(client.customers()).isNotNull()
+        assertThat(client.blocklist()).isNotNull()
         assertThat(client.refunds()).isNotNull()
         assertThat(client.disputes()).isNotNull()
         assertThat(client.payouts()).isNotNull()
