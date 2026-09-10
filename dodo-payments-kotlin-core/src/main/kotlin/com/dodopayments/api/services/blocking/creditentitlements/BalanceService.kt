@@ -112,6 +112,7 @@ interface BalanceService {
      * - `reason` - Optional human-readable reason
      * - `expires_at` - Optional expiration for credited amount (only for credit type)
      * - `idempotency_key` - Optional key to prevent duplicate entries
+     * - `metadata` - Optional key-value pairs
      *
      * # Responses
      * - `201 Created` - Ledger entry created successfully

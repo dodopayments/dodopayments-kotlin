@@ -36,6 +36,8 @@ import com.dodopayments.api.models.customers.CustomerRetrievePaymentMethodsRespo
 import com.dodopayments.api.models.customers.CustomerUpdateParams
 import com.dodopayments.api.services.async.customers.CustomerPortalServiceAsync
 import com.dodopayments.api.services.async.customers.CustomerPortalServiceAsyncImpl
+import com.dodopayments.api.services.async.customers.EmailServiceAsync
+import com.dodopayments.api.services.async.customers.EmailServiceAsyncImpl
 import com.dodopayments.api.services.async.customers.WalletServiceAsync
 import com.dodopayments.api.services.async.customers.WalletServiceAsyncImpl
 
@@ -52,6 +54,8 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
 
     private val wallets: WalletServiceAsync by lazy { WalletServiceAsyncImpl(clientOptions) }
 
+    private val emails: EmailServiceAsync by lazy { EmailServiceAsyncImpl(clientOptions) }
+
     override fun withRawResponse(): CustomerServiceAsync.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): CustomerServiceAsync =
@@ -60,6 +64,8 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
     override fun customerPortal(): CustomerPortalServiceAsync = customerPortal
 
     override fun wallets(): WalletServiceAsync = wallets
+
+    override fun emails(): EmailServiceAsync = emails
 
     override suspend fun create(
         params: CustomerCreateParams,
@@ -139,6 +145,10 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
             WalletServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val emails: EmailServiceAsync.WithRawResponse by lazy {
+            EmailServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): CustomerServiceAsync.WithRawResponse =
@@ -149,6 +159,8 @@ class CustomerServiceAsyncImpl internal constructor(private val clientOptions: C
         override fun customerPortal(): CustomerPortalServiceAsync.WithRawResponse = customerPortal
 
         override fun wallets(): WalletServiceAsync.WithRawResponse = wallets
+
+        override fun emails(): EmailServiceAsync.WithRawResponse = emails
 
         private val createHandler: Handler<Customer> =
             jsonHandler<Customer>(clientOptions.jsonMapper)

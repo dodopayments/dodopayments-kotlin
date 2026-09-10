@@ -2,7 +2,9 @@
 
 package com.dodopayments.api.models.creditentitlements.balances
 
+import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.misc.Metadata
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -23,6 +25,11 @@ internal class BalanceCreateLedgerEntryResponseTest {
                 .customerId("customer_id")
                 .entryType(LedgerEntryType.CREDIT)
                 .isCredit(true)
+                .metadata(
+                    Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .overageAfter("overage_after")
                 .overageBefore("overage_before")
                 .grantId("grant_id")
@@ -40,6 +47,10 @@ internal class BalanceCreateLedgerEntryResponseTest {
         assertThat(balanceCreateLedgerEntryResponse.customerId()).isEqualTo("customer_id")
         assertThat(balanceCreateLedgerEntryResponse.entryType()).isEqualTo(LedgerEntryType.CREDIT)
         assertThat(balanceCreateLedgerEntryResponse.isCredit()).isEqualTo(true)
+        assertThat(balanceCreateLedgerEntryResponse.metadata())
+            .isEqualTo(
+                Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
+            )
         assertThat(balanceCreateLedgerEntryResponse.overageAfter()).isEqualTo("overage_after")
         assertThat(balanceCreateLedgerEntryResponse.overageBefore()).isEqualTo("overage_before")
         assertThat(balanceCreateLedgerEntryResponse.grantId()).isEqualTo("grant_id")
@@ -60,6 +71,11 @@ internal class BalanceCreateLedgerEntryResponseTest {
                 .customerId("customer_id")
                 .entryType(LedgerEntryType.CREDIT)
                 .isCredit(true)
+                .metadata(
+                    Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
                 .overageAfter("overage_after")
                 .overageBefore("overage_before")
                 .grantId("grant_id")

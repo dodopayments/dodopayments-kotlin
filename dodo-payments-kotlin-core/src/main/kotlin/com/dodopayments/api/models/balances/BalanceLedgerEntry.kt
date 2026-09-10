@@ -669,6 +669,10 @@ private constructor(
 
             val BYOP_FEE = of("byop_fee")
 
+            val ETHOCA_FEES = of("ethoca_fees")
+
+            val ETHOCA_FEES_REVERSAL = of("ethoca_fees_reversal")
+
             fun of(value: String) = EventType(JsonField.of(value))
         }
 
@@ -696,6 +700,8 @@ private constructor(
             DUNNING_FEES,
             PAYMENT_RETRY_FEE,
             BYOP_FEE,
+            ETHOCA_FEES,
+            ETHOCA_FEES_REVERSAL,
         }
 
         /**
@@ -730,6 +736,8 @@ private constructor(
             DUNNING_FEES,
             PAYMENT_RETRY_FEE,
             BYOP_FEE,
+            ETHOCA_FEES,
+            ETHOCA_FEES_REVERSAL,
             /**
              * An enum member indicating that [EventType] was instantiated with an unknown value.
              */
@@ -767,6 +775,8 @@ private constructor(
                 DUNNING_FEES -> Value.DUNNING_FEES
                 PAYMENT_RETRY_FEE -> Value.PAYMENT_RETRY_FEE
                 BYOP_FEE -> Value.BYOP_FEE
+                ETHOCA_FEES -> Value.ETHOCA_FEES
+                ETHOCA_FEES_REVERSAL -> Value.ETHOCA_FEES_REVERSAL
                 else -> Value._UNKNOWN
             }
 
@@ -803,6 +813,8 @@ private constructor(
                 DUNNING_FEES -> Known.DUNNING_FEES
                 PAYMENT_RETRY_FEE -> Known.PAYMENT_RETRY_FEE
                 BYOP_FEE -> Known.BYOP_FEE
+                ETHOCA_FEES -> Known.ETHOCA_FEES
+                ETHOCA_FEES_REVERSAL -> Known.ETHOCA_FEES_REVERSAL
                 else -> throw DodoPaymentsInvalidDataException("Unknown EventType: $value")
             }
 
