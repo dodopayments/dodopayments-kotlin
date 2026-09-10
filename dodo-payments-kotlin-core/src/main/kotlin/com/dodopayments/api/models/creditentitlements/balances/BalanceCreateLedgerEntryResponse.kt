@@ -8,6 +8,7 @@ import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
+import com.dodopayments.api.models.misc.Metadata
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -29,6 +30,7 @@ private constructor(
     private val customerId: JsonField<String>,
     private val entryType: JsonField<LedgerEntryType>,
     private val isCredit: JsonField<Boolean>,
+    private val metadata: JsonField<Metadata>,
     private val overageAfter: JsonField<String>,
     private val overageBefore: JsonField<String>,
     private val grantId: JsonField<String>,
@@ -59,6 +61,7 @@ private constructor(
         @ExcludeMissing
         entryType: JsonField<LedgerEntryType> = JsonMissing.of(),
         @JsonProperty("is_credit") @ExcludeMissing isCredit: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("metadata") @ExcludeMissing metadata: JsonField<Metadata> = JsonMissing.of(),
         @JsonProperty("overage_after")
         @ExcludeMissing
         overageAfter: JsonField<String> = JsonMissing.of(),
@@ -77,6 +80,7 @@ private constructor(
         customerId,
         entryType,
         isCredit,
+        metadata,
         overageAfter,
         overageBefore,
         grantId,
@@ -137,6 +141,14 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun isCredit(): Boolean = isCredit.getRequired("is_credit")
+
+    /**
+     * Metadata stored on this entry.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun metadata(): Metadata = metadata.getRequired("metadata")
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
@@ -237,6 +249,13 @@ private constructor(
     @JsonProperty("is_credit") @ExcludeMissing fun _isCredit(): JsonField<Boolean> = isCredit
 
     /**
+     * Returns the raw JSON value of [metadata].
+     *
+     * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
+
+    /**
      * Returns the raw JSON value of [overageAfter].
      *
      * Unlike [overageAfter], this method doesn't throw if the JSON field has an unexpected type.
@@ -297,6 +316,7 @@ private constructor(
          * .customerId()
          * .entryType()
          * .isCredit()
+         * .metadata()
          * .overageAfter()
          * .overageBefore()
          * ```
@@ -316,6 +336,7 @@ private constructor(
         private var customerId: JsonField<String>? = null
         private var entryType: JsonField<LedgerEntryType>? = null
         private var isCredit: JsonField<Boolean>? = null
+        private var metadata: JsonField<Metadata>? = null
         private var overageAfter: JsonField<String>? = null
         private var overageBefore: JsonField<String>? = null
         private var grantId: JsonField<String> = JsonMissing.of()
@@ -333,6 +354,7 @@ private constructor(
                 customerId = balanceCreateLedgerEntryResponse.customerId
                 entryType = balanceCreateLedgerEntryResponse.entryType
                 isCredit = balanceCreateLedgerEntryResponse.isCredit
+                metadata = balanceCreateLedgerEntryResponse.metadata
                 overageAfter = balanceCreateLedgerEntryResponse.overageAfter
                 overageBefore = balanceCreateLedgerEntryResponse.overageBefore
                 grantId = balanceCreateLedgerEntryResponse.grantId
@@ -445,6 +467,18 @@ private constructor(
          */
         fun isCredit(isCredit: JsonField<Boolean>) = apply { this.isCredit = isCredit }
 
+        /** Metadata stored on this entry. */
+        fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
+
+        /**
+         * Sets [Builder.metadata] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.metadata] with a well-typed [Metadata] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
+
         fun overageAfter(overageAfter: String) = overageAfter(JsonField.of(overageAfter))
 
         /**
@@ -526,6 +560,7 @@ private constructor(
          * .customerId()
          * .entryType()
          * .isCredit()
+         * .metadata()
          * .overageAfter()
          * .overageBefore()
          * ```
@@ -543,6 +578,7 @@ private constructor(
                 checkRequired("customerId", customerId),
                 checkRequired("entryType", entryType),
                 checkRequired("isCredit", isCredit),
+                checkRequired("metadata", metadata),
                 checkRequired("overageAfter", overageAfter),
                 checkRequired("overageBefore", overageBefore),
                 grantId,
@@ -575,6 +611,7 @@ private constructor(
         customerId()
         entryType().validate()
         isCredit()
+        metadata().validate()
         overageAfter()
         overageBefore()
         grantId()
@@ -605,6 +642,7 @@ private constructor(
             (if (customerId.asKnown() == null) 0 else 1) +
             (entryType.asKnown()?.validity() ?: 0) +
             (if (isCredit.asKnown() == null) 0 else 1) +
+            (metadata.asKnown()?.validity() ?: 0) +
             (if (overageAfter.asKnown() == null) 0 else 1) +
             (if (overageBefore.asKnown() == null) 0 else 1) +
             (if (grantId.asKnown() == null) 0 else 1) +
@@ -625,6 +663,7 @@ private constructor(
             customerId == other.customerId &&
             entryType == other.entryType &&
             isCredit == other.isCredit &&
+            metadata == other.metadata &&
             overageAfter == other.overageAfter &&
             overageBefore == other.overageBefore &&
             grantId == other.grantId &&
@@ -643,6 +682,7 @@ private constructor(
             customerId,
             entryType,
             isCredit,
+            metadata,
             overageAfter,
             overageBefore,
             grantId,
@@ -654,5 +694,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "BalanceCreateLedgerEntryResponse{id=$id, amount=$amount, balanceAfter=$balanceAfter, balanceBefore=$balanceBefore, createdAt=$createdAt, creditEntitlementId=$creditEntitlementId, customerId=$customerId, entryType=$entryType, isCredit=$isCredit, overageAfter=$overageAfter, overageBefore=$overageBefore, grantId=$grantId, reason=$reason, additionalProperties=$additionalProperties}"
+        "BalanceCreateLedgerEntryResponse{id=$id, amount=$amount, balanceAfter=$balanceAfter, balanceBefore=$balanceBefore, createdAt=$createdAt, creditEntitlementId=$creditEntitlementId, customerId=$customerId, entryType=$entryType, isCredit=$isCredit, metadata=$metadata, overageAfter=$overageAfter, overageBefore=$overageBefore, grantId=$grantId, reason=$reason, additionalProperties=$additionalProperties}"
 }

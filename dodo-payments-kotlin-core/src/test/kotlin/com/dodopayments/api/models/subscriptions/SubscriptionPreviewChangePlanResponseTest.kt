@@ -109,6 +109,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                                 .phoneNumber("phone_number")
                                 .build()
                         )
+                        .hasPaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -294,6 +295,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                             .phoneNumber("phone_number")
                             .build()
                     )
+                    .hasPaymentMethod(true)
                     .metadata(
                         Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -483,6 +485,7 @@ internal class SubscriptionPreviewChangePlanResponseTest {
                                 .phoneNumber("phone_number")
                                 .build()
                         )
+                        .hasPaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))

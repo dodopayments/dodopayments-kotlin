@@ -172,9 +172,7 @@ private constructor(
     fun isCredit(): Boolean = isCredit.getRequired("is_credit")
 
     /**
-     * Metadata associated with the credit grant's source (the subscription or payment created at
-     * checkout). Empty when the grant has no resolvable source (e.g. credits granted directly via
-     * the API).
+     * Metadata associated with this entry.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -566,11 +564,7 @@ private constructor(
          */
         fun isCredit(isCredit: JsonField<Boolean>) = apply { this.isCredit = isCredit }
 
-        /**
-         * Metadata associated with the credit grant's source (the subscription or payment created
-         * at checkout). Empty when the grant has no resolvable source (e.g. credits granted
-         * directly via the API).
-         */
+        /** Metadata associated with this entry. */
         fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
         /**

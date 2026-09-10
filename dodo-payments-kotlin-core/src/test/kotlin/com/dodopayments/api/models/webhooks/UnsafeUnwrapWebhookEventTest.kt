@@ -5565,6 +5565,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .phoneNumber("phone_number")
                                 .build()
                         )
+                        .hasPaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -5781,6 +5782,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .phoneNumber("phone_number")
                                     .build()
                             )
+                            .hasPaymentMethod(true)
                             .metadata(
                                 Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -5949,6 +5951,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .phoneNumber("phone_number")
                                 .build()
                         )
+                        .hasPaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -6166,6 +6169,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .phoneNumber("phone_number")
                                     .build()
                             )
+                            .hasPaymentMethod(true)
                             .metadata(
                                 Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -6334,6 +6338,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .phoneNumber("phone_number")
                                 .build()
                         )
+                        .hasPaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -6550,6 +6555,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .phoneNumber("phone_number")
                                     .build()
                             )
+                            .hasPaymentMethod(true)
                             .metadata(
                                 Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -6718,6 +6724,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .phoneNumber("phone_number")
                                 .build()
                         )
+                        .hasPaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -6934,6 +6941,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .phoneNumber("phone_number")
                                     .build()
                             )
+                            .hasPaymentMethod(true)
                             .metadata(
                                 Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -7102,6 +7110,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .phoneNumber("phone_number")
                                 .build()
                         )
+                        .hasPaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -7318,6 +7327,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .phoneNumber("phone_number")
                                     .build()
                             )
+                            .hasPaymentMethod(true)
                             .metadata(
                                 Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -7486,6 +7496,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .phoneNumber("phone_number")
                                 .build()
                         )
+                        .hasPaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -7702,6 +7713,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .phoneNumber("phone_number")
                                     .build()
                             )
+                            .hasPaymentMethod(true)
                             .metadata(
                                 Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -7870,6 +7882,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .phoneNumber("phone_number")
                                 .build()
                         )
+                        .hasPaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -8086,6 +8099,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .phoneNumber("phone_number")
                                     .build()
                             )
+                            .hasPaymentMethod(true)
                             .metadata(
                                 Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -8254,6 +8268,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .phoneNumber("phone_number")
                                 .build()
                         )
+                        .hasPaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -8471,6 +8486,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .phoneNumber("phone_number")
                                     .build()
                             )
+                            .hasPaymentMethod(true)
                             .metadata(
                                 Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -8639,6 +8655,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .phoneNumber("phone_number")
                                 .build()
                         )
+                        .hasPaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -8855,6 +8872,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .phoneNumber("phone_number")
                                     .build()
                             )
+                            .hasPaymentMethod(true)
                             .metadata(
                                 Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -9023,6 +9041,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .phoneNumber("phone_number")
                                 .build()
                         )
+                        .hasPaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -9239,6 +9258,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .phoneNumber("phone_number")
                                     .build()
                             )
+                            .hasPaymentMethod(true)
                             .metadata(
                                 Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -9407,6 +9427,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .phoneNumber("phone_number")
                                 .build()
                         )
+                        .hasPaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -9626,6 +9647,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .phoneNumber("phone_number")
                                     .build()
                             )
+                            .hasPaymentMethod(true)
                             .metadata(
                                 Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -9794,6 +9816,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .phoneNumber("phone_number")
                                 .build()
                         )
+                        .hasPaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -10010,6 +10033,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .phoneNumber("phone_number")
                                     .build()
                             )
+                            .hasPaymentMethod(true)
                             .metadata(
                                 Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))

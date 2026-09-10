@@ -53,6 +53,7 @@ internal class SubscriptionListPageResponseTest {
                                 .discountCyclesRemaining(0)
                                 .build()
                         )
+                        .hasPaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -137,6 +138,7 @@ internal class SubscriptionListPageResponseTest {
                             .discountCyclesRemaining(0)
                             .build()
                     )
+                    .hasPaymentMethod(true)
                     .metadata(
                         Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -225,6 +227,7 @@ internal class SubscriptionListPageResponseTest {
                                 .discountCyclesRemaining(0)
                                 .build()
                         )
+                        .hasPaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))

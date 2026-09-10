@@ -72,6 +72,7 @@ internal class SubscriptionTest {
                         .phoneNumber("phone_number")
                         .build()
                 )
+                .hasPaymentMethod(true)
                 .metadata(
                     Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -224,6 +225,7 @@ internal class SubscriptionTest {
                     .phoneNumber("phone_number")
                     .build()
             )
+        assertThat(subscription.hasPaymentMethod()).isEqualTo(true)
         assertThat(subscription.metadata())
             .isEqualTo(
                 Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
@@ -382,6 +384,7 @@ internal class SubscriptionTest {
                         .phoneNumber("phone_number")
                         .build()
                 )
+                .hasPaymentMethod(true)
                 .metadata(
                     Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
