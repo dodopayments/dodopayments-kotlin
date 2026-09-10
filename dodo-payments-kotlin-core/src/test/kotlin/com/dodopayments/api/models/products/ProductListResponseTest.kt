@@ -55,8 +55,9 @@ internal class ProductListResponseTest {
                 .priceDetail(
                     Price.OneTimePrice.builder()
                         .currency(Currency.AED)
-                        .discount(0L)
                         .price(0)
+                        .discount(0L)
+                        .discountBps(0)
                         .payWhatYouWant(true)
                         .purchasingPowerParity(true)
                         .suggestedPrice(0)
@@ -104,8 +105,9 @@ internal class ProductListResponseTest {
                 Price.ofOneTime(
                     Price.OneTimePrice.builder()
                         .currency(Currency.AED)
-                        .discount(0L)
                         .price(0)
+                        .discount(0L)
+                        .discountBps(0)
                         .payWhatYouWant(true)
                         .purchasingPowerParity(true)
                         .suggestedPrice(0)
@@ -155,8 +157,9 @@ internal class ProductListResponseTest {
                 .priceDetail(
                     Price.OneTimePrice.builder()
                         .currency(Currency.AED)
-                        .discount(0L)
                         .price(0)
+                        .discount(0L)
+                        .discountBps(0)
                         .payWhatYouWant(true)
                         .purchasingPowerParity(true)
                         .suggestedPrice(0)

@@ -22,6 +22,7 @@ import com.dodopayments.api.models.customers.CustomerRetrievePaymentMethodsParam
 import com.dodopayments.api.models.customers.CustomerRetrievePaymentMethodsResponse
 import com.dodopayments.api.models.customers.CustomerUpdateParams
 import com.dodopayments.api.services.async.customers.CustomerPortalServiceAsync
+import com.dodopayments.api.services.async.customers.EmailServiceAsync
 import com.dodopayments.api.services.async.customers.WalletServiceAsync
 import com.google.errorprone.annotations.MustBeClosed
 
@@ -42,6 +43,8 @@ interface CustomerServiceAsync {
     fun customerPortal(): CustomerPortalServiceAsync
 
     fun wallets(): WalletServiceAsync
+
+    fun emails(): EmailServiceAsync
 
     suspend fun create(
         params: CustomerCreateParams,
@@ -217,6 +220,8 @@ interface CustomerServiceAsync {
         fun customerPortal(): CustomerPortalServiceAsync.WithRawResponse
 
         fun wallets(): WalletServiceAsync.WithRawResponse
+
+        fun emails(): EmailServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /customers`, but is otherwise the same as

@@ -85,6 +85,7 @@ internal class SubscriptionFailedWebhookEventTest {
                                 .phoneNumber("phone_number")
                                 .build()
                         )
+                        .hasPaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -240,6 +241,7 @@ internal class SubscriptionFailedWebhookEventTest {
                             .phoneNumber("phone_number")
                             .build()
                     )
+                    .hasPaymentMethod(true)
                     .metadata(
                         Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -400,6 +402,7 @@ internal class SubscriptionFailedWebhookEventTest {
                                 .phoneNumber("phone_number")
                                 .build()
                         )
+                        .hasPaymentMethod(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))

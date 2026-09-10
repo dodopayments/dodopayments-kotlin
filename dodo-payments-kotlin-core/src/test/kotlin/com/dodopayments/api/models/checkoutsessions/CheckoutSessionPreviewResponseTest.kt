@@ -28,6 +28,7 @@ internal class CheckoutSessionPreviewResponseTest {
                         .build()
                 )
                 .isByop(true)
+                .paymentMethodRequired(true)
                 .addProductCart(
                     CheckoutSessionPreviewResponse.ProductCart.builder()
                         .addCreditEntitlement(
@@ -113,6 +114,7 @@ internal class CheckoutSessionPreviewResponseTest {
                     .build()
             )
         assertThat(checkoutSessionPreviewResponse.isByop()).isEqualTo(true)
+        assertThat(checkoutSessionPreviewResponse.paymentMethodRequired()).isEqualTo(true)
         assertThat(checkoutSessionPreviewResponse.productCart())
             .containsExactly(
                 CheckoutSessionPreviewResponse.ProductCart.builder()
@@ -206,6 +208,7 @@ internal class CheckoutSessionPreviewResponseTest {
                         .build()
                 )
                 .isByop(true)
+                .paymentMethodRequired(true)
                 .addProductCart(
                     CheckoutSessionPreviewResponse.ProductCart.builder()
                         .addCreditEntitlement(
