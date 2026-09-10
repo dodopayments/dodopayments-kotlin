@@ -36,6 +36,8 @@ import com.dodopayments.api.models.customers.CustomerRetrievePaymentMethodsRespo
 import com.dodopayments.api.models.customers.CustomerUpdateParams
 import com.dodopayments.api.services.blocking.customers.CustomerPortalService
 import com.dodopayments.api.services.blocking.customers.CustomerPortalServiceImpl
+import com.dodopayments.api.services.blocking.customers.EmailService
+import com.dodopayments.api.services.blocking.customers.EmailServiceImpl
 import com.dodopayments.api.services.blocking.customers.WalletService
 import com.dodopayments.api.services.blocking.customers.WalletServiceImpl
 
@@ -52,6 +54,8 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
 
     private val wallets: WalletService by lazy { WalletServiceImpl(clientOptions) }
 
+    private val emails: EmailService by lazy { EmailServiceImpl(clientOptions) }
+
     override fun withRawResponse(): CustomerService.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): CustomerService =
@@ -60,6 +64,8 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
     override fun customerPortal(): CustomerPortalService = customerPortal
 
     override fun wallets(): WalletService = wallets
+
+    override fun emails(): EmailService = emails
 
     override fun create(params: CustomerCreateParams, requestOptions: RequestOptions): Customer =
         // post /customers
@@ -133,6 +139,10 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
             WalletServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val emails: EmailService.WithRawResponse by lazy {
+            EmailServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): CustomerService.WithRawResponse =
@@ -143,6 +153,8 @@ class CustomerServiceImpl internal constructor(private val clientOptions: Client
         override fun customerPortal(): CustomerPortalService.WithRawResponse = customerPortal
 
         override fun wallets(): WalletService.WithRawResponse = wallets
+
+        override fun emails(): EmailService.WithRawResponse = emails
 
         private val createHandler: Handler<Customer> =
             jsonHandler<Customer>(clientOptions.jsonMapper)

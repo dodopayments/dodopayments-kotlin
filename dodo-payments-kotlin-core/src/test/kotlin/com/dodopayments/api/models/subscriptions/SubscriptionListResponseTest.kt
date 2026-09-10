@@ -51,6 +51,7 @@ internal class SubscriptionListResponseTest {
                         .discountCyclesRemaining(0)
                         .build()
                 )
+                .hasPaymentMethod(true)
                 .metadata(
                     Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -134,6 +135,7 @@ internal class SubscriptionListResponseTest {
                     .discountCyclesRemaining(0)
                     .build()
             )
+        assertThat(subscriptionListResponse.hasPaymentMethod()).isEqualTo(true)
         assertThat(subscriptionListResponse.metadata())
             .isEqualTo(
                 Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
@@ -224,6 +226,7 @@ internal class SubscriptionListResponseTest {
                         .discountCyclesRemaining(0)
                         .build()
                 )
+                .hasPaymentMethod(true)
                 .metadata(
                     Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))

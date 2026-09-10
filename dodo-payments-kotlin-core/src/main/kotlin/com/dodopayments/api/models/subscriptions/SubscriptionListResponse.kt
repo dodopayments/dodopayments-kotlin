@@ -32,6 +32,7 @@ private constructor(
     private val currency: JsonField<Currency>,
     private val customer: JsonField<CustomerLimitedDetails>,
     private val discounts: JsonField<List<Discount>>,
+    private val hasPaymentMethod: JsonField<Boolean>,
     private val metadata: JsonField<Metadata>,
     private val nextBillingDate: JsonField<OffsetDateTime>,
     private val onDemand: JsonField<Boolean>,
@@ -78,6 +79,9 @@ private constructor(
         @JsonProperty("discounts")
         @ExcludeMissing
         discounts: JsonField<List<Discount>> = JsonMissing.of(),
+        @JsonProperty("has_payment_method")
+        @ExcludeMissing
+        hasPaymentMethod: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("metadata") @ExcludeMissing metadata: JsonField<Metadata> = JsonMissing.of(),
         @JsonProperty("next_billing_date")
         @ExcludeMissing
@@ -148,6 +152,7 @@ private constructor(
         currency,
         customer,
         discounts,
+        hasPaymentMethod,
         metadata,
         nextBillingDate,
         onDemand,
@@ -224,6 +229,15 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun discounts(): List<Discount> = discounts.getRequired("discounts")
+
+    /**
+     * Whether a payment method is on file. False while a card-optional subscription waits for the
+     * customer to add one.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun hasPaymentMethod(): Boolean = hasPaymentMethod.getRequired("has_payment_method")
 
     /**
      * Additional custom data associated with the subscription
@@ -486,6 +500,16 @@ private constructor(
     fun _discounts(): JsonField<List<Discount>> = discounts
 
     /**
+     * Returns the raw JSON value of [hasPaymentMethod].
+     *
+     * Unlike [hasPaymentMethod], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("has_payment_method")
+    @ExcludeMissing
+    fun _hasPaymentMethod(): JsonField<Boolean> = hasPaymentMethod
+
+    /**
      * Returns the raw JSON value of [metadata].
      *
      * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
@@ -725,6 +749,7 @@ private constructor(
          * .currency()
          * .customer()
          * .discounts()
+         * .hasPaymentMethod()
          * .metadata()
          * .nextBillingDate()
          * .onDemand()
@@ -754,6 +779,7 @@ private constructor(
         private var currency: JsonField<Currency>? = null
         private var customer: JsonField<CustomerLimitedDetails>? = null
         private var discounts: JsonField<MutableList<Discount>>? = null
+        private var hasPaymentMethod: JsonField<Boolean>? = null
         private var metadata: JsonField<Metadata>? = null
         private var nextBillingDate: JsonField<OffsetDateTime>? = null
         private var onDemand: JsonField<Boolean>? = null
@@ -788,6 +814,7 @@ private constructor(
             currency = subscriptionListResponse.currency
             customer = subscriptionListResponse.customer
             discounts = subscriptionListResponse.discounts.map { it.toMutableList() }
+            hasPaymentMethod = subscriptionListResponse.hasPaymentMethod
             metadata = subscriptionListResponse.metadata
             nextBillingDate = subscriptionListResponse.nextBillingDate
             onDemand = subscriptionListResponse.onDemand
@@ -905,6 +932,24 @@ private constructor(
                 (discounts ?: JsonField.of(mutableListOf())).also {
                     checkKnown("discounts", it).add(discount)
                 }
+        }
+
+        /**
+         * Whether a payment method is on file. False while a card-optional subscription waits for
+         * the customer to add one.
+         */
+        fun hasPaymentMethod(hasPaymentMethod: Boolean) =
+            hasPaymentMethod(JsonField.of(hasPaymentMethod))
+
+        /**
+         * Sets [Builder.hasPaymentMethod] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.hasPaymentMethod] with a well-typed [Boolean] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun hasPaymentMethod(hasPaymentMethod: JsonField<Boolean>) = apply {
+            this.hasPaymentMethod = hasPaymentMethod
         }
 
         /** Additional custom data associated with the subscription */
@@ -1306,6 +1351,7 @@ private constructor(
          * .currency()
          * .customer()
          * .discounts()
+         * .hasPaymentMethod()
          * .metadata()
          * .nextBillingDate()
          * .onDemand()
@@ -1333,6 +1379,7 @@ private constructor(
                 checkRequired("currency", currency),
                 checkRequired("customer", customer),
                 checkRequired("discounts", discounts).map { it.toImmutable() },
+                checkRequired("hasPaymentMethod", hasPaymentMethod),
                 checkRequired("metadata", metadata),
                 checkRequired("nextBillingDate", nextBillingDate),
                 checkRequired("onDemand", onDemand),
@@ -1383,6 +1430,7 @@ private constructor(
         currency().validate()
         customer().validate()
         discounts().forEach { it.validate() }
+        hasPaymentMethod()
         metadata().validate()
         nextBillingDate()
         onDemand()
@@ -1431,6 +1479,7 @@ private constructor(
             (currency.asKnown()?.validity() ?: 0) +
             (customer.asKnown()?.validity() ?: 0) +
             (discounts.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (hasPaymentMethod.asKnown() == null) 0 else 1) +
             (metadata.asKnown()?.validity() ?: 0) +
             (if (nextBillingDate.asKnown() == null) 0 else 1) +
             (if (onDemand.asKnown() == null) 0 else 1) +
@@ -1699,6 +1748,7 @@ private constructor(
             currency == other.currency &&
             customer == other.customer &&
             discounts == other.discounts &&
+            hasPaymentMethod == other.hasPaymentMethod &&
             metadata == other.metadata &&
             nextBillingDate == other.nextBillingDate &&
             onDemand == other.onDemand &&
@@ -1735,6 +1785,7 @@ private constructor(
             currency,
             customer,
             discounts,
+            hasPaymentMethod,
             metadata,
             nextBillingDate,
             onDemand,
@@ -1767,5 +1818,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "SubscriptionListResponse{billing=$billing, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, currency=$currency, customer=$customer, discounts=$discounts, metadata=$metadata, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancelledAt=$cancelledAt, customerBusinessName=$customerBusinessName, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, pausedAt=$pausedAt, paymentMethodId=$paymentMethodId, productName=$productName, scheduledChange=$scheduledChange, taxId=$taxId, trialAmount=$trialAmount, additionalProperties=$additionalProperties}"
+        "SubscriptionListResponse{billing=$billing, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, currency=$currency, customer=$customer, discounts=$discounts, hasPaymentMethod=$hasPaymentMethod, metadata=$metadata, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancelledAt=$cancelledAt, customerBusinessName=$customerBusinessName, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, pausedAt=$pausedAt, paymentMethodId=$paymentMethodId, productName=$productName, scheduledChange=$scheduledChange, taxId=$taxId, trialAmount=$trialAmount, additionalProperties=$additionalProperties}"
 }
