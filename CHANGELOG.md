@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.116.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.115.0...v1.116.0) (2026-09-10)
+
+
+### Features
+
+* **api:** add customer email logs ([f5018d4](https://github.com/dodopayments/dodopayments-kotlin/commit/f5018d4177814eef1bf9114469d1bb20a808d37a))
+* **api:** add customer email logs ([3d612e7](https://github.com/dodopayments/dodopayments-kotlin/commit/3d612e759d7758038b3cd91df41ee91f72146739))
+
 ## [1.115.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.114.0...v1.115.0) (2026-09-01)
 
 
