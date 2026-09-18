@@ -17,12 +17,14 @@ internal class EmailPoliciesTest {
                 .resendAllowed(true)
                 .resendsRemaining(0L)
                 .retryAllowed(true)
+                .superseded(true)
                 .build()
 
         assertThat(emailPolicies.requiresDifferentAddress()).isEqualTo(true)
         assertThat(emailPolicies.resendAllowed()).isEqualTo(true)
         assertThat(emailPolicies.resendsRemaining()).isEqualTo(0L)
         assertThat(emailPolicies.retryAllowed()).isEqualTo(true)
+        assertThat(emailPolicies.superseded()).isEqualTo(true)
     }
 
     @Test
@@ -34,6 +36,7 @@ internal class EmailPoliciesTest {
                 .resendAllowed(true)
                 .resendsRemaining(0L)
                 .retryAllowed(true)
+                .superseded(true)
                 .build()
 
         val roundtrippedEmailPolicies =
