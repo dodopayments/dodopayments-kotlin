@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.117.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.116.0...v1.117.0) (2026-09-18)
+
+
+### Features
+
+* **api:** tax id checkout flag, ledger event types, email policy fields ([2f0bcd4](https://github.com/dodopayments/dodopayments-kotlin/commit/2f0bcd4c48a84164a56915b6e86b01345e7ae59c))
+* **api:** tax id checkout flag, ledger event types, email policy fields ([690e647](https://github.com/dodopayments/dodopayments-kotlin/commit/690e647a64d1e865a4372c3c243704f4ca9f9ab7))
+
+
+### Chores
+
+* add Dependabot config for GitHub Actions ([637b58a](https://github.com/dodopayments/dodopayments-kotlin/commit/637b58ad00e0e80a07c15d393d8ad2c051d59f1a))
+
 ## [1.116.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.115.0...v1.116.0) (2026-09-10)
 
 
