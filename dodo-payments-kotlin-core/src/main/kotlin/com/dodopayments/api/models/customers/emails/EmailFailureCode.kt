@@ -43,6 +43,8 @@ class EmailFailureCode @JsonCreator private constructor(private val value: JsonF
 
         val SEND_FAILED = of("send_failed")
 
+        val TEST_MODE_QUOTA_SPENT = of("test_mode_quota_spent")
+
         fun of(value: String) = EmailFailureCode(JsonField.of(value))
     }
 
@@ -56,6 +58,7 @@ class EmailFailureCode @JsonCreator private constructor(private val value: JsonF
         MESSAGE_TOO_LARGE,
         MARKED_AS_SPAM,
         SEND_FAILED,
+        TEST_MODE_QUOTA_SPENT,
     }
 
     /**
@@ -76,6 +79,7 @@ class EmailFailureCode @JsonCreator private constructor(private val value: JsonF
         MESSAGE_TOO_LARGE,
         MARKED_AS_SPAM,
         SEND_FAILED,
+        TEST_MODE_QUOTA_SPENT,
         /**
          * An enum member indicating that [EmailFailureCode] was instantiated with an unknown value.
          */
@@ -99,6 +103,7 @@ class EmailFailureCode @JsonCreator private constructor(private val value: JsonF
             MESSAGE_TOO_LARGE -> Value.MESSAGE_TOO_LARGE
             MARKED_AS_SPAM -> Value.MARKED_AS_SPAM
             SEND_FAILED -> Value.SEND_FAILED
+            TEST_MODE_QUOTA_SPENT -> Value.TEST_MODE_QUOTA_SPENT
             else -> Value._UNKNOWN
         }
 
@@ -121,6 +126,7 @@ class EmailFailureCode @JsonCreator private constructor(private val value: JsonF
             MESSAGE_TOO_LARGE -> Known.MESSAGE_TOO_LARGE
             MARKED_AS_SPAM -> Known.MARKED_AS_SPAM
             SEND_FAILED -> Known.SEND_FAILED
+            TEST_MODE_QUOTA_SPENT -> Known.TEST_MODE_QUOTA_SPENT
             else -> throw DodoPaymentsInvalidDataException("Unknown EmailFailureCode: $value")
         }
 
