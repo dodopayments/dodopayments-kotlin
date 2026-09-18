@@ -30,6 +30,7 @@ internal class CheckoutSessionFlagsTest {
                 .alwaysCreateNewCustomer(true)
                 .redirectImmediately(true)
                 .requirePhoneNumber(true)
+                .requireTaxId(true)
                 .singlePage(true)
                 .build()
 
@@ -50,6 +51,7 @@ internal class CheckoutSessionFlagsTest {
         assertThat(checkoutSessionFlags.alwaysCreateNewCustomer()).isEqualTo(true)
         assertThat(checkoutSessionFlags.redirectImmediately()).isEqualTo(true)
         assertThat(checkoutSessionFlags.requirePhoneNumber()).isEqualTo(true)
+        assertThat(checkoutSessionFlags.requireTaxId()).isEqualTo(true)
         assertThat(checkoutSessionFlags.singlePage()).isEqualTo(true)
     }
 
@@ -75,6 +77,7 @@ internal class CheckoutSessionFlagsTest {
                 .alwaysCreateNewCustomer(true)
                 .redirectImmediately(true)
                 .requirePhoneNumber(true)
+                .requireTaxId(true)
                 .singlePage(true)
                 .build()
 

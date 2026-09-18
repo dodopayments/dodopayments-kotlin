@@ -181,6 +181,7 @@ internal class ServiceParamsTest {
                                 .alwaysCreateNewCustomer(true)
                                 .redirectImmediately(true)
                                 .requirePhoneNumber(true)
+                                .requireTaxId(true)
                                 .singlePage(true)
                                 .build()
                         )

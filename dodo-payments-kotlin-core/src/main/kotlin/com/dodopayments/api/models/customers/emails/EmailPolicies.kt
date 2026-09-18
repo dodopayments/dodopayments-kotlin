@@ -26,6 +26,7 @@ private constructor(
     private val resendAllowed: JsonField<Boolean>,
     private val resendsRemaining: JsonField<Long>,
     private val retryAllowed: JsonField<Boolean>,
+    private val superseded: JsonField<Boolean>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -43,11 +44,15 @@ private constructor(
         @JsonProperty("retry_allowed")
         @ExcludeMissing
         retryAllowed: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("superseded")
+        @ExcludeMissing
+        superseded: JsonField<Boolean> = JsonMissing.of(),
     ) : this(
         requiresDifferentAddress,
         resendAllowed,
         resendsRemaining,
         retryAllowed,
+        superseded,
         mutableMapOf(),
     )
 
@@ -83,6 +88,15 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun retryAllowed(): Boolean = retryAllowed.getRequired("retry_allowed")
+
+    /**
+     * A later send of this email reached the provider, so this row is history. To send it again
+     * would deliver a second copy.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun superseded(): Boolean = superseded.getRequired("superseded")
 
     /**
      * Returns the raw JSON value of [requiresDifferentAddress].
@@ -122,6 +136,13 @@ private constructor(
     @ExcludeMissing
     fun _retryAllowed(): JsonField<Boolean> = retryAllowed
 
+    /**
+     * Returns the raw JSON value of [superseded].
+     *
+     * Unlike [superseded], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("superseded") @ExcludeMissing fun _superseded(): JsonField<Boolean> = superseded
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -145,6 +166,7 @@ private constructor(
          * .resendAllowed()
          * .resendsRemaining()
          * .retryAllowed()
+         * .superseded()
          * ```
          */
         fun builder() = Builder()
@@ -157,6 +179,7 @@ private constructor(
         private var resendAllowed: JsonField<Boolean>? = null
         private var resendsRemaining: JsonField<Long>? = null
         private var retryAllowed: JsonField<Boolean>? = null
+        private var superseded: JsonField<Boolean>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(emailPolicies: EmailPolicies) = apply {
@@ -164,6 +187,7 @@ private constructor(
             resendAllowed = emailPolicies.resendAllowed
             resendsRemaining = emailPolicies.resendsRemaining
             retryAllowed = emailPolicies.retryAllowed
+            superseded = emailPolicies.superseded
             additionalProperties = emailPolicies.additionalProperties.toMutableMap()
         }
 
@@ -225,6 +249,21 @@ private constructor(
             this.retryAllowed = retryAllowed
         }
 
+        /**
+         * A later send of this email reached the provider, so this row is history. To send it again
+         * would deliver a second copy.
+         */
+        fun superseded(superseded: Boolean) = superseded(JsonField.of(superseded))
+
+        /**
+         * Sets [Builder.superseded] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.superseded] with a well-typed [Boolean] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun superseded(superseded: JsonField<Boolean>) = apply { this.superseded = superseded }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -255,6 +294,7 @@ private constructor(
          * .resendAllowed()
          * .resendsRemaining()
          * .retryAllowed()
+         * .superseded()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
@@ -265,6 +305,7 @@ private constructor(
                 checkRequired("resendAllowed", resendAllowed),
                 checkRequired("resendsRemaining", resendsRemaining),
                 checkRequired("retryAllowed", retryAllowed),
+                checkRequired("superseded", superseded),
                 additionalProperties.toMutableMap(),
             )
     }
@@ -288,6 +329,7 @@ private constructor(
         resendAllowed()
         resendsRemaining()
         retryAllowed()
+        superseded()
         validated = true
     }
 
@@ -308,7 +350,8 @@ private constructor(
         (if (requiresDifferentAddress.asKnown() == null) 0 else 1) +
             (if (resendAllowed.asKnown() == null) 0 else 1) +
             (if (resendsRemaining.asKnown() == null) 0 else 1) +
-            (if (retryAllowed.asKnown() == null) 0 else 1)
+            (if (retryAllowed.asKnown() == null) 0 else 1) +
+            (if (superseded.asKnown() == null) 0 else 1)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -320,6 +363,7 @@ private constructor(
             resendAllowed == other.resendAllowed &&
             resendsRemaining == other.resendsRemaining &&
             retryAllowed == other.retryAllowed &&
+            superseded == other.superseded &&
             additionalProperties == other.additionalProperties
     }
 
@@ -329,6 +373,7 @@ private constructor(
             resendAllowed,
             resendsRemaining,
             retryAllowed,
+            superseded,
             additionalProperties,
         )
     }
@@ -336,5 +381,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "EmailPolicies{requiresDifferentAddress=$requiresDifferentAddress, resendAllowed=$resendAllowed, resendsRemaining=$resendsRemaining, retryAllowed=$retryAllowed, additionalProperties=$additionalProperties}"
+        "EmailPolicies{requiresDifferentAddress=$requiresDifferentAddress, resendAllowed=$resendAllowed, resendsRemaining=$resendsRemaining, retryAllowed=$retryAllowed, superseded=$superseded, additionalProperties=$additionalProperties}"
 }

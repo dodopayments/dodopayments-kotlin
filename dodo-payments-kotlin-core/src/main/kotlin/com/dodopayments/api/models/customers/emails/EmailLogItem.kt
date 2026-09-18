@@ -29,7 +29,6 @@ private constructor(
     private val failureCode: JsonField<EmailFailureCode>,
     private val failureReason: JsonField<String>,
     private val from: JsonField<String>,
-    private val intendedRecipient: JsonField<String>,
     private val recipient: JsonField<String>,
     private val subject: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -61,9 +60,6 @@ private constructor(
         @ExcludeMissing
         failureReason: JsonField<String> = JsonMissing.of(),
         @JsonProperty("from") @ExcludeMissing from: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("intended_recipient")
-        @ExcludeMissing
-        intendedRecipient: JsonField<String> = JsonMissing.of(),
         @JsonProperty("recipient") @ExcludeMissing recipient: JsonField<String> = JsonMissing.of(),
         @JsonProperty("subject") @ExcludeMissing subject: JsonField<String> = JsonMissing.of(),
     ) : this(
@@ -77,7 +73,6 @@ private constructor(
         failureCode,
         failureReason,
         from,
-        intendedRecipient,
         recipient,
         subject,
         mutableMapOf(),
@@ -164,14 +159,6 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun from(): String? = from.getNullable("from")
-
-    /**
-     * What the merchant typed, when test mode redirected the send to the business owner.
-     *
-     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
-    fun intendedRecipient(): String? = intendedRecipient.getNullable("intended_recipient")
 
     /**
      * The address the email reached.
@@ -266,16 +253,6 @@ private constructor(
     @JsonProperty("from") @ExcludeMissing fun _from(): JsonField<String> = from
 
     /**
-     * Returns the raw JSON value of [intendedRecipient].
-     *
-     * Unlike [intendedRecipient], this method doesn't throw if the JSON field has an unexpected
-     * type.
-     */
-    @JsonProperty("intended_recipient")
-    @ExcludeMissing
-    fun _intendedRecipient(): JsonField<String> = intendedRecipient
-
-    /**
      * Returns the raw JSON value of [recipient].
      *
      * Unlike [recipient], this method doesn't throw if the JSON field has an unexpected type.
@@ -333,7 +310,6 @@ private constructor(
         private var failureCode: JsonField<EmailFailureCode> = JsonMissing.of()
         private var failureReason: JsonField<String> = JsonMissing.of()
         private var from: JsonField<String> = JsonMissing.of()
-        private var intendedRecipient: JsonField<String> = JsonMissing.of()
         private var recipient: JsonField<String> = JsonMissing.of()
         private var subject: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -349,7 +325,6 @@ private constructor(
             failureCode = emailLogItem.failureCode
             failureReason = emailLogItem.failureReason
             from = emailLogItem.from
-            intendedRecipient = emailLogItem.intendedRecipient
             recipient = emailLogItem.recipient
             subject = emailLogItem.subject
             additionalProperties = emailLogItem.additionalProperties.toMutableMap()
@@ -485,21 +460,6 @@ private constructor(
          */
         fun from(from: JsonField<String>) = apply { this.from = from }
 
-        /** What the merchant typed, when test mode redirected the send to the business owner. */
-        fun intendedRecipient(intendedRecipient: String?) =
-            intendedRecipient(JsonField.ofNullable(intendedRecipient))
-
-        /**
-         * Sets [Builder.intendedRecipient] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.intendedRecipient] with a well-typed [String] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun intendedRecipient(intendedRecipient: JsonField<String>) = apply {
-            this.intendedRecipient = intendedRecipient
-        }
-
         /** The address the email reached. */
         fun recipient(recipient: String?) = recipient(JsonField.ofNullable(recipient))
 
@@ -572,7 +532,6 @@ private constructor(
                 failureCode,
                 failureReason,
                 from,
-                intendedRecipient,
                 recipient,
                 subject,
                 additionalProperties.toMutableMap(),
@@ -604,7 +563,6 @@ private constructor(
         failureCode()?.validate()
         failureReason()
         from()
-        intendedRecipient()
         recipient()
         subject()
         validated = true
@@ -634,7 +592,6 @@ private constructor(
             (failureCode.asKnown()?.validity() ?: 0) +
             (if (failureReason.asKnown() == null) 0 else 1) +
             (if (from.asKnown() == null) 0 else 1) +
-            (if (intendedRecipient.asKnown() == null) 0 else 1) +
             (if (recipient.asKnown() == null) 0 else 1) +
             (if (subject.asKnown() == null) 0 else 1)
 
@@ -654,7 +611,6 @@ private constructor(
             failureCode == other.failureCode &&
             failureReason == other.failureReason &&
             from == other.from &&
-            intendedRecipient == other.intendedRecipient &&
             recipient == other.recipient &&
             subject == other.subject &&
             additionalProperties == other.additionalProperties
@@ -672,7 +628,6 @@ private constructor(
             failureCode,
             failureReason,
             from,
-            intendedRecipient,
             recipient,
             subject,
             additionalProperties,
@@ -682,5 +637,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "EmailLogItem{category=$category, createdAt=$createdAt, emailLogId=$emailLogId, emailType=$emailType, hasPreview=$hasPreview, policies=$policies, status=$status, failureCode=$failureCode, failureReason=$failureReason, from=$from, intendedRecipient=$intendedRecipient, recipient=$recipient, subject=$subject, additionalProperties=$additionalProperties}"
+        "EmailLogItem{category=$category, createdAt=$createdAt, emailLogId=$emailLogId, emailType=$emailType, hasPreview=$hasPreview, policies=$policies, status=$status, failureCode=$failureCode, failureReason=$failureReason, from=$from, recipient=$recipient, subject=$subject, additionalProperties=$additionalProperties}"
 }
