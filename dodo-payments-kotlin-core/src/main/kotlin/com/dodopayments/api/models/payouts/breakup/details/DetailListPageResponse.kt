@@ -22,6 +22,7 @@ class DetailListPageResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val items: JsonField<List<DetailListResponse>>,
+    private val unattributed: JsonField<Long>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -29,8 +30,11 @@ private constructor(
     private constructor(
         @JsonProperty("items")
         @ExcludeMissing
-        items: JsonField<List<DetailListResponse>> = JsonMissing.of()
-    ) : this(items, mutableMapOf())
+        items: JsonField<List<DetailListResponse>> = JsonMissing.of(),
+        @JsonProperty("unattributed")
+        @ExcludeMissing
+        unattributed: JsonField<Long> = JsonMissing.of(),
+    ) : this(items, unattributed, mutableMapOf())
 
     /**
      * List of payout breakup detail entries.
@@ -41,11 +45,33 @@ private constructor(
     fun items(): List<DetailListResponse> = items.getRequired("items")
 
     /**
+     * The payout amount less every entry, in the payout's currency and its smallest unit.
+     *
+     * The entries alone do not sum to the payout. This field holds the difference, so the entries
+     * and this field together reconcile against the payout. It takes either sign; see
+     * `PayoutBreakupV3Row` for what each sign means. The value covers the whole payout, not the
+     * page.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun unattributed(): Long = unattributed.getRequired("unattributed")
+
+    /**
      * Returns the raw JSON value of [items].
      *
      * Unlike [items], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("items") @ExcludeMissing fun _items(): JsonField<List<DetailListResponse>> = items
+
+    /**
+     * Returns the raw JSON value of [unattributed].
+     *
+     * Unlike [unattributed], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("unattributed")
+    @ExcludeMissing
+    fun _unattributed(): JsonField<Long> = unattributed
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -67,6 +93,7 @@ private constructor(
          * The following fields are required:
          * ```kotlin
          * .items()
+         * .unattributed()
          * ```
          */
         fun builder() = Builder()
@@ -76,10 +103,12 @@ private constructor(
     class Builder internal constructor() {
 
         private var items: JsonField<MutableList<DetailListResponse>>? = null
+        private var unattributed: JsonField<Long>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(detailListPageResponse: DetailListPageResponse) = apply {
             items = detailListPageResponse.items.map { it.toMutableList() }
+            unattributed = detailListPageResponse.unattributed
             additionalProperties = detailListPageResponse.additionalProperties.toMutableMap()
         }
 
@@ -106,6 +135,25 @@ private constructor(
             items =
                 (items ?: JsonField.of(mutableListOf())).also { checkKnown("items", it).add(item) }
         }
+
+        /**
+         * The payout amount less every entry, in the payout's currency and its smallest unit.
+         *
+         * The entries alone do not sum to the payout. This field holds the difference, so the
+         * entries and this field together reconcile against the payout. It takes either sign; see
+         * `PayoutBreakupV3Row` for what each sign means. The value covers the whole payout, not the
+         * page.
+         */
+        fun unattributed(unattributed: Long) = unattributed(JsonField.of(unattributed))
+
+        /**
+         * Sets [Builder.unattributed] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.unattributed] with a well-typed [Long] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun unattributed(unattributed: JsonField<Long>) = apply { this.unattributed = unattributed }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -134,6 +182,7 @@ private constructor(
          * The following fields are required:
          * ```kotlin
          * .items()
+         * .unattributed()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
@@ -141,6 +190,7 @@ private constructor(
         fun build(): DetailListPageResponse =
             DetailListPageResponse(
                 checkRequired("items", items).map { it.toImmutable() },
+                checkRequired("unattributed", unattributed),
                 additionalProperties.toMutableMap(),
             )
     }
@@ -161,6 +211,7 @@ private constructor(
         }
 
         items().forEach { it.validate() }
+        unattributed()
         validated = true
     }
 
@@ -177,7 +228,9 @@ private constructor(
      *
      * Used for best match union deserialization.
      */
-    internal fun validity(): Int = (items.asKnown()?.sumOf { it.validity().toInt() } ?: 0)
+    internal fun validity(): Int =
+        (items.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (unattributed.asKnown() == null) 0 else 1)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -186,13 +239,14 @@ private constructor(
 
         return other is DetailListPageResponse &&
             items == other.items &&
+            unattributed == other.unattributed &&
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(items, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(items, unattributed, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "DetailListPageResponse{items=$items, additionalProperties=$additionalProperties}"
+        "DetailListPageResponse{items=$items, unattributed=$unattributed, additionalProperties=$additionalProperties}"
 }

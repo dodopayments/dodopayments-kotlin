@@ -90,8 +90,9 @@ private constructor(
     fun retryAllowed(): Boolean = retryAllowed.getRequired("retry_allowed")
 
     /**
-     * A later send of this email reached the provider, so this row is history. To send it again
-     * would deliver a second copy.
+     * A later send of this email replaced this row, so this row is history. A row that never went
+     * out needs a later send that reached the provider. A failed row needs a later send that was
+     * delivered.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -250,8 +251,9 @@ private constructor(
         }
 
         /**
-         * A later send of this email reached the provider, so this row is history. To send it again
-         * would deliver a second copy.
+         * A later send of this email replaced this row, so this row is history. A row that never
+         * went out needs a later send that reached the provider. A failed row needs a later send
+         * that was delivered.
          */
         fun superseded(superseded: Boolean) = superseded(JsonField.of(superseded))
 

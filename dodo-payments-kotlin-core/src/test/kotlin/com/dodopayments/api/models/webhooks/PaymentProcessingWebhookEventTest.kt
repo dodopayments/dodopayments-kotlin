@@ -75,6 +75,7 @@ internal class PaymentProcessingWebhookEventTest {
                                 .remarks("remarks")
                                 .build()
                         )
+                        .isMultiSubscription(true)
                         .isUpdatePaymentMethod(true)
                         .metadata(
                             Metadata.builder()
@@ -99,6 +100,7 @@ internal class PaymentProcessingWebhookEventTest {
                         .retryAttempt(0)
                         .settlementAmount(0)
                         .settlementCurrency(Currency.AED)
+                        .addSubscriptionId("string")
                         .totalAmount(0)
                         .cardHolderName("card_holder_name")
                         .cardIssuingCountry(CountryCode.AF)
@@ -204,6 +206,7 @@ internal class PaymentProcessingWebhookEventTest {
                             .remarks("remarks")
                             .build()
                     )
+                    .isMultiSubscription(true)
                     .isUpdatePaymentMethod(true)
                     .metadata(
                         Metadata.builder()
@@ -228,6 +231,7 @@ internal class PaymentProcessingWebhookEventTest {
                     .retryAttempt(0)
                     .settlementAmount(0)
                     .settlementCurrency(Currency.AED)
+                    .addSubscriptionId("string")
                     .totalAmount(0)
                     .cardHolderName("card_holder_name")
                     .cardIssuingCountry(CountryCode.AF)
@@ -335,6 +339,7 @@ internal class PaymentProcessingWebhookEventTest {
                                 .remarks("remarks")
                                 .build()
                         )
+                        .isMultiSubscription(true)
                         .isUpdatePaymentMethod(true)
                         .metadata(
                             Metadata.builder()
@@ -359,6 +364,7 @@ internal class PaymentProcessingWebhookEventTest {
                         .retryAttempt(0)
                         .settlementAmount(0)
                         .settlementCurrency(Currency.AED)
+                        .addSubscriptionId("string")
                         .totalAmount(0)
                         .cardHolderName("card_holder_name")
                         .cardIssuingCountry(CountryCode.AF)

@@ -38,6 +38,7 @@ internal class PaymentListPageResponseTest {
                         )
                         .digitalProductsDelivered(true)
                         .hasLicenseKey(true)
+                        .isMultiSubscription(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -45,6 +46,7 @@ internal class PaymentListPageResponseTest {
                         )
                         .paymentId("payment_id")
                         .paymentProvider(PaymentListResponse.PaymentProvider.STRIPE)
+                        .addSubscriptionId("string")
                         .totalAmount(0)
                         .cardLastFour("card_last_four")
                         .cardNetwork("card_network")
@@ -81,6 +83,7 @@ internal class PaymentListPageResponseTest {
                     )
                     .digitalProductsDelivered(true)
                     .hasLicenseKey(true)
+                    .isMultiSubscription(true)
                     .metadata(
                         Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -88,6 +91,7 @@ internal class PaymentListPageResponseTest {
                     )
                     .paymentId("payment_id")
                     .paymentProvider(PaymentListResponse.PaymentProvider.STRIPE)
+                    .addSubscriptionId("string")
                     .totalAmount(0)
                     .cardLastFour("card_last_four")
                     .cardNetwork("card_network")
@@ -128,6 +132,7 @@ internal class PaymentListPageResponseTest {
                         )
                         .digitalProductsDelivered(true)
                         .hasLicenseKey(true)
+                        .isMultiSubscription(true)
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -135,6 +140,7 @@ internal class PaymentListPageResponseTest {
                         )
                         .paymentId("payment_id")
                         .paymentProvider(PaymentListResponse.PaymentProvider.STRIPE)
+                        .addSubscriptionId("string")
                         .totalAmount(0)
                         .cardLastFour("card_last_four")
                         .cardNetwork("card_network")
