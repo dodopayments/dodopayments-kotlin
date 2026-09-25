@@ -7,7 +7,9 @@ import com.dodopayments.api.core.ExcludeMissing
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
+import com.dodopayments.api.core.checkKnown
 import com.dodopayments.api.core.checkRequired
+import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.dodopayments.api.models.disputes.DisputeStatus
 import com.dodopayments.api.models.misc.Currency
@@ -29,9 +31,11 @@ private constructor(
     private val customer: JsonField<CustomerLimitedDetails>,
     private val digitalProductsDelivered: JsonField<Boolean>,
     private val hasLicenseKey: JsonField<Boolean>,
+    private val isMultiSubscription: JsonField<Boolean>,
     private val metadata: JsonField<Metadata>,
     private val paymentId: JsonField<String>,
     private val paymentProvider: JsonField<PaymentProvider>,
+    private val subscriptionIds: JsonField<List<String>>,
     private val totalAmount: JsonField<Int>,
     private val cardLastFour: JsonField<String>,
     private val cardNetwork: JsonField<String>,
@@ -62,11 +66,17 @@ private constructor(
         @JsonProperty("has_license_key")
         @ExcludeMissing
         hasLicenseKey: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("is_multi_subscription")
+        @ExcludeMissing
+        isMultiSubscription: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("metadata") @ExcludeMissing metadata: JsonField<Metadata> = JsonMissing.of(),
         @JsonProperty("payment_id") @ExcludeMissing paymentId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("payment_provider")
         @ExcludeMissing
         paymentProvider: JsonField<PaymentProvider> = JsonMissing.of(),
+        @JsonProperty("subscription_ids")
+        @ExcludeMissing
+        subscriptionIds: JsonField<List<String>> = JsonMissing.of(),
         @JsonProperty("total_amount")
         @ExcludeMissing
         totalAmount: JsonField<Int> = JsonMissing.of(),
@@ -103,9 +113,11 @@ private constructor(
         customer,
         digitalProductsDelivered,
         hasLicenseKey,
+        isMultiSubscription,
         metadata,
         paymentId,
         paymentProvider,
+        subscriptionIds,
         totalAmount,
         cardLastFour,
         cardNetwork,
@@ -158,6 +170,15 @@ private constructor(
     fun hasLicenseKey(): Boolean = hasLicenseKey.getRequired("has_license_key")
 
     /**
+     * True when one payment starts more than one subscription. Read this field to find the payment
+     * type. Do not read the length of `subscription_ids`. Do not read `subscription_id` for null.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun isMultiSubscription(): Boolean = isMultiSubscription.getRequired("is_multi_subscription")
+
+    /**
      * Arbitrary key-value metadata. Values can be string, integer, number, or boolean.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
@@ -179,6 +200,16 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun paymentProvider(): PaymentProvider = paymentProvider.getRequired("payment_provider")
+
+    /**
+     * Every subscription that this payment starts or charges, in a stable order. It is empty for a
+     * one-time payment. It holds the value of `subscription_id` when the payment names one
+     * subscription.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun subscriptionIds(): List<String> = subscriptionIds.getRequired("subscription_ids")
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
@@ -310,6 +341,16 @@ private constructor(
     fun _hasLicenseKey(): JsonField<Boolean> = hasLicenseKey
 
     /**
+     * Returns the raw JSON value of [isMultiSubscription].
+     *
+     * Unlike [isMultiSubscription], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("is_multi_subscription")
+    @ExcludeMissing
+    fun _isMultiSubscription(): JsonField<Boolean> = isMultiSubscription
+
+    /**
      * Returns the raw JSON value of [metadata].
      *
      * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
@@ -331,6 +372,15 @@ private constructor(
     @JsonProperty("payment_provider")
     @ExcludeMissing
     fun _paymentProvider(): JsonField<PaymentProvider> = paymentProvider
+
+    /**
+     * Returns the raw JSON value of [subscriptionIds].
+     *
+     * Unlike [subscriptionIds], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("subscription_ids")
+    @ExcludeMissing
+    fun _subscriptionIds(): JsonField<List<String>> = subscriptionIds
 
     /**
      * Returns the raw JSON value of [totalAmount].
@@ -449,9 +499,11 @@ private constructor(
          * .customer()
          * .digitalProductsDelivered()
          * .hasLicenseKey()
+         * .isMultiSubscription()
          * .metadata()
          * .paymentId()
          * .paymentProvider()
+         * .subscriptionIds()
          * .totalAmount()
          * ```
          */
@@ -467,9 +519,11 @@ private constructor(
         private var customer: JsonField<CustomerLimitedDetails>? = null
         private var digitalProductsDelivered: JsonField<Boolean>? = null
         private var hasLicenseKey: JsonField<Boolean>? = null
+        private var isMultiSubscription: JsonField<Boolean>? = null
         private var metadata: JsonField<Metadata>? = null
         private var paymentId: JsonField<String>? = null
         private var paymentProvider: JsonField<PaymentProvider>? = null
+        private var subscriptionIds: JsonField<MutableList<String>>? = null
         private var totalAmount: JsonField<Int>? = null
         private var cardLastFour: JsonField<String> = JsonMissing.of()
         private var cardNetwork: JsonField<String> = JsonMissing.of()
@@ -490,9 +544,11 @@ private constructor(
             customer = paymentListResponse.customer
             digitalProductsDelivered = paymentListResponse.digitalProductsDelivered
             hasLicenseKey = paymentListResponse.hasLicenseKey
+            isMultiSubscription = paymentListResponse.isMultiSubscription
             metadata = paymentListResponse.metadata
             paymentId = paymentListResponse.paymentId
             paymentProvider = paymentListResponse.paymentProvider
+            subscriptionIds = paymentListResponse.subscriptionIds.map { it.toMutableList() }
             totalAmount = paymentListResponse.totalAmount
             cardLastFour = paymentListResponse.cardLastFour
             cardNetwork = paymentListResponse.cardNetwork
@@ -579,6 +635,25 @@ private constructor(
             this.hasLicenseKey = hasLicenseKey
         }
 
+        /**
+         * True when one payment starts more than one subscription. Read this field to find the
+         * payment type. Do not read the length of `subscription_ids`. Do not read `subscription_id`
+         * for null.
+         */
+        fun isMultiSubscription(isMultiSubscription: Boolean) =
+            isMultiSubscription(JsonField.of(isMultiSubscription))
+
+        /**
+         * Sets [Builder.isMultiSubscription] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.isMultiSubscription] with a well-typed [Boolean] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun isMultiSubscription(isMultiSubscription: JsonField<Boolean>) = apply {
+            this.isMultiSubscription = isMultiSubscription
+        }
+
         /** Arbitrary key-value metadata. Values can be string, integer, number, or boolean. */
         fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
@@ -618,6 +693,37 @@ private constructor(
          */
         fun paymentProvider(paymentProvider: JsonField<PaymentProvider>) = apply {
             this.paymentProvider = paymentProvider
+        }
+
+        /**
+         * Every subscription that this payment starts or charges, in a stable order. It is empty
+         * for a one-time payment. It holds the value of `subscription_id` when the payment names
+         * one subscription.
+         */
+        fun subscriptionIds(subscriptionIds: List<String>) =
+            subscriptionIds(JsonField.of(subscriptionIds))
+
+        /**
+         * Sets [Builder.subscriptionIds] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.subscriptionIds] with a well-typed `List<String>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun subscriptionIds(subscriptionIds: JsonField<List<String>>) = apply {
+            this.subscriptionIds = subscriptionIds.map { it.toMutableList() }
+        }
+
+        /**
+         * Adds a single [String] to [subscriptionIds].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addSubscriptionId(subscriptionId: String) = apply {
+            subscriptionIds =
+                (subscriptionIds ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("subscriptionIds", it).add(subscriptionId)
+                }
         }
 
         fun totalAmount(totalAmount: Int) = totalAmount(JsonField.of(totalAmount))
@@ -795,9 +901,11 @@ private constructor(
          * .customer()
          * .digitalProductsDelivered()
          * .hasLicenseKey()
+         * .isMultiSubscription()
          * .metadata()
          * .paymentId()
          * .paymentProvider()
+         * .subscriptionIds()
          * .totalAmount()
          * ```
          *
@@ -811,9 +919,11 @@ private constructor(
                 checkRequired("customer", customer),
                 checkRequired("digitalProductsDelivered", digitalProductsDelivered),
                 checkRequired("hasLicenseKey", hasLicenseKey),
+                checkRequired("isMultiSubscription", isMultiSubscription),
                 checkRequired("metadata", metadata),
                 checkRequired("paymentId", paymentId),
                 checkRequired("paymentProvider", paymentProvider),
+                checkRequired("subscriptionIds", subscriptionIds).map { it.toImmutable() },
                 checkRequired("totalAmount", totalAmount),
                 cardLastFour,
                 cardNetwork,
@@ -850,9 +960,11 @@ private constructor(
         customer().validate()
         digitalProductsDelivered()
         hasLicenseKey()
+        isMultiSubscription()
         metadata().validate()
         paymentId()
         paymentProvider().validate()
+        subscriptionIds()
         totalAmount()
         cardLastFour()
         cardNetwork()
@@ -887,9 +999,11 @@ private constructor(
             (customer.asKnown()?.validity() ?: 0) +
             (if (digitalProductsDelivered.asKnown() == null) 0 else 1) +
             (if (hasLicenseKey.asKnown() == null) 0 else 1) +
+            (if (isMultiSubscription.asKnown() == null) 0 else 1) +
             (metadata.asKnown()?.validity() ?: 0) +
             (if (paymentId.asKnown() == null) 0 else 1) +
             (paymentProvider.asKnown()?.validity() ?: 0) +
+            (subscriptionIds.asKnown()?.size ?: 0) +
             (if (totalAmount.asKnown() == null) 0 else 1) +
             (if (cardLastFour.asKnown() == null) 0 else 1) +
             (if (cardNetwork.asKnown() == null) 0 else 1) +
@@ -1062,9 +1176,11 @@ private constructor(
             customer == other.customer &&
             digitalProductsDelivered == other.digitalProductsDelivered &&
             hasLicenseKey == other.hasLicenseKey &&
+            isMultiSubscription == other.isMultiSubscription &&
             metadata == other.metadata &&
             paymentId == other.paymentId &&
             paymentProvider == other.paymentProvider &&
+            subscriptionIds == other.subscriptionIds &&
             totalAmount == other.totalAmount &&
             cardLastFour == other.cardLastFour &&
             cardNetwork == other.cardNetwork &&
@@ -1087,9 +1203,11 @@ private constructor(
             customer,
             digitalProductsDelivered,
             hasLicenseKey,
+            isMultiSubscription,
             metadata,
             paymentId,
             paymentProvider,
+            subscriptionIds,
             totalAmount,
             cardLastFour,
             cardNetwork,
@@ -1108,5 +1226,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "PaymentListResponse{brandId=$brandId, createdAt=$createdAt, currency=$currency, customer=$customer, digitalProductsDelivered=$digitalProductsDelivered, hasLicenseKey=$hasLicenseKey, metadata=$metadata, paymentId=$paymentId, paymentProvider=$paymentProvider, totalAmount=$totalAmount, cardLastFour=$cardLastFour, cardNetwork=$cardNetwork, disputeStatus=$disputeStatus, invoiceId=$invoiceId, invoiceUrl=$invoiceUrl, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, refundStatus=$refundStatus, status=$status, subscriptionId=$subscriptionId, additionalProperties=$additionalProperties}"
+        "PaymentListResponse{brandId=$brandId, createdAt=$createdAt, currency=$currency, customer=$customer, digitalProductsDelivered=$digitalProductsDelivered, hasLicenseKey=$hasLicenseKey, isMultiSubscription=$isMultiSubscription, metadata=$metadata, paymentId=$paymentId, paymentProvider=$paymentProvider, subscriptionIds=$subscriptionIds, totalAmount=$totalAmount, cardLastFour=$cardLastFour, cardNetwork=$cardNetwork, disputeStatus=$disputeStatus, invoiceId=$invoiceId, invoiceUrl=$invoiceUrl, paymentMethod=$paymentMethod, paymentMethodType=$paymentMethodType, refundStatus=$refundStatus, status=$status, subscriptionId=$subscriptionId, additionalProperties=$additionalProperties}"
 }

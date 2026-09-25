@@ -33,6 +33,7 @@ private constructor(
     private val allowTaxId: JsonField<Boolean>,
     private val alwaysCreateNewCustomer: JsonField<Boolean>,
     private val redirectImmediately: JsonField<Boolean>,
+    private val requireCardholderName: JsonField<Boolean>,
     private val requirePhoneNumber: JsonField<Boolean>,
     private val requireTaxId: JsonField<Boolean>,
     private val singlePage: JsonField<Boolean>,
@@ -89,6 +90,9 @@ private constructor(
         @JsonProperty("redirect_immediately")
         @ExcludeMissing
         redirectImmediately: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("require_cardholder_name")
+        @ExcludeMissing
+        requireCardholderName: JsonField<Boolean> = JsonMissing.of(),
         @JsonProperty("require_phone_number")
         @ExcludeMissing
         requirePhoneNumber: JsonField<Boolean> = JsonMissing.of(),
@@ -115,6 +119,7 @@ private constructor(
         allowTaxId,
         alwaysCreateNewCustomer,
         redirectImmediately,
+        requireCardholderName,
         requirePhoneNumber,
         requireTaxId,
         singlePage,
@@ -264,6 +269,18 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun redirectImmediately(): Boolean? = redirectImmediately.getNullable("redirect_immediately")
+
+    /**
+     * If true, the customer must give the name on the card to pay by card. The checkout page
+     * enforces this. Other payment methods ignore it.
+     *
+     * Default is false
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun requireCardholderName(): Boolean? =
+        requireCardholderName.getNullable("require_cardholder_name")
 
     /**
      * If true, the customer must provide a phone number to complete checkout. Requires
@@ -461,6 +478,16 @@ private constructor(
     fun _redirectImmediately(): JsonField<Boolean> = redirectImmediately
 
     /**
+     * Returns the raw JSON value of [requireCardholderName].
+     *
+     * Unlike [requireCardholderName], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("require_cardholder_name")
+    @ExcludeMissing
+    fun _requireCardholderName(): JsonField<Boolean> = requireCardholderName
+
+    /**
      * Returns the raw JSON value of [requirePhoneNumber].
      *
      * Unlike [requirePhoneNumber], this method doesn't throw if the JSON field has an unexpected
@@ -523,6 +550,7 @@ private constructor(
         private var allowTaxId: JsonField<Boolean> = JsonMissing.of()
         private var alwaysCreateNewCustomer: JsonField<Boolean> = JsonMissing.of()
         private var redirectImmediately: JsonField<Boolean> = JsonMissing.of()
+        private var requireCardholderName: JsonField<Boolean> = JsonMissing.of()
         private var requirePhoneNumber: JsonField<Boolean> = JsonMissing.of()
         private var requireTaxId: JsonField<Boolean> = JsonMissing.of()
         private var singlePage: JsonField<Boolean> = JsonMissing.of()
@@ -545,6 +573,7 @@ private constructor(
             allowTaxId = checkoutSessionFlags.allowTaxId
             alwaysCreateNewCustomer = checkoutSessionFlags.alwaysCreateNewCustomer
             redirectImmediately = checkoutSessionFlags.redirectImmediately
+            requireCardholderName = checkoutSessionFlags.requireCardholderName
             requirePhoneNumber = checkoutSessionFlags.requirePhoneNumber
             requireTaxId = checkoutSessionFlags.requireTaxId
             singlePage = checkoutSessionFlags.singlePage
@@ -818,6 +847,26 @@ private constructor(
         }
 
         /**
+         * If true, the customer must give the name on the card to pay by card. The checkout page
+         * enforces this. Other payment methods ignore it.
+         *
+         * Default is false
+         */
+        fun requireCardholderName(requireCardholderName: Boolean) =
+            requireCardholderName(JsonField.of(requireCardholderName))
+
+        /**
+         * Sets [Builder.requireCardholderName] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.requireCardholderName] with a well-typed [Boolean] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun requireCardholderName(requireCardholderName: JsonField<Boolean>) = apply {
+            this.requireCardholderName = requireCardholderName
+        }
+
+        /**
          * If true, the customer must provide a phone number to complete checkout. Requires
          * `allow_phone_number_collection` to also be true.
          *
@@ -920,6 +969,7 @@ private constructor(
                 allowTaxId,
                 alwaysCreateNewCustomer,
                 redirectImmediately,
+                requireCardholderName,
                 requirePhoneNumber,
                 requireTaxId,
                 singlePage,
@@ -958,6 +1008,7 @@ private constructor(
         allowTaxId()
         alwaysCreateNewCustomer()
         redirectImmediately()
+        requireCardholderName()
         requirePhoneNumber()
         requireTaxId()
         singlePage()
@@ -994,6 +1045,7 @@ private constructor(
             (if (allowTaxId.asKnown() == null) 0 else 1) +
             (if (alwaysCreateNewCustomer.asKnown() == null) 0 else 1) +
             (if (redirectImmediately.asKnown() == null) 0 else 1) +
+            (if (requireCardholderName.asKnown() == null) 0 else 1) +
             (if (requirePhoneNumber.asKnown() == null) 0 else 1) +
             (if (requireTaxId.asKnown() == null) 0 else 1) +
             (if (singlePage.asKnown() == null) 0 else 1)
@@ -1020,6 +1072,7 @@ private constructor(
             allowTaxId == other.allowTaxId &&
             alwaysCreateNewCustomer == other.alwaysCreateNewCustomer &&
             redirectImmediately == other.redirectImmediately &&
+            requireCardholderName == other.requireCardholderName &&
             requirePhoneNumber == other.requirePhoneNumber &&
             requireTaxId == other.requireTaxId &&
             singlePage == other.singlePage &&
@@ -1044,6 +1097,7 @@ private constructor(
             allowTaxId,
             alwaysCreateNewCustomer,
             redirectImmediately,
+            requireCardholderName,
             requirePhoneNumber,
             requireTaxId,
             singlePage,
@@ -1054,5 +1108,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CheckoutSessionFlags{allowCurrencySelection=$allowCurrencySelection, allowCustomerEditingBusinessName=$allowCustomerEditingBusinessName, allowCustomerEditingCity=$allowCustomerEditingCity, allowCustomerEditingCountry=$allowCustomerEditingCountry, allowCustomerEditingEmail=$allowCustomerEditingEmail, allowCustomerEditingName=$allowCustomerEditingName, allowCustomerEditingState=$allowCustomerEditingState, allowCustomerEditingStreet=$allowCustomerEditingStreet, allowCustomerEditingTaxId=$allowCustomerEditingTaxId, allowCustomerEditingZipcode=$allowCustomerEditingZipcode, allowDiscountCode=$allowDiscountCode, allowEditingAddons=$allowEditingAddons, allowPhoneNumberCollection=$allowPhoneNumberCollection, allowTaxId=$allowTaxId, alwaysCreateNewCustomer=$alwaysCreateNewCustomer, redirectImmediately=$redirectImmediately, requirePhoneNumber=$requirePhoneNumber, requireTaxId=$requireTaxId, singlePage=$singlePage, additionalProperties=$additionalProperties}"
+        "CheckoutSessionFlags{allowCurrencySelection=$allowCurrencySelection, allowCustomerEditingBusinessName=$allowCustomerEditingBusinessName, allowCustomerEditingCity=$allowCustomerEditingCity, allowCustomerEditingCountry=$allowCustomerEditingCountry, allowCustomerEditingEmail=$allowCustomerEditingEmail, allowCustomerEditingName=$allowCustomerEditingName, allowCustomerEditingState=$allowCustomerEditingState, allowCustomerEditingStreet=$allowCustomerEditingStreet, allowCustomerEditingTaxId=$allowCustomerEditingTaxId, allowCustomerEditingZipcode=$allowCustomerEditingZipcode, allowDiscountCode=$allowDiscountCode, allowEditingAddons=$allowEditingAddons, allowPhoneNumberCollection=$allowPhoneNumberCollection, allowTaxId=$allowTaxId, alwaysCreateNewCustomer=$alwaysCreateNewCustomer, redirectImmediately=$redirectImmediately, requireCardholderName=$requireCardholderName, requirePhoneNumber=$requirePhoneNumber, requireTaxId=$requireTaxId, singlePage=$singlePage, additionalProperties=$additionalProperties}"
 }

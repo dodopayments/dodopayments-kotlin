@@ -19,6 +19,7 @@ import com.dodopayments.api.services.async.LicenseKeyServiceAsync
 import com.dodopayments.api.services.async.LicenseServiceAsync
 import com.dodopayments.api.services.async.MeterServiceAsync
 import com.dodopayments.api.services.async.MiscServiceAsync
+import com.dodopayments.api.services.async.ModerationServiceAsync
 import com.dodopayments.api.services.async.PaymentServiceAsync
 import com.dodopayments.api.services.async.PayoutServiceAsync
 import com.dodopayments.api.services.async.ProductCollectionServiceAsync
@@ -115,6 +116,8 @@ interface DodoPaymentsClientAsync {
 
     fun productCollections(): ProductCollectionServiceAsync
 
+    fun moderation(): ModerationServiceAsync
+
     /**
      * Closes this client, relinquishing any underlying resources.
      *
@@ -192,5 +195,7 @@ interface DodoPaymentsClientAsync {
         fun entitlements(): EntitlementServiceAsync.WithRawResponse
 
         fun productCollections(): ProductCollectionServiceAsync.WithRawResponse
+
+        fun moderation(): ModerationServiceAsync.WithRawResponse
     }
 }

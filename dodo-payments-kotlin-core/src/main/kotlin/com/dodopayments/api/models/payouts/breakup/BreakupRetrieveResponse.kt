@@ -15,7 +15,20 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
 
-/** Payout breakup aggregated by event type, with amounts in the payout's currency. */
+/**
+ * Payout breakup aggregated by event type, with amounts in the payout's currency.
+ *
+ * The rows sum to the payout amount. The last row can be `unattributed`, which is not a ledger
+ * event type. It holds the payout amount less the entries that fund it, and it takes either sign:
+ * - Positive: the entries come to less than the payout, so the payout drew on the balance an
+ *   earlier cycle left over. A cycle of refunds and disputes produces a large positive value.
+ * - Negative: the entries come to more than the payout, and the remainder funds a later payout.
+ *   This is the common case, for two reasons. The walk that claims the entries stops at the first
+ *   one that reaches its target, so it passes the target by part of an entry. The target is also
+ *   the gross debit, which holds the payout fee, and the fee is not a line here.
+ *
+ * The row is absent when the two are equal.
+ */
 class BreakupRetrieveResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
@@ -31,7 +44,8 @@ private constructor(
     ) : this(eventType, total, mutableMapOf())
 
     /**
-     * The type of balance ledger event (e.g., "payment", "refund", "dispute", "payment_fees").
+     * The type of balance ledger event (e.g., "payment", "refund", "dispute", "payment_fees"), or
+     * `unattributed` for the payout amount the entries do not account for.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -101,7 +115,8 @@ private constructor(
         }
 
         /**
-         * The type of balance ledger event (e.g., "payment", "refund", "dispute", "payment_fees").
+         * The type of balance ledger event (e.g., "payment", "refund", "dispute", "payment_fees"),
+         * or `unattributed` for the payout amount the entries do not account for.
          */
         fun eventType(eventType: String) = eventType(JsonField.of(eventType))
 
