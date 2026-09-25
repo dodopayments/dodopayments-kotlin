@@ -36,6 +36,7 @@ internal class PaymentListResponseTest {
                 )
                 .digitalProductsDelivered(true)
                 .hasLicenseKey(true)
+                .isMultiSubscription(true)
                 .metadata(
                     Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -43,6 +44,7 @@ internal class PaymentListResponseTest {
                 )
                 .paymentId("payment_id")
                 .paymentProvider(PaymentListResponse.PaymentProvider.STRIPE)
+                .addSubscriptionId("string")
                 .totalAmount(0)
                 .cardLastFour("card_last_four")
                 .cardNetwork("card_network")
@@ -76,6 +78,7 @@ internal class PaymentListResponseTest {
             )
         assertThat(paymentListResponse.digitalProductsDelivered()).isEqualTo(true)
         assertThat(paymentListResponse.hasLicenseKey()).isEqualTo(true)
+        assertThat(paymentListResponse.isMultiSubscription()).isEqualTo(true)
         assertThat(paymentListResponse.metadata())
             .isEqualTo(
                 Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
@@ -83,6 +86,7 @@ internal class PaymentListResponseTest {
         assertThat(paymentListResponse.paymentId()).isEqualTo("payment_id")
         assertThat(paymentListResponse.paymentProvider())
             .isEqualTo(PaymentListResponse.PaymentProvider.STRIPE)
+        assertThat(paymentListResponse.subscriptionIds()).containsExactly("string")
         assertThat(paymentListResponse.totalAmount()).isEqualTo(0)
         assertThat(paymentListResponse.cardLastFour()).isEqualTo("card_last_four")
         assertThat(paymentListResponse.cardNetwork()).isEqualTo("card_network")
@@ -119,6 +123,7 @@ internal class PaymentListResponseTest {
                 )
                 .digitalProductsDelivered(true)
                 .hasLicenseKey(true)
+                .isMultiSubscription(true)
                 .metadata(
                     Metadata.builder()
                         .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -126,6 +131,7 @@ internal class PaymentListResponseTest {
                 )
                 .paymentId("payment_id")
                 .paymentProvider(PaymentListResponse.PaymentProvider.STRIPE)
+                .addSubscriptionId("string")
                 .totalAmount(0)
                 .cardLastFour("card_last_four")
                 .cardNetwork("card_network")

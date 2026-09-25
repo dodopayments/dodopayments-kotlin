@@ -161,7 +161,8 @@ private constructor(
     fun from(): String? = from.getNullable("from")
 
     /**
-     * The address the email reached.
+     * The address the email went to. On a failed email this is the address the provider reports as
+     * bounced.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
@@ -460,7 +461,10 @@ private constructor(
          */
         fun from(from: JsonField<String>) = apply { this.from = from }
 
-        /** The address the email reached. */
+        /**
+         * The address the email went to. On a failed email this is the address the provider reports
+         * as bounced.
+         */
         fun recipient(recipient: String?) = recipient(JsonField.ofNullable(recipient))
 
         /**

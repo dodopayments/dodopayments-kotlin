@@ -36,6 +36,8 @@ import com.dodopayments.api.services.async.MeterServiceAsync
 import com.dodopayments.api.services.async.MeterServiceAsyncImpl
 import com.dodopayments.api.services.async.MiscServiceAsync
 import com.dodopayments.api.services.async.MiscServiceAsyncImpl
+import com.dodopayments.api.services.async.ModerationServiceAsync
+import com.dodopayments.api.services.async.ModerationServiceAsyncImpl
 import com.dodopayments.api.services.async.PaymentServiceAsync
 import com.dodopayments.api.services.async.PaymentServiceAsyncImpl
 import com.dodopayments.api.services.async.PayoutServiceAsync
@@ -171,6 +173,10 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
         ProductCollectionServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
+    private val moderation: ModerationServiceAsync by lazy {
+        ModerationServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
+
     override fun sync(): DodoPaymentsClient = sync
 
     override fun withRawResponse(): DodoPaymentsClientAsync.WithRawResponse = withRawResponse
@@ -227,6 +233,8 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
     override fun entitlements(): EntitlementServiceAsync = entitlements
 
     override fun productCollections(): ProductCollectionServiceAsync = productCollections
+
+    override fun moderation(): ModerationServiceAsync = moderation
 
     override fun close() = clientOptions.close()
 
@@ -333,6 +341,10 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
             ProductCollectionServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val moderation: ModerationServiceAsync.WithRawResponse by lazy {
+            ModerationServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): DodoPaymentsClientAsync.WithRawResponse =
@@ -393,5 +405,7 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
 
         override fun productCollections(): ProductCollectionServiceAsync.WithRawResponse =
             productCollections
+
+        override fun moderation(): ModerationServiceAsync.WithRawResponse = moderation
     }
 }

@@ -180,6 +180,7 @@ internal class ServiceParamsTest {
                                 .allowTaxId(true)
                                 .alwaysCreateNewCustomer(true)
                                 .redirectImmediately(true)
+                                .requireCardholderName(true)
                                 .requirePhoneNumber(true)
                                 .requireTaxId(true)
                                 .singlePage(true)
