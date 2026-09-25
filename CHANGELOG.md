@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.118.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.117.0...v1.118.0) (2026-09-25)
+
+
+### Features
+
+* **api:** add moderation API and multi-subscription payments ([94b787f](https://github.com/dodopayments/dodopayments-kotlin/commit/94b787ffee65a0d5bd2f832d25a1ee33c14b52b7))
+* **api:** add moderation API and multi-subscription payments ([4e1f207](https://github.com/dodopayments/dodopayments-kotlin/commit/4e1f207b1cb46ce9e382804665764e0866d73ed4))
+
 ## [1.117.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.116.0...v1.117.0) (2026-09-18)
 
 
