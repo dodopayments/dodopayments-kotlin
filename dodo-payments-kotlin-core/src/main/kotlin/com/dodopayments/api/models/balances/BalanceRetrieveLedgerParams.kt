@@ -1346,6 +1346,12 @@ private constructor(
 
             val DEFLECTION_FEES_REVERSAL = of("deflection_fees_reversal")
 
+            val RESERVE_HOLD = of("reserve_hold")
+
+            val RESERVE_RELEASE = of("reserve_release")
+
+            val MODERATION_FEES = of("moderation_fees")
+
             fun of(value: String) = EventType(JsonField.of(value))
         }
 
@@ -1379,6 +1385,9 @@ private constructor(
             DISPUTE_FEES_REVERSAL,
             DEFLECTION_FEES,
             DEFLECTION_FEES_REVERSAL,
+            RESERVE_HOLD,
+            RESERVE_RELEASE,
+            MODERATION_FEES,
         }
 
         /**
@@ -1419,6 +1428,9 @@ private constructor(
             DISPUTE_FEES_REVERSAL,
             DEFLECTION_FEES,
             DEFLECTION_FEES_REVERSAL,
+            RESERVE_HOLD,
+            RESERVE_RELEASE,
+            MODERATION_FEES,
             /**
              * An enum member indicating that [EventType] was instantiated with an unknown value.
              */
@@ -1462,6 +1474,9 @@ private constructor(
                 DISPUTE_FEES_REVERSAL -> Value.DISPUTE_FEES_REVERSAL
                 DEFLECTION_FEES -> Value.DEFLECTION_FEES
                 DEFLECTION_FEES_REVERSAL -> Value.DEFLECTION_FEES_REVERSAL
+                RESERVE_HOLD -> Value.RESERVE_HOLD
+                RESERVE_RELEASE -> Value.RESERVE_RELEASE
+                MODERATION_FEES -> Value.MODERATION_FEES
                 else -> Value._UNKNOWN
             }
 
@@ -1504,6 +1519,9 @@ private constructor(
                 DISPUTE_FEES_REVERSAL -> Known.DISPUTE_FEES_REVERSAL
                 DEFLECTION_FEES -> Known.DEFLECTION_FEES
                 DEFLECTION_FEES_REVERSAL -> Known.DEFLECTION_FEES_REVERSAL
+                RESERVE_HOLD -> Known.RESERVE_HOLD
+                RESERVE_RELEASE -> Known.RESERVE_RELEASE
+                MODERATION_FEES -> Known.MODERATION_FEES
                 else -> throw DodoPaymentsInvalidDataException("Unknown EventType: $value")
             }
 

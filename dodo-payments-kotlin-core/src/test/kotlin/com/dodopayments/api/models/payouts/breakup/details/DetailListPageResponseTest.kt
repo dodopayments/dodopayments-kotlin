@@ -27,6 +27,7 @@ internal class DetailListPageResponseTest {
                         .referenceObjectId("reference_object_id")
                         .build()
                 )
+                .unattributed(0L)
                 .build()
 
         assertThat(detailListPageResponse.items())
@@ -43,6 +44,7 @@ internal class DetailListPageResponseTest {
                     .referenceObjectId("reference_object_id")
                     .build()
             )
+        assertThat(detailListPageResponse.unattributed()).isEqualTo(0L)
     }
 
     @Test
@@ -63,6 +65,7 @@ internal class DetailListPageResponseTest {
                         .referenceObjectId("reference_object_id")
                         .build()
                 )
+                .unattributed(0L)
                 .build()
 
         val roundtrippedDetailListPageResponse =

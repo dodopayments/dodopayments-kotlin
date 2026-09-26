@@ -65,6 +65,7 @@ internal class PaymentTest {
                         .remarks("remarks")
                         .build()
                 )
+                .isMultiSubscription(true)
                 .isUpdatePaymentMethod(true)
                 .metadata(
                     Metadata.builder()
@@ -89,6 +90,7 @@ internal class PaymentTest {
                 .retryAttempt(0)
                 .settlementAmount(0)
                 .settlementCurrency(Currency.AED)
+                .addSubscriptionId("string")
                 .totalAmount(0)
                 .cardHolderName("card_holder_name")
                 .cardIssuingCountry(CountryCode.AF)
@@ -187,6 +189,7 @@ internal class PaymentTest {
                     .remarks("remarks")
                     .build()
             )
+        assertThat(payment.isMultiSubscription()).isEqualTo(true)
         assertThat(payment.isUpdatePaymentMethod()).isEqualTo(true)
         assertThat(payment.metadata())
             .isEqualTo(
@@ -211,6 +214,7 @@ internal class PaymentTest {
         assertThat(payment.retryAttempt()).isEqualTo(0)
         assertThat(payment.settlementAmount()).isEqualTo(0)
         assertThat(payment.settlementCurrency()).isEqualTo(Currency.AED)
+        assertThat(payment.subscriptionIds()).containsExactly("string")
         assertThat(payment.totalAmount()).isEqualTo(0)
         assertThat(payment.cardHolderName()).isEqualTo("card_holder_name")
         assertThat(payment.cardIssuingCountry()).isEqualTo(CountryCode.AF)
@@ -312,6 +316,7 @@ internal class PaymentTest {
                         .remarks("remarks")
                         .build()
                 )
+                .isMultiSubscription(true)
                 .isUpdatePaymentMethod(true)
                 .metadata(
                     Metadata.builder()
@@ -336,6 +341,7 @@ internal class PaymentTest {
                 .retryAttempt(0)
                 .settlementAmount(0)
                 .settlementCurrency(Currency.AED)
+                .addSubscriptionId("string")
                 .totalAmount(0)
                 .cardHolderName("card_holder_name")
                 .cardIssuingCountry(CountryCode.AF)

@@ -61,9 +61,10 @@ private constructor(
     fun code(): String? = body.code()
 
     /**
-     * Per-currency options (flat deduction / percentage cap + minimum subtotal). Required for
-     * `flat` codes (must include a resolvable default); optional per-currency caps for `percentage`
-     * codes. Per-row invariants are checked in `normalize_currency_options`, not via
+     * Per-currency options (flat deduction / percentage cap + minimum subtotal). Checkout uses the
+     * row for the currency the buyer pays in. For any other currency it converts the default row.
+     * Required for `flat` codes (must include a resolvable default); optional per-currency caps for
+     * `percentage` codes. Per-row invariants are checked in `normalize_currency_options`, not via
      * `#[validate(nested)]`.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -351,10 +352,11 @@ private constructor(
         fun code(code: JsonField<String>) = apply { body.code(code) }
 
         /**
-         * Per-currency options (flat deduction / percentage cap + minimum subtotal). Required for
-         * `flat` codes (must include a resolvable default); optional per-currency caps for
-         * `percentage` codes. Per-row invariants are checked in `normalize_currency_options`, not
-         * via `#[validate(nested)]`.
+         * Per-currency options (flat deduction / percentage cap + minimum subtotal). Checkout uses
+         * the row for the currency the buyer pays in. For any other currency it converts the
+         * default row. Required for `flat` codes (must include a resolvable default); optional
+         * per-currency caps for `percentage` codes. Per-row invariants are checked in
+         * `normalize_currency_options`, not via `#[validate(nested)]`.
          */
         fun currencyOptions(currencyOptions: List<CurrencyOption>?) = apply {
             body.currencyOptions(currencyOptions)
@@ -814,10 +816,11 @@ private constructor(
         fun code(): String? = code.getNullable("code")
 
         /**
-         * Per-currency options (flat deduction / percentage cap + minimum subtotal). Required for
-         * `flat` codes (must include a resolvable default); optional per-currency caps for
-         * `percentage` codes. Per-row invariants are checked in `normalize_currency_options`, not
-         * via `#[validate(nested)]`.
+         * Per-currency options (flat deduction / percentage cap + minimum subtotal). Checkout uses
+         * the row for the currency the buyer pays in. For any other currency it converts the
+         * default row. Required for `flat` codes (must include a resolvable default); optional
+         * per-currency caps for `percentage` codes. Per-row invariants are checked in
+         * `normalize_currency_options`, not via `#[validate(nested)]`.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
@@ -1142,10 +1145,11 @@ private constructor(
             fun code(code: JsonField<String>) = apply { this.code = code }
 
             /**
-             * Per-currency options (flat deduction / percentage cap + minimum subtotal). Required
-             * for `flat` codes (must include a resolvable default); optional per-currency caps for
-             * `percentage` codes. Per-row invariants are checked in `normalize_currency_options`,
-             * not via `#[validate(nested)]`.
+             * Per-currency options (flat deduction / percentage cap + minimum subtotal). Checkout
+             * uses the row for the currency the buyer pays in. For any other currency it converts
+             * the default row. Required for `flat` codes (must include a resolvable default);
+             * optional per-currency caps for `percentage` codes. Per-row invariants are checked in
+             * `normalize_currency_options`, not via `#[validate(nested)]`.
              */
             fun currencyOptions(currencyOptions: List<CurrencyOption>?) =
                 currencyOptions(JsonField.ofNullable(currencyOptions))
@@ -1559,7 +1563,8 @@ private constructor(
         ) : this(currency, isDefault, maxAmountPossible, minimumSubtotal, mutableMapOf())
 
         /**
-         * The currency this option applies to.
+         * The currency this option applies to. The row applies when the buyer pays in this
+         * currency.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -1567,8 +1572,8 @@ private constructor(
         fun currency(): Currency = currency.getRequired("currency")
 
         /**
-         * Whether this row is the default to convert from for unconfigured currencies. At most one
-         * row per discount may be default.
+         * Whether this row is the default to convert from when the buyer pays in a currency that
+         * has no row. At most one row per discount may be default.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
@@ -1668,7 +1673,10 @@ private constructor(
                 additionalProperties = currencyOption.additionalProperties.toMutableMap()
             }
 
-            /** The currency this option applies to. */
+            /**
+             * The currency this option applies to. The row applies when the buyer pays in this
+             * currency.
+             */
             fun currency(currency: Currency) = currency(JsonField.of(currency))
 
             /**
@@ -1681,8 +1689,8 @@ private constructor(
             fun currency(currency: JsonField<Currency>) = apply { this.currency = currency }
 
             /**
-             * Whether this row is the default to convert from for unconfigured currencies. At most
-             * one row per discount may be default.
+             * Whether this row is the default to convert from when the buyer pays in a currency
+             * that has no row. At most one row per discount may be default.
              */
             fun isDefault(isDefault: Boolean) = isDefault(JsonField.of(isDefault))
 

@@ -78,6 +78,7 @@ internal class ProGuardCompatibilityTest {
         assertThat(client.creditEntitlements()).isNotNull()
         assertThat(client.entitlements()).isNotNull()
         assertThat(client.productCollections()).isNotNull()
+        assertThat(client.moderation()).isNotNull()
     }
 
     @Test

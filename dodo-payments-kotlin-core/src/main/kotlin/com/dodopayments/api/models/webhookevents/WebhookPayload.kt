@@ -855,6 +855,7 @@ private constructor(
             private val customer: JsonField<CustomerLimitedDetails>,
             private val digitalProductsDelivered: JsonField<Boolean>,
             private val disputes: JsonField<List<Dispute>>,
+            private val isMultiSubscription: JsonField<Boolean>,
             private val isUpdatePaymentMethod: JsonField<Boolean>,
             private val metadata: JsonField<Metadata>,
             private val paymentId: JsonField<String>,
@@ -863,6 +864,7 @@ private constructor(
             private val retryAttempt: JsonField<Int>,
             private val settlementAmount: JsonField<Int>,
             private val settlementCurrency: JsonField<Currency>,
+            private val subscriptionIds: JsonField<List<String>>,
             private val totalAmount: JsonField<Int>,
             private val cardHolderName: JsonField<String>,
             private val cardIssuingCountry: JsonField<CountryCode>,
@@ -918,6 +920,9 @@ private constructor(
                 @JsonProperty("disputes")
                 @ExcludeMissing
                 disputes: JsonField<List<Dispute>> = JsonMissing.of(),
+                @JsonProperty("is_multi_subscription")
+                @ExcludeMissing
+                isMultiSubscription: JsonField<Boolean> = JsonMissing.of(),
                 @JsonProperty("is_update_payment_method")
                 @ExcludeMissing
                 isUpdatePaymentMethod: JsonField<Boolean> = JsonMissing.of(),
@@ -942,6 +947,9 @@ private constructor(
                 @JsonProperty("settlement_currency")
                 @ExcludeMissing
                 settlementCurrency: JsonField<Currency> = JsonMissing.of(),
+                @JsonProperty("subscription_ids")
+                @ExcludeMissing
+                subscriptionIds: JsonField<List<String>> = JsonMissing.of(),
                 @JsonProperty("total_amount")
                 @ExcludeMissing
                 totalAmount: JsonField<Int> = JsonMissing.of(),
@@ -1027,6 +1035,7 @@ private constructor(
                 customer,
                 digitalProductsDelivered,
                 disputes,
+                isMultiSubscription,
                 isUpdatePaymentMethod,
                 metadata,
                 paymentId,
@@ -1035,6 +1044,7 @@ private constructor(
                 retryAttempt,
                 settlementAmount,
                 settlementCurrency,
+                subscriptionIds,
                 totalAmount,
                 cardHolderName,
                 cardIssuingCountry,
@@ -1074,6 +1084,7 @@ private constructor(
                     .customer(customer)
                     .digitalProductsDelivered(digitalProductsDelivered)
                     .disputes(disputes)
+                    .isMultiSubscription(isMultiSubscription)
                     .isUpdatePaymentMethod(isUpdatePaymentMethod)
                     .metadata(metadata)
                     .paymentId(paymentId)
@@ -1082,6 +1093,7 @@ private constructor(
                     .retryAttempt(retryAttempt)
                     .settlementAmount(settlementAmount)
                     .settlementCurrency(settlementCurrency)
+                    .subscriptionIds(subscriptionIds)
                     .totalAmount(totalAmount)
                     .cardHolderName(cardHolderName)
                     .cardIssuingCountry(cardIssuingCountry)
@@ -1183,6 +1195,18 @@ private constructor(
             fun disputes(): List<Dispute> = disputes.getRequired("disputes")
 
             /**
+             * True when one payment starts more than one subscription. Read this field to find the
+             * payment type. Do not read the length of `subscription_ids`. Do not read
+             * `subscription_id` for null.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun isMultiSubscription(): Boolean =
+                isMultiSubscription.getRequired("is_multi_subscription")
+
+            /**
              * Whether this payment was created solely to update a subscription's payment method (a
              * zero-/setup-amount charge). `false` for normal charges.
              *
@@ -1263,6 +1287,17 @@ private constructor(
              */
             fun settlementCurrency(): Currency =
                 settlementCurrency.getRequired("settlement_currency")
+
+            /**
+             * Every subscription that this payment starts or charges, in a stable order. It is
+             * empty for a one-time payment. It holds the value of `subscription_id` when the
+             * payment names one subscription.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun subscriptionIds(): List<String> = subscriptionIds.getRequired("subscription_ids")
 
             /**
              * Total amount charged to the customer including tax, in the currency's smallest unit
@@ -1451,7 +1486,9 @@ private constructor(
             fun status(): IntentStatus? = status.getNullable("status")
 
             /**
-             * Identifier of the subscription if payment is part of a subscription
+             * Identifier of the subscription if payment is part of a subscription. A
+             * multi-subscription payment leaves this null, because no single subscription owns the
+             * payment. Read `subscription_ids` for those.
              *
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
@@ -1565,6 +1602,16 @@ private constructor(
             fun _disputes(): JsonField<List<Dispute>> = disputes
 
             /**
+             * Returns the raw JSON value of [isMultiSubscription].
+             *
+             * Unlike [isMultiSubscription], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("is_multi_subscription")
+            @ExcludeMissing
+            fun _isMultiSubscription(): JsonField<Boolean> = isMultiSubscription
+
+            /**
              * Returns the raw JSON value of [isUpdatePaymentMethod].
              *
              * Unlike [isUpdatePaymentMethod], this method doesn't throw if the JSON field has an
@@ -1642,6 +1689,16 @@ private constructor(
             @JsonProperty("settlement_currency")
             @ExcludeMissing
             fun _settlementCurrency(): JsonField<Currency> = settlementCurrency
+
+            /**
+             * Returns the raw JSON value of [subscriptionIds].
+             *
+             * Unlike [subscriptionIds], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("subscription_ids")
+            @ExcludeMissing
+            fun _subscriptionIds(): JsonField<List<String>> = subscriptionIds
 
             /**
              * Returns the raw JSON value of [totalAmount].
@@ -1913,6 +1970,7 @@ private constructor(
                  * .customer()
                  * .digitalProductsDelivered()
                  * .disputes()
+                 * .isMultiSubscription()
                  * .isUpdatePaymentMethod()
                  * .metadata()
                  * .paymentId()
@@ -1921,6 +1979,7 @@ private constructor(
                  * .retryAttempt()
                  * .settlementAmount()
                  * .settlementCurrency()
+                 * .subscriptionIds()
                  * .totalAmount()
                  * ```
                  */
@@ -1938,6 +1997,7 @@ private constructor(
                 private var customer: JsonField<CustomerLimitedDetails>? = null
                 private var digitalProductsDelivered: JsonField<Boolean>? = null
                 private var disputes: JsonField<MutableList<Dispute>>? = null
+                private var isMultiSubscription: JsonField<Boolean>? = null
                 private var isUpdatePaymentMethod: JsonField<Boolean>? = null
                 private var metadata: JsonField<Metadata>? = null
                 private var paymentId: JsonField<String>? = null
@@ -1946,6 +2006,7 @@ private constructor(
                 private var retryAttempt: JsonField<Int>? = null
                 private var settlementAmount: JsonField<Int>? = null
                 private var settlementCurrency: JsonField<Currency>? = null
+                private var subscriptionIds: JsonField<MutableList<String>>? = null
                 private var totalAmount: JsonField<Int>? = null
                 private var cardHolderName: JsonField<String> = JsonMissing.of()
                 private var cardIssuingCountry: JsonField<CountryCode> = JsonMissing.of()
@@ -1984,6 +2045,7 @@ private constructor(
                     customer = payment.customer
                     digitalProductsDelivered = payment.digitalProductsDelivered
                     disputes = payment.disputes.map { it.toMutableList() }
+                    isMultiSubscription = payment.isMultiSubscription
                     isUpdatePaymentMethod = payment.isUpdatePaymentMethod
                     metadata = payment.metadata
                     paymentId = payment.paymentId
@@ -1992,6 +2054,7 @@ private constructor(
                     retryAttempt = payment.retryAttempt
                     settlementAmount = payment.settlementAmount
                     settlementCurrency = payment.settlementCurrency
+                    subscriptionIds = payment.subscriptionIds.map { it.toMutableList() }
                     totalAmount = payment.totalAmount
                     cardHolderName = payment.cardHolderName
                     cardIssuingCountry = payment.cardIssuingCountry
@@ -2141,6 +2204,25 @@ private constructor(
                 }
 
                 /**
+                 * True when one payment starts more than one subscription. Read this field to find
+                 * the payment type. Do not read the length of `subscription_ids`. Do not read
+                 * `subscription_id` for null.
+                 */
+                fun isMultiSubscription(isMultiSubscription: Boolean) =
+                    isMultiSubscription(JsonField.of(isMultiSubscription))
+
+                /**
+                 * Sets [Builder.isMultiSubscription] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.isMultiSubscription] with a well-typed [Boolean]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun isMultiSubscription(isMultiSubscription: JsonField<Boolean>) = apply {
+                    this.isMultiSubscription = isMultiSubscription
+                }
+
+                /**
                  * Whether this payment was created solely to update a subscription's payment method
                  * (a zero-/setup-amount charge). `false` for normal charges.
                  */
@@ -2280,6 +2362,37 @@ private constructor(
                  */
                 fun settlementCurrency(settlementCurrency: JsonField<Currency>) = apply {
                     this.settlementCurrency = settlementCurrency
+                }
+
+                /**
+                 * Every subscription that this payment starts or charges, in a stable order. It is
+                 * empty for a one-time payment. It holds the value of `subscription_id` when the
+                 * payment names one subscription.
+                 */
+                fun subscriptionIds(subscriptionIds: List<String>) =
+                    subscriptionIds(JsonField.of(subscriptionIds))
+
+                /**
+                 * Sets [Builder.subscriptionIds] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.subscriptionIds] with a well-typed
+                 * `List<String>` value instead. This method is primarily for setting the field to
+                 * an undocumented or not yet supported value.
+                 */
+                fun subscriptionIds(subscriptionIds: JsonField<List<String>>) = apply {
+                    this.subscriptionIds = subscriptionIds.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [String] to [subscriptionIds].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addSubscriptionId(subscriptionId: String) = apply {
+                    subscriptionIds =
+                        (subscriptionIds ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("subscriptionIds", it).add(subscriptionId)
+                        }
                 }
 
                 /**
@@ -2664,7 +2777,11 @@ private constructor(
                  */
                 fun status(status: JsonField<IntentStatus>) = apply { this.status = status }
 
-                /** Identifier of the subscription if payment is part of a subscription */
+                /**
+                 * Identifier of the subscription if payment is part of a subscription. A
+                 * multi-subscription payment leaves this null, because no single subscription owns
+                 * the payment. Read `subscription_ids` for those.
+                 */
                 fun subscriptionId(subscriptionId: String?) =
                     subscriptionId(JsonField.ofNullable(subscriptionId))
 
@@ -2767,6 +2884,7 @@ private constructor(
                  * .customer()
                  * .digitalProductsDelivered()
                  * .disputes()
+                 * .isMultiSubscription()
                  * .isUpdatePaymentMethod()
                  * .metadata()
                  * .paymentId()
@@ -2775,6 +2893,7 @@ private constructor(
                  * .retryAttempt()
                  * .settlementAmount()
                  * .settlementCurrency()
+                 * .subscriptionIds()
                  * .totalAmount()
                  * ```
                  *
@@ -2790,6 +2909,7 @@ private constructor(
                         checkRequired("customer", customer),
                         checkRequired("digitalProductsDelivered", digitalProductsDelivered),
                         checkRequired("disputes", disputes).map { it.toImmutable() },
+                        checkRequired("isMultiSubscription", isMultiSubscription),
                         checkRequired("isUpdatePaymentMethod", isUpdatePaymentMethod),
                         checkRequired("metadata", metadata),
                         checkRequired("paymentId", paymentId),
@@ -2798,6 +2918,7 @@ private constructor(
                         checkRequired("retryAttempt", retryAttempt),
                         checkRequired("settlementAmount", settlementAmount),
                         checkRequired("settlementCurrency", settlementCurrency),
+                        checkRequired("subscriptionIds", subscriptionIds).map { it.toImmutable() },
                         checkRequired("totalAmount", totalAmount),
                         cardHolderName,
                         cardIssuingCountry,
@@ -2853,6 +2974,7 @@ private constructor(
                 customer().validate()
                 digitalProductsDelivered()
                 disputes().forEach { it.validate() }
+                isMultiSubscription()
                 isUpdatePaymentMethod()
                 metadata().validate()
                 paymentId()
@@ -2861,6 +2983,7 @@ private constructor(
                 retryAttempt()
                 settlementAmount()
                 settlementCurrency().validate()
+                subscriptionIds()
                 totalAmount()
                 cardHolderName()
                 cardIssuingCountry()?.validate()
@@ -2919,6 +3042,7 @@ private constructor(
                     (customer.asKnown()?.validity() ?: 0) +
                     (if (digitalProductsDelivered.asKnown() == null) 0 else 1) +
                     (disputes.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                    (if (isMultiSubscription.asKnown() == null) 0 else 1) +
                     (if (isUpdatePaymentMethod.asKnown() == null) 0 else 1) +
                     (metadata.asKnown()?.validity() ?: 0) +
                     (if (paymentId.asKnown() == null) 0 else 1) +
@@ -2927,6 +3051,7 @@ private constructor(
                     (if (retryAttempt.asKnown() == null) 0 else 1) +
                     (if (settlementAmount.asKnown() == null) 0 else 1) +
                     (settlementCurrency.asKnown()?.validity() ?: 0) +
+                    (subscriptionIds.asKnown()?.size ?: 0) +
                     (if (totalAmount.asKnown() == null) 0 else 1) +
                     (if (cardHolderName.asKnown() == null) 0 else 1) +
                     (cardIssuingCountry.asKnown()?.validity() ?: 0) +
@@ -2968,6 +3093,7 @@ private constructor(
                     customer == other.customer &&
                     digitalProductsDelivered == other.digitalProductsDelivered &&
                     disputes == other.disputes &&
+                    isMultiSubscription == other.isMultiSubscription &&
                     isUpdatePaymentMethod == other.isUpdatePaymentMethod &&
                     metadata == other.metadata &&
                     paymentId == other.paymentId &&
@@ -2976,6 +3102,7 @@ private constructor(
                     retryAttempt == other.retryAttempt &&
                     settlementAmount == other.settlementAmount &&
                     settlementCurrency == other.settlementCurrency &&
+                    subscriptionIds == other.subscriptionIds &&
                     totalAmount == other.totalAmount &&
                     cardHolderName == other.cardHolderName &&
                     cardIssuingCountry == other.cardIssuingCountry &&
@@ -3015,6 +3142,7 @@ private constructor(
                     customer,
                     digitalProductsDelivered,
                     disputes,
+                    isMultiSubscription,
                     isUpdatePaymentMethod,
                     metadata,
                     paymentId,
@@ -3023,6 +3151,7 @@ private constructor(
                     retryAttempt,
                     settlementAmount,
                     settlementCurrency,
+                    subscriptionIds,
                     totalAmount,
                     cardHolderName,
                     cardIssuingCountry,
@@ -3056,7 +3185,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Payment{billing=$billing, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, digitalProductsDelivered=$digitalProductsDelivered, disputes=$disputes, isUpdatePaymentMethod=$isUpdatePaymentMethod, metadata=$metadata, paymentId=$paymentId, paymentProvider=$paymentProvider, refunds=$refunds, retryAttempt=$retryAttempt, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, totalAmount=$totalAmount, cardHolderName=$cardHolderName, cardIssuingCountry=$cardIssuingCountry, cardLastFour=$cardLastFour, cardNetwork=$cardNetwork, cardType=$cardType, checkoutSessionId=$checkoutSessionId, customFieldResponses=$customFieldResponses, discountId=$discountId, discounts=$discounts, errorCode=$errorCode, errorMessage=$errorMessage, invoiceId=$invoiceId, invoiceUrl=$invoiceUrl, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodId=$paymentMethodId, paymentMethodType=$paymentMethodType, productCart=$productCart, refundStatus=$refundStatus, settlementTax=$settlementTax, status=$status, subscriptionId=$subscriptionId, tax=$tax, updatedAt=$updatedAt, payloadType=$payloadType, additionalProperties=$additionalProperties}"
+                "Payment{billing=$billing, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, digitalProductsDelivered=$digitalProductsDelivered, disputes=$disputes, isMultiSubscription=$isMultiSubscription, isUpdatePaymentMethod=$isUpdatePaymentMethod, metadata=$metadata, paymentId=$paymentId, paymentProvider=$paymentProvider, refunds=$refunds, retryAttempt=$retryAttempt, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, subscriptionIds=$subscriptionIds, totalAmount=$totalAmount, cardHolderName=$cardHolderName, cardIssuingCountry=$cardIssuingCountry, cardLastFour=$cardLastFour, cardNetwork=$cardNetwork, cardType=$cardType, checkoutSessionId=$checkoutSessionId, customFieldResponses=$customFieldResponses, discountId=$discountId, discounts=$discounts, errorCode=$errorCode, errorMessage=$errorMessage, invoiceId=$invoiceId, invoiceUrl=$invoiceUrl, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodId=$paymentMethodId, paymentMethodType=$paymentMethodType, productCart=$productCart, refundStatus=$refundStatus, settlementTax=$settlementTax, status=$status, subscriptionId=$subscriptionId, tax=$tax, updatedAt=$updatedAt, payloadType=$payloadType, additionalProperties=$additionalProperties}"
         }
 
         /** Response struct representing subscription details */
