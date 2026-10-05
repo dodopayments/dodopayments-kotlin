@@ -38,6 +38,7 @@ import com.dodopayments.api.models.payments.PaymentRefundStatus
 import com.dodopayments.api.models.payments.RefundListItem
 import com.dodopayments.api.models.products.DigitalProductDelivery
 import com.dodopayments.api.models.refunds.Refund
+import com.dodopayments.api.models.refunds.RefundNetworkReferenceType
 import com.dodopayments.api.models.refunds.RefundStatus
 import com.dodopayments.api.models.subscriptions.AddonCartResponseItem
 import com.dodopayments.api.models.subscriptions.CancellationFeedback
@@ -46,6 +47,7 @@ import com.dodopayments.api.models.subscriptions.MeterCartResponseItem
 import com.dodopayments.api.models.subscriptions.MeterCreditEntitlementCartResponse
 import com.dodopayments.api.models.subscriptions.ScheduledPlanChange
 import com.dodopayments.api.models.subscriptions.Subscription
+import com.dodopayments.api.models.subscriptions.SubscriptionCancelledBy
 import com.dodopayments.api.models.subscriptions.SubscriptionStatus
 import com.dodopayments.api.models.subscriptions.TimeInterval
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -3245,6 +3247,7 @@ private constructor(
             private val cancellationComment: JsonField<String>,
             private val cancellationFeedback: JsonField<CancellationFeedback>,
             private val cancelledAt: JsonField<OffsetDateTime>,
+            private val cancelledBy: JsonField<SubscriptionCancelledBy>,
             private val customFieldResponses: JsonField<List<CustomFieldResponse>>,
             private val customerBusinessName: JsonField<String>,
             private val discountCyclesRemaining: JsonField<Int>,
@@ -3352,6 +3355,9 @@ private constructor(
                 @JsonProperty("cancelled_at")
                 @ExcludeMissing
                 cancelledAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("cancelled_by")
+                @ExcludeMissing
+                cancelledBy: JsonField<SubscriptionCancelledBy> = JsonMissing.of(),
                 @JsonProperty("custom_field_responses")
                 @ExcludeMissing
                 customFieldResponses: JsonField<List<CustomFieldResponse>> = JsonMissing.of(),
@@ -3419,6 +3425,7 @@ private constructor(
                 cancellationComment,
                 cancellationFeedback,
                 cancelledAt,
+                cancelledBy,
                 customFieldResponses,
                 customerBusinessName,
                 discountCyclesRemaining,
@@ -3466,6 +3473,7 @@ private constructor(
                     .cancellationComment(cancellationComment)
                     .cancellationFeedback(cancellationFeedback)
                     .cancelledAt(cancelledAt)
+                    .cancelledBy(cancelledBy)
                     .customFieldResponses(customFieldResponses)
                     .customerBusinessName(customerBusinessName)
                     .discountCyclesRemaining(discountCyclesRemaining)
@@ -3749,6 +3757,15 @@ private constructor(
              *   (e.g. if the server responded with an unexpected value).
              */
             fun cancelledAt(): OffsetDateTime? = cancelledAt.getNullable("cancelled_at")
+
+            /**
+             * The caller that cancelled the subscription or scheduled its cancel. `null` when no
+             * caller is known, for example when the system cancelled the subscription.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun cancelledBy(): SubscriptionCancelledBy? = cancelledBy.getNullable("cancelled_by")
 
             /**
              * Customer's responses to custom fields collected during checkout
@@ -4156,6 +4173,16 @@ private constructor(
             fun _cancelledAt(): JsonField<OffsetDateTime> = cancelledAt
 
             /**
+             * Returns the raw JSON value of [cancelledBy].
+             *
+             * Unlike [cancelledBy], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("cancelled_by")
+            @ExcludeMissing
+            fun _cancelledBy(): JsonField<SubscriptionCancelledBy> = cancelledBy
+
+            /**
              * Returns the raw JSON value of [customFieldResponses].
              *
              * Unlike [customFieldResponses], this method doesn't throw if the JSON field has an
@@ -4358,6 +4385,7 @@ private constructor(
                 private var cancellationComment: JsonField<String> = JsonMissing.of()
                 private var cancellationFeedback: JsonField<CancellationFeedback> = JsonMissing.of()
                 private var cancelledAt: JsonField<OffsetDateTime> = JsonMissing.of()
+                private var cancelledBy: JsonField<SubscriptionCancelledBy> = JsonMissing.of()
                 private var customFieldResponses: JsonField<MutableList<CustomFieldResponse>>? =
                     null
                 private var customerBusinessName: JsonField<String> = JsonMissing.of()
@@ -4406,6 +4434,7 @@ private constructor(
                     cancellationComment = subscription.cancellationComment
                     cancellationFeedback = subscription.cancellationFeedback
                     cancelledAt = subscription.cancelledAt
+                    cancelledBy = subscription.cancelledBy
                     customFieldResponses =
                         subscription.customFieldResponses.map { it.toMutableList() }
                     customerBusinessName = subscription.customerBusinessName
@@ -4900,6 +4929,24 @@ private constructor(
                     this.cancelledAt = cancelledAt
                 }
 
+                /**
+                 * The caller that cancelled the subscription or scheduled its cancel. `null` when
+                 * no caller is known, for example when the system cancelled the subscription.
+                 */
+                fun cancelledBy(cancelledBy: SubscriptionCancelledBy?) =
+                    cancelledBy(JsonField.ofNullable(cancelledBy))
+
+                /**
+                 * Sets [Builder.cancelledBy] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.cancelledBy] with a well-typed
+                 * [SubscriptionCancelledBy] value instead. This method is primarily for setting the
+                 * field to an undocumented or not yet supported value.
+                 */
+                fun cancelledBy(cancelledBy: JsonField<SubscriptionCancelledBy>) = apply {
+                    this.cancelledBy = cancelledBy
+                }
+
                 /** Customer's responses to custom fields collected during checkout */
                 fun customFieldResponses(customFieldResponses: List<CustomFieldResponse>?) =
                     customFieldResponses(JsonField.ofNullable(customFieldResponses))
@@ -5242,6 +5289,7 @@ private constructor(
                         cancellationComment,
                         cancellationFeedback,
                         cancelledAt,
+                        cancelledBy,
                         (customFieldResponses ?: JsonMissing.of()).map { it.toImmutable() },
                         customerBusinessName,
                         discountCyclesRemaining,
@@ -5305,6 +5353,7 @@ private constructor(
                 cancellationComment()
                 cancellationFeedback()?.validate()
                 cancelledAt()
+                cancelledBy()?.validate()
                 customFieldResponses()?.forEach { it.validate() }
                 customerBusinessName()
                 discountCyclesRemaining()
@@ -5371,6 +5420,7 @@ private constructor(
                     (if (cancellationComment.asKnown() == null) 0 else 1) +
                     (cancellationFeedback.asKnown()?.validity() ?: 0) +
                     (if (cancelledAt.asKnown() == null) 0 else 1) +
+                    (cancelledBy.asKnown()?.validity() ?: 0) +
                     (customFieldResponses.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
                     (if (customerBusinessName.asKnown() == null) 0 else 1) +
                     (if (discountCyclesRemaining.asKnown() == null) 0 else 1) +
@@ -5420,6 +5470,7 @@ private constructor(
                     cancellationComment == other.cancellationComment &&
                     cancellationFeedback == other.cancellationFeedback &&
                     cancelledAt == other.cancelledAt &&
+                    cancelledBy == other.cancelledBy &&
                     customFieldResponses == other.customFieldResponses &&
                     customerBusinessName == other.customerBusinessName &&
                     discountCyclesRemaining == other.discountCyclesRemaining &&
@@ -5467,6 +5518,7 @@ private constructor(
                     cancellationComment,
                     cancellationFeedback,
                     cancelledAt,
+                    cancelledBy,
                     customFieldResponses,
                     customerBusinessName,
                     discountCyclesRemaining,
@@ -5487,7 +5539,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Subscription{addons=$addons, billing=$billing, brandId=$brandId, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, creditEntitlementCart=$creditEntitlementCart, currency=$currency, customer=$customer, hasPaymentMethod=$hasPaymentMethod, metadata=$metadata, meterCreditEntitlementCart=$meterCreditEntitlementCart, meters=$meters, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancellationComment=$cancellationComment, cancellationFeedback=$cancellationFeedback, cancelledAt=$cancelledAt, customFieldResponses=$customFieldResponses, customerBusinessName=$customerBusinessName, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, discounts=$discounts, expiresAt=$expiresAt, pausedAt=$pausedAt, paymentMethodId=$paymentMethodId, scheduledChange=$scheduledChange, taxId=$taxId, trialAmount=$trialAmount, payloadType=$payloadType, pastDueEndsAt=$pastDueEndsAt, additionalProperties=$additionalProperties}"
+                "Subscription{addons=$addons, billing=$billing, brandId=$brandId, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, creditEntitlementCart=$creditEntitlementCart, currency=$currency, customer=$customer, hasPaymentMethod=$hasPaymentMethod, metadata=$metadata, meterCreditEntitlementCart=$meterCreditEntitlementCart, meters=$meters, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancellationComment=$cancellationComment, cancellationFeedback=$cancellationFeedback, cancelledAt=$cancelledAt, cancelledBy=$cancelledBy, customFieldResponses=$customFieldResponses, customerBusinessName=$customerBusinessName, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, discounts=$discounts, expiresAt=$expiresAt, pausedAt=$pausedAt, paymentMethodId=$paymentMethodId, scheduledChange=$scheduledChange, taxId=$taxId, trialAmount=$trialAmount, payloadType=$payloadType, pastDueEndsAt=$pastDueEndsAt, additionalProperties=$additionalProperties}"
         }
 
         class Refund
@@ -5504,6 +5556,8 @@ private constructor(
             private val status: JsonField<RefundStatus>,
             private val amount: JsonField<Int>,
             private val currency: JsonField<Currency>,
+            private val networkReference: JsonField<String>,
+            private val networkReferenceType: JsonField<RefundNetworkReferenceType>,
             private val reason: JsonField<String>,
             private val payloadType: JsonValue,
             private val additionalProperties: MutableMap<String, JsonValue>,
@@ -5542,6 +5596,12 @@ private constructor(
                 @JsonProperty("currency")
                 @ExcludeMissing
                 currency: JsonField<Currency> = JsonMissing.of(),
+                @JsonProperty("network_reference")
+                @ExcludeMissing
+                networkReference: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("network_reference_type")
+                @ExcludeMissing
+                networkReferenceType: JsonField<RefundNetworkReferenceType> = JsonMissing.of(),
                 @JsonProperty("reason")
                 @ExcludeMissing
                 reason: JsonField<String> = JsonMissing.of(),
@@ -5560,6 +5620,8 @@ private constructor(
                 status,
                 amount,
                 currency,
+                networkReference,
+                networkReferenceType,
                 reason,
                 payloadType,
                 mutableMapOf(),
@@ -5578,6 +5640,8 @@ private constructor(
                     .status(status)
                     .amount(amount)
                     .currency(currency)
+                    .networkReference(networkReference)
+                    .networkReferenceType(networkReferenceType)
                     .reason(reason)
                     .build()
 
@@ -5677,6 +5741,25 @@ private constructor(
              *   (e.g. if the server responded with an unexpected value).
              */
             fun currency(): Currency? = currency.getNullable("currency")
+
+            /**
+             * The reference number that the card network or the bank gives to the refund. The
+             * customer can give this number to their bank to trace the refund. It is null until the
+             * payment processor sends it.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun networkReference(): String? = networkReference.getNullable("network_reference")
+
+            /**
+             * The kind of `network_reference`: ARN, STAN or RRN.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun networkReferenceType(): RefundNetworkReferenceType? =
+                networkReferenceType.getNullable("network_reference_type")
 
             /**
              * The reason provided for the refund, if any. Optional.
@@ -5799,6 +5882,27 @@ private constructor(
             fun _currency(): JsonField<Currency> = currency
 
             /**
+             * Returns the raw JSON value of [networkReference].
+             *
+             * Unlike [networkReference], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("network_reference")
+            @ExcludeMissing
+            fun _networkReference(): JsonField<String> = networkReference
+
+            /**
+             * Returns the raw JSON value of [networkReferenceType].
+             *
+             * Unlike [networkReferenceType], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("network_reference_type")
+            @ExcludeMissing
+            fun _networkReferenceType(): JsonField<RefundNetworkReferenceType> =
+                networkReferenceType
+
+            /**
              * Returns the raw JSON value of [reason].
              *
              * Unlike [reason], this method doesn't throw if the JSON field has an unexpected type.
@@ -5852,6 +5956,9 @@ private constructor(
                 private var status: JsonField<RefundStatus>? = null
                 private var amount: JsonField<Int> = JsonMissing.of()
                 private var currency: JsonField<Currency> = JsonMissing.of()
+                private var networkReference: JsonField<String> = JsonMissing.of()
+                private var networkReferenceType: JsonField<RefundNetworkReferenceType> =
+                    JsonMissing.of()
                 private var reason: JsonField<String> = JsonMissing.of()
                 private var payloadType: JsonValue = JsonValue.from("Refund")
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -5868,6 +5975,8 @@ private constructor(
                     status = refund.status
                     amount = refund.amount
                     currency = refund.currency
+                    networkReference = refund.networkReference
+                    networkReferenceType = refund.networkReferenceType
                     reason = refund.reason
                     payloadType = refund.payloadType
                     additionalProperties = refund.additionalProperties.toMutableMap()
@@ -6018,6 +6127,40 @@ private constructor(
                  */
                 fun currency(currency: JsonField<Currency>) = apply { this.currency = currency }
 
+                /**
+                 * The reference number that the card network or the bank gives to the refund. The
+                 * customer can give this number to their bank to trace the refund. It is null until
+                 * the payment processor sends it.
+                 */
+                fun networkReference(networkReference: String?) =
+                    networkReference(JsonField.ofNullable(networkReference))
+
+                /**
+                 * Sets [Builder.networkReference] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.networkReference] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun networkReference(networkReference: JsonField<String>) = apply {
+                    this.networkReference = networkReference
+                }
+
+                /** The kind of `network_reference`: ARN, STAN or RRN. */
+                fun networkReferenceType(networkReferenceType: RefundNetworkReferenceType?) =
+                    networkReferenceType(JsonField.ofNullable(networkReferenceType))
+
+                /**
+                 * Sets [Builder.networkReferenceType] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.networkReferenceType] with a well-typed
+                 * [RefundNetworkReferenceType] value instead. This method is primarily for setting
+                 * the field to an undocumented or not yet supported value.
+                 */
+                fun networkReferenceType(
+                    networkReferenceType: JsonField<RefundNetworkReferenceType>
+                ) = apply { this.networkReferenceType = networkReferenceType }
+
                 /** The reason provided for the refund, if any. Optional. */
                 fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
@@ -6099,6 +6242,8 @@ private constructor(
                         checkRequired("status", status),
                         amount,
                         currency,
+                        networkReference,
+                        networkReferenceType,
                         reason,
                         payloadType,
                         additionalProperties.toMutableMap(),
@@ -6133,6 +6278,8 @@ private constructor(
                 status().validate()
                 amount()
                 currency()?.validate()
+                networkReference()
+                networkReferenceType()?.validate()
                 reason()
                 _payloadType().let {
                     if (it != JsonValue.from("Refund")) {
@@ -6170,6 +6317,8 @@ private constructor(
                     (status.asKnown()?.validity() ?: 0) +
                     (if (amount.asKnown() == null) 0 else 1) +
                     (currency.asKnown()?.validity() ?: 0) +
+                    (if (networkReference.asKnown() == null) 0 else 1) +
+                    (networkReferenceType.asKnown()?.validity() ?: 0) +
                     (if (reason.asKnown() == null) 0 else 1) +
                     payloadType.let { if (it == JsonValue.from("Refund")) 1 else 0 }
 
@@ -6190,6 +6339,8 @@ private constructor(
                     status == other.status &&
                     amount == other.amount &&
                     currency == other.currency &&
+                    networkReference == other.networkReference &&
+                    networkReferenceType == other.networkReferenceType &&
                     reason == other.reason &&
                     payloadType == other.payloadType &&
                     additionalProperties == other.additionalProperties
@@ -6208,6 +6359,8 @@ private constructor(
                     status,
                     amount,
                     currency,
+                    networkReference,
+                    networkReferenceType,
                     reason,
                     payloadType,
                     additionalProperties,
@@ -6217,7 +6370,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Refund{brandId=$brandId, businessId=$businessId, createdAt=$createdAt, customer=$customer, isPartial=$isPartial, metadata=$metadata, paymentId=$paymentId, refundId=$refundId, status=$status, amount=$amount, currency=$currency, reason=$reason, payloadType=$payloadType, additionalProperties=$additionalProperties}"
+                "Refund{brandId=$brandId, businessId=$businessId, createdAt=$createdAt, customer=$customer, isPartial=$isPartial, metadata=$metadata, paymentId=$paymentId, refundId=$refundId, status=$status, amount=$amount, currency=$currency, networkReference=$networkReference, networkReferenceType=$networkReferenceType, reason=$reason, payloadType=$payloadType, additionalProperties=$additionalProperties}"
         }
 
         class Dispute

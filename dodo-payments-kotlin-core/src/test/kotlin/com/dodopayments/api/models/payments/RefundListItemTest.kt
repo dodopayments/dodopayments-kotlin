@@ -4,6 +4,7 @@ package com.dodopayments.api.models.payments
 
 import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.refunds.RefundNetworkReferenceType
 import com.dodopayments.api.models.refunds.RefundStatus
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
@@ -24,6 +25,8 @@ internal class RefundListItemTest {
                 .status(RefundStatus.SUCCEEDED)
                 .amount(0)
                 .currency(Currency.AED)
+                .networkReference("network_reference")
+                .networkReferenceType(RefundNetworkReferenceType.ACQUIRER_REFERENCE_NUMBER)
                 .reason("reason")
                 .build()
 
@@ -36,6 +39,9 @@ internal class RefundListItemTest {
         assertThat(refundListItem.status()).isEqualTo(RefundStatus.SUCCEEDED)
         assertThat(refundListItem.amount()).isEqualTo(0)
         assertThat(refundListItem.currency()).isEqualTo(Currency.AED)
+        assertThat(refundListItem.networkReference()).isEqualTo("network_reference")
+        assertThat(refundListItem.networkReferenceType())
+            .isEqualTo(RefundNetworkReferenceType.ACQUIRER_REFERENCE_NUMBER)
         assertThat(refundListItem.reason()).isEqualTo("reason")
     }
 
@@ -52,6 +58,8 @@ internal class RefundListItemTest {
                 .status(RefundStatus.SUCCEEDED)
                 .amount(0)
                 .currency(Currency.AED)
+                .networkReference("network_reference")
+                .networkReferenceType(RefundNetworkReferenceType.ACQUIRER_REFERENCE_NUMBER)
                 .reason("reason")
                 .build()
 

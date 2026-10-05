@@ -23,6 +23,7 @@ import com.dodopayments.api.models.subscriptions.MeterCartResponseItem
 import com.dodopayments.api.models.subscriptions.MeterCreditEntitlementCartResponse
 import com.dodopayments.api.models.subscriptions.ScheduledPlanChange
 import com.dodopayments.api.models.subscriptions.Subscription
+import com.dodopayments.api.models.subscriptions.SubscriptionCancelledBy
 import com.dodopayments.api.models.subscriptions.SubscriptionStatus
 import com.dodopayments.api.models.subscriptions.TimeInterval
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -338,6 +339,7 @@ private constructor(
         private val cancellationComment: JsonField<String>,
         private val cancellationFeedback: JsonField<CancellationFeedback>,
         private val cancelledAt: JsonField<OffsetDateTime>,
+        private val cancelledBy: JsonField<SubscriptionCancelledBy>,
         private val customFieldResponses: JsonField<List<CustomFieldResponse>>,
         private val customerBusinessName: JsonField<String>,
         private val discountCyclesRemaining: JsonField<Int>,
@@ -440,6 +442,9 @@ private constructor(
             @JsonProperty("cancelled_at")
             @ExcludeMissing
             cancelledAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("cancelled_by")
+            @ExcludeMissing
+            cancelledBy: JsonField<SubscriptionCancelledBy> = JsonMissing.of(),
             @JsonProperty("custom_field_responses")
             @ExcludeMissing
             customFieldResponses: JsonField<List<CustomFieldResponse>> = JsonMissing.of(),
@@ -504,6 +509,7 @@ private constructor(
             cancellationComment,
             cancellationFeedback,
             cancelledAt,
+            cancelledBy,
             customFieldResponses,
             customerBusinessName,
             discountCyclesRemaining,
@@ -550,6 +556,7 @@ private constructor(
                 .cancellationComment(cancellationComment)
                 .cancellationFeedback(cancellationFeedback)
                 .cancelledAt(cancelledAt)
+                .cancelledBy(cancelledBy)
                 .customFieldResponses(customFieldResponses)
                 .customerBusinessName(customerBusinessName)
                 .discountCyclesRemaining(discountCyclesRemaining)
@@ -806,6 +813,15 @@ private constructor(
          *   if the server responded with an unexpected value).
          */
         fun cancelledAt(): OffsetDateTime? = cancelledAt.getNullable("cancelled_at")
+
+        /**
+         * The caller that cancelled the subscription or scheduled its cancel. `null` when no caller
+         * is known, for example when the system cancelled the subscription.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun cancelledBy(): SubscriptionCancelledBy? = cancelledBy.getNullable("cancelled_by")
 
         /**
          * Customer's responses to custom fields collected during checkout
@@ -1182,6 +1198,15 @@ private constructor(
         fun _cancelledAt(): JsonField<OffsetDateTime> = cancelledAt
 
         /**
+         * Returns the raw JSON value of [cancelledBy].
+         *
+         * Unlike [cancelledBy], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("cancelled_by")
+        @ExcludeMissing
+        fun _cancelledBy(): JsonField<SubscriptionCancelledBy> = cancelledBy
+
+        /**
          * Returns the raw JSON value of [customFieldResponses].
          *
          * Unlike [customFieldResponses], this method doesn't throw if the JSON field has an
@@ -1379,6 +1404,7 @@ private constructor(
             private var cancellationComment: JsonField<String> = JsonMissing.of()
             private var cancellationFeedback: JsonField<CancellationFeedback> = JsonMissing.of()
             private var cancelledAt: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var cancelledBy: JsonField<SubscriptionCancelledBy> = JsonMissing.of()
             private var customFieldResponses: JsonField<MutableList<CustomFieldResponse>>? = null
             private var customerBusinessName: JsonField<String> = JsonMissing.of()
             private var discountCyclesRemaining: JsonField<Int> = JsonMissing.of()
@@ -1424,6 +1450,7 @@ private constructor(
                 cancellationComment = data.cancellationComment
                 cancellationFeedback = data.cancellationFeedback
                 cancelledAt = data.cancelledAt
+                cancelledBy = data.cancelledBy
                 customFieldResponses = data.customFieldResponses.map { it.toMutableList() }
                 customerBusinessName = data.customerBusinessName
                 discountCyclesRemaining = data.discountCyclesRemaining
@@ -1914,6 +1941,24 @@ private constructor(
                 this.cancelledAt = cancelledAt
             }
 
+            /**
+             * The caller that cancelled the subscription or scheduled its cancel. `null` when no
+             * caller is known, for example when the system cancelled the subscription.
+             */
+            fun cancelledBy(cancelledBy: SubscriptionCancelledBy?) =
+                cancelledBy(JsonField.ofNullable(cancelledBy))
+
+            /**
+             * Sets [Builder.cancelledBy] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.cancelledBy] with a well-typed
+             * [SubscriptionCancelledBy] value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun cancelledBy(cancelledBy: JsonField<SubscriptionCancelledBy>) = apply {
+                this.cancelledBy = cancelledBy
+            }
+
             /** Customer's responses to custom fields collected during checkout */
             fun customFieldResponses(customFieldResponses: List<CustomFieldResponse>?) =
                 customFieldResponses(JsonField.ofNullable(customFieldResponses))
@@ -2229,6 +2274,7 @@ private constructor(
                     cancellationComment,
                     cancellationFeedback,
                     cancelledAt,
+                    cancelledBy,
                     (customFieldResponses ?: JsonMissing.of()).map { it.toImmutable() },
                     customerBusinessName,
                     discountCyclesRemaining,
@@ -2290,6 +2336,7 @@ private constructor(
             cancellationComment()
             cancellationFeedback()?.validate()
             cancelledAt()
+            cancelledBy()?.validate()
             customFieldResponses()?.forEach { it.validate() }
             customerBusinessName()
             discountCyclesRemaining()
@@ -2349,6 +2396,7 @@ private constructor(
                 (if (cancellationComment.asKnown() == null) 0 else 1) +
                 (cancellationFeedback.asKnown()?.validity() ?: 0) +
                 (if (cancelledAt.asKnown() == null) 0 else 1) +
+                (cancelledBy.asKnown()?.validity() ?: 0) +
                 (customFieldResponses.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
                 (if (customerBusinessName.asKnown() == null) 0 else 1) +
                 (if (discountCyclesRemaining.asKnown() == null) 0 else 1) +
@@ -2397,6 +2445,7 @@ private constructor(
                 cancellationComment == other.cancellationComment &&
                 cancellationFeedback == other.cancellationFeedback &&
                 cancelledAt == other.cancelledAt &&
+                cancelledBy == other.cancelledBy &&
                 customFieldResponses == other.customFieldResponses &&
                 customerBusinessName == other.customerBusinessName &&
                 discountCyclesRemaining == other.discountCyclesRemaining &&
@@ -2443,6 +2492,7 @@ private constructor(
                 cancellationComment,
                 cancellationFeedback,
                 cancelledAt,
+                cancelledBy,
                 customFieldResponses,
                 customerBusinessName,
                 discountCyclesRemaining,
@@ -2462,7 +2512,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Data{addons=$addons, billing=$billing, brandId=$brandId, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, creditEntitlementCart=$creditEntitlementCart, currency=$currency, customer=$customer, hasPaymentMethod=$hasPaymentMethod, metadata=$metadata, meterCreditEntitlementCart=$meterCreditEntitlementCart, meters=$meters, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancellationComment=$cancellationComment, cancellationFeedback=$cancellationFeedback, cancelledAt=$cancelledAt, customFieldResponses=$customFieldResponses, customerBusinessName=$customerBusinessName, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, discounts=$discounts, expiresAt=$expiresAt, pausedAt=$pausedAt, paymentMethodId=$paymentMethodId, scheduledChange=$scheduledChange, taxId=$taxId, trialAmount=$trialAmount, pastDueEndsAt=$pastDueEndsAt, additionalProperties=$additionalProperties}"
+            "Data{addons=$addons, billing=$billing, brandId=$brandId, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, creditEntitlementCart=$creditEntitlementCart, currency=$currency, customer=$customer, hasPaymentMethod=$hasPaymentMethod, metadata=$metadata, meterCreditEntitlementCart=$meterCreditEntitlementCart, meters=$meters, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancellationComment=$cancellationComment, cancellationFeedback=$cancellationFeedback, cancelledAt=$cancelledAt, cancelledBy=$cancelledBy, customFieldResponses=$customFieldResponses, customerBusinessName=$customerBusinessName, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, discounts=$discounts, expiresAt=$expiresAt, pausedAt=$pausedAt, paymentMethodId=$paymentMethodId, scheduledChange=$scheduledChange, taxId=$taxId, trialAmount=$trialAmount, pastDueEndsAt=$pastDueEndsAt, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
