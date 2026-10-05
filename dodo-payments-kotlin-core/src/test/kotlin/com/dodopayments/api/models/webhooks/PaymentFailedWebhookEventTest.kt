@@ -19,6 +19,7 @@ import com.dodopayments.api.models.payments.IntentStatus
 import com.dodopayments.api.models.payments.Payment
 import com.dodopayments.api.models.payments.PaymentRefundStatus
 import com.dodopayments.api.models.payments.RefundListItem
+import com.dodopayments.api.models.refunds.RefundNetworkReferenceType
 import com.dodopayments.api.models.refunds.RefundStatus
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
@@ -94,6 +95,10 @@ internal class PaymentFailedWebhookEventTest {
                                 .status(RefundStatus.SUCCEEDED)
                                 .amount(0)
                                 .currency(Currency.AED)
+                                .networkReference("network_reference")
+                                .networkReferenceType(
+                                    RefundNetworkReferenceType.ACQUIRER_REFERENCE_NUMBER
+                                )
                                 .reason("reason")
                                 .build()
                         )
@@ -225,6 +230,10 @@ internal class PaymentFailedWebhookEventTest {
                             .status(RefundStatus.SUCCEEDED)
                             .amount(0)
                             .currency(Currency.AED)
+                            .networkReference("network_reference")
+                            .networkReferenceType(
+                                RefundNetworkReferenceType.ACQUIRER_REFERENCE_NUMBER
+                            )
                             .reason("reason")
                             .build()
                     )
@@ -358,6 +367,10 @@ internal class PaymentFailedWebhookEventTest {
                                 .status(RefundStatus.SUCCEEDED)
                                 .amount(0)
                                 .currency(Currency.AED)
+                                .networkReference("network_reference")
+                                .networkReferenceType(
+                                    RefundNetworkReferenceType.ACQUIRER_REFERENCE_NUMBER
+                                )
                                 .reason("reason")
                                 .build()
                         )

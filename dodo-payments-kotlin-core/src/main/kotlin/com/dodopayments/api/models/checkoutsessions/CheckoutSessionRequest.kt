@@ -177,7 +177,13 @@ private constructor(
         billingAddress.getNullable("billing_address")
 
     /**
-     * This field is ingored if adaptive pricing is disabled
+     * The currency to charge the customer in.
+     *
+     * Adaptive pricing must be enabled for the business. The customer then pays in this currency.
+     * If you do not set it, the currency comes from the billing country.
+     *
+     * If adaptive pricing is disabled, the API discards this field. The currency then comes from
+     * the product price, or from the billing country.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
@@ -291,6 +297,8 @@ private constructor(
 
     /**
      * If true, only zipcode is required when confirm is true; other address fields remain optional
+     *
+     * Default is true when `feature_flags.single_page` is true. Otherwise, default is false.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
@@ -725,7 +733,15 @@ private constructor(
             this.billingAddress = billingAddress
         }
 
-        /** This field is ingored if adaptive pricing is disabled */
+        /**
+         * The currency to charge the customer in.
+         *
+         * Adaptive pricing must be enabled for the business. The customer then pays in this
+         * currency. If you do not set it, the currency comes from the billing country.
+         *
+         * If adaptive pricing is disabled, the API discards this field. The currency then comes
+         * from the product price, or from the billing country.
+         */
         fun billingCurrency(billingCurrency: Currency?) =
             billingCurrency(JsonField.ofNullable(billingCurrency))
 
@@ -976,8 +992,18 @@ private constructor(
         /**
          * If true, only zipcode is required when confirm is true; other address fields remain
          * optional
+         *
+         * Default is true when `feature_flags.single_page` is true. Otherwise, default is false.
          */
-        fun minimalAddress(minimalAddress: Boolean) = minimalAddress(JsonField.of(minimalAddress))
+        fun minimalAddress(minimalAddress: Boolean?) =
+            minimalAddress(JsonField.ofNullable(minimalAddress))
+
+        /**
+         * Alias for [Builder.minimalAddress].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun minimalAddress(minimalAddress: Boolean) = minimalAddress(minimalAddress as Boolean?)
 
         /**
          * Sets [Builder.minimalAddress] to an arbitrary JSON value.
