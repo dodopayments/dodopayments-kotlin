@@ -33,6 +33,8 @@ private constructor(
     private val status: JsonField<RefundStatus>,
     private val amount: JsonField<Int>,
     private val currency: JsonField<Currency>,
+    private val networkReference: JsonField<String>,
+    private val networkReferenceType: JsonField<RefundNetworkReferenceType>,
     private val reason: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -58,6 +60,12 @@ private constructor(
         @JsonProperty("status") @ExcludeMissing status: JsonField<RefundStatus> = JsonMissing.of(),
         @JsonProperty("amount") @ExcludeMissing amount: JsonField<Int> = JsonMissing.of(),
         @JsonProperty("currency") @ExcludeMissing currency: JsonField<Currency> = JsonMissing.of(),
+        @JsonProperty("network_reference")
+        @ExcludeMissing
+        networkReference: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("network_reference_type")
+        @ExcludeMissing
+        networkReferenceType: JsonField<RefundNetworkReferenceType> = JsonMissing.of(),
         @JsonProperty("reason") @ExcludeMissing reason: JsonField<String> = JsonMissing.of(),
     ) : this(
         brandId,
@@ -71,6 +79,8 @@ private constructor(
         status,
         amount,
         currency,
+        networkReference,
+        networkReferenceType,
         reason,
         mutableMapOf(),
     )
@@ -164,6 +174,25 @@ private constructor(
     fun currency(): Currency? = currency.getNullable("currency")
 
     /**
+     * The reference number that the card network or the bank gives to the refund. The customer can
+     * give this number to their bank to trace the refund. It is null until the payment processor
+     * sends it.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun networkReference(): String? = networkReference.getNullable("network_reference")
+
+    /**
+     * The kind of `network_reference`: ARN, STAN or RRN.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun networkReferenceType(): RefundNetworkReferenceType? =
+        networkReferenceType.getNullable("network_reference_type")
+
+    /**
      * The reason provided for the refund, if any. Optional.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -253,6 +282,26 @@ private constructor(
     @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<Currency> = currency
 
     /**
+     * Returns the raw JSON value of [networkReference].
+     *
+     * Unlike [networkReference], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("network_reference")
+    @ExcludeMissing
+    fun _networkReference(): JsonField<String> = networkReference
+
+    /**
+     * Returns the raw JSON value of [networkReferenceType].
+     *
+     * Unlike [networkReferenceType], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("network_reference_type")
+    @ExcludeMissing
+    fun _networkReferenceType(): JsonField<RefundNetworkReferenceType> = networkReferenceType
+
+    /**
      * Returns the raw JSON value of [reason].
      *
      * Unlike [reason], this method doesn't throw if the JSON field has an unexpected type.
@@ -306,6 +355,8 @@ private constructor(
         private var status: JsonField<RefundStatus>? = null
         private var amount: JsonField<Int> = JsonMissing.of()
         private var currency: JsonField<Currency> = JsonMissing.of()
+        private var networkReference: JsonField<String> = JsonMissing.of()
+        private var networkReferenceType: JsonField<RefundNetworkReferenceType> = JsonMissing.of()
         private var reason: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -321,6 +372,8 @@ private constructor(
             status = refund.status
             amount = refund.amount
             currency = refund.currency
+            networkReference = refund.networkReference
+            networkReferenceType = refund.networkReferenceType
             reason = refund.reason
             additionalProperties = refund.additionalProperties.toMutableMap()
         }
@@ -463,6 +516,41 @@ private constructor(
          */
         fun currency(currency: JsonField<Currency>) = apply { this.currency = currency }
 
+        /**
+         * The reference number that the card network or the bank gives to the refund. The customer
+         * can give this number to their bank to trace the refund. It is null until the payment
+         * processor sends it.
+         */
+        fun networkReference(networkReference: String?) =
+            networkReference(JsonField.ofNullable(networkReference))
+
+        /**
+         * Sets [Builder.networkReference] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.networkReference] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun networkReference(networkReference: JsonField<String>) = apply {
+            this.networkReference = networkReference
+        }
+
+        /** The kind of `network_reference`: ARN, STAN or RRN. */
+        fun networkReferenceType(networkReferenceType: RefundNetworkReferenceType?) =
+            networkReferenceType(JsonField.ofNullable(networkReferenceType))
+
+        /**
+         * Sets [Builder.networkReferenceType] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.networkReferenceType] with a well-typed
+         * [RefundNetworkReferenceType] value instead. This method is primarily for setting the
+         * field to an undocumented or not yet supported value.
+         */
+        fun networkReferenceType(networkReferenceType: JsonField<RefundNetworkReferenceType>) =
+            apply {
+                this.networkReferenceType = networkReferenceType
+            }
+
         /** The reason provided for the refund, if any. Optional. */
         fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
@@ -526,6 +614,8 @@ private constructor(
                 checkRequired("status", status),
                 amount,
                 currency,
+                networkReference,
+                networkReferenceType,
                 reason,
                 additionalProperties.toMutableMap(),
             )
@@ -557,6 +647,8 @@ private constructor(
         status().validate()
         amount()
         currency()?.validate()
+        networkReference()
+        networkReferenceType()?.validate()
         reason()
         validated = true
     }
@@ -586,6 +678,8 @@ private constructor(
             (status.asKnown()?.validity() ?: 0) +
             (if (amount.asKnown() == null) 0 else 1) +
             (currency.asKnown()?.validity() ?: 0) +
+            (if (networkReference.asKnown() == null) 0 else 1) +
+            (networkReferenceType.asKnown()?.validity() ?: 0) +
             (if (reason.asKnown() == null) 0 else 1)
 
     override fun equals(other: Any?): Boolean {
@@ -605,6 +699,8 @@ private constructor(
             status == other.status &&
             amount == other.amount &&
             currency == other.currency &&
+            networkReference == other.networkReference &&
+            networkReferenceType == other.networkReferenceType &&
             reason == other.reason &&
             additionalProperties == other.additionalProperties
     }
@@ -622,6 +718,8 @@ private constructor(
             status,
             amount,
             currency,
+            networkReference,
+            networkReferenceType,
             reason,
             additionalProperties,
         )
@@ -630,5 +728,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Refund{brandId=$brandId, businessId=$businessId, createdAt=$createdAt, customer=$customer, isPartial=$isPartial, metadata=$metadata, paymentId=$paymentId, refundId=$refundId, status=$status, amount=$amount, currency=$currency, reason=$reason, additionalProperties=$additionalProperties}"
+        "Refund{brandId=$brandId, businessId=$businessId, createdAt=$createdAt, customer=$customer, isPartial=$isPartial, metadata=$metadata, paymentId=$paymentId, refundId=$refundId, status=$status, amount=$amount, currency=$currency, networkReference=$networkReference, networkReferenceType=$networkReferenceType, reason=$reason, additionalProperties=$additionalProperties}"
 }

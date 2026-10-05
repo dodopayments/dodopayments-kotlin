@@ -115,6 +115,13 @@ internal class SubscriptionTest {
                 .cancellationComment("cancellation_comment")
                 .cancellationFeedback(CancellationFeedback.TOO_EXPENSIVE)
                 .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .cancelledBy(
+                    SubscriptionCancelledBy.builder()
+                        .actorType(SubscriptionCancelledBy.ActorType.CUSTOMER)
+                        .email("email")
+                        .name("name")
+                        .build()
+                )
                 .addCustomFieldResponse(
                     CustomFieldResponse.builder().key("key").value("value").build()
                 )
@@ -273,6 +280,14 @@ internal class SubscriptionTest {
             .isEqualTo(CancellationFeedback.TOO_EXPENSIVE)
         assertThat(subscription.cancelledAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(subscription.cancelledBy())
+            .isEqualTo(
+                SubscriptionCancelledBy.builder()
+                    .actorType(SubscriptionCancelledBy.ActorType.CUSTOMER)
+                    .email("email")
+                    .name("name")
+                    .build()
+            )
         assertThat(subscription.customFieldResponses())
             .containsExactly(CustomFieldResponse.builder().key("key").value("value").build())
         assertThat(subscription.customerBusinessName()).isEqualTo("customer_business_name")
@@ -427,6 +442,13 @@ internal class SubscriptionTest {
                 .cancellationComment("cancellation_comment")
                 .cancellationFeedback(CancellationFeedback.TOO_EXPENSIVE)
                 .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .cancelledBy(
+                    SubscriptionCancelledBy.builder()
+                        .actorType(SubscriptionCancelledBy.ActorType.CUSTOMER)
+                        .email("email")
+                        .name("name")
+                        .build()
+                )
                 .addCustomFieldResponse(
                     CustomFieldResponse.builder().key("key").value("value").build()
                 )

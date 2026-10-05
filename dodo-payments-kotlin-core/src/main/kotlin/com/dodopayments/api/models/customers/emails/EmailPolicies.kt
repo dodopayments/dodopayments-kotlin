@@ -57,7 +57,8 @@ private constructor(
     )
 
     /**
-     * A permanent failure was recorded, so the same address would be a no-op.
+     * A permanent failure was recorded, so a send to the same address delivers nothing. It is false
+     * for a suppressed address that a resend can clear.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -192,7 +193,10 @@ private constructor(
             additionalProperties = emailPolicies.additionalProperties.toMutableMap()
         }
 
-        /** A permanent failure was recorded, so the same address would be a no-op. */
+        /**
+         * A permanent failure was recorded, so a send to the same address delivers nothing. It is
+         * false for a suppressed address that a resend can clear.
+         */
         fun requiresDifferentAddress(requiresDifferentAddress: Boolean) =
             requiresDifferentAddress(JsonField.of(requiresDifferentAddress))
 

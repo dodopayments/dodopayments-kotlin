@@ -19,6 +19,7 @@ import com.dodopayments.api.models.subscriptions.CreditEntitlementCartResponse
 import com.dodopayments.api.models.subscriptions.MeterCartResponseItem
 import com.dodopayments.api.models.subscriptions.MeterCreditEntitlementCartResponse
 import com.dodopayments.api.models.subscriptions.ScheduledPlanChange
+import com.dodopayments.api.models.subscriptions.SubscriptionCancelledBy
 import com.dodopayments.api.models.subscriptions.SubscriptionStatus
 import com.dodopayments.api.models.subscriptions.TimeInterval
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
@@ -128,6 +129,13 @@ internal class SubscriptionPlanChangedWebhookEventTest {
                         .cancellationComment("cancellation_comment")
                         .cancellationFeedback(CancellationFeedback.TOO_EXPENSIVE)
                         .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .cancelledBy(
+                            SubscriptionCancelledBy.builder()
+                                .actorType(SubscriptionCancelledBy.ActorType.CUSTOMER)
+                                .email("email")
+                                .name("name")
+                                .build()
+                        )
                         .addCustomFieldResponse(
                             CustomFieldResponse.builder().key("key").value("value").build()
                         )
@@ -284,6 +292,13 @@ internal class SubscriptionPlanChangedWebhookEventTest {
                     .cancellationComment("cancellation_comment")
                     .cancellationFeedback(CancellationFeedback.TOO_EXPENSIVE)
                     .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .cancelledBy(
+                        SubscriptionCancelledBy.builder()
+                            .actorType(SubscriptionCancelledBy.ActorType.CUSTOMER)
+                            .email("email")
+                            .name("name")
+                            .build()
+                    )
                     .addCustomFieldResponse(
                         CustomFieldResponse.builder().key("key").value("value").build()
                     )
@@ -445,6 +460,13 @@ internal class SubscriptionPlanChangedWebhookEventTest {
                         .cancellationComment("cancellation_comment")
                         .cancellationFeedback(CancellationFeedback.TOO_EXPENSIVE)
                         .cancelledAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .cancelledBy(
+                            SubscriptionCancelledBy.builder()
+                                .actorType(SubscriptionCancelledBy.ActorType.CUSTOMER)
+                                .email("email")
+                                .name("name")
+                                .build()
+                        )
                         .addCustomFieldResponse(
                             CustomFieldResponse.builder().key("key").value("value").build()
                         )
