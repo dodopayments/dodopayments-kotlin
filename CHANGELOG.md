@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.119.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.118.0...v1.119.0) (2026-10-05)
+
+
+### Features
+
+* **api:** refund network references and subscription cancelled_by ([7b60796](https://github.com/dodopayments/dodopayments-kotlin/commit/7b607963863c022e1d181cd4b6f889344dd0985a))
+* **api:** refund network references and subscription cancelled_by ([aff816e](https://github.com/dodopayments/dodopayments-kotlin/commit/aff816ed2bfa2f84d78611b980785b99a6436cb1))
+
 ## [1.118.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.117.0...v1.118.0) (2026-09-25)
 
 
