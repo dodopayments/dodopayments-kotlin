@@ -22,6 +22,7 @@ internal class UpdateSubscriptionPlanReqTest {
                 .quantity(0)
                 .adaptiveCurrencyFeesInclusive(true)
                 .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
+                .cancelOlderPaymentLink(true)
                 .cancelScheduledChangePlan(true)
                 .collectViaPaymentLink(true)
                 .discountCode("discount_code")
@@ -33,6 +34,7 @@ internal class UpdateSubscriptionPlanReqTest {
                         .build()
                 )
                 .onPaymentFailure(UpdateSubscriptionPlanReq.OnPaymentFailure.PREVENT_CHANGE)
+                .returnUrl("return_url")
                 .build()
 
         assertThat(updateSubscriptionPlanReq.productId()).isEqualTo("product_id")
@@ -42,6 +44,7 @@ internal class UpdateSubscriptionPlanReqTest {
         assertThat(updateSubscriptionPlanReq.adaptiveCurrencyFeesInclusive()).isEqualTo(true)
         assertThat(updateSubscriptionPlanReq.addons())
             .containsExactly(AttachAddon.builder().addonId("addon_id").quantity(0).build())
+        assertThat(updateSubscriptionPlanReq.cancelOlderPaymentLink()).isEqualTo(true)
         assertThat(updateSubscriptionPlanReq.cancelScheduledChangePlan()).isEqualTo(true)
         assertThat(updateSubscriptionPlanReq.collectViaPaymentLink()).isEqualTo(true)
         assertThat(updateSubscriptionPlanReq.discountCode()).isEqualTo("discount_code")
@@ -54,6 +57,7 @@ internal class UpdateSubscriptionPlanReqTest {
             )
         assertThat(updateSubscriptionPlanReq.onPaymentFailure())
             .isEqualTo(UpdateSubscriptionPlanReq.OnPaymentFailure.PREVENT_CHANGE)
+        assertThat(updateSubscriptionPlanReq.returnUrl()).isEqualTo("return_url")
     }
 
     @Test
@@ -68,6 +72,7 @@ internal class UpdateSubscriptionPlanReqTest {
                 .quantity(0)
                 .adaptiveCurrencyFeesInclusive(true)
                 .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
+                .cancelOlderPaymentLink(true)
                 .cancelScheduledChangePlan(true)
                 .collectViaPaymentLink(true)
                 .discountCode("discount_code")
@@ -79,6 +84,7 @@ internal class UpdateSubscriptionPlanReqTest {
                         .build()
                 )
                 .onPaymentFailure(UpdateSubscriptionPlanReq.OnPaymentFailure.PREVENT_CHANGE)
+                .returnUrl("return_url")
                 .build()
 
         val roundtrippedUpdateSubscriptionPlanReq =
