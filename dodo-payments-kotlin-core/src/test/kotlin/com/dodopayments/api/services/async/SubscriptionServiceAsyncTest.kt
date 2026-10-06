@@ -226,6 +226,7 @@ internal class SubscriptionServiceAsyncTest {
                             .quantity(0)
                             .adaptiveCurrencyFeesInclusive(true)
                             .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
+                            .cancelOlderPaymentLink(true)
                             .cancelScheduledChangePlan(true)
                             .collectViaPaymentLink(true)
                             .discountCode("discount_code")
@@ -239,6 +240,7 @@ internal class SubscriptionServiceAsyncTest {
                             .onPaymentFailure(
                                 UpdateSubscriptionPlanReq.OnPaymentFailure.PREVENT_CHANGE
                             )
+                            .returnUrl("return_url")
                             .build()
                     )
                     .build()
@@ -303,6 +305,7 @@ internal class SubscriptionServiceAsyncTest {
                             .quantity(0)
                             .adaptiveCurrencyFeesInclusive(true)
                             .addAddon(AttachAddon.builder().addonId("addon_id").quantity(0).build())
+                            .cancelOlderPaymentLink(true)
                             .cancelScheduledChangePlan(true)
                             .collectViaPaymentLink(true)
                             .discountCode("discount_code")
@@ -316,6 +319,7 @@ internal class SubscriptionServiceAsyncTest {
                             .onPaymentFailure(
                                 UpdateSubscriptionPlanReq.OnPaymentFailure.PREVENT_CHANGE
                             )
+                            .returnUrl("return_url")
                             .build()
                     )
                     .build()
