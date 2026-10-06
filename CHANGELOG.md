@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.120.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.119.0...v1.120.0) (2026-10-06)
+
+
+### Features
+
+* **api:** change-plan cancel_older_payment_link and return_url ([c7b42f1](https://github.com/dodopayments/dodopayments-kotlin/commit/c7b42f187513a985346331aca14674f8902bd8ee))
+* **api:** change-plan cancel_older_payment_link and return_url ([8c31a1f](https://github.com/dodopayments/dodopayments-kotlin/commit/8c31a1fd0b5ea0a3f8b4d13bfac36c2cf0418474))
+
 ## [1.119.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.118.0...v1.119.0) (2026-10-05)
 
 
