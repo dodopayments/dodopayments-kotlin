@@ -5745,7 +5745,7 @@ private constructor(
             /**
              * The reference number that the card network or the bank gives to the refund. The
              * customer can give this number to their bank to trace the refund. It is null until the
-             * payment processor sends it.
+             * reference is available.
              *
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
@@ -6130,7 +6130,7 @@ private constructor(
                 /**
                  * The reference number that the card network or the bank gives to the refund. The
                  * customer can give this number to their bank to trace the refund. It is null until
-                 * the payment processor sends it.
+                 * the reference is available.
                  */
                 fun networkReference(networkReference: String?) =
                     networkReference(JsonField.ofNullable(networkReference))
