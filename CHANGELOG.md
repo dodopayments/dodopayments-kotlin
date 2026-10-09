@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.120.2](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.120.1...v1.120.2) (2026-10-09)
+
+
+### Bug Fixes
+
+* **deps:** upgrade SDK toolchains (pnpm, uv, TypeScript 7, Gradle 9, okhttp 5, zod 4) and stop cursor pagination on done ([c93665a](https://github.com/dodopayments/dodopayments-kotlin/commit/c93665ac5fbd236400956718eacc559e523e0611))
+* **deps:** upgrade SDK toolchains (pnpm, uv, TypeScript 7, Gradle 9, okhttp 5, zod 4) and stop cursor pagination on done ([9be257e](https://github.com/dodopayments/dodopayments-kotlin/commit/9be257ee28283aefe7017dcf2976eda9b4527d96))
+
 ## [1.120.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.120.0...v1.120.1) (2026-10-09)
 
 
