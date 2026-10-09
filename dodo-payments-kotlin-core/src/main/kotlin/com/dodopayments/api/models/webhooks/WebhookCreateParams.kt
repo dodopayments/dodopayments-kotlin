@@ -25,7 +25,7 @@ import java.util.Objects
 class WebhookCreateParams
 private constructor(
     private val body: Body,
-    private val additionalHeaders: com.dodopayments.api.core.http.Headers,
+    private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
@@ -152,7 +152,7 @@ private constructor(
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     /** Additional headers to send with the request. */
-    fun _additionalHeaders(): com.dodopayments.api.core.http.Headers = additionalHeaders
+    fun _additionalHeaders(): Headers = additionalHeaders
 
     /** Additional query param to send with the request. */
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
@@ -176,8 +176,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var body: Body.Builder = Body.builder()
-        private var additionalHeaders: com.dodopayments.api.core.http.Headers.Builder =
-            com.dodopayments.api.core.http.Headers.builder()
+        private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(webhookCreateParams: WebhookCreateParams) = apply {
@@ -345,7 +344,7 @@ private constructor(
             body.removeAllAdditionalProperties(keys)
         }
 
-        fun additionalHeaders(additionalHeaders: com.dodopayments.api.core.http.Headers) = apply {
+        fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
             putAllAdditionalHeaders(additionalHeaders)
         }
@@ -363,10 +362,9 @@ private constructor(
             additionalHeaders.put(name, values)
         }
 
-        fun putAllAdditionalHeaders(additionalHeaders: com.dodopayments.api.core.http.Headers) =
-            apply {
-                this.additionalHeaders.putAll(additionalHeaders)
-            }
+        fun putAllAdditionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.putAll(additionalHeaders)
+        }
 
         fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
             this.additionalHeaders.putAll(additionalHeaders)
@@ -380,10 +378,9 @@ private constructor(
             additionalHeaders.replace(name, values)
         }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: com.dodopayments.api.core.http.Headers) =
-            apply {
-                this.additionalHeaders.replaceAll(additionalHeaders)
-            }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.replaceAll(additionalHeaders)
+        }
 
         fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
             this.additionalHeaders.replaceAll(additionalHeaders)
@@ -467,7 +464,7 @@ private constructor(
 
     fun _body(): Body = body
 
-    override fun _headers(): com.dodopayments.api.core.http.Headers = additionalHeaders
+    override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
