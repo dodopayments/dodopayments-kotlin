@@ -16,7 +16,7 @@ import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
 import com.dodopayments.api.models.creditentitlements.balances.CreditLedgerEntry
 import com.dodopayments.api.models.discounts.DiscountDetail
-import com.dodopayments.api.models.disputes.Dispute
+import com.dodopayments.api.models.disputes.Dispute as GlobalDispute
 import com.dodopayments.api.models.disputes.DisputeStage
 import com.dodopayments.api.models.disputes.DisputeStatus
 import com.dodopayments.api.models.disputes.GetDispute
@@ -856,7 +856,7 @@ private constructor(
             private val currency: JsonField<Currency>,
             private val customer: JsonField<CustomerLimitedDetails>,
             private val digitalProductsDelivered: JsonField<Boolean>,
-            private val disputes: JsonField<List<Dispute>>,
+            private val disputes: JsonField<List<GlobalDispute>>,
             private val isMultiSubscription: JsonField<Boolean>,
             private val isUpdatePaymentMethod: JsonField<Boolean>,
             private val metadata: JsonField<Metadata>,
@@ -923,7 +923,7 @@ private constructor(
                 digitalProductsDelivered: JsonField<Boolean> = JsonMissing.of(),
                 @JsonProperty("disputes")
                 @ExcludeMissing
-                disputes: JsonField<List<Dispute>> = JsonMissing.of(),
+                disputes: JsonField<List<GlobalDispute>> = JsonMissing.of(),
                 @JsonProperty("is_multi_subscription")
                 @ExcludeMissing
                 isMultiSubscription: JsonField<Boolean> = JsonMissing.of(),
@@ -1200,7 +1200,7 @@ private constructor(
              *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
-            fun disputes(): List<Dispute> = disputes.getRequired("disputes")
+            fun disputes(): List<GlobalDispute> = disputes.getRequired("disputes")
 
             /**
              * True when one payment starts more than one subscription. Read this field to find the
@@ -1608,7 +1608,7 @@ private constructor(
              */
             @JsonProperty("disputes")
             @ExcludeMissing
-            fun _disputes(): JsonField<List<Dispute>> = disputes
+            fun _disputes(): JsonField<List<GlobalDispute>> = disputes
 
             /**
              * Returns the raw JSON value of [isMultiSubscription].
@@ -2009,7 +2009,7 @@ private constructor(
                 private var currency: JsonField<Currency>? = null
                 private var customer: JsonField<CustomerLimitedDetails>? = null
                 private var digitalProductsDelivered: JsonField<Boolean>? = null
-                private var disputes: JsonField<MutableList<Dispute>>? = null
+                private var disputes: JsonField<MutableList<GlobalDispute>>? = null
                 private var isMultiSubscription: JsonField<Boolean>? = null
                 private var isUpdatePaymentMethod: JsonField<Boolean>? = null
                 private var metadata: JsonField<Metadata>? = null
@@ -2197,7 +2197,7 @@ private constructor(
                 }
 
                 /** List of disputes associated with this payment */
-                fun disputes(disputes: List<Dispute>) = disputes(JsonField.of(disputes))
+                fun disputes(disputes: List<GlobalDispute>) = disputes(JsonField.of(disputes))
 
                 /**
                  * Sets [Builder.disputes] to an arbitrary JSON value.
@@ -2206,7 +2206,7 @@ private constructor(
                  * value instead. This method is primarily for setting the field to an undocumented
                  * or not yet supported value.
                  */
-                fun disputes(disputes: JsonField<List<Dispute>>) = apply {
+                fun disputes(disputes: JsonField<List<GlobalDispute>>) = apply {
                     this.disputes = disputes.map { it.toMutableList() }
                 }
 
@@ -2215,7 +2215,7 @@ private constructor(
                  *
                  * @throws IllegalStateException if the field was previously set to a non-list.
                  */
-                fun addDispute(dispute: Dispute) = apply {
+                fun addDispute(dispute: GlobalDispute) = apply {
                     disputes =
                         (disputes ?: JsonField.of(mutableListOf())).also {
                             checkKnown("disputes", it).add(dispute)
