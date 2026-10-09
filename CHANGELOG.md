@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.120.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.120.0...v1.120.1) (2026-10-09)
+
+
+### Bug Fixes
+
+* **deps:** refresh generated SDK dependencies and CI action pins ([c4a3562](https://github.com/dodopayments/dodopayments-kotlin/commit/c4a35625b2687b1bc93fdde1e9e069c9ac583388))
+* **deps:** refresh generated SDK dependencies and CI action pins ([af99fcc](https://github.com/dodopayments/dodopayments-kotlin/commit/af99fcc50603f5be212c64ebf82ca7f75c70aa9e))
+
 ## [1.120.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.119.0...v1.120.0) (2026-10-06)
 
 
