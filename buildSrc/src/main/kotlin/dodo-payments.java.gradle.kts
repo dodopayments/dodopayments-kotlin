@@ -38,6 +38,11 @@ tasks.withType<Test>().configureEach {
     maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
     forkEvery = 100
 
+    // Mockito's byte-buddy agent attaches at runtime; without this JDK 21+ prints a
+    // "Java agent has been loaded dynamically" warning to stderr, which leaks into
+    // tests that capture System.err (LoggingHttpClientTest flaked on it).
+    jvmArgs("-XX:+EnableDynamicAgentLoading")
+
     testLogging {
         exceptionFormat = TestExceptionFormat.FULL
     }
