@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.120.4](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.120.3...v1.120.4) (2026-10-09)
+
+
+### Bug Fixes
+
+* **kotlin:** type payment webhook disputes as the Dispute model ([2db5ad9](https://github.com/dodopayments/dodopayments-kotlin/commit/2db5ad9e17f281d7ab20e13bbc13adb979cab4e5))
+* **kotlin:** type payment webhook disputes as the Dispute model ([77e679c](https://github.com/dodopayments/dodopayments-kotlin/commit/77e679c43777696b46ddfc0ef94bc2f0ed879b3a))
+
 ## [1.120.3](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.120.2...v1.120.3) (2026-10-09)
 
 
