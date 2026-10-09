@@ -39,7 +39,8 @@ private constructor(
 
     override fun items(): List<WebhookDetails> = data()
 
-    override fun hasNextPage(): Boolean = items().isNotEmpty() && iterator() != null
+    override fun hasNextPage(): Boolean =
+        (done() != true) && items().isNotEmpty() && iterator() != null
 
     fun nextPageParams(): WebhookListParams {
         val nextCursor =
