@@ -41,6 +41,8 @@ tasks.withType<Test>().configureEach {
 val ktfmt by configurations.creating
 dependencies {
     ktfmt("com.facebook:ktfmt:0.61")
+    // Gradle 9 no longer puts a JUnit Platform launcher on the test runtime classpath.
+    "testRuntimeOnly"("org.junit.platform:junit-platform-launcher:1.14.4")
 }
 
 fun registerKtfmt(

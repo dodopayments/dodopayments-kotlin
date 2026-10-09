@@ -1,6 +1,6 @@
 plugins {
     id("dodo-payments.kotlin")
-    id("com.gradleup.shadow") version "8.3.8"
+    id("com.gradleup.shadow") version "9.6.1"
 }
 
 buildscript {
@@ -9,8 +9,8 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.guardsquare:proguard-gradle:7.4.2")
-        classpath("com.android.tools:r8:8.3.37")
+        classpath("com.guardsquare:proguard-gradle:7.10.0")
+        classpath("com.android.tools:r8:9.5.23")
     }
 }
 
