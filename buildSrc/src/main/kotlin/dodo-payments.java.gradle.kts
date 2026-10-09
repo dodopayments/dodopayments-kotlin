@@ -50,7 +50,7 @@ tasks.withType<Test>().configureEach {
 
 val palantir by configurations.creating
 dependencies {
-    palantir("com.palantir.javaformat:palantir-java-format:2.89.0")
+    palantir("com.palantir.javaformat:palantir-java-format:2.102.0")
 }
 
 fun registerPalantir(
