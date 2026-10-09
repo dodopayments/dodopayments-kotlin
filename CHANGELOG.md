@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.120.3](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.120.2...v1.120.3) (2026-10-09)
+
+
+### Bug Fixes
+
+* **kotlin:** sign Maven Central publications with the Gradle-property signing key ([806716c](https://github.com/dodopayments/dodopayments-kotlin/commit/806716cfb47178e438de0148b02b836b9f8d06c1))
+* **kotlin:** sign Maven Central publications with the Gradle-property signing key ([8f8fce5](https://github.com/dodopayments/dodopayments-kotlin/commit/8f8fce5df02368b46eaf840ef1f15c1324404c95))
+
 ## [1.120.2](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.120.1...v1.120.2) (2026-10-09)
 
 
