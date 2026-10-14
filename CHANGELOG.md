@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.121.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.120.4...v1.121.0) (2026-10-14)
+
+
+### Features
+
+* **api:** payment service periods, retry attempts and subscription renewal payment_id ([111f804](https://github.com/dodopayments/dodopayments-kotlin/commit/111f8042de3d43d3d21d888ee0ee94e320a631a7))
+* **api:** payment service periods, retry attempts and subscription renewal payment_id ([fe59b28](https://github.com/dodopayments/dodopayments-kotlin/commit/fe59b2810548462fd554d00b14a4e6d784288b83))
+
 ## [1.120.4](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.120.3...v1.120.4) (2026-10-09)
 
 
