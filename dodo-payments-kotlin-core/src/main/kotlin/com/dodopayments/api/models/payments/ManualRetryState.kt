@@ -22,6 +22,9 @@ private constructor(
     private val canRetry: JsonField<Boolean>,
     private val sendsAllowed: JsonField<Long>,
     private val sendsUsed: JsonField<Long>,
+    private val automaticRetryNumber: JsonField<Int>,
+    private val automaticRetryTotal: JsonField<Int>,
+    private val nextAutomaticRetryAt: JsonField<OffsetDateTime>,
     private val reason: JsonField<String>,
     private val retryAvailableAt: JsonField<OffsetDateTime>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -34,11 +37,30 @@ private constructor(
         @ExcludeMissing
         sendsAllowed: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("sends_used") @ExcludeMissing sendsUsed: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("automatic_retry_number")
+        @ExcludeMissing
+        automaticRetryNumber: JsonField<Int> = JsonMissing.of(),
+        @JsonProperty("automatic_retry_total")
+        @ExcludeMissing
+        automaticRetryTotal: JsonField<Int> = JsonMissing.of(),
+        @JsonProperty("next_automatic_retry_at")
+        @ExcludeMissing
+        nextAutomaticRetryAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("reason") @ExcludeMissing reason: JsonField<String> = JsonMissing.of(),
         @JsonProperty("retry_available_at")
         @ExcludeMissing
         retryAvailableAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    ) : this(canRetry, sendsAllowed, sendsUsed, reason, retryAvailableAt, mutableMapOf())
+    ) : this(
+        canRetry,
+        sendsAllowed,
+        sendsUsed,
+        automaticRetryNumber,
+        automaticRetryTotal,
+        nextAutomaticRetryAt,
+        reason,
+        retryAvailableAt,
+        mutableMapOf(),
+    )
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
@@ -57,6 +79,33 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun sendsUsed(): Long = sendsUsed.getRequired("sends_used")
+
+    /**
+     * The number of the queued automatic retry, starting at 1.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun automaticRetryNumber(): Int? = automaticRetryNumber.getNullable("automatic_retry_number")
+
+    /**
+     * The number of automatic retries that the current configuration plans for this invoice. It is
+     * never less than `automatic_retry_number`.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun automaticRetryTotal(): Int? = automaticRetryTotal.getNullable("automatic_retry_total")
+
+    /**
+     * When the next automatic retry on this invoice is scheduled. Null when no automatic retry is
+     * queued or automatic retries are disabled.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun nextAutomaticRetryAt(): OffsetDateTime? =
+        nextAutomaticRetryAt.getNullable("next_automatic_retry_at")
 
     /**
      * The code `POST` would fail with. Null when `can_retry` is true.
@@ -97,6 +146,36 @@ private constructor(
      * Unlike [sendsUsed], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("sends_used") @ExcludeMissing fun _sendsUsed(): JsonField<Long> = sendsUsed
+
+    /**
+     * Returns the raw JSON value of [automaticRetryNumber].
+     *
+     * Unlike [automaticRetryNumber], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("automatic_retry_number")
+    @ExcludeMissing
+    fun _automaticRetryNumber(): JsonField<Int> = automaticRetryNumber
+
+    /**
+     * Returns the raw JSON value of [automaticRetryTotal].
+     *
+     * Unlike [automaticRetryTotal], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("automatic_retry_total")
+    @ExcludeMissing
+    fun _automaticRetryTotal(): JsonField<Int> = automaticRetryTotal
+
+    /**
+     * Returns the raw JSON value of [nextAutomaticRetryAt].
+     *
+     * Unlike [nextAutomaticRetryAt], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("next_automatic_retry_at")
+    @ExcludeMissing
+    fun _nextAutomaticRetryAt(): JsonField<OffsetDateTime> = nextAutomaticRetryAt
 
     /**
      * Returns the raw JSON value of [reason].
@@ -148,6 +227,9 @@ private constructor(
         private var canRetry: JsonField<Boolean>? = null
         private var sendsAllowed: JsonField<Long>? = null
         private var sendsUsed: JsonField<Long>? = null
+        private var automaticRetryNumber: JsonField<Int> = JsonMissing.of()
+        private var automaticRetryTotal: JsonField<Int> = JsonMissing.of()
+        private var nextAutomaticRetryAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var reason: JsonField<String> = JsonMissing.of()
         private var retryAvailableAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -156,6 +238,9 @@ private constructor(
             canRetry = manualRetryState.canRetry
             sendsAllowed = manualRetryState.sendsAllowed
             sendsUsed = manualRetryState.sendsUsed
+            automaticRetryNumber = manualRetryState.automaticRetryNumber
+            automaticRetryTotal = manualRetryState.automaticRetryTotal
+            nextAutomaticRetryAt = manualRetryState.nextAutomaticRetryAt
             reason = manualRetryState.reason
             retryAvailableAt = manualRetryState.retryAvailableAt
             additionalProperties = manualRetryState.additionalProperties.toMutableMap()
@@ -192,6 +277,73 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun sendsUsed(sendsUsed: JsonField<Long>) = apply { this.sendsUsed = sendsUsed }
+
+        /** The number of the queued automatic retry, starting at 1. */
+        fun automaticRetryNumber(automaticRetryNumber: Int?) =
+            automaticRetryNumber(JsonField.ofNullable(automaticRetryNumber))
+
+        /**
+         * Alias for [Builder.automaticRetryNumber].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun automaticRetryNumber(automaticRetryNumber: Int) =
+            automaticRetryNumber(automaticRetryNumber as Int?)
+
+        /**
+         * Sets [Builder.automaticRetryNumber] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.automaticRetryNumber] with a well-typed [Int] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun automaticRetryNumber(automaticRetryNumber: JsonField<Int>) = apply {
+            this.automaticRetryNumber = automaticRetryNumber
+        }
+
+        /**
+         * The number of automatic retries that the current configuration plans for this invoice. It
+         * is never less than `automatic_retry_number`.
+         */
+        fun automaticRetryTotal(automaticRetryTotal: Int?) =
+            automaticRetryTotal(JsonField.ofNullable(automaticRetryTotal))
+
+        /**
+         * Alias for [Builder.automaticRetryTotal].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun automaticRetryTotal(automaticRetryTotal: Int) =
+            automaticRetryTotal(automaticRetryTotal as Int?)
+
+        /**
+         * Sets [Builder.automaticRetryTotal] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.automaticRetryTotal] with a well-typed [Int] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun automaticRetryTotal(automaticRetryTotal: JsonField<Int>) = apply {
+            this.automaticRetryTotal = automaticRetryTotal
+        }
+
+        /**
+         * When the next automatic retry on this invoice is scheduled. Null when no automatic retry
+         * is queued or automatic retries are disabled.
+         */
+        fun nextAutomaticRetryAt(nextAutomaticRetryAt: OffsetDateTime?) =
+            nextAutomaticRetryAt(JsonField.ofNullable(nextAutomaticRetryAt))
+
+        /**
+         * Sets [Builder.nextAutomaticRetryAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.nextAutomaticRetryAt] with a well-typed [OffsetDateTime]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
+        fun nextAutomaticRetryAt(nextAutomaticRetryAt: JsonField<OffsetDateTime>) = apply {
+            this.nextAutomaticRetryAt = nextAutomaticRetryAt
+        }
 
         /** The code `POST` would fail with. Null when `can_retry` is true. */
         fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
@@ -260,6 +412,9 @@ private constructor(
                 checkRequired("canRetry", canRetry),
                 checkRequired("sendsAllowed", sendsAllowed),
                 checkRequired("sendsUsed", sendsUsed),
+                automaticRetryNumber,
+                automaticRetryTotal,
+                nextAutomaticRetryAt,
                 reason,
                 retryAvailableAt,
                 additionalProperties.toMutableMap(),
@@ -284,6 +439,9 @@ private constructor(
         canRetry()
         sendsAllowed()
         sendsUsed()
+        automaticRetryNumber()
+        automaticRetryTotal()
+        nextAutomaticRetryAt()
         reason()
         retryAvailableAt()
         validated = true
@@ -306,6 +464,9 @@ private constructor(
         (if (canRetry.asKnown() == null) 0 else 1) +
             (if (sendsAllowed.asKnown() == null) 0 else 1) +
             (if (sendsUsed.asKnown() == null) 0 else 1) +
+            (if (automaticRetryNumber.asKnown() == null) 0 else 1) +
+            (if (automaticRetryTotal.asKnown() == null) 0 else 1) +
+            (if (nextAutomaticRetryAt.asKnown() == null) 0 else 1) +
             (if (reason.asKnown() == null) 0 else 1) +
             (if (retryAvailableAt.asKnown() == null) 0 else 1)
 
@@ -318,6 +479,9 @@ private constructor(
             canRetry == other.canRetry &&
             sendsAllowed == other.sendsAllowed &&
             sendsUsed == other.sendsUsed &&
+            automaticRetryNumber == other.automaticRetryNumber &&
+            automaticRetryTotal == other.automaticRetryTotal &&
+            nextAutomaticRetryAt == other.nextAutomaticRetryAt &&
             reason == other.reason &&
             retryAvailableAt == other.retryAvailableAt &&
             additionalProperties == other.additionalProperties
@@ -328,6 +492,9 @@ private constructor(
             canRetry,
             sendsAllowed,
             sendsUsed,
+            automaticRetryNumber,
+            automaticRetryTotal,
+            nextAutomaticRetryAt,
             reason,
             retryAvailableAt,
             additionalProperties,
@@ -337,5 +504,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ManualRetryState{canRetry=$canRetry, sendsAllowed=$sendsAllowed, sendsUsed=$sendsUsed, reason=$reason, retryAvailableAt=$retryAvailableAt, additionalProperties=$additionalProperties}"
+        "ManualRetryState{canRetry=$canRetry, sendsAllowed=$sendsAllowed, sendsUsed=$sendsUsed, automaticRetryNumber=$automaticRetryNumber, automaticRetryTotal=$automaticRetryTotal, nextAutomaticRetryAt=$nextAutomaticRetryAt, reason=$reason, retryAvailableAt=$retryAvailableAt, additionalProperties=$additionalProperties}"
 }
