@@ -210,6 +210,9 @@ private constructor(
     /**
      * If the customer is allowed to apply discount code, set it to true.
      *
+     * If this flag is false, the customer cannot change the discount codes. The discount codes that
+     * you give when you create the session still apply.
+     *
      * Default is true
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -737,6 +740,9 @@ private constructor(
 
         /**
          * If the customer is allowed to apply discount code, set it to true.
+         *
+         * If this flag is false, the customer cannot change the discount codes. The discount codes
+         * that you give when you create the session still apply.
          *
          * Default is true
          */

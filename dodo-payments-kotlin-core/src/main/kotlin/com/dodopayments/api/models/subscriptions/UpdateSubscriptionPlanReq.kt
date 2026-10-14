@@ -873,6 +873,8 @@ private constructor(
 
             val DO_NOT_BILL = of("do_not_bill")
 
+            val PRORATED_IMMEDIATELY_KEEP_CYCLE = of("prorated_immediately_keep_cycle")
+
             fun of(value: String) = ProrationBillingMode(JsonField.of(value))
         }
 
@@ -882,6 +884,7 @@ private constructor(
             FULL_IMMEDIATELY,
             DIFFERENCE_IMMEDIATELY,
             DO_NOT_BILL,
+            PRORATED_IMMEDIATELY_KEEP_CYCLE,
         }
 
         /**
@@ -899,6 +902,7 @@ private constructor(
             FULL_IMMEDIATELY,
             DIFFERENCE_IMMEDIATELY,
             DO_NOT_BILL,
+            PRORATED_IMMEDIATELY_KEEP_CYCLE,
             /**
              * An enum member indicating that [ProrationBillingMode] was instantiated with an
              * unknown value.
@@ -919,6 +923,7 @@ private constructor(
                 FULL_IMMEDIATELY -> Value.FULL_IMMEDIATELY
                 DIFFERENCE_IMMEDIATELY -> Value.DIFFERENCE_IMMEDIATELY
                 DO_NOT_BILL -> Value.DO_NOT_BILL
+                PRORATED_IMMEDIATELY_KEEP_CYCLE -> Value.PRORATED_IMMEDIATELY_KEEP_CYCLE
                 else -> Value._UNKNOWN
             }
 
@@ -937,6 +942,7 @@ private constructor(
                 FULL_IMMEDIATELY -> Known.FULL_IMMEDIATELY
                 DIFFERENCE_IMMEDIATELY -> Known.DIFFERENCE_IMMEDIATELY
                 DO_NOT_BILL -> Known.DO_NOT_BILL
+                PRORATED_IMMEDIATELY_KEEP_CYCLE -> Known.PRORATED_IMMEDIATELY_KEEP_CYCLE
                 else ->
                     throw DodoPaymentsInvalidDataException("Unknown ProrationBillingMode: $value")
             }

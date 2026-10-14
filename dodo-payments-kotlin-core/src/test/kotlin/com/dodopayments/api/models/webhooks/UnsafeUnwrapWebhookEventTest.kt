@@ -29,6 +29,7 @@ import com.dodopayments.api.models.payments.IntentStatus
 import com.dodopayments.api.models.payments.Payment
 import com.dodopayments.api.models.payments.PaymentRefundStatus
 import com.dodopayments.api.models.payments.RefundListItem
+import com.dodopayments.api.models.payments.SubscriptionServicePeriod
 import com.dodopayments.api.models.products.DigitalProductDelivery
 import com.dodopayments.api.models.products.DigitalProductDeliveryFile
 import com.dodopayments.api.models.refunds.Refund
@@ -3390,10 +3391,20 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .networkReferenceType(
                                     RefundNetworkReferenceType.ACQUIRER_REFERENCE_NUMBER
                                 )
+                                .networkReferenceUpdatedAt(
+                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                )
                                 .reason("reason")
                                 .build()
                         )
                         .retryAttempt(0)
+                        .addServicePeriod(
+                            SubscriptionServicePeriod.builder()
+                                .endsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .subscriptionId("subscription_id")
+                                .build()
+                        )
                         .settlementAmount(0)
                         .settlementCurrency(Currency.AED)
                         .addSubscriptionId("string")
@@ -3582,10 +3593,20 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .networkReferenceType(
                                         RefundNetworkReferenceType.ACQUIRER_REFERENCE_NUMBER
                                     )
+                                    .networkReferenceUpdatedAt(
+                                        OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                    )
                                     .reason("reason")
                                     .build()
                             )
                             .retryAttempt(0)
+                            .addServicePeriod(
+                                SubscriptionServicePeriod.builder()
+                                    .endsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .subscriptionId("subscription_id")
+                                    .build()
+                            )
                             .settlementAmount(0)
                             .settlementCurrency(Currency.AED)
                             .addSubscriptionId("string")
@@ -3730,10 +3751,20 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .networkReferenceType(
                                     RefundNetworkReferenceType.ACQUIRER_REFERENCE_NUMBER
                                 )
+                                .networkReferenceUpdatedAt(
+                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                )
                                 .reason("reason")
                                 .build()
                         )
                         .retryAttempt(0)
+                        .addServicePeriod(
+                            SubscriptionServicePeriod.builder()
+                                .endsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .subscriptionId("subscription_id")
+                                .build()
+                        )
                         .settlementAmount(0)
                         .settlementCurrency(Currency.AED)
                         .addSubscriptionId("string")
@@ -3922,10 +3953,20 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .networkReferenceType(
                                         RefundNetworkReferenceType.ACQUIRER_REFERENCE_NUMBER
                                     )
+                                    .networkReferenceUpdatedAt(
+                                        OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                    )
                                     .reason("reason")
                                     .build()
                             )
                             .retryAttempt(0)
+                            .addServicePeriod(
+                                SubscriptionServicePeriod.builder()
+                                    .endsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .subscriptionId("subscription_id")
+                                    .build()
+                            )
                             .settlementAmount(0)
                             .settlementCurrency(Currency.AED)
                             .addSubscriptionId("string")
@@ -4070,10 +4111,20 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .networkReferenceType(
                                     RefundNetworkReferenceType.ACQUIRER_REFERENCE_NUMBER
                                 )
+                                .networkReferenceUpdatedAt(
+                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                )
                                 .reason("reason")
                                 .build()
                         )
                         .retryAttempt(0)
+                        .addServicePeriod(
+                            SubscriptionServicePeriod.builder()
+                                .endsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .subscriptionId("subscription_id")
+                                .build()
+                        )
                         .settlementAmount(0)
                         .settlementCurrency(Currency.AED)
                         .addSubscriptionId("string")
@@ -4263,10 +4314,20 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .networkReferenceType(
                                         RefundNetworkReferenceType.ACQUIRER_REFERENCE_NUMBER
                                     )
+                                    .networkReferenceUpdatedAt(
+                                        OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                    )
                                     .reason("reason")
                                     .build()
                             )
                             .retryAttempt(0)
+                            .addServicePeriod(
+                                SubscriptionServicePeriod.builder()
+                                    .endsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .subscriptionId("subscription_id")
+                                    .build()
+                            )
                             .settlementAmount(0)
                             .settlementCurrency(Currency.AED)
                             .addSubscriptionId("string")
@@ -4411,10 +4472,20 @@ internal class UnsafeUnwrapWebhookEventTest {
                                 .networkReferenceType(
                                     RefundNetworkReferenceType.ACQUIRER_REFERENCE_NUMBER
                                 )
+                                .networkReferenceUpdatedAt(
+                                    OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                )
                                 .reason("reason")
                                 .build()
                         )
                         .retryAttempt(0)
+                        .addServicePeriod(
+                            SubscriptionServicePeriod.builder()
+                                .endsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .subscriptionId("subscription_id")
+                                .build()
+                        )
                         .settlementAmount(0)
                         .settlementCurrency(Currency.AED)
                         .addSubscriptionId("string")
@@ -4603,10 +4674,20 @@ internal class UnsafeUnwrapWebhookEventTest {
                                     .networkReferenceType(
                                         RefundNetworkReferenceType.ACQUIRER_REFERENCE_NUMBER
                                     )
+                                    .networkReferenceUpdatedAt(
+                                        OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                    )
                                     .reason("reason")
                                     .build()
                             )
                             .retryAttempt(0)
+                            .addServicePeriod(
+                                SubscriptionServicePeriod.builder()
+                                    .endsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .subscriptionId("subscription_id")
+                                    .build()
+                            )
                             .settlementAmount(0)
                             .settlementCurrency(Currency.AED)
                             .addSubscriptionId("string")
@@ -5306,6 +5387,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .currency(Currency.AED)
                         .networkReference("network_reference")
                         .networkReferenceType(RefundNetworkReferenceType.ACQUIRER_REFERENCE_NUMBER)
+                        .networkReferenceUpdatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .reason("reason")
                         .build()
                 )
@@ -5404,6 +5486,9 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .networkReferenceType(
                                 RefundNetworkReferenceType.ACQUIRER_REFERENCE_NUMBER
                             )
+                            .networkReferenceUpdatedAt(
+                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                            )
                             .reason("reason")
                             .build()
                     )
@@ -5456,6 +5541,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .currency(Currency.AED)
                         .networkReference("network_reference")
                         .networkReferenceType(RefundNetworkReferenceType.ACQUIRER_REFERENCE_NUMBER)
+                        .networkReferenceUpdatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .reason("reason")
                         .build()
                 )
@@ -5553,6 +5639,9 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .networkReference("network_reference")
                             .networkReferenceType(
                                 RefundNetworkReferenceType.ACQUIRER_REFERENCE_NUMBER
+                            )
+                            .networkReferenceUpdatedAt(
+                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
                             )
                             .reason("reason")
                             .build()
@@ -5731,6 +5820,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .taxId("tax_id")
                         .trialAmount(0)
                         .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentId("payment_id")
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -5955,6 +6045,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .taxId("tax_id")
                             .trialAmount(0)
                             .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .paymentId("payment_id")
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -6131,6 +6222,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .taxId("tax_id")
                         .trialAmount(0)
                         .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentId("payment_id")
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -6356,6 +6448,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .taxId("tax_id")
                             .trialAmount(0)
                             .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .paymentId("payment_id")
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -6532,6 +6625,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .taxId("tax_id")
                         .trialAmount(0)
                         .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentId("payment_id")
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -6756,6 +6850,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .taxId("tax_id")
                             .trialAmount(0)
                             .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .paymentId("payment_id")
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -6932,6 +7027,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .taxId("tax_id")
                         .trialAmount(0)
                         .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentId("payment_id")
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -7156,6 +7252,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .taxId("tax_id")
                             .trialAmount(0)
                             .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .paymentId("payment_id")
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -7332,6 +7429,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .taxId("tax_id")
                         .trialAmount(0)
                         .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentId("payment_id")
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -7556,6 +7654,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .taxId("tax_id")
                             .trialAmount(0)
                             .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .paymentId("payment_id")
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -7732,6 +7831,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .taxId("tax_id")
                         .trialAmount(0)
                         .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentId("payment_id")
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -7956,6 +8056,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .taxId("tax_id")
                             .trialAmount(0)
                             .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .paymentId("payment_id")
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -8132,6 +8233,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .taxId("tax_id")
                         .trialAmount(0)
                         .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentId("payment_id")
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -8356,6 +8458,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .taxId("tax_id")
                             .trialAmount(0)
                             .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .paymentId("payment_id")
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -8532,6 +8635,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .taxId("tax_id")
                         .trialAmount(0)
                         .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentId("payment_id")
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -8757,6 +8861,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .taxId("tax_id")
                             .trialAmount(0)
                             .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .paymentId("payment_id")
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -8933,6 +9038,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .taxId("tax_id")
                         .trialAmount(0)
                         .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentId("payment_id")
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -9157,6 +9263,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .taxId("tax_id")
                             .trialAmount(0)
                             .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .paymentId("payment_id")
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -9333,6 +9440,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .taxId("tax_id")
                         .trialAmount(0)
                         .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentId("payment_id")
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -9557,6 +9665,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .taxId("tax_id")
                             .trialAmount(0)
                             .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .paymentId("payment_id")
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -9733,6 +9842,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .taxId("tax_id")
                         .trialAmount(0)
                         .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentId("payment_id")
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -9960,6 +10070,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .taxId("tax_id")
                             .trialAmount(0)
                             .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .paymentId("payment_id")
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -10136,6 +10247,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                         .taxId("tax_id")
                         .trialAmount(0)
                         .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentId("payment_id")
                         .build()
                 )
                 .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -10360,6 +10472,7 @@ internal class UnsafeUnwrapWebhookEventTest {
                             .taxId("tax_id")
                             .trialAmount(0)
                             .pastDueEndsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .paymentId("payment_id")
                             .build()
                     )
                     .timestamp(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
