@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.122.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.121.0...v1.122.0) (2026-10-21)
+
+
+### Features
+
+* **api:** payment charge type, usage flag and card details, signed invoice link tokens ([bd9f7fa](https://github.com/dodopayments/dodopayments-kotlin/commit/bd9f7fa5c148a88321978ac04f73d33788316ca2))
+* **api:** payment charge type, usage flag and card details, signed invoice link tokens ([1c17e28](https://github.com/dodopayments/dodopayments-kotlin/commit/1c17e28dffaf3dd75172819a74ca5ad21d8428b5))
+
 ## [1.121.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.120.4...v1.121.0) (2026-10-14)
 
 
