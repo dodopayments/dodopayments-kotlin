@@ -4,6 +4,9 @@ package com.dodopayments.api.services.blocking.invoices
 
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
+import com.dodopayments.api.models.invoices.payments.PaymentRetrieveParams
+import com.dodopayments.api.models.invoices.payments.PaymentRetrievePayoutParams
+import com.dodopayments.api.models.invoices.payments.PaymentRetrieveRefundParams
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.ok
@@ -30,7 +33,13 @@ internal class PaymentServiceTest {
         val paymentService = client.invoices().payments()
         stubFor(get(anyUrl()).willReturn(ok().withBody("abc")))
 
-        val payment = paymentService.retrieve("pay_gr4RizvMOXFJ6xca3y2tU")
+        val payment =
+            paymentService.retrieve(
+                PaymentRetrieveParams.builder()
+                    .paymentId("pay_gr4RizvMOXFJ6xca3y2tU")
+                    .token("token")
+                    .build()
+            )
 
         assertThat(payment.body()).hasContent("abc")
     }
@@ -45,7 +54,13 @@ internal class PaymentServiceTest {
         val paymentService = client.invoices().payments()
         stubFor(get(anyUrl()).willReturn(ok().withBody("abc")))
 
-        val response = paymentService.retrievePayout("pyt_zFTrrn4sk3x3y2vjDBW3T")
+        val response =
+            paymentService.retrievePayout(
+                PaymentRetrievePayoutParams.builder()
+                    .payoutId("pyt_zFTrrn4sk3x3y2vjDBW3T")
+                    .token("token")
+                    .build()
+            )
 
         assertThat(response.body()).hasContent("abc")
     }
@@ -60,7 +75,13 @@ internal class PaymentServiceTest {
         val paymentService = client.invoices().payments()
         stubFor(get(anyUrl()).willReturn(ok().withBody("abc")))
 
-        val response = paymentService.retrieveRefund("ref_F0gZetLvTxxBrMU2CZcmy")
+        val response =
+            paymentService.retrieveRefund(
+                PaymentRetrieveRefundParams.builder()
+                    .refundId("ref_F0gZetLvTxxBrMU2CZcmy")
+                    .token("token")
+                    .build()
+            )
 
         assertThat(response.body()).hasContent("abc")
     }
