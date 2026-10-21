@@ -2,6 +2,7 @@
 
 package com.dodopayments.api.models.invoices.payments
 
+import com.dodopayments.api.core.http.QueryParams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -9,7 +10,10 @@ internal class PaymentRetrieveRefundParamsTest {
 
     @Test
     fun create() {
-        PaymentRetrieveRefundParams.builder().refundId("ref_F0gZetLvTxxBrMU2CZcmy").build()
+        PaymentRetrieveRefundParams.builder()
+            .refundId("ref_F0gZetLvTxxBrMU2CZcmy")
+            .token("token")
+            .build()
     }
 
     @Test
@@ -20,5 +24,28 @@ internal class PaymentRetrieveRefundParamsTest {
         assertThat(params._pathParam(0)).isEqualTo("ref_F0gZetLvTxxBrMU2CZcmy")
         // out-of-bound path param
         assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
+    fun queryParams() {
+        val params =
+            PaymentRetrieveRefundParams.builder()
+                .refundId("ref_F0gZetLvTxxBrMU2CZcmy")
+                .token("token")
+                .build()
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().put("token", "token").build())
+    }
+
+    @Test
+    fun queryParamsWithoutOptionalFields() {
+        val params =
+            PaymentRetrieveRefundParams.builder().refundId("ref_F0gZetLvTxxBrMU2CZcmy").build()
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
     }
 }

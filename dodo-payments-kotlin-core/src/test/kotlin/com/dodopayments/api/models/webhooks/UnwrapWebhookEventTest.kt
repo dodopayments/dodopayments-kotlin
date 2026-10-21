@@ -23,6 +23,7 @@ import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.payments.BillingAddress
+import com.dodopayments.api.models.payments.ChargeType
 import com.dodopayments.api.models.payments.CustomFieldResponse
 import com.dodopayments.api.models.payments.CustomerLimitedDetails
 import com.dodopayments.api.models.payments.IntentStatus
@@ -3357,6 +3358,7 @@ internal class UnwrapWebhookEventTest {
                                 .remarks("remarks")
                                 .build()
                         )
+                        .includesUsage(true)
                         .isMultiSubscription(true)
                         .isUpdatePaymentMethod(true)
                         .metadata(
@@ -3390,6 +3392,7 @@ internal class UnwrapWebhookEventTest {
                         .addServicePeriod(
                             SubscriptionServicePeriod.builder()
                                 .endsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .prorationFactor("1")
                                 .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .subscriptionId("subscription_id")
                                 .build()
@@ -3398,11 +3401,14 @@ internal class UnwrapWebhookEventTest {
                         .settlementCurrency(Currency.AED)
                         .addSubscriptionId("string")
                         .totalAmount(0)
+                        .cardExpMonth("card_exp_month")
+                        .cardExpYear("card_exp_year")
                         .cardHolderName("card_holder_name")
                         .cardIssuingCountry(CountryCode.AF)
                         .cardLastFour("card_last_four")
                         .cardNetwork("card_network")
                         .cardType("card_type")
+                        .chargeType(ChargeType.NEW)
                         .checkoutSessionId("checkout_session_id")
                         .addCustomFieldResponse(
                             CustomFieldResponse.builder().key("key").value("value").build()
@@ -3559,6 +3565,7 @@ internal class UnwrapWebhookEventTest {
                                     .remarks("remarks")
                                     .build()
                             )
+                            .includesUsage(true)
                             .isMultiSubscription(true)
                             .isUpdatePaymentMethod(true)
                             .metadata(
@@ -3592,6 +3599,7 @@ internal class UnwrapWebhookEventTest {
                             .addServicePeriod(
                                 SubscriptionServicePeriod.builder()
                                     .endsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .prorationFactor("1")
                                     .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .subscriptionId("subscription_id")
                                     .build()
@@ -3600,11 +3608,14 @@ internal class UnwrapWebhookEventTest {
                             .settlementCurrency(Currency.AED)
                             .addSubscriptionId("string")
                             .totalAmount(0)
+                            .cardExpMonth("card_exp_month")
+                            .cardExpYear("card_exp_year")
                             .cardHolderName("card_holder_name")
                             .cardIssuingCountry(CountryCode.AF)
                             .cardLastFour("card_last_four")
                             .cardNetwork("card_network")
                             .cardType("card_type")
+                            .chargeType(ChargeType.NEW)
                             .checkoutSessionId("checkout_session_id")
                             .addCustomFieldResponse(
                                 CustomFieldResponse.builder().key("key").value("value").build()
@@ -3717,6 +3728,7 @@ internal class UnwrapWebhookEventTest {
                                 .remarks("remarks")
                                 .build()
                         )
+                        .includesUsage(true)
                         .isMultiSubscription(true)
                         .isUpdatePaymentMethod(true)
                         .metadata(
@@ -3750,6 +3762,7 @@ internal class UnwrapWebhookEventTest {
                         .addServicePeriod(
                             SubscriptionServicePeriod.builder()
                                 .endsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .prorationFactor("1")
                                 .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .subscriptionId("subscription_id")
                                 .build()
@@ -3758,11 +3771,14 @@ internal class UnwrapWebhookEventTest {
                         .settlementCurrency(Currency.AED)
                         .addSubscriptionId("string")
                         .totalAmount(0)
+                        .cardExpMonth("card_exp_month")
+                        .cardExpYear("card_exp_year")
                         .cardHolderName("card_holder_name")
                         .cardIssuingCountry(CountryCode.AF)
                         .cardLastFour("card_last_four")
                         .cardNetwork("card_network")
                         .cardType("card_type")
+                        .chargeType(ChargeType.NEW)
                         .checkoutSessionId("checkout_session_id")
                         .addCustomFieldResponse(
                             CustomFieldResponse.builder().key("key").value("value").build()
@@ -3919,6 +3935,7 @@ internal class UnwrapWebhookEventTest {
                                     .remarks("remarks")
                                     .build()
                             )
+                            .includesUsage(true)
                             .isMultiSubscription(true)
                             .isUpdatePaymentMethod(true)
                             .metadata(
@@ -3952,6 +3969,7 @@ internal class UnwrapWebhookEventTest {
                             .addServicePeriod(
                                 SubscriptionServicePeriod.builder()
                                     .endsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .prorationFactor("1")
                                     .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .subscriptionId("subscription_id")
                                     .build()
@@ -3960,11 +3978,14 @@ internal class UnwrapWebhookEventTest {
                             .settlementCurrency(Currency.AED)
                             .addSubscriptionId("string")
                             .totalAmount(0)
+                            .cardExpMonth("card_exp_month")
+                            .cardExpYear("card_exp_year")
                             .cardHolderName("card_holder_name")
                             .cardIssuingCountry(CountryCode.AF)
                             .cardLastFour("card_last_four")
                             .cardNetwork("card_network")
                             .cardType("card_type")
+                            .chargeType(ChargeType.NEW)
                             .checkoutSessionId("checkout_session_id")
                             .addCustomFieldResponse(
                                 CustomFieldResponse.builder().key("key").value("value").build()
@@ -4077,6 +4098,7 @@ internal class UnwrapWebhookEventTest {
                                 .remarks("remarks")
                                 .build()
                         )
+                        .includesUsage(true)
                         .isMultiSubscription(true)
                         .isUpdatePaymentMethod(true)
                         .metadata(
@@ -4110,6 +4132,7 @@ internal class UnwrapWebhookEventTest {
                         .addServicePeriod(
                             SubscriptionServicePeriod.builder()
                                 .endsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .prorationFactor("1")
                                 .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .subscriptionId("subscription_id")
                                 .build()
@@ -4118,11 +4141,14 @@ internal class UnwrapWebhookEventTest {
                         .settlementCurrency(Currency.AED)
                         .addSubscriptionId("string")
                         .totalAmount(0)
+                        .cardExpMonth("card_exp_month")
+                        .cardExpYear("card_exp_year")
                         .cardHolderName("card_holder_name")
                         .cardIssuingCountry(CountryCode.AF)
                         .cardLastFour("card_last_four")
                         .cardNetwork("card_network")
                         .cardType("card_type")
+                        .chargeType(ChargeType.NEW)
                         .checkoutSessionId("checkout_session_id")
                         .addCustomFieldResponse(
                             CustomFieldResponse.builder().key("key").value("value").build()
@@ -4279,6 +4305,7 @@ internal class UnwrapWebhookEventTest {
                                     .remarks("remarks")
                                     .build()
                             )
+                            .includesUsage(true)
                             .isMultiSubscription(true)
                             .isUpdatePaymentMethod(true)
                             .metadata(
@@ -4312,6 +4339,7 @@ internal class UnwrapWebhookEventTest {
                             .addServicePeriod(
                                 SubscriptionServicePeriod.builder()
                                     .endsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .prorationFactor("1")
                                     .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .subscriptionId("subscription_id")
                                     .build()
@@ -4320,11 +4348,14 @@ internal class UnwrapWebhookEventTest {
                             .settlementCurrency(Currency.AED)
                             .addSubscriptionId("string")
                             .totalAmount(0)
+                            .cardExpMonth("card_exp_month")
+                            .cardExpYear("card_exp_year")
                             .cardHolderName("card_holder_name")
                             .cardIssuingCountry(CountryCode.AF)
                             .cardLastFour("card_last_four")
                             .cardNetwork("card_network")
                             .cardType("card_type")
+                            .chargeType(ChargeType.NEW)
                             .checkoutSessionId("checkout_session_id")
                             .addCustomFieldResponse(
                                 CustomFieldResponse.builder().key("key").value("value").build()
@@ -4437,6 +4468,7 @@ internal class UnwrapWebhookEventTest {
                                 .remarks("remarks")
                                 .build()
                         )
+                        .includesUsage(true)
                         .isMultiSubscription(true)
                         .isUpdatePaymentMethod(true)
                         .metadata(
@@ -4470,6 +4502,7 @@ internal class UnwrapWebhookEventTest {
                         .addServicePeriod(
                             SubscriptionServicePeriod.builder()
                                 .endsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                .prorationFactor("1")
                                 .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .subscriptionId("subscription_id")
                                 .build()
@@ -4478,11 +4511,14 @@ internal class UnwrapWebhookEventTest {
                         .settlementCurrency(Currency.AED)
                         .addSubscriptionId("string")
                         .totalAmount(0)
+                        .cardExpMonth("card_exp_month")
+                        .cardExpYear("card_exp_year")
                         .cardHolderName("card_holder_name")
                         .cardIssuingCountry(CountryCode.AF)
                         .cardLastFour("card_last_four")
                         .cardNetwork("card_network")
                         .cardType("card_type")
+                        .chargeType(ChargeType.NEW)
                         .checkoutSessionId("checkout_session_id")
                         .addCustomFieldResponse(
                             CustomFieldResponse.builder().key("key").value("value").build()
@@ -4639,6 +4675,7 @@ internal class UnwrapWebhookEventTest {
                                     .remarks("remarks")
                                     .build()
                             )
+                            .includesUsage(true)
                             .isMultiSubscription(true)
                             .isUpdatePaymentMethod(true)
                             .metadata(
@@ -4672,6 +4709,7 @@ internal class UnwrapWebhookEventTest {
                             .addServicePeriod(
                                 SubscriptionServicePeriod.builder()
                                     .endsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .prorationFactor("1")
                                     .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                     .subscriptionId("subscription_id")
                                     .build()
@@ -4680,11 +4718,14 @@ internal class UnwrapWebhookEventTest {
                             .settlementCurrency(Currency.AED)
                             .addSubscriptionId("string")
                             .totalAmount(0)
+                            .cardExpMonth("card_exp_month")
+                            .cardExpYear("card_exp_year")
                             .cardHolderName("card_holder_name")
                             .cardIssuingCountry(CountryCode.AF)
                             .cardLastFour("card_last_four")
                             .cardNetwork("card_network")
                             .cardType("card_type")
+                            .chargeType(ChargeType.NEW)
                             .checkoutSessionId("checkout_session_id")
                             .addCustomFieldResponse(
                                 CustomFieldResponse.builder().key("key").value("value").build()

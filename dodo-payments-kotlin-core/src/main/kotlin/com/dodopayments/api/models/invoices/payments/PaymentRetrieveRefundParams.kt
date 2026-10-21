@@ -10,11 +10,18 @@ import java.util.Objects
 class PaymentRetrieveRefundParams
 private constructor(
     private val refundId: String?,
+    private val token: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun refundId(): String? = refundId
+
+    /**
+     * The signed link token. If the business asks for a credential on its invoice links, a valid
+     * token for this record replaces the credential.
+     */
+    fun token(): String? = token
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -38,16 +45,24 @@ private constructor(
     class Builder internal constructor() {
 
         private var refundId: String? = null
+        private var token: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(paymentRetrieveRefundParams: PaymentRetrieveRefundParams) = apply {
             refundId = paymentRetrieveRefundParams.refundId
+            token = paymentRetrieveRefundParams.token
             additionalHeaders = paymentRetrieveRefundParams.additionalHeaders.toBuilder()
             additionalQueryParams = paymentRetrieveRefundParams.additionalQueryParams.toBuilder()
         }
 
         fun refundId(refundId: String?) = apply { this.refundId = refundId }
+
+        /**
+         * The signed link token. If the business asks for a credential on its invoice links, a
+         * valid token for this record replaces the credential.
+         */
+        fun token(token: String?) = apply { this.token = token }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -155,6 +170,7 @@ private constructor(
         fun build(): PaymentRetrieveRefundParams =
             PaymentRetrieveRefundParams(
                 refundId,
+                token,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -168,7 +184,13 @@ private constructor(
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                token?.let { put("token", it) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -177,12 +199,14 @@ private constructor(
 
         return other is PaymentRetrieveRefundParams &&
             refundId == other.refundId &&
+            token == other.token &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = Objects.hash(refundId, additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int =
+        Objects.hash(refundId, token, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "PaymentRetrieveRefundParams{refundId=$refundId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "PaymentRetrieveRefundParams{refundId=$refundId, token=$token, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
