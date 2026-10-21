@@ -35,7 +35,7 @@ private constructor(
 
     /**
      * Optional group name update: Some(Some(name)) = set name, Some(None) = clear name, None = no
-     * change
+     * change The API returns 422 if another group in the collection has no name.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
      *   the server responded with an unexpected value).
@@ -136,7 +136,7 @@ private constructor(
 
         /**
          * Optional group name update: Some(Some(name)) = set name, Some(None) = clear name, None =
-         * no change
+         * no change The API returns 422 if another group in the collection has no name.
          */
         fun groupName(groupName: String?) = apply { body.groupName(groupName) }
 
@@ -365,7 +365,7 @@ private constructor(
 
         /**
          * Optional group name update: Some(Some(name)) = set name, Some(None) = clear name, None =
-         * no change
+         * no change The API returns 422 if another group in the collection has no name.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
          *   if the server responded with an unexpected value).
@@ -448,7 +448,7 @@ private constructor(
 
             /**
              * Optional group name update: Some(Some(name)) = set name, Some(None) = clear name,
-             * None = no change
+             * None = no change The API returns 422 if another group in the collection has no name.
              */
             fun groupName(groupName: String?) = groupName(JsonField.ofNullable(groupName))
 
