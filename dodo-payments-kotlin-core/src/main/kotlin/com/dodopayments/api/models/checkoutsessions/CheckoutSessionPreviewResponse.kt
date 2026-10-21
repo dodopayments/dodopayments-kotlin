@@ -1180,6 +1180,7 @@ private constructor(
         private val description: JsonField<String>,
         private val discountAmount: JsonField<Int>,
         private val discountCycle: JsonField<Int>,
+        private val monthlyEquivalent: JsonField<Int>,
         private val name: JsonField<String>,
         private val tax: JsonField<Int>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -1232,6 +1233,9 @@ private constructor(
             @JsonProperty("discount_cycle")
             @ExcludeMissing
             discountCycle: JsonField<Int> = JsonMissing.of(),
+            @JsonProperty("monthly_equivalent")
+            @ExcludeMissing
+            monthlyEquivalent: JsonField<Int> = JsonMissing.of(),
             @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
             @JsonProperty("tax") @ExcludeMissing tax: JsonField<Int> = JsonMissing.of(),
         ) : this(
@@ -1252,6 +1256,7 @@ private constructor(
             description,
             discountAmount,
             discountCycle,
+            monthlyEquivalent,
             name,
             tax,
             mutableMapOf(),
@@ -1386,6 +1391,17 @@ private constructor(
          *   if the server responded with an unexpected value).
          */
         fun discountCycle(): Int? = discountCycle.getNullable("discount_cycle")
+
+        /**
+         * The monthly equivalent of the yearly unit price after discounts, in minor units of
+         * `currency`. Only the hosted checkout sets it, when the business shows yearly plans as
+         * monthly. The value is only for display. The order summary shows the amounts that we
+         * charge.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun monthlyEquivalent(): Int? = monthlyEquivalent.getNullable("monthly_equivalent")
 
         /**
          * name of the product
@@ -1550,6 +1566,16 @@ private constructor(
         fun _discountCycle(): JsonField<Int> = discountCycle
 
         /**
+         * Returns the raw JSON value of [monthlyEquivalent].
+         *
+         * Unlike [monthlyEquivalent], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("monthly_equivalent")
+        @ExcludeMissing
+        fun _monthlyEquivalent(): JsonField<Int> = monthlyEquivalent
+
+        /**
          * Returns the raw JSON value of [name].
          *
          * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
@@ -1620,6 +1646,7 @@ private constructor(
             private var description: JsonField<String> = JsonMissing.of()
             private var discountAmount: JsonField<Int> = JsonMissing.of()
             private var discountCycle: JsonField<Int> = JsonMissing.of()
+            private var monthlyEquivalent: JsonField<Int> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
             private var tax: JsonField<Int> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -1642,6 +1669,7 @@ private constructor(
                 description = productCart.description
                 discountAmount = productCart.discountAmount
                 discountCycle = productCart.discountCycle
+                monthlyEquivalent = productCart.monthlyEquivalent
                 name = productCart.name
                 tax = productCart.tax
                 additionalProperties = productCart.additionalProperties.toMutableMap()
@@ -1927,6 +1955,34 @@ private constructor(
                 this.discountCycle = discountCycle
             }
 
+            /**
+             * The monthly equivalent of the yearly unit price after discounts, in minor units of
+             * `currency`. Only the hosted checkout sets it, when the business shows yearly plans as
+             * monthly. The value is only for display. The order summary shows the amounts that we
+             * charge.
+             */
+            fun monthlyEquivalent(monthlyEquivalent: Int?) =
+                monthlyEquivalent(JsonField.ofNullable(monthlyEquivalent))
+
+            /**
+             * Alias for [Builder.monthlyEquivalent].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun monthlyEquivalent(monthlyEquivalent: Int) =
+                monthlyEquivalent(monthlyEquivalent as Int?)
+
+            /**
+             * Sets [Builder.monthlyEquivalent] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.monthlyEquivalent] with a well-typed [Int] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun monthlyEquivalent(monthlyEquivalent: JsonField<Int>) = apply {
+                this.monthlyEquivalent = monthlyEquivalent
+            }
+
             /** name of the product */
             fun name(name: String?) = name(JsonField.ofNullable(name))
 
@@ -2022,6 +2078,7 @@ private constructor(
                     description,
                     discountAmount,
                     discountCycle,
+                    monthlyEquivalent,
                     name,
                     tax,
                     additionalProperties.toMutableMap(),
@@ -2061,6 +2118,7 @@ private constructor(
             description()
             discountAmount()
             discountCycle()
+            monthlyEquivalent()
             name()
             tax()
             validated = true
@@ -2098,6 +2156,7 @@ private constructor(
                 (if (description.asKnown() == null) 0 else 1) +
                 (if (discountAmount.asKnown() == null) 0 else 1) +
                 (if (discountCycle.asKnown() == null) 0 else 1) +
+                (if (monthlyEquivalent.asKnown() == null) 0 else 1) +
                 (if (name.asKnown() == null) 0 else 1) +
                 (if (tax.asKnown() == null) 0 else 1)
 
@@ -3579,6 +3638,7 @@ private constructor(
                 description == other.description &&
                 discountAmount == other.discountAmount &&
                 discountCycle == other.discountCycle &&
+                monthlyEquivalent == other.monthlyEquivalent &&
                 name == other.name &&
                 tax == other.tax &&
                 additionalProperties == other.additionalProperties
@@ -3603,6 +3663,7 @@ private constructor(
                 description,
                 discountAmount,
                 discountCycle,
+                monthlyEquivalent,
                 name,
                 tax,
                 additionalProperties,
@@ -3612,7 +3673,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "ProductCart{creditEntitlements=$creditEntitlements, currency=$currency, discountedPrice=$discountedPrice, isSubscription=$isSubscription, isUsageBased=$isUsageBased, meters=$meters, ogCurrency=$ogCurrency, ogPrice=$ogPrice, productId=$productId, quantity=$quantity, taxCategory=$taxCategory, taxInclusive=$taxInclusive, taxRate=$taxRate, addons=$addons, description=$description, discountAmount=$discountAmount, discountCycle=$discountCycle, name=$name, tax=$tax, additionalProperties=$additionalProperties}"
+            "ProductCart{creditEntitlements=$creditEntitlements, currency=$currency, discountedPrice=$discountedPrice, isSubscription=$isSubscription, isUsageBased=$isUsageBased, meters=$meters, ogCurrency=$ogCurrency, ogPrice=$ogPrice, productId=$productId, quantity=$quantity, taxCategory=$taxCategory, taxInclusive=$taxInclusive, taxRate=$taxRate, addons=$addons, description=$description, discountAmount=$discountAmount, discountCycle=$discountCycle, monthlyEquivalent=$monthlyEquivalent, name=$name, tax=$tax, additionalProperties=$additionalProperties}"
     }
 
     /** Breakup of recurring payments (None for one-time only) */

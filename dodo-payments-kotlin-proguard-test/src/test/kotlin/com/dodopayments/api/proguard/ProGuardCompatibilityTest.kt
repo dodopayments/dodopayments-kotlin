@@ -7,8 +7,8 @@ import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.checkoutsessions.CheckoutSessionBillingAddress
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.payments.AttachExistingCustomer
+import com.dodopayments.api.models.payments.ChargeType
 import com.dodopayments.api.models.payments.CustomerRequest
-import com.dodopayments.api.models.payments.IntentStatus
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import kotlin.reflect.full.memberFunctions
 import kotlin.reflect.jvm.javaMethod
@@ -121,16 +121,16 @@ internal class ProGuardCompatibilityTest {
     }
 
     @Test
-    fun intentStatusRoundtrip() {
+    fun chargeTypeRoundtrip() {
         val jsonMapper = jsonMapper()
-        val intentStatus = IntentStatus.SUCCEEDED
+        val chargeType = ChargeType.NEW
 
-        val roundtrippedIntentStatus =
+        val roundtrippedChargeType =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(intentStatus),
-                jacksonTypeRef<IntentStatus>(),
+                jsonMapper.writeValueAsString(chargeType),
+                jacksonTypeRef<ChargeType>(),
             )
 
-        assertThat(roundtrippedIntentStatus).isEqualTo(intentStatus)
+        assertThat(roundtrippedChargeType).isEqualTo(chargeType)
     }
 }
