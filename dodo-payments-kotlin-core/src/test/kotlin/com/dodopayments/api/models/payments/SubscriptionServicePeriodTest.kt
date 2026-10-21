@@ -15,12 +15,14 @@ internal class SubscriptionServicePeriodTest {
         val subscriptionServicePeriod =
             SubscriptionServicePeriod.builder()
                 .endsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .prorationFactor("1")
                 .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .subscriptionId("subscription_id")
                 .build()
 
         assertThat(subscriptionServicePeriod.endsAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(subscriptionServicePeriod.prorationFactor()).isEqualTo("1")
         assertThat(subscriptionServicePeriod.startsAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(subscriptionServicePeriod.subscriptionId()).isEqualTo("subscription_id")
@@ -32,6 +34,7 @@ internal class SubscriptionServicePeriodTest {
         val subscriptionServicePeriod =
             SubscriptionServicePeriod.builder()
                 .endsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .prorationFactor("1")
                 .startsAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .subscriptionId("subscription_id")
                 .build()

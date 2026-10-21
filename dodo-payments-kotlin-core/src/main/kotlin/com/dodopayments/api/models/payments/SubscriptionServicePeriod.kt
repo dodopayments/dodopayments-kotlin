@@ -21,6 +21,7 @@ class SubscriptionServicePeriod
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val endsAt: JsonField<OffsetDateTime>,
+    private val prorationFactor: JsonField<String>,
     private val startsAt: JsonField<OffsetDateTime>,
     private val subscriptionId: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -31,13 +32,16 @@ private constructor(
         @JsonProperty("ends_at")
         @ExcludeMissing
         endsAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("proration_factor")
+        @ExcludeMissing
+        prorationFactor: JsonField<String> = JsonMissing.of(),
         @JsonProperty("starts_at")
         @ExcludeMissing
         startsAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("subscription_id")
         @ExcludeMissing
         subscriptionId: JsonField<String> = JsonMissing.of(),
-    ) : this(endsAt, startsAt, subscriptionId, mutableMapOf())
+    ) : this(endsAt, prorationFactor, startsAt, subscriptionId, mutableMapOf())
 
     /**
      * End of the service period.
@@ -46,6 +50,17 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun endsAt(): OffsetDateTime = endsAt.getRequired("ends_at")
+
+    /**
+     * The part of one full billing period that the plan charge pays for. The value `"1"` is a full
+     * period. A value less than 1 is a partial period, for example after a plan change that keeps
+     * the billing cycle. For a plan change, this is the value of the new plan. The credit for the
+     * old plan is not in this value.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun prorationFactor(): String = prorationFactor.getRequired("proration_factor")
 
     /**
      * Start of the service period. For a renewal, this is the billing date. For a plan change that
@@ -71,6 +86,15 @@ private constructor(
      * Unlike [endsAt], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("ends_at") @ExcludeMissing fun _endsAt(): JsonField<OffsetDateTime> = endsAt
+
+    /**
+     * Returns the raw JSON value of [prorationFactor].
+     *
+     * Unlike [prorationFactor], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("proration_factor")
+    @ExcludeMissing
+    fun _prorationFactor(): JsonField<String> = prorationFactor
 
     /**
      * Returns the raw JSON value of [startsAt].
@@ -108,6 +132,7 @@ private constructor(
          * The following fields are required:
          * ```kotlin
          * .endsAt()
+         * .prorationFactor()
          * .startsAt()
          * .subscriptionId()
          * ```
@@ -119,12 +144,14 @@ private constructor(
     class Builder internal constructor() {
 
         private var endsAt: JsonField<OffsetDateTime>? = null
+        private var prorationFactor: JsonField<String>? = null
         private var startsAt: JsonField<OffsetDateTime>? = null
         private var subscriptionId: JsonField<String>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(subscriptionServicePeriod: SubscriptionServicePeriod) = apply {
             endsAt = subscriptionServicePeriod.endsAt
+            prorationFactor = subscriptionServicePeriod.prorationFactor
             startsAt = subscriptionServicePeriod.startsAt
             subscriptionId = subscriptionServicePeriod.subscriptionId
             additionalProperties = subscriptionServicePeriod.additionalProperties.toMutableMap()
@@ -141,6 +168,26 @@ private constructor(
          * supported value.
          */
         fun endsAt(endsAt: JsonField<OffsetDateTime>) = apply { this.endsAt = endsAt }
+
+        /**
+         * The part of one full billing period that the plan charge pays for. The value `"1"` is a
+         * full period. A value less than 1 is a partial period, for example after a plan change
+         * that keeps the billing cycle. For a plan change, this is the value of the new plan. The
+         * credit for the old plan is not in this value.
+         */
+        fun prorationFactor(prorationFactor: String) =
+            prorationFactor(JsonField.of(prorationFactor))
+
+        /**
+         * Sets [Builder.prorationFactor] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.prorationFactor] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun prorationFactor(prorationFactor: JsonField<String>) = apply {
+            this.prorationFactor = prorationFactor
+        }
 
         /**
          * Start of the service period. For a renewal, this is the billing date. For a plan change
@@ -199,6 +246,7 @@ private constructor(
          * The following fields are required:
          * ```kotlin
          * .endsAt()
+         * .prorationFactor()
          * .startsAt()
          * .subscriptionId()
          * ```
@@ -208,6 +256,7 @@ private constructor(
         fun build(): SubscriptionServicePeriod =
             SubscriptionServicePeriod(
                 checkRequired("endsAt", endsAt),
+                checkRequired("prorationFactor", prorationFactor),
                 checkRequired("startsAt", startsAt),
                 checkRequired("subscriptionId", subscriptionId),
                 additionalProperties.toMutableMap(),
@@ -230,6 +279,7 @@ private constructor(
         }
 
         endsAt()
+        prorationFactor()
         startsAt()
         subscriptionId()
         validated = true
@@ -250,6 +300,7 @@ private constructor(
      */
     internal fun validity(): Int =
         (if (endsAt.asKnown() == null) 0 else 1) +
+            (if (prorationFactor.asKnown() == null) 0 else 1) +
             (if (startsAt.asKnown() == null) 0 else 1) +
             (if (subscriptionId.asKnown() == null) 0 else 1)
 
@@ -260,17 +311,18 @@ private constructor(
 
         return other is SubscriptionServicePeriod &&
             endsAt == other.endsAt &&
+            prorationFactor == other.prorationFactor &&
             startsAt == other.startsAt &&
             subscriptionId == other.subscriptionId &&
             additionalProperties == other.additionalProperties
     }
 
     private val hashCode: Int by lazy {
-        Objects.hash(endsAt, startsAt, subscriptionId, additionalProperties)
+        Objects.hash(endsAt, prorationFactor, startsAt, subscriptionId, additionalProperties)
     }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "SubscriptionServicePeriod{endsAt=$endsAt, startsAt=$startsAt, subscriptionId=$subscriptionId, additionalProperties=$additionalProperties}"
+        "SubscriptionServicePeriod{endsAt=$endsAt, prorationFactor=$prorationFactor, startsAt=$startsAt, subscriptionId=$subscriptionId, additionalProperties=$additionalProperties}"
 }

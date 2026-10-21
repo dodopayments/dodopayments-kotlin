@@ -942,8 +942,9 @@ private constructor(
         fun currency(): Currency = currency.getRequired("currency")
 
         /**
-         * Number of units for the payment frequency. For example, a value of `1` with a
-         * `payment_frequency_interval` of `month` represents monthly payments.
+         * Number of `payment_frequency_interval` units between two charges. This field sets the
+         * billing cycle. For example, `1` with a `payment_frequency_interval` of `month` charges
+         * the customer every month.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -952,7 +953,8 @@ private constructor(
             paymentFrequencyCount.getRequired("payment_frequency_count")
 
         /**
-         * The time interval for the payment frequency (e.g., day, month, year).
+         * The time unit of the billing cycle (e.g., day, month, year). Use it with
+         * `payment_frequency_count`.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -970,8 +972,21 @@ private constructor(
         fun price(): Int = price.getRequired("price")
 
         /**
-         * Number of units for the subscription period. For example, a value of `12` with a
-         * `subscription_period_interval` of `month` represents a one-year subscription.
+         * Number of `subscription_period_interval` units for the total duration of the
+         * subscription. This field does not set the billing cycle. Use `payment_frequency_count`
+         * for the billing cycle. When this period ends, the subscription expires. Dodo Payments
+         * does not start a new billing cycle after the subscription expires. Dodo Payments can
+         * still retry a failed payment for an earlier billing cycle.
+         *
+         * For a subscription that renews until the customer cancels it, set this to `20` with a
+         * `subscription_period_interval` of `year`. This is the recommended value and also the
+         * maximum. The subscription expires after 20 years if the customer does not cancel it
+         * before then.
+         *
+         * For example, a monthly plan uses a `payment_frequency_count` of `1`, a
+         * `payment_frequency_interval` of `month`, and a subscription period of `20` `year`. Do not
+         * set the subscription period to `1` `month` for a monthly plan: the subscription then
+         * expires after one month.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -980,7 +995,9 @@ private constructor(
             subscriptionPeriodCount.getRequired("subscription_period_count")
 
         /**
-         * The time interval for the subscription period (e.g., day, month, year).
+         * The time unit of the total subscription duration (e.g., day, month, year). Use it with
+         * `subscription_period_count`. The recommended value is `year`, with a
+         * `subscription_period_count` of `20`.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -1313,8 +1330,9 @@ private constructor(
             fun currency(currency: JsonField<Currency>) = apply { this.currency = currency }
 
             /**
-             * Number of units for the payment frequency. For example, a value of `1` with a
-             * `payment_frequency_interval` of `month` represents monthly payments.
+             * Number of `payment_frequency_interval` units between two charges. This field sets the
+             * billing cycle. For example, `1` with a `payment_frequency_interval` of `month`
+             * charges the customer every month.
              */
             fun paymentFrequencyCount(paymentFrequencyCount: Int) =
                 paymentFrequencyCount(JsonField.of(paymentFrequencyCount))
@@ -1330,7 +1348,10 @@ private constructor(
                 this.paymentFrequencyCount = paymentFrequencyCount
             }
 
-            /** The time interval for the payment frequency (e.g., day, month, year). */
+            /**
+             * The time unit of the billing cycle (e.g., day, month, year). Use it with
+             * `payment_frequency_count`.
+             */
             fun paymentFrequencyInterval(paymentFrequencyInterval: TimeInterval) =
                 paymentFrequencyInterval(JsonField.of(paymentFrequencyInterval))
 
@@ -1362,8 +1383,22 @@ private constructor(
             fun price(price: JsonField<Int>) = apply { this.price = price }
 
             /**
-             * Number of units for the subscription period. For example, a value of `12` with a
-             * `subscription_period_interval` of `month` represents a one-year subscription.
+             * Number of `subscription_period_interval` units for the total duration of the
+             * subscription. This field does not set the billing cycle. Use
+             * `payment_frequency_count` for the billing cycle. When this period ends, the
+             * subscription expires. Dodo Payments does not start a new billing cycle after the
+             * subscription expires. Dodo Payments can still retry a failed payment for an earlier
+             * billing cycle.
+             *
+             * For a subscription that renews until the customer cancels it, set this to `20` with a
+             * `subscription_period_interval` of `year`. This is the recommended value and also the
+             * maximum. The subscription expires after 20 years if the customer does not cancel it
+             * before then.
+             *
+             * For example, a monthly plan uses a `payment_frequency_count` of `1`, a
+             * `payment_frequency_interval` of `month`, and a subscription period of `20` `year`. Do
+             * not set the subscription period to `1` `month` for a monthly plan: the subscription
+             * then expires after one month.
              */
             fun subscriptionPeriodCount(subscriptionPeriodCount: Int) =
                 subscriptionPeriodCount(JsonField.of(subscriptionPeriodCount))
@@ -1379,7 +1414,11 @@ private constructor(
                 this.subscriptionPeriodCount = subscriptionPeriodCount
             }
 
-            /** The time interval for the subscription period (e.g., day, month, year). */
+            /**
+             * The time unit of the total subscription duration (e.g., day, month, year). Use it
+             * with `subscription_period_count`. The recommended value is `year`, with a
+             * `subscription_period_count` of `20`.
+             */
             fun subscriptionPeriodInterval(subscriptionPeriodInterval: TimeInterval) =
                 subscriptionPeriodInterval(JsonField.of(subscriptionPeriodInterval))
 
@@ -1859,8 +1898,9 @@ private constructor(
         fun fixedPrice(): Int = fixedPrice.getRequired("fixed_price")
 
         /**
-         * Number of units for the payment frequency. For example, a value of `1` with a
-         * `payment_frequency_interval` of `month` represents monthly payments.
+         * Number of `payment_frequency_interval` units between two charges. This field sets the
+         * billing cycle. For example, `1` with a `payment_frequency_interval` of `month` charges
+         * the customer every month.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -1869,7 +1909,8 @@ private constructor(
             paymentFrequencyCount.getRequired("payment_frequency_count")
 
         /**
-         * The time interval for the payment frequency (e.g., day, month, year).
+         * The time unit of the billing cycle (e.g., day, month, year). Use it with
+         * `payment_frequency_count`.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -1878,8 +1919,21 @@ private constructor(
             paymentFrequencyInterval.getRequired("payment_frequency_interval")
 
         /**
-         * Number of units for the subscription period. For example, a value of `12` with a
-         * `subscription_period_interval` of `month` represents a one-year subscription.
+         * Number of `subscription_period_interval` units for the total duration of the
+         * subscription. This field does not set the billing cycle. Use `payment_frequency_count`
+         * for the billing cycle. When this period ends, the subscription expires. Dodo Payments
+         * does not start a new billing cycle after the subscription expires. Dodo Payments can
+         * still retry a failed payment for an earlier billing cycle.
+         *
+         * For a subscription that renews until the customer cancels it, set this to `20` with a
+         * `subscription_period_interval` of `year`. This is the recommended value and also the
+         * maximum. The subscription expires after 20 years if the customer does not cancel it
+         * before then.
+         *
+         * For example, a monthly plan uses a `payment_frequency_count` of `1`, a
+         * `payment_frequency_interval` of `month`, and a subscription period of `20` `year`. Do not
+         * set the subscription period to `1` `month` for a monthly plan: the subscription then
+         * expires after one month.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -1888,7 +1942,9 @@ private constructor(
             subscriptionPeriodCount.getRequired("subscription_period_count")
 
         /**
-         * The time interval for the subscription period (e.g., day, month, year).
+         * The time unit of the total subscription duration (e.g., day, month, year). Use it with
+         * `subscription_period_count`. The recommended value is `year`, with a
+         * `subscription_period_count` of `20`.
          *
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -2148,8 +2204,9 @@ private constructor(
             fun fixedPrice(fixedPrice: JsonField<Int>) = apply { this.fixedPrice = fixedPrice }
 
             /**
-             * Number of units for the payment frequency. For example, a value of `1` with a
-             * `payment_frequency_interval` of `month` represents monthly payments.
+             * Number of `payment_frequency_interval` units between two charges. This field sets the
+             * billing cycle. For example, `1` with a `payment_frequency_interval` of `month`
+             * charges the customer every month.
              */
             fun paymentFrequencyCount(paymentFrequencyCount: Int) =
                 paymentFrequencyCount(JsonField.of(paymentFrequencyCount))
@@ -2165,7 +2222,10 @@ private constructor(
                 this.paymentFrequencyCount = paymentFrequencyCount
             }
 
-            /** The time interval for the payment frequency (e.g., day, month, year). */
+            /**
+             * The time unit of the billing cycle (e.g., day, month, year). Use it with
+             * `payment_frequency_count`.
+             */
             fun paymentFrequencyInterval(paymentFrequencyInterval: TimeInterval) =
                 paymentFrequencyInterval(JsonField.of(paymentFrequencyInterval))
 
@@ -2182,8 +2242,22 @@ private constructor(
                 }
 
             /**
-             * Number of units for the subscription period. For example, a value of `12` with a
-             * `subscription_period_interval` of `month` represents a one-year subscription.
+             * Number of `subscription_period_interval` units for the total duration of the
+             * subscription. This field does not set the billing cycle. Use
+             * `payment_frequency_count` for the billing cycle. When this period ends, the
+             * subscription expires. Dodo Payments does not start a new billing cycle after the
+             * subscription expires. Dodo Payments can still retry a failed payment for an earlier
+             * billing cycle.
+             *
+             * For a subscription that renews until the customer cancels it, set this to `20` with a
+             * `subscription_period_interval` of `year`. This is the recommended value and also the
+             * maximum. The subscription expires after 20 years if the customer does not cancel it
+             * before then.
+             *
+             * For example, a monthly plan uses a `payment_frequency_count` of `1`, a
+             * `payment_frequency_interval` of `month`, and a subscription period of `20` `year`. Do
+             * not set the subscription period to `1` `month` for a monthly plan: the subscription
+             * then expires after one month.
              */
             fun subscriptionPeriodCount(subscriptionPeriodCount: Int) =
                 subscriptionPeriodCount(JsonField.of(subscriptionPeriodCount))
@@ -2199,7 +2273,11 @@ private constructor(
                 this.subscriptionPeriodCount = subscriptionPeriodCount
             }
 
-            /** The time interval for the subscription period (e.g., day, month, year). */
+            /**
+             * The time unit of the total subscription duration (e.g., day, month, year). Use it
+             * with `subscription_period_count`. The recommended value is `year`, with a
+             * `subscription_period_count` of `20`.
+             */
             fun subscriptionPeriodInterval(subscriptionPeriodInterval: TimeInterval) =
                 subscriptionPeriodInterval(JsonField.of(subscriptionPeriodInterval))
 
