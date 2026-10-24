@@ -13,6 +13,8 @@ import com.dodopayments.api.models.meters.MeterListPage
 import com.dodopayments.api.models.meters.MeterListParams
 import com.dodopayments.api.models.meters.MeterRetrieveParams
 import com.dodopayments.api.models.meters.MeterUnarchiveParams
+import com.dodopayments.api.models.meters.MeterUpdateParams
+import com.dodopayments.api.services.blocking.meters.TranslationService
 import com.google.errorprone.annotations.MustBeClosed
 
 interface MeterService {
@@ -28,6 +30,8 @@ interface MeterService {
      * The original service is not modified.
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MeterService
+
+    fun translations(): TranslationService
 
     fun create(
         params: MeterCreateParams,
@@ -49,6 +53,22 @@ interface MeterService {
     /** @see retrieve */
     fun retrieve(id: String, requestOptions: RequestOptions): Meter =
         retrieve(id, MeterRetrieveParams.none(), requestOptions)
+
+    fun update(
+        id: String,
+        params: MeterUpdateParams = MeterUpdateParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Meter = update(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see update */
+    fun update(
+        params: MeterUpdateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Meter
+
+    /** @see update */
+    fun update(id: String, requestOptions: RequestOptions): Meter =
+        update(id, MeterUpdateParams.none(), requestOptions)
 
     fun list(
         params: MeterListParams = MeterListParams.none(),
@@ -98,6 +118,8 @@ interface MeterService {
          */
         fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MeterService.WithRawResponse
 
+        fun translations(): TranslationService.WithRawResponse
+
         /**
          * Returns a raw HTTP response for `post /meters`, but is otherwise the same as
          * [MeterService.create].
@@ -130,6 +152,29 @@ interface MeterService {
         @MustBeClosed
         fun retrieve(id: String, requestOptions: RequestOptions): HttpResponseFor<Meter> =
             retrieve(id, MeterRetrieveParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `patch /meters/{id}`, but is otherwise the same as
+         * [MeterService.update].
+         */
+        @MustBeClosed
+        fun update(
+            id: String,
+            params: MeterUpdateParams = MeterUpdateParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Meter> = update(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see update */
+        @MustBeClosed
+        fun update(
+            params: MeterUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Meter>
+
+        /** @see update */
+        @MustBeClosed
+        fun update(id: String, requestOptions: RequestOptions): HttpResponseFor<Meter> =
+            update(id, MeterUpdateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /meters`, but is otherwise the same as

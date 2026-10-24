@@ -3,6 +3,7 @@
 package com.dodopayments.api.models.checkoutsessions
 
 import com.dodopayments.api.core.JsonValue
+import com.dodopayments.api.core.http.QueryParams
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.Metadata
@@ -18,6 +19,7 @@ internal class CheckoutSessionPreviewParamsTest {
     @Test
     fun create() {
         CheckoutSessionPreviewParams.builder()
+            .locale("locale")
             .checkoutSessionRequest(
                 CheckoutSessionRequest.builder()
                     .addProductCart(
@@ -177,9 +179,199 @@ internal class CheckoutSessionPreviewParamsTest {
     }
 
     @Test
+    fun queryParams() {
+        val params =
+            CheckoutSessionPreviewParams.builder()
+                .locale("locale")
+                .checkoutSessionRequest(
+                    CheckoutSessionRequest.builder()
+                        .addProductCart(
+                            ProductItemReq.builder()
+                                .productId("product_id")
+                                .quantity(0)
+                                .addAddon(
+                                    AttachAddon.builder().addonId("addon_id").quantity(0).build()
+                                )
+                                .amount(0)
+                                .addCreditEntitlement(
+                                    ProductItemReq.CreditEntitlement.builder()
+                                        .creditEntitlementId("credit_entitlement_id")
+                                        .creditsAmount("credits_amount")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .addAllowedPaymentMethodType(PaymentMethodTypes.ACH)
+                        .billingAddress(
+                            CheckoutSessionBillingAddress.builder()
+                                .country(CountryCode.AF)
+                                .city("city")
+                                .state("state")
+                                .street("street")
+                                .zipcode("zipcode")
+                                .build()
+                        )
+                        .billingCurrency(Currency.AED)
+                        .cancelUrl("cancel_url")
+                        .confirm(true)
+                        .addCustomField(
+                            CustomField.builder()
+                                .fieldType(CustomField.FieldType.TEXT)
+                                .key("key")
+                                .label("label")
+                                .addOption("string")
+                                .placeholder("placeholder")
+                                .required(true)
+                                .build()
+                        )
+                        .customer(
+                            AttachExistingCustomer.builder().customerId("customer_id").build()
+                        )
+                        .customerBusinessName("customer_business_name")
+                        .customization(
+                            CheckoutSessionCustomization.builder()
+                                .forceLanguage("force_language")
+                                .showOnDemandTag(true)
+                                .showOrderDetails(true)
+                                .theme(CheckoutSessionCustomization.Theme.DARK)
+                                .themeConfig(
+                                    ThemeConfig.builder()
+                                        .dark(
+                                            ThemeModeConfig.builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .fontPrimaryUrl("font_primary_url")
+                                        .fontSecondaryUrl("font_secondary_url")
+                                        .fontSize(ThemeConfig.FontSize.XS)
+                                        .fontWeight(ThemeConfig.FontWeight.NORMAL)
+                                        .light(
+                                            ThemeModeConfig.builder()
+                                                .bgPrimary("bg_primary")
+                                                .bgSecondary("bg_secondary")
+                                                .borderPrimary("border_primary")
+                                                .borderSecondary("border_secondary")
+                                                .buttonPrimary("button_primary")
+                                                .buttonPrimaryHover("button_primary_hover")
+                                                .buttonSecondary("button_secondary")
+                                                .buttonSecondaryHover("button_secondary_hover")
+                                                .buttonTextPrimary("button_text_primary")
+                                                .buttonTextSecondary("button_text_secondary")
+                                                .inputFocusBorder("input_focus_border")
+                                                .textError("text_error")
+                                                .textPlaceholder("text_placeholder")
+                                                .textPrimary("text_primary")
+                                                .textSecondary("text_secondary")
+                                                .textSuccess("text_success")
+                                                .build()
+                                        )
+                                        .payButtonText("pay_button_text")
+                                        .radius("radius")
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .discountCode("discount_code")
+                        .addDiscountCode("string")
+                        .featureFlags(
+                            CheckoutSessionFlags.builder()
+                                .allowCurrencySelection(true)
+                                .allowCustomerEditingBusinessName(true)
+                                .allowCustomerEditingCity(true)
+                                .allowCustomerEditingCountry(true)
+                                .allowCustomerEditingEmail(true)
+                                .allowCustomerEditingName(true)
+                                .allowCustomerEditingState(true)
+                                .allowCustomerEditingStreet(true)
+                                .allowCustomerEditingTaxId(true)
+                                .allowCustomerEditingZipcode(true)
+                                .allowDiscountCode(true)
+                                .allowEditingAddons(true)
+                                .allowPhoneNumberCollection(true)
+                                .allowTaxId(true)
+                                .alwaysCreateNewCustomer(true)
+                                .redirectImmediately(true)
+                                .requireCardholderName(true)
+                                .requirePhoneNumber(true)
+                                .requireTaxId(true)
+                                .singlePage(true)
+                                .build()
+                        )
+                        .force3ds(true)
+                        .mandateMinAmountInrPaise(0)
+                        .metadata(
+                            Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("string"))
+                                .build()
+                        )
+                        .minimalAddress(true)
+                        .paymentMethodId("payment_method_id")
+                        .productCollectionId("product_collection_id")
+                        .returnUrl("return_url")
+                        .shortLink(true)
+                        .showSavedPaymentMethods(true)
+                        .subscriptionData(
+                            SubscriptionData.builder()
+                                .onDemand(
+                                    OnDemandSubscription.builder()
+                                        .mandateOnly(true)
+                                        .adaptiveCurrencyFeesInclusive(true)
+                                        .productCurrency(Currency.AED)
+                                        .productDescription("product_description")
+                                        .productPrice(0)
+                                        .build()
+                                )
+                                .trialPeriodDays(0)
+                                .build()
+                        )
+                        .taxId("tax_id")
+                        .build()
+                )
+                .build()
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().put("locale", "locale").build())
+    }
+
+    @Test
+    fun queryParamsWithoutOptionalFields() {
+        val params =
+            CheckoutSessionPreviewParams.builder()
+                .checkoutSessionRequest(
+                    CheckoutSessionRequest.builder()
+                        .addProductCart(
+                            ProductItemReq.builder().productId("product_id").quantity(0).build()
+                        )
+                        .build()
+                )
+                .build()
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
+    }
+
+    @Test
     fun body() {
         val params =
             CheckoutSessionPreviewParams.builder()
+                .locale("locale")
                 .checkoutSessionRequest(
                     CheckoutSessionRequest.builder()
                         .addProductCart(

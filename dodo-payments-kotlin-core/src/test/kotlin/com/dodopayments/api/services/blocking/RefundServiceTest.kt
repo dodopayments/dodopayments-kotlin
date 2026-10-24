@@ -5,6 +5,7 @@ package com.dodopayments.api.services.blocking
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
 import com.dodopayments.api.core.JsonValue
+import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.refunds.RefundCreateParams
 import org.junit.jupiter.api.Test
@@ -26,6 +27,7 @@ internal class RefundServiceTest {
             refundService.create(
                 RefundCreateParams.builder()
                     .paymentId("payment_id")
+                    .currency(Currency.AED)
                     .addItem(
                         RefundCreateParams.Item.builder()
                             .itemId("item_id")

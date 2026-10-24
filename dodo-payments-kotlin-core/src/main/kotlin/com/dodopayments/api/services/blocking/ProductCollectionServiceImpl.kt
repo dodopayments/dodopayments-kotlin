@@ -31,6 +31,8 @@ import com.dodopayments.api.models.productcollections.ProductCollectionUpdateIma
 import com.dodopayments.api.models.productcollections.ProductCollectionUpdateParams
 import com.dodopayments.api.services.blocking.productcollections.GroupService
 import com.dodopayments.api.services.blocking.productcollections.GroupServiceImpl
+import com.dodopayments.api.services.blocking.productcollections.TranslationService
+import com.dodopayments.api.services.blocking.productcollections.TranslationServiceImpl
 
 class ProductCollectionServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     ProductCollectionService {
@@ -39,12 +41,16 @@ class ProductCollectionServiceImpl internal constructor(private val clientOption
         WithRawResponseImpl(clientOptions)
     }
 
+    private val translations: TranslationService by lazy { TranslationServiceImpl(clientOptions) }
+
     private val groups: GroupService by lazy { GroupServiceImpl(clientOptions) }
 
     override fun withRawResponse(): ProductCollectionService.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ProductCollectionService =
         ProductCollectionServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
+    override fun translations(): TranslationService = translations
 
     override fun groups(): GroupService = groups
 
@@ -99,6 +105,10 @@ class ProductCollectionServiceImpl internal constructor(private val clientOption
         private val errorHandler: Handler<HttpResponse> =
             errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
+        private val translations: TranslationService.WithRawResponse by lazy {
+            TranslationServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         private val groups: GroupService.WithRawResponse by lazy {
             GroupServiceImpl.WithRawResponseImpl(clientOptions)
         }
@@ -109,6 +119,8 @@ class ProductCollectionServiceImpl internal constructor(private val clientOption
             ProductCollectionServiceImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier).build()
             )
+
+        override fun translations(): TranslationService.WithRawResponse = translations
 
         override fun groups(): GroupService.WithRawResponse = groups
 

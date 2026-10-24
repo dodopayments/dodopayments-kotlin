@@ -11,6 +11,7 @@ class ProductListParams
 private constructor(
     private val archived: Boolean?,
     private val brandId: String?,
+    private val locale: String?,
     private val pageNumber: Int?,
     private val pageSize: Int?,
     private val recurring: Boolean?,
@@ -23,6 +24,16 @@ private constructor(
 
     /** filter by Brand id */
     fun brandId(): String? = brandId
+
+    /**
+     * Shows the translated name, description and unit of the catalog entities in this locale. The
+     * value must be a code from `GET /locales`, for example `fr`. A field with no translation, an
+     * unknown code, or no code shows the base text.
+     *
+     * Do not send a text from a localized response back in a create or update request. The base
+     * text then changes to the translated text.
+     */
+    fun locale(): String? = locale
 
     /** Page number default is 0 */
     fun pageNumber(): Int? = pageNumber
@@ -59,6 +70,7 @@ private constructor(
 
         private var archived: Boolean? = null
         private var brandId: String? = null
+        private var locale: String? = null
         private var pageNumber: Int? = null
         private var pageSize: Int? = null
         private var recurring: Boolean? = null
@@ -68,6 +80,7 @@ private constructor(
         internal fun from(productListParams: ProductListParams) = apply {
             archived = productListParams.archived
             brandId = productListParams.brandId
+            locale = productListParams.locale
             pageNumber = productListParams.pageNumber
             pageSize = productListParams.pageSize
             recurring = productListParams.recurring
@@ -87,6 +100,16 @@ private constructor(
 
         /** filter by Brand id */
         fun brandId(brandId: String?) = apply { this.brandId = brandId }
+
+        /**
+         * Shows the translated name, description and unit of the catalog entities in this locale.
+         * The value must be a code from `GET /locales`, for example `fr`. A field with no
+         * translation, an unknown code, or no code shows the base text.
+         *
+         * Do not send a text from a localized response back in a create or update request. The base
+         * text then changes to the translated text.
+         */
+        fun locale(locale: String?) = apply { this.locale = locale }
 
         /** Page number default is 0 */
         fun pageNumber(pageNumber: Int?) = apply { this.pageNumber = pageNumber }
@@ -230,6 +253,7 @@ private constructor(
             ProductListParams(
                 archived,
                 brandId,
+                locale,
                 pageNumber,
                 pageSize,
                 recurring,
@@ -245,6 +269,7 @@ private constructor(
             .apply {
                 archived?.let { put("archived", it.toString()) }
                 brandId?.let { put("brand_id", it) }
+                locale?.let { put("locale", it) }
                 pageNumber?.let { put("page_number", it.toString()) }
                 pageSize?.let { put("page_size", it.toString()) }
                 recurring?.let { put("recurring", it.toString()) }
@@ -260,6 +285,7 @@ private constructor(
         return other is ProductListParams &&
             archived == other.archived &&
             brandId == other.brandId &&
+            locale == other.locale &&
             pageNumber == other.pageNumber &&
             pageSize == other.pageSize &&
             recurring == other.recurring &&
@@ -271,6 +297,7 @@ private constructor(
         Objects.hash(
             archived,
             brandId,
+            locale,
             pageNumber,
             pageSize,
             recurring,
@@ -279,5 +306,5 @@ private constructor(
         )
 
     override fun toString() =
-        "ProductListParams{archived=$archived, brandId=$brandId, pageNumber=$pageNumber, pageSize=$pageSize, recurring=$recurring, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "ProductListParams{archived=$archived, brandId=$brandId, locale=$locale, pageNumber=$pageNumber, pageSize=$pageSize, recurring=$recurring, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

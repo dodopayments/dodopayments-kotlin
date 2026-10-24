@@ -33,6 +33,7 @@ import java.util.Objects
 class CreditEntitlementListParams
 private constructor(
     private val deleted: Boolean?,
+    private val locale: String?,
     private val pageNumber: Int?,
     private val pageSize: Int?,
     private val additionalHeaders: Headers,
@@ -41,6 +42,16 @@ private constructor(
 
     /** List deleted credit entitlements */
     fun deleted(): Boolean? = deleted
+
+    /**
+     * Shows the translated name, description and unit of the catalog entities in this locale. The
+     * value must be a code from `GET /locales`, for example `fr`. A field with no translation, an
+     * unknown code, or no code shows the base text.
+     *
+     * Do not send a text from a localized response back in a create or update request. The base
+     * text then changes to the translated text.
+     */
+    fun locale(): String? = locale
 
     /** Page number default is 0 */
     fun pageNumber(): Int? = pageNumber
@@ -70,6 +81,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var deleted: Boolean? = null
+        private var locale: String? = null
         private var pageNumber: Int? = null
         private var pageSize: Int? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -77,6 +89,7 @@ private constructor(
 
         internal fun from(creditEntitlementListParams: CreditEntitlementListParams) = apply {
             deleted = creditEntitlementListParams.deleted
+            locale = creditEntitlementListParams.locale
             pageNumber = creditEntitlementListParams.pageNumber
             pageSize = creditEntitlementListParams.pageSize
             additionalHeaders = creditEntitlementListParams.additionalHeaders.toBuilder()
@@ -92,6 +105,16 @@ private constructor(
          * This unboxed primitive overload exists for backwards compatibility.
          */
         fun deleted(deleted: Boolean) = deleted(deleted as Boolean?)
+
+        /**
+         * Shows the translated name, description and unit of the catalog entities in this locale.
+         * The value must be a code from `GET /locales`, for example `fr`. A field with no
+         * translation, an unknown code, or no code shows the base text.
+         *
+         * Do not send a text from a localized response back in a create or update request. The base
+         * text then changes to the translated text.
+         */
+        fun locale(locale: String?) = apply { this.locale = locale }
 
         /** Page number default is 0 */
         fun pageNumber(pageNumber: Int?) = apply { this.pageNumber = pageNumber }
@@ -219,6 +242,7 @@ private constructor(
         fun build(): CreditEntitlementListParams =
             CreditEntitlementListParams(
                 deleted,
+                locale,
                 pageNumber,
                 pageSize,
                 additionalHeaders.build(),
@@ -232,6 +256,7 @@ private constructor(
         QueryParams.builder()
             .apply {
                 deleted?.let { put("deleted", it.toString()) }
+                locale?.let { put("locale", it) }
                 pageNumber?.let { put("page_number", it.toString()) }
                 pageSize?.let { put("page_size", it.toString()) }
                 putAll(additionalQueryParams)
@@ -245,6 +270,7 @@ private constructor(
 
         return other is CreditEntitlementListParams &&
             deleted == other.deleted &&
+            locale == other.locale &&
             pageNumber == other.pageNumber &&
             pageSize == other.pageSize &&
             additionalHeaders == other.additionalHeaders &&
@@ -252,8 +278,15 @@ private constructor(
     }
 
     override fun hashCode(): Int =
-        Objects.hash(deleted, pageNumber, pageSize, additionalHeaders, additionalQueryParams)
+        Objects.hash(
+            deleted,
+            locale,
+            pageNumber,
+            pageSize,
+            additionalHeaders,
+            additionalQueryParams,
+        )
 
     override fun toString() =
-        "CreditEntitlementListParams{deleted=$deleted, pageNumber=$pageNumber, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "CreditEntitlementListParams{deleted=$deleted, locale=$locale, pageNumber=$pageNumber, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -10,11 +10,22 @@ import java.util.Objects
 class SubscriptionRetrieveParams
 private constructor(
     private val subscriptionId: String?,
+    private val locale: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun subscriptionId(): String? = subscriptionId
+
+    /**
+     * Shows the translated name, description and unit of the catalog entities in this locale. The
+     * value must be a code from `GET /locales`, for example `fr`. A field with no translation, an
+     * unknown code, or no code shows the base text.
+     *
+     * Do not send a text from a localized response back in a create or update request. The base
+     * text then changes to the translated text.
+     */
+    fun locale(): String? = locale
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -38,16 +49,28 @@ private constructor(
     class Builder internal constructor() {
 
         private var subscriptionId: String? = null
+        private var locale: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(subscriptionRetrieveParams: SubscriptionRetrieveParams) = apply {
             subscriptionId = subscriptionRetrieveParams.subscriptionId
+            locale = subscriptionRetrieveParams.locale
             additionalHeaders = subscriptionRetrieveParams.additionalHeaders.toBuilder()
             additionalQueryParams = subscriptionRetrieveParams.additionalQueryParams.toBuilder()
         }
 
         fun subscriptionId(subscriptionId: String?) = apply { this.subscriptionId = subscriptionId }
+
+        /**
+         * Shows the translated name, description and unit of the catalog entities in this locale.
+         * The value must be a code from `GET /locales`, for example `fr`. A field with no
+         * translation, an unknown code, or no code shows the base text.
+         *
+         * Do not send a text from a localized response back in a create or update request. The base
+         * text then changes to the translated text.
+         */
+        fun locale(locale: String?) = apply { this.locale = locale }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -155,6 +178,7 @@ private constructor(
         fun build(): SubscriptionRetrieveParams =
             SubscriptionRetrieveParams(
                 subscriptionId,
+                locale,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -168,7 +192,13 @@ private constructor(
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                locale?.let { put("locale", it) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -177,13 +207,14 @@ private constructor(
 
         return other is SubscriptionRetrieveParams &&
             subscriptionId == other.subscriptionId &&
+            locale == other.locale &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
     override fun hashCode(): Int =
-        Objects.hash(subscriptionId, additionalHeaders, additionalQueryParams)
+        Objects.hash(subscriptionId, locale, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "SubscriptionRetrieveParams{subscriptionId=$subscriptionId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "SubscriptionRetrieveParams{subscriptionId=$subscriptionId, locale=$locale, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

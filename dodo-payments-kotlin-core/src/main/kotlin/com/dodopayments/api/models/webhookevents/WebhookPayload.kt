@@ -38,6 +38,8 @@ import com.dodopayments.api.models.payments.Payment
 import com.dodopayments.api.models.payments.PaymentRefundStatus
 import com.dodopayments.api.models.payments.RefundListItem
 import com.dodopayments.api.models.payments.SubscriptionServicePeriod
+import com.dodopayments.api.models.payments.ThreeDSFlow
+import com.dodopayments.api.models.payments.ThreeDSStatus
 import com.dodopayments.api.models.products.DigitalProductDelivery
 import com.dodopayments.api.models.refunds.Refund
 import com.dodopayments.api.models.refunds.RefundNetworkReferenceType
@@ -900,6 +902,9 @@ private constructor(
             private val status: JsonField<IntentStatus>,
             private val subscriptionId: JsonField<String>,
             private val tax: JsonField<Int>,
+            private val threeDSFlow: JsonField<ThreeDSFlow>,
+            private val threeDSStatus: JsonField<ThreeDSStatus>,
+            private val threeDSVersion: JsonField<String>,
             private val updatedAt: JsonField<OffsetDateTime>,
             private val payloadType: JsonValue,
             private val additionalProperties: MutableMap<String, JsonValue>,
@@ -1050,6 +1055,15 @@ private constructor(
                 @ExcludeMissing
                 subscriptionId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("tax") @ExcludeMissing tax: JsonField<Int> = JsonMissing.of(),
+                @JsonProperty("three_ds_flow")
+                @ExcludeMissing
+                threeDSFlow: JsonField<ThreeDSFlow> = JsonMissing.of(),
+                @JsonProperty("three_ds_status")
+                @ExcludeMissing
+                threeDSStatus: JsonField<ThreeDSStatus> = JsonMissing.of(),
+                @JsonProperty("three_ds_version")
+                @ExcludeMissing
+                threeDSVersion: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("updated_at")
                 @ExcludeMissing
                 updatedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -1104,6 +1118,9 @@ private constructor(
                 status,
                 subscriptionId,
                 tax,
+                threeDSFlow,
+                threeDSStatus,
+                threeDSVersion,
                 updatedAt,
                 payloadType,
                 mutableMapOf(),
@@ -1158,6 +1175,9 @@ private constructor(
                     .status(status)
                     .subscriptionId(subscriptionId)
                     .tax(tax)
+                    .threeDSFlow(threeDSFlow)
+                    .threeDSStatus(threeDSStatus)
+                    .threeDSVersion(threeDSVersion)
                     .updatedAt(updatedAt)
                     .build()
 
@@ -1607,6 +1627,33 @@ private constructor(
              *   (e.g. if the server responded with an unexpected value).
              */
             fun tax(): Int? = tax.getNullable("tax")
+
+            /**
+             * How the cardholder completed the 3DS authentication. The value is null when the
+             * processor does not report it.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun threeDSFlow(): ThreeDSFlow? = threeDSFlow.getNullable("three_ds_flow")
+
+            /**
+             * The result of the 3DS authentication, as the processor reports it. The value is null
+             * when the processor reports no 3DS data, for example when the payment did not use 3DS.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun threeDSStatus(): ThreeDSStatus? = threeDSStatus.getNullable("three_ds_status")
+
+            /**
+             * The 3DS protocol version, for example `2.2.0`. The value is null when the processor
+             * does not report it.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun threeDSVersion(): String? = threeDSVersion.getNullable("three_ds_version")
 
             /**
              * Timestamp when the payment was last updated
@@ -2093,6 +2140,36 @@ private constructor(
             @JsonProperty("tax") @ExcludeMissing fun _tax(): JsonField<Int> = tax
 
             /**
+             * Returns the raw JSON value of [threeDSFlow].
+             *
+             * Unlike [threeDSFlow], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("three_ds_flow")
+            @ExcludeMissing
+            fun _threeDSFlow(): JsonField<ThreeDSFlow> = threeDSFlow
+
+            /**
+             * Returns the raw JSON value of [threeDSStatus].
+             *
+             * Unlike [threeDSStatus], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("three_ds_status")
+            @ExcludeMissing
+            fun _threeDSStatus(): JsonField<ThreeDSStatus> = threeDSStatus
+
+            /**
+             * Returns the raw JSON value of [threeDSVersion].
+             *
+             * Unlike [threeDSVersion], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("three_ds_version")
+            @ExcludeMissing
+            fun _threeDSVersion(): JsonField<String> = threeDSVersion
+
+            /**
              * Returns the raw JSON value of [updatedAt].
              *
              * Unlike [updatedAt], this method doesn't throw if the JSON field has an unexpected
@@ -2205,6 +2282,9 @@ private constructor(
                 private var status: JsonField<IntentStatus> = JsonMissing.of()
                 private var subscriptionId: JsonField<String> = JsonMissing.of()
                 private var tax: JsonField<Int> = JsonMissing.of()
+                private var threeDSFlow: JsonField<ThreeDSFlow> = JsonMissing.of()
+                private var threeDSStatus: JsonField<ThreeDSStatus> = JsonMissing.of()
+                private var threeDSVersion: JsonField<String> = JsonMissing.of()
                 private var updatedAt: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var payloadType: JsonValue = JsonValue.from("Payment")
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -2257,6 +2337,9 @@ private constructor(
                     status = payment.status
                     subscriptionId = payment.subscriptionId
                     tax = payment.tax
+                    threeDSFlow = payment.threeDSFlow
+                    threeDSStatus = payment.threeDSStatus
+                    threeDSVersion = payment.threeDSVersion
                     updatedAt = payment.updatedAt
                     payloadType = payment.payloadType
                     additionalProperties = payment.additionalProperties.toMutableMap()
@@ -3127,6 +3210,61 @@ private constructor(
                  */
                 fun tax(tax: JsonField<Int>) = apply { this.tax = tax }
 
+                /**
+                 * How the cardholder completed the 3DS authentication. The value is null when the
+                 * processor does not report it.
+                 */
+                fun threeDSFlow(threeDSFlow: ThreeDSFlow?) =
+                    threeDSFlow(JsonField.ofNullable(threeDSFlow))
+
+                /**
+                 * Sets [Builder.threeDSFlow] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.threeDSFlow] with a well-typed [ThreeDSFlow]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun threeDSFlow(threeDSFlow: JsonField<ThreeDSFlow>) = apply {
+                    this.threeDSFlow = threeDSFlow
+                }
+
+                /**
+                 * The result of the 3DS authentication, as the processor reports it. The value is
+                 * null when the processor reports no 3DS data, for example when the payment did not
+                 * use 3DS.
+                 */
+                fun threeDSStatus(threeDSStatus: ThreeDSStatus?) =
+                    threeDSStatus(JsonField.ofNullable(threeDSStatus))
+
+                /**
+                 * Sets [Builder.threeDSStatus] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.threeDSStatus] with a well-typed [ThreeDSStatus]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun threeDSStatus(threeDSStatus: JsonField<ThreeDSStatus>) = apply {
+                    this.threeDSStatus = threeDSStatus
+                }
+
+                /**
+                 * The 3DS protocol version, for example `2.2.0`. The value is null when the
+                 * processor does not report it.
+                 */
+                fun threeDSVersion(threeDSVersion: String?) =
+                    threeDSVersion(JsonField.ofNullable(threeDSVersion))
+
+                /**
+                 * Sets [Builder.threeDSVersion] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.threeDSVersion] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun threeDSVersion(threeDSVersion: JsonField<String>) = apply {
+                    this.threeDSVersion = threeDSVersion
+                }
+
                 /** Timestamp when the payment was last updated */
                 fun updatedAt(updatedAt: OffsetDateTime?) =
                     updatedAt(JsonField.ofNullable(updatedAt))
@@ -3259,6 +3397,9 @@ private constructor(
                         status,
                         subscriptionId,
                         tax,
+                        threeDSFlow,
+                        threeDSStatus,
+                        threeDSVersion,
                         updatedAt,
                         payloadType,
                         additionalProperties.toMutableMap(),
@@ -3329,6 +3470,9 @@ private constructor(
                 status()?.validate()
                 subscriptionId()
                 tax()
+                threeDSFlow()?.validate()
+                threeDSStatus()?.validate()
+                threeDSVersion()
                 updatedAt()
                 _payloadType().let {
                     if (it != JsonValue.from("Payment")) {
@@ -3402,6 +3546,9 @@ private constructor(
                     (status.asKnown()?.validity() ?: 0) +
                     (if (subscriptionId.asKnown() == null) 0 else 1) +
                     (if (tax.asKnown() == null) 0 else 1) +
+                    (threeDSFlow.asKnown()?.validity() ?: 0) +
+                    (threeDSStatus.asKnown()?.validity() ?: 0) +
+                    (if (threeDSVersion.asKnown() == null) 0 else 1) +
                     (if (updatedAt.asKnown() == null) 0 else 1) +
                     payloadType.let { if (it == JsonValue.from("Payment")) 1 else 0 }
 
@@ -3458,6 +3605,9 @@ private constructor(
                     status == other.status &&
                     subscriptionId == other.subscriptionId &&
                     tax == other.tax &&
+                    threeDSFlow == other.threeDSFlow &&
+                    threeDSStatus == other.threeDSStatus &&
+                    threeDSVersion == other.threeDSVersion &&
                     updatedAt == other.updatedAt &&
                     payloadType == other.payloadType &&
                     additionalProperties == other.additionalProperties
@@ -3512,6 +3662,9 @@ private constructor(
                     status,
                     subscriptionId,
                     tax,
+                    threeDSFlow,
+                    threeDSStatus,
+                    threeDSVersion,
                     updatedAt,
                     payloadType,
                     additionalProperties,
@@ -3521,7 +3674,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Payment{billing=$billing, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, digitalProductsDelivered=$digitalProductsDelivered, disputes=$disputes, includesUsage=$includesUsage, isMultiSubscription=$isMultiSubscription, isUpdatePaymentMethod=$isUpdatePaymentMethod, metadata=$metadata, paymentId=$paymentId, paymentProvider=$paymentProvider, refunds=$refunds, retryAttempt=$retryAttempt, servicePeriods=$servicePeriods, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, subscriptionIds=$subscriptionIds, totalAmount=$totalAmount, cardExpMonth=$cardExpMonth, cardExpYear=$cardExpYear, cardHolderName=$cardHolderName, cardIssuingCountry=$cardIssuingCountry, cardLastFour=$cardLastFour, cardNetwork=$cardNetwork, cardType=$cardType, chargeType=$chargeType, checkoutSessionId=$checkoutSessionId, customFieldResponses=$customFieldResponses, discountId=$discountId, discounts=$discounts, errorCode=$errorCode, errorMessage=$errorMessage, invoiceId=$invoiceId, invoiceUrl=$invoiceUrl, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodId=$paymentMethodId, paymentMethodType=$paymentMethodType, productCart=$productCart, refundStatus=$refundStatus, settlementTax=$settlementTax, status=$status, subscriptionId=$subscriptionId, tax=$tax, updatedAt=$updatedAt, payloadType=$payloadType, additionalProperties=$additionalProperties}"
+                "Payment{billing=$billing, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, currency=$currency, customer=$customer, digitalProductsDelivered=$digitalProductsDelivered, disputes=$disputes, includesUsage=$includesUsage, isMultiSubscription=$isMultiSubscription, isUpdatePaymentMethod=$isUpdatePaymentMethod, metadata=$metadata, paymentId=$paymentId, paymentProvider=$paymentProvider, refunds=$refunds, retryAttempt=$retryAttempt, servicePeriods=$servicePeriods, settlementAmount=$settlementAmount, settlementCurrency=$settlementCurrency, subscriptionIds=$subscriptionIds, totalAmount=$totalAmount, cardExpMonth=$cardExpMonth, cardExpYear=$cardExpYear, cardHolderName=$cardHolderName, cardIssuingCountry=$cardIssuingCountry, cardLastFour=$cardLastFour, cardNetwork=$cardNetwork, cardType=$cardType, chargeType=$chargeType, checkoutSessionId=$checkoutSessionId, customFieldResponses=$customFieldResponses, discountId=$discountId, discounts=$discounts, errorCode=$errorCode, errorMessage=$errorMessage, invoiceId=$invoiceId, invoiceUrl=$invoiceUrl, paymentLink=$paymentLink, paymentMethod=$paymentMethod, paymentMethodId=$paymentMethodId, paymentMethodType=$paymentMethodType, productCart=$productCart, refundStatus=$refundStatus, settlementTax=$settlementTax, status=$status, subscriptionId=$subscriptionId, tax=$tax, threeDSFlow=$threeDSFlow, threeDSStatus=$threeDSStatus, threeDSVersion=$threeDSVersion, updatedAt=$updatedAt, payloadType=$payloadType, additionalProperties=$additionalProperties}"
         }
 
         /** Response struct representing subscription details */

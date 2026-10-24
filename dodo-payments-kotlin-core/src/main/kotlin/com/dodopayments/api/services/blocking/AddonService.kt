@@ -4,15 +4,19 @@ package com.dodopayments.api.services.blocking
 
 import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
+import com.dodopayments.api.core.http.HttpResponse
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.models.addons.AddonCreateParams
+import com.dodopayments.api.models.addons.AddonDeleteParams
 import com.dodopayments.api.models.addons.AddonListPage
 import com.dodopayments.api.models.addons.AddonListParams
 import com.dodopayments.api.models.addons.AddonResponse
 import com.dodopayments.api.models.addons.AddonRetrieveParams
+import com.dodopayments.api.models.addons.AddonUnarchiveParams
 import com.dodopayments.api.models.addons.AddonUpdateImagesParams
 import com.dodopayments.api.models.addons.AddonUpdateImagesResponse
 import com.dodopayments.api.models.addons.AddonUpdateParams
+import com.dodopayments.api.services.blocking.addons.TranslationService
 import com.google.errorprone.annotations.MustBeClosed
 
 interface AddonService {
@@ -28,6 +32,8 @@ interface AddonService {
      * The original service is not modified.
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): AddonService
+
+    fun translations(): TranslationService
 
     fun create(
         params: AddonCreateParams,
@@ -75,6 +81,35 @@ interface AddonService {
     fun list(requestOptions: RequestOptions): AddonListPage =
         list(AddonListParams.none(), requestOptions)
 
+    fun delete(
+        id: String,
+        params: AddonDeleteParams = AddonDeleteParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ) = delete(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see delete */
+    fun delete(params: AddonDeleteParams, requestOptions: RequestOptions = RequestOptions.none())
+
+    /** @see delete */
+    fun delete(id: String, requestOptions: RequestOptions) =
+        delete(id, AddonDeleteParams.none(), requestOptions)
+
+    fun unarchive(
+        id: String,
+        params: AddonUnarchiveParams = AddonUnarchiveParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ) = unarchive(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see unarchive */
+    fun unarchive(
+        params: AddonUnarchiveParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    )
+
+    /** @see unarchive */
+    fun unarchive(id: String, requestOptions: RequestOptions) =
+        unarchive(id, AddonUnarchiveParams.none(), requestOptions)
+
     fun updateImages(
         id: String,
         params: AddonUpdateImagesParams = AddonUpdateImagesParams.none(),
@@ -100,6 +135,8 @@ interface AddonService {
          * The original service is not modified.
          */
         fun withOptions(modifier: (ClientOptions.Builder) -> Unit): AddonService.WithRawResponse
+
+        fun translations(): TranslationService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /addons`, but is otherwise the same as
@@ -173,6 +210,52 @@ interface AddonService {
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<AddonListPage> =
             list(AddonListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `delete /addons/{id}`, but is otherwise the same as
+         * [AddonService.delete].
+         */
+        @MustBeClosed
+        fun delete(
+            id: String,
+            params: AddonDeleteParams = AddonDeleteParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse = delete(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see delete */
+        @MustBeClosed
+        fun delete(
+            params: AddonDeleteParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
+
+        /** @see delete */
+        @MustBeClosed
+        fun delete(id: String, requestOptions: RequestOptions): HttpResponse =
+            delete(id, AddonDeleteParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `post /addons/{id}/unarchive`, but is otherwise the same
+         * as [AddonService.unarchive].
+         */
+        @MustBeClosed
+        fun unarchive(
+            id: String,
+            params: AddonUnarchiveParams = AddonUnarchiveParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse = unarchive(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see unarchive */
+        @MustBeClosed
+        fun unarchive(
+            params: AddonUnarchiveParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
+
+        /** @see unarchive */
+        @MustBeClosed
+        fun unarchive(id: String, requestOptions: RequestOptions): HttpResponse =
+            unarchive(id, AddonUnarchiveParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `put /addons/{id}/images`, but is otherwise the same as

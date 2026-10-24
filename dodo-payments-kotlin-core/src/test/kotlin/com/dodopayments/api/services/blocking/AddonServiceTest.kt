@@ -5,6 +5,7 @@ package com.dodopayments.api.services.blocking
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
 import com.dodopayments.api.models.addons.AddonCreateParams
+import com.dodopayments.api.models.addons.AddonRetrieveParams
 import com.dodopayments.api.models.addons.AddonUpdateParams
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.TaxCategory
@@ -46,7 +47,13 @@ internal class AddonServiceTest {
                 .build()
         val addonService = client.addons()
 
-        val addonResponse = addonService.retrieve("adn_NX1zdqW4Hbivsqz8vI9dc")
+        val addonResponse =
+            addonService.retrieve(
+                AddonRetrieveParams.builder()
+                    .id("adn_NX1zdqW4Hbivsqz8vI9dc")
+                    .locale("locale")
+                    .build()
+            )
 
         addonResponse.validate()
     }
@@ -88,6 +95,30 @@ internal class AddonServiceTest {
         val page = addonService.list()
 
         page.response().validate()
+    }
+
+    @Test
+    fun delete() {
+        val client =
+            DodoPaymentsOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val addonService = client.addons()
+
+        addonService.delete("adn_NX1zdqW4Hbivsqz8vI9dc")
+    }
+
+    @Test
+    fun unarchive() {
+        val client =
+            DodoPaymentsOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val addonService = client.addons()
+
+        addonService.unarchive("adn_NX1zdqW4Hbivsqz8vI9dc")
     }
 
     @Test
