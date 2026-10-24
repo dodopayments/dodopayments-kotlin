@@ -10,7 +10,8 @@ import java.util.Objects
 /**
  * Downloads the complete payout breakup as a CSV file. Each row represents a balance ledger entry
  * with columns: Ledger ID, Event Type, Original Amount, Original Currency, Reference Object ID,
- * Description, Created At, USD Equivalent Amount, and Payout Currency Amount.
+ * Description, Created At, USD Equivalent Amount, and Payout Currency Amount. A settlement batch
+ * payout shows its rows in native amounts.
  */
 class DetailDownloadCsvParams
 private constructor(

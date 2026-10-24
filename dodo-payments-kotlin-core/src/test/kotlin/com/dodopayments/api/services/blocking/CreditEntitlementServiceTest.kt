@@ -6,6 +6,7 @@ import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
 import com.dodopayments.api.models.creditentitlements.CbbOverageBehavior
 import com.dodopayments.api.models.creditentitlements.CreditEntitlementCreateParams
+import com.dodopayments.api.models.creditentitlements.CreditEntitlementRetrieveParams
 import com.dodopayments.api.models.creditentitlements.CreditEntitlementUpdateParams
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.subscriptions.TimeInterval
@@ -57,7 +58,13 @@ internal class CreditEntitlementServiceTest {
                 .build()
         val creditEntitlementService = client.creditEntitlements()
 
-        val creditEntitlement = creditEntitlementService.retrieve("cde_ztxm5XJsKxWucRWA3rjdM")
+        val creditEntitlement =
+            creditEntitlementService.retrieve(
+                CreditEntitlementRetrieveParams.builder()
+                    .id("cde_ztxm5XJsKxWucRWA3rjdM")
+                    .locale("locale")
+                    .build()
+            )
 
         creditEntitlement.validate()
     }

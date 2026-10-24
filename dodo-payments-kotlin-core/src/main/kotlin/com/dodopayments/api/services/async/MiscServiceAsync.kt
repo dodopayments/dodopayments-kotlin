@@ -6,6 +6,8 @@ import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.models.misc.CountryCode
+import com.dodopayments.api.models.misc.LocaleInfo
+import com.dodopayments.api.models.misc.MiscListLocalesParams
 import com.dodopayments.api.models.misc.MiscListSupportedCountriesParams
 import com.google.errorprone.annotations.MustBeClosed
 
@@ -22,6 +24,16 @@ interface MiscServiceAsync {
      * The original service is not modified.
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MiscServiceAsync
+
+    /** Lists the locales that a translation can have. */
+    suspend fun listLocales(
+        params: MiscListLocalesParams = MiscListLocalesParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): List<LocaleInfo>
+
+    /** @see listLocales */
+    suspend fun listLocales(requestOptions: RequestOptions): List<LocaleInfo> =
+        listLocales(MiscListLocalesParams.none(), requestOptions)
 
     suspend fun listSupportedCountries(
         params: MiscListSupportedCountriesParams = MiscListSupportedCountriesParams.none(),
@@ -41,6 +53,21 @@ interface MiscServiceAsync {
          * The original service is not modified.
          */
         fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MiscServiceAsync.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `get /locales`, but is otherwise the same as
+         * [MiscServiceAsync.listLocales].
+         */
+        @MustBeClosed
+        suspend fun listLocales(
+            params: MiscListLocalesParams = MiscListLocalesParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<List<LocaleInfo>>
+
+        /** @see listLocales */
+        @MustBeClosed
+        suspend fun listLocales(requestOptions: RequestOptions): HttpResponseFor<List<LocaleInfo>> =
+            listLocales(MiscListLocalesParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /checkout/supported_countries`, but is otherwise the

@@ -34,12 +34,18 @@ import com.dodopayments.api.services.async.products.LocalizedPriceServiceAsync
 import com.dodopayments.api.services.async.products.LocalizedPriceServiceAsyncImpl
 import com.dodopayments.api.services.async.products.ShortLinkServiceAsync
 import com.dodopayments.api.services.async.products.ShortLinkServiceAsyncImpl
+import com.dodopayments.api.services.async.products.TranslationServiceAsync
+import com.dodopayments.api.services.async.products.TranslationServiceAsyncImpl
 
 class ProductServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     ProductServiceAsync {
 
     private val withRawResponse: ProductServiceAsync.WithRawResponse by lazy {
         WithRawResponseImpl(clientOptions)
+    }
+
+    private val translations: TranslationServiceAsync by lazy {
+        TranslationServiceAsyncImpl(clientOptions)
     }
 
     private val images: ImageServiceAsync by lazy { ImageServiceAsyncImpl(clientOptions) }
@@ -56,6 +62,8 @@ class ProductServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ProductServiceAsync =
         ProductServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
+    override fun translations(): TranslationServiceAsync = translations
 
     override fun images(): ImageServiceAsync = images
 
@@ -112,6 +120,10 @@ class ProductServiceAsyncImpl internal constructor(private val clientOptions: Cl
         private val errorHandler: Handler<HttpResponse> =
             errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
+        private val translations: TranslationServiceAsync.WithRawResponse by lazy {
+            TranslationServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         private val images: ImageServiceAsync.WithRawResponse by lazy {
             ImageServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
@@ -130,6 +142,8 @@ class ProductServiceAsyncImpl internal constructor(private val clientOptions: Cl
             ProductServiceAsyncImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier).build()
             )
+
+        override fun translations(): TranslationServiceAsync.WithRawResponse = translations
 
         override fun images(): ImageServiceAsync.WithRawResponse = images
 

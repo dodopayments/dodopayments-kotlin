@@ -25,6 +25,9 @@ import com.dodopayments.api.models.meters.MeterListPageResponse
 import com.dodopayments.api.models.meters.MeterListParams
 import com.dodopayments.api.models.meters.MeterRetrieveParams
 import com.dodopayments.api.models.meters.MeterUnarchiveParams
+import com.dodopayments.api.models.meters.MeterUpdateParams
+import com.dodopayments.api.services.async.meters.TranslationServiceAsync
+import com.dodopayments.api.services.async.meters.TranslationServiceAsyncImpl
 
 class MeterServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     MeterServiceAsync {
@@ -33,10 +36,16 @@ class MeterServiceAsyncImpl internal constructor(private val clientOptions: Clie
         WithRawResponseImpl(clientOptions)
     }
 
+    private val translations: TranslationServiceAsync by lazy {
+        TranslationServiceAsyncImpl(clientOptions)
+    }
+
     override fun withRawResponse(): MeterServiceAsync.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MeterServiceAsync =
         MeterServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
+    override fun translations(): TranslationServiceAsync = translations
 
     override suspend fun create(params: MeterCreateParams, requestOptions: RequestOptions): Meter =
         // post /meters
@@ -48,6 +57,10 @@ class MeterServiceAsyncImpl internal constructor(private val clientOptions: Clie
     ): Meter =
         // get /meters/{id}
         withRawResponse().retrieve(params, requestOptions).parse()
+
+    override suspend fun update(params: MeterUpdateParams, requestOptions: RequestOptions): Meter =
+        // patch /meters/{id}
+        withRawResponse().update(params, requestOptions).parse()
 
     override suspend fun list(
         params: MeterListParams,
@@ -72,12 +85,18 @@ class MeterServiceAsyncImpl internal constructor(private val clientOptions: Clie
         private val errorHandler: Handler<HttpResponse> =
             errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
+        private val translations: TranslationServiceAsync.WithRawResponse by lazy {
+            TranslationServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): MeterServiceAsync.WithRawResponse =
             MeterServiceAsyncImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier).build()
             )
+
+        override fun translations(): TranslationServiceAsync.WithRawResponse = translations
 
         private val createHandler: Handler<Meter> = jsonHandler<Meter>(clientOptions.jsonMapper)
 
@@ -127,6 +146,36 @@ class MeterServiceAsyncImpl internal constructor(private val clientOptions: Clie
             return errorHandler.handle(response).parseable {
                 response
                     .use { retrieveHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val updateHandler: Handler<Meter> = jsonHandler<Meter>(clientOptions.jsonMapper)
+
+        override suspend fun update(
+            params: MeterUpdateParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<Meter> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PATCH)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("meters", params._pathParam(0))
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { updateHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()

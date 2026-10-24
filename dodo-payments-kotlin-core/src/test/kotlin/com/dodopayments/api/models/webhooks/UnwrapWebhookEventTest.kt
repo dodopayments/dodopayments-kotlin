@@ -31,6 +31,8 @@ import com.dodopayments.api.models.payments.Payment
 import com.dodopayments.api.models.payments.PaymentRefundStatus
 import com.dodopayments.api.models.payments.RefundListItem
 import com.dodopayments.api.models.payments.SubscriptionServicePeriod
+import com.dodopayments.api.models.payments.ThreeDSFlow
+import com.dodopayments.api.models.payments.ThreeDSStatus
 import com.dodopayments.api.models.products.DigitalProductDelivery
 import com.dodopayments.api.models.products.DigitalProductDeliveryFile
 import com.dodopayments.api.models.refunds.Refund
@@ -3457,6 +3459,9 @@ internal class UnwrapWebhookEventTest {
                         .status(IntentStatus.SUCCEEDED)
                         .subscriptionId("subscription_id")
                         .tax(0)
+                        .threeDSFlow(ThreeDSFlow.CHALLENGE)
+                        .threeDSStatus(ThreeDSStatus.AUTHENTICATED)
+                        .threeDSVersion("three_ds_version")
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .build()
                 )
@@ -3664,6 +3669,9 @@ internal class UnwrapWebhookEventTest {
                             .status(IntentStatus.SUCCEEDED)
                             .subscriptionId("subscription_id")
                             .tax(0)
+                            .threeDSFlow(ThreeDSFlow.CHALLENGE)
+                            .threeDSStatus(ThreeDSStatus.AUTHENTICATED)
+                            .threeDSVersion("three_ds_version")
                             .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .build()
                     )
@@ -3827,6 +3835,9 @@ internal class UnwrapWebhookEventTest {
                         .status(IntentStatus.SUCCEEDED)
                         .subscriptionId("subscription_id")
                         .tax(0)
+                        .threeDSFlow(ThreeDSFlow.CHALLENGE)
+                        .threeDSStatus(ThreeDSStatus.AUTHENTICATED)
+                        .threeDSVersion("three_ds_version")
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .build()
                 )
@@ -4034,6 +4045,9 @@ internal class UnwrapWebhookEventTest {
                             .status(IntentStatus.SUCCEEDED)
                             .subscriptionId("subscription_id")
                             .tax(0)
+                            .threeDSFlow(ThreeDSFlow.CHALLENGE)
+                            .threeDSStatus(ThreeDSStatus.AUTHENTICATED)
+                            .threeDSVersion("three_ds_version")
                             .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .build()
                     )
@@ -4197,6 +4211,9 @@ internal class UnwrapWebhookEventTest {
                         .status(IntentStatus.SUCCEEDED)
                         .subscriptionId("subscription_id")
                         .tax(0)
+                        .threeDSFlow(ThreeDSFlow.CHALLENGE)
+                        .threeDSStatus(ThreeDSStatus.AUTHENTICATED)
+                        .threeDSVersion("three_ds_version")
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .build()
                 )
@@ -4404,6 +4421,9 @@ internal class UnwrapWebhookEventTest {
                             .status(IntentStatus.SUCCEEDED)
                             .subscriptionId("subscription_id")
                             .tax(0)
+                            .threeDSFlow(ThreeDSFlow.CHALLENGE)
+                            .threeDSStatus(ThreeDSStatus.AUTHENTICATED)
+                            .threeDSVersion("three_ds_version")
                             .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .build()
                     )
@@ -4567,6 +4587,9 @@ internal class UnwrapWebhookEventTest {
                         .status(IntentStatus.SUCCEEDED)
                         .subscriptionId("subscription_id")
                         .tax(0)
+                        .threeDSFlow(ThreeDSFlow.CHALLENGE)
+                        .threeDSStatus(ThreeDSStatus.AUTHENTICATED)
+                        .threeDSVersion("three_ds_version")
                         .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .build()
                 )
@@ -4774,6 +4797,9 @@ internal class UnwrapWebhookEventTest {
                             .status(IntentStatus.SUCCEEDED)
                             .subscriptionId("subscription_id")
                             .tax(0)
+                            .threeDSFlow(ThreeDSFlow.CHALLENGE)
+                            .threeDSStatus(ThreeDSStatus.AUTHENTICATED)
+                            .threeDSVersion("three_ds_version")
                             .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .build()
                     )

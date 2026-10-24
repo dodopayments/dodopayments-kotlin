@@ -5,16 +5,24 @@ package com.dodopayments.api.models.payments
 import com.dodopayments.api.core.Params
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
+import com.dodopayments.api.models.misc.Currency
 import java.util.Objects
 
 class PaymentRetrieveLineItemsParams
 private constructor(
     private val paymentId: String?,
+    private val currency: Currency?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun paymentId(): String? = paymentId
+
+    /**
+     * The currency of the amounts. It must be the currency that the customer paid in. Without it,
+     * the amounts are in the settlement currency.
+     */
+    fun currency(): Currency? = currency
 
     /** Additional headers to send with the request. */
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -39,16 +47,24 @@ private constructor(
     class Builder internal constructor() {
 
         private var paymentId: String? = null
+        private var currency: Currency? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         internal fun from(paymentRetrieveLineItemsParams: PaymentRetrieveLineItemsParams) = apply {
             paymentId = paymentRetrieveLineItemsParams.paymentId
+            currency = paymentRetrieveLineItemsParams.currency
             additionalHeaders = paymentRetrieveLineItemsParams.additionalHeaders.toBuilder()
             additionalQueryParams = paymentRetrieveLineItemsParams.additionalQueryParams.toBuilder()
         }
 
         fun paymentId(paymentId: String?) = apply { this.paymentId = paymentId }
+
+        /**
+         * The currency of the amounts. It must be the currency that the customer paid in. Without
+         * it, the amounts are in the settlement currency.
+         */
+        fun currency(currency: Currency?) = apply { this.currency = currency }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -156,6 +172,7 @@ private constructor(
         fun build(): PaymentRetrieveLineItemsParams =
             PaymentRetrieveLineItemsParams(
                 paymentId,
+                currency,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -169,7 +186,13 @@ private constructor(
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                currency?.let { put("currency", it.toString()) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -178,12 +201,14 @@ private constructor(
 
         return other is PaymentRetrieveLineItemsParams &&
             paymentId == other.paymentId &&
+            currency == other.currency &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = Objects.hash(paymentId, additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int =
+        Objects.hash(paymentId, currency, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "PaymentRetrieveLineItemsParams{paymentId=$paymentId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "PaymentRetrieveLineItemsParams{paymentId=$paymentId, currency=$currency, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

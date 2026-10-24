@@ -10,6 +10,8 @@ import com.dodopayments.api.models.meters.FilterType
 import com.dodopayments.api.models.meters.MeterAggregation
 import com.dodopayments.api.models.meters.MeterCreateParams
 import com.dodopayments.api.models.meters.MeterFilter
+import com.dodopayments.api.models.meters.MeterRetrieveParams
+import com.dodopayments.api.models.meters.MeterUpdateParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -72,7 +74,35 @@ internal class MeterServiceAsyncTest {
                 .build()
         val meterServiceAsync = client.meters()
 
-        val meter = meterServiceAsync.retrieve("mtr_h5tgTWL55OyMO0L2Q9w9v")
+        val meter =
+            meterServiceAsync.retrieve(
+                MeterRetrieveParams.builder()
+                    .id("mtr_h5tgTWL55OyMO0L2Q9w9v")
+                    .locale("locale")
+                    .build()
+            )
+
+        meter.validate()
+    }
+
+    @Test
+    suspend fun update() {
+        val client =
+            DodoPaymentsOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val meterServiceAsync = client.meters()
+
+        val meter =
+            meterServiceAsync.update(
+                MeterUpdateParams.builder()
+                    .id("mtr_h5tgTWL55OyMO0L2Q9w9v")
+                    .description("description")
+                    .measurementUnit("measurement_unit")
+                    .name("name")
+                    .build()
+            )
 
         meter.validate()
     }

@@ -4,6 +4,7 @@ package com.dodopayments.api.models.customers
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.misc.Locale
 import com.dodopayments.api.models.misc.Metadata
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
@@ -29,6 +30,7 @@ internal class CustomerTest {
                         .build()
                 )
                 .phoneNumber("phone_number")
+                .preferredLocale(Locale.AR)
                 .build()
 
         assertThat(customer.businessId()).isEqualTo("business_id")
@@ -43,6 +45,7 @@ internal class CustomerTest {
                 Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
             )
         assertThat(customer.phoneNumber()).isEqualTo("phone_number")
+        assertThat(customer.preferredLocale()).isEqualTo(Locale.AR)
     }
 
     @Test
@@ -63,6 +66,7 @@ internal class CustomerTest {
                         .build()
                 )
                 .phoneNumber("phone_number")
+                .preferredLocale(Locale.AR)
                 .build()
 
         val roundtrippedCustomer =

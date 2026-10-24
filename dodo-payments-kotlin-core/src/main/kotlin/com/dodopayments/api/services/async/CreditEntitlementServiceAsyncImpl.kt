@@ -28,12 +28,18 @@ import com.dodopayments.api.models.creditentitlements.CreditEntitlementUndeleteP
 import com.dodopayments.api.models.creditentitlements.CreditEntitlementUpdateParams
 import com.dodopayments.api.services.async.creditentitlements.BalanceServiceAsync
 import com.dodopayments.api.services.async.creditentitlements.BalanceServiceAsyncImpl
+import com.dodopayments.api.services.async.creditentitlements.TranslationServiceAsync
+import com.dodopayments.api.services.async.creditentitlements.TranslationServiceAsyncImpl
 
 class CreditEntitlementServiceAsyncImpl
 internal constructor(private val clientOptions: ClientOptions) : CreditEntitlementServiceAsync {
 
     private val withRawResponse: CreditEntitlementServiceAsync.WithRawResponse by lazy {
         WithRawResponseImpl(clientOptions)
+    }
+
+    private val translations: TranslationServiceAsync by lazy {
+        TranslationServiceAsyncImpl(clientOptions)
     }
 
     private val balances: BalanceServiceAsync by lazy { BalanceServiceAsyncImpl(clientOptions) }
@@ -44,6 +50,8 @@ internal constructor(private val clientOptions: ClientOptions) : CreditEntitleme
         modifier: (ClientOptions.Builder) -> Unit
     ): CreditEntitlementServiceAsync =
         CreditEntitlementServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
+    override fun translations(): TranslationServiceAsync = translations
 
     override fun balances(): BalanceServiceAsync = balances
 
@@ -98,6 +106,10 @@ internal constructor(private val clientOptions: ClientOptions) : CreditEntitleme
         private val errorHandler: Handler<HttpResponse> =
             errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
+        private val translations: TranslationServiceAsync.WithRawResponse by lazy {
+            TranslationServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         private val balances: BalanceServiceAsync.WithRawResponse by lazy {
             BalanceServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
@@ -108,6 +120,8 @@ internal constructor(private val clientOptions: ClientOptions) : CreditEntitleme
             CreditEntitlementServiceAsyncImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier).build()
             )
+
+        override fun translations(): TranslationServiceAsync.WithRawResponse = translations
 
         override fun balances(): BalanceServiceAsync.WithRawResponse = balances
 

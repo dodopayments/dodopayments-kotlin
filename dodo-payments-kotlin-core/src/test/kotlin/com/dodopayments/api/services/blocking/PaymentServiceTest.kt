@@ -13,6 +13,7 @@ import com.dodopayments.api.models.payments.BillingAddress
 import com.dodopayments.api.models.payments.OneTimeProductCartItem
 import com.dodopayments.api.models.payments.PaymentCreateParams
 import com.dodopayments.api.models.payments.PaymentMethodTypes
+import com.dodopayments.api.models.payments.PaymentRetrieveLineItemsParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
@@ -111,7 +112,13 @@ internal class PaymentServiceTest {
                 .build()
         val paymentService = client.payments()
 
-        val response = paymentService.retrieveLineItems("pay_gr4RizvMOXFJ6xca3y2tU")
+        val response =
+            paymentService.retrieveLineItems(
+                PaymentRetrieveLineItemsParams.builder()
+                    .paymentId("pay_gr4RizvMOXFJ6xca3y2tU")
+                    .currency(Currency.AED)
+                    .build()
+            )
 
         response.validate()
     }

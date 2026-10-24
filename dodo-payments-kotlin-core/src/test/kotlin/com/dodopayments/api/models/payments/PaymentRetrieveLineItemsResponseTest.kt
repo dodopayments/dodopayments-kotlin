@@ -25,6 +25,7 @@ internal class PaymentRetrieveLineItemsResponseTest {
                         .name("name")
                         .build()
                 )
+                .partialRefundAllowed(true)
                 .build()
 
         assertThat(paymentRetrieveLineItemsResponse.currency()).isEqualTo(Currency.AED)
@@ -39,6 +40,7 @@ internal class PaymentRetrieveLineItemsResponseTest {
                     .name("name")
                     .build()
             )
+        assertThat(paymentRetrieveLineItemsResponse.partialRefundAllowed()).isEqualTo(true)
     }
 
     @Test
@@ -57,6 +59,7 @@ internal class PaymentRetrieveLineItemsResponseTest {
                         .name("name")
                         .build()
                 )
+                .partialRefundAllowed(true)
                 .build()
 
         val roundtrippedPaymentRetrieveLineItemsResponse =

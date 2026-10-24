@@ -19,6 +19,7 @@ import com.dodopayments.api.models.subscriptions.SubscriptionChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeParams
 import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
 import com.dodopayments.api.models.subscriptions.SubscriptionPreviewChangePlanParams
+import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveParams
 import com.dodopayments.api.models.subscriptions.SubscriptionStatus
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdateParams
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdatePaymentMethodParams
@@ -108,7 +109,13 @@ internal class SubscriptionServiceTest {
                 .build()
         val subscriptionService = client.subscriptions()
 
-        val subscription = subscriptionService.retrieve("sub_Iuaq622bbmmfOGrVTqdXv")
+        val subscription =
+            subscriptionService.retrieve(
+                SubscriptionRetrieveParams.builder()
+                    .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
+                    .locale("locale")
+                    .build()
+            )
 
         subscription.validate()
     }

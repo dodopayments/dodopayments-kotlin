@@ -5,6 +5,7 @@ package com.dodopayments.api.services.async
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClientAsync
 import com.dodopayments.api.models.productcollections.ProductCollectionCreateParams
+import com.dodopayments.api.models.productcollections.ProductCollectionRetrieveParams
 import com.dodopayments.api.models.productcollections.ProductCollectionUpdateImagesParams
 import com.dodopayments.api.models.productcollections.ProductCollectionUpdateParams
 import com.dodopayments.api.models.productcollections.groups.GroupProduct
@@ -69,7 +70,13 @@ internal class ProductCollectionServiceAsyncTest {
                 .build()
         val productCollectionServiceAsync = client.productCollections()
 
-        val productCollection = productCollectionServiceAsync.retrieve("pdc_8BWv0hojwUH7iCDabr0NI")
+        val productCollection =
+            productCollectionServiceAsync.retrieve(
+                ProductCollectionRetrieveParams.builder()
+                    .id("pdc_8BWv0hojwUH7iCDabr0NI")
+                    .locale("locale")
+                    .build()
+            )
 
         productCollection.validate()
     }

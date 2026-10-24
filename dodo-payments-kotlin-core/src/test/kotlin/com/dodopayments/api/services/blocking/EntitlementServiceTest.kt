@@ -7,6 +7,7 @@ import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.entitlements.EntitlementCreateParams
 import com.dodopayments.api.models.entitlements.EntitlementIntegrationType
+import com.dodopayments.api.models.entitlements.EntitlementRetrieveParams
 import com.dodopayments.api.models.entitlements.EntitlementUpdateParams
 import com.dodopayments.api.models.entitlements.FeatureType
 import com.dodopayments.api.models.entitlements.IntegrationConfig
@@ -58,7 +59,13 @@ internal class EntitlementServiceTest {
                 .build()
         val entitlementService = client.entitlements()
 
-        val entitlement = entitlementService.retrieve("ent_jt7jcvI79Xh8eehqgWdcm")
+        val entitlement =
+            entitlementService.retrieve(
+                EntitlementRetrieveParams.builder()
+                    .id("ent_jt7jcvI79Xh8eehqgWdcm")
+                    .locale("locale")
+                    .build()
+            )
 
         entitlement.validate()
     }
