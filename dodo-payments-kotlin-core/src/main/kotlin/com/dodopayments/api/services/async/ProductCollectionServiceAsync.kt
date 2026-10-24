@@ -18,6 +18,7 @@ import com.dodopayments.api.models.productcollections.ProductCollectionUpdateIma
 import com.dodopayments.api.models.productcollections.ProductCollectionUpdateImagesResponse
 import com.dodopayments.api.models.productcollections.ProductCollectionUpdateParams
 import com.dodopayments.api.services.async.productcollections.GroupServiceAsync
+import com.dodopayments.api.services.async.productcollections.TranslationServiceAsync
 import com.google.errorprone.annotations.MustBeClosed
 
 interface ProductCollectionServiceAsync {
@@ -33,6 +34,8 @@ interface ProductCollectionServiceAsync {
      * The original service is not modified.
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ProductCollectionServiceAsync
+
+    fun translations(): TranslationServiceAsync
 
     fun groups(): GroupServiceAsync
 
@@ -152,6 +155,8 @@ interface ProductCollectionServiceAsync {
         fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): ProductCollectionServiceAsync.WithRawResponse
+
+        fun translations(): TranslationServiceAsync.WithRawResponse
 
         fun groups(): GroupServiceAsync.WithRawResponse
 

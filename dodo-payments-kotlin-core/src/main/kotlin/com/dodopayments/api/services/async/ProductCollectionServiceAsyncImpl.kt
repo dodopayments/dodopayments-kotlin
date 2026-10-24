@@ -31,12 +31,18 @@ import com.dodopayments.api.models.productcollections.ProductCollectionUpdateIma
 import com.dodopayments.api.models.productcollections.ProductCollectionUpdateParams
 import com.dodopayments.api.services.async.productcollections.GroupServiceAsync
 import com.dodopayments.api.services.async.productcollections.GroupServiceAsyncImpl
+import com.dodopayments.api.services.async.productcollections.TranslationServiceAsync
+import com.dodopayments.api.services.async.productcollections.TranslationServiceAsyncImpl
 
 class ProductCollectionServiceAsyncImpl
 internal constructor(private val clientOptions: ClientOptions) : ProductCollectionServiceAsync {
 
     private val withRawResponse: ProductCollectionServiceAsync.WithRawResponse by lazy {
         WithRawResponseImpl(clientOptions)
+    }
+
+    private val translations: TranslationServiceAsync by lazy {
+        TranslationServiceAsyncImpl(clientOptions)
     }
 
     private val groups: GroupServiceAsync by lazy { GroupServiceAsyncImpl(clientOptions) }
@@ -47,6 +53,8 @@ internal constructor(private val clientOptions: ClientOptions) : ProductCollecti
         modifier: (ClientOptions.Builder) -> Unit
     ): ProductCollectionServiceAsync =
         ProductCollectionServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
+    override fun translations(): TranslationServiceAsync = translations
 
     override fun groups(): GroupServiceAsync = groups
 
@@ -107,6 +115,10 @@ internal constructor(private val clientOptions: ClientOptions) : ProductCollecti
         private val errorHandler: Handler<HttpResponse> =
             errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
+        private val translations: TranslationServiceAsync.WithRawResponse by lazy {
+            TranslationServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         private val groups: GroupServiceAsync.WithRawResponse by lazy {
             GroupServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
@@ -117,6 +129,8 @@ internal constructor(private val clientOptions: ClientOptions) : ProductCollecti
             ProductCollectionServiceAsyncImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier).build()
             )
+
+        override fun translations(): TranslationServiceAsync.WithRawResponse = translations
 
         override fun groups(): GroupServiceAsync.WithRawResponse = groups
 

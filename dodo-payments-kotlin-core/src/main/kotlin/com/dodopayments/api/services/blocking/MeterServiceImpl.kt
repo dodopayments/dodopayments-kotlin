@@ -25,6 +25,9 @@ import com.dodopayments.api.models.meters.MeterListPageResponse
 import com.dodopayments.api.models.meters.MeterListParams
 import com.dodopayments.api.models.meters.MeterRetrieveParams
 import com.dodopayments.api.models.meters.MeterUnarchiveParams
+import com.dodopayments.api.models.meters.MeterUpdateParams
+import com.dodopayments.api.services.blocking.meters.TranslationService
+import com.dodopayments.api.services.blocking.meters.TranslationServiceImpl
 
 class MeterServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     MeterService {
@@ -33,10 +36,14 @@ class MeterServiceImpl internal constructor(private val clientOptions: ClientOpt
         WithRawResponseImpl(clientOptions)
     }
 
+    private val translations: TranslationService by lazy { TranslationServiceImpl(clientOptions) }
+
     override fun withRawResponse(): MeterService.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MeterService =
         MeterServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
+    override fun translations(): TranslationService = translations
 
     override fun create(params: MeterCreateParams, requestOptions: RequestOptions): Meter =
         // post /meters
@@ -45,6 +52,10 @@ class MeterServiceImpl internal constructor(private val clientOptions: ClientOpt
     override fun retrieve(params: MeterRetrieveParams, requestOptions: RequestOptions): Meter =
         // get /meters/{id}
         withRawResponse().retrieve(params, requestOptions).parse()
+
+    override fun update(params: MeterUpdateParams, requestOptions: RequestOptions): Meter =
+        // patch /meters/{id}
+        withRawResponse().update(params, requestOptions).parse()
 
     override fun list(params: MeterListParams, requestOptions: RequestOptions): MeterListPage =
         // get /meters
@@ -66,10 +77,16 @@ class MeterServiceImpl internal constructor(private val clientOptions: ClientOpt
         private val errorHandler: Handler<HttpResponse> =
             errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
+        private val translations: TranslationService.WithRawResponse by lazy {
+            TranslationServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): MeterService.WithRawResponse =
             MeterServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
+
+        override fun translations(): TranslationService.WithRawResponse = translations
 
         private val createHandler: Handler<Meter> = jsonHandler<Meter>(clientOptions.jsonMapper)
 
@@ -119,6 +136,36 @@ class MeterServiceImpl internal constructor(private val clientOptions: ClientOpt
             return errorHandler.handle(response).parseable {
                 response
                     .use { retrieveHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val updateHandler: Handler<Meter> = jsonHandler<Meter>(clientOptions.jsonMapper)
+
+        override fun update(
+            params: MeterUpdateParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<Meter> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PATCH)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("meters", params._pathParam(0))
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { updateHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()

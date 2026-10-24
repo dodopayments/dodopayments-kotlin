@@ -15,6 +15,8 @@ import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepareAsync
 import com.dodopayments.api.models.misc.CountryCode
+import com.dodopayments.api.models.misc.LocaleInfo
+import com.dodopayments.api.models.misc.MiscListLocalesParams
 import com.dodopayments.api.models.misc.MiscListSupportedCountriesParams
 
 class MiscServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -28,6 +30,13 @@ class MiscServiceAsyncImpl internal constructor(private val clientOptions: Clien
 
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MiscServiceAsync =
         MiscServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
+
+    override suspend fun listLocales(
+        params: MiscListLocalesParams,
+        requestOptions: RequestOptions,
+    ): List<LocaleInfo> =
+        // get /locales
+        withRawResponse().listLocales(params, requestOptions).parse()
 
     override suspend fun listSupportedCountries(
         params: MiscListSupportedCountriesParams,
@@ -48,6 +57,33 @@ class MiscServiceAsyncImpl internal constructor(private val clientOptions: Clien
             MiscServiceAsyncImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier).build()
             )
+
+        private val listLocalesHandler: Handler<List<LocaleInfo>> =
+            jsonHandler<List<LocaleInfo>>(clientOptions.jsonMapper)
+
+        override suspend fun listLocales(
+            params: MiscListLocalesParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<List<LocaleInfo>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("locales")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { listLocalesHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.forEach { it.validate() }
+                        }
+                    }
+            }
+        }
 
         private val listSupportedCountriesHandler: Handler<List<CountryCode>> =
             jsonHandler<List<CountryCode>>(clientOptions.jsonMapper)

@@ -10,13 +10,23 @@ internal class CreditEntitlementListParamsTest {
 
     @Test
     fun create() {
-        CreditEntitlementListParams.builder().deleted(true).pageNumber(0).pageSize(0).build()
+        CreditEntitlementListParams.builder()
+            .deleted(true)
+            .locale("locale")
+            .pageNumber(0)
+            .pageSize(0)
+            .build()
     }
 
     @Test
     fun queryParams() {
         val params =
-            CreditEntitlementListParams.builder().deleted(true).pageNumber(0).pageSize(0).build()
+            CreditEntitlementListParams.builder()
+                .deleted(true)
+                .locale("locale")
+                .pageNumber(0)
+                .pageSize(0)
+                .build()
 
         val queryParams = params._queryParams()
 
@@ -24,6 +34,7 @@ internal class CreditEntitlementListParamsTest {
             .isEqualTo(
                 QueryParams.builder()
                     .put("deleted", "true")
+                    .put("locale", "locale")
                     .put("page_number", "0")
                     .put("page_size", "0")
                     .build()

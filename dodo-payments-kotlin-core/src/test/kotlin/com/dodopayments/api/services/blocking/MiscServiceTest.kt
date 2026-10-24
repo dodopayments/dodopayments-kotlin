@@ -11,6 +11,20 @@ import org.junit.jupiter.api.extension.ExtendWith
 internal class MiscServiceTest {
 
     @Test
+    fun listLocales() {
+        val client =
+            DodoPaymentsOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val miscService = client.misc()
+
+        val localeInfos = miscService.listLocales()
+
+        localeInfos.forEach { it.validate() }
+    }
+
+    @Test
     fun listSupportedCountries() {
         val client =
             DodoPaymentsOkHttpClient.builder()
