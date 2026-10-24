@@ -13,6 +13,7 @@ import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
 import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
+import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.Metadata
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -35,6 +36,15 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun paymentId(): String = body.paymentId()
+
+    /**
+     * The currency of every `items[].amount`. It must be the currency the customer paid in. Without
+     * it, the amounts are in the settlement currency.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun currency(): Currency? = body.currency()
 
     /**
      * Partially Refund an Individual Item
@@ -66,6 +76,13 @@ private constructor(
      * Unlike [paymentId], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _paymentId(): JsonField<String> = body._paymentId()
+
+    /**
+     * Returns the raw JSON value of [currency].
+     *
+     * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _currency(): JsonField<Currency> = body._currency()
 
     /**
      * Returns the raw JSON value of [items].
@@ -130,9 +147,11 @@ private constructor(
          * This is generally only useful if you are already constructing the body separately.
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [paymentId]
+         * - [currency]
          * - [items]
          * - [metadata]
          * - [reason]
+         * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
@@ -147,6 +166,21 @@ private constructor(
          * value.
          */
         fun paymentId(paymentId: JsonField<String>) = apply { body.paymentId(paymentId) }
+
+        /**
+         * The currency of every `items[].amount`. It must be the currency the customer paid in.
+         * Without it, the amounts are in the settlement currency.
+         */
+        fun currency(currency: Currency?) = apply { body.currency(currency) }
+
+        /**
+         * Sets [Builder.currency] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.currency] with a well-typed [Currency] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun currency(currency: JsonField<Currency>) = apply { body.currency(currency) }
 
         /** Partially Refund an Individual Item */
         fun items(items: List<Item>?) = apply { body.items(items) }
@@ -337,6 +371,7 @@ private constructor(
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val paymentId: JsonField<String>,
+        private val currency: JsonField<Currency>,
         private val items: JsonField<List<Item>>,
         private val metadata: JsonField<Metadata>,
         private val reason: JsonField<String>,
@@ -348,12 +383,15 @@ private constructor(
             @JsonProperty("payment_id")
             @ExcludeMissing
             paymentId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("currency")
+            @ExcludeMissing
+            currency: JsonField<Currency> = JsonMissing.of(),
             @JsonProperty("items") @ExcludeMissing items: JsonField<List<Item>> = JsonMissing.of(),
             @JsonProperty("metadata")
             @ExcludeMissing
             metadata: JsonField<Metadata> = JsonMissing.of(),
             @JsonProperty("reason") @ExcludeMissing reason: JsonField<String> = JsonMissing.of(),
-        ) : this(paymentId, items, metadata, reason, mutableMapOf())
+        ) : this(paymentId, currency, items, metadata, reason, mutableMapOf())
 
         /**
          * The unique identifier of the payment to be refunded.
@@ -362,6 +400,15 @@ private constructor(
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun paymentId(): String = paymentId.getRequired("payment_id")
+
+        /**
+         * The currency of every `items[].amount`. It must be the currency the customer paid in.
+         * Without it, the amounts are in the settlement currency.
+         *
+         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
+         *   if the server responded with an unexpected value).
+         */
+        fun currency(): Currency? = currency.getNullable("currency")
 
         /**
          * Partially Refund an Individual Item
@@ -393,6 +440,13 @@ private constructor(
          * Unlike [paymentId], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("payment_id") @ExcludeMissing fun _paymentId(): JsonField<String> = paymentId
+
+        /**
+         * Returns the raw JSON value of [currency].
+         *
+         * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<Currency> = currency
 
         /**
          * Returns the raw JSON value of [items].
@@ -444,6 +498,7 @@ private constructor(
         class Builder internal constructor() {
 
             private var paymentId: JsonField<String>? = null
+            private var currency: JsonField<Currency> = JsonMissing.of()
             private var items: JsonField<MutableList<Item>>? = null
             private var metadata: JsonField<Metadata> = JsonMissing.of()
             private var reason: JsonField<String> = JsonMissing.of()
@@ -451,6 +506,7 @@ private constructor(
 
             internal fun from(body: Body) = apply {
                 paymentId = body.paymentId
+                currency = body.currency
                 items = body.items.map { it.toMutableList() }
                 metadata = body.metadata
                 reason = body.reason
@@ -468,6 +524,21 @@ private constructor(
              * supported value.
              */
             fun paymentId(paymentId: JsonField<String>) = apply { this.paymentId = paymentId }
+
+            /**
+             * The currency of every `items[].amount`. It must be the currency the customer paid in.
+             * Without it, the amounts are in the settlement currency.
+             */
+            fun currency(currency: Currency?) = currency(JsonField.ofNullable(currency))
+
+            /**
+             * Sets [Builder.currency] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.currency] with a well-typed [Currency] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun currency(currency: JsonField<Currency>) = apply { this.currency = currency }
 
             /** Partially Refund an Individual Item */
             fun items(items: List<Item>?) = items(JsonField.ofNullable(items))
@@ -553,6 +624,7 @@ private constructor(
             fun build(): Body =
                 Body(
                     checkRequired("paymentId", paymentId),
+                    currency,
                     (items ?: JsonMissing.of()).map { it.toImmutable() },
                     metadata,
                     reason,
@@ -577,6 +649,7 @@ private constructor(
             }
 
             paymentId()
+            currency()?.validate()
             items()?.forEach { it.validate() }
             metadata()?.validate()
             reason()
@@ -599,6 +672,7 @@ private constructor(
          */
         internal fun validity(): Int =
             (if (paymentId.asKnown() == null) 0 else 1) +
+                (currency.asKnown()?.validity() ?: 0) +
                 (items.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
                 (metadata.asKnown()?.validity() ?: 0) +
                 (if (reason.asKnown() == null) 0 else 1)
@@ -610,6 +684,7 @@ private constructor(
 
             return other is Body &&
                 paymentId == other.paymentId &&
+                currency == other.currency &&
                 items == other.items &&
                 metadata == other.metadata &&
                 reason == other.reason &&
@@ -617,13 +692,13 @@ private constructor(
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(paymentId, items, metadata, reason, additionalProperties)
+            Objects.hash(paymentId, currency, items, metadata, reason, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{paymentId=$paymentId, items=$items, metadata=$metadata, reason=$reason, additionalProperties=$additionalProperties}"
+            "Body{paymentId=$paymentId, currency=$currency, items=$items, metadata=$metadata, reason=$reason, additionalProperties=$additionalProperties}"
     }
 
     class Item

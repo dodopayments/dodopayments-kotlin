@@ -1358,6 +1358,8 @@ private constructor(
 
             val SCHEME_FEE = of("scheme_fee")
 
+            val OPENING_BALANCE = of("opening_balance")
+
             fun of(value: String) = EventType(JsonField.of(value))
         }
 
@@ -1397,6 +1399,7 @@ private constructor(
             DODO_FIXED_FEE,
             INTERCHANGE_FEE,
             SCHEME_FEE,
+            OPENING_BALANCE,
         }
 
         /**
@@ -1443,6 +1446,7 @@ private constructor(
             DODO_FIXED_FEE,
             INTERCHANGE_FEE,
             SCHEME_FEE,
+            OPENING_BALANCE,
             /**
              * An enum member indicating that [EventType] was instantiated with an unknown value.
              */
@@ -1492,6 +1496,7 @@ private constructor(
                 DODO_FIXED_FEE -> Value.DODO_FIXED_FEE
                 INTERCHANGE_FEE -> Value.INTERCHANGE_FEE
                 SCHEME_FEE -> Value.SCHEME_FEE
+                OPENING_BALANCE -> Value.OPENING_BALANCE
                 else -> Value._UNKNOWN
             }
 
@@ -1540,6 +1545,7 @@ private constructor(
                 DODO_FIXED_FEE -> Known.DODO_FIXED_FEE
                 INTERCHANGE_FEE -> Known.INTERCHANGE_FEE
                 SCHEME_FEE -> Known.SCHEME_FEE
+                OPENING_BALANCE -> Known.OPENING_BALANCE
                 else -> throw DodoPaymentsInvalidDataException("Unknown EventType: $value")
             }
 

@@ -15,6 +15,7 @@ import com.dodopayments.api.models.creditentitlements.CreditEntitlementRetrieveP
 import com.dodopayments.api.models.creditentitlements.CreditEntitlementUndeleteParams
 import com.dodopayments.api.models.creditentitlements.CreditEntitlementUpdateParams
 import com.dodopayments.api.services.blocking.creditentitlements.BalanceService
+import com.dodopayments.api.services.blocking.creditentitlements.TranslationService
 import com.google.errorprone.annotations.MustBeClosed
 
 interface CreditEntitlementService {
@@ -30,6 +31,8 @@ interface CreditEntitlementService {
      * The original service is not modified.
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): CreditEntitlementService
+
+    fun translations(): TranslationService
 
     fun balances(): BalanceService
 
@@ -286,6 +289,8 @@ interface CreditEntitlementService {
         fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): CreditEntitlementService.WithRawResponse
+
+        fun translations(): TranslationService.WithRawResponse
 
         fun balances(): BalanceService.WithRawResponse
 

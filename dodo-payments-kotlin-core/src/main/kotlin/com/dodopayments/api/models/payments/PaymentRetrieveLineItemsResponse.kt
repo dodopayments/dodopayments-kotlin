@@ -23,6 +23,7 @@ class PaymentRetrieveLineItemsResponse
 private constructor(
     private val currency: JsonField<Currency>,
     private val items: JsonField<List<Item>>,
+    private val partialRefundAllowed: JsonField<Boolean>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -30,7 +31,10 @@ private constructor(
     private constructor(
         @JsonProperty("currency") @ExcludeMissing currency: JsonField<Currency> = JsonMissing.of(),
         @JsonProperty("items") @ExcludeMissing items: JsonField<List<Item>> = JsonMissing.of(),
-    ) : this(currency, items, mutableMapOf())
+        @JsonProperty("partial_refund_allowed")
+        @ExcludeMissing
+        partialRefundAllowed: JsonField<Boolean> = JsonMissing.of(),
+    ) : this(currency, items, partialRefundAllowed, mutableMapOf())
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
@@ -45,6 +49,14 @@ private constructor(
     fun items(): List<Item> = items.getRequired("items")
 
     /**
+     * False when the payment method does not allow a partial refund of this payment.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun partialRefundAllowed(): Boolean = partialRefundAllowed.getRequired("partial_refund_allowed")
+
+    /**
      * Returns the raw JSON value of [currency].
      *
      * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
@@ -57,6 +69,16 @@ private constructor(
      * Unlike [items], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("items") @ExcludeMissing fun _items(): JsonField<List<Item>> = items
+
+    /**
+     * Returns the raw JSON value of [partialRefundAllowed].
+     *
+     * Unlike [partialRefundAllowed], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("partial_refund_allowed")
+    @ExcludeMissing
+    fun _partialRefundAllowed(): JsonField<Boolean> = partialRefundAllowed
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -80,6 +102,7 @@ private constructor(
          * ```kotlin
          * .currency()
          * .items()
+         * .partialRefundAllowed()
          * ```
          */
         fun builder() = Builder()
@@ -90,12 +113,14 @@ private constructor(
 
         private var currency: JsonField<Currency>? = null
         private var items: JsonField<MutableList<Item>>? = null
+        private var partialRefundAllowed: JsonField<Boolean>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(paymentRetrieveLineItemsResponse: PaymentRetrieveLineItemsResponse) =
             apply {
                 currency = paymentRetrieveLineItemsResponse.currency
                 items = paymentRetrieveLineItemsResponse.items.map { it.toMutableList() }
+                partialRefundAllowed = paymentRetrieveLineItemsResponse.partialRefundAllowed
                 additionalProperties =
                     paymentRetrieveLineItemsResponse.additionalProperties.toMutableMap()
             }
@@ -134,6 +159,21 @@ private constructor(
                 (items ?: JsonField.of(mutableListOf())).also { checkKnown("items", it).add(item) }
         }
 
+        /** False when the payment method does not allow a partial refund of this payment. */
+        fun partialRefundAllowed(partialRefundAllowed: Boolean) =
+            partialRefundAllowed(JsonField.of(partialRefundAllowed))
+
+        /**
+         * Sets [Builder.partialRefundAllowed] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.partialRefundAllowed] with a well-typed [Boolean] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun partialRefundAllowed(partialRefundAllowed: JsonField<Boolean>) = apply {
+            this.partialRefundAllowed = partialRefundAllowed
+        }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -162,6 +202,7 @@ private constructor(
          * ```kotlin
          * .currency()
          * .items()
+         * .partialRefundAllowed()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
@@ -170,6 +211,7 @@ private constructor(
             PaymentRetrieveLineItemsResponse(
                 checkRequired("currency", currency),
                 checkRequired("items", items).map { it.toImmutable() },
+                checkRequired("partialRefundAllowed", partialRefundAllowed),
                 additionalProperties.toMutableMap(),
             )
     }
@@ -191,6 +233,7 @@ private constructor(
 
         currency().validate()
         items().forEach { it.validate() }
+        partialRefundAllowed()
         validated = true
     }
 
@@ -209,7 +252,8 @@ private constructor(
      */
     internal fun validity(): Int =
         (currency.asKnown()?.validity() ?: 0) +
-            (items.asKnown()?.sumOf { it.validity().toInt() } ?: 0)
+            (items.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (partialRefundAllowed.asKnown() == null) 0 else 1)
 
     class Item
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
@@ -574,13 +618,16 @@ private constructor(
         return other is PaymentRetrieveLineItemsResponse &&
             currency == other.currency &&
             items == other.items &&
+            partialRefundAllowed == other.partialRefundAllowed &&
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(currency, items, additionalProperties) }
+    private val hashCode: Int by lazy {
+        Objects.hash(currency, items, partialRefundAllowed, additionalProperties)
+    }
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "PaymentRetrieveLineItemsResponse{currency=$currency, items=$items, additionalProperties=$additionalProperties}"
+        "PaymentRetrieveLineItemsResponse{currency=$currency, items=$items, partialRefundAllowed=$partialRefundAllowed, additionalProperties=$additionalProperties}"
 }

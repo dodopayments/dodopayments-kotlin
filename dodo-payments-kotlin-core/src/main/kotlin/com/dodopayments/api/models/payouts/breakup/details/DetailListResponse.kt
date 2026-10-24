@@ -115,7 +115,8 @@ private constructor(
      * Amount in the payout's currency, in that currency's smallest unit (cents for USD, yen for
      * JPY, fils for KWD). The entry is converted at the rate the payout settled at. These amounts
      * sum to the value of the entries, which can be less than the payout: the grouped breakup
-     * reports the difference as `unattributed`.
+     * reports the difference as `unattributed`. A settlement batch payout shows the native amount
+     * of a row in the payout's currency, and 0 for a row in a different currency.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -356,7 +357,8 @@ private constructor(
          * Amount in the payout's currency, in that currency's smallest unit (cents for USD, yen for
          * JPY, fils for KWD). The entry is converted at the rate the payout settled at. These
          * amounts sum to the value of the entries, which can be less than the payout: the grouped
-         * breakup reports the difference as `unattributed`.
+         * breakup reports the difference as `unattributed`. A settlement batch payout shows the
+         * native amount of a row in the payout's currency, and 0 for a row in a different currency.
          */
         fun payoutCurrencyAmount(payoutCurrencyAmount: Long) =
             payoutCurrencyAmount(JsonField.of(payoutCurrencyAmount))

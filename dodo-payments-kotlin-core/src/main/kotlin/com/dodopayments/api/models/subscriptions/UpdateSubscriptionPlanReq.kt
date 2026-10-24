@@ -231,6 +231,10 @@ private constructor(
      * - `prevent_change`: Keep subscription on current plan until payment succeeds
      * - `apply_change` (default): Apply plan change immediately regardless of payment outcome
      *
+     * With `effective_at: next_billing_date`, the plan change payment replaces the renewal payment.
+     * If that payment fails with `prevent_change`, the plan change is cancelled. The subscription
+     * then renews on the current plan, with the usual payment retries.
+     *
      * If not specified, uses the business-level default setting.
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -695,6 +699,10 @@ private constructor(
          * - `prevent_change`: Keep subscription on current plan until payment succeeds
          * - `apply_change` (default): Apply plan change immediately regardless of payment outcome
          *
+         * With `effective_at: next_billing_date`, the plan change payment replaces the renewal
+         * payment. If that payment fails with `prevent_change`, the plan change is cancelled. The
+         * subscription then renews on the current plan, with the usual payment retries.
+         *
          * If not specified, uses the business-level default setting.
          */
         fun onPaymentFailure(onPaymentFailure: OnPaymentFailure?) =
@@ -1154,6 +1162,10 @@ private constructor(
      * Controls behavior when the plan change payment fails.
      * - `prevent_change`: Keep subscription on current plan until payment succeeds
      * - `apply_change` (default): Apply plan change immediately regardless of payment outcome
+     *
+     * With `effective_at: next_billing_date`, the plan change payment replaces the renewal payment.
+     * If that payment fails with `prevent_change`, the plan change is cancelled. The subscription
+     * then renews on the current plan, with the usual payment retries.
      *
      * If not specified, uses the business-level default setting.
      */

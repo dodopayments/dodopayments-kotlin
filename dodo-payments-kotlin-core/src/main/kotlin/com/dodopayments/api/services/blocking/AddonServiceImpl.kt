@@ -5,6 +5,7 @@ package com.dodopayments.api.services.blocking
 import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.checkRequired
+import com.dodopayments.api.core.handlers.emptyHandler
 import com.dodopayments.api.core.handlers.errorBodyHandler
 import com.dodopayments.api.core.handlers.errorHandler
 import com.dodopayments.api.core.handlers.jsonHandler
@@ -17,14 +18,18 @@ import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepare
 import com.dodopayments.api.models.addons.AddonCreateParams
+import com.dodopayments.api.models.addons.AddonDeleteParams
 import com.dodopayments.api.models.addons.AddonListPage
 import com.dodopayments.api.models.addons.AddonListPageResponse
 import com.dodopayments.api.models.addons.AddonListParams
 import com.dodopayments.api.models.addons.AddonResponse
 import com.dodopayments.api.models.addons.AddonRetrieveParams
+import com.dodopayments.api.models.addons.AddonUnarchiveParams
 import com.dodopayments.api.models.addons.AddonUpdateImagesParams
 import com.dodopayments.api.models.addons.AddonUpdateImagesResponse
 import com.dodopayments.api.models.addons.AddonUpdateParams
+import com.dodopayments.api.services.blocking.addons.TranslationService
+import com.dodopayments.api.services.blocking.addons.TranslationServiceImpl
 
 class AddonServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     AddonService {
@@ -33,10 +38,14 @@ class AddonServiceImpl internal constructor(private val clientOptions: ClientOpt
         WithRawResponseImpl(clientOptions)
     }
 
+    private val translations: TranslationService by lazy { TranslationServiceImpl(clientOptions) }
+
     override fun withRawResponse(): AddonService.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): AddonService =
         AddonServiceImpl(clientOptions.toBuilder().apply(modifier).build())
+
+    override fun translations(): TranslationService = translations
 
     override fun create(params: AddonCreateParams, requestOptions: RequestOptions): AddonResponse =
         // post /addons
@@ -57,6 +66,16 @@ class AddonServiceImpl internal constructor(private val clientOptions: ClientOpt
         // get /addons
         withRawResponse().list(params, requestOptions).parse()
 
+    override fun delete(params: AddonDeleteParams, requestOptions: RequestOptions) {
+        // delete /addons/{id}
+        withRawResponse().delete(params, requestOptions)
+    }
+
+    override fun unarchive(params: AddonUnarchiveParams, requestOptions: RequestOptions) {
+        // post /addons/{id}/unarchive
+        withRawResponse().unarchive(params, requestOptions)
+    }
+
     override fun updateImages(
         params: AddonUpdateImagesParams,
         requestOptions: RequestOptions,
@@ -70,10 +89,16 @@ class AddonServiceImpl internal constructor(private val clientOptions: ClientOpt
         private val errorHandler: Handler<HttpResponse> =
             errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
+        private val translations: TranslationService.WithRawResponse by lazy {
+            TranslationServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): AddonService.WithRawResponse =
             AddonServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
+
+        override fun translations(): TranslationService.WithRawResponse = translations
 
         private val createHandler: Handler<AddonResponse> =
             jsonHandler<AddonResponse>(clientOptions.jsonMapper)
@@ -195,6 +220,54 @@ class AddonServiceImpl internal constructor(private val clientOptions: ClientOpt
                             .response(it)
                             .build()
                     }
+            }
+        }
+
+        private val deleteHandler: Handler<Void?> = emptyHandler()
+
+        override fun delete(
+            params: AddonDeleteParams,
+            requestOptions: RequestOptions,
+        ): HttpResponse {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.DELETE)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("addons", params._pathParam(0))
+                    .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response.use { deleteHandler.handle(it) }
+            }
+        }
+
+        private val unarchiveHandler: Handler<Void?> = emptyHandler()
+
+        override fun unarchive(
+            params: AddonUnarchiveParams,
+            requestOptions: RequestOptions,
+        ): HttpResponse {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("addons", params._pathParam(0), "unarchive")
+                    .apply { params._body()?.let { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response.use { unarchiveHandler.handle(it) }
             }
         }
 

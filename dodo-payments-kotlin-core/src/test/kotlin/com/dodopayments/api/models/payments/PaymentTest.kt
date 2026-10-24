@@ -158,6 +158,9 @@ internal class PaymentTest {
                 .status(IntentStatus.SUCCEEDED)
                 .subscriptionId("subscription_id")
                 .tax(0)
+                .threeDSFlow(ThreeDSFlow.CHALLENGE)
+                .threeDSStatus(ThreeDSStatus.AUTHENTICATED)
+                .threeDSVersion("three_ds_version")
                 .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
 
@@ -299,6 +302,9 @@ internal class PaymentTest {
         assertThat(payment.status()).isEqualTo(IntentStatus.SUCCEEDED)
         assertThat(payment.subscriptionId()).isEqualTo("subscription_id")
         assertThat(payment.tax()).isEqualTo(0)
+        assertThat(payment.threeDSFlow()).isEqualTo(ThreeDSFlow.CHALLENGE)
+        assertThat(payment.threeDSStatus()).isEqualTo(ThreeDSStatus.AUTHENTICATED)
+        assertThat(payment.threeDSVersion()).isEqualTo("three_ds_version")
         assertThat(payment.updatedAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
     }
 
@@ -440,6 +446,9 @@ internal class PaymentTest {
                 .status(IntentStatus.SUCCEEDED)
                 .subscriptionId("subscription_id")
                 .tax(0)
+                .threeDSFlow(ThreeDSFlow.CHALLENGE)
+                .threeDSStatus(ThreeDSStatus.AUTHENTICATED)
+                .threeDSVersion("three_ds_version")
                 .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .build()
 
