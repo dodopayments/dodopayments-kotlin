@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.123.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.122.0...v1.123.0) (2026-10-24)
+
+
+### Features
+
+* **api:** translations and locales, addon delete/unarchive, meter update, 3DS payment details ([ea2536b](https://github.com/dodopayments/dodopayments-kotlin/commit/ea2536b9cd856da480fad7f19038e3e31038b299))
+* **api:** translations and locales, addon delete/unarchive, meter update, 3DS payment details ([72ac5c4](https://github.com/dodopayments/dodopayments-kotlin/commit/72ac5c47c9bcb8ed61023f3c8e547fcd8ac94832))
+
 ## [1.122.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.121.0...v1.122.0) (2026-10-21)
 
 
