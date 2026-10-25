@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.123.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.123.0...v1.123.1) (2026-10-25)
+
+
+### Chores
+
+* sync generated version strings with the latest release ([e9521dc](https://github.com/dodopayments/dodopayments-kotlin/commit/e9521dc6737e409d7b43eb88653f3acc96f73b9b))
+* sync generated version strings with the latest release ([160cdf8](https://github.com/dodopayments/dodopayments-kotlin/commit/160cdf8edd7741e62e483ce9a65504301992dcb8))
+
 ## [1.123.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.122.0...v1.123.0) (2026-10-24)
 
 
