@@ -8,6 +8,9 @@ import com.dodopayments.api.core.http.LoggingHttpClient
 import com.dodopayments.api.core.http.PhantomReachableClosingHttpClient
 import com.dodopayments.api.core.http.QueryParams
 import com.dodopayments.api.core.http.RetryingHttpClient
+import com.dodopayments.api.workloadidentity.WorkloadIdentity
+import com.dodopayments.api.workloadidentity.WorkloadIdentityTokenManager
+import com.dodopayments.api.workloadidentity.withWorkloadIdentity
 import com.fasterxml.jackson.databind.json.JsonMapper
 import java.time.Clock
 import java.time.Duration
@@ -106,6 +109,14 @@ private constructor(
     /** Bearer Token for API authentication */
     val bearerToken: String,
     val webhookKey: String?,
+    /**
+     * The workload identity configuration, or null when the client does not use workload identity.
+     */
+    val workloadIdentity: WorkloadIdentity?,
+    /**
+     * The workload identity token cache, or null when the client does not use workload identity.
+     */
+    val workloadIdentityTokens: WorkloadIdentityTokenManager?,
 ) {
 
     init {
@@ -168,6 +179,8 @@ private constructor(
         private var logLevel: LogLevel = LogLevel.fromEnv()
         private var bearerToken: String? = null
         private var webhookKey: String? = null
+        private var workloadIdentity: WorkloadIdentity? = null
+        private var workloadIdentityTokens: WorkloadIdentityTokenManager? = null
 
         internal fun from(clientOptions: ClientOptions) = apply {
             httpClient = clientOptions.originalHttpClient
@@ -184,6 +197,11 @@ private constructor(
             logLevel = clientOptions.logLevel
             bearerToken = clientOptions.bearerToken
             webhookKey = clientOptions.webhookKey
+            workloadIdentity = clientOptions.workloadIdentity
+            workloadIdentityTokens = clientOptions.workloadIdentityTokens
+            if (clientOptions.workloadIdentity != null) {
+                bearerToken = null
+            }
         }
 
         /**
@@ -309,6 +327,16 @@ private constructor(
         fun bearerToken(bearerToken: String) = apply { this.bearerToken = bearerToken }
 
         fun webhookKey(webhookKey: String?) = apply { this.webhookKey = webhookKey }
+
+        /**
+         * Authenticates with workload identity federation instead of [bearerToken].
+         *
+         * The client exchanges a subject token for a short-lived access token and keeps the access
+         * token. Do not set [bearerToken] too.
+         */
+        fun workloadIdentity(workloadIdentity: WorkloadIdentity?) = apply {
+            this.workloadIdentity = workloadIdentity
+        }
 
         fun headers(headers: Headers) = apply {
             this.headers.clear()
@@ -440,7 +468,27 @@ private constructor(
         fun build(): ClientOptions {
             val httpClient = checkRequired("httpClient", httpClient)
             val sleeper = sleeper ?: PhantomReachableSleeper(DefaultSleeper())
-            val bearerToken = checkRequired("bearerToken", bearerToken)
+            check(bearerToken == null || workloadIdentity == null) {
+                "Set bearerToken or workloadIdentity, not both."
+            }
+            val workloadIdentity =
+                workloadIdentity ?: if (bearerToken == null) WorkloadIdentity.detect() else null
+            val bearerToken =
+                if (workloadIdentity != null) "" else checkRequired("bearerToken", bearerToken)
+            val workloadIdentityTokens =
+                workloadIdentity?.let { identity ->
+                    val url = baseUrl ?: LIVE_MODE_URL
+                    this.workloadIdentityTokens?.takeIf { it.canReuse(identity, url, httpClient) }
+                        ?: WorkloadIdentityTokenManager(
+                            identity,
+                            url,
+                            httpClient,
+                            jsonMapper,
+                            clock,
+                            sleeper,
+                            maxRetries,
+                        )
+                }
 
             val headers = Headers.builder()
             val queryParams = QueryParams.builder()
@@ -463,18 +511,21 @@ private constructor(
 
             return ClientOptions(
                 httpClient,
-                RetryingHttpClient.builder()
-                    .httpClient(
-                        LoggingHttpClient.builder()
-                            .httpClient(httpClient)
-                            .clock(clock)
-                            .level(logLevel)
-                            .build()
-                    )
-                    .sleeper(sleeper)
-                    .clock(clock)
-                    .maxRetries(maxRetries)
-                    .build(),
+                withWorkloadIdentity(
+                    RetryingHttpClient.builder()
+                        .httpClient(
+                            LoggingHttpClient.builder()
+                                .httpClient(httpClient)
+                                .clock(clock)
+                                .level(logLevel)
+                                .build()
+                        )
+                        .sleeper(sleeper)
+                        .clock(clock)
+                        .maxRetries(maxRetries)
+                        .build(),
+                    workloadIdentityTokens,
+                ),
                 checkJacksonVersionCompatibility,
                 jsonMapper,
                 sleeper,
@@ -488,6 +539,8 @@ private constructor(
                 logLevel,
                 bearerToken,
                 webhookKey,
+                workloadIdentity,
+                workloadIdentityTokens,
             )
         }
     }
