@@ -2,8 +2,8 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.dodopayments.api/dodo-payments-kotlin)](https://central.sonatype.com/artifact/com.dodopayments.api/dodo-payments-kotlin/1.123.0)
-[![javadoc](https://javadoc.io/badge2/com.dodopayments.api/dodo-payments-kotlin/1.123.0/javadoc.svg)](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/1.123.0)
+[![Maven Central](https://img.shields.io/maven-central/v/com.dodopayments.api/dodo-payments-kotlin)](https://central.sonatype.com/artifact/com.dodopayments.api/dodo-payments-kotlin/1.123.1)
+[![javadoc](https://javadoc.io/badge2/com.dodopayments.api/dodo-payments-kotlin/1.123.1/javadoc.svg)](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/1.123.1)
 
 <!-- x-release-please-end -->
 
@@ -21,7 +21,7 @@ Use the Dodo Payments MCP Server to enable AI assistants to interact with this A
 
 <!-- x-release-please-start-version -->
 
-The REST API documentation can be found on [docs.dodopayments.com](https://docs.dodopayments.com/api-reference/introduction). KDocs are available on [javadoc.io](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/1.123.0).
+The REST API documentation can be found on [docs.dodopayments.com](https://docs.dodopayments.com/api-reference/introduction). KDocs are available on [javadoc.io](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/1.123.1).
 
 <!-- x-release-please-end -->
 
@@ -32,7 +32,7 @@ The REST API documentation can be found on [docs.dodopayments.com](https://docs.
 ### Gradle
 
 ```kotlin
-implementation("com.dodopayments.api:dodo-payments-kotlin:1.123.0")
+implementation("com.dodopayments.api:dodo-payments-kotlin:1.123.1")
 ```
 
 ### Maven
@@ -41,7 +41,7 @@ implementation("com.dodopayments.api:dodo-payments-kotlin:1.123.0")
 <dependency>
   <groupId>com.dodopayments.api</groupId>
   <artifactId>dodo-payments-kotlin</artifactId>
-  <version>1.123.0</version>
+  <version>1.123.1</version>
 </dependency>
 ```
 
@@ -139,6 +139,38 @@ val clientWithOptions: DodoPaymentsClient = client.withOptions {
 ```
 
 The `withOptions()` method does not affect the original client or service.
+
+## Workload identity
+
+The client can use workload identity federation instead of an API key. The client exchanges a JWT from your platform for a short-lived access token.
+
+```kotlin
+import com.dodopayments.api.client.DodoPaymentsClient
+import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
+import com.dodopayments.api.workloadidentity.SubjectTokenProviders
+import com.dodopayments.api.workloadidentity.WorkloadIdentity
+
+val client: DodoPaymentsClient = DodoPaymentsOkHttpClient.builder()
+    .testMode()
+    .workloadIdentity(
+        WorkloadIdentity.builder()
+            // Or set the `DODO_PAYMENTS_IDENTITY_PROVIDER_ID` environment variable.
+            .identityProviderId("wip_...")
+            .provider(SubjectTokenProviders.githubActions())
+            .build()
+    )
+    .build()
+```
+
+`DodoPaymentsOkHttpClientAsync.builder()` has the same `workloadIdentity` method.
+
+- The client keeps the access token and gets a new token when 5 minutes or less remain. Concurrent requests share one exchange.
+- If the API returns `401`, the client gets a new token and sends the request again one time.
+- Do not set `bearerToken` and `workloadIdentity` together. The client builder throws an `IllegalStateException`.
+- If `DODO_PAYMENTS_API_KEY` is not set and `DODO_PAYMENTS_IDENTITY_PROVIDER_ID` is set, the client uses `SubjectTokenProviders.auto()`.
+- `client.workloadIdentity()?.revoke()` revokes the access token and clears the cache.
+
+`SubjectTokenProviders` has these providers: `githubActions()`, `gitlab()`, `terraformCloud()`, `gcp()`, `vercel()`, `kubernetes()`, `file()`, `aws { ... }`, `static(token)` and `auto()`. You can also give your own `SubjectTokenProvider`.
 
 ## Requests and responses
 
