@@ -56,6 +56,7 @@ import com.dodopayments.api.services.async.WebhookEventServiceAsync
 import com.dodopayments.api.services.async.WebhookEventServiceAsyncImpl
 import com.dodopayments.api.services.async.WebhookServiceAsync
 import com.dodopayments.api.services.async.WebhookServiceAsyncImpl
+import com.dodopayments.api.workloadidentity.WorkloadIdentityTokenManager
 
 class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
     DodoPaymentsClientAsync {
@@ -235,6 +236,9 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
     override fun productCollections(): ProductCollectionServiceAsync = productCollections
 
     override fun moderation(): ModerationServiceAsync = moderation
+
+    override fun workloadIdentity(): WorkloadIdentityTokenManager? =
+        clientOptions.workloadIdentityTokens
 
     override fun close() = clientOptions.close()
 

@@ -13,6 +13,7 @@ import com.dodopayments.api.core.http.HttpClient
 import com.dodopayments.api.core.http.ProxyAuthenticator
 import com.dodopayments.api.core.http.QueryParams
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.workloadidentity.WorkloadIdentity
 import com.fasterxml.jackson.databind.json.JsonMapper
 import java.net.Proxy
 import java.time.Clock
@@ -252,6 +253,15 @@ class DodoPaymentsOkHttpClient private constructor() {
 
         /** Bearer Token for API authentication */
         fun bearerToken(bearerToken: String) = apply { clientOptions.bearerToken(bearerToken) }
+
+        /**
+         * Authenticates with workload identity federation instead of [bearerToken].
+         *
+         * @see ClientOptions.Builder.workloadIdentity
+         */
+        fun workloadIdentity(workloadIdentity: WorkloadIdentity?) = apply {
+            clientOptions.workloadIdentity(workloadIdentity)
+        }
 
         fun webhookKey(webhookKey: String?) = apply { clientOptions.webhookKey(webhookKey) }
 
