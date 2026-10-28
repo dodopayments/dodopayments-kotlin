@@ -29,6 +29,7 @@ import com.dodopayments.api.services.async.SubscriptionServiceAsync
 import com.dodopayments.api.services.async.UsageEventServiceAsync
 import com.dodopayments.api.services.async.WebhookEventServiceAsync
 import com.dodopayments.api.services.async.WebhookServiceAsync
+import com.dodopayments.api.workloadidentity.WorkloadIdentityTokenManager
 
 /**
  * A client for interacting with the Dodo Payments REST API asynchronously. You can also switch to
@@ -65,6 +66,13 @@ interface DodoPaymentsClientAsync {
      * The original service is not modified.
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): DodoPaymentsClientAsync
+
+    /**
+     * The workload identity token cache, or null when the client does not use workload identity.
+     *
+     * Call `revoke` on it to revoke the cached access token.
+     */
+    fun workloadIdentity(): WorkloadIdentityTokenManager?
 
     fun checkoutSessions(): CheckoutSessionServiceAsync
 
