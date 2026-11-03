@@ -5,12 +5,14 @@ package com.dodopayments.api.workloadidentity
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpMethod
 import com.dodopayments.api.core.http.HttpRequest
+import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.jsonMapper
 import java.io.File
 import java.io.IOException
 import java.net.URI
 import java.net.URLDecoder
 import java.net.URLEncoder
+import java.time.Duration
 
 /** The subject token providers that the SDK supplies. */
 object SubjectTokenProviders {
@@ -23,6 +25,8 @@ object SubjectTokenProviders {
 
     /** The default environment variable for [gitlab]. */
     const val GITLAB_TOKEN_ENV = "DODO_PAYMENTS_ID_TOKEN"
+
+    private const val VERCEL_TOKEN_EXCHANGE_URL = "https://oidc.vercel.com/~token"
 
     private const val GCP_IDENTITY_URL =
         "http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/identity"
@@ -93,8 +97,65 @@ object SubjectTokenProviders {
             .trim()
     }
 
-    /** Reads the Vercel OIDC token from the `VERCEL_OIDC_TOKEN` environment variable. */
-    fun vercel(): SubjectTokenProvider = SubjectTokenProvider { requireEnv("VERCEL_OIDC_TOKEN") }
+    /**
+     * Exchanges the Vercel OIDC token for a token with the Dodo Payments audience, for each
+     * exchange.
+     *
+     * The provider reads the token from the file in `VERCEL_OIDC_TOKEN_FILE` or from the
+     * `VERCEL_OIDC_TOKEN` environment variable. The audience defaults to the origin of the client
+     * base URL.
+     */
+    @JvmOverloads
+    fun vercel(audience: String? = null): SubjectTokenProvider =
+        vercelProvider(audience, VERCEL_TOKEN_EXCHANGE_URL) { System.getenv(it) }
+
+    internal fun vercelProvider(
+        audience: String?,
+        exchangeUrl: String,
+        getenv: (String) -> String?,
+    ): SubjectTokenProvider = SubjectTokenProvider { context ->
+        val tokenFile = getenv("VERCEL_OIDC_TOKEN_FILE")?.takeIf { it.isNotEmpty() }
+        val baseToken =
+            if (tokenFile != null) readToken(tokenFile)
+            else
+                getenv("VERCEL_OIDC_TOKEN")?.trim()?.takeIf { it.isNotEmpty() }
+                    ?: throw WorkloadIdentityException(
+                        "Set VERCEL_OIDC_TOKEN_FILE or VERCEL_OIDC_TOKEN."
+                    )
+        val body = LinkedHashMap<String, String>()
+        body["token"] = baseToken
+        body["aud"] = audience ?: context.audience()
+        val request =
+            HttpRequest.builder()
+                .method(HttpMethod.POST)
+                .baseUrl(exchangeUrl)
+                .putHeader("Accept", "application/json")
+                .body(json(jsonMapper(), body))
+                .build()
+        val options = RequestOptions.builder().timeout(Duration.ofSeconds(10)).build()
+        context.httpClient.execute(request, options).use { response ->
+            val status = response.statusCode()
+            val text = response.body().readBytes().toString(Charsets.UTF_8)
+            if (status !in 200..299) {
+                val excerpt = text.trim().replace(baseToken, "[redacted]").take(200)
+                throw WorkloadIdentityException(
+                    "The Vercel OIDC token exchange failed with status $status: $excerpt"
+                )
+            }
+            val token =
+                try {
+                    jsonMapper().readTree(text).get("token")?.asText()?.trim()
+                } catch (e: IOException) {
+                    null
+                }
+            if (token.isNullOrEmpty()) {
+                throw WorkloadIdentityException(
+                    "The Vercel OIDC token exchange response with status $status has no token."
+                )
+            }
+            token
+        }
+    }
 
     /** Reads a projected Kubernetes service account token from [path] for each exchange. */
     fun kubernetes(path: String = DEFAULT_KUBERNETES_TOKEN_PATH): SubjectTokenProvider =
