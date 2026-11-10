@@ -23,11 +23,22 @@ import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.misc.TaxCategory
+import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
+import com.github.tomakehurst.wiremock.client.WireMock.get
+import com.github.tomakehurst.wiremock.client.WireMock.ok
+import com.github.tomakehurst.wiremock.client.WireMock.post
+import com.github.tomakehurst.wiremock.client.WireMock.stubFor
+import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
+import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import java.time.OffsetDateTime
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.jupiter.api.parallel.ResourceLock
 
 @ExtendWith(TestServerExtension::class)
+@WireMockTest
+@ResourceLock("https://github.com/wiremock/wiremock/issues/169")
 internal class InvoiceServiceTest {
 
     @Test
@@ -295,75 +306,83 @@ internal class InvoiceServiceTest {
     }
 
     @Test
-    fun preview() {
+    fun preview(wmRuntimeInfo: WireMockRuntimeInfo) {
         val client =
             DodoPaymentsOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
+                .baseUrl(wmRuntimeInfo.httpBaseUrl)
                 .bearerToken("My Bearer Token")
                 .build()
         val invoiceService = client.invoices()
+        stubFor(post(anyUrl()).willReturn(ok().withBody("abc")))
 
-        invoiceService.preview(
-            InvoicePreviewParams.builder()
-                .format(InvoicePreviewParams.Format.JSON)
-                .collectionMethod(CollectionMethod.AUTO_CHARGE)
-                .currency(Currency.AED)
-                .customerId("customer_id")
-                .addItem(
-                    InvoicePreviewParams.Item.CustomItem.builder()
-                        .description("description")
-                        .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
-                        .unitAmount(0)
-                        .quantity(0)
-                        .build()
-                )
-                .billingAddress(
-                    InvoicePreviewParams.BillingAddress.builder()
-                        .country(CountryCode.AF)
-                        .city("city")
-                        .state("state")
-                        .street("street")
-                        .zipcode("zipcode")
-                        .build()
-                )
-                .addCcEmail("string")
-                .customerEmail("customer_email")
-                .addDiscountId("string")
-                .dueAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .dunning(
-                    InvoicePreviewParams.Dunning.builder()
-                        .remindersEnabled(true)
-                        .addOffsetsDay(0)
-                        .build()
-                )
-                .memo("memo")
-                .metadata(
-                    Metadata.builder()
-                        .putAdditionalProperty("foo", JsonValue.from("string"))
-                        .build()
-                )
-                .paymentTermsDueOnReceipt()
-                .reviewRequired(true)
-                .taxId("tax_id")
-                .build()
-        )
+        val response =
+            invoiceService.preview(
+                InvoicePreviewParams.builder()
+                    .format(InvoicePreviewParams.Format.JSON)
+                    .collectionMethod(CollectionMethod.AUTO_CHARGE)
+                    .currency(Currency.AED)
+                    .customerId("customer_id")
+                    .addItem(
+                        InvoicePreviewParams.Item.CustomItem.builder()
+                            .description("description")
+                            .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
+                            .unitAmount(0)
+                            .quantity(0)
+                            .build()
+                    )
+                    .billingAddress(
+                        InvoicePreviewParams.BillingAddress.builder()
+                            .country(CountryCode.AF)
+                            .city("city")
+                            .state("state")
+                            .street("street")
+                            .zipcode("zipcode")
+                            .build()
+                    )
+                    .addCcEmail("string")
+                    .customerEmail("customer_email")
+                    .addDiscountId("string")
+                    .dueAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .dunning(
+                        InvoicePreviewParams.Dunning.builder()
+                            .remindersEnabled(true)
+                            .addOffsetsDay(0)
+                            .build()
+                    )
+                    .memo("memo")
+                    .metadata(
+                        Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("string"))
+                            .build()
+                    )
+                    .paymentTermsDueOnReceipt()
+                    .reviewRequired(true)
+                    .taxId("tax_id")
+                    .build()
+            )
+
+        assertThat(response.body()).hasContent("abc")
     }
 
     @Test
-    fun previewExisting() {
+    fun previewExisting(wmRuntimeInfo: WireMockRuntimeInfo) {
         val client =
             DodoPaymentsOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
+                .baseUrl(wmRuntimeInfo.httpBaseUrl)
                 .bearerToken("My Bearer Token")
                 .build()
         val invoiceService = client.invoices()
+        stubFor(get(anyUrl()).willReturn(ok().withBody("abc")))
 
-        invoiceService.previewExisting(
-            InvoicePreviewExistingParams.builder()
-                .invoiceId("invoice_id")
-                .format(InvoicePreviewExistingParams.Format.JSON)
-                .build()
-        )
+        val response =
+            invoiceService.previewExisting(
+                InvoicePreviewExistingParams.builder()
+                    .invoiceId("invoice_id")
+                    .format(InvoicePreviewExistingParams.Format.JSON)
+                    .build()
+            )
+
+        assertThat(response.body()).hasContent("abc")
     }
 
     @Test
