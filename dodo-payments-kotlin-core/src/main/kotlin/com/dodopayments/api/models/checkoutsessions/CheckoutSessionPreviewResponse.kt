@@ -2864,6 +2864,7 @@ private constructor(
             private val addonId: JsonField<String>,
             private val currency: JsonField<Currency>,
             private val discountedPrice: JsonField<Int>,
+            private val maxQuantityReached: JsonField<Boolean>,
             private val name: JsonField<String>,
             private val ogCurrency: JsonField<Currency>,
             private val ogPrice: JsonField<Int>,
@@ -2889,6 +2890,9 @@ private constructor(
                 @JsonProperty("discounted_price")
                 @ExcludeMissing
                 discountedPrice: JsonField<Int> = JsonMissing.of(),
+                @JsonProperty("max_quantity_reached")
+                @ExcludeMissing
+                maxQuantityReached: JsonField<Boolean> = JsonMissing.of(),
                 @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("og_currency")
                 @ExcludeMissing
@@ -2922,6 +2926,7 @@ private constructor(
                 addonId,
                 currency,
                 discountedPrice,
+                maxQuantityReached,
                 name,
                 ogCurrency,
                 ogPrice,
@@ -2956,6 +2961,17 @@ private constructor(
              *   value).
              */
             fun discountedPrice(): Int = discountedPrice.getRequired("discounted_price")
+
+            /**
+             * True when one more unit of this addon puts the cart above the cart value limit of the
+             * business. False when the limit does not apply to the business.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun maxQuantityReached(): Boolean =
+                maxQuantityReached.getRequired("max_quantity_reached")
 
             /**
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
@@ -3069,6 +3085,16 @@ private constructor(
             @JsonProperty("discounted_price")
             @ExcludeMissing
             fun _discountedPrice(): JsonField<Int> = discountedPrice
+
+            /**
+             * Returns the raw JSON value of [maxQuantityReached].
+             *
+             * Unlike [maxQuantityReached], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("max_quantity_reached")
+            @ExcludeMissing
+            fun _maxQuantityReached(): JsonField<Boolean> = maxQuantityReached
 
             /**
              * Returns the raw JSON value of [name].
@@ -3188,6 +3214,7 @@ private constructor(
                  * .addonId()
                  * .currency()
                  * .discountedPrice()
+                 * .maxQuantityReached()
                  * .name()
                  * .ogCurrency()
                  * .ogPrice()
@@ -3207,6 +3234,7 @@ private constructor(
                 private var addonId: JsonField<String>? = null
                 private var currency: JsonField<Currency>? = null
                 private var discountedPrice: JsonField<Int>? = null
+                private var maxQuantityReached: JsonField<Boolean>? = null
                 private var name: JsonField<String>? = null
                 private var ogCurrency: JsonField<Currency>? = null
                 private var ogPrice: JsonField<Int>? = null
@@ -3224,6 +3252,7 @@ private constructor(
                     addonId = addon.addonId
                     currency = addon.currency
                     discountedPrice = addon.discountedPrice
+                    maxQuantityReached = addon.maxQuantityReached
                     name = addon.name
                     ogCurrency = addon.ogCurrency
                     ogPrice = addon.ogPrice
@@ -3272,6 +3301,24 @@ private constructor(
                  */
                 fun discountedPrice(discountedPrice: JsonField<Int>) = apply {
                     this.discountedPrice = discountedPrice
+                }
+
+                /**
+                 * True when one more unit of this addon puts the cart above the cart value limit of
+                 * the business. False when the limit does not apply to the business.
+                 */
+                fun maxQuantityReached(maxQuantityReached: Boolean) =
+                    maxQuantityReached(JsonField.of(maxQuantityReached))
+
+                /**
+                 * Sets [Builder.maxQuantityReached] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.maxQuantityReached] with a well-typed [Boolean]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun maxQuantityReached(maxQuantityReached: JsonField<Boolean>) = apply {
+                    this.maxQuantityReached = maxQuantityReached
                 }
 
                 fun name(name: String) = name(JsonField.of(name))
@@ -3470,6 +3517,7 @@ private constructor(
                  * .addonId()
                  * .currency()
                  * .discountedPrice()
+                 * .maxQuantityReached()
                  * .name()
                  * .ogCurrency()
                  * .ogPrice()
@@ -3487,6 +3535,7 @@ private constructor(
                         checkRequired("addonId", addonId),
                         checkRequired("currency", currency),
                         checkRequired("discountedPrice", discountedPrice),
+                        checkRequired("maxQuantityReached", maxQuantityReached),
                         checkRequired("name", name),
                         checkRequired("ogCurrency", ogCurrency),
                         checkRequired("ogPrice", ogPrice),
@@ -3522,6 +3571,7 @@ private constructor(
                 addonId()
                 currency().validate()
                 discountedPrice()
+                maxQuantityReached()
                 name()
                 ogCurrency().validate()
                 ogPrice()
@@ -3554,6 +3604,7 @@ private constructor(
                 (if (addonId.asKnown() == null) 0 else 1) +
                     (currency.asKnown()?.validity() ?: 0) +
                     (if (discountedPrice.asKnown() == null) 0 else 1) +
+                    (if (maxQuantityReached.asKnown() == null) 0 else 1) +
                     (if (name.asKnown() == null) 0 else 1) +
                     (ogCurrency.asKnown()?.validity() ?: 0) +
                     (if (ogPrice.asKnown() == null) 0 else 1) +
@@ -3575,6 +3626,7 @@ private constructor(
                     addonId == other.addonId &&
                     currency == other.currency &&
                     discountedPrice == other.discountedPrice &&
+                    maxQuantityReached == other.maxQuantityReached &&
                     name == other.name &&
                     ogCurrency == other.ogCurrency &&
                     ogPrice == other.ogPrice &&
@@ -3594,6 +3646,7 @@ private constructor(
                     addonId,
                     currency,
                     discountedPrice,
+                    maxQuantityReached,
                     name,
                     ogCurrency,
                     ogPrice,
@@ -3612,7 +3665,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Addon{addonId=$addonId, currency=$currency, discountedPrice=$discountedPrice, name=$name, ogCurrency=$ogCurrency, ogPrice=$ogPrice, quantity=$quantity, singleQuantityPrice=$singleQuantityPrice, taxCategory=$taxCategory, taxInclusive=$taxInclusive, taxRate=$taxRate, description=$description, discountAmount=$discountAmount, tax=$tax, additionalProperties=$additionalProperties}"
+                "Addon{addonId=$addonId, currency=$currency, discountedPrice=$discountedPrice, maxQuantityReached=$maxQuantityReached, name=$name, ogCurrency=$ogCurrency, ogPrice=$ogPrice, quantity=$quantity, singleQuantityPrice=$singleQuantityPrice, taxCategory=$taxCategory, taxInclusive=$taxInclusive, taxRate=$taxRate, description=$description, discountAmount=$discountAmount, tax=$tax, additionalProperties=$additionalProperties}"
         }
 
         override fun equals(other: Any?): Boolean {

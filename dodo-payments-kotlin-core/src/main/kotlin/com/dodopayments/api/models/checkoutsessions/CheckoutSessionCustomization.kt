@@ -19,6 +19,7 @@ class CheckoutSessionCustomization
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val forceLanguage: JsonField<String>,
+    private val paymentMethodLayout: JsonField<PaymentMethodLayout>,
     private val showOnDemandTag: JsonField<Boolean>,
     private val showOrderDetails: JsonField<Boolean>,
     private val theme: JsonField<Theme>,
@@ -31,6 +32,9 @@ private constructor(
         @JsonProperty("force_language")
         @ExcludeMissing
         forceLanguage: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("payment_method_layout")
+        @ExcludeMissing
+        paymentMethodLayout: JsonField<PaymentMethodLayout> = JsonMissing.of(),
         @JsonProperty("show_on_demand_tag")
         @ExcludeMissing
         showOnDemandTag: JsonField<Boolean> = JsonMissing.of(),
@@ -41,7 +45,15 @@ private constructor(
         @JsonProperty("theme_config")
         @ExcludeMissing
         themeConfig: JsonField<ThemeConfig> = JsonMissing.of(),
-    ) : this(forceLanguage, showOnDemandTag, showOrderDetails, theme, themeConfig, mutableMapOf())
+    ) : this(
+        forceLanguage,
+        paymentMethodLayout,
+        showOnDemandTag,
+        showOrderDetails,
+        theme,
+        themeConfig,
+        mutableMapOf(),
+    )
 
     /**
      * Force the checkout interface to render in a specific language (e.g. `en`, `es`)
@@ -50,6 +62,18 @@ private constructor(
      *   the server responded with an unexpected value).
      */
     fun forceLanguage(): String? = forceLanguage.getNullable("force_language")
+
+    /**
+     * How a single-page checkout shows the payment methods. You can set it only when
+     * `feature_flags.single_page` is true.
+     *
+     * Default is `accordion`.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun paymentMethodLayout(): PaymentMethodLayout? =
+        paymentMethodLayout.getNullable("payment_method_layout")
 
     /**
      * Show on demand tag
@@ -97,6 +121,16 @@ private constructor(
     @JsonProperty("force_language")
     @ExcludeMissing
     fun _forceLanguage(): JsonField<String> = forceLanguage
+
+    /**
+     * Returns the raw JSON value of [paymentMethodLayout].
+     *
+     * Unlike [paymentMethodLayout], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("payment_method_layout")
+    @ExcludeMissing
+    fun _paymentMethodLayout(): JsonField<PaymentMethodLayout> = paymentMethodLayout
 
     /**
      * Returns the raw JSON value of [showOnDemandTag].
@@ -157,6 +191,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var forceLanguage: JsonField<String> = JsonMissing.of()
+        private var paymentMethodLayout: JsonField<PaymentMethodLayout> = JsonMissing.of()
         private var showOnDemandTag: JsonField<Boolean> = JsonMissing.of()
         private var showOrderDetails: JsonField<Boolean> = JsonMissing.of()
         private var theme: JsonField<Theme> = JsonMissing.of()
@@ -165,6 +200,7 @@ private constructor(
 
         internal fun from(checkoutSessionCustomization: CheckoutSessionCustomization) = apply {
             forceLanguage = checkoutSessionCustomization.forceLanguage
+            paymentMethodLayout = checkoutSessionCustomization.paymentMethodLayout
             showOnDemandTag = checkoutSessionCustomization.showOnDemandTag
             showOrderDetails = checkoutSessionCustomization.showOrderDetails
             theme = checkoutSessionCustomization.theme
@@ -185,6 +221,26 @@ private constructor(
          */
         fun forceLanguage(forceLanguage: JsonField<String>) = apply {
             this.forceLanguage = forceLanguage
+        }
+
+        /**
+         * How a single-page checkout shows the payment methods. You can set it only when
+         * `feature_flags.single_page` is true.
+         *
+         * Default is `accordion`.
+         */
+        fun paymentMethodLayout(paymentMethodLayout: PaymentMethodLayout?) =
+            paymentMethodLayout(JsonField.ofNullable(paymentMethodLayout))
+
+        /**
+         * Sets [Builder.paymentMethodLayout] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.paymentMethodLayout] with a well-typed
+         * [PaymentMethodLayout] value instead. This method is primarily for setting the field to an
+         * undocumented or not yet supported value.
+         */
+        fun paymentMethodLayout(paymentMethodLayout: JsonField<PaymentMethodLayout>) = apply {
+            this.paymentMethodLayout = paymentMethodLayout
         }
 
         /**
@@ -281,6 +337,7 @@ private constructor(
         fun build(): CheckoutSessionCustomization =
             CheckoutSessionCustomization(
                 forceLanguage,
+                paymentMethodLayout,
                 showOnDemandTag,
                 showOrderDetails,
                 theme,
@@ -305,6 +362,7 @@ private constructor(
         }
 
         forceLanguage()
+        paymentMethodLayout()?.validate()
         showOnDemandTag()
         showOrderDetails()
         theme()?.validate()
@@ -327,10 +385,157 @@ private constructor(
      */
     internal fun validity(): Int =
         (if (forceLanguage.asKnown() == null) 0 else 1) +
+            (paymentMethodLayout.asKnown()?.validity() ?: 0) +
             (if (showOnDemandTag.asKnown() == null) 0 else 1) +
             (if (showOrderDetails.asKnown() == null) 0 else 1) +
             (theme.asKnown()?.validity() ?: 0) +
             (themeConfig.asKnown()?.validity() ?: 0)
+
+    /**
+     * How a single-page checkout shows the payment methods. You can set it only when
+     * `feature_flags.single_page` is true.
+     *
+     * Default is `accordion`.
+     */
+    class PaymentMethodLayout
+    @JsonCreator
+    private constructor(private val value: JsonField<String>) : Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            val ACCORDION = of("accordion")
+
+            val TABS = of("tabs")
+
+            fun of(value: String) = PaymentMethodLayout(JsonField.of(value))
+        }
+
+        /** An enum containing [PaymentMethodLayout]'s known values. */
+        enum class Known {
+            ACCORDION,
+            TABS,
+        }
+
+        /**
+         * An enum containing [PaymentMethodLayout]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [PaymentMethodLayout] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            ACCORDION,
+            TABS,
+            /**
+             * An enum member indicating that [PaymentMethodLayout] was instantiated with an unknown
+             * value.
+             */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                ACCORDION -> Value.ACCORDION
+                TABS -> Value.TABS
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws DodoPaymentsInvalidDataException if this class instance's value is a not a known
+         *   member.
+         */
+        fun known(): Known =
+            when (this) {
+                ACCORDION -> Known.ACCORDION
+                TABS -> Known.TABS
+                else ->
+                    throw DodoPaymentsInvalidDataException("Unknown PaymentMethodLayout: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws DodoPaymentsInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString() ?: throw DodoPaymentsInvalidDataException("Value is not a String")
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't match
+         *   its expected type.
+         */
+        fun validate(): PaymentMethodLayout = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is PaymentMethodLayout && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
 
     /**
      * Theme of the page (determines which mode - light/dark/system - to use)
@@ -484,6 +689,7 @@ private constructor(
 
         return other is CheckoutSessionCustomization &&
             forceLanguage == other.forceLanguage &&
+            paymentMethodLayout == other.paymentMethodLayout &&
             showOnDemandTag == other.showOnDemandTag &&
             showOrderDetails == other.showOrderDetails &&
             theme == other.theme &&
@@ -494,6 +700,7 @@ private constructor(
     private val hashCode: Int by lazy {
         Objects.hash(
             forceLanguage,
+            paymentMethodLayout,
             showOnDemandTag,
             showOrderDetails,
             theme,
@@ -505,5 +712,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "CheckoutSessionCustomization{forceLanguage=$forceLanguage, showOnDemandTag=$showOnDemandTag, showOrderDetails=$showOrderDetails, theme=$theme, themeConfig=$themeConfig, additionalProperties=$additionalProperties}"
+        "CheckoutSessionCustomization{forceLanguage=$forceLanguage, paymentMethodLayout=$paymentMethodLayout, showOnDemandTag=$showOnDemandTag, showOrderDetails=$showOrderDetails, theme=$theme, themeConfig=$themeConfig, additionalProperties=$additionalProperties}"
 }

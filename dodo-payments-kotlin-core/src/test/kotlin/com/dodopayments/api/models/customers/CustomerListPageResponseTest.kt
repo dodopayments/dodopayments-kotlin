@@ -4,7 +4,6 @@ package com.dodopayments.api.models.customers
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
-import com.dodopayments.api.models.misc.Locale
 import com.dodopayments.api.models.misc.Metadata
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
@@ -32,7 +31,6 @@ internal class CustomerListPageResponseTest {
                                 .build()
                         )
                         .phoneNumber("phone_number")
-                        .preferredLocale(Locale.AR)
                         .build()
                 )
                 .build()
@@ -53,7 +51,6 @@ internal class CustomerListPageResponseTest {
                             .build()
                     )
                     .phoneNumber("phone_number")
-                    .preferredLocale(Locale.AR)
                     .build()
             )
     }
@@ -78,7 +75,6 @@ internal class CustomerListPageResponseTest {
                                 .build()
                         )
                         .phoneNumber("phone_number")
-                        .preferredLocale(Locale.AR)
                         .build()
                 )
                 .build()
