@@ -24,6 +24,11 @@ import com.dodopayments.api.models.entitlements.EntitlementIntegrationType
 import com.dodopayments.api.models.entitlements.Feature
 import com.dodopayments.api.models.entitlements.grants.EntitlementGrant
 import com.dodopayments.api.models.entitlements.grants.LicenseKeyGrant
+import com.dodopayments.api.models.invoices.CollectionMethod
+import com.dodopayments.api.models.invoices.DunningState
+import com.dodopayments.api.models.invoices.Invoice
+import com.dodopayments.api.models.invoices.InvoiceLine
+import com.dodopayments.api.models.invoices.InvoiceStatus
 import com.dodopayments.api.models.licensekeys.LicenseKey
 import com.dodopayments.api.models.licensekeys.LicenseKeyStatus
 import com.dodopayments.api.models.misc.CountryCode
@@ -255,6 +260,9 @@ private constructor(
         fun data(entitlementGrant: Data.EntitlementGrant) =
             data(Data.ofEntitlementGrant(entitlementGrant))
 
+        /** Alias for calling [data] with `Data.ofInvoice(invoice)`. */
+        fun data(invoice: Data.Invoice) = data(Data.ofInvoice(invoice))
+
         /**
          * The timestamp of when the event occurred (not necessarily the same of when it was
          * delivered)
@@ -383,6 +391,7 @@ private constructor(
         private val abandonedCheckout: AbandonedCheckout? = null,
         private val dunningAttempt: DunningAttempt? = null,
         private val entitlementGrant: EntitlementGrant? = null,
+        private val invoice: Invoice? = null,
         private val _json: JsonValue? = null,
     ) {
 
@@ -414,6 +423,9 @@ private constructor(
          */
         fun entitlementGrant(): EntitlementGrant? = entitlementGrant
 
+        /** An invoice-led invoice. Every read and every `invoice.*` webhook uses this schema. */
+        fun invoice(): Invoice? = invoice
+
         fun isPayment(): Boolean = payment != null
 
         fun isSubscription(): Boolean = subscription != null
@@ -435,6 +447,8 @@ private constructor(
         fun isDunningAttempt(): Boolean = dunningAttempt != null
 
         fun isEntitlementGrant(): Boolean = entitlementGrant != null
+
+        fun isInvoice(): Boolean = invoice != null
 
         fun asPayment(): Payment = payment.getOrThrow("payment")
 
@@ -465,6 +479,9 @@ private constructor(
          * integration-specific delivery payload.
          */
         fun asEntitlementGrant(): EntitlementGrant = entitlementGrant.getOrThrow("entitlementGrant")
+
+        /** An invoice-led invoice. Every read and every `invoice.*` webhook uses this schema. */
+        fun asInvoice(): Invoice = invoice.getOrThrow("invoice")
 
         fun _json(): JsonValue? = _json
 
@@ -505,6 +522,7 @@ private constructor(
                 abandonedCheckout != null -> visitor.visitAbandonedCheckout(abandonedCheckout)
                 dunningAttempt != null -> visitor.visitDunningAttempt(dunningAttempt)
                 entitlementGrant != null -> visitor.visitEntitlementGrant(entitlementGrant)
+                invoice != null -> visitor.visitInvoice(invoice)
                 else -> visitor.unknown(_json)
             }
 
@@ -569,6 +587,10 @@ private constructor(
                     override fun visitEntitlementGrant(entitlementGrant: EntitlementGrant) {
                         entitlementGrant.validate()
                     }
+
+                    override fun visitInvoice(invoice: Invoice) {
+                        invoice.validate()
+                    }
                 }
             )
             validated = true
@@ -619,6 +641,8 @@ private constructor(
                     override fun visitEntitlementGrant(entitlementGrant: EntitlementGrant) =
                         entitlementGrant.validity()
 
+                    override fun visitInvoice(invoice: Invoice) = invoice.validity()
+
                     override fun unknown(json: JsonValue?) = 0
                 }
             )
@@ -639,7 +663,8 @@ private constructor(
                 creditBalanceLow == other.creditBalanceLow &&
                 abandonedCheckout == other.abandonedCheckout &&
                 dunningAttempt == other.dunningAttempt &&
-                entitlementGrant == other.entitlementGrant
+                entitlementGrant == other.entitlementGrant &&
+                invoice == other.invoice
         }
 
         override fun hashCode(): Int =
@@ -655,6 +680,7 @@ private constructor(
                 abandonedCheckout,
                 dunningAttempt,
                 entitlementGrant,
+                invoice,
             )
 
         override fun toString(): String =
@@ -670,6 +696,7 @@ private constructor(
                 abandonedCheckout != null -> "Data{abandonedCheckout=$abandonedCheckout}"
                 dunningAttempt != null -> "Data{dunningAttempt=$dunningAttempt}"
                 entitlementGrant != null -> "Data{entitlementGrant=$entitlementGrant}"
+                invoice != null -> "Data{invoice=$invoice}"
                 _json != null -> "Data{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Data")
             }
@@ -708,6 +735,11 @@ private constructor(
              */
             fun ofEntitlementGrant(entitlementGrant: EntitlementGrant) =
                 Data(entitlementGrant = entitlementGrant)
+
+            /**
+             * An invoice-led invoice. Every read and every `invoice.*` webhook uses this schema.
+             */
+            fun ofInvoice(invoice: Invoice) = Data(invoice = invoice)
         }
 
         /** An interface that defines how to map each variant of [Data] to a value of type [T]. */
@@ -740,6 +772,11 @@ private constructor(
              * any integration-specific delivery payload.
              */
             fun visitEntitlementGrant(entitlementGrant: EntitlementGrant): T
+
+            /**
+             * An invoice-led invoice. Every read and every `invoice.*` webhook uses this schema.
+             */
+            fun visitInvoice(invoice: Invoice): T
 
             /**
              * Maps an unknown variant of [Data] to a value of type [T].
@@ -817,6 +854,11 @@ private constructor(
                             Data(entitlementGrant = it, _json = json)
                         } ?: Data(_json = json)
                     }
+                    "Invoice" -> {
+                        return tryDeserialize(node, jacksonTypeRef<Invoice>())?.let {
+                            Data(invoice = it, _json = json)
+                        } ?: Data(_json = json)
+                    }
                 }
 
                 return Data(_json = json)
@@ -844,6 +886,7 @@ private constructor(
                         generator.writeObject(value.abandonedCheckout)
                     value.dunningAttempt != null -> generator.writeObject(value.dunningAttempt)
                     value.entitlementGrant != null -> generator.writeObject(value.entitlementGrant)
+                    value.invoice != null -> generator.writeObject(value.invoice)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid Data")
                 }
@@ -3660,6 +3703,7 @@ private constructor(
         private constructor(
             private val addons: JsonField<List<AddonCartResponseItem>>,
             private val billing: JsonField<BillingAddress>,
+            private val billingMode: JsonField<Subscription.BillingMode>,
             private val brandId: JsonField<String>,
             private val cancelAtNextBillingDate: JsonField<Boolean>,
             private val createdAt: JsonField<OffsetDateTime>,
@@ -3689,6 +3733,7 @@ private constructor(
             private val cancellationFeedback: JsonField<CancellationFeedback>,
             private val cancelledAt: JsonField<OffsetDateTime>,
             private val cancelledBy: JsonField<SubscriptionCancelledBy>,
+            private val collectionMethod: JsonField<CollectionMethod>,
             private val customFieldResponses: JsonField<List<CustomFieldResponse>>,
             private val customerBusinessName: JsonField<String>,
             private val discountCyclesRemaining: JsonField<Int>,
@@ -3697,6 +3742,7 @@ private constructor(
             private val expiresAt: JsonField<OffsetDateTime>,
             private val pausedAt: JsonField<OffsetDateTime>,
             private val paymentMethodId: JsonField<String>,
+            private val paymentTermsDays: JsonField<Int>,
             private val scheduledChange: JsonField<ScheduledPlanChange>,
             private val taxId: JsonField<String>,
             private val trialAmount: JsonField<Int>,
@@ -3714,6 +3760,9 @@ private constructor(
                 @JsonProperty("billing")
                 @ExcludeMissing
                 billing: JsonField<BillingAddress> = JsonMissing.of(),
+                @JsonProperty("billing_mode")
+                @ExcludeMissing
+                billingMode: JsonField<Subscription.BillingMode> = JsonMissing.of(),
                 @JsonProperty("brand_id")
                 @ExcludeMissing
                 brandId: JsonField<String> = JsonMissing.of(),
@@ -3800,6 +3849,9 @@ private constructor(
                 @JsonProperty("cancelled_by")
                 @ExcludeMissing
                 cancelledBy: JsonField<SubscriptionCancelledBy> = JsonMissing.of(),
+                @JsonProperty("collection_method")
+                @ExcludeMissing
+                collectionMethod: JsonField<CollectionMethod> = JsonMissing.of(),
                 @JsonProperty("custom_field_responses")
                 @ExcludeMissing
                 customFieldResponses: JsonField<List<CustomFieldResponse>> = JsonMissing.of(),
@@ -3824,6 +3876,9 @@ private constructor(
                 @JsonProperty("payment_method_id")
                 @ExcludeMissing
                 paymentMethodId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("payment_terms_days")
+                @ExcludeMissing
+                paymentTermsDays: JsonField<Int> = JsonMissing.of(),
                 @JsonProperty("scheduled_change")
                 @ExcludeMissing
                 scheduledChange: JsonField<ScheduledPlanChange> = JsonMissing.of(),
@@ -3843,6 +3898,7 @@ private constructor(
             ) : this(
                 addons,
                 billing,
+                billingMode,
                 brandId,
                 cancelAtNextBillingDate,
                 createdAt,
@@ -3871,6 +3927,7 @@ private constructor(
                 cancellationFeedback,
                 cancelledAt,
                 cancelledBy,
+                collectionMethod,
                 customFieldResponses,
                 customerBusinessName,
                 discountCyclesRemaining,
@@ -3879,6 +3936,7 @@ private constructor(
                 expiresAt,
                 pausedAt,
                 paymentMethodId,
+                paymentTermsDays,
                 scheduledChange,
                 taxId,
                 trialAmount,
@@ -3892,6 +3950,7 @@ private constructor(
                 Subscription.builder()
                     .addons(addons)
                     .billing(billing)
+                    .billingMode(billingMode)
                     .brandId(brandId)
                     .cancelAtNextBillingDate(cancelAtNextBillingDate)
                     .createdAt(createdAt)
@@ -3920,6 +3979,7 @@ private constructor(
                     .cancellationFeedback(cancellationFeedback)
                     .cancelledAt(cancelledAt)
                     .cancelledBy(cancelledBy)
+                    .collectionMethod(collectionMethod)
                     .customFieldResponses(customFieldResponses)
                     .customerBusinessName(customerBusinessName)
                     .discountCyclesRemaining(discountCyclesRemaining)
@@ -3928,6 +3988,7 @@ private constructor(
                     .expiresAt(expiresAt)
                     .pausedAt(pausedAt)
                     .paymentMethodId(paymentMethodId)
+                    .paymentTermsDays(paymentTermsDays)
                     .scheduledChange(scheduledChange)
                     .taxId(taxId)
                     .trialAmount(trialAmount)
@@ -3950,6 +4011,15 @@ private constructor(
              *   value).
              */
             fun billing(): BillingAddress = billing.getRequired("billing")
+
+            /**
+             * `invoice_led` when invoices bill the subscription. `normal` otherwise.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun billingMode(): Subscription.BillingMode = billingMode.getRequired("billing_mode")
 
             /**
              * Brand id this subscription belongs to
@@ -4214,6 +4284,15 @@ private constructor(
             fun cancelledBy(): SubscriptionCancelledBy? = cancelledBy.getNullable("cancelled_by")
 
             /**
+             * How an invoice-led subscription collects each invoice. `null` for `normal`.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun collectionMethod(): CollectionMethod? =
+                collectionMethod.getNullable("collection_method")
+
+            /**
              * Customer's responses to custom fields collected during checkout
              *
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
@@ -4281,6 +4360,14 @@ private constructor(
              *   (e.g. if the server responded with an unexpected value).
              */
             fun paymentMethodId(): String? = paymentMethodId.getNullable("payment_method_id")
+
+            /**
+             * Days from the invoice date to the due date. `null` for `normal`.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun paymentTermsDays(): Int? = paymentTermsDays.getNullable("payment_terms_days")
 
             /**
              * Scheduled plan change details, if any
@@ -4361,6 +4448,16 @@ private constructor(
             @JsonProperty("billing")
             @ExcludeMissing
             fun _billing(): JsonField<BillingAddress> = billing
+
+            /**
+             * Returns the raw JSON value of [billingMode].
+             *
+             * Unlike [billingMode], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("billing_mode")
+            @ExcludeMissing
+            fun _billingMode(): JsonField<Subscription.BillingMode> = billingMode
 
             /**
              * Returns the raw JSON value of [brandId].
@@ -4638,6 +4735,16 @@ private constructor(
             fun _cancelledBy(): JsonField<SubscriptionCancelledBy> = cancelledBy
 
             /**
+             * Returns the raw JSON value of [collectionMethod].
+             *
+             * Unlike [collectionMethod], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("collection_method")
+            @ExcludeMissing
+            fun _collectionMethod(): JsonField<CollectionMethod> = collectionMethod
+
+            /**
              * Returns the raw JSON value of [customFieldResponses].
              *
              * Unlike [customFieldResponses], this method doesn't throw if the JSON field has an
@@ -4718,6 +4825,16 @@ private constructor(
             fun _paymentMethodId(): JsonField<String> = paymentMethodId
 
             /**
+             * Returns the raw JSON value of [paymentTermsDays].
+             *
+             * Unlike [paymentTermsDays], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("payment_terms_days")
+            @ExcludeMissing
+            fun _paymentTermsDays(): JsonField<Int> = paymentTermsDays
+
+            /**
              * Returns the raw JSON value of [scheduledChange].
              *
              * Unlike [scheduledChange], this method doesn't throw if the JSON field has an
@@ -4785,6 +4902,7 @@ private constructor(
                  * ```kotlin
                  * .addons()
                  * .billing()
+                 * .billingMode()
                  * .brandId()
                  * .cancelAtNextBillingDate()
                  * .createdAt()
@@ -4819,6 +4937,7 @@ private constructor(
 
                 private var addons: JsonField<MutableList<AddonCartResponseItem>>? = null
                 private var billing: JsonField<BillingAddress>? = null
+                private var billingMode: JsonField<Subscription.BillingMode>? = null
                 private var brandId: JsonField<String>? = null
                 private var cancelAtNextBillingDate: JsonField<Boolean>? = null
                 private var createdAt: JsonField<OffsetDateTime>? = null
@@ -4851,6 +4970,7 @@ private constructor(
                 private var cancellationFeedback: JsonField<CancellationFeedback> = JsonMissing.of()
                 private var cancelledAt: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var cancelledBy: JsonField<SubscriptionCancelledBy> = JsonMissing.of()
+                private var collectionMethod: JsonField<CollectionMethod> = JsonMissing.of()
                 private var customFieldResponses: JsonField<MutableList<CustomFieldResponse>>? =
                     null
                 private var customerBusinessName: JsonField<String> = JsonMissing.of()
@@ -4860,6 +4980,7 @@ private constructor(
                 private var expiresAt: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var pausedAt: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var paymentMethodId: JsonField<String> = JsonMissing.of()
+                private var paymentTermsDays: JsonField<Int> = JsonMissing.of()
                 private var scheduledChange: JsonField<ScheduledPlanChange> = JsonMissing.of()
                 private var taxId: JsonField<String> = JsonMissing.of()
                 private var trialAmount: JsonField<Int> = JsonMissing.of()
@@ -4871,6 +4992,7 @@ private constructor(
                 internal fun from(subscription: Subscription) = apply {
                     addons = subscription.addons.map { it.toMutableList() }
                     billing = subscription.billing
+                    billingMode = subscription.billingMode
                     brandId = subscription.brandId
                     cancelAtNextBillingDate = subscription.cancelAtNextBillingDate
                     createdAt = subscription.createdAt
@@ -4901,6 +5023,7 @@ private constructor(
                     cancellationFeedback = subscription.cancellationFeedback
                     cancelledAt = subscription.cancelledAt
                     cancelledBy = subscription.cancelledBy
+                    collectionMethod = subscription.collectionMethod
                     customFieldResponses =
                         subscription.customFieldResponses.map { it.toMutableList() }
                     customerBusinessName = subscription.customerBusinessName
@@ -4910,6 +5033,7 @@ private constructor(
                     expiresAt = subscription.expiresAt
                     pausedAt = subscription.pausedAt
                     paymentMethodId = subscription.paymentMethodId
+                    paymentTermsDays = subscription.paymentTermsDays
                     scheduledChange = subscription.scheduledChange
                     taxId = subscription.taxId
                     trialAmount = subscription.trialAmount
@@ -4956,6 +5080,21 @@ private constructor(
                  * or not yet supported value.
                  */
                 fun billing(billing: JsonField<BillingAddress>) = apply { this.billing = billing }
+
+                /** `invoice_led` when invoices bill the subscription. `normal` otherwise. */
+                fun billingMode(billingMode: Subscription.BillingMode) =
+                    billingMode(JsonField.of(billingMode))
+
+                /**
+                 * Sets [Builder.billingMode] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.billingMode] with a well-typed
+                 * [Subscription.BillingMode] value instead. This method is primarily for setting
+                 * the field to an undocumented or not yet supported value.
+                 */
+                fun billingMode(billingMode: JsonField<Subscription.BillingMode>) = apply {
+                    this.billingMode = billingMode
+                }
 
                 /** Brand id this subscription belongs to */
                 fun brandId(brandId: String) = brandId(JsonField.of(brandId))
@@ -5414,6 +5553,21 @@ private constructor(
                     this.cancelledBy = cancelledBy
                 }
 
+                /** How an invoice-led subscription collects each invoice. `null` for `normal`. */
+                fun collectionMethod(collectionMethod: CollectionMethod?) =
+                    collectionMethod(JsonField.ofNullable(collectionMethod))
+
+                /**
+                 * Sets [Builder.collectionMethod] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.collectionMethod] with a well-typed
+                 * [CollectionMethod] value instead. This method is primarily for setting the field
+                 * to an undocumented or not yet supported value.
+                 */
+                fun collectionMethod(collectionMethod: JsonField<CollectionMethod>) = apply {
+                    this.collectionMethod = collectionMethod
+                }
+
                 /** Customer's responses to custom fields collected during checkout */
                 fun customFieldResponses(customFieldResponses: List<CustomFieldResponse>?) =
                     customFieldResponses(JsonField.ofNullable(customFieldResponses))
@@ -5574,6 +5728,29 @@ private constructor(
                     this.paymentMethodId = paymentMethodId
                 }
 
+                /** Days from the invoice date to the due date. `null` for `normal`. */
+                fun paymentTermsDays(paymentTermsDays: Int?) =
+                    paymentTermsDays(JsonField.ofNullable(paymentTermsDays))
+
+                /**
+                 * Alias for [Builder.paymentTermsDays].
+                 *
+                 * This unboxed primitive overload exists for backwards compatibility.
+                 */
+                fun paymentTermsDays(paymentTermsDays: Int) =
+                    paymentTermsDays(paymentTermsDays as Int?)
+
+                /**
+                 * Sets [Builder.paymentTermsDays] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.paymentTermsDays] with a well-typed [Int] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun paymentTermsDays(paymentTermsDays: JsonField<Int>) = apply {
+                    this.paymentTermsDays = paymentTermsDays
+                }
+
                 /** Scheduled plan change details, if any */
                 fun scheduledChange(scheduledChange: ScheduledPlanChange?) =
                     scheduledChange(JsonField.ofNullable(scheduledChange))
@@ -5709,6 +5886,7 @@ private constructor(
                  * ```kotlin
                  * .addons()
                  * .billing()
+                 * .billingMode()
                  * .brandId()
                  * .cancelAtNextBillingDate()
                  * .createdAt()
@@ -5741,6 +5919,7 @@ private constructor(
                     Subscription(
                         checkRequired("addons", addons).map { it.toImmutable() },
                         checkRequired("billing", billing),
+                        checkRequired("billingMode", billingMode),
                         checkRequired("brandId", brandId),
                         checkRequired("cancelAtNextBillingDate", cancelAtNextBillingDate),
                         checkRequired("createdAt", createdAt),
@@ -5772,6 +5951,7 @@ private constructor(
                         cancellationFeedback,
                         cancelledAt,
                         cancelledBy,
+                        collectionMethod,
                         (customFieldResponses ?: JsonMissing.of()).map { it.toImmutable() },
                         customerBusinessName,
                         discountCyclesRemaining,
@@ -5780,6 +5960,7 @@ private constructor(
                         expiresAt,
                         pausedAt,
                         paymentMethodId,
+                        paymentTermsDays,
                         scheduledChange,
                         taxId,
                         trialAmount,
@@ -5809,6 +5990,7 @@ private constructor(
 
                 addons().forEach { it.validate() }
                 billing().validate()
+                billingMode().validate()
                 brandId()
                 cancelAtNextBillingDate()
                 createdAt()
@@ -5837,6 +6019,7 @@ private constructor(
                 cancellationFeedback()?.validate()
                 cancelledAt()
                 cancelledBy()?.validate()
+                collectionMethod()?.validate()
                 customFieldResponses()?.forEach { it.validate() }
                 customerBusinessName()
                 discountCyclesRemaining()
@@ -5845,6 +6028,7 @@ private constructor(
                 expiresAt()
                 pausedAt()
                 paymentMethodId()
+                paymentTermsDays()
                 scheduledChange()?.validate()
                 taxId()
                 trialAmount()
@@ -5877,6 +6061,7 @@ private constructor(
             internal fun validity(): Int =
                 (addons.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
                     (billing.asKnown()?.validity() ?: 0) +
+                    (billingMode.asKnown()?.validity() ?: 0) +
                     (if (brandId.asKnown() == null) 0 else 1) +
                     (if (cancelAtNextBillingDate.asKnown() == null) 0 else 1) +
                     (if (createdAt.asKnown() == null) 0 else 1) +
@@ -5905,6 +6090,7 @@ private constructor(
                     (cancellationFeedback.asKnown()?.validity() ?: 0) +
                     (if (cancelledAt.asKnown() == null) 0 else 1) +
                     (cancelledBy.asKnown()?.validity() ?: 0) +
+                    (collectionMethod.asKnown()?.validity() ?: 0) +
                     (customFieldResponses.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
                     (if (customerBusinessName.asKnown() == null) 0 else 1) +
                     (if (discountCyclesRemaining.asKnown() == null) 0 else 1) +
@@ -5913,6 +6099,7 @@ private constructor(
                     (if (expiresAt.asKnown() == null) 0 else 1) +
                     (if (pausedAt.asKnown() == null) 0 else 1) +
                     (if (paymentMethodId.asKnown() == null) 0 else 1) +
+                    (if (paymentTermsDays.asKnown() == null) 0 else 1) +
                     (scheduledChange.asKnown()?.validity() ?: 0) +
                     (if (taxId.asKnown() == null) 0 else 1) +
                     (if (trialAmount.asKnown() == null) 0 else 1) +
@@ -5928,6 +6115,7 @@ private constructor(
                 return other is Subscription &&
                     addons == other.addons &&
                     billing == other.billing &&
+                    billingMode == other.billingMode &&
                     brandId == other.brandId &&
                     cancelAtNextBillingDate == other.cancelAtNextBillingDate &&
                     createdAt == other.createdAt &&
@@ -5956,6 +6144,7 @@ private constructor(
                     cancellationFeedback == other.cancellationFeedback &&
                     cancelledAt == other.cancelledAt &&
                     cancelledBy == other.cancelledBy &&
+                    collectionMethod == other.collectionMethod &&
                     customFieldResponses == other.customFieldResponses &&
                     customerBusinessName == other.customerBusinessName &&
                     discountCyclesRemaining == other.discountCyclesRemaining &&
@@ -5964,6 +6153,7 @@ private constructor(
                     expiresAt == other.expiresAt &&
                     pausedAt == other.pausedAt &&
                     paymentMethodId == other.paymentMethodId &&
+                    paymentTermsDays == other.paymentTermsDays &&
                     scheduledChange == other.scheduledChange &&
                     taxId == other.taxId &&
                     trialAmount == other.trialAmount &&
@@ -5977,6 +6167,7 @@ private constructor(
                 Objects.hash(
                     addons,
                     billing,
+                    billingMode,
                     brandId,
                     cancelAtNextBillingDate,
                     createdAt,
@@ -6005,6 +6196,7 @@ private constructor(
                     cancellationFeedback,
                     cancelledAt,
                     cancelledBy,
+                    collectionMethod,
                     customFieldResponses,
                     customerBusinessName,
                     discountCyclesRemaining,
@@ -6013,6 +6205,7 @@ private constructor(
                     expiresAt,
                     pausedAt,
                     paymentMethodId,
+                    paymentTermsDays,
                     scheduledChange,
                     taxId,
                     trialAmount,
@@ -6026,7 +6219,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Subscription{addons=$addons, billing=$billing, brandId=$brandId, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, creditEntitlementCart=$creditEntitlementCart, currency=$currency, customer=$customer, hasPaymentMethod=$hasPaymentMethod, metadata=$metadata, meterCreditEntitlementCart=$meterCreditEntitlementCart, meters=$meters, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancellationComment=$cancellationComment, cancellationFeedback=$cancellationFeedback, cancelledAt=$cancelledAt, cancelledBy=$cancelledBy, customFieldResponses=$customFieldResponses, customerBusinessName=$customerBusinessName, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, discounts=$discounts, expiresAt=$expiresAt, pausedAt=$pausedAt, paymentMethodId=$paymentMethodId, scheduledChange=$scheduledChange, taxId=$taxId, trialAmount=$trialAmount, payloadType=$payloadType, pastDueEndsAt=$pastDueEndsAt, paymentId=$paymentId, additionalProperties=$additionalProperties}"
+                "Subscription{addons=$addons, billing=$billing, billingMode=$billingMode, brandId=$brandId, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, creditEntitlementCart=$creditEntitlementCart, currency=$currency, customer=$customer, hasPaymentMethod=$hasPaymentMethod, metadata=$metadata, meterCreditEntitlementCart=$meterCreditEntitlementCart, meters=$meters, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancellationComment=$cancellationComment, cancellationFeedback=$cancellationFeedback, cancelledAt=$cancelledAt, cancelledBy=$cancelledBy, collectionMethod=$collectionMethod, customFieldResponses=$customFieldResponses, customerBusinessName=$customerBusinessName, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, discounts=$discounts, expiresAt=$expiresAt, pausedAt=$pausedAt, paymentMethodId=$paymentMethodId, paymentTermsDays=$paymentTermsDays, scheduledChange=$scheduledChange, taxId=$taxId, trialAmount=$trialAmount, payloadType=$payloadType, pastDueEndsAt=$pastDueEndsAt, paymentId=$paymentId, additionalProperties=$additionalProperties}"
         }
 
         class Refund
@@ -7109,7 +7302,8 @@ private constructor(
 
             /**
              * Which processor handled the underlying payment. `stripe` / `adyen` for BYOP routes
-             * (the merchant's own payment connector); `dodo` for everything Dodo processed itself.
+             * (the merchant's own Hyperswitch connector); `dodo` for everything Dodo processed
+             * itself.
              *
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
              *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -7494,7 +7688,7 @@ private constructor(
 
                 /**
                  * Which processor handled the underlying payment. `stripe` / `adyen` for BYOP
-                 * routes (the merchant's own payment connector); `dodo` for everything Dodo
+                 * routes (the merchant's own Hyperswitch connector); `dodo` for everything Dodo
                  * processed itself.
                  */
                 fun paymentProvider(paymentProvider: GetDispute.PaymentProvider) =
@@ -13992,6 +14186,2024 @@ private constructor(
 
             override fun toString() =
                 "EntitlementGrant{id=$id, brandId=$brandId, businessId=$businessId, createdAt=$createdAt, customerId=$customerId, entitlementId=$entitlementId, integrationType=$integrationType, metadata=$metadata, status=$status, updatedAt=$updatedAt, deliveredAt=$deliveredAt, digitalProductDelivery=$digitalProductDelivery, errorCode=$errorCode, errorMessage=$errorMessage, feature=$feature, licenseKey=$licenseKey, oauthExpiresAt=$oauthExpiresAt, oauthUrl=$oauthUrl, paymentId=$paymentId, revocationReason=$revocationReason, revokedAt=$revokedAt, subscriptionId=$subscriptionId, payloadType=$payloadType, additionalProperties=$additionalProperties}"
+        }
+
+        /** An invoice-led invoice. Every read and every `invoice.*` webhook uses this schema. */
+        class Invoice
+        @JsonCreator(mode = JsonCreator.Mode.DISABLED)
+        private constructor(
+            private val allowedActions: JsonField<List<Invoice.AllowedAction>>,
+            private val amountDue: JsonField<Long>,
+            private val amountPaid: JsonField<Long>,
+            private val amountRefunded: JsonField<Long>,
+            private val billingMode: JsonField<Invoice.BillingMode>,
+            private val businessId: JsonField<String>,
+            private val createdAt: JsonField<OffsetDateTime>,
+            private val credits: JsonField<Long>,
+            private val currency: JsonField<Currency>,
+            private val customer: JsonField<Invoice.Customer>,
+            private val discountIds: JsonField<List<String>>,
+            private val editableFields: JsonField<List<Invoice.EditableField>>,
+            private val frequency: JsonField<Invoice.Frequency>,
+            private val invoiceId: JsonField<String>,
+            private val metadata: JsonValue,
+            private val refundIds: JsonField<List<String>>,
+            private val retryCount: JsonField<Int>,
+            private val rowVersion: JsonField<Long>,
+            private val status: JsonField<InvoiceStatus>,
+            private val subscriptionIds: JsonField<List<String>>,
+            private val tags: JsonField<List<Invoice.Tag>>,
+            private val tax: JsonField<Int>,
+            private val totalAmount: JsonField<Int>,
+            private val collectionMethod: JsonField<CollectionMethod>,
+            private val dueAt: JsonField<OffsetDateTime>,
+            private val dunningState: JsonField<DunningState>,
+            private val finalizedAt: JsonField<OffsetDateTime>,
+            private val hostedUrl: JsonField<String>,
+            private val lines: JsonField<List<InvoiceLine>>,
+            private val memo: JsonField<String>,
+            private val nextReminderAt: JsonField<OffsetDateTime>,
+            private val nextRetryAt: JsonField<OffsetDateTime>,
+            private val paymentTermsDays: JsonField<Int>,
+            private val payments: JsonField<List<Invoice.Payment>>,
+            private val pdfUrl: JsonField<String>,
+            private val reminderSettings: JsonField<Invoice.ReminderSettings>,
+            private val reviewDeadline: JsonField<OffsetDateTime>,
+            private val sentAt: JsonField<OffsetDateTime>,
+            private val payloadType: JsonValue,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("allowed_actions")
+                @ExcludeMissing
+                allowedActions: JsonField<List<Invoice.AllowedAction>> = JsonMissing.of(),
+                @JsonProperty("amount_due")
+                @ExcludeMissing
+                amountDue: JsonField<Long> = JsonMissing.of(),
+                @JsonProperty("amount_paid")
+                @ExcludeMissing
+                amountPaid: JsonField<Long> = JsonMissing.of(),
+                @JsonProperty("amount_refunded")
+                @ExcludeMissing
+                amountRefunded: JsonField<Long> = JsonMissing.of(),
+                @JsonProperty("billing_mode")
+                @ExcludeMissing
+                billingMode: JsonField<Invoice.BillingMode> = JsonMissing.of(),
+                @JsonProperty("business_id")
+                @ExcludeMissing
+                businessId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("created_at")
+                @ExcludeMissing
+                createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("credits")
+                @ExcludeMissing
+                credits: JsonField<Long> = JsonMissing.of(),
+                @JsonProperty("currency")
+                @ExcludeMissing
+                currency: JsonField<Currency> = JsonMissing.of(),
+                @JsonProperty("customer")
+                @ExcludeMissing
+                customer: JsonField<Invoice.Customer> = JsonMissing.of(),
+                @JsonProperty("discount_ids")
+                @ExcludeMissing
+                discountIds: JsonField<List<String>> = JsonMissing.of(),
+                @JsonProperty("editable_fields")
+                @ExcludeMissing
+                editableFields: JsonField<List<Invoice.EditableField>> = JsonMissing.of(),
+                @JsonProperty("frequency")
+                @ExcludeMissing
+                frequency: JsonField<Invoice.Frequency> = JsonMissing.of(),
+                @JsonProperty("invoice_id")
+                @ExcludeMissing
+                invoiceId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("metadata") @ExcludeMissing metadata: JsonValue = JsonMissing.of(),
+                @JsonProperty("refund_ids")
+                @ExcludeMissing
+                refundIds: JsonField<List<String>> = JsonMissing.of(),
+                @JsonProperty("retry_count")
+                @ExcludeMissing
+                retryCount: JsonField<Int> = JsonMissing.of(),
+                @JsonProperty("row_version")
+                @ExcludeMissing
+                rowVersion: JsonField<Long> = JsonMissing.of(),
+                @JsonProperty("status")
+                @ExcludeMissing
+                status: JsonField<InvoiceStatus> = JsonMissing.of(),
+                @JsonProperty("subscription_ids")
+                @ExcludeMissing
+                subscriptionIds: JsonField<List<String>> = JsonMissing.of(),
+                @JsonProperty("tags")
+                @ExcludeMissing
+                tags: JsonField<List<Invoice.Tag>> = JsonMissing.of(),
+                @JsonProperty("tax") @ExcludeMissing tax: JsonField<Int> = JsonMissing.of(),
+                @JsonProperty("total_amount")
+                @ExcludeMissing
+                totalAmount: JsonField<Int> = JsonMissing.of(),
+                @JsonProperty("collection_method")
+                @ExcludeMissing
+                collectionMethod: JsonField<CollectionMethod> = JsonMissing.of(),
+                @JsonProperty("due_at")
+                @ExcludeMissing
+                dueAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("dunning_state")
+                @ExcludeMissing
+                dunningState: JsonField<DunningState> = JsonMissing.of(),
+                @JsonProperty("finalized_at")
+                @ExcludeMissing
+                finalizedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("hosted_url")
+                @ExcludeMissing
+                hostedUrl: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("lines")
+                @ExcludeMissing
+                lines: JsonField<List<InvoiceLine>> = JsonMissing.of(),
+                @JsonProperty("memo") @ExcludeMissing memo: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("next_reminder_at")
+                @ExcludeMissing
+                nextReminderAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("next_retry_at")
+                @ExcludeMissing
+                nextRetryAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("payment_terms_days")
+                @ExcludeMissing
+                paymentTermsDays: JsonField<Int> = JsonMissing.of(),
+                @JsonProperty("payments")
+                @ExcludeMissing
+                payments: JsonField<List<Invoice.Payment>> = JsonMissing.of(),
+                @JsonProperty("pdf_url")
+                @ExcludeMissing
+                pdfUrl: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("reminder_settings")
+                @ExcludeMissing
+                reminderSettings: JsonField<Invoice.ReminderSettings> = JsonMissing.of(),
+                @JsonProperty("review_deadline")
+                @ExcludeMissing
+                reviewDeadline: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("sent_at")
+                @ExcludeMissing
+                sentAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("payload_type")
+                @ExcludeMissing
+                payloadType: JsonValue = JsonMissing.of(),
+            ) : this(
+                allowedActions,
+                amountDue,
+                amountPaid,
+                amountRefunded,
+                billingMode,
+                businessId,
+                createdAt,
+                credits,
+                currency,
+                customer,
+                discountIds,
+                editableFields,
+                frequency,
+                invoiceId,
+                metadata,
+                refundIds,
+                retryCount,
+                rowVersion,
+                status,
+                subscriptionIds,
+                tags,
+                tax,
+                totalAmount,
+                collectionMethod,
+                dueAt,
+                dunningState,
+                finalizedAt,
+                hostedUrl,
+                lines,
+                memo,
+                nextReminderAt,
+                nextRetryAt,
+                paymentTermsDays,
+                payments,
+                pdfUrl,
+                reminderSettings,
+                reviewDeadline,
+                sentAt,
+                payloadType,
+                mutableMapOf(),
+            )
+
+            fun toInvoice(): Invoice =
+                Invoice.builder()
+                    .allowedActions(allowedActions)
+                    .amountDue(amountDue)
+                    .amountPaid(amountPaid)
+                    .amountRefunded(amountRefunded)
+                    .billingMode(billingMode)
+                    .businessId(businessId)
+                    .createdAt(createdAt)
+                    .credits(credits)
+                    .currency(currency)
+                    .customer(customer)
+                    .discountIds(discountIds)
+                    .editableFields(editableFields)
+                    .frequency(frequency)
+                    .invoiceId(invoiceId)
+                    .metadata(metadata)
+                    .refundIds(refundIds)
+                    .retryCount(retryCount)
+                    .rowVersion(rowVersion)
+                    .status(status)
+                    .subscriptionIds(subscriptionIds)
+                    .tags(tags)
+                    .tax(tax)
+                    .totalAmount(totalAmount)
+                    .collectionMethod(collectionMethod)
+                    .dueAt(dueAt)
+                    .dunningState(dunningState)
+                    .finalizedAt(finalizedAt)
+                    .hostedUrl(hostedUrl)
+                    .lines(lines)
+                    .memo(memo)
+                    .nextReminderAt(nextReminderAt)
+                    .nextRetryAt(nextRetryAt)
+                    .paymentTermsDays(paymentTermsDays)
+                    .payments(payments)
+                    .pdfUrl(pdfUrl)
+                    .reminderSettings(reminderSettings)
+                    .reviewDeadline(reviewDeadline)
+                    .sentAt(sentAt)
+                    .build()
+
+            /**
+             * The actions that the current status accepts.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun allowedActions(): List<Invoice.AllowedAction> =
+                allowedActions.getRequired("allowed_actions")
+
+            /**
+             * The amount that the customer must pay. Zero unless the invoice is open or past due.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun amountDue(): Long = amountDue.getRequired("amount_due")
+
+            /**
+             * The sum of the succeeded payments, in the smallest currency unit. A late payment is
+             * not included after its late refund.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun amountPaid(): Long = amountPaid.getRequired("amount_paid")
+
+            /**
+             * The sum of the succeeded refunds, in the currency of each payment. The late refund of
+             * a late payment is not included.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun amountRefunded(): Long = amountRefunded.getRequired("amount_refunded")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun billingMode(): Invoice.BillingMode = billingMode.getRequired("billing_mode")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun businessId(): String = businessId.getRequired("business_id")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun createdAt(): OffsetDateTime = createdAt.getRequired("created_at")
+
+            /**
+             * Customer credits applied at finalise, in the smallest currency unit. Zero or less.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun credits(): Long = credits.getRequired("credits")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun currency(): Currency = currency.getRequired("currency")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun customer(): Invoice.Customer = customer.getRequired("customer")
+
+            /**
+             * The discount codes of the invoice.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun discountIds(): List<String> = discountIds.getRequired("discount_ids")
+
+            /**
+             * The fields that `PATCH` can change in the current status.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun editableFields(): List<Invoice.EditableField> =
+                editableFields.getRequired("editable_fields")
+
+            /**
+             * How often the invoice lines bill. `mixed` covers several intervals, or one-time lines
+             * next to a plan.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun frequency(): Invoice.Frequency = frequency.getRequired("frequency")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun invoiceId(): String = invoiceId.getRequired("invoice_id")
+
+            /**
+             * This arbitrary value can be deserialized into a custom type using the `convert`
+             * method:
+             * ```kotlin
+             * val myObject: MyClass = invoice.metadata().convert(MyClass::class.java)
+             * ```
+             */
+            @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonValue = metadata
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun refundIds(): List<String> = refundIds.getRequired("refund_ids")
+
+            /**
+             * The number of failed automatic charges.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun retryCount(): Int = retryCount.getRequired("retry_count")
+
+            /**
+             * Goes up by one on each change. Use it to ignore an older webhook delivery.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun rowVersion(): Long = rowVersion.getRequired("row_version")
+
+            /**
+             * The `message` of each variant is the label of the invoice document.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun status(): InvoiceStatus = status.getRequired("status")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun subscriptionIds(): List<String> = subscriptionIds.getRequired("subscription_ids")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun tags(): List<Invoice.Tag> = tags.getRequired("tags")
+
+            /**
+             * Tax in the smallest currency unit.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun tax(): Int = tax.getRequired("tax")
+
+            /**
+             * Total with tax, before credits, in the smallest currency unit.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun totalAmount(): Int = totalAmount.getRequired("total_amount")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun collectionMethod(): CollectionMethod? =
+                collectionMethod.getNullable("collection_method")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun dueAt(): OffsetDateTime? = dueAt.getNullable("due_at")
+
+            /**
+             * `null` for an invoice that has no collection: draft, paid, void or uncollectable.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun dunningState(): DunningState? = dunningState.getNullable("dunning_state")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun finalizedAt(): OffsetDateTime? = finalizedAt.getNullable("finalized_at")
+
+            /**
+             * The page where the customer pays. `null` until the invoice is sent.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun hostedUrl(): String? = hostedUrl.getNullable("hosted_url")
+
+            /**
+             * Only on a single invoice. A list leaves it out.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun lines(): List<InvoiceLine>? = lines.getNullable("lines")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun memo(): String? = memo.getNullable("memo")
+
+            /**
+             * The time of the next reminder email to the customer, before or after the due date.
+             * `null` when no reminder email will go out.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun nextReminderAt(): OffsetDateTime? = nextReminderAt.getNullable("next_reminder_at")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun nextRetryAt(): OffsetDateTime? = nextRetryAt.getNullable("next_retry_at")
+
+            /**
+             * Days from finalise to the due date. `null` when the invoice has a custom due date.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun paymentTermsDays(): Int? = paymentTermsDays.getNullable("payment_terms_days")
+
+            /**
+             * Only on a single invoice. A list leaves it out.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun payments(): List<Invoice.Payment>? = payments.getNullable("payments")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun pdfUrl(): String? = pdfUrl.getNullable("pdf_url")
+
+            /**
+             * `null` on a draft that keeps all reminder settings of the business.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun reminderSettings(): Invoice.ReminderSettings? =
+                reminderSettings.getNullable("reminder_settings")
+
+            /**
+             * The time at which a draft that waits for review finalises.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun reviewDeadline(): OffsetDateTime? = reviewDeadline.getNullable("review_deadline")
+
+            /**
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun sentAt(): OffsetDateTime? = sentAt.getNullable("sent_at")
+
+            /**
+             * Expected to always return the following:
+             * ```kotlin
+             * JsonValue.from("Invoice")
+             * ```
+             *
+             * However, this method can be useful for debugging and logging (e.g. if the server
+             * responded with an unexpected value).
+             */
+            @JsonProperty("payload_type")
+            @ExcludeMissing
+            fun _payloadType(): JsonValue = payloadType
+
+            /**
+             * Returns the raw JSON value of [allowedActions].
+             *
+             * Unlike [allowedActions], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("allowed_actions")
+            @ExcludeMissing
+            fun _allowedActions(): JsonField<List<Invoice.AllowedAction>> = allowedActions
+
+            /**
+             * Returns the raw JSON value of [amountDue].
+             *
+             * Unlike [amountDue], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("amount_due")
+            @ExcludeMissing
+            fun _amountDue(): JsonField<Long> = amountDue
+
+            /**
+             * Returns the raw JSON value of [amountPaid].
+             *
+             * Unlike [amountPaid], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("amount_paid")
+            @ExcludeMissing
+            fun _amountPaid(): JsonField<Long> = amountPaid
+
+            /**
+             * Returns the raw JSON value of [amountRefunded].
+             *
+             * Unlike [amountRefunded], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("amount_refunded")
+            @ExcludeMissing
+            fun _amountRefunded(): JsonField<Long> = amountRefunded
+
+            /**
+             * Returns the raw JSON value of [billingMode].
+             *
+             * Unlike [billingMode], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("billing_mode")
+            @ExcludeMissing
+            fun _billingMode(): JsonField<Invoice.BillingMode> = billingMode
+
+            /**
+             * Returns the raw JSON value of [businessId].
+             *
+             * Unlike [businessId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("business_id")
+            @ExcludeMissing
+            fun _businessId(): JsonField<String> = businessId
+
+            /**
+             * Returns the raw JSON value of [createdAt].
+             *
+             * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("created_at")
+            @ExcludeMissing
+            fun _createdAt(): JsonField<OffsetDateTime> = createdAt
+
+            /**
+             * Returns the raw JSON value of [credits].
+             *
+             * Unlike [credits], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("credits") @ExcludeMissing fun _credits(): JsonField<Long> = credits
+
+            /**
+             * Returns the raw JSON value of [currency].
+             *
+             * Unlike [currency], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("currency")
+            @ExcludeMissing
+            fun _currency(): JsonField<Currency> = currency
+
+            /**
+             * Returns the raw JSON value of [customer].
+             *
+             * Unlike [customer], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("customer")
+            @ExcludeMissing
+            fun _customer(): JsonField<Invoice.Customer> = customer
+
+            /**
+             * Returns the raw JSON value of [discountIds].
+             *
+             * Unlike [discountIds], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("discount_ids")
+            @ExcludeMissing
+            fun _discountIds(): JsonField<List<String>> = discountIds
+
+            /**
+             * Returns the raw JSON value of [editableFields].
+             *
+             * Unlike [editableFields], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("editable_fields")
+            @ExcludeMissing
+            fun _editableFields(): JsonField<List<Invoice.EditableField>> = editableFields
+
+            /**
+             * Returns the raw JSON value of [frequency].
+             *
+             * Unlike [frequency], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("frequency")
+            @ExcludeMissing
+            fun _frequency(): JsonField<Invoice.Frequency> = frequency
+
+            /**
+             * Returns the raw JSON value of [invoiceId].
+             *
+             * Unlike [invoiceId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("invoice_id")
+            @ExcludeMissing
+            fun _invoiceId(): JsonField<String> = invoiceId
+
+            /**
+             * Returns the raw JSON value of [refundIds].
+             *
+             * Unlike [refundIds], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("refund_ids")
+            @ExcludeMissing
+            fun _refundIds(): JsonField<List<String>> = refundIds
+
+            /**
+             * Returns the raw JSON value of [retryCount].
+             *
+             * Unlike [retryCount], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("retry_count")
+            @ExcludeMissing
+            fun _retryCount(): JsonField<Int> = retryCount
+
+            /**
+             * Returns the raw JSON value of [rowVersion].
+             *
+             * Unlike [rowVersion], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("row_version")
+            @ExcludeMissing
+            fun _rowVersion(): JsonField<Long> = rowVersion
+
+            /**
+             * Returns the raw JSON value of [status].
+             *
+             * Unlike [status], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("status") @ExcludeMissing fun _status(): JsonField<InvoiceStatus> = status
+
+            /**
+             * Returns the raw JSON value of [subscriptionIds].
+             *
+             * Unlike [subscriptionIds], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("subscription_ids")
+            @ExcludeMissing
+            fun _subscriptionIds(): JsonField<List<String>> = subscriptionIds
+
+            /**
+             * Returns the raw JSON value of [tags].
+             *
+             * Unlike [tags], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("tags") @ExcludeMissing fun _tags(): JsonField<List<Invoice.Tag>> = tags
+
+            /**
+             * Returns the raw JSON value of [tax].
+             *
+             * Unlike [tax], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("tax") @ExcludeMissing fun _tax(): JsonField<Int> = tax
+
+            /**
+             * Returns the raw JSON value of [totalAmount].
+             *
+             * Unlike [totalAmount], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("total_amount")
+            @ExcludeMissing
+            fun _totalAmount(): JsonField<Int> = totalAmount
+
+            /**
+             * Returns the raw JSON value of [collectionMethod].
+             *
+             * Unlike [collectionMethod], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("collection_method")
+            @ExcludeMissing
+            fun _collectionMethod(): JsonField<CollectionMethod> = collectionMethod
+
+            /**
+             * Returns the raw JSON value of [dueAt].
+             *
+             * Unlike [dueAt], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("due_at") @ExcludeMissing fun _dueAt(): JsonField<OffsetDateTime> = dueAt
+
+            /**
+             * Returns the raw JSON value of [dunningState].
+             *
+             * Unlike [dunningState], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("dunning_state")
+            @ExcludeMissing
+            fun _dunningState(): JsonField<DunningState> = dunningState
+
+            /**
+             * Returns the raw JSON value of [finalizedAt].
+             *
+             * Unlike [finalizedAt], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("finalized_at")
+            @ExcludeMissing
+            fun _finalizedAt(): JsonField<OffsetDateTime> = finalizedAt
+
+            /**
+             * Returns the raw JSON value of [hostedUrl].
+             *
+             * Unlike [hostedUrl], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("hosted_url")
+            @ExcludeMissing
+            fun _hostedUrl(): JsonField<String> = hostedUrl
+
+            /**
+             * Returns the raw JSON value of [lines].
+             *
+             * Unlike [lines], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("lines")
+            @ExcludeMissing
+            fun _lines(): JsonField<List<InvoiceLine>> = lines
+
+            /**
+             * Returns the raw JSON value of [memo].
+             *
+             * Unlike [memo], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("memo") @ExcludeMissing fun _memo(): JsonField<String> = memo
+
+            /**
+             * Returns the raw JSON value of [nextReminderAt].
+             *
+             * Unlike [nextReminderAt], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("next_reminder_at")
+            @ExcludeMissing
+            fun _nextReminderAt(): JsonField<OffsetDateTime> = nextReminderAt
+
+            /**
+             * Returns the raw JSON value of [nextRetryAt].
+             *
+             * Unlike [nextRetryAt], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("next_retry_at")
+            @ExcludeMissing
+            fun _nextRetryAt(): JsonField<OffsetDateTime> = nextRetryAt
+
+            /**
+             * Returns the raw JSON value of [paymentTermsDays].
+             *
+             * Unlike [paymentTermsDays], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("payment_terms_days")
+            @ExcludeMissing
+            fun _paymentTermsDays(): JsonField<Int> = paymentTermsDays
+
+            /**
+             * Returns the raw JSON value of [payments].
+             *
+             * Unlike [payments], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("payments")
+            @ExcludeMissing
+            fun _payments(): JsonField<List<Invoice.Payment>> = payments
+
+            /**
+             * Returns the raw JSON value of [pdfUrl].
+             *
+             * Unlike [pdfUrl], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("pdf_url") @ExcludeMissing fun _pdfUrl(): JsonField<String> = pdfUrl
+
+            /**
+             * Returns the raw JSON value of [reminderSettings].
+             *
+             * Unlike [reminderSettings], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("reminder_settings")
+            @ExcludeMissing
+            fun _reminderSettings(): JsonField<Invoice.ReminderSettings> = reminderSettings
+
+            /**
+             * Returns the raw JSON value of [reviewDeadline].
+             *
+             * Unlike [reviewDeadline], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("review_deadline")
+            @ExcludeMissing
+            fun _reviewDeadline(): JsonField<OffsetDateTime> = reviewDeadline
+
+            /**
+             * Returns the raw JSON value of [sentAt].
+             *
+             * Unlike [sentAt], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("sent_at")
+            @ExcludeMissing
+            fun _sentAt(): JsonField<OffsetDateTime> = sentAt
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of [Invoice].
+                 *
+                 * The following fields are required:
+                 * ```kotlin
+                 * .allowedActions()
+                 * .amountDue()
+                 * .amountPaid()
+                 * .amountRefunded()
+                 * .billingMode()
+                 * .businessId()
+                 * .createdAt()
+                 * .credits()
+                 * .currency()
+                 * .customer()
+                 * .discountIds()
+                 * .editableFields()
+                 * .frequency()
+                 * .invoiceId()
+                 * .metadata()
+                 * .refundIds()
+                 * .retryCount()
+                 * .rowVersion()
+                 * .status()
+                 * .subscriptionIds()
+                 * .tags()
+                 * .tax()
+                 * .totalAmount()
+                 * ```
+                 */
+                fun builder() = Builder()
+            }
+
+            /** A builder for [Invoice]. */
+            class Builder internal constructor() {
+
+                private var allowedActions: JsonField<MutableList<Invoice.AllowedAction>>? = null
+                private var amountDue: JsonField<Long>? = null
+                private var amountPaid: JsonField<Long>? = null
+                private var amountRefunded: JsonField<Long>? = null
+                private var billingMode: JsonField<Invoice.BillingMode>? = null
+                private var businessId: JsonField<String>? = null
+                private var createdAt: JsonField<OffsetDateTime>? = null
+                private var credits: JsonField<Long>? = null
+                private var currency: JsonField<Currency>? = null
+                private var customer: JsonField<Invoice.Customer>? = null
+                private var discountIds: JsonField<MutableList<String>>? = null
+                private var editableFields: JsonField<MutableList<Invoice.EditableField>>? = null
+                private var frequency: JsonField<Invoice.Frequency>? = null
+                private var invoiceId: JsonField<String>? = null
+                private var metadata: JsonValue? = null
+                private var refundIds: JsonField<MutableList<String>>? = null
+                private var retryCount: JsonField<Int>? = null
+                private var rowVersion: JsonField<Long>? = null
+                private var status: JsonField<InvoiceStatus>? = null
+                private var subscriptionIds: JsonField<MutableList<String>>? = null
+                private var tags: JsonField<MutableList<Invoice.Tag>>? = null
+                private var tax: JsonField<Int>? = null
+                private var totalAmount: JsonField<Int>? = null
+                private var collectionMethod: JsonField<CollectionMethod> = JsonMissing.of()
+                private var dueAt: JsonField<OffsetDateTime> = JsonMissing.of()
+                private var dunningState: JsonField<DunningState> = JsonMissing.of()
+                private var finalizedAt: JsonField<OffsetDateTime> = JsonMissing.of()
+                private var hostedUrl: JsonField<String> = JsonMissing.of()
+                private var lines: JsonField<MutableList<InvoiceLine>>? = null
+                private var memo: JsonField<String> = JsonMissing.of()
+                private var nextReminderAt: JsonField<OffsetDateTime> = JsonMissing.of()
+                private var nextRetryAt: JsonField<OffsetDateTime> = JsonMissing.of()
+                private var paymentTermsDays: JsonField<Int> = JsonMissing.of()
+                private var payments: JsonField<MutableList<Invoice.Payment>>? = null
+                private var pdfUrl: JsonField<String> = JsonMissing.of()
+                private var reminderSettings: JsonField<Invoice.ReminderSettings> = JsonMissing.of()
+                private var reviewDeadline: JsonField<OffsetDateTime> = JsonMissing.of()
+                private var sentAt: JsonField<OffsetDateTime> = JsonMissing.of()
+                private var payloadType: JsonValue = JsonValue.from("Invoice")
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                internal fun from(invoice: Invoice) = apply {
+                    allowedActions = invoice.allowedActions.map { it.toMutableList() }
+                    amountDue = invoice.amountDue
+                    amountPaid = invoice.amountPaid
+                    amountRefunded = invoice.amountRefunded
+                    billingMode = invoice.billingMode
+                    businessId = invoice.businessId
+                    createdAt = invoice.createdAt
+                    credits = invoice.credits
+                    currency = invoice.currency
+                    customer = invoice.customer
+                    discountIds = invoice.discountIds.map { it.toMutableList() }
+                    editableFields = invoice.editableFields.map { it.toMutableList() }
+                    frequency = invoice.frequency
+                    invoiceId = invoice.invoiceId
+                    metadata = invoice.metadata
+                    refundIds = invoice.refundIds.map { it.toMutableList() }
+                    retryCount = invoice.retryCount
+                    rowVersion = invoice.rowVersion
+                    status = invoice.status
+                    subscriptionIds = invoice.subscriptionIds.map { it.toMutableList() }
+                    tags = invoice.tags.map { it.toMutableList() }
+                    tax = invoice.tax
+                    totalAmount = invoice.totalAmount
+                    collectionMethod = invoice.collectionMethod
+                    dueAt = invoice.dueAt
+                    dunningState = invoice.dunningState
+                    finalizedAt = invoice.finalizedAt
+                    hostedUrl = invoice.hostedUrl
+                    lines = invoice.lines.map { it.toMutableList() }
+                    memo = invoice.memo
+                    nextReminderAt = invoice.nextReminderAt
+                    nextRetryAt = invoice.nextRetryAt
+                    paymentTermsDays = invoice.paymentTermsDays
+                    payments = invoice.payments.map { it.toMutableList() }
+                    pdfUrl = invoice.pdfUrl
+                    reminderSettings = invoice.reminderSettings
+                    reviewDeadline = invoice.reviewDeadline
+                    sentAt = invoice.sentAt
+                    payloadType = invoice.payloadType
+                    additionalProperties = invoice.additionalProperties.toMutableMap()
+                }
+
+                /** The actions that the current status accepts. */
+                fun allowedActions(allowedActions: List<Invoice.AllowedAction>) =
+                    allowedActions(JsonField.of(allowedActions))
+
+                /**
+                 * Sets [Builder.allowedActions] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.allowedActions] with a well-typed
+                 * `List<Invoice.AllowedAction>` value instead. This method is primarily for setting
+                 * the field to an undocumented or not yet supported value.
+                 */
+                fun allowedActions(allowedActions: JsonField<List<Invoice.AllowedAction>>) = apply {
+                    this.allowedActions = allowedActions.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [Invoice.AllowedAction] to [allowedActions].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addAllowedAction(allowedAction: Invoice.AllowedAction) = apply {
+                    allowedActions =
+                        (allowedActions ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("allowedActions", it).add(allowedAction)
+                        }
+                }
+
+                /**
+                 * The amount that the customer must pay. Zero unless the invoice is open or past
+                 * due.
+                 */
+                fun amountDue(amountDue: Long) = amountDue(JsonField.of(amountDue))
+
+                /**
+                 * Sets [Builder.amountDue] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.amountDue] with a well-typed [Long] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun amountDue(amountDue: JsonField<Long>) = apply { this.amountDue = amountDue }
+
+                /**
+                 * The sum of the succeeded payments, in the smallest currency unit. A late payment
+                 * is not included after its late refund.
+                 */
+                fun amountPaid(amountPaid: Long) = amountPaid(JsonField.of(amountPaid))
+
+                /**
+                 * Sets [Builder.amountPaid] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.amountPaid] with a well-typed [Long] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun amountPaid(amountPaid: JsonField<Long>) = apply { this.amountPaid = amountPaid }
+
+                /**
+                 * The sum of the succeeded refunds, in the currency of each payment. The late
+                 * refund of a late payment is not included.
+                 */
+                fun amountRefunded(amountRefunded: Long) =
+                    amountRefunded(JsonField.of(amountRefunded))
+
+                /**
+                 * Sets [Builder.amountRefunded] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.amountRefunded] with a well-typed [Long] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun amountRefunded(amountRefunded: JsonField<Long>) = apply {
+                    this.amountRefunded = amountRefunded
+                }
+
+                fun billingMode(billingMode: Invoice.BillingMode) =
+                    billingMode(JsonField.of(billingMode))
+
+                /**
+                 * Sets [Builder.billingMode] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.billingMode] with a well-typed
+                 * [Invoice.BillingMode] value instead. This method is primarily for setting the
+                 * field to an undocumented or not yet supported value.
+                 */
+                fun billingMode(billingMode: JsonField<Invoice.BillingMode>) = apply {
+                    this.billingMode = billingMode
+                }
+
+                fun businessId(businessId: String) = businessId(JsonField.of(businessId))
+
+                /**
+                 * Sets [Builder.businessId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.businessId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun businessId(businessId: JsonField<String>) = apply {
+                    this.businessId = businessId
+                }
+
+                fun createdAt(createdAt: OffsetDateTime) = createdAt(JsonField.of(createdAt))
+
+                /**
+                 * Sets [Builder.createdAt] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply {
+                    this.createdAt = createdAt
+                }
+
+                /**
+                 * Customer credits applied at finalise, in the smallest currency unit. Zero or
+                 * less.
+                 */
+                fun credits(credits: Long) = credits(JsonField.of(credits))
+
+                /**
+                 * Sets [Builder.credits] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.credits] with a well-typed [Long] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
+                fun credits(credits: JsonField<Long>) = apply { this.credits = credits }
+
+                fun currency(currency: Currency) = currency(JsonField.of(currency))
+
+                /**
+                 * Sets [Builder.currency] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.currency] with a well-typed [Currency] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun currency(currency: JsonField<Currency>) = apply { this.currency = currency }
+
+                fun customer(customer: Invoice.Customer) = customer(JsonField.of(customer))
+
+                /**
+                 * Sets [Builder.customer] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.customer] with a well-typed [Invoice.Customer]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun customer(customer: JsonField<Invoice.Customer>) = apply {
+                    this.customer = customer
+                }
+
+                /** The discount codes of the invoice. */
+                fun discountIds(discountIds: List<String>) = discountIds(JsonField.of(discountIds))
+
+                /**
+                 * Sets [Builder.discountIds] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.discountIds] with a well-typed `List<String>`
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun discountIds(discountIds: JsonField<List<String>>) = apply {
+                    this.discountIds = discountIds.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [String] to [discountIds].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addDiscountId(discountId: String) = apply {
+                    discountIds =
+                        (discountIds ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("discountIds", it).add(discountId)
+                        }
+                }
+
+                /** The fields that `PATCH` can change in the current status. */
+                fun editableFields(editableFields: List<Invoice.EditableField>) =
+                    editableFields(JsonField.of(editableFields))
+
+                /**
+                 * Sets [Builder.editableFields] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.editableFields] with a well-typed
+                 * `List<Invoice.EditableField>` value instead. This method is primarily for setting
+                 * the field to an undocumented or not yet supported value.
+                 */
+                fun editableFields(editableFields: JsonField<List<Invoice.EditableField>>) = apply {
+                    this.editableFields = editableFields.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [Invoice.EditableField] to [editableFields].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addEditableField(editableField: Invoice.EditableField) = apply {
+                    editableFields =
+                        (editableFields ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("editableFields", it).add(editableField)
+                        }
+                }
+
+                /**
+                 * How often the invoice lines bill. `mixed` covers several intervals, or one-time
+                 * lines next to a plan.
+                 */
+                fun frequency(frequency: Invoice.Frequency) = frequency(JsonField.of(frequency))
+
+                /**
+                 * Sets [Builder.frequency] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.frequency] with a well-typed [Invoice.Frequency]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun frequency(frequency: JsonField<Invoice.Frequency>) = apply {
+                    this.frequency = frequency
+                }
+
+                /** Alias for calling [frequency] with `Invoice.Frequency.ofObject()`. */
+                fun frequencyObject() = frequency(Invoice.Frequency.ofObject())
+
+                /**
+                 * Alias for calling [frequency] with
+                 * `Invoice.Frequency.ofUnionMember1(unionMember1)`.
+                 */
+                fun frequency(unionMember1: Invoice.Frequency.UnionMember1) =
+                    frequency(Invoice.Frequency.ofUnionMember1(unionMember1))
+
+                /** Alias for calling [frequency] with `Invoice.Frequency.ofObject()`. */
+                fun frequencyObject() = frequency(Invoice.Frequency.ofObject())
+
+                fun invoiceId(invoiceId: String) = invoiceId(JsonField.of(invoiceId))
+
+                /**
+                 * Sets [Builder.invoiceId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.invoiceId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun invoiceId(invoiceId: JsonField<String>) = apply { this.invoiceId = invoiceId }
+
+                fun metadata(metadata: JsonValue) = apply { this.metadata = metadata }
+
+                fun refundIds(refundIds: List<String>) = refundIds(JsonField.of(refundIds))
+
+                /**
+                 * Sets [Builder.refundIds] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.refundIds] with a well-typed `List<String>`
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun refundIds(refundIds: JsonField<List<String>>) = apply {
+                    this.refundIds = refundIds.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [String] to [refundIds].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addRefundId(refundId: String) = apply {
+                    refundIds =
+                        (refundIds ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("refundIds", it).add(refundId)
+                        }
+                }
+
+                /** The number of failed automatic charges. */
+                fun retryCount(retryCount: Int) = retryCount(JsonField.of(retryCount))
+
+                /**
+                 * Sets [Builder.retryCount] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.retryCount] with a well-typed [Int] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun retryCount(retryCount: JsonField<Int>) = apply { this.retryCount = retryCount }
+
+                /** Goes up by one on each change. Use it to ignore an older webhook delivery. */
+                fun rowVersion(rowVersion: Long) = rowVersion(JsonField.of(rowVersion))
+
+                /**
+                 * Sets [Builder.rowVersion] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.rowVersion] with a well-typed [Long] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun rowVersion(rowVersion: JsonField<Long>) = apply { this.rowVersion = rowVersion }
+
+                /** The `message` of each variant is the label of the invoice document. */
+                fun status(status: InvoiceStatus) = status(JsonField.of(status))
+
+                /**
+                 * Sets [Builder.status] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.status] with a well-typed [InvoiceStatus] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun status(status: JsonField<InvoiceStatus>) = apply { this.status = status }
+
+                fun subscriptionIds(subscriptionIds: List<String>) =
+                    subscriptionIds(JsonField.of(subscriptionIds))
+
+                /**
+                 * Sets [Builder.subscriptionIds] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.subscriptionIds] with a well-typed
+                 * `List<String>` value instead. This method is primarily for setting the field to
+                 * an undocumented or not yet supported value.
+                 */
+                fun subscriptionIds(subscriptionIds: JsonField<List<String>>) = apply {
+                    this.subscriptionIds = subscriptionIds.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [String] to [subscriptionIds].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addSubscriptionId(subscriptionId: String) = apply {
+                    subscriptionIds =
+                        (subscriptionIds ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("subscriptionIds", it).add(subscriptionId)
+                        }
+                }
+
+                fun tags(tags: List<Invoice.Tag>) = tags(JsonField.of(tags))
+
+                /**
+                 * Sets [Builder.tags] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.tags] with a well-typed `List<Invoice.Tag>`
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun tags(tags: JsonField<List<Invoice.Tag>>) = apply {
+                    this.tags = tags.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [Invoice.Tag] to [tags].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addTag(tag: Invoice.Tag) = apply {
+                    tags =
+                        (tags ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("tags", it).add(tag)
+                        }
+                }
+
+                /** Tax in the smallest currency unit. */
+                fun tax(tax: Int) = tax(JsonField.of(tax))
+
+                /**
+                 * Sets [Builder.tax] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.tax] with a well-typed [Int] value instead. This
+                 * method is primarily for setting the field to an undocumented or not yet supported
+                 * value.
+                 */
+                fun tax(tax: JsonField<Int>) = apply { this.tax = tax }
+
+                /** Total with tax, before credits, in the smallest currency unit. */
+                fun totalAmount(totalAmount: Int) = totalAmount(JsonField.of(totalAmount))
+
+                /**
+                 * Sets [Builder.totalAmount] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.totalAmount] with a well-typed [Int] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun totalAmount(totalAmount: JsonField<Int>) = apply {
+                    this.totalAmount = totalAmount
+                }
+
+                fun collectionMethod(collectionMethod: CollectionMethod?) =
+                    collectionMethod(JsonField.ofNullable(collectionMethod))
+
+                /**
+                 * Sets [Builder.collectionMethod] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.collectionMethod] with a well-typed
+                 * [CollectionMethod] value instead. This method is primarily for setting the field
+                 * to an undocumented or not yet supported value.
+                 */
+                fun collectionMethod(collectionMethod: JsonField<CollectionMethod>) = apply {
+                    this.collectionMethod = collectionMethod
+                }
+
+                fun dueAt(dueAt: OffsetDateTime?) = dueAt(JsonField.ofNullable(dueAt))
+
+                /**
+                 * Sets [Builder.dueAt] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.dueAt] with a well-typed [OffsetDateTime] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun dueAt(dueAt: JsonField<OffsetDateTime>) = apply { this.dueAt = dueAt }
+
+                /**
+                 * `null` for an invoice that has no collection: draft, paid, void or uncollectable.
+                 */
+                fun dunningState(dunningState: DunningState?) =
+                    dunningState(JsonField.ofNullable(dunningState))
+
+                /**
+                 * Sets [Builder.dunningState] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.dunningState] with a well-typed [DunningState]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun dunningState(dunningState: JsonField<DunningState>) = apply {
+                    this.dunningState = dunningState
+                }
+
+                fun finalizedAt(finalizedAt: OffsetDateTime?) =
+                    finalizedAt(JsonField.ofNullable(finalizedAt))
+
+                /**
+                 * Sets [Builder.finalizedAt] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.finalizedAt] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun finalizedAt(finalizedAt: JsonField<OffsetDateTime>) = apply {
+                    this.finalizedAt = finalizedAt
+                }
+
+                /** The page where the customer pays. `null` until the invoice is sent. */
+                fun hostedUrl(hostedUrl: String?) = hostedUrl(JsonField.ofNullable(hostedUrl))
+
+                /**
+                 * Sets [Builder.hostedUrl] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.hostedUrl] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun hostedUrl(hostedUrl: JsonField<String>) = apply { this.hostedUrl = hostedUrl }
+
+                /** Only on a single invoice. A list leaves it out. */
+                fun lines(lines: List<InvoiceLine>?) = lines(JsonField.ofNullable(lines))
+
+                /**
+                 * Sets [Builder.lines] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.lines] with a well-typed `List<InvoiceLine>`
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun lines(lines: JsonField<List<InvoiceLine>>) = apply {
+                    this.lines = lines.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [InvoiceLine] to [lines].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addLine(line: InvoiceLine) = apply {
+                    lines =
+                        (lines ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("lines", it).add(line)
+                        }
+                }
+
+                fun memo(memo: String?) = memo(JsonField.ofNullable(memo))
+
+                /**
+                 * Sets [Builder.memo] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.memo] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
+                fun memo(memo: JsonField<String>) = apply { this.memo = memo }
+
+                /**
+                 * The time of the next reminder email to the customer, before or after the due
+                 * date. `null` when no reminder email will go out.
+                 */
+                fun nextReminderAt(nextReminderAt: OffsetDateTime?) =
+                    nextReminderAt(JsonField.ofNullable(nextReminderAt))
+
+                /**
+                 * Sets [Builder.nextReminderAt] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.nextReminderAt] with a well-typed
+                 * [OffsetDateTime] value instead. This method is primarily for setting the field to
+                 * an undocumented or not yet supported value.
+                 */
+                fun nextReminderAt(nextReminderAt: JsonField<OffsetDateTime>) = apply {
+                    this.nextReminderAt = nextReminderAt
+                }
+
+                fun nextRetryAt(nextRetryAt: OffsetDateTime?) =
+                    nextRetryAt(JsonField.ofNullable(nextRetryAt))
+
+                /**
+                 * Sets [Builder.nextRetryAt] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.nextRetryAt] with a well-typed [OffsetDateTime]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun nextRetryAt(nextRetryAt: JsonField<OffsetDateTime>) = apply {
+                    this.nextRetryAt = nextRetryAt
+                }
+
+                /**
+                 * Days from finalise to the due date. `null` when the invoice has a custom due
+                 * date.
+                 */
+                fun paymentTermsDays(paymentTermsDays: Int?) =
+                    paymentTermsDays(JsonField.ofNullable(paymentTermsDays))
+
+                /**
+                 * Alias for [Builder.paymentTermsDays].
+                 *
+                 * This unboxed primitive overload exists for backwards compatibility.
+                 */
+                fun paymentTermsDays(paymentTermsDays: Int) =
+                    paymentTermsDays(paymentTermsDays as Int?)
+
+                /**
+                 * Sets [Builder.paymentTermsDays] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.paymentTermsDays] with a well-typed [Int] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun paymentTermsDays(paymentTermsDays: JsonField<Int>) = apply {
+                    this.paymentTermsDays = paymentTermsDays
+                }
+
+                /** Only on a single invoice. A list leaves it out. */
+                fun payments(payments: List<Invoice.Payment>?) =
+                    payments(JsonField.ofNullable(payments))
+
+                /**
+                 * Sets [Builder.payments] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.payments] with a well-typed
+                 * `List<Invoice.Payment>` value instead. This method is primarily for setting the
+                 * field to an undocumented or not yet supported value.
+                 */
+                fun payments(payments: JsonField<List<Invoice.Payment>>) = apply {
+                    this.payments = payments.map { it.toMutableList() }
+                }
+
+                /**
+                 * Adds a single [Invoice.Payment] to [payments].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
+                fun addPayment(payment: Invoice.Payment) = apply {
+                    payments =
+                        (payments ?: JsonField.of(mutableListOf())).also {
+                            checkKnown("payments", it).add(payment)
+                        }
+                }
+
+                fun pdfUrl(pdfUrl: String?) = pdfUrl(JsonField.ofNullable(pdfUrl))
+
+                /**
+                 * Sets [Builder.pdfUrl] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.pdfUrl] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun pdfUrl(pdfUrl: JsonField<String>) = apply { this.pdfUrl = pdfUrl }
+
+                /** `null` on a draft that keeps all reminder settings of the business. */
+                fun reminderSettings(reminderSettings: Invoice.ReminderSettings?) =
+                    reminderSettings(JsonField.ofNullable(reminderSettings))
+
+                /**
+                 * Sets [Builder.reminderSettings] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.reminderSettings] with a well-typed
+                 * [Invoice.ReminderSettings] value instead. This method is primarily for setting
+                 * the field to an undocumented or not yet supported value.
+                 */
+                fun reminderSettings(reminderSettings: JsonField<Invoice.ReminderSettings>) =
+                    apply {
+                        this.reminderSettings = reminderSettings
+                    }
+
+                /**
+                 * Alias for calling [reminderSettings] with
+                 * `Invoice.ReminderSettings.ofUnionMember0(unionMember0)`.
+                 */
+                fun reminderSettings(unionMember0: Invoice.ReminderSettings.UnionMember0) =
+                    reminderSettings(Invoice.ReminderSettings.ofUnionMember0(unionMember0))
+
+                /**
+                 * Alias for calling [reminderSettings] with
+                 * `Invoice.ReminderSettings.ofUnionMember1(unionMember1)`.
+                 */
+                fun reminderSettings(unionMember1: Invoice.ReminderSettings.UnionMember1) =
+                    reminderSettings(Invoice.ReminderSettings.ofUnionMember1(unionMember1))
+
+                /** The time at which a draft that waits for review finalises. */
+                fun reviewDeadline(reviewDeadline: OffsetDateTime?) =
+                    reviewDeadline(JsonField.ofNullable(reviewDeadline))
+
+                /**
+                 * Sets [Builder.reviewDeadline] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.reviewDeadline] with a well-typed
+                 * [OffsetDateTime] value instead. This method is primarily for setting the field to
+                 * an undocumented or not yet supported value.
+                 */
+                fun reviewDeadline(reviewDeadline: JsonField<OffsetDateTime>) = apply {
+                    this.reviewDeadline = reviewDeadline
+                }
+
+                fun sentAt(sentAt: OffsetDateTime?) = sentAt(JsonField.ofNullable(sentAt))
+
+                /**
+                 * Sets [Builder.sentAt] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.sentAt] with a well-typed [OffsetDateTime] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun sentAt(sentAt: JsonField<OffsetDateTime>) = apply { this.sentAt = sentAt }
+
+                /**
+                 * Sets the field to an arbitrary JSON value.
+                 *
+                 * It is usually unnecessary to call this method because the field defaults to the
+                 * following:
+                 * ```kotlin
+                 * JsonValue.from("Invoice")
+                 * ```
+                 *
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
+                fun payloadType(payloadType: JsonValue) = apply { this.payloadType = payloadType }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Invoice].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```kotlin
+                 * .allowedActions()
+                 * .amountDue()
+                 * .amountPaid()
+                 * .amountRefunded()
+                 * .billingMode()
+                 * .businessId()
+                 * .createdAt()
+                 * .credits()
+                 * .currency()
+                 * .customer()
+                 * .discountIds()
+                 * .editableFields()
+                 * .frequency()
+                 * .invoiceId()
+                 * .metadata()
+                 * .refundIds()
+                 * .retryCount()
+                 * .rowVersion()
+                 * .status()
+                 * .subscriptionIds()
+                 * .tags()
+                 * .tax()
+                 * .totalAmount()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
+                fun build(): Invoice =
+                    Invoice(
+                        checkRequired("allowedActions", allowedActions).map { it.toImmutable() },
+                        checkRequired("amountDue", amountDue),
+                        checkRequired("amountPaid", amountPaid),
+                        checkRequired("amountRefunded", amountRefunded),
+                        checkRequired("billingMode", billingMode),
+                        checkRequired("businessId", businessId),
+                        checkRequired("createdAt", createdAt),
+                        checkRequired("credits", credits),
+                        checkRequired("currency", currency),
+                        checkRequired("customer", customer),
+                        checkRequired("discountIds", discountIds).map { it.toImmutable() },
+                        checkRequired("editableFields", editableFields).map { it.toImmutable() },
+                        checkRequired("frequency", frequency),
+                        checkRequired("invoiceId", invoiceId),
+                        checkRequired("metadata", metadata),
+                        checkRequired("refundIds", refundIds).map { it.toImmutable() },
+                        checkRequired("retryCount", retryCount),
+                        checkRequired("rowVersion", rowVersion),
+                        checkRequired("status", status),
+                        checkRequired("subscriptionIds", subscriptionIds).map { it.toImmutable() },
+                        checkRequired("tags", tags).map { it.toImmutable() },
+                        checkRequired("tax", tax),
+                        checkRequired("totalAmount", totalAmount),
+                        collectionMethod,
+                        dueAt,
+                        dunningState,
+                        finalizedAt,
+                        hostedUrl,
+                        (lines ?: JsonMissing.of()).map { it.toImmutable() },
+                        memo,
+                        nextReminderAt,
+                        nextRetryAt,
+                        paymentTermsDays,
+                        (payments ?: JsonMissing.of()).map { it.toImmutable() },
+                        pdfUrl,
+                        reminderSettings,
+                        reviewDeadline,
+                        sentAt,
+                        payloadType,
+                        additionalProperties.toMutableMap(),
+                    )
+            }
+
+            private var validated: Boolean = false
+
+            /**
+             * Validates that the types of all values in this object match their expected types
+             * recursively.
+             *
+             * This method is _not_ forwards compatible with new types from the API for existing
+             * fields.
+             *
+             * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
+             *   match its expected type.
+             */
+            fun validate(): Invoice = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                allowedActions().forEach { it.validate() }
+                amountDue()
+                amountPaid()
+                amountRefunded()
+                billingMode().validate()
+                businessId()
+                createdAt()
+                credits()
+                currency().validate()
+                customer().validate()
+                discountIds()
+                editableFields().forEach { it.validate() }
+                frequency().validate()
+                invoiceId()
+                refundIds()
+                retryCount()
+                rowVersion()
+                status().validate()
+                subscriptionIds()
+                tags().forEach { it.validate() }
+                tax()
+                totalAmount()
+                collectionMethod()?.validate()
+                dueAt()
+                dunningState()?.validate()
+                finalizedAt()
+                hostedUrl()
+                lines()?.forEach { it.validate() }
+                memo()
+                nextReminderAt()
+                nextRetryAt()
+                paymentTermsDays()
+                payments()?.forEach { it.validate() }
+                pdfUrl()
+                reminderSettings()?.validate()
+                reviewDeadline()
+                sentAt()
+                _payloadType().let {
+                    if (it != JsonValue.from("Invoice")) {
+                        throw DodoPaymentsInvalidDataException(
+                            "'payloadType' is invalid, received $it"
+                        )
+                    }
+                }
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: DodoPaymentsInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            internal fun validity(): Int =
+                (allowedActions.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                    (if (amountDue.asKnown() == null) 0 else 1) +
+                    (if (amountPaid.asKnown() == null) 0 else 1) +
+                    (if (amountRefunded.asKnown() == null) 0 else 1) +
+                    (billingMode.asKnown()?.validity() ?: 0) +
+                    (if (businessId.asKnown() == null) 0 else 1) +
+                    (if (createdAt.asKnown() == null) 0 else 1) +
+                    (if (credits.asKnown() == null) 0 else 1) +
+                    (currency.asKnown()?.validity() ?: 0) +
+                    (customer.asKnown()?.validity() ?: 0) +
+                    (discountIds.asKnown()?.size ?: 0) +
+                    (editableFields.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                    (frequency.asKnown()?.validity() ?: 0) +
+                    (if (invoiceId.asKnown() == null) 0 else 1) +
+                    (refundIds.asKnown()?.size ?: 0) +
+                    (if (retryCount.asKnown() == null) 0 else 1) +
+                    (if (rowVersion.asKnown() == null) 0 else 1) +
+                    (status.asKnown()?.validity() ?: 0) +
+                    (subscriptionIds.asKnown()?.size ?: 0) +
+                    (tags.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                    (if (tax.asKnown() == null) 0 else 1) +
+                    (if (totalAmount.asKnown() == null) 0 else 1) +
+                    (collectionMethod.asKnown()?.validity() ?: 0) +
+                    (if (dueAt.asKnown() == null) 0 else 1) +
+                    (dunningState.asKnown()?.validity() ?: 0) +
+                    (if (finalizedAt.asKnown() == null) 0 else 1) +
+                    (if (hostedUrl.asKnown() == null) 0 else 1) +
+                    (lines.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                    (if (memo.asKnown() == null) 0 else 1) +
+                    (if (nextReminderAt.asKnown() == null) 0 else 1) +
+                    (if (nextRetryAt.asKnown() == null) 0 else 1) +
+                    (if (paymentTermsDays.asKnown() == null) 0 else 1) +
+                    (payments.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
+                    (if (pdfUrl.asKnown() == null) 0 else 1) +
+                    (reminderSettings.asKnown()?.validity() ?: 0) +
+                    (if (reviewDeadline.asKnown() == null) 0 else 1) +
+                    (if (sentAt.asKnown() == null) 0 else 1) +
+                    payloadType.let { if (it == JsonValue.from("Invoice")) 1 else 0 }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return other is Invoice &&
+                    allowedActions == other.allowedActions &&
+                    amountDue == other.amountDue &&
+                    amountPaid == other.amountPaid &&
+                    amountRefunded == other.amountRefunded &&
+                    billingMode == other.billingMode &&
+                    businessId == other.businessId &&
+                    createdAt == other.createdAt &&
+                    credits == other.credits &&
+                    currency == other.currency &&
+                    customer == other.customer &&
+                    discountIds == other.discountIds &&
+                    editableFields == other.editableFields &&
+                    frequency == other.frequency &&
+                    invoiceId == other.invoiceId &&
+                    metadata == other.metadata &&
+                    refundIds == other.refundIds &&
+                    retryCount == other.retryCount &&
+                    rowVersion == other.rowVersion &&
+                    status == other.status &&
+                    subscriptionIds == other.subscriptionIds &&
+                    tags == other.tags &&
+                    tax == other.tax &&
+                    totalAmount == other.totalAmount &&
+                    collectionMethod == other.collectionMethod &&
+                    dueAt == other.dueAt &&
+                    dunningState == other.dunningState &&
+                    finalizedAt == other.finalizedAt &&
+                    hostedUrl == other.hostedUrl &&
+                    lines == other.lines &&
+                    memo == other.memo &&
+                    nextReminderAt == other.nextReminderAt &&
+                    nextRetryAt == other.nextRetryAt &&
+                    paymentTermsDays == other.paymentTermsDays &&
+                    payments == other.payments &&
+                    pdfUrl == other.pdfUrl &&
+                    reminderSettings == other.reminderSettings &&
+                    reviewDeadline == other.reviewDeadline &&
+                    sentAt == other.sentAt &&
+                    payloadType == other.payloadType &&
+                    additionalProperties == other.additionalProperties
+            }
+
+            private val hashCode: Int by lazy {
+                Objects.hash(
+                    allowedActions,
+                    amountDue,
+                    amountPaid,
+                    amountRefunded,
+                    billingMode,
+                    businessId,
+                    createdAt,
+                    credits,
+                    currency,
+                    customer,
+                    discountIds,
+                    editableFields,
+                    frequency,
+                    invoiceId,
+                    metadata,
+                    refundIds,
+                    retryCount,
+                    rowVersion,
+                    status,
+                    subscriptionIds,
+                    tags,
+                    tax,
+                    totalAmount,
+                    collectionMethod,
+                    dueAt,
+                    dunningState,
+                    finalizedAt,
+                    hostedUrl,
+                    lines,
+                    memo,
+                    nextReminderAt,
+                    nextRetryAt,
+                    paymentTermsDays,
+                    payments,
+                    pdfUrl,
+                    reminderSettings,
+                    reviewDeadline,
+                    sentAt,
+                    payloadType,
+                    additionalProperties,
+                )
+            }
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() =
+                "Invoice{allowedActions=$allowedActions, amountDue=$amountDue, amountPaid=$amountPaid, amountRefunded=$amountRefunded, billingMode=$billingMode, businessId=$businessId, createdAt=$createdAt, credits=$credits, currency=$currency, customer=$customer, discountIds=$discountIds, editableFields=$editableFields, frequency=$frequency, invoiceId=$invoiceId, metadata=$metadata, refundIds=$refundIds, retryCount=$retryCount, rowVersion=$rowVersion, status=$status, subscriptionIds=$subscriptionIds, tags=$tags, tax=$tax, totalAmount=$totalAmount, collectionMethod=$collectionMethod, dueAt=$dueAt, dunningState=$dunningState, finalizedAt=$finalizedAt, hostedUrl=$hostedUrl, lines=$lines, memo=$memo, nextReminderAt=$nextReminderAt, nextRetryAt=$nextRetryAt, paymentTermsDays=$paymentTermsDays, payments=$payments, pdfUrl=$pdfUrl, reminderSettings=$reminderSettings, reviewDeadline=$reviewDeadline, sentAt=$sentAt, payloadType=$payloadType, additionalProperties=$additionalProperties}"
         }
     }
 

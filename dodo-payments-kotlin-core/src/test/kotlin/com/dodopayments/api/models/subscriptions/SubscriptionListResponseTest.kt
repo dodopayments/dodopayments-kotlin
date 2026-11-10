@@ -4,6 +4,7 @@ package com.dodopayments.api.models.subscriptions
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.invoices.CollectionMethod
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.Metadata
@@ -29,6 +30,7 @@ internal class SubscriptionListResponseTest {
                         .zipcode("zipcode")
                         .build()
                 )
+                .billingMode(SubscriptionListResponse.BillingMode.NORMAL)
                 .cancelAtNextBillingDate(true)
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .currency(Currency.AED)
@@ -79,11 +81,13 @@ internal class SubscriptionListResponseTest {
                         .name("name")
                         .build()
                 )
+                .collectionMethod(CollectionMethod.AUTO_CHARGE)
                 .customerBusinessName("customer_business_name")
                 .discountCyclesRemaining(0)
                 .discountId("discount_id")
                 .pausedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .paymentMethodId("payment_method_id")
+                .paymentTermsDays(0)
                 .productName("product_name")
                 .scheduledChange(
                     ScheduledPlanChange.builder()
@@ -117,6 +121,8 @@ internal class SubscriptionListResponseTest {
                     .zipcode("zipcode")
                     .build()
             )
+        assertThat(subscriptionListResponse.billingMode())
+            .isEqualTo(SubscriptionListResponse.BillingMode.NORMAL)
         assertThat(subscriptionListResponse.cancelAtNextBillingDate()).isEqualTo(true)
         assertThat(subscriptionListResponse.createdAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -174,6 +180,8 @@ internal class SubscriptionListResponseTest {
                     .name("name")
                     .build()
             )
+        assertThat(subscriptionListResponse.collectionMethod())
+            .isEqualTo(CollectionMethod.AUTO_CHARGE)
         assertThat(subscriptionListResponse.customerBusinessName())
             .isEqualTo("customer_business_name")
         assertThat(subscriptionListResponse.discountCyclesRemaining()).isEqualTo(0)
@@ -181,6 +189,7 @@ internal class SubscriptionListResponseTest {
         assertThat(subscriptionListResponse.pausedAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(subscriptionListResponse.paymentMethodId()).isEqualTo("payment_method_id")
+        assertThat(subscriptionListResponse.paymentTermsDays()).isEqualTo(0)
         assertThat(subscriptionListResponse.productName()).isEqualTo("product_name")
         assertThat(subscriptionListResponse.scheduledChange())
             .isEqualTo(
@@ -219,6 +228,7 @@ internal class SubscriptionListResponseTest {
                         .zipcode("zipcode")
                         .build()
                 )
+                .billingMode(SubscriptionListResponse.BillingMode.NORMAL)
                 .cancelAtNextBillingDate(true)
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .currency(Currency.AED)
@@ -269,11 +279,13 @@ internal class SubscriptionListResponseTest {
                         .name("name")
                         .build()
                 )
+                .collectionMethod(CollectionMethod.AUTO_CHARGE)
                 .customerBusinessName("customer_business_name")
                 .discountCyclesRemaining(0)
                 .discountId("discount_id")
                 .pausedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .paymentMethodId("payment_method_id")
+                .paymentTermsDays(0)
                 .productName("product_name")
                 .scheduledChange(
                     ScheduledPlanChange.builder()

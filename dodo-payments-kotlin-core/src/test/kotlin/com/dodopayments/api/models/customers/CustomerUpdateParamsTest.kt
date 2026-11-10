@@ -3,7 +3,6 @@
 package com.dodopayments.api.models.customers
 
 import com.dodopayments.api.core.JsonValue
-import com.dodopayments.api.models.misc.Locale
 import com.dodopayments.api.models.misc.Metadata
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -20,7 +19,6 @@ internal class CustomerUpdateParamsTest {
             )
             .name("name")
             .phoneNumber("phone_number")
-            .preferredLocale(Locale.AR)
             .build()
     }
 
@@ -46,7 +44,6 @@ internal class CustomerUpdateParamsTest {
                 )
                 .name("name")
                 .phoneNumber("phone_number")
-                .preferredLocale(Locale.AR)
                 .build()
 
         val body = params._body()
@@ -58,7 +55,6 @@ internal class CustomerUpdateParamsTest {
             )
         assertThat(body.name()).isEqualTo("name")
         assertThat(body.phoneNumber()).isEqualTo("phone_number")
-        assertThat(body.preferredLocale()).isEqualTo(Locale.AR)
     }
 
     @Test

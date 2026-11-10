@@ -17,6 +17,7 @@ import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.core.http.json
 import com.dodopayments.api.core.http.parseable
 import com.dodopayments.api.core.prepareAsync
+import com.dodopayments.api.models.invoices.Invoice
 import com.dodopayments.api.models.subscriptions.Subscription
 import com.dodopayments.api.models.subscriptions.SubscriptionCancelChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChangePlanParams
@@ -33,6 +34,7 @@ import com.dodopayments.api.models.subscriptions.SubscriptionPreviewChangePlanRe
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveCreditUsageParams
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveCreditUsageResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveParams
+import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUpcomingInvoiceParams
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryPageAsync
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryPageResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryParams
@@ -116,6 +118,13 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
     ): SubscriptionRetrieveCreditUsageResponse =
         // get /subscriptions/{subscription_id}/credit-usage
         withRawResponse().retrieveCreditUsage(params, requestOptions).parse()
+
+    override suspend fun retrieveUpcomingInvoice(
+        params: SubscriptionRetrieveUpcomingInvoiceParams,
+        requestOptions: RequestOptions,
+    ): Invoice =
+        // get /subscriptions/{subscription_id}/upcoming-invoice
+        withRawResponse().retrieveUpcomingInvoice(params, requestOptions).parse()
 
     override suspend fun retrieveUsageHistory(
         params: SubscriptionRetrieveUsageHistoryParams,
@@ -417,6 +426,36 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
             return errorHandler.handle(response).parseable {
                 response
                     .use { retrieveCreditUsageHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val retrieveUpcomingInvoiceHandler: Handler<Invoice> =
+            jsonHandler<Invoice>(clientOptions.jsonMapper)
+
+        override suspend fun retrieveUpcomingInvoice(
+            params: SubscriptionRetrieveUpcomingInvoiceParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<Invoice> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("subscriptionId", params.subscriptionId())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("subscriptions", params._pathParam(0), "upcoming-invoice")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.executeAsync(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { retrieveUpcomingInvoiceHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()

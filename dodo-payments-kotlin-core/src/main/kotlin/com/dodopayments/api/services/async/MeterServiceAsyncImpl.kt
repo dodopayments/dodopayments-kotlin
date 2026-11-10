@@ -26,8 +26,6 @@ import com.dodopayments.api.models.meters.MeterListParams
 import com.dodopayments.api.models.meters.MeterRetrieveParams
 import com.dodopayments.api.models.meters.MeterUnarchiveParams
 import com.dodopayments.api.models.meters.MeterUpdateParams
-import com.dodopayments.api.services.async.meters.TranslationServiceAsync
-import com.dodopayments.api.services.async.meters.TranslationServiceAsyncImpl
 
 class MeterServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     MeterServiceAsync {
@@ -36,16 +34,10 @@ class MeterServiceAsyncImpl internal constructor(private val clientOptions: Clie
         WithRawResponseImpl(clientOptions)
     }
 
-    private val translations: TranslationServiceAsync by lazy {
-        TranslationServiceAsyncImpl(clientOptions)
-    }
-
     override fun withRawResponse(): MeterServiceAsync.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MeterServiceAsync =
         MeterServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
-
-    override fun translations(): TranslationServiceAsync = translations
 
     override suspend fun create(params: MeterCreateParams, requestOptions: RequestOptions): Meter =
         // post /meters
@@ -85,18 +77,12 @@ class MeterServiceAsyncImpl internal constructor(private val clientOptions: Clie
         private val errorHandler: Handler<HttpResponse> =
             errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
-        private val translations: TranslationServiceAsync.WithRawResponse by lazy {
-            TranslationServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
-
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): MeterServiceAsync.WithRawResponse =
             MeterServiceAsyncImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier).build()
             )
-
-        override fun translations(): TranslationServiceAsync.WithRawResponse = translations
 
         private val createHandler: Handler<Meter> = jsonHandler<Meter>(clientOptions.jsonMapper)
 
