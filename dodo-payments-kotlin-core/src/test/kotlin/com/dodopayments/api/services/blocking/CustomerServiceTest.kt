@@ -8,7 +8,6 @@ import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.customers.CustomerCreateParams
 import com.dodopayments.api.models.customers.CustomerDeletePaymentMethodParams
 import com.dodopayments.api.models.customers.CustomerUpdateParams
-import com.dodopayments.api.models.misc.Locale
 import com.dodopayments.api.models.misc.Metadata
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -36,7 +35,6 @@ internal class CustomerServiceTest {
                             .build()
                     )
                     .phoneNumber("phone_number")
-                    .preferredLocale(Locale.AR)
                     .build()
             )
 
@@ -78,7 +76,6 @@ internal class CustomerServiceTest {
                     )
                     .name("name")
                     .phoneNumber("phone_number")
-                    .preferredLocale(Locale.AR)
                     .build()
             )
 

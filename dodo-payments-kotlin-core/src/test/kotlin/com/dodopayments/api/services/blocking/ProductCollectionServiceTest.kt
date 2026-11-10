@@ -5,7 +5,6 @@ package com.dodopayments.api.services.blocking
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
 import com.dodopayments.api.models.productcollections.ProductCollectionCreateParams
-import com.dodopayments.api.models.productcollections.ProductCollectionRetrieveParams
 import com.dodopayments.api.models.productcollections.ProductCollectionUpdateImagesParams
 import com.dodopayments.api.models.productcollections.ProductCollectionUpdateParams
 import com.dodopayments.api.models.productcollections.groups.GroupProduct
@@ -70,13 +69,7 @@ internal class ProductCollectionServiceTest {
                 .build()
         val productCollectionService = client.productCollections()
 
-        val productCollection =
-            productCollectionService.retrieve(
-                ProductCollectionRetrieveParams.builder()
-                    .id("pdc_8BWv0hojwUH7iCDabr0NI")
-                    .locale("locale")
-                    .build()
-            )
+        val productCollection = productCollectionService.retrieve("pdc_8BWv0hojwUH7iCDabr0NI")
 
         productCollection.validate()
     }

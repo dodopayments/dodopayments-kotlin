@@ -28,8 +28,6 @@ import com.dodopayments.api.models.addons.AddonUnarchiveParams
 import com.dodopayments.api.models.addons.AddonUpdateImagesParams
 import com.dodopayments.api.models.addons.AddonUpdateImagesResponse
 import com.dodopayments.api.models.addons.AddonUpdateParams
-import com.dodopayments.api.services.async.addons.TranslationServiceAsync
-import com.dodopayments.api.services.async.addons.TranslationServiceAsyncImpl
 
 class AddonServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     AddonServiceAsync {
@@ -38,16 +36,10 @@ class AddonServiceAsyncImpl internal constructor(private val clientOptions: Clie
         WithRawResponseImpl(clientOptions)
     }
 
-    private val translations: TranslationServiceAsync by lazy {
-        TranslationServiceAsyncImpl(clientOptions)
-    }
-
     override fun withRawResponse(): AddonServiceAsync.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): AddonServiceAsync =
         AddonServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
-
-    override fun translations(): TranslationServiceAsync = translations
 
     override suspend fun create(
         params: AddonCreateParams,
@@ -100,18 +92,12 @@ class AddonServiceAsyncImpl internal constructor(private val clientOptions: Clie
         private val errorHandler: Handler<HttpResponse> =
             errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
-        private val translations: TranslationServiceAsync.WithRawResponse by lazy {
-            TranslationServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
-
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): AddonServiceAsync.WithRawResponse =
             AddonServiceAsyncImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier).build()
             )
-
-        override fun translations(): TranslationServiceAsync.WithRawResponse = translations
 
         private val createHandler: Handler<AddonResponse> =
             jsonHandler<AddonResponse>(clientOptions.jsonMapper)

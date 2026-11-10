@@ -19,7 +19,6 @@ import com.dodopayments.api.models.products.ProductUpdateParams
 import com.dodopayments.api.services.async.products.ImageServiceAsync
 import com.dodopayments.api.services.async.products.LocalizedPriceServiceAsync
 import com.dodopayments.api.services.async.products.ShortLinkServiceAsync
-import com.dodopayments.api.services.async.products.TranslationServiceAsync
 import com.google.errorprone.annotations.MustBeClosed
 
 interface ProductServiceAsync {
@@ -35,8 +34,6 @@ interface ProductServiceAsync {
      * The original service is not modified.
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ProductServiceAsync
-
-    fun translations(): TranslationServiceAsync
 
     fun images(): ImageServiceAsync
 
@@ -147,8 +144,6 @@ interface ProductServiceAsync {
         fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): ProductServiceAsync.WithRawResponse
-
-        fun translations(): TranslationServiceAsync.WithRawResponse
 
         fun images(): ImageServiceAsync.WithRawResponse
 

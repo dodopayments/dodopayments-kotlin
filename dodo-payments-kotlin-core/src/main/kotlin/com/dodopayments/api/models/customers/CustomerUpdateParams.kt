@@ -10,7 +10,6 @@ import com.dodopayments.api.core.Params
 import com.dodopayments.api.core.http.Headers
 import com.dodopayments.api.core.http.QueryParams
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
-import com.dodopayments.api.models.misc.Locale
 import com.dodopayments.api.models.misc.Metadata
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -56,16 +55,6 @@ private constructor(
     fun phoneNumber(): String? = body.phoneNumber()
 
     /**
-     * The language of the customer emails, a code from `GET /locales`. A value replaces the current
-     * language, and `null` removes it. Send this field only to change the language on purpose. With
-     * no language, the emails are in English.
-     *
-     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
-     *   the server responded with an unexpected value).
-     */
-    fun preferredLocale(): Locale? = body.preferredLocale()
-
-    /**
      * Returns the raw JSON value of [email].
      *
      * Unlike [email], this method doesn't throw if the JSON field has an unexpected type.
@@ -92,13 +81,6 @@ private constructor(
      * Unlike [phoneNumber], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _phoneNumber(): JsonField<String> = body._phoneNumber()
-
-    /**
-     * Returns the raw JSON value of [preferredLocale].
-     *
-     * Unlike [preferredLocale], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _preferredLocale(): JsonField<Locale> = body._preferredLocale()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -144,8 +126,6 @@ private constructor(
          * - [metadata]
          * - [name]
          * - [phoneNumber]
-         * - [preferredLocale]
-         * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
@@ -191,26 +171,6 @@ private constructor(
          * value.
          */
         fun phoneNumber(phoneNumber: JsonField<String>) = apply { body.phoneNumber(phoneNumber) }
-
-        /**
-         * The language of the customer emails, a code from `GET /locales`. A value replaces the
-         * current language, and `null` removes it. Send this field only to change the language on
-         * purpose. With no language, the emails are in English.
-         */
-        fun preferredLocale(preferredLocale: Locale?) = apply {
-            body.preferredLocale(preferredLocale)
-        }
-
-        /**
-         * Sets [Builder.preferredLocale] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.preferredLocale] with a well-typed [Locale] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
-         */
-        fun preferredLocale(preferredLocale: JsonField<Locale>) = apply {
-            body.preferredLocale(preferredLocale)
-        }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -362,7 +322,6 @@ private constructor(
         private val metadata: JsonField<Metadata>,
         private val name: JsonField<String>,
         private val phoneNumber: JsonField<String>,
-        private val preferredLocale: JsonField<Locale>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -376,10 +335,7 @@ private constructor(
             @JsonProperty("phone_number")
             @ExcludeMissing
             phoneNumber: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("preferred_locale")
-            @ExcludeMissing
-            preferredLocale: JsonField<Locale> = JsonMissing.of(),
-        ) : this(email, metadata, name, phoneNumber, preferredLocale, mutableMapOf())
+        ) : this(email, metadata, name, phoneNumber, mutableMapOf())
 
         /**
          * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
@@ -406,16 +362,6 @@ private constructor(
          *   if the server responded with an unexpected value).
          */
         fun phoneNumber(): String? = phoneNumber.getNullable("phone_number")
-
-        /**
-         * The language of the customer emails, a code from `GET /locales`. A value replaces the
-         * current language, and `null` removes it. Send this field only to change the language on
-         * purpose. With no language, the emails are in English.
-         *
-         * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g.
-         *   if the server responded with an unexpected value).
-         */
-        fun preferredLocale(): Locale? = preferredLocale.getNullable("preferred_locale")
 
         /**
          * Returns the raw JSON value of [email].
@@ -447,16 +393,6 @@ private constructor(
         @ExcludeMissing
         fun _phoneNumber(): JsonField<String> = phoneNumber
 
-        /**
-         * Returns the raw JSON value of [preferredLocale].
-         *
-         * Unlike [preferredLocale], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("preferred_locale")
-        @ExcludeMissing
-        fun _preferredLocale(): JsonField<Locale> = preferredLocale
-
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -482,7 +418,6 @@ private constructor(
             private var metadata: JsonField<Metadata> = JsonMissing.of()
             private var name: JsonField<String> = JsonMissing.of()
             private var phoneNumber: JsonField<String> = JsonMissing.of()
-            private var preferredLocale: JsonField<Locale> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             internal fun from(body: Body) = apply {
@@ -490,7 +425,6 @@ private constructor(
                 metadata = body.metadata
                 name = body.name
                 phoneNumber = body.phoneNumber
-                preferredLocale = body.preferredLocale
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
@@ -541,25 +475,6 @@ private constructor(
                 this.phoneNumber = phoneNumber
             }
 
-            /**
-             * The language of the customer emails, a code from `GET /locales`. A value replaces the
-             * current language, and `null` removes it. Send this field only to change the language
-             * on purpose. With no language, the emails are in English.
-             */
-            fun preferredLocale(preferredLocale: Locale?) =
-                preferredLocale(JsonField.ofNullable(preferredLocale))
-
-            /**
-             * Sets [Builder.preferredLocale] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.preferredLocale] with a well-typed [Locale] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun preferredLocale(preferredLocale: JsonField<Locale>) = apply {
-                this.preferredLocale = preferredLocale
-            }
-
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -585,14 +500,7 @@ private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              */
             fun build(): Body =
-                Body(
-                    email,
-                    metadata,
-                    name,
-                    phoneNumber,
-                    preferredLocale,
-                    additionalProperties.toMutableMap(),
-                )
+                Body(email, metadata, name, phoneNumber, additionalProperties.toMutableMap())
         }
 
         private var validated: Boolean = false
@@ -615,7 +523,6 @@ private constructor(
             metadata()?.validate()
             name()
             phoneNumber()
-            preferredLocale()?.validate()
             validated = true
         }
 
@@ -637,8 +544,7 @@ private constructor(
             (if (email.asKnown() == null) 0 else 1) +
                 (metadata.asKnown()?.validity() ?: 0) +
                 (if (name.asKnown() == null) 0 else 1) +
-                (if (phoneNumber.asKnown() == null) 0 else 1) +
-                (preferredLocale.asKnown()?.validity() ?: 0)
+                (if (phoneNumber.asKnown() == null) 0 else 1)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -650,18 +556,17 @@ private constructor(
                 metadata == other.metadata &&
                 name == other.name &&
                 phoneNumber == other.phoneNumber &&
-                preferredLocale == other.preferredLocale &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
-            Objects.hash(email, metadata, name, phoneNumber, preferredLocale, additionalProperties)
+            Objects.hash(email, metadata, name, phoneNumber, additionalProperties)
         }
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{email=$email, metadata=$metadata, name=$name, phoneNumber=$phoneNumber, preferredLocale=$preferredLocale, additionalProperties=$additionalProperties}"
+            "Body{email=$email, metadata=$metadata, name=$name, phoneNumber=$phoneNumber, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
