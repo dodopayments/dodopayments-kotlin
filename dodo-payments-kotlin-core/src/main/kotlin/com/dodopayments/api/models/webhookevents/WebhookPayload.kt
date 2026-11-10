@@ -3726,7 +3726,8 @@ private constructor(
         private constructor(
             private val addons: JsonField<List<AddonCartResponseItem>>,
             private val billing: JsonField<BillingAddress>,
-            private val billingMode: JsonField<Subscription.BillingMode>,
+            private val billingMode:
+                JsonField<com.dodopayments.api.models.subscriptions.Subscription.BillingMode>,
             private val brandId: JsonField<String>,
             private val cancelAtNextBillingDate: JsonField<Boolean>,
             private val createdAt: JsonField<OffsetDateTime>,
@@ -3785,7 +3786,9 @@ private constructor(
                 billing: JsonField<BillingAddress> = JsonMissing.of(),
                 @JsonProperty("billing_mode")
                 @ExcludeMissing
-                billingMode: JsonField<Subscription.BillingMode> = JsonMissing.of(),
+                billingMode:
+                    JsonField<com.dodopayments.api.models.subscriptions.Subscription.BillingMode> =
+                    JsonMissing.of(),
                 @JsonProperty("brand_id")
                 @ExcludeMissing
                 brandId: JsonField<String> = JsonMissing.of(),
@@ -4042,7 +4045,8 @@ private constructor(
              *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
-            fun billingMode(): Subscription.BillingMode = billingMode.getRequired("billing_mode")
+            fun billingMode(): com.dodopayments.api.models.subscriptions.Subscription.BillingMode =
+                billingMode.getRequired("billing_mode")
 
             /**
              * Brand id this subscription belongs to
@@ -4480,7 +4484,9 @@ private constructor(
              */
             @JsonProperty("billing_mode")
             @ExcludeMissing
-            fun _billingMode(): JsonField<Subscription.BillingMode> = billingMode
+            fun _billingMode():
+                JsonField<com.dodopayments.api.models.subscriptions.Subscription.BillingMode> =
+                billingMode
 
             /**
              * Returns the raw JSON value of [brandId].
@@ -4960,7 +4966,9 @@ private constructor(
 
                 private var addons: JsonField<MutableList<AddonCartResponseItem>>? = null
                 private var billing: JsonField<BillingAddress>? = null
-                private var billingMode: JsonField<Subscription.BillingMode>? = null
+                private var billingMode:
+                    JsonField<com.dodopayments.api.models.subscriptions.Subscription.BillingMode>? =
+                    null
                 private var brandId: JsonField<String>? = null
                 private var cancelAtNextBillingDate: JsonField<Boolean>? = null
                 private var createdAt: JsonField<OffsetDateTime>? = null
@@ -5105,8 +5113,9 @@ private constructor(
                 fun billing(billing: JsonField<BillingAddress>) = apply { this.billing = billing }
 
                 /** `invoice_led` when invoices bill the subscription. `normal` otherwise. */
-                fun billingMode(billingMode: Subscription.BillingMode) =
-                    billingMode(JsonField.of(billingMode))
+                fun billingMode(
+                    billingMode: com.dodopayments.api.models.subscriptions.Subscription.BillingMode
+                ) = billingMode(JsonField.of(billingMode))
 
                 /**
                  * Sets [Builder.billingMode] to an arbitrary JSON value.
@@ -5115,9 +5124,12 @@ private constructor(
                  * [Subscription.BillingMode] value instead. This method is primarily for setting
                  * the field to an undocumented or not yet supported value.
                  */
-                fun billingMode(billingMode: JsonField<Subscription.BillingMode>) = apply {
-                    this.billingMode = billingMode
-                }
+                fun billingMode(
+                    billingMode:
+                        JsonField<
+                            com.dodopayments.api.models.subscriptions.Subscription.BillingMode
+                        >
+                ) = apply { this.billingMode = billingMode }
 
                 /** Brand id this subscription belongs to */
                 fun brandId(brandId: String) = brandId(JsonField.of(brandId))
@@ -14260,19 +14272,23 @@ private constructor(
         class Invoice
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
-            private val allowedActions: JsonField<List<Invoice.AllowedAction>>,
+            private val allowedActions:
+                JsonField<List<com.dodopayments.api.models.invoices.Invoice.AllowedAction>>,
             private val amountDue: JsonField<Long>,
             private val amountPaid: JsonField<Long>,
             private val amountRefunded: JsonField<Long>,
-            private val billingMode: JsonField<Invoice.BillingMode>,
+            private val billingMode:
+                JsonField<com.dodopayments.api.models.invoices.Invoice.BillingMode>,
             private val businessId: JsonField<String>,
             private val createdAt: JsonField<OffsetDateTime>,
             private val credits: JsonField<Long>,
             private val currency: JsonField<Currency>,
-            private val customer: JsonField<Invoice.Customer>,
+            private val customer: JsonField<com.dodopayments.api.models.invoices.Invoice.Customer>,
             private val discountIds: JsonField<List<String>>,
-            private val editableFields: JsonField<List<Invoice.EditableField>>,
-            private val frequency: JsonField<Invoice.Frequency>,
+            private val editableFields:
+                JsonField<List<com.dodopayments.api.models.invoices.Invoice.EditableField>>,
+            private val frequency:
+                JsonField<com.dodopayments.api.models.invoices.Invoice.Frequency>,
             private val invoiceId: JsonField<String>,
             private val metadata: JsonValue,
             private val refundIds: JsonField<List<String>>,
@@ -14280,7 +14296,7 @@ private constructor(
             private val rowVersion: JsonField<Long>,
             private val status: JsonField<InvoiceStatus>,
             private val subscriptionIds: JsonField<List<String>>,
-            private val tags: JsonField<List<Invoice.Tag>>,
+            private val tags: JsonField<List<com.dodopayments.api.models.invoices.Invoice.Tag>>,
             private val tax: JsonField<Int>,
             private val totalAmount: JsonField<Int>,
             private val collectionMethod: JsonField<CollectionMethod>,
@@ -14293,9 +14309,11 @@ private constructor(
             private val nextReminderAt: JsonField<OffsetDateTime>,
             private val nextRetryAt: JsonField<OffsetDateTime>,
             private val paymentTermsDays: JsonField<Int>,
-            private val payments: JsonField<List<Invoice.Payment>>,
+            private val payments:
+                JsonField<List<com.dodopayments.api.models.invoices.Invoice.Payment>>,
             private val pdfUrl: JsonField<String>,
-            private val reminderSettings: JsonField<Invoice.ReminderSettings>,
+            private val reminderSettings:
+                JsonField<com.dodopayments.api.models.invoices.Invoice.ReminderSettings>,
             private val reviewDeadline: JsonField<OffsetDateTime>,
             private val sentAt: JsonField<OffsetDateTime>,
             private val payloadType: JsonValue,
@@ -14306,7 +14324,9 @@ private constructor(
             private constructor(
                 @JsonProperty("allowed_actions")
                 @ExcludeMissing
-                allowedActions: JsonField<List<Invoice.AllowedAction>> = JsonMissing.of(),
+                allowedActions:
+                    JsonField<List<com.dodopayments.api.models.invoices.Invoice.AllowedAction>> =
+                    JsonMissing.of(),
                 @JsonProperty("amount_due")
                 @ExcludeMissing
                 amountDue: JsonField<Long> = JsonMissing.of(),
@@ -14318,7 +14338,8 @@ private constructor(
                 amountRefunded: JsonField<Long> = JsonMissing.of(),
                 @JsonProperty("billing_mode")
                 @ExcludeMissing
-                billingMode: JsonField<Invoice.BillingMode> = JsonMissing.of(),
+                billingMode: JsonField<com.dodopayments.api.models.invoices.Invoice.BillingMode> =
+                    JsonMissing.of(),
                 @JsonProperty("business_id")
                 @ExcludeMissing
                 businessId: JsonField<String> = JsonMissing.of(),
@@ -14333,16 +14354,20 @@ private constructor(
                 currency: JsonField<Currency> = JsonMissing.of(),
                 @JsonProperty("customer")
                 @ExcludeMissing
-                customer: JsonField<Invoice.Customer> = JsonMissing.of(),
+                customer: JsonField<com.dodopayments.api.models.invoices.Invoice.Customer> =
+                    JsonMissing.of(),
                 @JsonProperty("discount_ids")
                 @ExcludeMissing
                 discountIds: JsonField<List<String>> = JsonMissing.of(),
                 @JsonProperty("editable_fields")
                 @ExcludeMissing
-                editableFields: JsonField<List<Invoice.EditableField>> = JsonMissing.of(),
+                editableFields:
+                    JsonField<List<com.dodopayments.api.models.invoices.Invoice.EditableField>> =
+                    JsonMissing.of(),
                 @JsonProperty("frequency")
                 @ExcludeMissing
-                frequency: JsonField<Invoice.Frequency> = JsonMissing.of(),
+                frequency: JsonField<com.dodopayments.api.models.invoices.Invoice.Frequency> =
+                    JsonMissing.of(),
                 @JsonProperty("invoice_id")
                 @ExcludeMissing
                 invoiceId: JsonField<String> = JsonMissing.of(),
@@ -14364,7 +14389,8 @@ private constructor(
                 subscriptionIds: JsonField<List<String>> = JsonMissing.of(),
                 @JsonProperty("tags")
                 @ExcludeMissing
-                tags: JsonField<List<Invoice.Tag>> = JsonMissing.of(),
+                tags: JsonField<List<com.dodopayments.api.models.invoices.Invoice.Tag>> =
+                    JsonMissing.of(),
                 @JsonProperty("tax") @ExcludeMissing tax: JsonField<Int> = JsonMissing.of(),
                 @JsonProperty("total_amount")
                 @ExcludeMissing
@@ -14399,13 +14425,16 @@ private constructor(
                 paymentTermsDays: JsonField<Int> = JsonMissing.of(),
                 @JsonProperty("payments")
                 @ExcludeMissing
-                payments: JsonField<List<Invoice.Payment>> = JsonMissing.of(),
+                payments: JsonField<List<com.dodopayments.api.models.invoices.Invoice.Payment>> =
+                    JsonMissing.of(),
                 @JsonProperty("pdf_url")
                 @ExcludeMissing
                 pdfUrl: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("reminder_settings")
                 @ExcludeMissing
-                reminderSettings: JsonField<Invoice.ReminderSettings> = JsonMissing.of(),
+                reminderSettings:
+                    JsonField<com.dodopayments.api.models.invoices.Invoice.ReminderSettings> =
+                    JsonMissing.of(),
                 @JsonProperty("review_deadline")
                 @ExcludeMissing
                 reviewDeadline: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -14507,7 +14536,7 @@ private constructor(
              *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
-            fun allowedActions(): List<Invoice.AllowedAction> =
+            fun allowedActions(): List<com.dodopayments.api.models.invoices.Invoice.AllowedAction> =
                 allowedActions.getRequired("allowed_actions")
 
             /**
@@ -14544,7 +14573,8 @@ private constructor(
              *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
-            fun billingMode(): Invoice.BillingMode = billingMode.getRequired("billing_mode")
+            fun billingMode(): com.dodopayments.api.models.invoices.Invoice.BillingMode =
+                billingMode.getRequired("billing_mode")
 
             /**
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
@@ -14581,7 +14611,8 @@ private constructor(
              *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
-            fun customer(): Invoice.Customer = customer.getRequired("customer")
+            fun customer(): com.dodopayments.api.models.invoices.Invoice.Customer =
+                customer.getRequired("customer")
 
             /**
              * The discount codes of the invoice.
@@ -14599,7 +14630,7 @@ private constructor(
              *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
-            fun editableFields(): List<Invoice.EditableField> =
+            fun editableFields(): List<com.dodopayments.api.models.invoices.Invoice.EditableField> =
                 editableFields.getRequired("editable_fields")
 
             /**
@@ -14610,7 +14641,8 @@ private constructor(
              *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
-            fun frequency(): Invoice.Frequency = frequency.getRequired("frequency")
+            fun frequency(): com.dodopayments.api.models.invoices.Invoice.Frequency =
+                frequency.getRequired("frequency")
 
             /**
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
@@ -14674,7 +14706,8 @@ private constructor(
              *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
-            fun tags(): List<Invoice.Tag> = tags.getRequired("tags")
+            fun tags(): List<com.dodopayments.api.models.invoices.Invoice.Tag> =
+                tags.getRequired("tags")
 
             /**
              * Tax in the smallest currency unit.
@@ -14772,7 +14805,8 @@ private constructor(
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
              */
-            fun payments(): List<Invoice.Payment>? = payments.getNullable("payments")
+            fun payments(): List<com.dodopayments.api.models.invoices.Invoice.Payment>? =
+                payments.getNullable("payments")
 
             /**
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
@@ -14786,7 +14820,7 @@ private constructor(
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
              *   (e.g. if the server responded with an unexpected value).
              */
-            fun reminderSettings(): Invoice.ReminderSettings? =
+            fun reminderSettings(): com.dodopayments.api.models.invoices.Invoice.ReminderSettings? =
                 reminderSettings.getNullable("reminder_settings")
 
             /**
@@ -14824,7 +14858,9 @@ private constructor(
              */
             @JsonProperty("allowed_actions")
             @ExcludeMissing
-            fun _allowedActions(): JsonField<List<Invoice.AllowedAction>> = allowedActions
+            fun _allowedActions():
+                JsonField<List<com.dodopayments.api.models.invoices.Invoice.AllowedAction>> =
+                allowedActions
 
             /**
              * Returns the raw JSON value of [amountDue].
@@ -14864,7 +14900,8 @@ private constructor(
              */
             @JsonProperty("billing_mode")
             @ExcludeMissing
-            fun _billingMode(): JsonField<Invoice.BillingMode> = billingMode
+            fun _billingMode():
+                JsonField<com.dodopayments.api.models.invoices.Invoice.BillingMode> = billingMode
 
             /**
              * Returns the raw JSON value of [businessId].
@@ -14911,7 +14948,8 @@ private constructor(
              */
             @JsonProperty("customer")
             @ExcludeMissing
-            fun _customer(): JsonField<Invoice.Customer> = customer
+            fun _customer(): JsonField<com.dodopayments.api.models.invoices.Invoice.Customer> =
+                customer
 
             /**
              * Returns the raw JSON value of [discountIds].
@@ -14931,7 +14969,9 @@ private constructor(
              */
             @JsonProperty("editable_fields")
             @ExcludeMissing
-            fun _editableFields(): JsonField<List<Invoice.EditableField>> = editableFields
+            fun _editableFields():
+                JsonField<List<com.dodopayments.api.models.invoices.Invoice.EditableField>> =
+                editableFields
 
             /**
              * Returns the raw JSON value of [frequency].
@@ -14941,7 +14981,8 @@ private constructor(
              */
             @JsonProperty("frequency")
             @ExcludeMissing
-            fun _frequency(): JsonField<Invoice.Frequency> = frequency
+            fun _frequency(): JsonField<com.dodopayments.api.models.invoices.Invoice.Frequency> =
+                frequency
 
             /**
              * Returns the raw JSON value of [invoiceId].
@@ -15005,7 +15046,9 @@ private constructor(
              *
              * Unlike [tags], this method doesn't throw if the JSON field has an unexpected type.
              */
-            @JsonProperty("tags") @ExcludeMissing fun _tags(): JsonField<List<Invoice.Tag>> = tags
+            @JsonProperty("tags")
+            @ExcludeMissing
+            fun _tags(): JsonField<List<com.dodopayments.api.models.invoices.Invoice.Tag>> = tags
 
             /**
              * Returns the raw JSON value of [tax].
@@ -15125,7 +15168,8 @@ private constructor(
              */
             @JsonProperty("payments")
             @ExcludeMissing
-            fun _payments(): JsonField<List<Invoice.Payment>> = payments
+            fun _payments(): JsonField<List<com.dodopayments.api.models.invoices.Invoice.Payment>> =
+                payments
 
             /**
              * Returns the raw JSON value of [pdfUrl].
@@ -15142,7 +15186,9 @@ private constructor(
              */
             @JsonProperty("reminder_settings")
             @ExcludeMissing
-            fun _reminderSettings(): JsonField<Invoice.ReminderSettings> = reminderSettings
+            fun _reminderSettings():
+                JsonField<com.dodopayments.api.models.invoices.Invoice.ReminderSettings> =
+                reminderSettings
 
             /**
              * Returns the raw JSON value of [reviewDeadline].
@@ -15213,19 +15259,33 @@ private constructor(
             /** A builder for [Invoice]. */
             class Builder internal constructor() {
 
-                private var allowedActions: JsonField<MutableList<Invoice.AllowedAction>>? = null
+                private var allowedActions:
+                    JsonField<
+                        MutableList<com.dodopayments.api.models.invoices.Invoice.AllowedAction>
+                    >? =
+                    null
                 private var amountDue: JsonField<Long>? = null
                 private var amountPaid: JsonField<Long>? = null
                 private var amountRefunded: JsonField<Long>? = null
-                private var billingMode: JsonField<Invoice.BillingMode>? = null
+                private var billingMode:
+                    JsonField<com.dodopayments.api.models.invoices.Invoice.BillingMode>? =
+                    null
                 private var businessId: JsonField<String>? = null
                 private var createdAt: JsonField<OffsetDateTime>? = null
                 private var credits: JsonField<Long>? = null
                 private var currency: JsonField<Currency>? = null
-                private var customer: JsonField<Invoice.Customer>? = null
+                private var customer:
+                    JsonField<com.dodopayments.api.models.invoices.Invoice.Customer>? =
+                    null
                 private var discountIds: JsonField<MutableList<String>>? = null
-                private var editableFields: JsonField<MutableList<Invoice.EditableField>>? = null
-                private var frequency: JsonField<Invoice.Frequency>? = null
+                private var editableFields:
+                    JsonField<
+                        MutableList<com.dodopayments.api.models.invoices.Invoice.EditableField>
+                    >? =
+                    null
+                private var frequency:
+                    JsonField<com.dodopayments.api.models.invoices.Invoice.Frequency>? =
+                    null
                 private var invoiceId: JsonField<String>? = null
                 private var metadata: JsonValue? = null
                 private var refundIds: JsonField<MutableList<String>>? = null
@@ -15233,7 +15293,9 @@ private constructor(
                 private var rowVersion: JsonField<Long>? = null
                 private var status: JsonField<InvoiceStatus>? = null
                 private var subscriptionIds: JsonField<MutableList<String>>? = null
-                private var tags: JsonField<MutableList<Invoice.Tag>>? = null
+                private var tags:
+                    JsonField<MutableList<com.dodopayments.api.models.invoices.Invoice.Tag>>? =
+                    null
                 private var tax: JsonField<Int>? = null
                 private var totalAmount: JsonField<Int>? = null
                 private var collectionMethod: JsonField<CollectionMethod> = JsonMissing.of()
@@ -15246,9 +15308,13 @@ private constructor(
                 private var nextReminderAt: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var nextRetryAt: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var paymentTermsDays: JsonField<Int> = JsonMissing.of()
-                private var payments: JsonField<MutableList<Invoice.Payment>>? = null
+                private var payments:
+                    JsonField<MutableList<com.dodopayments.api.models.invoices.Invoice.Payment>>? =
+                    null
                 private var pdfUrl: JsonField<String> = JsonMissing.of()
-                private var reminderSettings: JsonField<Invoice.ReminderSettings> = JsonMissing.of()
+                private var reminderSettings:
+                    JsonField<com.dodopayments.api.models.invoices.Invoice.ReminderSettings> =
+                    JsonMissing.of()
                 private var reviewDeadline: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var sentAt: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var payloadType: JsonValue = JsonValue.from("Invoice")
@@ -15298,8 +15364,9 @@ private constructor(
                 }
 
                 /** The actions that the current status accepts. */
-                fun allowedActions(allowedActions: List<Invoice.AllowedAction>) =
-                    allowedActions(JsonField.of(allowedActions))
+                fun allowedActions(
+                    allowedActions: List<com.dodopayments.api.models.invoices.Invoice.AllowedAction>
+                ) = allowedActions(JsonField.of(allowedActions))
 
                 /**
                  * Sets [Builder.allowedActions] to an arbitrary JSON value.
@@ -15308,16 +15375,19 @@ private constructor(
                  * `List<Invoice.AllowedAction>` value instead. This method is primarily for setting
                  * the field to an undocumented or not yet supported value.
                  */
-                fun allowedActions(allowedActions: JsonField<List<Invoice.AllowedAction>>) = apply {
-                    this.allowedActions = allowedActions.map { it.toMutableList() }
-                }
+                fun allowedActions(
+                    allowedActions:
+                        JsonField<List<com.dodopayments.api.models.invoices.Invoice.AllowedAction>>
+                ) = apply { this.allowedActions = allowedActions.map { it.toMutableList() } }
 
                 /**
                  * Adds a single [Invoice.AllowedAction] to [allowedActions].
                  *
                  * @throws IllegalStateException if the field was previously set to a non-list.
                  */
-                fun addAllowedAction(allowedAction: Invoice.AllowedAction) = apply {
+                fun addAllowedAction(
+                    allowedAction: com.dodopayments.api.models.invoices.Invoice.AllowedAction
+                ) = apply {
                     allowedActions =
                         (allowedActions ?: JsonField.of(mutableListOf())).also {
                             checkKnown("allowedActions", it).add(allowedAction)
@@ -15372,8 +15442,9 @@ private constructor(
                     this.amountRefunded = amountRefunded
                 }
 
-                fun billingMode(billingMode: Invoice.BillingMode) =
-                    billingMode(JsonField.of(billingMode))
+                fun billingMode(
+                    billingMode: com.dodopayments.api.models.invoices.Invoice.BillingMode
+                ) = billingMode(JsonField.of(billingMode))
 
                 /**
                  * Sets [Builder.billingMode] to an arbitrary JSON value.
@@ -15382,9 +15453,9 @@ private constructor(
                  * [Invoice.BillingMode] value instead. This method is primarily for setting the
                  * field to an undocumented or not yet supported value.
                  */
-                fun billingMode(billingMode: JsonField<Invoice.BillingMode>) = apply {
-                    this.billingMode = billingMode
-                }
+                fun billingMode(
+                    billingMode: JsonField<com.dodopayments.api.models.invoices.Invoice.BillingMode>
+                ) = apply { this.billingMode = billingMode }
 
                 fun businessId(businessId: String) = businessId(JsonField.of(businessId))
 
@@ -15438,7 +15509,8 @@ private constructor(
                  */
                 fun currency(currency: JsonField<Currency>) = apply { this.currency = currency }
 
-                fun customer(customer: Invoice.Customer) = customer(JsonField.of(customer))
+                fun customer(customer: com.dodopayments.api.models.invoices.Invoice.Customer) =
+                    customer(JsonField.of(customer))
 
                 /**
                  * Sets [Builder.customer] to an arbitrary JSON value.
@@ -15447,9 +15519,9 @@ private constructor(
                  * value instead. This method is primarily for setting the field to an undocumented
                  * or not yet supported value.
                  */
-                fun customer(customer: JsonField<Invoice.Customer>) = apply {
-                    this.customer = customer
-                }
+                fun customer(
+                    customer: JsonField<com.dodopayments.api.models.invoices.Invoice.Customer>
+                ) = apply { this.customer = customer }
 
                 /** The discount codes of the invoice. */
                 fun discountIds(discountIds: List<String>) = discountIds(JsonField.of(discountIds))
@@ -15478,8 +15550,9 @@ private constructor(
                 }
 
                 /** The fields that `PATCH` can change in the current status. */
-                fun editableFields(editableFields: List<Invoice.EditableField>) =
-                    editableFields(JsonField.of(editableFields))
+                fun editableFields(
+                    editableFields: List<com.dodopayments.api.models.invoices.Invoice.EditableField>
+                ) = editableFields(JsonField.of(editableFields))
 
                 /**
                  * Sets [Builder.editableFields] to an arbitrary JSON value.
@@ -15488,16 +15561,19 @@ private constructor(
                  * `List<Invoice.EditableField>` value instead. This method is primarily for setting
                  * the field to an undocumented or not yet supported value.
                  */
-                fun editableFields(editableFields: JsonField<List<Invoice.EditableField>>) = apply {
-                    this.editableFields = editableFields.map { it.toMutableList() }
-                }
+                fun editableFields(
+                    editableFields:
+                        JsonField<List<com.dodopayments.api.models.invoices.Invoice.EditableField>>
+                ) = apply { this.editableFields = editableFields.map { it.toMutableList() } }
 
                 /**
                  * Adds a single [Invoice.EditableField] to [editableFields].
                  *
                  * @throws IllegalStateException if the field was previously set to a non-list.
                  */
-                fun addEditableField(editableField: Invoice.EditableField) = apply {
+                fun addEditableField(
+                    editableField: com.dodopayments.api.models.invoices.Invoice.EditableField
+                ) = apply {
                     editableFields =
                         (editableFields ?: JsonField.of(mutableListOf())).also {
                             checkKnown("editableFields", it).add(editableField)
@@ -15508,7 +15584,8 @@ private constructor(
                  * How often the invoice lines bill. `mixed` covers several intervals, or one-time
                  * lines next to a plan.
                  */
-                fun frequency(frequency: Invoice.Frequency) = frequency(JsonField.of(frequency))
+                fun frequency(frequency: com.dodopayments.api.models.invoices.Invoice.Frequency) =
+                    frequency(JsonField.of(frequency))
 
                 /**
                  * Sets [Builder.frequency] to an arbitrary JSON value.
@@ -15517,22 +15594,29 @@ private constructor(
                  * value instead. This method is primarily for setting the field to an undocumented
                  * or not yet supported value.
                  */
-                fun frequency(frequency: JsonField<Invoice.Frequency>) = apply {
-                    this.frequency = frequency
-                }
+                fun frequency(
+                    frequency: JsonField<com.dodopayments.api.models.invoices.Invoice.Frequency>
+                ) = apply { this.frequency = frequency }
 
-                /** Alias for calling [frequency] with `Invoice.Frequency.ofObject()`. */
-                fun frequencyObject() = frequency(Invoice.Frequency.ofObject())
+                /** Alias for calling [frequency] with `Invoice.Frequency.ofOneTime()`. */
+                fun frequencyOneTime() =
+                    frequency(com.dodopayments.api.models.invoices.Invoice.Frequency.ofOneTime())
 
                 /**
-                 * Alias for calling [frequency] with
-                 * `Invoice.Frequency.ofUnionMember1(unionMember1)`.
+                 * Alias for calling [frequency] with `Invoice.Frequency.ofRecurring(recurring)`.
                  */
-                fun frequency(unionMember1: Invoice.Frequency.UnionMember1) =
-                    frequency(Invoice.Frequency.ofUnionMember1(unionMember1))
+                fun frequency(
+                    recurring: com.dodopayments.api.models.invoices.Invoice.Frequency.Recurring
+                ) =
+                    frequency(
+                        com.dodopayments.api.models.invoices.Invoice.Frequency.ofRecurring(
+                            recurring
+                        )
+                    )
 
-                /** Alias for calling [frequency] with `Invoice.Frequency.ofObject()`. */
-                fun frequencyObject() = frequency(Invoice.Frequency.ofObject())
+                /** Alias for calling [frequency] with `Invoice.Frequency.ofMixed()`. */
+                fun frequencyMixed() =
+                    frequency(com.dodopayments.api.models.invoices.Invoice.Frequency.ofMixed())
 
                 fun invoiceId(invoiceId: String) = invoiceId(JsonField.of(invoiceId))
 
@@ -15634,7 +15718,8 @@ private constructor(
                         }
                 }
 
-                fun tags(tags: List<Invoice.Tag>) = tags(JsonField.of(tags))
+                fun tags(tags: List<com.dodopayments.api.models.invoices.Invoice.Tag>) =
+                    tags(JsonField.of(tags))
 
                 /**
                  * Sets [Builder.tags] to an arbitrary JSON value.
@@ -15643,16 +15728,17 @@ private constructor(
                  * value instead. This method is primarily for setting the field to an undocumented
                  * or not yet supported value.
                  */
-                fun tags(tags: JsonField<List<Invoice.Tag>>) = apply {
-                    this.tags = tags.map { it.toMutableList() }
-                }
+                fun tags(tags: JsonField<List<com.dodopayments.api.models.invoices.Invoice.Tag>>) =
+                    apply {
+                        this.tags = tags.map { it.toMutableList() }
+                    }
 
                 /**
                  * Adds a single [Invoice.Tag] to [tags].
                  *
                  * @throws IllegalStateException if the field was previously set to a non-list.
                  */
-                fun addTag(tag: Invoice.Tag) = apply {
+                fun addTag(tag: com.dodopayments.api.models.invoices.Invoice.Tag) = apply {
                     tags =
                         (tags ?: JsonField.of(mutableListOf())).also {
                             checkKnown("tags", it).add(tag)
@@ -15849,8 +15935,9 @@ private constructor(
                 }
 
                 /** Only on a single invoice. A list leaves it out. */
-                fun payments(payments: List<Invoice.Payment>?) =
-                    payments(JsonField.ofNullable(payments))
+                fun payments(
+                    payments: List<com.dodopayments.api.models.invoices.Invoice.Payment>?
+                ) = payments(JsonField.ofNullable(payments))
 
                 /**
                  * Sets [Builder.payments] to an arbitrary JSON value.
@@ -15859,21 +15946,22 @@ private constructor(
                  * `List<Invoice.Payment>` value instead. This method is primarily for setting the
                  * field to an undocumented or not yet supported value.
                  */
-                fun payments(payments: JsonField<List<Invoice.Payment>>) = apply {
-                    this.payments = payments.map { it.toMutableList() }
-                }
+                fun payments(
+                    payments: JsonField<List<com.dodopayments.api.models.invoices.Invoice.Payment>>
+                ) = apply { this.payments = payments.map { it.toMutableList() } }
 
                 /**
                  * Adds a single [Invoice.Payment] to [payments].
                  *
                  * @throws IllegalStateException if the field was previously set to a non-list.
                  */
-                fun addPayment(payment: Invoice.Payment) = apply {
-                    payments =
-                        (payments ?: JsonField.of(mutableListOf())).also {
-                            checkKnown("payments", it).add(payment)
-                        }
-                }
+                fun addPayment(payment: com.dodopayments.api.models.invoices.Invoice.Payment) =
+                    apply {
+                        payments =
+                            (payments ?: JsonField.of(mutableListOf())).also {
+                                checkKnown("payments", it).add(payment)
+                            }
+                    }
 
                 fun pdfUrl(pdfUrl: String?) = pdfUrl(JsonField.ofNullable(pdfUrl))
 
@@ -15887,8 +15975,9 @@ private constructor(
                 fun pdfUrl(pdfUrl: JsonField<String>) = apply { this.pdfUrl = pdfUrl }
 
                 /** `null` on a draft that keeps all reminder settings of the business. */
-                fun reminderSettings(reminderSettings: Invoice.ReminderSettings?) =
-                    reminderSettings(JsonField.ofNullable(reminderSettings))
+                fun reminderSettings(
+                    reminderSettings: com.dodopayments.api.models.invoices.Invoice.ReminderSettings?
+                ) = reminderSettings(JsonField.ofNullable(reminderSettings))
 
                 /**
                  * Sets [Builder.reminderSettings] to an arbitrary JSON value.
@@ -15897,24 +15986,36 @@ private constructor(
                  * [Invoice.ReminderSettings] value instead. This method is primarily for setting
                  * the field to an undocumented or not yet supported value.
                  */
-                fun reminderSettings(reminderSettings: JsonField<Invoice.ReminderSettings>) =
-                    apply {
-                        this.reminderSettings = reminderSettings
-                    }
+                fun reminderSettings(
+                    reminderSettings:
+                        JsonField<com.dodopayments.api.models.invoices.Invoice.ReminderSettings>
+                ) = apply { this.reminderSettings = reminderSettings }
 
                 /**
                  * Alias for calling [reminderSettings] with
-                 * `Invoice.ReminderSettings.ofUnionMember0(unionMember0)`.
+                 * `Invoice.ReminderSettings.ofSnapshot(snapshot)`.
                  */
-                fun reminderSettings(unionMember0: Invoice.ReminderSettings.UnionMember0) =
-                    reminderSettings(Invoice.ReminderSettings.ofUnionMember0(unionMember0))
+                fun reminderSettings(
+                    snapshot: com.dodopayments.api.models.invoices.Invoice.ReminderSettings.Snapshot
+                ) =
+                    reminderSettings(
+                        com.dodopayments.api.models.invoices.Invoice.ReminderSettings.ofSnapshot(
+                            snapshot
+                        )
+                    )
 
                 /**
                  * Alias for calling [reminderSettings] with
-                 * `Invoice.ReminderSettings.ofUnionMember1(unionMember1)`.
+                 * `Invoice.ReminderSettings.ofOverride(override)`.
                  */
-                fun reminderSettings(unionMember1: Invoice.ReminderSettings.UnionMember1) =
-                    reminderSettings(Invoice.ReminderSettings.ofUnionMember1(unionMember1))
+                fun reminderSettings(
+                    override: com.dodopayments.api.models.invoices.Invoice.ReminderSettings.Override
+                ) =
+                    reminderSettings(
+                        com.dodopayments.api.models.invoices.Invoice.ReminderSettings.ofOverride(
+                            override
+                        )
+                    )
 
                 /** The time at which a draft that waits for review finalises. */
                 fun reviewDeadline(reviewDeadline: OffsetDateTime?) =

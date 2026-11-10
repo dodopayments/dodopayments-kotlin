@@ -46,7 +46,7 @@ internal class InvoiceTest {
                 )
                 .addDiscountId("string")
                 .addEditableField(Invoice.EditableField.CUSTOMER)
-                .frequencyObject()
+                .frequencyOneTime()
                 .invoiceId("invoice_id")
                 .metadata(JsonValue.from(mapOf<String, Any>()))
                 .addRefundId("string")
@@ -95,7 +95,7 @@ internal class InvoiceTest {
                 )
                 .pdfUrl("pdf_url")
                 .reminderSettings(
-                    Invoice.ReminderSettings.UnionMember0.builder()
+                    Invoice.ReminderSettings.Snapshot.builder()
                         .addOffsetsMinute(0L)
                         .paused(true)
                         .remindersEnabled(true)
@@ -134,7 +134,7 @@ internal class InvoiceTest {
             )
         assertThat(invoice.discountIds()).containsExactly("string")
         assertThat(invoice.editableFields()).containsExactly(Invoice.EditableField.CUSTOMER)
-        assertThat(invoice.frequency()).isEqualTo(Invoice.Frequency.ofObject())
+        assertThat(invoice.frequency()).isEqualTo(Invoice.Frequency.ofOneTime())
         assertThat(invoice.invoiceId()).isEqualTo("invoice_id")
         assertThat(invoice._metadata()).isEqualTo(JsonValue.from(mapOf<String, Any>()))
         assertThat(invoice.refundIds()).containsExactly("string")
@@ -189,8 +189,8 @@ internal class InvoiceTest {
         assertThat(invoice.pdfUrl()).isEqualTo("pdf_url")
         assertThat(invoice.reminderSettings())
             .isEqualTo(
-                Invoice.ReminderSettings.ofUnionMember0(
-                    Invoice.ReminderSettings.UnionMember0.builder()
+                Invoice.ReminderSettings.ofSnapshot(
+                    Invoice.ReminderSettings.Snapshot.builder()
                         .addOffsetsMinute(0L)
                         .paused(true)
                         .remindersEnabled(true)
@@ -235,7 +235,7 @@ internal class InvoiceTest {
                 )
                 .addDiscountId("string")
                 .addEditableField(Invoice.EditableField.CUSTOMER)
-                .frequencyObject()
+                .frequencyOneTime()
                 .invoiceId("invoice_id")
                 .metadata(JsonValue.from(mapOf<String, Any>()))
                 .addRefundId("string")
@@ -284,7 +284,7 @@ internal class InvoiceTest {
                 )
                 .pdfUrl("pdf_url")
                 .reminderSettings(
-                    Invoice.ReminderSettings.UnionMember0.builder()
+                    Invoice.ReminderSettings.Snapshot.builder()
                         .addOffsetsMinute(0L)
                         .paused(true)
                         .remindersEnabled(true)

@@ -508,13 +508,21 @@ private constructor(
             body.paymentTerms(paymentTerms)
         }
 
-        /** Alias for calling [paymentTerms] with `PaymentTerms.ofObject()`. */
-        fun paymentTermsObject() = apply { body.paymentTermsObject() }
+        /** Alias for calling [paymentTerms] with `PaymentTerms.ofDueOnReceipt()`. */
+        fun paymentTermsDueOnReceipt() = apply { body.paymentTermsDueOnReceipt() }
 
-        /** Alias for calling [paymentTerms] with `PaymentTerms.ofUnionMember1(unionMember1)`. */
-        fun paymentTerms(unionMember1: PaymentTerms.UnionMember1) = apply {
-            body.paymentTerms(unionMember1)
-        }
+        /** Alias for calling [paymentTerms] with `PaymentTerms.ofNet(net)`. */
+        fun paymentTerms(net: PaymentTerms.Net) = apply { body.paymentTerms(net) }
+
+        /**
+         * Alias for calling [paymentTerms] with the following:
+         * ```kotlin
+         * PaymentTerms.Net.builder()
+         *     .days(days)
+         *     .build()
+         * ```
+         */
+        fun netPaymentTerms(days: Int) = apply { body.netPaymentTerms(days) }
 
         fun reviewRequired(reviewRequired: Boolean?) = apply { body.reviewRequired(reviewRequired) }
 
@@ -1283,14 +1291,22 @@ private constructor(
                 this.paymentTerms = paymentTerms
             }
 
-            /** Alias for calling [paymentTerms] with `PaymentTerms.ofObject()`. */
-            fun paymentTermsObject() = paymentTerms(PaymentTerms.ofObject())
+            /** Alias for calling [paymentTerms] with `PaymentTerms.ofDueOnReceipt()`. */
+            fun paymentTermsDueOnReceipt() = paymentTerms(PaymentTerms.ofDueOnReceipt())
+
+            /** Alias for calling [paymentTerms] with `PaymentTerms.ofNet(net)`. */
+            fun paymentTerms(net: PaymentTerms.Net) = paymentTerms(PaymentTerms.ofNet(net))
 
             /**
-             * Alias for calling [paymentTerms] with `PaymentTerms.ofUnionMember1(unionMember1)`.
+             * Alias for calling [paymentTerms] with the following:
+             * ```kotlin
+             * PaymentTerms.Net.builder()
+             *     .days(days)
+             *     .build()
+             * ```
              */
-            fun paymentTerms(unionMember1: PaymentTerms.UnionMember1) =
-                paymentTerms(PaymentTerms.ofUnionMember1(unionMember1))
+            fun netPaymentTerms(days: Int) =
+                paymentTerms(PaymentTerms.Net.builder().days(days).build())
 
             fun reviewRequired(reviewRequired: Boolean?) =
                 reviewRequired(JsonField.ofNullable(reviewRequired))
@@ -2854,22 +2870,22 @@ private constructor(
     @JsonSerialize(using = PaymentTerms.Serializer::class)
     class PaymentTerms
     private constructor(
-        private val object_: JsonValue? = null,
-        private val unionMember1: UnionMember1? = null,
+        private val dueOnReceipt: JsonValue? = null,
+        private val net: Net? = null,
         private val _json: JsonValue? = null,
     ) {
 
-        fun object_(): JsonValue? = object_
+        fun dueOnReceipt(): JsonValue? = dueOnReceipt
 
-        fun unionMember1(): UnionMember1? = unionMember1
+        fun net(): Net? = net
 
-        fun isObject(): Boolean = object_ != null
+        fun isDueOnReceipt(): Boolean = dueOnReceipt != null
 
-        fun isUnionMember1(): Boolean = unionMember1 != null
+        fun isNet(): Boolean = net != null
 
-        fun asObject(): JsonValue = object_.getOrThrow("object_")
+        fun asDueOnReceipt(): JsonValue = dueOnReceipt.getOrThrow("dueOnReceipt")
 
-        fun asUnionMember1(): UnionMember1 = unionMember1.getOrThrow("unionMember1")
+        fun asNet(): Net = net.getOrThrow("net")
 
         fun _json(): JsonValue? = _json
 
@@ -2883,7 +2899,7 @@ private constructor(
          * import com.dodopayments.api.core.JsonValue
          *
          * val result: String? = paymentTerms.accept(object : PaymentTerms.Visitor<String?> {
-         *     override fun visitObject(object_: JsonValue): String? = object_.toString()
+         *     override fun visitDueOnReceipt(dueOnReceipt: JsonValue): String? = dueOnReceipt.toString()
          *
          *     // ...
          *
@@ -2899,8 +2915,8 @@ private constructor(
          */
         fun <T> accept(visitor: Visitor<T>): T =
             when {
-                object_ != null -> visitor.visitObject(object_)
-                unionMember1 != null -> visitor.visitUnionMember1(unionMember1)
+                dueOnReceipt != null -> visitor.visitDueOnReceipt(dueOnReceipt)
+                net != null -> visitor.visitNet(net)
                 else -> visitor.unknown(_json)
             }
 
@@ -2922,18 +2938,18 @@ private constructor(
 
             accept(
                 object : Visitor<Unit> {
-                    override fun visitObject(object_: JsonValue) {
-                        object_.let {
+                    override fun visitDueOnReceipt(dueOnReceipt: JsonValue) {
+                        dueOnReceipt.let {
                             if (it != JsonValue.from(mapOf("type" to "due_on_receipt"))) {
                                 throw DodoPaymentsInvalidDataException(
-                                    "'object_' is invalid, received $it"
+                                    "'dueOnReceipt' is invalid, received $it"
                                 )
                             }
                         }
                     }
 
-                    override fun visitUnionMember1(unionMember1: UnionMember1) {
-                        unionMember1.validate()
+                    override fun visitNet(net: Net) {
+                        net.validate()
                     }
                 }
             )
@@ -2957,13 +2973,12 @@ private constructor(
         internal fun validity(): Int =
             accept(
                 object : Visitor<Int> {
-                    override fun visitObject(object_: JsonValue) =
-                        object_.let {
+                    override fun visitDueOnReceipt(dueOnReceipt: JsonValue) =
+                        dueOnReceipt.let {
                             if (it == JsonValue.from(mapOf("type" to "due_on_receipt"))) 1 else 0
                         }
 
-                    override fun visitUnionMember1(unionMember1: UnionMember1) =
-                        unionMember1.validity()
+                    override fun visitNet(net: Net) = net.validity()
 
                     override fun unknown(json: JsonValue?) = 0
                 }
@@ -2974,28 +2989,25 @@ private constructor(
                 return true
             }
 
-            return other is PaymentTerms &&
-                object_ == other.object_ &&
-                unionMember1 == other.unionMember1
+            return other is PaymentTerms && dueOnReceipt == other.dueOnReceipt && net == other.net
         }
 
-        override fun hashCode(): Int = Objects.hash(object_, unionMember1)
+        override fun hashCode(): Int = Objects.hash(dueOnReceipt, net)
 
         override fun toString(): String =
             when {
-                object_ != null -> "PaymentTerms{object_=$object_}"
-                unionMember1 != null -> "PaymentTerms{unionMember1=$unionMember1}"
+                dueOnReceipt != null -> "PaymentTerms{dueOnReceipt=$dueOnReceipt}"
+                net != null -> "PaymentTerms{net=$net}"
                 _json != null -> "PaymentTerms{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid PaymentTerms")
             }
 
         companion object {
 
-            fun ofObject() =
-                PaymentTerms(object_ = JsonValue.from(mapOf("type" to "due_on_receipt")))
+            fun ofDueOnReceipt() =
+                PaymentTerms(dueOnReceipt = JsonValue.from(mapOf("type" to "due_on_receipt")))
 
-            fun ofUnionMember1(unionMember1: UnionMember1) =
-                PaymentTerms(unionMember1 = unionMember1)
+            fun ofNet(net: Net) = PaymentTerms(net = net)
         }
 
         /**
@@ -3004,9 +3016,9 @@ private constructor(
          */
         interface Visitor<out T> {
 
-            fun visitObject(object_: JsonValue): T
+            fun visitDueOnReceipt(dueOnReceipt: JsonValue): T
 
-            fun visitUnionMember1(unionMember1: UnionMember1): T
+            fun visitNet(net: Net): T
 
             /**
              * Maps an unknown variant of [PaymentTerms] to a value of type [T].
@@ -3027,29 +3039,22 @@ private constructor(
 
             override fun ObjectCodec.deserialize(node: JsonNode): PaymentTerms {
                 val json = JsonValue.fromJsonNode(node)
+                val type = json.asObject()?.get("type")?.asString()
 
-                val bestMatches =
-                    sequenceOf(
-                            tryDeserialize(node, jacksonTypeRef<JsonValue>())
-                                ?.let { PaymentTerms(object_ = it, _json = json) }
-                                ?.takeIf { it.isValid() },
-                            tryDeserialize(node, jacksonTypeRef<UnionMember1>())?.let {
-                                PaymentTerms(unionMember1 = it, _json = json)
-                            },
-                        )
-                        .filterNotNull()
-                        .allMaxBy { it.validity() }
-                        .toList()
-                return when (bestMatches.size) {
-                    // This can happen if what we're deserializing is completely incompatible with
-                    // all the possible variants (e.g. deserializing from boolean).
-                    0 -> PaymentTerms(_json = json)
-                    1 -> bestMatches.single()
-                    // If there's more than one match with the highest validity, then use the first
-                    // completely valid match, or simply the first match if none are completely
-                    // valid.
-                    else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
+                when (type) {
+                    "due_on_receipt" -> {
+                        return tryDeserialize(node, jacksonTypeRef<JsonValue>())
+                            ?.let { PaymentTerms(dueOnReceipt = it, _json = json) }
+                            ?.takeIf { it.isValid() } ?: PaymentTerms(_json = json)
+                    }
+                    "net" -> {
+                        return tryDeserialize(node, jacksonTypeRef<Net>())?.let {
+                            PaymentTerms(net = it, _json = json)
+                        } ?: PaymentTerms(_json = json)
+                    }
                 }
+
+                return PaymentTerms(_json = json)
             }
         }
 
@@ -3061,15 +3066,15 @@ private constructor(
                 provider: SerializerProvider,
             ) {
                 when {
-                    value.object_ != null -> generator.writeObject(value.object_)
-                    value.unionMember1 != null -> generator.writeObject(value.unionMember1)
+                    value.dueOnReceipt != null -> generator.writeObject(value.dueOnReceipt)
+                    value.net != null -> generator.writeObject(value.net)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid PaymentTerms")
                 }
             }
         }
 
-        class UnionMember1
+        class Net
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val days: JsonField<Int>,
@@ -3123,7 +3128,7 @@ private constructor(
             companion object {
 
                 /**
-                 * Returns a mutable builder for constructing an instance of [UnionMember1].
+                 * Returns a mutable builder for constructing an instance of [Net].
                  *
                  * The following fields are required:
                  * ```kotlin
@@ -3133,17 +3138,17 @@ private constructor(
                 fun builder() = Builder()
             }
 
-            /** A builder for [UnionMember1]. */
+            /** A builder for [Net]. */
             class Builder internal constructor() {
 
                 private var days: JsonField<Int>? = null
                 private var type: JsonValue = JsonValue.from("net")
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-                internal fun from(unionMember1: UnionMember1) = apply {
-                    days = unionMember1.days
-                    type = unionMember1.type
-                    additionalProperties = unionMember1.additionalProperties.toMutableMap()
+                internal fun from(net: Net) = apply {
+                    days = net.days
+                    type = net.type
+                    additionalProperties = net.additionalProperties.toMutableMap()
                 }
 
                 fun days(days: Int) = days(JsonField.of(days))
@@ -3194,7 +3199,7 @@ private constructor(
                 }
 
                 /**
-                 * Returns an immutable instance of [UnionMember1].
+                 * Returns an immutable instance of [Net].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
@@ -3205,12 +3210,8 @@ private constructor(
                  *
                  * @throws IllegalStateException if any required field is unset.
                  */
-                fun build(): UnionMember1 =
-                    UnionMember1(
-                        checkRequired("days", days),
-                        type,
-                        additionalProperties.toMutableMap(),
-                    )
+                fun build(): Net =
+                    Net(checkRequired("days", days), type, additionalProperties.toMutableMap())
             }
 
             private var validated: Boolean = false
@@ -3225,7 +3226,7 @@ private constructor(
              * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
              *   match its expected type.
              */
-            fun validate(): UnionMember1 = apply {
+            fun validate(): Net = apply {
                 if (validated) {
                     return@apply
                 }
@@ -3262,7 +3263,7 @@ private constructor(
                     return true
                 }
 
-                return other is UnionMember1 &&
+                return other is Net &&
                     days == other.days &&
                     type == other.type &&
                     additionalProperties == other.additionalProperties
@@ -3273,7 +3274,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "UnionMember1{days=$days, type=$type, additionalProperties=$additionalProperties}"
+                "Net{days=$days, type=$type, additionalProperties=$additionalProperties}"
         }
     }
 

@@ -34,7 +34,7 @@ internal class UpdateSubscriptionPlanReqTest {
                     UpdateSubscriptionPlanReq.Invoice.builder()
                         .collectionMethod(CollectionMethod.AUTO_CHARGE)
                         .finalize(true)
-                        .paymentTermsObject()
+                        .paymentTermsDueOnReceipt()
                         .build()
                 )
                 .metadata(
@@ -67,7 +67,7 @@ internal class UpdateSubscriptionPlanReqTest {
                 UpdateSubscriptionPlanReq.Invoice.builder()
                     .collectionMethod(CollectionMethod.AUTO_CHARGE)
                     .finalize(true)
-                    .paymentTermsObject()
+                    .paymentTermsDueOnReceipt()
                     .build()
             )
         assertThat(updateSubscriptionPlanReq.metadata())
@@ -102,7 +102,7 @@ internal class UpdateSubscriptionPlanReqTest {
                     UpdateSubscriptionPlanReq.Invoice.builder()
                         .collectionMethod(CollectionMethod.AUTO_CHARGE)
                         .finalize(true)
-                        .paymentTermsObject()
+                        .paymentTermsDueOnReceipt()
                         .build()
                 )
                 .metadata(

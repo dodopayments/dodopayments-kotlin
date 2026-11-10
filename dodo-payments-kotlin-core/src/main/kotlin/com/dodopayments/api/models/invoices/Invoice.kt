@@ -9,7 +9,6 @@ import com.dodopayments.api.core.ExcludeMissing
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
 import com.dodopayments.api.core.JsonValue
-import com.dodopayments.api.core.allMaxBy
 import com.dodopayments.api.core.checkKnown
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.getOrThrow
@@ -1112,15 +1111,14 @@ private constructor(
          */
         fun frequency(frequency: JsonField<Frequency>) = apply { this.frequency = frequency }
 
-        /** Alias for calling [frequency] with `Frequency.ofObject()`. */
-        fun frequencyObject() = frequency(Frequency.ofObject())
+        /** Alias for calling [frequency] with `Frequency.ofOneTime()`. */
+        fun frequencyOneTime() = frequency(Frequency.ofOneTime())
 
-        /** Alias for calling [frequency] with `Frequency.ofUnionMember1(unionMember1)`. */
-        fun frequency(unionMember1: Frequency.UnionMember1) =
-            frequency(Frequency.ofUnionMember1(unionMember1))
+        /** Alias for calling [frequency] with `Frequency.ofRecurring(recurring)`. */
+        fun frequency(recurring: Frequency.Recurring) = frequency(Frequency.ofRecurring(recurring))
 
-        /** Alias for calling [frequency] with `Frequency.ofObject()`. */
-        fun frequencyObject() = frequency(Frequency.ofObject())
+        /** Alias for calling [frequency] with `Frequency.ofMixed()`. */
+        fun frequencyMixed() = frequency(Frequency.ofMixed())
 
         fun invoiceId(invoiceId: String) = invoiceId(JsonField.of(invoiceId))
 
@@ -1466,19 +1464,13 @@ private constructor(
             this.reminderSettings = reminderSettings
         }
 
-        /**
-         * Alias for calling [reminderSettings] with
-         * `ReminderSettings.ofUnionMember0(unionMember0)`.
-         */
-        fun reminderSettings(unionMember0: ReminderSettings.UnionMember0) =
-            reminderSettings(ReminderSettings.ofUnionMember0(unionMember0))
+        /** Alias for calling [reminderSettings] with `ReminderSettings.ofSnapshot(snapshot)`. */
+        fun reminderSettings(snapshot: ReminderSettings.Snapshot) =
+            reminderSettings(ReminderSettings.ofSnapshot(snapshot))
 
-        /**
-         * Alias for calling [reminderSettings] with
-         * `ReminderSettings.ofUnionMember1(unionMember1)`.
-         */
-        fun reminderSettings(unionMember1: ReminderSettings.UnionMember1) =
-            reminderSettings(ReminderSettings.ofUnionMember1(unionMember1))
+        /** Alias for calling [reminderSettings] with `ReminderSettings.ofOverride(override)`. */
+        fun reminderSettings(override: ReminderSettings.Override) =
+            reminderSettings(ReminderSettings.ofOverride(override))
 
         /** The time at which a draft that waits for review finalises. */
         fun reviewDeadline(reviewDeadline: OffsetDateTime?) =
@@ -2881,29 +2873,29 @@ private constructor(
     @JsonSerialize(using = Frequency.Serializer::class)
     class Frequency
     private constructor(
-        private val object_: JsonValue? = null,
-        private val unionMember1: UnionMember1? = null,
-        private val object_: JsonValue? = null,
+        private val oneTime: JsonValue? = null,
+        private val recurring: Recurring? = null,
+        private val mixed: JsonValue? = null,
         private val _json: JsonValue? = null,
     ) {
 
-        fun object_(): JsonValue? = object_
+        fun oneTime(): JsonValue? = oneTime
 
-        fun unionMember1(): UnionMember1? = unionMember1
+        fun recurring(): Recurring? = recurring
 
-        fun object_(): JsonValue? = object_
+        fun mixed(): JsonValue? = mixed
 
-        fun isObject(): Boolean = object_ != null
+        fun isOneTime(): Boolean = oneTime != null
 
-        fun isUnionMember1(): Boolean = unionMember1 != null
+        fun isRecurring(): Boolean = recurring != null
 
-        fun isObject(): Boolean = object_ != null
+        fun isMixed(): Boolean = mixed != null
 
-        fun asObject(): JsonValue = object_.getOrThrow("object_")
+        fun asOneTime(): JsonValue = oneTime.getOrThrow("oneTime")
 
-        fun asUnionMember1(): UnionMember1 = unionMember1.getOrThrow("unionMember1")
+        fun asRecurring(): Recurring = recurring.getOrThrow("recurring")
 
-        fun asObject(): JsonValue = object_.getOrThrow("object_")
+        fun asMixed(): JsonValue = mixed.getOrThrow("mixed")
 
         fun _json(): JsonValue? = _json
 
@@ -2917,7 +2909,7 @@ private constructor(
          * import com.dodopayments.api.core.JsonValue
          *
          * val result: String? = frequency.accept(object : Frequency.Visitor<String?> {
-         *     override fun visitObject(object_: JsonValue): String? = object_.toString()
+         *     override fun visitOneTime(oneTime: JsonValue): String? = oneTime.toString()
          *
          *     // ...
          *
@@ -2933,9 +2925,9 @@ private constructor(
          */
         fun <T> accept(visitor: Visitor<T>): T =
             when {
-                object_ != null -> visitor.visitObject(object_)
-                unionMember1 != null -> visitor.visitUnionMember1(unionMember1)
-                object_ != null -> visitor.visitObject(object_)
+                oneTime != null -> visitor.visitOneTime(oneTime)
+                recurring != null -> visitor.visitRecurring(recurring)
+                mixed != null -> visitor.visitMixed(mixed)
                 else -> visitor.unknown(_json)
             }
 
@@ -2957,25 +2949,25 @@ private constructor(
 
             accept(
                 object : Visitor<Unit> {
-                    override fun visitObject(object_: JsonValue) {
-                        object_.let {
+                    override fun visitOneTime(oneTime: JsonValue) {
+                        oneTime.let {
                             if (it != JsonValue.from(mapOf("type" to "one_time"))) {
                                 throw DodoPaymentsInvalidDataException(
-                                    "'object_' is invalid, received $it"
+                                    "'oneTime' is invalid, received $it"
                                 )
                             }
                         }
                     }
 
-                    override fun visitUnionMember1(unionMember1: UnionMember1) {
-                        unionMember1.validate()
+                    override fun visitRecurring(recurring: Recurring) {
+                        recurring.validate()
                     }
 
-                    override fun visitObject(object_: JsonValue) {
-                        object_.let {
+                    override fun visitMixed(mixed: JsonValue) {
+                        mixed.let {
                             if (it != JsonValue.from(mapOf("type" to "mixed"))) {
                                 throw DodoPaymentsInvalidDataException(
-                                    "'object_' is invalid, received $it"
+                                    "'mixed' is invalid, received $it"
                                 )
                             }
                         }
@@ -3002,16 +2994,15 @@ private constructor(
         internal fun validity(): Int =
             accept(
                 object : Visitor<Int> {
-                    override fun visitObject(object_: JsonValue) =
-                        object_.let {
+                    override fun visitOneTime(oneTime: JsonValue) =
+                        oneTime.let {
                             if (it == JsonValue.from(mapOf("type" to "one_time"))) 1 else 0
                         }
 
-                    override fun visitUnionMember1(unionMember1: UnionMember1) =
-                        unionMember1.validity()
+                    override fun visitRecurring(recurring: Recurring) = recurring.validity()
 
-                    override fun visitObject(object_: JsonValue) =
-                        object_.let { if (it == JsonValue.from(mapOf("type" to "mixed"))) 1 else 0 }
+                    override fun visitMixed(mixed: JsonValue) =
+                        mixed.let { if (it == JsonValue.from(mapOf("type" to "mixed"))) 1 else 0 }
 
                     override fun unknown(json: JsonValue?) = 0
                 }
@@ -3023,29 +3014,29 @@ private constructor(
             }
 
             return other is Frequency &&
-                object_ == other.object_ &&
-                unionMember1 == other.unionMember1 &&
-                object_ == other.object_
+                oneTime == other.oneTime &&
+                recurring == other.recurring &&
+                mixed == other.mixed
         }
 
-        override fun hashCode(): Int = Objects.hash(object_, unionMember1, object_)
+        override fun hashCode(): Int = Objects.hash(oneTime, recurring, mixed)
 
         override fun toString(): String =
             when {
-                object_ != null -> "Frequency{object_=$object_}"
-                unionMember1 != null -> "Frequency{unionMember1=$unionMember1}"
-                object_ != null -> "Frequency{object_=$object_}"
+                oneTime != null -> "Frequency{oneTime=$oneTime}"
+                recurring != null -> "Frequency{recurring=$recurring}"
+                mixed != null -> "Frequency{mixed=$mixed}"
                 _json != null -> "Frequency{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Frequency")
             }
 
         companion object {
 
-            fun ofObject() = Frequency(object_ = JsonValue.from(mapOf("type" to "one_time")))
+            fun ofOneTime() = Frequency(oneTime = JsonValue.from(mapOf("type" to "one_time")))
 
-            fun ofUnionMember1(unionMember1: UnionMember1) = Frequency(unionMember1 = unionMember1)
+            fun ofRecurring(recurring: Recurring) = Frequency(recurring = recurring)
 
-            fun ofObject() = Frequency(object_ = JsonValue.from(mapOf("type" to "mixed")))
+            fun ofMixed() = Frequency(mixed = JsonValue.from(mapOf("type" to "mixed")))
         }
 
         /**
@@ -3053,11 +3044,11 @@ private constructor(
          */
         interface Visitor<out T> {
 
-            fun visitObject(object_: JsonValue): T
+            fun visitOneTime(oneTime: JsonValue): T
 
-            fun visitUnionMember1(unionMember1: UnionMember1): T
+            fun visitRecurring(recurring: Recurring): T
 
-            fun visitObject(object_: JsonValue): T
+            fun visitMixed(mixed: JsonValue): T
 
             /**
              * Maps an unknown variant of [Frequency] to a value of type [T].
@@ -3078,32 +3069,27 @@ private constructor(
 
             override fun ObjectCodec.deserialize(node: JsonNode): Frequency {
                 val json = JsonValue.fromJsonNode(node)
+                val type = json.asObject()?.get("type")?.asString()
 
-                val bestMatches =
-                    sequenceOf(
-                            tryDeserialize(node, jacksonTypeRef<JsonValue>())
-                                ?.let { Frequency(object_ = it, _json = json) }
-                                ?.takeIf { it.isValid() },
-                            tryDeserialize(node, jacksonTypeRef<JsonValue>())
-                                ?.let { Frequency(object_ = it, _json = json) }
-                                ?.takeIf { it.isValid() },
-                            tryDeserialize(node, jacksonTypeRef<UnionMember1>())?.let {
-                                Frequency(unionMember1 = it, _json = json)
-                            },
-                        )
-                        .filterNotNull()
-                        .allMaxBy { it.validity() }
-                        .toList()
-                return when (bestMatches.size) {
-                    // This can happen if what we're deserializing is completely incompatible with
-                    // all the possible variants (e.g. deserializing from boolean).
-                    0 -> Frequency(_json = json)
-                    1 -> bestMatches.single()
-                    // If there's more than one match with the highest validity, then use the first
-                    // completely valid match, or simply the first match if none are completely
-                    // valid.
-                    else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
+                when (type) {
+                    "one_time" -> {
+                        return tryDeserialize(node, jacksonTypeRef<JsonValue>())
+                            ?.let { Frequency(oneTime = it, _json = json) }
+                            ?.takeIf { it.isValid() } ?: Frequency(_json = json)
+                    }
+                    "recurring" -> {
+                        return tryDeserialize(node, jacksonTypeRef<Recurring>())?.let {
+                            Frequency(recurring = it, _json = json)
+                        } ?: Frequency(_json = json)
+                    }
+                    "mixed" -> {
+                        return tryDeserialize(node, jacksonTypeRef<JsonValue>())
+                            ?.let { Frequency(mixed = it, _json = json) }
+                            ?.takeIf { it.isValid() } ?: Frequency(_json = json)
+                    }
                 }
+
+                return Frequency(_json = json)
             }
         }
 
@@ -3115,16 +3101,16 @@ private constructor(
                 provider: SerializerProvider,
             ) {
                 when {
-                    value.object_ != null -> generator.writeObject(value.object_)
-                    value.unionMember1 != null -> generator.writeObject(value.unionMember1)
-                    value.object_ != null -> generator.writeObject(value.object_)
+                    value.oneTime != null -> generator.writeObject(value.oneTime)
+                    value.recurring != null -> generator.writeObject(value.recurring)
+                    value.mixed != null -> generator.writeObject(value.mixed)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid Frequency")
                 }
             }
         }
 
-        class UnionMember1
+        class Recurring
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val count: JsonField<Int>,
@@ -3201,7 +3187,7 @@ private constructor(
             companion object {
 
                 /**
-                 * Returns a mutable builder for constructing an instance of [UnionMember1].
+                 * Returns a mutable builder for constructing an instance of [Recurring].
                  *
                  * The following fields are required:
                  * ```kotlin
@@ -3212,7 +3198,7 @@ private constructor(
                 fun builder() = Builder()
             }
 
-            /** A builder for [UnionMember1]. */
+            /** A builder for [Recurring]. */
             class Builder internal constructor() {
 
                 private var count: JsonField<Int>? = null
@@ -3220,11 +3206,11 @@ private constructor(
                 private var type: JsonValue = JsonValue.from("recurring")
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-                internal fun from(unionMember1: UnionMember1) = apply {
-                    count = unionMember1.count
-                    interval = unionMember1.interval
-                    type = unionMember1.type
-                    additionalProperties = unionMember1.additionalProperties.toMutableMap()
+                internal fun from(recurring: Recurring) = apply {
+                    count = recurring.count
+                    interval = recurring.interval
+                    type = recurring.type
+                    additionalProperties = recurring.additionalProperties.toMutableMap()
                 }
 
                 fun count(count: Int) = count(JsonField.of(count))
@@ -3287,7 +3273,7 @@ private constructor(
                 }
 
                 /**
-                 * Returns an immutable instance of [UnionMember1].
+                 * Returns an immutable instance of [Recurring].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
@@ -3299,8 +3285,8 @@ private constructor(
                  *
                  * @throws IllegalStateException if any required field is unset.
                  */
-                fun build(): UnionMember1 =
-                    UnionMember1(
+                fun build(): Recurring =
+                    Recurring(
                         checkRequired("count", count),
                         checkRequired("interval", interval),
                         type,
@@ -3320,7 +3306,7 @@ private constructor(
              * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
              *   match its expected type.
              */
-            fun validate(): UnionMember1 = apply {
+            fun validate(): Recurring = apply {
                 if (validated) {
                     return@apply
                 }
@@ -3359,7 +3345,7 @@ private constructor(
                     return true
                 }
 
-                return other is UnionMember1 &&
+                return other is Recurring &&
                     count == other.count &&
                     interval == other.interval &&
                     type == other.type &&
@@ -3373,7 +3359,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "UnionMember1{count=$count, interval=$interval, type=$type, additionalProperties=$additionalProperties}"
+                "Recurring{count=$count, interval=$interval, type=$type, additionalProperties=$additionalProperties}"
         }
     }
 
@@ -3857,26 +3843,26 @@ private constructor(
     @JsonSerialize(using = ReminderSettings.Serializer::class)
     class ReminderSettings
     private constructor(
-        private val unionMember0: UnionMember0? = null,
-        private val unionMember1: UnionMember1? = null,
+        private val snapshot: Snapshot? = null,
+        private val override: Override? = null,
         private val _json: JsonValue? = null,
     ) {
 
         /** The settings that finalise froze. The reminders run on them. */
-        fun unionMember0(): UnionMember0? = unionMember0
+        fun snapshot(): Snapshot? = snapshot
 
         /** The changes of a draft. A `null` field keeps the business value at finalise. */
-        fun unionMember1(): UnionMember1? = unionMember1
+        fun override(): Override? = override
 
-        fun isUnionMember0(): Boolean = unionMember0 != null
+        fun isSnapshot(): Boolean = snapshot != null
 
-        fun isUnionMember1(): Boolean = unionMember1 != null
+        fun isOverride(): Boolean = override != null
 
         /** The settings that finalise froze. The reminders run on them. */
-        fun asUnionMember0(): UnionMember0 = unionMember0.getOrThrow("unionMember0")
+        fun asSnapshot(): Snapshot = snapshot.getOrThrow("snapshot")
 
         /** The changes of a draft. A `null` field keeps the business value at finalise. */
-        fun asUnionMember1(): UnionMember1 = unionMember1.getOrThrow("unionMember1")
+        fun asOverride(): Override = override.getOrThrow("override")
 
         fun _json(): JsonValue? = _json
 
@@ -3890,7 +3876,7 @@ private constructor(
          * import com.dodopayments.api.core.JsonValue
          *
          * val result: String? = reminderSettings.accept(object : ReminderSettings.Visitor<String?> {
-         *     override fun visitUnionMember0(unionMember0: UnionMember0): String? = unionMember0.toString()
+         *     override fun visitSnapshot(snapshot: Snapshot): String? = snapshot.toString()
          *
          *     // ...
          *
@@ -3906,8 +3892,8 @@ private constructor(
          */
         fun <T> accept(visitor: Visitor<T>): T =
             when {
-                unionMember0 != null -> visitor.visitUnionMember0(unionMember0)
-                unionMember1 != null -> visitor.visitUnionMember1(unionMember1)
+                snapshot != null -> visitor.visitSnapshot(snapshot)
+                override != null -> visitor.visitOverride(override)
                 else -> visitor.unknown(_json)
             }
 
@@ -3929,12 +3915,12 @@ private constructor(
 
             accept(
                 object : Visitor<Unit> {
-                    override fun visitUnionMember0(unionMember0: UnionMember0) {
-                        unionMember0.validate()
+                    override fun visitSnapshot(snapshot: Snapshot) {
+                        snapshot.validate()
                     }
 
-                    override fun visitUnionMember1(unionMember1: UnionMember1) {
-                        unionMember1.validate()
+                    override fun visitOverride(override: Override) {
+                        override.validate()
                     }
                 }
             )
@@ -3958,11 +3944,9 @@ private constructor(
         internal fun validity(): Int =
             accept(
                 object : Visitor<Int> {
-                    override fun visitUnionMember0(unionMember0: UnionMember0) =
-                        unionMember0.validity()
+                    override fun visitSnapshot(snapshot: Snapshot) = snapshot.validity()
 
-                    override fun visitUnionMember1(unionMember1: UnionMember1) =
-                        unionMember1.validity()
+                    override fun visitOverride(override: Override) = override.validity()
 
                     override fun unknown(json: JsonValue?) = 0
                 }
@@ -3974,16 +3958,16 @@ private constructor(
             }
 
             return other is ReminderSettings &&
-                unionMember0 == other.unionMember0 &&
-                unionMember1 == other.unionMember1
+                snapshot == other.snapshot &&
+                override == other.override
         }
 
-        override fun hashCode(): Int = Objects.hash(unionMember0, unionMember1)
+        override fun hashCode(): Int = Objects.hash(snapshot, override)
 
         override fun toString(): String =
             when {
-                unionMember0 != null -> "ReminderSettings{unionMember0=$unionMember0}"
-                unionMember1 != null -> "ReminderSettings{unionMember1=$unionMember1}"
+                snapshot != null -> "ReminderSettings{snapshot=$snapshot}"
+                override != null -> "ReminderSettings{override=$override}"
                 _json != null -> "ReminderSettings{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid ReminderSettings")
             }
@@ -3991,12 +3975,10 @@ private constructor(
         companion object {
 
             /** The settings that finalise froze. The reminders run on them. */
-            fun ofUnionMember0(unionMember0: UnionMember0) =
-                ReminderSettings(unionMember0 = unionMember0)
+            fun ofSnapshot(snapshot: Snapshot) = ReminderSettings(snapshot = snapshot)
 
             /** The changes of a draft. A `null` field keeps the business value at finalise. */
-            fun ofUnionMember1(unionMember1: UnionMember1) =
-                ReminderSettings(unionMember1 = unionMember1)
+            fun ofOverride(override: Override) = ReminderSettings(override = override)
         }
 
         /**
@@ -4006,10 +3988,10 @@ private constructor(
         interface Visitor<out T> {
 
             /** The settings that finalise froze. The reminders run on them. */
-            fun visitUnionMember0(unionMember0: UnionMember0): T
+            fun visitSnapshot(snapshot: Snapshot): T
 
             /** The changes of a draft. A `null` field keeps the business value at finalise. */
-            fun visitUnionMember1(unionMember1: UnionMember1): T
+            fun visitOverride(override: Override): T
 
             /**
              * Maps an unknown variant of [ReminderSettings] to a value of type [T].
@@ -4030,29 +4012,22 @@ private constructor(
 
             override fun ObjectCodec.deserialize(node: JsonNode): ReminderSettings {
                 val json = JsonValue.fromJsonNode(node)
+                val kind = json.asObject()?.get("kind")?.asString()
 
-                val bestMatches =
-                    sequenceOf(
-                            tryDeserialize(node, jacksonTypeRef<UnionMember0>())?.let {
-                                ReminderSettings(unionMember0 = it, _json = json)
-                            },
-                            tryDeserialize(node, jacksonTypeRef<UnionMember1>())?.let {
-                                ReminderSettings(unionMember1 = it, _json = json)
-                            },
-                        )
-                        .filterNotNull()
-                        .allMaxBy { it.validity() }
-                        .toList()
-                return when (bestMatches.size) {
-                    // This can happen if what we're deserializing is completely incompatible with
-                    // all the possible variants (e.g. deserializing from boolean).
-                    0 -> ReminderSettings(_json = json)
-                    1 -> bestMatches.single()
-                    // If there's more than one match with the highest validity, then use the first
-                    // completely valid match, or simply the first match if none are completely
-                    // valid.
-                    else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
+                when (kind) {
+                    "snapshot" -> {
+                        return tryDeserialize(node, jacksonTypeRef<Snapshot>())?.let {
+                            ReminderSettings(snapshot = it, _json = json)
+                        } ?: ReminderSettings(_json = json)
+                    }
+                    "override" -> {
+                        return tryDeserialize(node, jacksonTypeRef<Override>())?.let {
+                            ReminderSettings(override = it, _json = json)
+                        } ?: ReminderSettings(_json = json)
+                    }
                 }
+
+                return ReminderSettings(_json = json)
             }
         }
 
@@ -4064,8 +4039,8 @@ private constructor(
                 provider: SerializerProvider,
             ) {
                 when {
-                    value.unionMember0 != null -> generator.writeObject(value.unionMember0)
-                    value.unionMember1 != null -> generator.writeObject(value.unionMember1)
+                    value.snapshot != null -> generator.writeObject(value.snapshot)
+                    value.override != null -> generator.writeObject(value.override)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid ReminderSettings")
                 }
@@ -4073,7 +4048,7 @@ private constructor(
         }
 
         /** The settings that finalise froze. The reminders run on them. */
-        class UnionMember0
+        class Snapshot
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val kind: JsonValue,
@@ -4171,7 +4146,7 @@ private constructor(
             companion object {
 
                 /**
-                 * Returns a mutable builder for constructing an instance of [UnionMember0].
+                 * Returns a mutable builder for constructing an instance of [Snapshot].
                  *
                  * The following fields are required:
                  * ```kotlin
@@ -4183,7 +4158,7 @@ private constructor(
                 fun builder() = Builder()
             }
 
-            /** A builder for [UnionMember0]. */
+            /** A builder for [Snapshot]. */
             class Builder internal constructor() {
 
                 private var kind: JsonValue = JsonValue.from("snapshot")
@@ -4192,12 +4167,12 @@ private constructor(
                 private var remindersEnabled: JsonField<Boolean>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-                internal fun from(unionMember0: UnionMember0) = apply {
-                    kind = unionMember0.kind
-                    offsetsMinutes = unionMember0.offsetsMinutes.map { it.toMutableList() }
-                    paused = unionMember0.paused
-                    remindersEnabled = unionMember0.remindersEnabled
-                    additionalProperties = unionMember0.additionalProperties.toMutableMap()
+                internal fun from(snapshot: Snapshot) = apply {
+                    kind = snapshot.kind
+                    offsetsMinutes = snapshot.offsetsMinutes.map { it.toMutableList() }
+                    paused = snapshot.paused
+                    remindersEnabled = snapshot.remindersEnabled
+                    additionalProperties = snapshot.additionalProperties.toMutableMap()
                 }
 
                 /**
@@ -4288,7 +4263,7 @@ private constructor(
                 }
 
                 /**
-                 * Returns an immutable instance of [UnionMember0].
+                 * Returns an immutable instance of [Snapshot].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
@@ -4301,8 +4276,8 @@ private constructor(
                  *
                  * @throws IllegalStateException if any required field is unset.
                  */
-                fun build(): UnionMember0 =
-                    UnionMember0(
+                fun build(): Snapshot =
+                    Snapshot(
                         kind,
                         checkRequired("offsetsMinutes", offsetsMinutes).map { it.toImmutable() },
                         checkRequired("paused", paused),
@@ -4323,7 +4298,7 @@ private constructor(
              * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
              *   match its expected type.
              */
-            fun validate(): UnionMember0 = apply {
+            fun validate(): Snapshot = apply {
                 if (validated) {
                     return@apply
                 }
@@ -4364,7 +4339,7 @@ private constructor(
                     return true
                 }
 
-                return other is UnionMember0 &&
+                return other is Snapshot &&
                     kind == other.kind &&
                     offsetsMinutes == other.offsetsMinutes &&
                     paused == other.paused &&
@@ -4379,11 +4354,11 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "UnionMember0{kind=$kind, offsetsMinutes=$offsetsMinutes, paused=$paused, remindersEnabled=$remindersEnabled, additionalProperties=$additionalProperties}"
+                "Snapshot{kind=$kind, offsetsMinutes=$offsetsMinutes, paused=$paused, remindersEnabled=$remindersEnabled, additionalProperties=$additionalProperties}"
         }
 
         /** The changes of a draft. A `null` field keeps the business value at finalise. */
-        class UnionMember1
+        class Override
         @JsonCreator(mode = JsonCreator.Mode.DISABLED)
         private constructor(
             private val kind: JsonValue,
@@ -4477,11 +4452,11 @@ private constructor(
 
             companion object {
 
-                /** Returns a mutable builder for constructing an instance of [UnionMember1]. */
+                /** Returns a mutable builder for constructing an instance of [Override]. */
                 fun builder() = Builder()
             }
 
-            /** A builder for [UnionMember1]. */
+            /** A builder for [Override]. */
             class Builder internal constructor() {
 
                 private var kind: JsonValue = JsonValue.from("override")
@@ -4490,12 +4465,12 @@ private constructor(
                 private var remindersEnabled: JsonField<Boolean> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
-                internal fun from(unionMember1: UnionMember1) = apply {
-                    kind = unionMember1.kind
-                    offsetsMinutes = unionMember1.offsetsMinutes.map { it.toMutableList() }
-                    paused = unionMember1.paused
-                    remindersEnabled = unionMember1.remindersEnabled
-                    additionalProperties = unionMember1.additionalProperties.toMutableMap()
+                internal fun from(override: Override) = apply {
+                    kind = override.kind
+                    offsetsMinutes = override.offsetsMinutes.map { it.toMutableList() }
+                    paused = override.paused
+                    remindersEnabled = override.remindersEnabled
+                    additionalProperties = override.additionalProperties.toMutableMap()
                 }
 
                 /**
@@ -4601,12 +4576,12 @@ private constructor(
                 }
 
                 /**
-                 * Returns an immutable instance of [UnionMember1].
+                 * Returns an immutable instance of [Override].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  */
-                fun build(): UnionMember1 =
-                    UnionMember1(
+                fun build(): Override =
+                    Override(
                         kind,
                         (offsetsMinutes ?: JsonMissing.of()).map { it.toImmutable() },
                         paused,
@@ -4627,7 +4602,7 @@ private constructor(
              * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't
              *   match its expected type.
              */
-            fun validate(): UnionMember1 = apply {
+            fun validate(): Override = apply {
                 if (validated) {
                     return@apply
                 }
@@ -4668,7 +4643,7 @@ private constructor(
                     return true
                 }
 
-                return other is UnionMember1 &&
+                return other is Override &&
                     kind == other.kind &&
                     offsetsMinutes == other.offsetsMinutes &&
                     paused == other.paused &&
@@ -4683,7 +4658,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "UnionMember1{kind=$kind, offsetsMinutes=$offsetsMinutes, paused=$paused, remindersEnabled=$remindersEnabled, additionalProperties=$additionalProperties}"
+                "Override{kind=$kind, offsetsMinutes=$offsetsMinutes, paused=$paused, remindersEnabled=$remindersEnabled, additionalProperties=$additionalProperties}"
         }
     }
 
