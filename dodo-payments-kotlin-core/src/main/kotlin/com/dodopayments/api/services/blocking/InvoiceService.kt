@@ -207,26 +207,31 @@ interface InvoiceService {
     ): Invoice
 
     /** Prices the body as a draft and returns it. No row is saved. */
+    @MustBeClosed
     fun preview(
         params: InvoicePreviewParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    )
+    ): HttpResponse
 
     /** Preview a draft invoice */
+    @MustBeClosed
     fun previewExisting(
         invoiceId: String,
         params: InvoicePreviewExistingParams = InvoicePreviewExistingParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ) = previewExisting(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
+    ): HttpResponse =
+        previewExisting(params.toBuilder().invoiceId(invoiceId).build(), requestOptions)
 
     /** @see previewExisting */
+    @MustBeClosed
     fun previewExisting(
         params: InvoicePreviewExistingParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    )
+    ): HttpResponse
 
     /** @see previewExisting */
-    fun previewExisting(invoiceId: String, requestOptions: RequestOptions) =
+    @MustBeClosed
+    fun previewExisting(invoiceId: String, requestOptions: RequestOptions): HttpResponse =
         previewExisting(invoiceId, InvoicePreviewExistingParams.none(), requestOptions)
 
     /** Charges the saved payment method of the invoice subscription now. */
