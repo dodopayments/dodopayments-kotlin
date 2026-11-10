@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.126.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.125.0...v1.126.0) (2026-11-10)
+
+
+### Features
+
+* **api:** billing invoices and upcoming invoice; sync spec to prod 1.122.7 ([fd76ca6](https://github.com/dodopayments/dodopayments-kotlin/commit/fd76ca684ae511c4f2090eeee9086da69314a171))
+* **api:** billing invoices and upcoming invoice; sync spec to prod 1.122.7 ([2650adf](https://github.com/dodopayments/dodopayments-kotlin/commit/2650adf8c8e6bc423678fdd7cdabdd7d2da64a62))
+* **api:** regenerate SDK from latest OpenAPI spec ([8a095c4](https://github.com/dodopayments/dodopayments-kotlin/commit/8a095c4f4694f55f73cc9e4cd748a89d140d5844))
+* **api:** regenerate SDK from latest OpenAPI spec ([ae2a63a](https://github.com/dodopayments/dodopayments-kotlin/commit/ae2a63a565bad766f6008c1df4415c2434ebbda8))
+
 ## [1.125.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.124.0...v1.125.0) (2026-10-28)
 
 
