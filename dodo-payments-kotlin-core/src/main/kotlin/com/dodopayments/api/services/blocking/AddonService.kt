@@ -16,7 +16,6 @@ import com.dodopayments.api.models.addons.AddonUnarchiveParams
 import com.dodopayments.api.models.addons.AddonUpdateImagesParams
 import com.dodopayments.api.models.addons.AddonUpdateImagesResponse
 import com.dodopayments.api.models.addons.AddonUpdateParams
-import com.dodopayments.api.services.blocking.addons.TranslationService
 import com.google.errorprone.annotations.MustBeClosed
 
 interface AddonService {
@@ -32,8 +31,6 @@ interface AddonService {
      * The original service is not modified.
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): AddonService
-
-    fun translations(): TranslationService
 
     fun create(
         params: AddonCreateParams,
@@ -135,8 +132,6 @@ interface AddonService {
          * The original service is not modified.
          */
         fun withOptions(modifier: (ClientOptions.Builder) -> Unit): AddonService.WithRawResponse
-
-        fun translations(): TranslationService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /addons`, but is otherwise the same as

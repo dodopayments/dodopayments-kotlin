@@ -6,6 +6,7 @@ import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponse
 import com.dodopayments.api.core.http.HttpResponseFor
+import com.dodopayments.api.models.invoices.Invoice
 import com.dodopayments.api.models.subscriptions.Subscription
 import com.dodopayments.api.models.subscriptions.SubscriptionCancelChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChangePlanParams
@@ -21,6 +22,7 @@ import com.dodopayments.api.models.subscriptions.SubscriptionPreviewChangePlanRe
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveCreditUsageParams
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveCreditUsageResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveParams
+import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUpcomingInvoiceParams
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryPage
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryParams
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdateParams
@@ -175,6 +177,35 @@ interface SubscriptionService {
         )
 
     /**
+     * Prices the next cycle invoice of an invoice-led subscription. The invoice ID in the response
+     * is not stored, so the response has no allowed actions and no editable fields.
+     */
+    fun retrieveUpcomingInvoice(
+        subscriptionId: String,
+        params: SubscriptionRetrieveUpcomingInvoiceParams =
+            SubscriptionRetrieveUpcomingInvoiceParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Invoice =
+        retrieveUpcomingInvoice(
+            params.toBuilder().subscriptionId(subscriptionId).build(),
+            requestOptions,
+        )
+
+    /** @see retrieveUpcomingInvoice */
+    fun retrieveUpcomingInvoice(
+        params: SubscriptionRetrieveUpcomingInvoiceParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Invoice
+
+    /** @see retrieveUpcomingInvoice */
+    fun retrieveUpcomingInvoice(subscriptionId: String, requestOptions: RequestOptions): Invoice =
+        retrieveUpcomingInvoice(
+            subscriptionId,
+            SubscriptionRetrieveUpcomingInvoiceParams.none(),
+            requestOptions,
+        )
+
+    /**
      * Get detailed usage history for a subscription that includes usage-based billing (metered
      * components). This endpoint provides insights into customer usage patterns and billing
      * calculations over time.
@@ -236,6 +267,10 @@ interface SubscriptionService {
             requestOptions,
         )
 
+    /**
+     * For an invoice-led subscription, billing charges the open invoices after the change, so the
+     * response has no payment.
+     */
     fun updatePaymentMethod(
         subscriptionId: String,
         params: SubscriptionUpdatePaymentMethodParams,
@@ -471,6 +506,41 @@ interface SubscriptionService {
             retrieveCreditUsage(
                 subscriptionId,
                 SubscriptionRetrieveCreditUsageParams.none(),
+                requestOptions,
+            )
+
+        /**
+         * Returns a raw HTTP response for `get /subscriptions/{subscription_id}/upcoming-invoice`,
+         * but is otherwise the same as [SubscriptionService.retrieveUpcomingInvoice].
+         */
+        @MustBeClosed
+        fun retrieveUpcomingInvoice(
+            subscriptionId: String,
+            params: SubscriptionRetrieveUpcomingInvoiceParams =
+                SubscriptionRetrieveUpcomingInvoiceParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Invoice> =
+            retrieveUpcomingInvoice(
+                params.toBuilder().subscriptionId(subscriptionId).build(),
+                requestOptions,
+            )
+
+        /** @see retrieveUpcomingInvoice */
+        @MustBeClosed
+        fun retrieveUpcomingInvoice(
+            params: SubscriptionRetrieveUpcomingInvoiceParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Invoice>
+
+        /** @see retrieveUpcomingInvoice */
+        @MustBeClosed
+        fun retrieveUpcomingInvoice(
+            subscriptionId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<Invoice> =
+            retrieveUpcomingInvoice(
+                subscriptionId,
+                SubscriptionRetrieveUpcomingInvoiceParams.none(),
                 requestOptions,
             )
 

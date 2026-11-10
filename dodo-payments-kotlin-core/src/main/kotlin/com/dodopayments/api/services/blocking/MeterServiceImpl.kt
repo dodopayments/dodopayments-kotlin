@@ -26,8 +26,6 @@ import com.dodopayments.api.models.meters.MeterListParams
 import com.dodopayments.api.models.meters.MeterRetrieveParams
 import com.dodopayments.api.models.meters.MeterUnarchiveParams
 import com.dodopayments.api.models.meters.MeterUpdateParams
-import com.dodopayments.api.services.blocking.meters.TranslationService
-import com.dodopayments.api.services.blocking.meters.TranslationServiceImpl
 
 class MeterServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     MeterService {
@@ -36,14 +34,10 @@ class MeterServiceImpl internal constructor(private val clientOptions: ClientOpt
         WithRawResponseImpl(clientOptions)
     }
 
-    private val translations: TranslationService by lazy { TranslationServiceImpl(clientOptions) }
-
     override fun withRawResponse(): MeterService.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MeterService =
         MeterServiceImpl(clientOptions.toBuilder().apply(modifier).build())
-
-    override fun translations(): TranslationService = translations
 
     override fun create(params: MeterCreateParams, requestOptions: RequestOptions): Meter =
         // post /meters
@@ -77,16 +71,10 @@ class MeterServiceImpl internal constructor(private val clientOptions: ClientOpt
         private val errorHandler: Handler<HttpResponse> =
             errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
-        private val translations: TranslationService.WithRawResponse by lazy {
-            TranslationServiceImpl.WithRawResponseImpl(clientOptions)
-        }
-
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): MeterService.WithRawResponse =
             MeterServiceImpl.WithRawResponseImpl(clientOptions.toBuilder().apply(modifier).build())
-
-        override fun translations(): TranslationService.WithRawResponse = translations
 
         private val createHandler: Handler<Meter> = jsonHandler<Meter>(clientOptions.jsonMapper)
 

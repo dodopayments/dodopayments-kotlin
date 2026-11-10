@@ -72,6 +72,22 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
 
         val SUBSCRIPTION_UPDATE_PAYMENT_METHOD = of("subscription.update_payment_method")
 
+        val INVOICE_FINALIZED = of("invoice.finalized")
+
+        val INVOICE_SENT = of("invoice.sent")
+
+        val INVOICE_PAID = of("invoice.paid")
+
+        val INVOICE_PAYMENT_FAILED = of("invoice.payment_failed")
+
+        val INVOICE_PAST_DUE = of("invoice.past_due")
+
+        val INVOICE_REOPENED = of("invoice.reopened")
+
+        val INVOICE_VOIDED = of("invoice.voided")
+
+        val INVOICE_MARKED_UNCOLLECTABLE = of("invoice.marked_uncollectable")
+
         val LICENSE_KEY_CREATED = of("license_key.created")
 
         val PAYOUT_CREATED = of("payout.created")
@@ -148,6 +164,14 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         SUBSCRIPTION_PLAN_CHANGED,
         SUBSCRIPTION_UPDATED,
         SUBSCRIPTION_UPDATE_PAYMENT_METHOD,
+        INVOICE_FINALIZED,
+        INVOICE_SENT,
+        INVOICE_PAID,
+        INVOICE_PAYMENT_FAILED,
+        INVOICE_PAST_DUE,
+        INVOICE_REOPENED,
+        INVOICE_VOIDED,
+        INVOICE_MARKED_UNCOLLECTABLE,
         LICENSE_KEY_CREATED,
         PAYOUT_CREATED,
         PAYOUT_ON_HOLD,
@@ -208,6 +232,14 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
         SUBSCRIPTION_PLAN_CHANGED,
         SUBSCRIPTION_UPDATED,
         SUBSCRIPTION_UPDATE_PAYMENT_METHOD,
+        INVOICE_FINALIZED,
+        INVOICE_SENT,
+        INVOICE_PAID,
+        INVOICE_PAYMENT_FAILED,
+        INVOICE_PAST_DUE,
+        INVOICE_REOPENED,
+        INVOICE_VOIDED,
+        INVOICE_MARKED_UNCOLLECTABLE,
         LICENSE_KEY_CREATED,
         PAYOUT_CREATED,
         PAYOUT_ON_HOLD,
@@ -271,6 +303,14 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             SUBSCRIPTION_PLAN_CHANGED -> Value.SUBSCRIPTION_PLAN_CHANGED
             SUBSCRIPTION_UPDATED -> Value.SUBSCRIPTION_UPDATED
             SUBSCRIPTION_UPDATE_PAYMENT_METHOD -> Value.SUBSCRIPTION_UPDATE_PAYMENT_METHOD
+            INVOICE_FINALIZED -> Value.INVOICE_FINALIZED
+            INVOICE_SENT -> Value.INVOICE_SENT
+            INVOICE_PAID -> Value.INVOICE_PAID
+            INVOICE_PAYMENT_FAILED -> Value.INVOICE_PAYMENT_FAILED
+            INVOICE_PAST_DUE -> Value.INVOICE_PAST_DUE
+            INVOICE_REOPENED -> Value.INVOICE_REOPENED
+            INVOICE_VOIDED -> Value.INVOICE_VOIDED
+            INVOICE_MARKED_UNCOLLECTABLE -> Value.INVOICE_MARKED_UNCOLLECTABLE
             LICENSE_KEY_CREATED -> Value.LICENSE_KEY_CREATED
             PAYOUT_CREATED -> Value.PAYOUT_CREATED
             PAYOUT_ON_HOLD -> Value.PAYOUT_ON_HOLD
@@ -333,6 +373,14 @@ class WebhookEventType @JsonCreator private constructor(private val value: JsonF
             SUBSCRIPTION_PLAN_CHANGED -> Known.SUBSCRIPTION_PLAN_CHANGED
             SUBSCRIPTION_UPDATED -> Known.SUBSCRIPTION_UPDATED
             SUBSCRIPTION_UPDATE_PAYMENT_METHOD -> Known.SUBSCRIPTION_UPDATE_PAYMENT_METHOD
+            INVOICE_FINALIZED -> Known.INVOICE_FINALIZED
+            INVOICE_SENT -> Known.INVOICE_SENT
+            INVOICE_PAID -> Known.INVOICE_PAID
+            INVOICE_PAYMENT_FAILED -> Known.INVOICE_PAYMENT_FAILED
+            INVOICE_PAST_DUE -> Known.INVOICE_PAST_DUE
+            INVOICE_REOPENED -> Known.INVOICE_REOPENED
+            INVOICE_VOIDED -> Known.INVOICE_VOIDED
+            INVOICE_MARKED_UNCOLLECTABLE -> Known.INVOICE_MARKED_UNCOLLECTABLE
             LICENSE_KEY_CREATED -> Known.LICENSE_KEY_CREATED
             PAYOUT_CREATED -> Known.PAYOUT_CREATED
             PAYOUT_ON_HOLD -> Known.PAYOUT_ON_HOLD

@@ -4,6 +4,7 @@ package com.dodopayments.api.models.subscriptions
 
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.core.jsonMapper
+import com.dodopayments.api.models.invoices.CollectionMethod
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.Metadata
@@ -31,6 +32,7 @@ internal class SubscriptionListPageResponseTest {
                                 .zipcode("zipcode")
                                 .build()
                         )
+                        .billingMode(SubscriptionListResponse.BillingMode.NORMAL)
                         .cancelAtNextBillingDate(true)
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .currency(Currency.AED)
@@ -81,11 +83,13 @@ internal class SubscriptionListPageResponseTest {
                                 .name("name")
                                 .build()
                         )
+                        .collectionMethod(CollectionMethod.AUTO_CHARGE)
                         .customerBusinessName("customer_business_name")
                         .discountCyclesRemaining(0)
                         .discountId("discount_id")
                         .pausedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
+                        .paymentTermsDays(0)
                         .productName("product_name")
                         .scheduledChange(
                             ScheduledPlanChange.builder()
@@ -123,6 +127,7 @@ internal class SubscriptionListPageResponseTest {
                             .zipcode("zipcode")
                             .build()
                     )
+                    .billingMode(SubscriptionListResponse.BillingMode.NORMAL)
                     .cancelAtNextBillingDate(true)
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .currency(Currency.AED)
@@ -173,11 +178,13 @@ internal class SubscriptionListPageResponseTest {
                             .name("name")
                             .build()
                     )
+                    .collectionMethod(CollectionMethod.AUTO_CHARGE)
                     .customerBusinessName("customer_business_name")
                     .discountCyclesRemaining(0)
                     .discountId("discount_id")
                     .pausedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .paymentMethodId("payment_method_id")
+                    .paymentTermsDays(0)
                     .productName("product_name")
                     .scheduledChange(
                         ScheduledPlanChange.builder()
@@ -219,6 +226,7 @@ internal class SubscriptionListPageResponseTest {
                                 .zipcode("zipcode")
                                 .build()
                         )
+                        .billingMode(SubscriptionListResponse.BillingMode.NORMAL)
                         .cancelAtNextBillingDate(true)
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .currency(Currency.AED)
@@ -269,11 +277,13 @@ internal class SubscriptionListPageResponseTest {
                                 .name("name")
                                 .build()
                         )
+                        .collectionMethod(CollectionMethod.AUTO_CHARGE)
                         .customerBusinessName("customer_business_name")
                         .discountCyclesRemaining(0)
                         .discountId("discount_id")
                         .pausedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .paymentMethodId("payment_method_id")
+                        .paymentTermsDays(0)
                         .productName("product_name")
                         .scheduledChange(
                             ScheduledPlanChange.builder()

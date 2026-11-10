@@ -1346,19 +1346,17 @@ private constructor(
 
             val DEFLECTION_FEES_REVERSAL = of("deflection_fees_reversal")
 
+            val MODERATION_FEES = of("moderation_fees")
+
             val RESERVE_HOLD = of("reserve_hold")
 
             val RESERVE_RELEASE = of("reserve_release")
-
-            val MODERATION_FEES = of("moderation_fees")
 
             val DODO_FIXED_FEE = of("dodo_fixed_fee")
 
             val INTERCHANGE_FEE = of("interchange_fee")
 
             val SCHEME_FEE = of("scheme_fee")
-
-            val OPENING_BALANCE = of("opening_balance")
 
             fun of(value: String) = EventType(JsonField.of(value))
         }
@@ -1393,13 +1391,12 @@ private constructor(
             DISPUTE_FEES_REVERSAL,
             DEFLECTION_FEES,
             DEFLECTION_FEES_REVERSAL,
+            MODERATION_FEES,
             RESERVE_HOLD,
             RESERVE_RELEASE,
-            MODERATION_FEES,
             DODO_FIXED_FEE,
             INTERCHANGE_FEE,
             SCHEME_FEE,
-            OPENING_BALANCE,
         }
 
         /**
@@ -1440,13 +1437,12 @@ private constructor(
             DISPUTE_FEES_REVERSAL,
             DEFLECTION_FEES,
             DEFLECTION_FEES_REVERSAL,
+            MODERATION_FEES,
             RESERVE_HOLD,
             RESERVE_RELEASE,
-            MODERATION_FEES,
             DODO_FIXED_FEE,
             INTERCHANGE_FEE,
             SCHEME_FEE,
-            OPENING_BALANCE,
             /**
              * An enum member indicating that [EventType] was instantiated with an unknown value.
              */
@@ -1490,13 +1486,12 @@ private constructor(
                 DISPUTE_FEES_REVERSAL -> Value.DISPUTE_FEES_REVERSAL
                 DEFLECTION_FEES -> Value.DEFLECTION_FEES
                 DEFLECTION_FEES_REVERSAL -> Value.DEFLECTION_FEES_REVERSAL
+                MODERATION_FEES -> Value.MODERATION_FEES
                 RESERVE_HOLD -> Value.RESERVE_HOLD
                 RESERVE_RELEASE -> Value.RESERVE_RELEASE
-                MODERATION_FEES -> Value.MODERATION_FEES
                 DODO_FIXED_FEE -> Value.DODO_FIXED_FEE
                 INTERCHANGE_FEE -> Value.INTERCHANGE_FEE
                 SCHEME_FEE -> Value.SCHEME_FEE
-                OPENING_BALANCE -> Value.OPENING_BALANCE
                 else -> Value._UNKNOWN
             }
 
@@ -1539,13 +1534,12 @@ private constructor(
                 DISPUTE_FEES_REVERSAL -> Known.DISPUTE_FEES_REVERSAL
                 DEFLECTION_FEES -> Known.DEFLECTION_FEES
                 DEFLECTION_FEES_REVERSAL -> Known.DEFLECTION_FEES_REVERSAL
+                MODERATION_FEES -> Known.MODERATION_FEES
                 RESERVE_HOLD -> Known.RESERVE_HOLD
                 RESERVE_RELEASE -> Known.RESERVE_RELEASE
-                MODERATION_FEES -> Known.MODERATION_FEES
                 DODO_FIXED_FEE -> Known.DODO_FIXED_FEE
                 INTERCHANGE_FEE -> Known.INTERCHANGE_FEE
                 SCHEME_FEE -> Known.SCHEME_FEE
-                OPENING_BALANCE -> Known.OPENING_BALANCE
                 else -> throw DodoPaymentsInvalidDataException("Unknown EventType: $value")
             }
 
