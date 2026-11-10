@@ -1,0 +1,258 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package com.dodopayments.api.models.invoices
+
+import com.dodopayments.api.core.JsonValue
+import com.dodopayments.api.core.http.QueryParams
+import com.dodopayments.api.models.misc.CountryCode
+import com.dodopayments.api.models.misc.Currency
+import com.dodopayments.api.models.misc.Metadata
+import com.dodopayments.api.models.misc.TaxCategory
+import java.time.OffsetDateTime
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+
+internal class InvoicePreviewParamsTest {
+
+    @Test
+    fun create() {
+        InvoicePreviewParams.builder()
+            .format(InvoicePreviewParams.Format.JSON)
+            .collectionMethod(CollectionMethod.AUTO_CHARGE)
+            .currency(Currency.AED)
+            .customerId("customer_id")
+            .addItem(
+                InvoicePreviewParams.Item.CustomItem.builder()
+                    .description("description")
+                    .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
+                    .unitAmount(0)
+                    .quantity(0)
+                    .build()
+            )
+            .billingAddress(
+                InvoicePreviewParams.BillingAddress.builder()
+                    .country(CountryCode.AF)
+                    .city("city")
+                    .state("state")
+                    .street("street")
+                    .zipcode("zipcode")
+                    .build()
+            )
+            .addCcEmail("string")
+            .customerEmail("customer_email")
+            .addDiscountId("string")
+            .dueAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+            .dunning(
+                InvoicePreviewParams.Dunning.builder()
+                    .remindersEnabled(true)
+                    .addOffsetsDay(0)
+                    .build()
+            )
+            .memo("memo")
+            .metadata(
+                Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
+            )
+            .paymentTermsObject()
+            .reviewRequired(true)
+            .taxId("tax_id")
+            .build()
+    }
+
+    @Test
+    fun queryParams() {
+        val params =
+            InvoicePreviewParams.builder()
+                .format(InvoicePreviewParams.Format.JSON)
+                .collectionMethod(CollectionMethod.AUTO_CHARGE)
+                .currency(Currency.AED)
+                .customerId("customer_id")
+                .addItem(
+                    InvoicePreviewParams.Item.CustomItem.builder()
+                        .description("description")
+                        .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
+                        .unitAmount(0)
+                        .quantity(0)
+                        .build()
+                )
+                .billingAddress(
+                    InvoicePreviewParams.BillingAddress.builder()
+                        .country(CountryCode.AF)
+                        .city("city")
+                        .state("state")
+                        .street("street")
+                        .zipcode("zipcode")
+                        .build()
+                )
+                .addCcEmail("string")
+                .customerEmail("customer_email")
+                .addDiscountId("string")
+                .dueAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .dunning(
+                    InvoicePreviewParams.Dunning.builder()
+                        .remindersEnabled(true)
+                        .addOffsetsDay(0)
+                        .build()
+                )
+                .memo("memo")
+                .metadata(
+                    Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
+                .paymentTermsObject()
+                .reviewRequired(true)
+                .taxId("tax_id")
+                .build()
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().put("format", "json").build())
+    }
+
+    @Test
+    fun queryParamsWithoutOptionalFields() {
+        val params =
+            InvoicePreviewParams.builder()
+                .collectionMethod(CollectionMethod.AUTO_CHARGE)
+                .currency(Currency.AED)
+                .customerId("customer_id")
+                .addItem(
+                    InvoicePreviewParams.Item.CustomItem.builder()
+                        .description("description")
+                        .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
+                        .unitAmount(0)
+                        .build()
+                )
+                .build()
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
+    }
+
+    @Test
+    fun body() {
+        val params =
+            InvoicePreviewParams.builder()
+                .format(InvoicePreviewParams.Format.JSON)
+                .collectionMethod(CollectionMethod.AUTO_CHARGE)
+                .currency(Currency.AED)
+                .customerId("customer_id")
+                .addItem(
+                    InvoicePreviewParams.Item.CustomItem.builder()
+                        .description("description")
+                        .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
+                        .unitAmount(0)
+                        .quantity(0)
+                        .build()
+                )
+                .billingAddress(
+                    InvoicePreviewParams.BillingAddress.builder()
+                        .country(CountryCode.AF)
+                        .city("city")
+                        .state("state")
+                        .street("street")
+                        .zipcode("zipcode")
+                        .build()
+                )
+                .addCcEmail("string")
+                .customerEmail("customer_email")
+                .addDiscountId("string")
+                .dueAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .dunning(
+                    InvoicePreviewParams.Dunning.builder()
+                        .remindersEnabled(true)
+                        .addOffsetsDay(0)
+                        .build()
+                )
+                .memo("memo")
+                .metadata(
+                    Metadata.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("string"))
+                        .build()
+                )
+                .paymentTermsObject()
+                .reviewRequired(true)
+                .taxId("tax_id")
+                .build()
+
+        val body = params._body()
+
+        assertThat(body.collectionMethod()).isEqualTo(CollectionMethod.AUTO_CHARGE)
+        assertThat(body.currency()).isEqualTo(Currency.AED)
+        assertThat(body.customerId()).isEqualTo("customer_id")
+        assertThat(body.items())
+            .containsExactly(
+                InvoicePreviewParams.Item.ofCustom(
+                    InvoicePreviewParams.Item.CustomItem.builder()
+                        .description("description")
+                        .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
+                        .unitAmount(0)
+                        .quantity(0)
+                        .build()
+                )
+            )
+        assertThat(body.billingAddress())
+            .isEqualTo(
+                InvoicePreviewParams.BillingAddress.builder()
+                    .country(CountryCode.AF)
+                    .city("city")
+                    .state("state")
+                    .street("street")
+                    .zipcode("zipcode")
+                    .build()
+            )
+        assertThat(body.ccEmails()).containsExactly("string")
+        assertThat(body.customerEmail()).isEqualTo("customer_email")
+        assertThat(body.discountIds()).containsExactly("string")
+        assertThat(body.dueAt()).isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(body.dunning())
+            .isEqualTo(
+                InvoicePreviewParams.Dunning.builder()
+                    .remindersEnabled(true)
+                    .addOffsetsDay(0)
+                    .build()
+            )
+        assertThat(body.memo()).isEqualTo("memo")
+        assertThat(body.metadata())
+            .isEqualTo(
+                Metadata.builder().putAdditionalProperty("foo", JsonValue.from("string")).build()
+            )
+        assertThat(body.paymentTerms()).isEqualTo(InvoicePreviewParams.PaymentTerms.ofObject())
+        assertThat(body.reviewRequired()).isEqualTo(true)
+        assertThat(body.taxId()).isEqualTo("tax_id")
+    }
+
+    @Test
+    fun bodyWithoutOptionalFields() {
+        val params =
+            InvoicePreviewParams.builder()
+                .collectionMethod(CollectionMethod.AUTO_CHARGE)
+                .currency(Currency.AED)
+                .customerId("customer_id")
+                .addItem(
+                    InvoicePreviewParams.Item.CustomItem.builder()
+                        .description("description")
+                        .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
+                        .unitAmount(0)
+                        .build()
+                )
+                .build()
+
+        val body = params._body()
+
+        assertThat(body.collectionMethod()).isEqualTo(CollectionMethod.AUTO_CHARGE)
+        assertThat(body.currency()).isEqualTo(Currency.AED)
+        assertThat(body.customerId()).isEqualTo("customer_id")
+        assertThat(body.items())
+            .containsExactly(
+                InvoicePreviewParams.Item.ofCustom(
+                    InvoicePreviewParams.Item.CustomItem.builder()
+                        .description("description")
+                        .taxCategory(TaxCategory.DIGITAL_PRODUCTS)
+                        .unitAmount(0)
+                        .build()
+                )
+            )
+    }
+}

@@ -18,27 +18,27 @@ import java.util.Objects
 class NoteRequest
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
-    private val note: JsonField<String>,
+    private val text: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("note") @ExcludeMissing note: JsonField<String> = JsonMissing.of()
-    ) : this(note, mutableMapOf())
+        @JsonProperty("text") @ExcludeMissing text: JsonField<String> = JsonMissing.of()
+    ) : this(text, mutableMapOf())
 
     /**
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun note(): String = note.getRequired("note")
+    fun text(): String = text.getRequired("text")
 
     /**
-     * Returns the raw JSON value of [note].
+     * Returns the raw JSON value of [text].
      *
-     * Unlike [note], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [text], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("note") @ExcludeMissing fun _note(): JsonField<String> = note
+    @JsonProperty("text") @ExcludeMissing fun _text(): JsonField<String> = text
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -59,7 +59,7 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
-         * .note()
+         * .text()
          * ```
          */
         fun builder() = Builder()
@@ -68,23 +68,23 @@ private constructor(
     /** A builder for [NoteRequest]. */
     class Builder internal constructor() {
 
-        private var note: JsonField<String>? = null
+        private var text: JsonField<String>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         internal fun from(noteRequest: NoteRequest) = apply {
-            note = noteRequest.note
+            text = noteRequest.text
             additionalProperties = noteRequest.additionalProperties.toMutableMap()
         }
 
-        fun note(note: String) = note(JsonField.of(note))
+        fun text(text: String) = text(JsonField.of(text))
 
         /**
-         * Sets [Builder.note] to an arbitrary JSON value.
+         * Sets [Builder.text] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.note] with a well-typed [String] value instead. This
+         * You should usually call [Builder.text] with a well-typed [String] value instead. This
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun note(note: JsonField<String>) = apply { this.note = note }
+        fun text(text: JsonField<String>) = apply { this.text = text }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -112,13 +112,13 @@ private constructor(
          *
          * The following fields are required:
          * ```kotlin
-         * .note()
+         * .text()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
         fun build(): NoteRequest =
-            NoteRequest(checkRequired("note", note), additionalProperties.toMutableMap())
+            NoteRequest(checkRequired("text", text), additionalProperties.toMutableMap())
     }
 
     private var validated: Boolean = false
@@ -136,7 +136,7 @@ private constructor(
             return@apply
         }
 
-        note()
+        text()
         validated = true
     }
 
@@ -153,7 +153,7 @@ private constructor(
      *
      * Used for best match union deserialization.
      */
-    internal fun validity(): Int = (if (note.asKnown() == null) 0 else 1)
+    internal fun validity(): Int = (if (text.asKnown() == null) 0 else 1)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -161,13 +161,13 @@ private constructor(
         }
 
         return other is NoteRequest &&
-            note == other.note &&
+            text == other.text &&
             additionalProperties == other.additionalProperties
     }
 
-    private val hashCode: Int by lazy { Objects.hash(note, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(text, additionalProperties) }
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "NoteRequest{note=$note, additionalProperties=$additionalProperties}"
+    override fun toString() = "NoteRequest{text=$text, additionalProperties=$additionalProperties}"
 }

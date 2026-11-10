@@ -12,7 +12,7 @@ internal class NoteUpdateParamsTest {
         NoteUpdateParams.builder()
             .entryId("entry_id")
             .noteId("note_id")
-            .noteRequest(NoteRequest.builder().note("note").build())
+            .noteRequest(NoteRequest.builder().text("text").build())
             .build()
     }
 
@@ -22,7 +22,7 @@ internal class NoteUpdateParamsTest {
             NoteUpdateParams.builder()
                 .entryId("entry_id")
                 .noteId("note_id")
-                .noteRequest(NoteRequest.builder().note("note").build())
+                .noteRequest(NoteRequest.builder().text("text").build())
                 .build()
 
         assertThat(params._pathParam(0)).isEqualTo("entry_id")
@@ -37,11 +37,11 @@ internal class NoteUpdateParamsTest {
             NoteUpdateParams.builder()
                 .entryId("entry_id")
                 .noteId("note_id")
-                .noteRequest(NoteRequest.builder().note("note").build())
+                .noteRequest(NoteRequest.builder().text("text").build())
                 .build()
 
         val body = params._body()
 
-        assertThat(body).isEqualTo(NoteRequest.builder().note("note").build())
+        assertThat(body).isEqualTo(NoteRequest.builder().text("text").build())
     }
 }

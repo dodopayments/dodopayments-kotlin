@@ -10,18 +10,12 @@ internal class MeterListParamsTest {
 
     @Test
     fun create() {
-        MeterListParams.builder().archived(true).locale("locale").pageNumber(0).pageSize(0).build()
+        MeterListParams.builder().archived(true).pageNumber(0).pageSize(0).build()
     }
 
     @Test
     fun queryParams() {
-        val params =
-            MeterListParams.builder()
-                .archived(true)
-                .locale("locale")
-                .pageNumber(0)
-                .pageSize(0)
-                .build()
+        val params = MeterListParams.builder().archived(true).pageNumber(0).pageSize(0).build()
 
         val queryParams = params._queryParams()
 
@@ -29,7 +23,6 @@ internal class MeterListParamsTest {
             .isEqualTo(
                 QueryParams.builder()
                     .put("archived", "true")
-                    .put("locale", "locale")
                     .put("page_number", "0")
                     .put("page_size", "0")
                     .build()

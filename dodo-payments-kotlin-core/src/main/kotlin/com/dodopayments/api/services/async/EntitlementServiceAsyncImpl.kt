@@ -29,18 +29,12 @@ import com.dodopayments.api.services.async.entitlements.FileServiceAsync
 import com.dodopayments.api.services.async.entitlements.FileServiceAsyncImpl
 import com.dodopayments.api.services.async.entitlements.GrantServiceAsync
 import com.dodopayments.api.services.async.entitlements.GrantServiceAsyncImpl
-import com.dodopayments.api.services.async.entitlements.TranslationServiceAsync
-import com.dodopayments.api.services.async.entitlements.TranslationServiceAsyncImpl
 
 class EntitlementServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     EntitlementServiceAsync {
 
     private val withRawResponse: EntitlementServiceAsync.WithRawResponse by lazy {
         WithRawResponseImpl(clientOptions)
-    }
-
-    private val translations: TranslationServiceAsync by lazy {
-        TranslationServiceAsyncImpl(clientOptions)
     }
 
     private val files: FileServiceAsync by lazy { FileServiceAsyncImpl(clientOptions) }
@@ -51,8 +45,6 @@ class EntitlementServiceAsyncImpl internal constructor(private val clientOptions
 
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): EntitlementServiceAsync =
         EntitlementServiceAsyncImpl(clientOptions.toBuilder().apply(modifier).build())
-
-    override fun translations(): TranslationServiceAsync = translations
 
     override fun files(): FileServiceAsync = files
 
@@ -97,10 +89,6 @@ class EntitlementServiceAsyncImpl internal constructor(private val clientOptions
         private val errorHandler: Handler<HttpResponse> =
             errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
-        private val translations: TranslationServiceAsync.WithRawResponse by lazy {
-            TranslationServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
-
         private val files: FileServiceAsync.WithRawResponse by lazy {
             FileServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
@@ -115,8 +103,6 @@ class EntitlementServiceAsyncImpl internal constructor(private val clientOptions
             EntitlementServiceAsyncImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier).build()
             )
-
-        override fun translations(): TranslationServiceAsync.WithRawResponse = translations
 
         override fun files(): FileServiceAsync.WithRawResponse = files
 

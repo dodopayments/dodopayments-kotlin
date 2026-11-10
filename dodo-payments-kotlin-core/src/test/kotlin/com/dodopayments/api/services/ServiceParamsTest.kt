@@ -105,6 +105,9 @@ internal class ServiceParamsTest {
                         .customization(
                             CheckoutSessionCustomization.builder()
                                 .forceLanguage("force_language")
+                                .paymentMethodLayout(
+                                    CheckoutSessionCustomization.PaymentMethodLayout.ACCORDION
+                                )
                                 .showOnDemandTag(true)
                                 .showOrderDetails(true)
                                 .theme(CheckoutSessionCustomization.Theme.DARK)

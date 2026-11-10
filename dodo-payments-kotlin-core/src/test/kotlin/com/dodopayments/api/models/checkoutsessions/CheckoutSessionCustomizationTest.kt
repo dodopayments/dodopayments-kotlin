@@ -14,6 +14,7 @@ internal class CheckoutSessionCustomizationTest {
         val checkoutSessionCustomization =
             CheckoutSessionCustomization.builder()
                 .forceLanguage("force_language")
+                .paymentMethodLayout(CheckoutSessionCustomization.PaymentMethodLayout.ACCORDION)
                 .showOnDemandTag(true)
                 .showOrderDetails(true)
                 .theme(CheckoutSessionCustomization.Theme.DARK)
@@ -70,6 +71,8 @@ internal class CheckoutSessionCustomizationTest {
                 .build()
 
         assertThat(checkoutSessionCustomization.forceLanguage()).isEqualTo("force_language")
+        assertThat(checkoutSessionCustomization.paymentMethodLayout())
+            .isEqualTo(CheckoutSessionCustomization.PaymentMethodLayout.ACCORDION)
         assertThat(checkoutSessionCustomization.showOnDemandTag()).isEqualTo(true)
         assertThat(checkoutSessionCustomization.showOrderDetails()).isEqualTo(true)
         assertThat(checkoutSessionCustomization.theme())
@@ -133,6 +136,7 @@ internal class CheckoutSessionCustomizationTest {
         val checkoutSessionCustomization =
             CheckoutSessionCustomization.builder()
                 .forceLanguage("force_language")
+                .paymentMethodLayout(CheckoutSessionCustomization.PaymentMethodLayout.ACCORDION)
                 .showOnDemandTag(true)
                 .showOrderDetails(true)
                 .theme(CheckoutSessionCustomization.Theme.DARK)

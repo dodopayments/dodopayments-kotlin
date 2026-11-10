@@ -44,6 +44,14 @@ private constructor(
     private val entitlementGrantDelivered: EntitlementGrantDeliveredWebhookEvent? = null,
     private val entitlementGrantFailed: EntitlementGrantFailedWebhookEvent? = null,
     private val entitlementGrantRevoked: EntitlementGrantRevokedWebhookEvent? = null,
+    private val invoiceFinalized: InvoiceFinalizedWebhookEvent? = null,
+    private val invoiceMarkedUncollectable: InvoiceMarkedUncollectableWebhookEvent? = null,
+    private val invoicePaid: InvoicePaidWebhookEvent? = null,
+    private val invoicePastDue: InvoicePastDueWebhookEvent? = null,
+    private val invoicePaymentFailed: InvoicePaymentFailedWebhookEvent? = null,
+    private val invoiceReopened: InvoiceReopenedWebhookEvent? = null,
+    private val invoiceSent: InvoiceSentWebhookEvent? = null,
+    private val invoiceVoided: InvoiceVoidedWebhookEvent? = null,
     private val licenseKeyCreated: LicenseKeyCreatedWebhookEvent? = null,
     private val paymentCancelled: PaymentCancelledWebhookEvent? = null,
     private val paymentFailed: PaymentFailedWebhookEvent? = null,
@@ -122,6 +130,23 @@ private constructor(
     fun entitlementGrantFailed(): EntitlementGrantFailedWebhookEvent? = entitlementGrantFailed
 
     fun entitlementGrantRevoked(): EntitlementGrantRevokedWebhookEvent? = entitlementGrantRevoked
+
+    fun invoiceFinalized(): InvoiceFinalizedWebhookEvent? = invoiceFinalized
+
+    fun invoiceMarkedUncollectable(): InvoiceMarkedUncollectableWebhookEvent? =
+        invoiceMarkedUncollectable
+
+    fun invoicePaid(): InvoicePaidWebhookEvent? = invoicePaid
+
+    fun invoicePastDue(): InvoicePastDueWebhookEvent? = invoicePastDue
+
+    fun invoicePaymentFailed(): InvoicePaymentFailedWebhookEvent? = invoicePaymentFailed
+
+    fun invoiceReopened(): InvoiceReopenedWebhookEvent? = invoiceReopened
+
+    fun invoiceSent(): InvoiceSentWebhookEvent? = invoiceSent
+
+    fun invoiceVoided(): InvoiceVoidedWebhookEvent? = invoiceVoided
 
     fun licenseKeyCreated(): LicenseKeyCreatedWebhookEvent? = licenseKeyCreated
 
@@ -219,6 +244,22 @@ private constructor(
     fun isEntitlementGrantFailed(): Boolean = entitlementGrantFailed != null
 
     fun isEntitlementGrantRevoked(): Boolean = entitlementGrantRevoked != null
+
+    fun isInvoiceFinalized(): Boolean = invoiceFinalized != null
+
+    fun isInvoiceMarkedUncollectable(): Boolean = invoiceMarkedUncollectable != null
+
+    fun isInvoicePaid(): Boolean = invoicePaid != null
+
+    fun isInvoicePastDue(): Boolean = invoicePastDue != null
+
+    fun isInvoicePaymentFailed(): Boolean = invoicePaymentFailed != null
+
+    fun isInvoiceReopened(): Boolean = invoiceReopened != null
+
+    fun isInvoiceSent(): Boolean = invoiceSent != null
+
+    fun isInvoiceVoided(): Boolean = invoiceVoided != null
 
     fun isLicenseKeyCreated(): Boolean = licenseKeyCreated != null
 
@@ -331,6 +372,26 @@ private constructor(
 
     fun asEntitlementGrantRevoked(): EntitlementGrantRevokedWebhookEvent =
         entitlementGrantRevoked.getOrThrow("entitlementGrantRevoked")
+
+    fun asInvoiceFinalized(): InvoiceFinalizedWebhookEvent =
+        invoiceFinalized.getOrThrow("invoiceFinalized")
+
+    fun asInvoiceMarkedUncollectable(): InvoiceMarkedUncollectableWebhookEvent =
+        invoiceMarkedUncollectable.getOrThrow("invoiceMarkedUncollectable")
+
+    fun asInvoicePaid(): InvoicePaidWebhookEvent = invoicePaid.getOrThrow("invoicePaid")
+
+    fun asInvoicePastDue(): InvoicePastDueWebhookEvent = invoicePastDue.getOrThrow("invoicePastDue")
+
+    fun asInvoicePaymentFailed(): InvoicePaymentFailedWebhookEvent =
+        invoicePaymentFailed.getOrThrow("invoicePaymentFailed")
+
+    fun asInvoiceReopened(): InvoiceReopenedWebhookEvent =
+        invoiceReopened.getOrThrow("invoiceReopened")
+
+    fun asInvoiceSent(): InvoiceSentWebhookEvent = invoiceSent.getOrThrow("invoiceSent")
+
+    fun asInvoiceVoided(): InvoiceVoidedWebhookEvent = invoiceVoided.getOrThrow("invoiceVoided")
 
     fun asLicenseKeyCreated(): LicenseKeyCreatedWebhookEvent =
         licenseKeyCreated.getOrThrow("licenseKeyCreated")
@@ -458,6 +519,15 @@ private constructor(
                 visitor.visitEntitlementGrantFailed(entitlementGrantFailed)
             entitlementGrantRevoked != null ->
                 visitor.visitEntitlementGrantRevoked(entitlementGrantRevoked)
+            invoiceFinalized != null -> visitor.visitInvoiceFinalized(invoiceFinalized)
+            invoiceMarkedUncollectable != null ->
+                visitor.visitInvoiceMarkedUncollectable(invoiceMarkedUncollectable)
+            invoicePaid != null -> visitor.visitInvoicePaid(invoicePaid)
+            invoicePastDue != null -> visitor.visitInvoicePastDue(invoicePastDue)
+            invoicePaymentFailed != null -> visitor.visitInvoicePaymentFailed(invoicePaymentFailed)
+            invoiceReopened != null -> visitor.visitInvoiceReopened(invoiceReopened)
+            invoiceSent != null -> visitor.visitInvoiceSent(invoiceSent)
+            invoiceVoided != null -> visitor.visitInvoiceVoided(invoiceVoided)
             licenseKeyCreated != null -> visitor.visitLicenseKeyCreated(licenseKeyCreated)
             paymentCancelled != null -> visitor.visitPaymentCancelled(paymentCancelled)
             paymentFailed != null -> visitor.visitPaymentFailed(paymentFailed)
@@ -621,6 +691,42 @@ private constructor(
                     entitlementGrantRevoked: EntitlementGrantRevokedWebhookEvent
                 ) {
                     entitlementGrantRevoked.validate()
+                }
+
+                override fun visitInvoiceFinalized(invoiceFinalized: InvoiceFinalizedWebhookEvent) {
+                    invoiceFinalized.validate()
+                }
+
+                override fun visitInvoiceMarkedUncollectable(
+                    invoiceMarkedUncollectable: InvoiceMarkedUncollectableWebhookEvent
+                ) {
+                    invoiceMarkedUncollectable.validate()
+                }
+
+                override fun visitInvoicePaid(invoicePaid: InvoicePaidWebhookEvent) {
+                    invoicePaid.validate()
+                }
+
+                override fun visitInvoicePastDue(invoicePastDue: InvoicePastDueWebhookEvent) {
+                    invoicePastDue.validate()
+                }
+
+                override fun visitInvoicePaymentFailed(
+                    invoicePaymentFailed: InvoicePaymentFailedWebhookEvent
+                ) {
+                    invoicePaymentFailed.validate()
+                }
+
+                override fun visitInvoiceReopened(invoiceReopened: InvoiceReopenedWebhookEvent) {
+                    invoiceReopened.validate()
+                }
+
+                override fun visitInvoiceSent(invoiceSent: InvoiceSentWebhookEvent) {
+                    invoiceSent.validate()
+                }
+
+                override fun visitInvoiceVoided(invoiceVoided: InvoiceVoidedWebhookEvent) {
+                    invoiceVoided.validate()
                 }
 
                 override fun visitLicenseKeyCreated(
@@ -850,6 +956,32 @@ private constructor(
                     entitlementGrantRevoked: EntitlementGrantRevokedWebhookEvent
                 ) = entitlementGrantRevoked.validity()
 
+                override fun visitInvoiceFinalized(invoiceFinalized: InvoiceFinalizedWebhookEvent) =
+                    invoiceFinalized.validity()
+
+                override fun visitInvoiceMarkedUncollectable(
+                    invoiceMarkedUncollectable: InvoiceMarkedUncollectableWebhookEvent
+                ) = invoiceMarkedUncollectable.validity()
+
+                override fun visitInvoicePaid(invoicePaid: InvoicePaidWebhookEvent) =
+                    invoicePaid.validity()
+
+                override fun visitInvoicePastDue(invoicePastDue: InvoicePastDueWebhookEvent) =
+                    invoicePastDue.validity()
+
+                override fun visitInvoicePaymentFailed(
+                    invoicePaymentFailed: InvoicePaymentFailedWebhookEvent
+                ) = invoicePaymentFailed.validity()
+
+                override fun visitInvoiceReopened(invoiceReopened: InvoiceReopenedWebhookEvent) =
+                    invoiceReopened.validity()
+
+                override fun visitInvoiceSent(invoiceSent: InvoiceSentWebhookEvent) =
+                    invoiceSent.validity()
+
+                override fun visitInvoiceVoided(invoiceVoided: InvoiceVoidedWebhookEvent) =
+                    invoiceVoided.validity()
+
                 override fun visitLicenseKeyCreated(
                     licenseKeyCreated: LicenseKeyCreatedWebhookEvent
                 ) = licenseKeyCreated.validity()
@@ -970,6 +1102,14 @@ private constructor(
             entitlementGrantDelivered == other.entitlementGrantDelivered &&
             entitlementGrantFailed == other.entitlementGrantFailed &&
             entitlementGrantRevoked == other.entitlementGrantRevoked &&
+            invoiceFinalized == other.invoiceFinalized &&
+            invoiceMarkedUncollectable == other.invoiceMarkedUncollectable &&
+            invoicePaid == other.invoicePaid &&
+            invoicePastDue == other.invoicePastDue &&
+            invoicePaymentFailed == other.invoicePaymentFailed &&
+            invoiceReopened == other.invoiceReopened &&
+            invoiceSent == other.invoiceSent &&
+            invoiceVoided == other.invoiceVoided &&
             licenseKeyCreated == other.licenseKeyCreated &&
             paymentCancelled == other.paymentCancelled &&
             paymentFailed == other.paymentFailed &&
@@ -1022,6 +1162,14 @@ private constructor(
             entitlementGrantDelivered,
             entitlementGrantFailed,
             entitlementGrantRevoked,
+            invoiceFinalized,
+            invoiceMarkedUncollectable,
+            invoicePaid,
+            invoicePastDue,
+            invoicePaymentFailed,
+            invoiceReopened,
+            invoiceSent,
+            invoiceVoided,
             licenseKeyCreated,
             paymentCancelled,
             paymentFailed,
@@ -1089,6 +1237,17 @@ private constructor(
                 "UnsafeUnwrapWebhookEvent{entitlementGrantFailed=$entitlementGrantFailed}"
             entitlementGrantRevoked != null ->
                 "UnsafeUnwrapWebhookEvent{entitlementGrantRevoked=$entitlementGrantRevoked}"
+            invoiceFinalized != null ->
+                "UnsafeUnwrapWebhookEvent{invoiceFinalized=$invoiceFinalized}"
+            invoiceMarkedUncollectable != null ->
+                "UnsafeUnwrapWebhookEvent{invoiceMarkedUncollectable=$invoiceMarkedUncollectable}"
+            invoicePaid != null -> "UnsafeUnwrapWebhookEvent{invoicePaid=$invoicePaid}"
+            invoicePastDue != null -> "UnsafeUnwrapWebhookEvent{invoicePastDue=$invoicePastDue}"
+            invoicePaymentFailed != null ->
+                "UnsafeUnwrapWebhookEvent{invoicePaymentFailed=$invoicePaymentFailed}"
+            invoiceReopened != null -> "UnsafeUnwrapWebhookEvent{invoiceReopened=$invoiceReopened}"
+            invoiceSent != null -> "UnsafeUnwrapWebhookEvent{invoiceSent=$invoiceSent}"
+            invoiceVoided != null -> "UnsafeUnwrapWebhookEvent{invoiceVoided=$invoiceVoided}"
             licenseKeyCreated != null ->
                 "UnsafeUnwrapWebhookEvent{licenseKeyCreated=$licenseKeyCreated}"
             paymentCancelled != null ->
@@ -1213,6 +1372,31 @@ private constructor(
         fun ofEntitlementGrantRevoked(
             entitlementGrantRevoked: EntitlementGrantRevokedWebhookEvent
         ) = UnsafeUnwrapWebhookEvent(entitlementGrantRevoked = entitlementGrantRevoked)
+
+        fun ofInvoiceFinalized(invoiceFinalized: InvoiceFinalizedWebhookEvent) =
+            UnsafeUnwrapWebhookEvent(invoiceFinalized = invoiceFinalized)
+
+        fun ofInvoiceMarkedUncollectable(
+            invoiceMarkedUncollectable: InvoiceMarkedUncollectableWebhookEvent
+        ) = UnsafeUnwrapWebhookEvent(invoiceMarkedUncollectable = invoiceMarkedUncollectable)
+
+        fun ofInvoicePaid(invoicePaid: InvoicePaidWebhookEvent) =
+            UnsafeUnwrapWebhookEvent(invoicePaid = invoicePaid)
+
+        fun ofInvoicePastDue(invoicePastDue: InvoicePastDueWebhookEvent) =
+            UnsafeUnwrapWebhookEvent(invoicePastDue = invoicePastDue)
+
+        fun ofInvoicePaymentFailed(invoicePaymentFailed: InvoicePaymentFailedWebhookEvent) =
+            UnsafeUnwrapWebhookEvent(invoicePaymentFailed = invoicePaymentFailed)
+
+        fun ofInvoiceReopened(invoiceReopened: InvoiceReopenedWebhookEvent) =
+            UnsafeUnwrapWebhookEvent(invoiceReopened = invoiceReopened)
+
+        fun ofInvoiceSent(invoiceSent: InvoiceSentWebhookEvent) =
+            UnsafeUnwrapWebhookEvent(invoiceSent = invoiceSent)
+
+        fun ofInvoiceVoided(invoiceVoided: InvoiceVoidedWebhookEvent) =
+            UnsafeUnwrapWebhookEvent(invoiceVoided = invoiceVoided)
 
         fun ofLicenseKeyCreated(licenseKeyCreated: LicenseKeyCreatedWebhookEvent) =
             UnsafeUnwrapWebhookEvent(licenseKeyCreated = licenseKeyCreated)
@@ -1361,6 +1545,24 @@ private constructor(
         fun visitEntitlementGrantRevoked(
             entitlementGrantRevoked: EntitlementGrantRevokedWebhookEvent
         ): T
+
+        fun visitInvoiceFinalized(invoiceFinalized: InvoiceFinalizedWebhookEvent): T
+
+        fun visitInvoiceMarkedUncollectable(
+            invoiceMarkedUncollectable: InvoiceMarkedUncollectableWebhookEvent
+        ): T
+
+        fun visitInvoicePaid(invoicePaid: InvoicePaidWebhookEvent): T
+
+        fun visitInvoicePastDue(invoicePastDue: InvoicePastDueWebhookEvent): T
+
+        fun visitInvoicePaymentFailed(invoicePaymentFailed: InvoicePaymentFailedWebhookEvent): T
+
+        fun visitInvoiceReopened(invoiceReopened: InvoiceReopenedWebhookEvent): T
+
+        fun visitInvoiceSent(invoiceSent: InvoiceSentWebhookEvent): T
+
+        fun visitInvoiceVoided(invoiceVoided: InvoiceVoidedWebhookEvent): T
 
         fun visitLicenseKeyCreated(licenseKeyCreated: LicenseKeyCreatedWebhookEvent): T
 
@@ -1589,6 +1791,50 @@ private constructor(
                             UnsafeUnwrapWebhookEvent(entitlementGrantRevoked = it, _json = json)
                         } ?: UnsafeUnwrapWebhookEvent(_json = json)
                 }
+                "invoice.finalized" -> {
+                    return tryDeserialize(node, jacksonTypeRef<InvoiceFinalizedWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(invoiceFinalized = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "invoice.marked_uncollectable" -> {
+                    return tryDeserialize(
+                            node,
+                            jacksonTypeRef<InvoiceMarkedUncollectableWebhookEvent>(),
+                        )
+                        ?.let {
+                            UnsafeUnwrapWebhookEvent(invoiceMarkedUncollectable = it, _json = json)
+                        } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "invoice.paid" -> {
+                    return tryDeserialize(node, jacksonTypeRef<InvoicePaidWebhookEvent>())?.let {
+                        UnsafeUnwrapWebhookEvent(invoicePaid = it, _json = json)
+                    } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "invoice.past_due" -> {
+                    return tryDeserialize(node, jacksonTypeRef<InvoicePastDueWebhookEvent>())?.let {
+                        UnsafeUnwrapWebhookEvent(invoicePastDue = it, _json = json)
+                    } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "invoice.payment_failed" -> {
+                    return tryDeserialize(node, jacksonTypeRef<InvoicePaymentFailedWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(invoicePaymentFailed = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "invoice.reopened" -> {
+                    return tryDeserialize(node, jacksonTypeRef<InvoiceReopenedWebhookEvent>())
+                        ?.let { UnsafeUnwrapWebhookEvent(invoiceReopened = it, _json = json) }
+                        ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "invoice.sent" -> {
+                    return tryDeserialize(node, jacksonTypeRef<InvoiceSentWebhookEvent>())?.let {
+                        UnsafeUnwrapWebhookEvent(invoiceSent = it, _json = json)
+                    } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
+                "invoice.voided" -> {
+                    return tryDeserialize(node, jacksonTypeRef<InvoiceVoidedWebhookEvent>())?.let {
+                        UnsafeUnwrapWebhookEvent(invoiceVoided = it, _json = json)
+                    } ?: UnsafeUnwrapWebhookEvent(_json = json)
+                }
                 "license_key.created" -> {
                     return tryDeserialize(node, jacksonTypeRef<LicenseKeyCreatedWebhookEvent>())
                         ?.let { UnsafeUnwrapWebhookEvent(licenseKeyCreated = it, _json = json) }
@@ -1768,6 +2014,16 @@ private constructor(
                     generator.writeObject(value.entitlementGrantFailed)
                 value.entitlementGrantRevoked != null ->
                     generator.writeObject(value.entitlementGrantRevoked)
+                value.invoiceFinalized != null -> generator.writeObject(value.invoiceFinalized)
+                value.invoiceMarkedUncollectable != null ->
+                    generator.writeObject(value.invoiceMarkedUncollectable)
+                value.invoicePaid != null -> generator.writeObject(value.invoicePaid)
+                value.invoicePastDue != null -> generator.writeObject(value.invoicePastDue)
+                value.invoicePaymentFailed != null ->
+                    generator.writeObject(value.invoicePaymentFailed)
+                value.invoiceReopened != null -> generator.writeObject(value.invoiceReopened)
+                value.invoiceSent != null -> generator.writeObject(value.invoiceSent)
+                value.invoiceVoided != null -> generator.writeObject(value.invoiceVoided)
                 value.licenseKeyCreated != null -> generator.writeObject(value.licenseKeyCreated)
                 value.paymentCancelled != null -> generator.writeObject(value.paymentCancelled)
                 value.paymentFailed != null -> generator.writeObject(value.paymentFailed)

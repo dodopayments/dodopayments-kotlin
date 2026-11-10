@@ -14,7 +14,6 @@ import com.dodopayments.api.models.meters.MeterListParams
 import com.dodopayments.api.models.meters.MeterRetrieveParams
 import com.dodopayments.api.models.meters.MeterUnarchiveParams
 import com.dodopayments.api.models.meters.MeterUpdateParams
-import com.dodopayments.api.services.async.meters.TranslationServiceAsync
 import com.google.errorprone.annotations.MustBeClosed
 
 interface MeterServiceAsync {
@@ -30,8 +29,6 @@ interface MeterServiceAsync {
      * The original service is not modified.
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MeterServiceAsync
-
-    fun translations(): TranslationServiceAsync
 
     suspend fun create(
         params: MeterCreateParams,
@@ -122,8 +119,6 @@ interface MeterServiceAsync {
         fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): MeterServiceAsync.WithRawResponse
-
-        fun translations(): TranslationServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /meters`, but is otherwise the same as

@@ -5,6 +5,7 @@ package com.dodopayments.api.services.async
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClientAsync
 import com.dodopayments.api.core.JsonValue
+import com.dodopayments.api.models.invoices.CollectionMethod
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.Metadata
@@ -19,7 +20,6 @@ import com.dodopayments.api.models.subscriptions.SubscriptionChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeParams
 import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
 import com.dodopayments.api.models.subscriptions.SubscriptionPreviewChangePlanParams
-import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveParams
 import com.dodopayments.api.models.subscriptions.SubscriptionStatus
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdateParams
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdatePaymentMethodParams
@@ -109,13 +109,7 @@ internal class SubscriptionServiceAsyncTest {
                 .build()
         val subscriptionServiceAsync = client.subscriptions()
 
-        val subscription =
-            subscriptionServiceAsync.retrieve(
-                SubscriptionRetrieveParams.builder()
-                    .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
-                    .locale("locale")
-                    .build()
-            )
+        val subscription = subscriptionServiceAsync.retrieve("sub_Iuaq622bbmmfOGrVTqdXv")
 
         subscription.validate()
     }
@@ -236,9 +230,17 @@ internal class SubscriptionServiceAsyncTest {
                             .cancelOlderPaymentLink(true)
                             .cancelScheduledChangePlan(true)
                             .collectViaPaymentLink(true)
+                            .credit(UpdateSubscriptionPlanReq.Credit.CUSTOMER_BALANCE)
                             .discountCode("discount_code")
                             .addDiscountCode("string")
                             .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
+                            .invoice(
+                                UpdateSubscriptionPlanReq.Invoice.builder()
+                                    .collectionMethod(CollectionMethod.AUTO_CHARGE)
+                                    .finalize(true)
+                                    .paymentTermsObject()
+                                    .build()
+                            )
                             .metadata(
                                 Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -315,9 +317,17 @@ internal class SubscriptionServiceAsyncTest {
                             .cancelOlderPaymentLink(true)
                             .cancelScheduledChangePlan(true)
                             .collectViaPaymentLink(true)
+                            .credit(UpdateSubscriptionPlanReq.Credit.CUSTOMER_BALANCE)
                             .discountCode("discount_code")
                             .addDiscountCode("string")
                             .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
+                            .invoice(
+                                UpdateSubscriptionPlanReq.Invoice.builder()
+                                    .collectionMethod(CollectionMethod.AUTO_CHARGE)
+                                    .finalize(true)
+                                    .paymentTermsObject()
+                                    .build()
+                            )
                             .metadata(
                                 Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -347,6 +357,20 @@ internal class SubscriptionServiceAsyncTest {
         val response = subscriptionServiceAsync.retrieveCreditUsage("sub_Iuaq622bbmmfOGrVTqdXv")
 
         response.validate()
+    }
+
+    @Test
+    suspend fun retrieveUpcomingInvoice() {
+        val client =
+            DodoPaymentsOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val subscriptionServiceAsync = client.subscriptions()
+
+        val invoice = subscriptionServiceAsync.retrieveUpcomingInvoice("subscription_id")
+
+        invoice.validate()
     }
 
     @Test
