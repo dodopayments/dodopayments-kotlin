@@ -12,7 +12,6 @@ internal class EntitlementListParamsTest {
     fun create() {
         EntitlementListParams.builder()
             .integrationType(EntitlementListParams.IntegrationType.DISCORD)
-            .locale("locale")
             .pageNumber(0)
             .pageSize(0)
             .build()
@@ -23,7 +22,6 @@ internal class EntitlementListParamsTest {
         val params =
             EntitlementListParams.builder()
                 .integrationType(EntitlementListParams.IntegrationType.DISCORD)
-                .locale("locale")
                 .pageNumber(0)
                 .pageSize(0)
                 .build()
@@ -34,7 +32,6 @@ internal class EntitlementListParamsTest {
             .isEqualTo(
                 QueryParams.builder()
                     .put("integration_type", "discord")
-                    .put("locale", "locale")
                     .put("page_number", "0")
                     .put("page_size", "0")
                     .build()

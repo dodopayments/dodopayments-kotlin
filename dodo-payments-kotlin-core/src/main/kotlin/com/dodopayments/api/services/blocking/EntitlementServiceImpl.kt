@@ -29,8 +29,6 @@ import com.dodopayments.api.services.blocking.entitlements.FileService
 import com.dodopayments.api.services.blocking.entitlements.FileServiceImpl
 import com.dodopayments.api.services.blocking.entitlements.GrantService
 import com.dodopayments.api.services.blocking.entitlements.GrantServiceImpl
-import com.dodopayments.api.services.blocking.entitlements.TranslationService
-import com.dodopayments.api.services.blocking.entitlements.TranslationServiceImpl
 
 class EntitlementServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     EntitlementService {
@@ -38,8 +36,6 @@ class EntitlementServiceImpl internal constructor(private val clientOptions: Cli
     private val withRawResponse: EntitlementService.WithRawResponse by lazy {
         WithRawResponseImpl(clientOptions)
     }
-
-    private val translations: TranslationService by lazy { TranslationServiceImpl(clientOptions) }
 
     private val files: FileService by lazy { FileServiceImpl(clientOptions) }
 
@@ -49,8 +45,6 @@ class EntitlementServiceImpl internal constructor(private val clientOptions: Cli
 
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): EntitlementService =
         EntitlementServiceImpl(clientOptions.toBuilder().apply(modifier).build())
-
-    override fun translations(): TranslationService = translations
 
     override fun files(): FileService = files
 
@@ -95,10 +89,6 @@ class EntitlementServiceImpl internal constructor(private val clientOptions: Cli
         private val errorHandler: Handler<HttpResponse> =
             errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
-        private val translations: TranslationService.WithRawResponse by lazy {
-            TranslationServiceImpl.WithRawResponseImpl(clientOptions)
-        }
-
         private val files: FileService.WithRawResponse by lazy {
             FileServiceImpl.WithRawResponseImpl(clientOptions)
         }
@@ -113,8 +103,6 @@ class EntitlementServiceImpl internal constructor(private val clientOptions: Cli
             EntitlementServiceImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier).build()
             )
-
-        override fun translations(): TranslationService.WithRawResponse = translations
 
         override fun files(): FileService.WithRawResponse = files
 

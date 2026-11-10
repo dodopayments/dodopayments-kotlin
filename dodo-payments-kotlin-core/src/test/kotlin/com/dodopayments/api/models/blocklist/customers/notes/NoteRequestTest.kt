@@ -11,15 +11,15 @@ internal class NoteRequestTest {
 
     @Test
     fun create() {
-        val noteRequest = NoteRequest.builder().note("note").build()
+        val noteRequest = NoteRequest.builder().text("text").build()
 
-        assertThat(noteRequest.note()).isEqualTo("note")
+        assertThat(noteRequest.text()).isEqualTo("text")
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val noteRequest = NoteRequest.builder().note("note").build()
+        val noteRequest = NoteRequest.builder().text("text").build()
 
         val roundtrippedNoteRequest =
             jsonMapper.readValue(

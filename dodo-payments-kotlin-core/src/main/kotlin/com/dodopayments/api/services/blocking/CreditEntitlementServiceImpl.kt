@@ -28,8 +28,6 @@ import com.dodopayments.api.models.creditentitlements.CreditEntitlementUndeleteP
 import com.dodopayments.api.models.creditentitlements.CreditEntitlementUpdateParams
 import com.dodopayments.api.services.blocking.creditentitlements.BalanceService
 import com.dodopayments.api.services.blocking.creditentitlements.BalanceServiceImpl
-import com.dodopayments.api.services.blocking.creditentitlements.TranslationService
-import com.dodopayments.api.services.blocking.creditentitlements.TranslationServiceImpl
 
 class CreditEntitlementServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     CreditEntitlementService {
@@ -38,16 +36,12 @@ class CreditEntitlementServiceImpl internal constructor(private val clientOption
         WithRawResponseImpl(clientOptions)
     }
 
-    private val translations: TranslationService by lazy { TranslationServiceImpl(clientOptions) }
-
     private val balances: BalanceService by lazy { BalanceServiceImpl(clientOptions) }
 
     override fun withRawResponse(): CreditEntitlementService.WithRawResponse = withRawResponse
 
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): CreditEntitlementService =
         CreditEntitlementServiceImpl(clientOptions.toBuilder().apply(modifier).build())
-
-    override fun translations(): TranslationService = translations
 
     override fun balances(): BalanceService = balances
 
@@ -93,10 +87,6 @@ class CreditEntitlementServiceImpl internal constructor(private val clientOption
         private val errorHandler: Handler<HttpResponse> =
             errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
-        private val translations: TranslationService.WithRawResponse by lazy {
-            TranslationServiceImpl.WithRawResponseImpl(clientOptions)
-        }
-
         private val balances: BalanceService.WithRawResponse by lazy {
             BalanceServiceImpl.WithRawResponseImpl(clientOptions)
         }
@@ -107,8 +97,6 @@ class CreditEntitlementServiceImpl internal constructor(private val clientOption
             CreditEntitlementServiceImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier).build()
             )
-
-        override fun translations(): TranslationService.WithRawResponse = translations
 
         override fun balances(): BalanceService.WithRawResponse = balances
 

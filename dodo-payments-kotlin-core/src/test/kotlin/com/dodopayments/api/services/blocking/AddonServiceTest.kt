@@ -5,7 +5,6 @@ package com.dodopayments.api.services.blocking
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
 import com.dodopayments.api.models.addons.AddonCreateParams
-import com.dodopayments.api.models.addons.AddonRetrieveParams
 import com.dodopayments.api.models.addons.AddonUpdateParams
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.TaxCategory
@@ -47,13 +46,7 @@ internal class AddonServiceTest {
                 .build()
         val addonService = client.addons()
 
-        val addonResponse =
-            addonService.retrieve(
-                AddonRetrieveParams.builder()
-                    .id("adn_NX1zdqW4Hbivsqz8vI9dc")
-                    .locale("locale")
-                    .build()
-            )
+        val addonResponse = addonService.retrieve("adn_NX1zdqW4Hbivsqz8vI9dc")
 
         addonResponse.validate()
     }
