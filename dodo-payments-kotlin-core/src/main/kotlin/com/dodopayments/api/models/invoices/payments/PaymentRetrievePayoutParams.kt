@@ -17,10 +17,7 @@ private constructor(
 
     fun payoutId(): String? = payoutId
 
-    /**
-     * The signed link token. If the business asks for a credential on its invoice links, a valid
-     * token for this record replaces the credential.
-     */
+    /** The signed link token. A valid token for this record replaces the credential. */
     fun token(): String? = token
 
     /** Additional headers to send with the request. */
@@ -58,10 +55,7 @@ private constructor(
 
         fun payoutId(payoutId: String?) = apply { this.payoutId = payoutId }
 
-        /**
-         * The signed link token. If the business asks for a credential on its invoice links, a
-         * valid token for this record replaces the credential.
-         */
+        /** The signed link token. A valid token for this record replaces the credential. */
         fun token(token: String?) = apply { this.token = token }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {

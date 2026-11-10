@@ -26,7 +26,7 @@ internal class NoteServiceTest {
             noteService.create(
                 NoteCreateParams.builder()
                     .entryId("entry_id")
-                    .noteRequest(NoteRequest.builder().note("note").build())
+                    .noteRequest(NoteRequest.builder().text("text").build())
                     .build()
             )
 
@@ -47,7 +47,7 @@ internal class NoteServiceTest {
                 NoteUpdateParams.builder()
                     .entryId("entry_id")
                     .noteId("note_id")
-                    .noteRequest(NoteRequest.builder().note("note").build())
+                    .noteRequest(NoteRequest.builder().text("text").build())
                     .build()
             )
 

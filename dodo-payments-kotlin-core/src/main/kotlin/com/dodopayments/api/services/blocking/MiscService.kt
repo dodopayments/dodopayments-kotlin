@@ -6,8 +6,6 @@ import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.RequestOptions
 import com.dodopayments.api.core.http.HttpResponseFor
 import com.dodopayments.api.models.misc.CountryCode
-import com.dodopayments.api.models.misc.LocaleInfo
-import com.dodopayments.api.models.misc.MiscListLocalesParams
 import com.dodopayments.api.models.misc.MiscListSupportedCountriesParams
 import com.google.errorprone.annotations.MustBeClosed
 
@@ -24,16 +22,6 @@ interface MiscService {
      * The original service is not modified.
      */
     fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MiscService
-
-    /** Lists the locales that a translation can have. */
-    fun listLocales(
-        params: MiscListLocalesParams = MiscListLocalesParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): List<LocaleInfo>
-
-    /** @see listLocales */
-    fun listLocales(requestOptions: RequestOptions): List<LocaleInfo> =
-        listLocales(MiscListLocalesParams.none(), requestOptions)
 
     fun listSupportedCountries(
         params: MiscListSupportedCountriesParams = MiscListSupportedCountriesParams.none(),
@@ -53,21 +41,6 @@ interface MiscService {
          * The original service is not modified.
          */
         fun withOptions(modifier: (ClientOptions.Builder) -> Unit): MiscService.WithRawResponse
-
-        /**
-         * Returns a raw HTTP response for `get /locales`, but is otherwise the same as
-         * [MiscService.listLocales].
-         */
-        @MustBeClosed
-        fun listLocales(
-            params: MiscListLocalesParams = MiscListLocalesParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<List<LocaleInfo>>
-
-        /** @see listLocales */
-        @MustBeClosed
-        fun listLocales(requestOptions: RequestOptions): HttpResponseFor<List<LocaleInfo>> =
-            listLocales(MiscListLocalesParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /checkout/supported_countries`, but is otherwise the

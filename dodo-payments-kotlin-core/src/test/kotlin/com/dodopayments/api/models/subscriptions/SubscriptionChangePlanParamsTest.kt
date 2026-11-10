@@ -3,6 +3,7 @@
 package com.dodopayments.api.models.subscriptions
 
 import com.dodopayments.api.core.JsonValue
+import com.dodopayments.api.models.invoices.CollectionMethod
 import com.dodopayments.api.models.misc.Metadata
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -25,9 +26,17 @@ internal class SubscriptionChangePlanParamsTest {
                     .cancelOlderPaymentLink(true)
                     .cancelScheduledChangePlan(true)
                     .collectViaPaymentLink(true)
+                    .credit(UpdateSubscriptionPlanReq.Credit.CUSTOMER_BALANCE)
                     .discountCode("discount_code")
                     .addDiscountCode("string")
                     .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
+                    .invoice(
+                        UpdateSubscriptionPlanReq.Invoice.builder()
+                            .collectionMethod(CollectionMethod.AUTO_CHARGE)
+                            .finalize(true)
+                            .paymentTermsDueOnReceipt()
+                            .build()
+                    )
                     .metadata(
                         Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -78,9 +87,17 @@ internal class SubscriptionChangePlanParamsTest {
                         .cancelOlderPaymentLink(true)
                         .cancelScheduledChangePlan(true)
                         .collectViaPaymentLink(true)
+                        .credit(UpdateSubscriptionPlanReq.Credit.CUSTOMER_BALANCE)
                         .discountCode("discount_code")
                         .addDiscountCode("string")
                         .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
+                        .invoice(
+                            UpdateSubscriptionPlanReq.Invoice.builder()
+                                .collectionMethod(CollectionMethod.AUTO_CHARGE)
+                                .finalize(true)
+                                .paymentTermsDueOnReceipt()
+                                .build()
+                        )
                         .metadata(
                             Metadata.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -107,9 +124,17 @@ internal class SubscriptionChangePlanParamsTest {
                     .cancelOlderPaymentLink(true)
                     .cancelScheduledChangePlan(true)
                     .collectViaPaymentLink(true)
+                    .credit(UpdateSubscriptionPlanReq.Credit.CUSTOMER_BALANCE)
                     .discountCode("discount_code")
                     .addDiscountCode("string")
                     .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
+                    .invoice(
+                        UpdateSubscriptionPlanReq.Invoice.builder()
+                            .collectionMethod(CollectionMethod.AUTO_CHARGE)
+                            .finalize(true)
+                            .paymentTermsDueOnReceipt()
+                            .build()
+                    )
                     .metadata(
                         Metadata.builder()
                             .putAdditionalProperty("foo", JsonValue.from("string"))

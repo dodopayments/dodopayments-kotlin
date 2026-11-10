@@ -2,6 +2,7 @@
 
 package com.dodopayments.api.models.subscriptions
 
+import com.dodopayments.api.core.Enum
 import com.dodopayments.api.core.ExcludeMissing
 import com.dodopayments.api.core.JsonField
 import com.dodopayments.api.core.JsonMissing
@@ -10,6 +11,7 @@ import com.dodopayments.api.core.checkKnown
 import com.dodopayments.api.core.checkRequired
 import com.dodopayments.api.core.toImmutable
 import com.dodopayments.api.errors.DodoPaymentsInvalidDataException
+import com.dodopayments.api.models.invoices.CollectionMethod
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.Metadata
 import com.dodopayments.api.models.payments.BillingAddress
@@ -27,6 +29,7 @@ class SubscriptionListResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val billing: JsonField<BillingAddress>,
+    private val billingMode: JsonField<BillingMode>,
     private val cancelAtNextBillingDate: JsonField<Boolean>,
     private val createdAt: JsonField<OffsetDateTime>,
     private val currency: JsonField<Currency>,
@@ -50,11 +53,13 @@ private constructor(
     private val trialPeriodDays: JsonField<Int>,
     private val cancelledAt: JsonField<OffsetDateTime>,
     private val cancelledBy: JsonField<SubscriptionCancelledBy>,
+    private val collectionMethod: JsonField<CollectionMethod>,
     private val customerBusinessName: JsonField<String>,
     private val discountCyclesRemaining: JsonField<Int>,
     private val discountId: JsonField<String>,
     private val pausedAt: JsonField<OffsetDateTime>,
     private val paymentMethodId: JsonField<String>,
+    private val paymentTermsDays: JsonField<Int>,
     private val productName: JsonField<String>,
     private val scheduledChange: JsonField<ScheduledPlanChange>,
     private val taxId: JsonField<String>,
@@ -67,6 +72,9 @@ private constructor(
         @JsonProperty("billing")
         @ExcludeMissing
         billing: JsonField<BillingAddress> = JsonMissing.of(),
+        @JsonProperty("billing_mode")
+        @ExcludeMissing
+        billingMode: JsonField<BillingMode> = JsonMissing.of(),
         @JsonProperty("cancel_at_next_billing_date")
         @ExcludeMissing
         cancelAtNextBillingDate: JsonField<Boolean> = JsonMissing.of(),
@@ -126,6 +134,9 @@ private constructor(
         @JsonProperty("cancelled_by")
         @ExcludeMissing
         cancelledBy: JsonField<SubscriptionCancelledBy> = JsonMissing.of(),
+        @JsonProperty("collection_method")
+        @ExcludeMissing
+        collectionMethod: JsonField<CollectionMethod> = JsonMissing.of(),
         @JsonProperty("customer_business_name")
         @ExcludeMissing
         customerBusinessName: JsonField<String> = JsonMissing.of(),
@@ -141,6 +152,9 @@ private constructor(
         @JsonProperty("payment_method_id")
         @ExcludeMissing
         paymentMethodId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("payment_terms_days")
+        @ExcludeMissing
+        paymentTermsDays: JsonField<Int> = JsonMissing.of(),
         @JsonProperty("product_name")
         @ExcludeMissing
         productName: JsonField<String> = JsonMissing.of(),
@@ -151,6 +165,7 @@ private constructor(
         @JsonProperty("trial_amount") @ExcludeMissing trialAmount: JsonField<Int> = JsonMissing.of(),
     ) : this(
         billing,
+        billingMode,
         cancelAtNextBillingDate,
         createdAt,
         currency,
@@ -174,11 +189,13 @@ private constructor(
         trialPeriodDays,
         cancelledAt,
         cancelledBy,
+        collectionMethod,
         customerBusinessName,
         discountCyclesRemaining,
         discountId,
         pausedAt,
         paymentMethodId,
+        paymentTermsDays,
         productName,
         scheduledChange,
         taxId,
@@ -193,6 +210,14 @@ private constructor(
      *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
      */
     fun billing(): BillingAddress = billing.getRequired("billing")
+
+    /**
+     * `invoice_led` when invoices bill the subscription. `normal` otherwise.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or is
+     *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun billingMode(): BillingMode = billingMode.getRequired("billing_mode")
 
     /**
      * Indicates if the subscription will cancel at the next billing date
@@ -387,6 +412,14 @@ private constructor(
     fun cancelledBy(): SubscriptionCancelledBy? = cancelledBy.getNullable("cancelled_by")
 
     /**
+     * How an invoice-led subscription collects each invoice. `null` for `normal`.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun collectionMethod(): CollectionMethod? = collectionMethod.getNullable("collection_method")
+
+    /**
      * Business / legal name associated with the tax id (B2B). When set this is used on the invoice
      * in place of the customer's personal name.
      *
@@ -430,6 +463,14 @@ private constructor(
     fun paymentMethodId(): String? = paymentMethodId.getNullable("payment_method_id")
 
     /**
+     * Days from the invoice date to the due date. `null` for `normal`.
+     *
+     * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
+     *   the server responded with an unexpected value).
+     */
+    fun paymentTermsDays(): Int? = paymentTermsDays.getNullable("payment_terms_days")
+
+    /**
      * Name of the product associated with this subscription
      *
      * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -468,6 +509,15 @@ private constructor(
      * Unlike [billing], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("billing") @ExcludeMissing fun _billing(): JsonField<BillingAddress> = billing
+
+    /**
+     * Returns the raw JSON value of [billingMode].
+     *
+     * Unlike [billingMode], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("billing_mode")
+    @ExcludeMissing
+    fun _billingMode(): JsonField<BillingMode> = billingMode
 
     /**
      * Returns the raw JSON value of [cancelAtNextBillingDate].
@@ -673,6 +723,16 @@ private constructor(
     fun _cancelledBy(): JsonField<SubscriptionCancelledBy> = cancelledBy
 
     /**
+     * Returns the raw JSON value of [collectionMethod].
+     *
+     * Unlike [collectionMethod], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("collection_method")
+    @ExcludeMissing
+    fun _collectionMethod(): JsonField<CollectionMethod> = collectionMethod
+
+    /**
      * Returns the raw JSON value of [customerBusinessName].
      *
      * Unlike [customerBusinessName], this method doesn't throw if the JSON field has an unexpected
@@ -714,6 +774,16 @@ private constructor(
     @JsonProperty("payment_method_id")
     @ExcludeMissing
     fun _paymentMethodId(): JsonField<String> = paymentMethodId
+
+    /**
+     * Returns the raw JSON value of [paymentTermsDays].
+     *
+     * Unlike [paymentTermsDays], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
+    @JsonProperty("payment_terms_days")
+    @ExcludeMissing
+    fun _paymentTermsDays(): JsonField<Int> = paymentTermsDays
 
     /**
      * Returns the raw JSON value of [productName].
@@ -767,6 +837,7 @@ private constructor(
          * The following fields are required:
          * ```kotlin
          * .billing()
+         * .billingMode()
          * .cancelAtNextBillingDate()
          * .createdAt()
          * .currency()
@@ -797,6 +868,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var billing: JsonField<BillingAddress>? = null
+        private var billingMode: JsonField<BillingMode>? = null
         private var cancelAtNextBillingDate: JsonField<Boolean>? = null
         private var createdAt: JsonField<OffsetDateTime>? = null
         private var currency: JsonField<Currency>? = null
@@ -820,11 +892,13 @@ private constructor(
         private var trialPeriodDays: JsonField<Int>? = null
         private var cancelledAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var cancelledBy: JsonField<SubscriptionCancelledBy> = JsonMissing.of()
+        private var collectionMethod: JsonField<CollectionMethod> = JsonMissing.of()
         private var customerBusinessName: JsonField<String> = JsonMissing.of()
         private var discountCyclesRemaining: JsonField<Int> = JsonMissing.of()
         private var discountId: JsonField<String> = JsonMissing.of()
         private var pausedAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var paymentMethodId: JsonField<String> = JsonMissing.of()
+        private var paymentTermsDays: JsonField<Int> = JsonMissing.of()
         private var productName: JsonField<String> = JsonMissing.of()
         private var scheduledChange: JsonField<ScheduledPlanChange> = JsonMissing.of()
         private var taxId: JsonField<String> = JsonMissing.of()
@@ -833,6 +907,7 @@ private constructor(
 
         internal fun from(subscriptionListResponse: SubscriptionListResponse) = apply {
             billing = subscriptionListResponse.billing
+            billingMode = subscriptionListResponse.billingMode
             cancelAtNextBillingDate = subscriptionListResponse.cancelAtNextBillingDate
             createdAt = subscriptionListResponse.createdAt
             currency = subscriptionListResponse.currency
@@ -856,11 +931,13 @@ private constructor(
             trialPeriodDays = subscriptionListResponse.trialPeriodDays
             cancelledAt = subscriptionListResponse.cancelledAt
             cancelledBy = subscriptionListResponse.cancelledBy
+            collectionMethod = subscriptionListResponse.collectionMethod
             customerBusinessName = subscriptionListResponse.customerBusinessName
             discountCyclesRemaining = subscriptionListResponse.discountCyclesRemaining
             discountId = subscriptionListResponse.discountId
             pausedAt = subscriptionListResponse.pausedAt
             paymentMethodId = subscriptionListResponse.paymentMethodId
+            paymentTermsDays = subscriptionListResponse.paymentTermsDays
             productName = subscriptionListResponse.productName
             scheduledChange = subscriptionListResponse.scheduledChange
             taxId = subscriptionListResponse.taxId
@@ -879,6 +956,20 @@ private constructor(
          * supported value.
          */
         fun billing(billing: JsonField<BillingAddress>) = apply { this.billing = billing }
+
+        /** `invoice_led` when invoices bill the subscription. `normal` otherwise. */
+        fun billingMode(billingMode: BillingMode) = billingMode(JsonField.of(billingMode))
+
+        /**
+         * Sets [Builder.billingMode] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.billingMode] with a well-typed [BillingMode] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun billingMode(billingMode: JsonField<BillingMode>) = apply {
+            this.billingMode = billingMode
+        }
 
         /** Indicates if the subscription will cancel at the next billing date */
         fun cancelAtNextBillingDate(cancelAtNextBillingDate: Boolean) =
@@ -1220,6 +1311,21 @@ private constructor(
             this.cancelledBy = cancelledBy
         }
 
+        /** How an invoice-led subscription collects each invoice. `null` for `normal`. */
+        fun collectionMethod(collectionMethod: CollectionMethod?) =
+            collectionMethod(JsonField.ofNullable(collectionMethod))
+
+        /**
+         * Sets [Builder.collectionMethod] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.collectionMethod] with a well-typed [CollectionMethod]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
+        fun collectionMethod(collectionMethod: JsonField<CollectionMethod>) = apply {
+            this.collectionMethod = collectionMethod
+        }
+
         /**
          * Business / legal name associated with the tax id (B2B). When set this is used on the
          * invoice in place of the customer's personal name.
@@ -1301,6 +1407,28 @@ private constructor(
          */
         fun paymentMethodId(paymentMethodId: JsonField<String>) = apply {
             this.paymentMethodId = paymentMethodId
+        }
+
+        /** Days from the invoice date to the due date. `null` for `normal`. */
+        fun paymentTermsDays(paymentTermsDays: Int?) =
+            paymentTermsDays(JsonField.ofNullable(paymentTermsDays))
+
+        /**
+         * Alias for [Builder.paymentTermsDays].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun paymentTermsDays(paymentTermsDays: Int) = paymentTermsDays(paymentTermsDays as Int?)
+
+        /**
+         * Sets [Builder.paymentTermsDays] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.paymentTermsDays] with a well-typed [Int] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun paymentTermsDays(paymentTermsDays: JsonField<Int>) = apply {
+            this.paymentTermsDays = paymentTermsDays
         }
 
         /** Name of the product associated with this subscription */
@@ -1389,6 +1517,7 @@ private constructor(
          * The following fields are required:
          * ```kotlin
          * .billing()
+         * .billingMode()
          * .cancelAtNextBillingDate()
          * .createdAt()
          * .currency()
@@ -1417,6 +1546,7 @@ private constructor(
         fun build(): SubscriptionListResponse =
             SubscriptionListResponse(
                 checkRequired("billing", billing),
+                checkRequired("billingMode", billingMode),
                 checkRequired("cancelAtNextBillingDate", cancelAtNextBillingDate),
                 checkRequired("createdAt", createdAt),
                 checkRequired("currency", currency),
@@ -1440,11 +1570,13 @@ private constructor(
                 checkRequired("trialPeriodDays", trialPeriodDays),
                 cancelledAt,
                 cancelledBy,
+                collectionMethod,
                 customerBusinessName,
                 discountCyclesRemaining,
                 discountId,
                 pausedAt,
                 paymentMethodId,
+                paymentTermsDays,
                 productName,
                 scheduledChange,
                 taxId,
@@ -1469,6 +1601,7 @@ private constructor(
         }
 
         billing().validate()
+        billingMode().validate()
         cancelAtNextBillingDate()
         createdAt()
         currency().validate()
@@ -1492,11 +1625,13 @@ private constructor(
         trialPeriodDays()
         cancelledAt()
         cancelledBy()?.validate()
+        collectionMethod()?.validate()
         customerBusinessName()
         discountCyclesRemaining()
         discountId()
         pausedAt()
         paymentMethodId()
+        paymentTermsDays()
         productName()
         scheduledChange()?.validate()
         taxId()
@@ -1519,6 +1654,7 @@ private constructor(
      */
     internal fun validity(): Int =
         (billing.asKnown()?.validity() ?: 0) +
+            (billingMode.asKnown()?.validity() ?: 0) +
             (if (cancelAtNextBillingDate.asKnown() == null) 0 else 1) +
             (if (createdAt.asKnown() == null) 0 else 1) +
             (currency.asKnown()?.validity() ?: 0) +
@@ -1542,15 +1678,155 @@ private constructor(
             (if (trialPeriodDays.asKnown() == null) 0 else 1) +
             (if (cancelledAt.asKnown() == null) 0 else 1) +
             (cancelledBy.asKnown()?.validity() ?: 0) +
+            (collectionMethod.asKnown()?.validity() ?: 0) +
             (if (customerBusinessName.asKnown() == null) 0 else 1) +
             (if (discountCyclesRemaining.asKnown() == null) 0 else 1) +
             (if (discountId.asKnown() == null) 0 else 1) +
             (if (pausedAt.asKnown() == null) 0 else 1) +
             (if (paymentMethodId.asKnown() == null) 0 else 1) +
+            (if (paymentTermsDays.asKnown() == null) 0 else 1) +
             (if (productName.asKnown() == null) 0 else 1) +
             (scheduledChange.asKnown()?.validity() ?: 0) +
             (if (taxId.asKnown() == null) 0 else 1) +
             (if (trialAmount.asKnown() == null) 0 else 1)
+
+    /** `invoice_led` when invoices bill the subscription. `normal` otherwise. */
+    class BillingMode @JsonCreator private constructor(private val value: JsonField<String>) :
+        Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            val NORMAL = of("normal")
+
+            val INVOICE_LED = of("invoice_led")
+
+            fun of(value: String) = BillingMode(JsonField.of(value))
+        }
+
+        /** An enum containing [BillingMode]'s known values. */
+        enum class Known {
+            NORMAL,
+            INVOICE_LED,
+        }
+
+        /**
+         * An enum containing [BillingMode]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [BillingMode] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            NORMAL,
+            INVOICE_LED,
+            /**
+             * An enum member indicating that [BillingMode] was instantiated with an unknown value.
+             */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                NORMAL -> Value.NORMAL
+                INVOICE_LED -> Value.INVOICE_LED
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws DodoPaymentsInvalidDataException if this class instance's value is a not a known
+         *   member.
+         */
+        fun known(): Known =
+            when (this) {
+                NORMAL -> Known.NORMAL
+                INVOICE_LED -> Known.INVOICE_LED
+                else -> throw DodoPaymentsInvalidDataException("Unknown BillingMode: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws DodoPaymentsInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString() ?: throw DodoPaymentsInvalidDataException("Value is not a String")
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws DodoPaymentsInvalidDataException if any value type in this object doesn't match
+         *   its expected type.
+         */
+        fun validate(): BillingMode = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: DodoPaymentsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is BillingMode && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
 
     /**
      * Lightweight discount info for list endpoints. Array order represents position (no explicit
@@ -1789,6 +2065,7 @@ private constructor(
 
         return other is SubscriptionListResponse &&
             billing == other.billing &&
+            billingMode == other.billingMode &&
             cancelAtNextBillingDate == other.cancelAtNextBillingDate &&
             createdAt == other.createdAt &&
             currency == other.currency &&
@@ -1812,11 +2089,13 @@ private constructor(
             trialPeriodDays == other.trialPeriodDays &&
             cancelledAt == other.cancelledAt &&
             cancelledBy == other.cancelledBy &&
+            collectionMethod == other.collectionMethod &&
             customerBusinessName == other.customerBusinessName &&
             discountCyclesRemaining == other.discountCyclesRemaining &&
             discountId == other.discountId &&
             pausedAt == other.pausedAt &&
             paymentMethodId == other.paymentMethodId &&
+            paymentTermsDays == other.paymentTermsDays &&
             productName == other.productName &&
             scheduledChange == other.scheduledChange &&
             taxId == other.taxId &&
@@ -1827,6 +2106,7 @@ private constructor(
     private val hashCode: Int by lazy {
         Objects.hash(
             billing,
+            billingMode,
             cancelAtNextBillingDate,
             createdAt,
             currency,
@@ -1850,11 +2130,13 @@ private constructor(
             trialPeriodDays,
             cancelledAt,
             cancelledBy,
+            collectionMethod,
             customerBusinessName,
             discountCyclesRemaining,
             discountId,
             pausedAt,
             paymentMethodId,
+            paymentTermsDays,
             productName,
             scheduledChange,
             taxId,
@@ -1866,5 +2148,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "SubscriptionListResponse{billing=$billing, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, currency=$currency, customer=$customer, discounts=$discounts, hasPaymentMethod=$hasPaymentMethod, metadata=$metadata, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancelledAt=$cancelledAt, cancelledBy=$cancelledBy, customerBusinessName=$customerBusinessName, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, pausedAt=$pausedAt, paymentMethodId=$paymentMethodId, productName=$productName, scheduledChange=$scheduledChange, taxId=$taxId, trialAmount=$trialAmount, additionalProperties=$additionalProperties}"
+        "SubscriptionListResponse{billing=$billing, billingMode=$billingMode, cancelAtNextBillingDate=$cancelAtNextBillingDate, createdAt=$createdAt, currency=$currency, customer=$customer, discounts=$discounts, hasPaymentMethod=$hasPaymentMethod, metadata=$metadata, nextBillingDate=$nextBillingDate, onDemand=$onDemand, paymentFrequencyCount=$paymentFrequencyCount, paymentFrequencyInterval=$paymentFrequencyInterval, previousBillingDate=$previousBillingDate, productId=$productId, quantity=$quantity, recurringPreTaxAmount=$recurringPreTaxAmount, status=$status, subscriptionId=$subscriptionId, subscriptionPeriodCount=$subscriptionPeriodCount, subscriptionPeriodInterval=$subscriptionPeriodInterval, taxInclusive=$taxInclusive, trialPeriodDays=$trialPeriodDays, cancelledAt=$cancelledAt, cancelledBy=$cancelledBy, collectionMethod=$collectionMethod, customerBusinessName=$customerBusinessName, discountCyclesRemaining=$discountCyclesRemaining, discountId=$discountId, pausedAt=$pausedAt, paymentMethodId=$paymentMethodId, paymentTermsDays=$paymentTermsDays, productName=$productName, scheduledChange=$scheduledChange, taxId=$taxId, trialAmount=$trialAmount, additionalProperties=$additionalProperties}"
 }

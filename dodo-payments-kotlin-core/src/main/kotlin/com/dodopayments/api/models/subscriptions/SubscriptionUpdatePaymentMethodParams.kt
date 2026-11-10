@@ -31,6 +31,10 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.util.Collections
 import java.util.Objects
 
+/**
+ * For an invoice-led subscription, billing charges the open invoices after the change, so the
+ * response has no payment.
+ */
 class SubscriptionUpdatePaymentMethodParams
 private constructor(
     private val subscriptionId: String?,

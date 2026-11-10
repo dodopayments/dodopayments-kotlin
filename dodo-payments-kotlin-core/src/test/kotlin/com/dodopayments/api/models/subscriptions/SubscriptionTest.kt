@@ -7,6 +7,7 @@ import com.dodopayments.api.core.jsonMapper
 import com.dodopayments.api.models.creditentitlements.CbbOverageBehavior
 import com.dodopayments.api.models.discounts.DiscountDetail
 import com.dodopayments.api.models.discounts.DiscountType
+import com.dodopayments.api.models.invoices.CollectionMethod
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.Metadata
@@ -34,6 +35,7 @@ internal class SubscriptionTest {
                         .zipcode("zipcode")
                         .build()
                 )
+                .billingMode(Subscription.BillingMode.NORMAL)
                 .brandId("brand_id")
                 .cancelAtNextBillingDate(true)
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -122,6 +124,7 @@ internal class SubscriptionTest {
                         .name("name")
                         .build()
                 )
+                .collectionMethod(CollectionMethod.AUTO_CHARGE)
                 .addCustomFieldResponse(
                     CustomFieldResponse.builder().key("key").value("value").build()
                 )
@@ -155,6 +158,7 @@ internal class SubscriptionTest {
                 .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .pausedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .paymentMethodId("payment_method_id")
+                .paymentTermsDays(0)
                 .scheduledChange(
                     ScheduledPlanChange.builder()
                         .id("id")
@@ -191,6 +195,7 @@ internal class SubscriptionTest {
                     .zipcode("zipcode")
                     .build()
             )
+        assertThat(subscription.billingMode()).isEqualTo(Subscription.BillingMode.NORMAL)
         assertThat(subscription.brandId()).isEqualTo("brand_id")
         assertThat(subscription.cancelAtNextBillingDate()).isEqualTo(true)
         assertThat(subscription.createdAt())
@@ -288,6 +293,7 @@ internal class SubscriptionTest {
                     .name("name")
                     .build()
             )
+        assertThat(subscription.collectionMethod()).isEqualTo(CollectionMethod.AUTO_CHARGE)
         assertThat(subscription.customFieldResponses())
             .containsExactly(CustomFieldResponse.builder().key("key").value("value").build())
         assertThat(subscription.customerBusinessName()).isEqualTo("customer_business_name")
@@ -323,6 +329,7 @@ internal class SubscriptionTest {
         assertThat(subscription.pausedAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(subscription.paymentMethodId()).isEqualTo("payment_method_id")
+        assertThat(subscription.paymentTermsDays()).isEqualTo(0)
         assertThat(subscription.scheduledChange())
             .isEqualTo(
                 ScheduledPlanChange.builder()
@@ -361,6 +368,7 @@ internal class SubscriptionTest {
                         .zipcode("zipcode")
                         .build()
                 )
+                .billingMode(Subscription.BillingMode.NORMAL)
                 .brandId("brand_id")
                 .cancelAtNextBillingDate(true)
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -449,6 +457,7 @@ internal class SubscriptionTest {
                         .name("name")
                         .build()
                 )
+                .collectionMethod(CollectionMethod.AUTO_CHARGE)
                 .addCustomFieldResponse(
                     CustomFieldResponse.builder().key("key").value("value").build()
                 )
@@ -482,6 +491,7 @@ internal class SubscriptionTest {
                 .expiresAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .pausedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .paymentMethodId("payment_method_id")
+                .paymentTermsDays(0)
                 .scheduledChange(
                     ScheduledPlanChange.builder()
                         .id("id")

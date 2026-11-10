@@ -5,6 +5,7 @@ package com.dodopayments.api.services.blocking
 import com.dodopayments.api.TestServerExtension
 import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClient
 import com.dodopayments.api.core.JsonValue
+import com.dodopayments.api.models.invoices.CollectionMethod
 import com.dodopayments.api.models.misc.CountryCode
 import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.Metadata
@@ -19,7 +20,6 @@ import com.dodopayments.api.models.subscriptions.SubscriptionChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeParams
 import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
 import com.dodopayments.api.models.subscriptions.SubscriptionPreviewChangePlanParams
-import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveParams
 import com.dodopayments.api.models.subscriptions.SubscriptionStatus
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdateParams
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdatePaymentMethodParams
@@ -109,13 +109,7 @@ internal class SubscriptionServiceTest {
                 .build()
         val subscriptionService = client.subscriptions()
 
-        val subscription =
-            subscriptionService.retrieve(
-                SubscriptionRetrieveParams.builder()
-                    .subscriptionId("sub_Iuaq622bbmmfOGrVTqdXv")
-                    .locale("locale")
-                    .build()
-            )
+        val subscription = subscriptionService.retrieve("sub_Iuaq622bbmmfOGrVTqdXv")
 
         subscription.validate()
     }
@@ -236,9 +230,17 @@ internal class SubscriptionServiceTest {
                             .cancelOlderPaymentLink(true)
                             .cancelScheduledChangePlan(true)
                             .collectViaPaymentLink(true)
+                            .credit(UpdateSubscriptionPlanReq.Credit.CUSTOMER_BALANCE)
                             .discountCode("discount_code")
                             .addDiscountCode("string")
                             .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
+                            .invoice(
+                                UpdateSubscriptionPlanReq.Invoice.builder()
+                                    .collectionMethod(CollectionMethod.AUTO_CHARGE)
+                                    .finalize(true)
+                                    .paymentTermsDueOnReceipt()
+                                    .build()
+                            )
                             .metadata(
                                 Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -315,9 +317,17 @@ internal class SubscriptionServiceTest {
                             .cancelOlderPaymentLink(true)
                             .cancelScheduledChangePlan(true)
                             .collectViaPaymentLink(true)
+                            .credit(UpdateSubscriptionPlanReq.Credit.CUSTOMER_BALANCE)
                             .discountCode("discount_code")
                             .addDiscountCode("string")
                             .effectiveAt(UpdateSubscriptionPlanReq.EffectiveAt.IMMEDIATELY)
+                            .invoice(
+                                UpdateSubscriptionPlanReq.Invoice.builder()
+                                    .collectionMethod(CollectionMethod.AUTO_CHARGE)
+                                    .finalize(true)
+                                    .paymentTermsDueOnReceipt()
+                                    .build()
+                            )
                             .metadata(
                                 Metadata.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("string"))
@@ -347,6 +357,20 @@ internal class SubscriptionServiceTest {
         val response = subscriptionService.retrieveCreditUsage("sub_Iuaq622bbmmfOGrVTqdXv")
 
         response.validate()
+    }
+
+    @Test
+    fun retrieveUpcomingInvoice() {
+        val client =
+            DodoPaymentsOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val subscriptionService = client.subscriptions()
+
+        val invoice = subscriptionService.retrieveUpcomingInvoice("subscription_id")
+
+        invoice.validate()
     }
 
     @Test

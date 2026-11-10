@@ -10,18 +10,12 @@ internal class AddonListParamsTest {
 
     @Test
     fun create() {
-        AddonListParams.builder().archived(true).locale("locale").pageNumber(0).pageSize(0).build()
+        AddonListParams.builder().archived(true).pageNumber(0).pageSize(0).build()
     }
 
     @Test
     fun queryParams() {
-        val params =
-            AddonListParams.builder()
-                .archived(true)
-                .locale("locale")
-                .pageNumber(0)
-                .pageSize(0)
-                .build()
+        val params = AddonListParams.builder().archived(true).pageNumber(0).pageSize(0).build()
 
         val queryParams = params._queryParams()
 
@@ -29,7 +23,6 @@ internal class AddonListParamsTest {
             .isEqualTo(
                 QueryParams.builder()
                     .put("archived", "true")
-                    .put("locale", "locale")
                     .put("page_number", "0")
                     .put("page_size", "0")
                     .build()

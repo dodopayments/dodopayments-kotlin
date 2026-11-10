@@ -34,8 +34,6 @@ import com.dodopayments.api.services.blocking.products.LocalizedPriceService
 import com.dodopayments.api.services.blocking.products.LocalizedPriceServiceImpl
 import com.dodopayments.api.services.blocking.products.ShortLinkService
 import com.dodopayments.api.services.blocking.products.ShortLinkServiceImpl
-import com.dodopayments.api.services.blocking.products.TranslationService
-import com.dodopayments.api.services.blocking.products.TranslationServiceImpl
 
 class ProductServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     ProductService {
@@ -43,8 +41,6 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
     private val withRawResponse: ProductService.WithRawResponse by lazy {
         WithRawResponseImpl(clientOptions)
     }
-
-    private val translations: TranslationService by lazy { TranslationServiceImpl(clientOptions) }
 
     private val images: ImageService by lazy { ImageServiceImpl(clientOptions) }
 
@@ -58,8 +54,6 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
 
     override fun withOptions(modifier: (ClientOptions.Builder) -> Unit): ProductService =
         ProductServiceImpl(clientOptions.toBuilder().apply(modifier).build())
-
-    override fun translations(): TranslationService = translations
 
     override fun images(): ImageService = images
 
@@ -107,10 +101,6 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
         private val errorHandler: Handler<HttpResponse> =
             errorHandler(errorBodyHandler(clientOptions.jsonMapper))
 
-        private val translations: TranslationService.WithRawResponse by lazy {
-            TranslationServiceImpl.WithRawResponseImpl(clientOptions)
-        }
-
         private val images: ImageService.WithRawResponse by lazy {
             ImageServiceImpl.WithRawResponseImpl(clientOptions)
         }
@@ -129,8 +119,6 @@ class ProductServiceImpl internal constructor(private val clientOptions: ClientO
             ProductServiceImpl.WithRawResponseImpl(
                 clientOptions.toBuilder().apply(modifier).build()
             )
-
-        override fun translations(): TranslationService.WithRawResponse = translations
 
         override fun images(): ImageService.WithRawResponse = images
 

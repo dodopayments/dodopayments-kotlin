@@ -10,7 +10,6 @@ import com.dodopayments.api.models.meters.FilterType
 import com.dodopayments.api.models.meters.MeterAggregation
 import com.dodopayments.api.models.meters.MeterCreateParams
 import com.dodopayments.api.models.meters.MeterFilter
-import com.dodopayments.api.models.meters.MeterRetrieveParams
 import com.dodopayments.api.models.meters.MeterUpdateParams
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -74,13 +73,7 @@ internal class MeterServiceTest {
                 .build()
         val meterService = client.meters()
 
-        val meter =
-            meterService.retrieve(
-                MeterRetrieveParams.builder()
-                    .id("mtr_h5tgTWL55OyMO0L2Q9w9v")
-                    .locale("locale")
-                    .build()
-            )
+        val meter = meterService.retrieve("mtr_h5tgTWL55OyMO0L2Q9w9v")
 
         meter.validate()
     }
