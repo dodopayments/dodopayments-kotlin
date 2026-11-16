@@ -6,6 +6,8 @@ import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.getPackageVersion
 import com.dodopayments.api.services.async.AddonServiceAsync
 import com.dodopayments.api.services.async.AddonServiceAsyncImpl
+import com.dodopayments.api.services.async.AppInstallationServiceAsync
+import com.dodopayments.api.services.async.AppInstallationServiceAsyncImpl
 import com.dodopayments.api.services.async.BalanceServiceAsync
 import com.dodopayments.api.services.async.BalanceServiceAsyncImpl
 import com.dodopayments.api.services.async.BlocklistServiceAsync
@@ -178,6 +180,10 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
         ModerationServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
+    private val appInstallation: AppInstallationServiceAsync by lazy {
+        AppInstallationServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
+
     override fun sync(): DodoPaymentsClient = sync
 
     override fun withRawResponse(): DodoPaymentsClientAsync.WithRawResponse = withRawResponse
@@ -236,6 +242,8 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
     override fun productCollections(): ProductCollectionServiceAsync = productCollections
 
     override fun moderation(): ModerationServiceAsync = moderation
+
+    override fun appInstallation(): AppInstallationServiceAsync = appInstallation
 
     override fun workloadIdentity(): WorkloadIdentityTokenManager? =
         clientOptions.workloadIdentityTokens
@@ -349,6 +357,10 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
             ModerationServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val appInstallation: AppInstallationServiceAsync.WithRawResponse by lazy {
+            AppInstallationServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): DodoPaymentsClientAsync.WithRawResponse =
@@ -411,5 +423,8 @@ class DodoPaymentsClientAsyncImpl(private val clientOptions: ClientOptions) :
             productCollections
 
         override fun moderation(): ModerationServiceAsync.WithRawResponse = moderation
+
+        override fun appInstallation(): AppInstallationServiceAsync.WithRawResponse =
+            appInstallation
     }
 }
