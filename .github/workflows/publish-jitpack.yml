@@ -51,7 +51,21 @@ jobs:
           for module in ${MODULES}; do
             for ext in pom jar; do
               url="${BASE}/${module}/${VERSION}/${module}-${VERSION}.${ext}"
-              curl -sfL --max-time 300 -o "/tmp/${module}.${ext}" "${url}" || { echo "::error::Cannot download ${url}"; exit 1; }
+              # The first download after a build can be incomplete. Thus the step tries 3 times and examines each JAR.
+              ok=0
+              for attempt in 1 2 3; do
+                if curl -sfL --max-time 300 -o "/tmp/${module}.${ext}" "${url}"; then
+                  if [ "${ext}" != "jar" ] || unzip -tq "/tmp/${module}.${ext}" > /dev/null; then
+                    ok=1
+                    break
+                  fi
+                fi
+                sleep 20
+              done
+              if [ "${ok}" != "1" ]; then
+                echo "::error::Cannot download a complete file from ${url}"
+                exit 1
+              fi
               echo "OK ${url} ($(wc -c < "/tmp/${module}.${ext}") bytes)"
             done
           done
