@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.127.1](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.127.0...v1.127.1) (2026-11-16)
+
+
+### Bug Fixes
+
+* **build:** check that the downloaded JitPack JAR files are complete ([c1a9908](https://github.com/dodopayments/dodopayments-kotlin/commit/c1a990877e5699e445d7851b442c713c453637c1))
+* **build:** distribute the SDK on JitPack instead of Maven Central ([c20da2f](https://github.com/dodopayments/dodopayments-kotlin/commit/c20da2fa185b500e2b510fdbe12b0565f2741494))
+* **build:** distribute the SDK on JitPack instead of Maven Central ([fc2f774](https://github.com/dodopayments/dodopayments-kotlin/commit/fc2f7743ac6ff42a5a3e8d5503946f2752eab91f))
+* **build:** publish an empty javadoc JAR in the JitPack build ([b850e44](https://github.com/dodopayments/dodopayments-kotlin/commit/b850e44acef51055999b7b32e15015639a92c64c))
+
 ## [1.127.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.126.0...v1.127.0) (2026-11-16)
 
 
