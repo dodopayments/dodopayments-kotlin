@@ -27,19 +27,40 @@ The REST API documentation can be found on [docs.dodopayments.com](https://docs.
 
 ## Installation
 
+JitPack (https://jitpack.io) distributes this SDK. Add the JitPack repository to your build, then add the dependency.
+
+> [!NOTE]
+> Versions up to 1.126.0 stay available on Maven Central as `com.dodopayments.api:dodo-payments-kotlin`.
+> Version 1.127.1 and newer versions are available only on JitPack.
+> JitPack builds a version from source at the first request. Thus the first download of a new version can be slow.
+
 <!-- x-release-please-start-version -->
 
 ### Gradle
 
 ```kotlin
-implementation("com.dodopayments.api:dodo-payments-kotlin:1.127.0")
+repositories {
+    mavenCentral()
+    maven { url = uri("https://jitpack.io") }
+}
+
+dependencies {
+    implementation("com.github.dodopayments.dodopayments-kotlin:dodo-payments-kotlin:1.127.0")
+}
 ```
 
 ### Maven
 
 ```xml
+<repositories>
+  <repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+  </repository>
+</repositories>
+
 <dependency>
-  <groupId>com.dodopayments.api</groupId>
+  <groupId>com.github.dodopayments.dodopayments-kotlin</groupId>
   <artifactId>dodo-payments-kotlin</artifactId>
   <version>1.127.0</version>
 </dependency>

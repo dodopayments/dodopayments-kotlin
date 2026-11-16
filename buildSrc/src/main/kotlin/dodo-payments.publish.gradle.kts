@@ -22,6 +22,10 @@ repositories {
     mavenCentral()
 }
 
+// JitPack (jitpack.yml) sets these properties. The POM dependencies between the modules then use the JitPack coordinates.
+findProperty("jitpackGroup")?.let { group = it.toString() }
+findProperty("jitpackVersion")?.let { version = it.toString() }
+
 extra["signingInMemoryKey"] = System.getenv("GPG_SIGNING_KEY")
 extra["signingInMemoryKeyId"] = System.getenv("GPG_SIGNING_KEY_ID")
 extra["signingInMemoryKeyPassword"] = System.getenv("GPG_SIGNING_PASSWORD")
@@ -35,7 +39,8 @@ configure<MavenPublishBaseExtension> {
     coordinates(project.group.toString(), project.name, project.version.toString())
     configure(
         KotlinJvm(
-            javadocJar = JavadocJar.Dokka("dokkaHtml"),
+            // JitPack has a small memory limit, and Dokka can run out of memory there. Thus a JitPack build publishes an empty javadoc JAR.
+            javadocJar = if (project.hasProperty("jitpackGroup")) JavadocJar.Empty() else JavadocJar.Dokka("dokkaHtml"),
             sourcesJar = true,
         )
     )

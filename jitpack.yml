@@ -1,0 +1,6 @@
+# JitPack builds this SDK from source and serves it from https://jitpack.io.
+# JitPack sets GROUP, ARTIFACT and VERSION. The build publishes the modules under these coordinates.
+jdk:
+  - openjdk21
+install:
+  - ./gradlew publishToMavenLocal -PpublishLocal -PjitpackGroup="${GROUP}.${ARTIFACT}" -PjitpackVersion="${VERSION}" -Pkotlin.compiler.execution.strategy=in-process --no-daemon --no-parallel --no-configuration-cache --stacktrace -Dorg.gradle.jvmargs="-Xmx4g -XX:MaxMetaspaceSize=1g -XX:+UseParallelGC"
