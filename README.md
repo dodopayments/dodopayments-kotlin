@@ -2,8 +2,8 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.dodopayments.api/dodo-payments-kotlin)](https://central.sonatype.com/artifact/com.dodopayments.api/dodo-payments-kotlin/1.127.0)
-[![javadoc](https://javadoc.io/badge2/com.dodopayments.api/dodo-payments-kotlin/1.127.0/javadoc.svg)](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/1.126.0)
+[![Maven Central](https://img.shields.io/maven-central/v/com.dodopayments.api/dodo-payments-kotlin)](https://central.sonatype.com/artifact/com.dodopayments.api/dodo-payments-kotlin/1.127.1)
+[![javadoc](https://javadoc.io/badge2/com.dodopayments.api/dodo-payments-kotlin/1.127.1/javadoc.svg)](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/1.126.0)
 
 <!-- x-release-please-end -->
 
@@ -21,7 +21,7 @@ Use the Dodo Payments MCP Server to enable AI assistants to interact with this A
 
 <!-- x-release-please-start-version -->
 
-The REST API documentation can be found on [docs.dodopayments.com](https://docs.dodopayments.com/api-reference/introduction). KDocs are available on [javadoc.io](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/1.127.0).
+The REST API documentation can be found on [docs.dodopayments.com](https://docs.dodopayments.com/api-reference/introduction). KDocs are available on [javadoc.io](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/1.127.1).
 
 <!-- x-release-please-end -->
 
@@ -45,7 +45,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.dodopayments.dodopayments-kotlin:dodo-payments-kotlin:1.127.0")
+    implementation("com.github.dodopayments.dodopayments-kotlin:dodo-payments-kotlin:1.127.1")
 }
 ```
 
@@ -62,7 +62,7 @@ dependencies {
 <dependency>
   <groupId>com.github.dodopayments.dodopayments-kotlin</groupId>
   <artifactId>dodo-payments-kotlin</artifactId>
-  <version>1.127.0</version>
+  <version>1.127.1</version>
 </dependency>
 ```
 
