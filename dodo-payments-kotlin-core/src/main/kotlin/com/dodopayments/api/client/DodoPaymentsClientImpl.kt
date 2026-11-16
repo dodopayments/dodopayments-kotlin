@@ -6,6 +6,8 @@ import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.core.getPackageVersion
 import com.dodopayments.api.services.blocking.AddonService
 import com.dodopayments.api.services.blocking.AddonServiceImpl
+import com.dodopayments.api.services.blocking.AppInstallationService
+import com.dodopayments.api.services.blocking.AppInstallationServiceImpl
 import com.dodopayments.api.services.blocking.BalanceService
 import com.dodopayments.api.services.blocking.BalanceServiceImpl
 import com.dodopayments.api.services.blocking.BlocklistService
@@ -155,6 +157,10 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
         ModerationServiceImpl(clientOptionsWithUserAgent)
     }
 
+    private val appInstallation: AppInstallationService by lazy {
+        AppInstallationServiceImpl(clientOptionsWithUserAgent)
+    }
+
     override fun async(): DodoPaymentsClientAsync = async
 
     override fun withRawResponse(): DodoPaymentsClient.WithRawResponse = withRawResponse
@@ -213,6 +219,8 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
     override fun productCollections(): ProductCollectionService = productCollections
 
     override fun moderation(): ModerationService = moderation
+
+    override fun appInstallation(): AppInstallationService = appInstallation
 
     override fun workloadIdentity(): WorkloadIdentityTokenManager? =
         clientOptions.workloadIdentityTokens
@@ -326,6 +334,10 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
             ModerationServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val appInstallation: AppInstallationService.WithRawResponse by lazy {
+            AppInstallationServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: (ClientOptions.Builder) -> Unit
         ): DodoPaymentsClient.WithRawResponse =
@@ -387,5 +399,7 @@ class DodoPaymentsClientImpl(private val clientOptions: ClientOptions) : DodoPay
             productCollections
 
         override fun moderation(): ModerationService.WithRawResponse = moderation
+
+        override fun appInstallation(): AppInstallationService.WithRawResponse = appInstallation
     }
 }

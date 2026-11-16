@@ -116,8 +116,8 @@ interface InvoiceService {
     ): Invoice
 
     /**
-     * Returns the page where the customer pays. A copied link counts as a send, so the first call
-     * sets `sent_at`.
+     * Returns the page where the customer pays. The first call sets `sent_at` and records a
+     * `link_shared` event. It sends no email and no `invoice.sent` webhook.
      */
     fun createHostedLink(
         invoiceId: String,
