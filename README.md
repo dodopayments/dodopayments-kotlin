@@ -2,8 +2,7 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.dodopayments.api/dodo-payments-kotlin)](https://central.sonatype.com/artifact/com.dodopayments.api/dodo-payments-kotlin/1.127.0)
-[![javadoc](https://javadoc.io/badge2/com.dodopayments.api/dodo-payments-kotlin/1.127.0/javadoc.svg)](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/1.127.0)
+[![JitPack](https://jitpack.io/v/dodopayments/dodopayments-kotlin.svg)](https://jitpack.io/#dodopayments/dodopayments-kotlin)
 
 <!-- x-release-please-end -->
 
@@ -19,29 +18,46 @@ Use the Dodo Payments MCP Server to enable AI assistants to interact with this A
 
 > Note: You may need to set environment variables in your MCP client.
 
-<!-- x-release-please-start-version -->
-
-The REST API documentation can be found on [docs.dodopayments.com](https://docs.dodopayments.com/api-reference/introduction). KDocs are available on [javadoc.io](https://javadoc.io/doc/com.dodopayments.api/dodo-payments-kotlin/1.127.0).
-
-<!-- x-release-please-end -->
+The REST API documentation can be found on [docs.dodopayments.com](https://docs.dodopayments.com/api-reference/introduction).
 
 ## Installation
+
+JitPack (https://jitpack.io) distributes this SDK. Add the JitPack repository to your build, then add the dependency.
+
+> [!NOTE]
+> Earlier versions stay available on Maven Central as `com.dodopayments.api:dodo-payments-kotlin`.
+> New versions are available only on JitPack.
+> JitPack builds a version from source at the first request. Thus the first download of a new version can be slow.
 
 <!-- x-release-please-start-version -->
 
 ### Gradle
 
 ```kotlin
-implementation("com.dodopayments.api:dodo-payments-kotlin:1.127.0")
+repositories {
+    mavenCentral()
+    maven { url = uri("https://jitpack.io") }
+}
+
+dependencies {
+    implementation("com.github.dodopayments.dodopayments-kotlin:dodo-payments-kotlin:1.127.2")
+}
 ```
 
 ### Maven
 
 ```xml
+<repositories>
+  <repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+  </repository>
+</repositories>
+
 <dependency>
-  <groupId>com.dodopayments.api</groupId>
+  <groupId>com.github.dodopayments.dodopayments-kotlin</groupId>
   <artifactId>dodo-payments-kotlin</artifactId>
-  <version>1.127.0</version>
+  <version>1.127.2</version>
 </dependency>
 ```
 
