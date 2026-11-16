@@ -22,6 +22,10 @@ repositories {
     mavenCentral()
 }
 
+// JitPack (jitpack.yml) sets these properties. The POM dependencies between the modules then use the JitPack coordinates.
+findProperty("jitpackGroup")?.let { group = it.toString() }
+findProperty("jitpackVersion")?.let { version = it.toString() }
+
 extra["signingInMemoryKey"] = System.getenv("GPG_SIGNING_KEY")
 extra["signingInMemoryKeyId"] = System.getenv("GPG_SIGNING_KEY_ID")
 extra["signingInMemoryKeyPassword"] = System.getenv("GPG_SIGNING_PASSWORD")

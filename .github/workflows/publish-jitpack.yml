@@ -1,0 +1,58 @@
+# This workflow runs when a GitHub release is published.
+# It starts the JitPack build of the release tag. It fails if JitPack does not serve the POM and the JAR of each module.
+# You can also run it by hand: https://www.github.com/dodopayments/dodopayments-kotlin/actions/workflows/publish-jitpack.yml
+name: Publish JitPack
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'The version to build on JitPack, for example 1.127.1'
+        required: true
+
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    name: publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Build on JitPack and download the artifacts
+        env:
+          VERSION: ${{ github.event.release.tag_name || inputs.version }}
+          REPO: ${{ github.event.repository.name }}
+          MODULES: dodo-payments-kotlin dodo-payments-kotlin-core dodo-payments-kotlin-client-okhttp
+        run: |-
+          set -euo pipefail
+          VERSION="${VERSION#v}"
+          BASE="https://jitpack.io/com/github/dodopayments/${REPO}"
+          echo "Start the JitPack build of ${REPO} ${VERSION}"
+          curl -s -o /dev/null --max-time 60 "${BASE}/${VERSION}/build.log" || true
+          deadline=$(( $(date +%s) + 50 * 60 ))
+          while true; do
+            status="$(curl -s --max-time 60 "https://jitpack.io/api/builds/com.github.dodopayments/${REPO}" | jq -r --arg r "${REPO}" --arg v "${VERSION}" '.["com.github.dodopayments"][$r][$v] // "pending"' || echo pending)"
+            echo "$(date -u +%H:%M:%S) JitPack status: ${status}"
+            if [ "${status}" = "ok" ]; then
+              break
+            fi
+            if [ "${status}" = "Error" ]; then
+              echo "::error::The JitPack build failed. Log: ${BASE}/${VERSION}/build.log"
+              curl -s --max-time 60 "${BASE}/${VERSION}/build.log" | tail -n 60 || true
+              exit 1
+            fi
+            if [ "$(date +%s)" -gt "${deadline}" ]; then
+              echo "::error::The JitPack build did not complete in 50 minutes. Log: ${BASE}/${VERSION}/build.log"
+              exit 1
+            fi
+            sleep 30
+          done
+          for module in ${MODULES}; do
+            for ext in pom jar; do
+              url="${BASE}/${module}/${VERSION}/${module}-${VERSION}.${ext}"
+              curl -sfL --max-time 300 -o "/tmp/${module}.${ext}" "${url}" || { echo "::error::Cannot download ${url}"; exit 1; }
+              echo "OK ${url} ($(wc -c < "/tmp/${module}.${ext}") bytes)"
+            done
+          done
+          echo "Gradle: implementation(\"com.github.dodopayments.${REPO}:dodo-payments-kotlin:${VERSION}\")"
