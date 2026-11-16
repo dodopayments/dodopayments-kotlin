@@ -7,7 +7,10 @@ import com.dodopayments.api.client.okhttp.DodoPaymentsOkHttpClientAsync
 import com.dodopayments.api.core.JsonValue
 import com.dodopayments.api.models.customers.CustomerCreateParams
 import com.dodopayments.api.models.customers.CustomerDeletePaymentMethodParams
+import com.dodopayments.api.models.customers.CustomerRetrievePaymentMethodsParams
 import com.dodopayments.api.models.customers.CustomerUpdateParams
+import com.dodopayments.api.models.misc.CountryCode
+import com.dodopayments.api.models.misc.Currency
 import com.dodopayments.api.models.misc.Metadata
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -164,7 +167,14 @@ internal class CustomerServiceAsyncTest {
                 .build()
         val customerServiceAsync = client.customers()
 
-        val response = customerServiceAsync.retrievePaymentMethods("cus_TV52uJWWXt2yIoBBxpjaa")
+        val response =
+            customerServiceAsync.retrievePaymentMethods(
+                CustomerRetrievePaymentMethodsParams.builder()
+                    .customerId("cus_TV52uJWWXt2yIoBBxpjaa")
+                    .billingCountry(CountryCode.AF)
+                    .currency(Currency.AED)
+                    .build()
+            )
 
         response.validate()
     }

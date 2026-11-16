@@ -53,6 +53,7 @@ internal class InvoiceListPageResponseTest {
                         .metadata(JsonValue.from(mapOf<String, Any>()))
                         .addRefundId("string")
                         .retryCount(0)
+                        .reviewRequired(true)
                         .rowVersion(0L)
                         .status(InvoiceStatus.OPEN)
                         .addSubscriptionId("string")
@@ -85,6 +86,7 @@ internal class InvoiceListPageResponseTest {
                         .memo("memo")
                         .nextReminderAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .nextRetryAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentMethodId("payment_method_id")
                         .paymentTermsDays(0)
                         .addPayment(
                             Invoice.Payment.builder()
@@ -145,6 +147,7 @@ internal class InvoiceListPageResponseTest {
                     .metadata(JsonValue.from(mapOf<String, Any>()))
                     .addRefundId("string")
                     .retryCount(0)
+                    .reviewRequired(true)
                     .rowVersion(0L)
                     .status(InvoiceStatus.OPEN)
                     .addSubscriptionId("string")
@@ -177,6 +180,7 @@ internal class InvoiceListPageResponseTest {
                     .memo("memo")
                     .nextReminderAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .nextRetryAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .paymentMethodId("payment_method_id")
                     .paymentTermsDays(0)
                     .addPayment(
                         Invoice.Payment.builder()
@@ -241,6 +245,7 @@ internal class InvoiceListPageResponseTest {
                         .metadata(JsonValue.from(mapOf<String, Any>()))
                         .addRefundId("string")
                         .retryCount(0)
+                        .reviewRequired(true)
                         .rowVersion(0L)
                         .status(InvoiceStatus.OPEN)
                         .addSubscriptionId("string")
@@ -273,6 +278,7 @@ internal class InvoiceListPageResponseTest {
                         .memo("memo")
                         .nextReminderAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .nextRetryAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .paymentMethodId("payment_method_id")
                         .paymentTermsDays(0)
                         .addPayment(
                             Invoice.Payment.builder()

@@ -4,6 +4,7 @@ package com.dodopayments.api.client
 
 import com.dodopayments.api.core.ClientOptions
 import com.dodopayments.api.services.blocking.AddonService
+import com.dodopayments.api.services.blocking.AppInstallationService
 import com.dodopayments.api.services.blocking.BalanceService
 import com.dodopayments.api.services.blocking.BlocklistService
 import com.dodopayments.api.services.blocking.BrandService
@@ -126,6 +127,8 @@ interface DodoPaymentsClient {
 
     fun moderation(): ModerationService
 
+    fun appInstallation(): AppInstallationService
+
     /**
      * Closes this client, relinquishing any underlying resources.
      *
@@ -204,5 +207,7 @@ interface DodoPaymentsClient {
         fun productCollections(): ProductCollectionService.WithRawResponse
 
         fun moderation(): ModerationService.WithRawResponse
+
+        fun appInstallation(): AppInstallationService.WithRawResponse
     }
 }
