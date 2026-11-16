@@ -26,16 +26,7 @@ repositories {
 findProperty("jitpackGroup")?.let { group = it.toString() }
 findProperty("jitpackVersion")?.let { version = it.toString() }
 
-extra["signingInMemoryKey"] = System.getenv("GPG_SIGNING_KEY")
-extra["signingInMemoryKeyId"] = System.getenv("GPG_SIGNING_KEY_ID")
-extra["signingInMemoryKeyPassword"] = System.getenv("GPG_SIGNING_PASSWORD")
-
 configure<MavenPublishBaseExtension> {
-    if (!project.hasProperty("publishLocal")) {
-        signAllPublications()
-        publishToMavenCentral()
-    }
-
     coordinates(project.group.toString(), project.name, project.version.toString())
     configure(
         KotlinJvm(
