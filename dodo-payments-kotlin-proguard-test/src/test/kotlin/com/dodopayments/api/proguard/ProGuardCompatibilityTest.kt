@@ -79,6 +79,7 @@ internal class ProGuardCompatibilityTest {
         assertThat(client.entitlements()).isNotNull()
         assertThat(client.productCollections()).isNotNull()
         assertThat(client.moderation()).isNotNull()
+        assertThat(client.appInstallation()).isNotNull()
     }
 
     @Test

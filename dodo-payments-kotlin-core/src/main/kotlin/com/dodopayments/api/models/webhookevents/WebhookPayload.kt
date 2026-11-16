@@ -14209,6 +14209,7 @@ private constructor(
             private val metadata: JsonValue,
             private val refundIds: JsonField<List<String>>,
             private val retryCount: JsonField<Int>,
+            private val reviewRequired: JsonField<Boolean>,
             private val rowVersion: JsonField<Long>,
             private val status: JsonField<InvoiceStatus>,
             private val subscriptionIds: JsonField<List<String>>,
@@ -14224,6 +14225,7 @@ private constructor(
             private val memo: JsonField<String>,
             private val nextReminderAt: JsonField<OffsetDateTime>,
             private val nextRetryAt: JsonField<OffsetDateTime>,
+            private val paymentMethodId: JsonField<String>,
             private val paymentTermsDays: JsonField<Int>,
             private val payments: JsonField<List<Invoice.Payment>>,
             private val pdfUrl: JsonField<String>,
@@ -14285,6 +14287,9 @@ private constructor(
                 @JsonProperty("retry_count")
                 @ExcludeMissing
                 retryCount: JsonField<Int> = JsonMissing.of(),
+                @JsonProperty("review_required")
+                @ExcludeMissing
+                reviewRequired: JsonField<Boolean> = JsonMissing.of(),
                 @JsonProperty("row_version")
                 @ExcludeMissing
                 rowVersion: JsonField<Long> = JsonMissing.of(),
@@ -14326,6 +14331,9 @@ private constructor(
                 @JsonProperty("next_retry_at")
                 @ExcludeMissing
                 nextRetryAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+                @JsonProperty("payment_method_id")
+                @ExcludeMissing
+                paymentMethodId: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("payment_terms_days")
                 @ExcludeMissing
                 paymentTermsDays: JsonField<Int> = JsonMissing.of(),
@@ -14365,6 +14373,7 @@ private constructor(
                 metadata,
                 refundIds,
                 retryCount,
+                reviewRequired,
                 rowVersion,
                 status,
                 subscriptionIds,
@@ -14380,6 +14389,7 @@ private constructor(
                 memo,
                 nextReminderAt,
                 nextRetryAt,
+                paymentMethodId,
                 paymentTermsDays,
                 payments,
                 pdfUrl,
@@ -14409,6 +14419,7 @@ private constructor(
                     .metadata(metadata)
                     .refundIds(refundIds)
                     .retryCount(retryCount)
+                    .reviewRequired(reviewRequired)
                     .rowVersion(rowVersion)
                     .status(status)
                     .subscriptionIds(subscriptionIds)
@@ -14424,6 +14435,7 @@ private constructor(
                     .memo(memo)
                     .nextReminderAt(nextReminderAt)
                     .nextRetryAt(nextRetryAt)
+                    .paymentMethodId(paymentMethodId)
                     .paymentTermsDays(paymentTermsDays)
                     .payments(payments)
                     .pdfUrl(pdfUrl)
@@ -14577,6 +14589,17 @@ private constructor(
             fun retryCount(): Int = retryCount.getRequired("retry_count")
 
             /**
+             * `true` when a subscription of the invoice has renewal review on now. The value
+             * follows the subscription, so it can change after finalise. `review_deadline` shows
+             * that this draft waits.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
+             *   is unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun reviewRequired(): Boolean = reviewRequired.getRequired("review_required")
+
+            /**
              * Goes up by one on each change. Use it to ignore an older webhook delivery.
              *
              * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type or
@@ -14689,6 +14712,14 @@ private constructor(
              *   (e.g. if the server responded with an unexpected value).
              */
             fun nextRetryAt(): OffsetDateTime? = nextRetryAt.getNullable("next_retry_at")
+
+            /**
+             * The saved card that an automatic charge of the invoice uses.
+             *
+             * @throws DodoPaymentsInvalidDataException if the JSON field has an unexpected type
+             *   (e.g. if the server responded with an unexpected value).
+             */
+            fun paymentMethodId(): String? = paymentMethodId.getNullable("payment_method_id")
 
             /**
              * Days from finalise to the due date. `null` when the invoice has a custom due date.
@@ -14906,6 +14937,16 @@ private constructor(
             fun _retryCount(): JsonField<Int> = retryCount
 
             /**
+             * Returns the raw JSON value of [reviewRequired].
+             *
+             * Unlike [reviewRequired], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("review_required")
+            @ExcludeMissing
+            fun _reviewRequired(): JsonField<Boolean> = reviewRequired
+
+            /**
              * Returns the raw JSON value of [rowVersion].
              *
              * Unlike [rowVersion], this method doesn't throw if the JSON field has an unexpected
@@ -15040,6 +15081,16 @@ private constructor(
             fun _nextRetryAt(): JsonField<OffsetDateTime> = nextRetryAt
 
             /**
+             * Returns the raw JSON value of [paymentMethodId].
+             *
+             * Unlike [paymentMethodId], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("payment_method_id")
+            @ExcludeMissing
+            fun _paymentMethodId(): JsonField<String> = paymentMethodId
+
+            /**
              * Returns the raw JSON value of [paymentTermsDays].
              *
              * Unlike [paymentTermsDays], this method doesn't throw if the JSON field has an
@@ -15131,6 +15182,7 @@ private constructor(
                  * .metadata()
                  * .refundIds()
                  * .retryCount()
+                 * .reviewRequired()
                  * .rowVersion()
                  * .status()
                  * .subscriptionIds()
@@ -15162,6 +15214,7 @@ private constructor(
                 private var metadata: JsonValue? = null
                 private var refundIds: JsonField<MutableList<String>>? = null
                 private var retryCount: JsonField<Int>? = null
+                private var reviewRequired: JsonField<Boolean>? = null
                 private var rowVersion: JsonField<Long>? = null
                 private var status: JsonField<InvoiceStatus>? = null
                 private var subscriptionIds: JsonField<MutableList<String>>? = null
@@ -15177,6 +15230,7 @@ private constructor(
                 private var memo: JsonField<String> = JsonMissing.of()
                 private var nextReminderAt: JsonField<OffsetDateTime> = JsonMissing.of()
                 private var nextRetryAt: JsonField<OffsetDateTime> = JsonMissing.of()
+                private var paymentMethodId: JsonField<String> = JsonMissing.of()
                 private var paymentTermsDays: JsonField<Int> = JsonMissing.of()
                 private var payments: JsonField<MutableList<Invoice.Payment>>? = null
                 private var pdfUrl: JsonField<String> = JsonMissing.of()
@@ -15204,6 +15258,7 @@ private constructor(
                     metadata = invoice.metadata
                     refundIds = invoice.refundIds.map { it.toMutableList() }
                     retryCount = invoice.retryCount
+                    reviewRequired = invoice.reviewRequired
                     rowVersion = invoice.rowVersion
                     status = invoice.status
                     subscriptionIds = invoice.subscriptionIds.map { it.toMutableList() }
@@ -15219,6 +15274,7 @@ private constructor(
                     memo = invoice.memo
                     nextReminderAt = invoice.nextReminderAt
                     nextRetryAt = invoice.nextRetryAt
+                    paymentMethodId = invoice.paymentMethodId
                     paymentTermsDays = invoice.paymentTermsDays
                     payments = invoice.payments.map { it.toMutableList() }
                     pdfUrl = invoice.pdfUrl
@@ -15515,6 +15571,25 @@ private constructor(
                  */
                 fun retryCount(retryCount: JsonField<Int>) = apply { this.retryCount = retryCount }
 
+                /**
+                 * `true` when a subscription of the invoice has renewal review on now. The value
+                 * follows the subscription, so it can change after finalise. `review_deadline`
+                 * shows that this draft waits.
+                 */
+                fun reviewRequired(reviewRequired: Boolean) =
+                    reviewRequired(JsonField.of(reviewRequired))
+
+                /**
+                 * Sets [Builder.reviewRequired] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.reviewRequired] with a well-typed [Boolean]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun reviewRequired(reviewRequired: JsonField<Boolean>) = apply {
+                    this.reviewRequired = reviewRequired
+                }
+
                 /** Goes up by one on each change. Use it to ignore an older webhook delivery. */
                 fun rowVersion(rowVersion: Long) = rowVersion(JsonField.of(rowVersion))
 
@@ -15753,6 +15828,21 @@ private constructor(
                     this.nextRetryAt = nextRetryAt
                 }
 
+                /** The saved card that an automatic charge of the invoice uses. */
+                fun paymentMethodId(paymentMethodId: String?) =
+                    paymentMethodId(JsonField.ofNullable(paymentMethodId))
+
+                /**
+                 * Sets [Builder.paymentMethodId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.paymentMethodId] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun paymentMethodId(paymentMethodId: JsonField<String>) = apply {
+                    this.paymentMethodId = paymentMethodId
+                }
+
                 /**
                  * Days from finalise to the due date. `null` when the invoice has a custom due
                  * date.
@@ -15933,6 +16023,7 @@ private constructor(
                  * .metadata()
                  * .refundIds()
                  * .retryCount()
+                 * .reviewRequired()
                  * .rowVersion()
                  * .status()
                  * .subscriptionIds()
@@ -15962,6 +16053,7 @@ private constructor(
                         checkRequired("metadata", metadata),
                         checkRequired("refundIds", refundIds).map { it.toImmutable() },
                         checkRequired("retryCount", retryCount),
+                        checkRequired("reviewRequired", reviewRequired),
                         checkRequired("rowVersion", rowVersion),
                         checkRequired("status", status),
                         checkRequired("subscriptionIds", subscriptionIds).map { it.toImmutable() },
@@ -15977,6 +16069,7 @@ private constructor(
                         memo,
                         nextReminderAt,
                         nextRetryAt,
+                        paymentMethodId,
                         paymentTermsDays,
                         (payments ?: JsonMissing.of()).map { it.toImmutable() },
                         pdfUrl,
@@ -16021,6 +16114,7 @@ private constructor(
                 invoiceId()
                 refundIds()
                 retryCount()
+                reviewRequired()
                 rowVersion()
                 status().validate()
                 subscriptionIds()
@@ -16036,6 +16130,7 @@ private constructor(
                 memo()
                 nextReminderAt()
                 nextRetryAt()
+                paymentMethodId()
                 paymentTermsDays()
                 payments()?.forEach { it.validate() }
                 pdfUrl()
@@ -16083,6 +16178,7 @@ private constructor(
                     (if (invoiceId.asKnown() == null) 0 else 1) +
                     (refundIds.asKnown()?.size ?: 0) +
                     (if (retryCount.asKnown() == null) 0 else 1) +
+                    (if (reviewRequired.asKnown() == null) 0 else 1) +
                     (if (rowVersion.asKnown() == null) 0 else 1) +
                     (status.asKnown()?.validity() ?: 0) +
                     (subscriptionIds.asKnown()?.size ?: 0) +
@@ -16098,6 +16194,7 @@ private constructor(
                     (if (memo.asKnown() == null) 0 else 1) +
                     (if (nextReminderAt.asKnown() == null) 0 else 1) +
                     (if (nextRetryAt.asKnown() == null) 0 else 1) +
+                    (if (paymentMethodId.asKnown() == null) 0 else 1) +
                     (if (paymentTermsDays.asKnown() == null) 0 else 1) +
                     (payments.asKnown()?.sumOf { it.validity().toInt() } ?: 0) +
                     (if (pdfUrl.asKnown() == null) 0 else 1) +
@@ -16129,6 +16226,7 @@ private constructor(
                     metadata == other.metadata &&
                     refundIds == other.refundIds &&
                     retryCount == other.retryCount &&
+                    reviewRequired == other.reviewRequired &&
                     rowVersion == other.rowVersion &&
                     status == other.status &&
                     subscriptionIds == other.subscriptionIds &&
@@ -16144,6 +16242,7 @@ private constructor(
                     memo == other.memo &&
                     nextReminderAt == other.nextReminderAt &&
                     nextRetryAt == other.nextRetryAt &&
+                    paymentMethodId == other.paymentMethodId &&
                     paymentTermsDays == other.paymentTermsDays &&
                     payments == other.payments &&
                     pdfUrl == other.pdfUrl &&
@@ -16173,6 +16272,7 @@ private constructor(
                     metadata,
                     refundIds,
                     retryCount,
+                    reviewRequired,
                     rowVersion,
                     status,
                     subscriptionIds,
@@ -16188,6 +16288,7 @@ private constructor(
                     memo,
                     nextReminderAt,
                     nextRetryAt,
+                    paymentMethodId,
                     paymentTermsDays,
                     payments,
                     pdfUrl,
@@ -16202,7 +16303,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "Invoice{allowedActions=$allowedActions, amountDue=$amountDue, amountPaid=$amountPaid, amountRefunded=$amountRefunded, billingMode=$billingMode, businessId=$businessId, createdAt=$createdAt, credits=$credits, currency=$currency, customer=$customer, discountIds=$discountIds, editableFields=$editableFields, frequency=$frequency, invoiceId=$invoiceId, metadata=$metadata, refundIds=$refundIds, retryCount=$retryCount, rowVersion=$rowVersion, status=$status, subscriptionIds=$subscriptionIds, tags=$tags, tax=$tax, totalAmount=$totalAmount, collectionMethod=$collectionMethod, dueAt=$dueAt, dunningState=$dunningState, finalizedAt=$finalizedAt, hostedUrl=$hostedUrl, lines=$lines, memo=$memo, nextReminderAt=$nextReminderAt, nextRetryAt=$nextRetryAt, paymentTermsDays=$paymentTermsDays, payments=$payments, pdfUrl=$pdfUrl, reminderSettings=$reminderSettings, reviewDeadline=$reviewDeadline, sentAt=$sentAt, payloadType=$payloadType, additionalProperties=$additionalProperties}"
+                "Invoice{allowedActions=$allowedActions, amountDue=$amountDue, amountPaid=$amountPaid, amountRefunded=$amountRefunded, billingMode=$billingMode, businessId=$businessId, createdAt=$createdAt, credits=$credits, currency=$currency, customer=$customer, discountIds=$discountIds, editableFields=$editableFields, frequency=$frequency, invoiceId=$invoiceId, metadata=$metadata, refundIds=$refundIds, retryCount=$retryCount, reviewRequired=$reviewRequired, rowVersion=$rowVersion, status=$status, subscriptionIds=$subscriptionIds, tags=$tags, tax=$tax, totalAmount=$totalAmount, collectionMethod=$collectionMethod, dueAt=$dueAt, dunningState=$dunningState, finalizedAt=$finalizedAt, hostedUrl=$hostedUrl, lines=$lines, memo=$memo, nextReminderAt=$nextReminderAt, nextRetryAt=$nextRetryAt, paymentMethodId=$paymentMethodId, paymentTermsDays=$paymentTermsDays, payments=$payments, pdfUrl=$pdfUrl, reminderSettings=$reminderSettings, reviewDeadline=$reviewDeadline, sentAt=$sentAt, payloadType=$payloadType, additionalProperties=$additionalProperties}"
         }
     }
 

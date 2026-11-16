@@ -20,6 +20,7 @@ import com.dodopayments.api.models.subscriptions.SubscriptionChangePlanParams
 import com.dodopayments.api.models.subscriptions.SubscriptionChargeParams
 import com.dodopayments.api.models.subscriptions.SubscriptionCreateParams
 import com.dodopayments.api.models.subscriptions.SubscriptionPreviewChangePlanParams
+import com.dodopayments.api.models.subscriptions.SubscriptionStartTrialParams
 import com.dodopayments.api.models.subscriptions.SubscriptionStatus
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdateParams
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdatePaymentMethodParams
@@ -385,6 +386,44 @@ internal class SubscriptionServiceAsyncTest {
         val page = subscriptionServiceAsync.retrieveUsageHistory("sub_Iuaq622bbmmfOGrVTqdXv")
 
         page.response().validate()
+    }
+
+    @Test
+    suspend fun startTrial() {
+        val client =
+            DodoPaymentsOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val subscriptionServiceAsync = client.subscriptions()
+
+        val response =
+            subscriptionServiceAsync.startTrial(
+                SubscriptionStartTrialParams.builder()
+                    .idempotencyKey("Idempotency-Key")
+                    .collectionMethod(CollectionMethod.AUTO_CHARGE)
+                    .currency(Currency.AED)
+                    .customerId("customer_id")
+                    .productId("product_id")
+                    .billingAddress(
+                        SubscriptionStartTrialParams.BillingAddress.builder()
+                            .country(CountryCode.AF)
+                            .city("city")
+                            .state("state")
+                            .street("street")
+                            .zipcode("zipcode")
+                            .build()
+                    )
+                    .paymentMethodId("payment_method_id")
+                    .paymentTermsDueOnReceipt()
+                    .quantity(0)
+                    .reviewRequired(true)
+                    .taxId("tax_id")
+                    .trialPeriodDays(0)
+                    .build()
+            )
+
+        response.validate()
     }
 
     @Test
