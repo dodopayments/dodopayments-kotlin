@@ -39,7 +39,8 @@ configure<MavenPublishBaseExtension> {
     coordinates(project.group.toString(), project.name, project.version.toString())
     configure(
         KotlinJvm(
-            javadocJar = JavadocJar.Dokka("dokkaHtml"),
+            // JitPack has a small memory limit, and Dokka can run out of memory there. Thus a JitPack build publishes an empty javadoc JAR.
+            javadocJar = if (project.hasProperty("jitpackGroup")) JavadocJar.Empty() else JavadocJar.Dokka("dokkaHtml"),
             sourcesJar = true,
         )
     )
