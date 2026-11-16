@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.127.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.126.0...v1.127.0) (2026-11-16)
+
+
+### Features
+
+* **api:** trial subscriptions and app installation settings; sync spec to prod 1.124.0 ([557cc1d](https://github.com/dodopayments/dodopayments-kotlin/commit/557cc1d6d0cb5b90019e9b1ea32e2e36a5f289c3))
+* **api:** trial subscriptions and app installation settings; sync spec to prod 1.124.0 ([7c66033](https://github.com/dodopayments/dodopayments-kotlin/commit/7c660332a29c3f86cbcdaa256ee6063d352a26eb))
+
 ## [1.126.0](https://github.com/dodopayments/dodopayments-kotlin/compare/v1.125.0...v1.126.0) (2026-11-10)
 
 
