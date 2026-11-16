@@ -80,6 +80,8 @@ jobs:
           test -f jitpack.yml || { echo "::error::jitpack.yml is missing"; exit 1; }
           test -f .github/workflows/publish-jitpack.yml || { echo "::error::publish-jitpack.yml is missing"; exit 1; }
           grep -q 'jitpackGroup' buildSrc/src/main/kotlin/dodo-payments.publish.gradle.kts || { echo "::error::the JitPack coordinates are missing in the publish plugin"; exit 1; }
-          if [ -f .github/workflows/publish-sonatype.yml ]; then echo "::error::publish-sonatype.yml is back. The SDK is on JitPack, not on Maven Central."; exit 1; fi
+          for f in .github/workflows/publish-*.yml; do [ "$f" = .github/workflows/publish-jitpack.yml ] || { echo "::error::$f is back. JitPack distributes the SDK, not Maven Central."; exit 1; }; done
+          if grep -q 'publishToMavenCentral' buildSrc/src/main/kotlin/dodo-payments.publish.gradle.kts; then echo "::error::the publish plugin publishes to Maven Central again"; exit 1; fi
+          grep -q 'https://jitpack.io/v/dodopayments/dodopayments-kotlin.svg' README.md || { echo "::error::the README has no JitPack badge"; exit 1; }
           grep -q 'com.github.dodopayments.dodopayments-kotlin' README.md || { echo "::error::the README has no JitPack install instructions"; exit 1; }
           if grep -q '<groupId>com.dodopayments.api</groupId>' README.md; then echo "::error::the README install instructions point to Maven Central"; exit 1; fi
