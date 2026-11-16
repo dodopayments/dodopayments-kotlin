@@ -38,6 +38,8 @@ import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUpcomingInv
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryPage
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryPageResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionRetrieveUsageHistoryParams
+import com.dodopayments.api.models.subscriptions.SubscriptionStartTrialParams
+import com.dodopayments.api.models.subscriptions.SubscriptionStartTrialResponse
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdateParams
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdatePaymentMethodParams
 import com.dodopayments.api.models.subscriptions.SubscriptionUpdatePaymentMethodResponse
@@ -132,6 +134,13 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
     ): SubscriptionRetrieveUsageHistoryPage =
         // get /subscriptions/{subscription_id}/usage-history
         withRawResponse().retrieveUsageHistory(params, requestOptions).parse()
+
+    override fun startTrial(
+        params: SubscriptionStartTrialParams,
+        requestOptions: RequestOptions,
+    ): SubscriptionStartTrialResponse =
+        // post /billing/subscriptions
+        withRawResponse().startTrial(params, requestOptions).parse()
 
     override fun updatePaymentMethod(
         params: SubscriptionUpdatePaymentMethodParams,
@@ -498,6 +507,34 @@ class SubscriptionServiceImpl internal constructor(private val clientOptions: Cl
                             .params(params)
                             .response(it)
                             .build()
+                    }
+            }
+        }
+
+        private val startTrialHandler: Handler<SubscriptionStartTrialResponse> =
+            jsonHandler<SubscriptionStartTrialResponse>(clientOptions.jsonMapper)
+
+        override fun startTrial(
+            params: SubscriptionStartTrialParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<SubscriptionStartTrialResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("billing", "subscriptions")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return errorHandler.handle(response).parseable {
+                response
+                    .use { startTrialHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
                     }
             }
         }
