@@ -83,5 +83,6 @@ jobs:
           for f in .github/workflows/publish-*.yml; do [ "$f" = .github/workflows/publish-jitpack.yml ] || { echo "::error::$f is back. JitPack distributes the SDK, not Maven Central."; exit 1; }; done
           if grep -q 'publishToMavenCentral' buildSrc/src/main/kotlin/dodo-payments.publish.gradle.kts; then echo "::error::the publish plugin publishes to Maven Central again"; exit 1; fi
           grep -q 'https://jitpack.io/v/dodopayments/dodopayments-kotlin.svg' README.md || { echo "::error::the README has no JitPack badge"; exit 1; }
+          if grep -q 'javadoc.io' README.md; then echo "::error::the README links to javadoc.io, which serves only Maven Central versions"; exit 1; fi
           grep -q 'com.github.dodopayments.dodopayments-kotlin' README.md || { echo "::error::the README has no JitPack install instructions"; exit 1; }
           if grep -q '<groupId>com.dodopayments.api</groupId>' README.md; then echo "::error::the README install instructions point to Maven Central"; exit 1; fi
