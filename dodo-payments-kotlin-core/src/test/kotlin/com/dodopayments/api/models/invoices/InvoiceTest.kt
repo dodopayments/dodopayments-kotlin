@@ -51,6 +51,7 @@ internal class InvoiceTest {
                 .metadata(JsonValue.from(mapOf<String, Any>()))
                 .addRefundId("string")
                 .retryCount(0)
+                .reviewRequired(true)
                 .rowVersion(0L)
                 .status(InvoiceStatus.OPEN)
                 .addSubscriptionId("string")
@@ -83,6 +84,7 @@ internal class InvoiceTest {
                 .memo("memo")
                 .nextReminderAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .nextRetryAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .paymentMethodId("payment_method_id")
                 .paymentTermsDays(0)
                 .addPayment(
                     Invoice.Payment.builder()
@@ -139,6 +141,7 @@ internal class InvoiceTest {
         assertThat(invoice._metadata()).isEqualTo(JsonValue.from(mapOf<String, Any>()))
         assertThat(invoice.refundIds()).containsExactly("string")
         assertThat(invoice.retryCount()).isEqualTo(0)
+        assertThat(invoice.reviewRequired()).isEqualTo(true)
         assertThat(invoice.rowVersion()).isEqualTo(0L)
         assertThat(invoice.status()).isEqualTo(InvoiceStatus.OPEN)
         assertThat(invoice.subscriptionIds()).containsExactly("string")
@@ -175,6 +178,7 @@ internal class InvoiceTest {
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(invoice.nextRetryAt())
             .isEqualTo(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(invoice.paymentMethodId()).isEqualTo("payment_method_id")
         assertThat(invoice.paymentTermsDays()).isEqualTo(0)
         assertThat(invoice.payments())
             .containsExactly(
@@ -240,6 +244,7 @@ internal class InvoiceTest {
                 .metadata(JsonValue.from(mapOf<String, Any>()))
                 .addRefundId("string")
                 .retryCount(0)
+                .reviewRequired(true)
                 .rowVersion(0L)
                 .status(InvoiceStatus.OPEN)
                 .addSubscriptionId("string")
@@ -272,6 +277,7 @@ internal class InvoiceTest {
                 .memo("memo")
                 .nextReminderAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .nextRetryAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .paymentMethodId("payment_method_id")
                 .paymentTermsDays(0)
                 .addPayment(
                     Invoice.Payment.builder()
